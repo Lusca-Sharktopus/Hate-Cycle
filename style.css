@@ -86,13 +86,31 @@ footer {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+.sobre-autor {
+  display: left;
+  align-items: left;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
+.autor-foto {
+  width: 18%;
+  height: auto;
+  border-radius: 10px;
+  float: left;
+}
+
+/* Responsividade para dispositivos móveis */
 @media (max-width: 600px) {
-  body {
-    font-size: 0.7rem;
-  }
   .autor-foto {
-    padding: 150%;
+    width: 100%;
+    float: none;
+    display: block;
+    margin: 0 auto 20px auto;
   }
 
+  .sobre-autor {
+    flex-direction: column;
+    text-align: center;
+  }
 }
