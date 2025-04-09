@@ -1,0 +1,88 @@
+:root {
+  --cor-primaria: #1abc9c;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 20px;
+}
+
+header {
+  background-image: linear-gradient(to top, var(--cor-primaria) 0%, #14866f 100%);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+nav a {
+  margin: 0 10px;
+  color: #ecf0f1;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.galeria {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.historia {
+  flex: 0 0 300px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  scroll-snap-align: start;
+  transition: transform 0.2s ease;
+}
+
+.historia:hover {
+  transform: scale(1.02);
+}
+
+.historia img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.historia .tags {
+  margin-bottom: 8px;
+}
+
+.tag {
+  display: inline-block;
+  background-color: var(--cor-primaria);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  margin-right: 5px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #09493c;
+  color: #cfe7ff;
+}
+
+.autor-foto {
+  float: left;
+  width: 150px;
+  height: auto;
+  margin: 0 20px 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
