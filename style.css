@@ -103,14 +103,14 @@ footer {
 /* Responsividade para dispositivos móveis */
 @media (max-width: 600px) {
   .autor-foto {
-    width: 100%;
-    float: none;
+    width: 20%;
+    float: left;
     display: block;
     margin: 0 auto 20px auto;
   }
 
   .sobre-autor {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
   }
 }
