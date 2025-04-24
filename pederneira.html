@@ -24,13 +24,6 @@
       border-radius: 10px;
     }
 
-    .title-image {
-      display: block;
-      margin: 0 auto 30px auto;
-      width: 50%;
-      height: auto;
-    }
-
     p {
   line-height: 1.8;
   font-size: 1.1rem;
@@ -59,15 +52,34 @@
   .container {
     padding: 20px;
   }}
+
+  .only-on-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .only-on-dark {
+    display: block;
+      margin: 0 auto 30px auto;
+      width: 50%;
+      height: auto;
+  }
+  
+  .only-on-light {
+    display: block;
+      margin: 0 auto 30px auto;
+      width: 50%;
+      height: auto;
+  }
+}
+
   </style>
 
 </head>
 <body>
   <div class="container">
-    <picture>
-      <source src="logos/Pederneira - White.png" media="(prefers-color-scheme: dark)">
-      <img src="logos/Pederneira - Black.png" class="title-image">
-    </picture>
+    <img class="only-on-dark" src="logos/Pederneira - White.png"/>
+    <img class="only-on-light" src="logos/Pederneira - Black.png" />
     <hr style="width:80%">
     <p>
 “Estamos perdidos!”, exclamou Harry, meu jovem assistente. Cansaço, frustração e o que eu só posso interpretar como um gemido causado por dor muscular eram todos audíveis em sua voz. <br/>
