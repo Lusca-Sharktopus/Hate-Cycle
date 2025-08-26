@@ -1,78 +1,153 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hate Cycle | Ossos do Ofício</title>
+  <title data-i18n="meta.title">Hate Cycle | Pederneira</title>
   <link rel="icon" href="logos/favicon.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
-
   <style>
-    body {
-      background-color: #fdf6e3;
-      font-family: 'Times New Roman', serif;
-      color: #333;
-      padding: 40px 20px;
-    }
-
-    .container {
-      max-width: 750px;
-      margin: auto;
-      background: white;
-      padding: 40px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-    }
-
-    .title-image {
-      display: block;
-      margin: 0 auto 30px auto;
-      width: 50%;
-      height: auto;
-    }
-
-    p {
-  line-height: 1.8;
-  font-size: 1.1rem;
-  margin-bottom: 1.4em;
-  text-align: justify;
-     }
-
-    .voltar {
-      display: block;
-      text-align: center;
-      margin-top: 30px;
-      color: var(--cor-primaria, #1abc9c);
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .voltar:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-  p {
-    font-size: 0.7rem;
-  }
-  .container {
-    padding: 20px;
-  }}
+    body { background:#fdf6e3; font-family:'Times New Roman', serif; color:#333; padding:40px 20px; }
+    .container { max-width:750px; margin:auto; background:#fff; padding:40px; box-shadow:0 4px 10px rgba(0,0,0,.1); border-radius:10px; }
+    .title-image { display:block; margin:0 auto 30px; width:35%; height:auto; }
+    p { line-height:1.8; font-size:1.1rem; margin-bottom:1.4em; text-align:justify; }
+    .voltar { display:block; text-align:center; margin-top:30px; color:var(--cor-primaria, #1abc9c); text-decoration:none; font-weight:bold; }
+    .voltar:hover { text-decoration:underline; }
+    @media (max-width:600px){ p{font-size:.9rem;} .container{padding:20px;} }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <img src="logos/Hate Cycle Logo.png" class="title-image"/>
+    <!-- Título/Logo (se quiser variar por idioma, trocamos via JS depois) -->
+    <img id="logo-title" class="title-image" src="logos/Pederneira - Black.png" alt="Pederneira">
+
     <hr style="width:80%">
-    <p>
-        Não era pra você estar aqui...
-</p>
-    <a class="voltar" href="index.html">← Voltar para a página inicial</a>
+
+    <!-- Seletor de idioma -->
+    <label for="lang-select" style="display:block; text-align:right; margin-bottom:12px;">
+      <span data-i18n="ui.language">Idioma:</span>
+      <select id="lang-select" aria-label="Language">
+        <option value="pt">Português</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+
+    <!-- O conto em si -->
+    <p data-i18n="story.intro">
+      <!-- Conteúdo PT vem do translations; esse fallback pode ficar vazio -->
+    </p>
+
+    <!-- Link voltar -->
+    <a class="voltar" href="index.html" data-i18n="ui.back">← Voltar para a página inicial</a>
   </div>
 
-<footer>
-  <p>&copy; 2025 - Todos os direitos reservados.</p>
-</footer>
+  <footer>
+    <p>&copy; 2025 - <span data-i18n="ui.rights">Todos os direitos reservados.</span></p>
+  </footer>
+
+  <!-- Script de i18n -->
+  <script>
+    // -------------  TRADUÇÕES  -------------
+    // Use innerHTML quando precisar de <br>. Você pode colar o SEU texto completo aqui.
+    const translations = {
+      pt: {
+        "meta.title": "Hate Cycle | Pederneira",
+        "ui.language": "Idioma:",
+        "ui.back": "← Voltar para a página inicial",
+        "ui.rights": "Todos os direitos reservados.",
+        // Exemplo: coloque aqui o conto em PT (com <br> se quiser)
+        "story.intro": `Em breve`
+      },
+      en: {
+        "meta.title": "Hate Cycle | Firestriker",
+        "ui.language": "Language:",
+        "ui.back": "← Back to home",
+        "ui.rights": "All rights reserved.",
+        // 🔽 COLE AQUI O SEU TEXTO EM INGLÊS EXATO, COM <br> NAS QUEBRAS
+        "story.intro": `Coming soon`
+      },
+      es: {
+        "meta.title": "Hate Cycle | Chispero",
+        "ui.language": "Idioma:",
+        "ui.back": "← Volver al inicio",
+        "ui.rights": "Todos los derechos reservados.",
+        // Coloque aqui a versão em espanhol quando tiver
+        "story.intro": `En breve`
+      }
+    };
+
+    // -------------  HELPERs  -------------
+    const normalizeLang = (v) => (v || "").toString().toLowerCase().split("-")[0];
+    const getInitialLang = () => {
+      // 1) URL ?lang=pt|en|es
+      const m = location.search.match(/[?&]lang=(pt|en|es)\b/i);
+      if (m) return normalizeLang(m[1]);
+      // 2) localStorage salvo no site
+      const saved = localStorage.getItem("siteLang");
+      if (saved) return normalizeLang(saved);
+      // 3) atributo do HTML (caso tenha vindo correto do index)
+      const htmlLang = document.documentElement.getAttribute("lang");
+      if (htmlLang) return normalizeLang(htmlLang);
+      // 4) navegador
+      return normalizeLang(navigator.language || "pt");
+    };
+
+    function applyTranslations(lang) {
+      const dict = translations[lang] || translations.pt;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        const val = (dict && dict[key]) || translations.pt[key];
+        if (typeof val === "string") {
+          // usamos innerHTML para suportar <br> no texto
+          el.innerHTML = val;
+        } else {
+          // se a chave não existir, mantemos o conteúdo original
+          // e logamos para você ajustar:
+          console.warn("[i18n] missing key:", lang, key);
+        }
+      });
+
+      // <title>
+      const titleKey = "meta.title";
+      if (dict[titleKey]) document.title = dict[titleKey];
+
+      // <html lang="">
+      document.documentElement.setAttribute("lang", lang);
+
+      // (Opcional) trocar a arte do logo por idioma, se quiser
+      const logo = document.getElementById("logo-title");
+      if (logo) {
+        const map = {
+          pt: { src: "logos/Ossos do Ofício 2.png", alt: "Pederneira" },
+          en: { src: "logos/Ossos do Ofício 2.png", alt: "Firestriker" },
+          es: { src: "logos/Ossos do Ofício 1.png",   alt: "Chispero" }
+        };
+        const img = map[lang] || map.pt;
+        logo.src = img.src;
+        logo.alt = img.alt;
+      }
+    }
+
+    function setLang(lang) {
+      lang = normalizeLang(lang);
+      localStorage.setItem("siteLang", lang);
+      applyTranslations(lang);
+      const sel = document.getElementById("lang-select");
+      if (sel) sel.value = lang;
+    }
+
+    // -------------  BOOT  -------------
+    document.addEventListener("DOMContentLoaded", () => {
+      const initial = getInitialLang();
+      setLang(initial);
+
+      const sel = document.getElementById("lang-select");
+      if (sel) {
+        sel.value = initial;
+        sel.addEventListener("change", (e) => setLang(e.target.value));
+      }
+    });
+  </script>
 </body>
 </html>
