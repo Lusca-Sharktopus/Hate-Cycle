@@ -8,7 +8,7 @@ body {
   color: #333;
 }
 
-.header {
+header {
   background-image: linear-gradient(to top, var(--cor-primaria) 0%, #14866f 100%);
   color: white;
   padding: 20px;
