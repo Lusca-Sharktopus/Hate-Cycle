@@ -110,7 +110,7 @@ footer {
   flex-wrap: wrap;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .autor-foto {
     width: 100%;
     float: none;
@@ -122,6 +122,20 @@ footer {
     flex-direction: column;
     text-align: center;
   }
+
+  .apollo-gif {
+    float: left;
+    width: 25%;
+    height: auto;
+    margin: 0 10px 5px 0;
+}
+
+  .anfibio-gif {
+    float: right;
+    width: 25%;
+    height: auto;
+    margin: 0 5px 10px 0;
+}
 }
 
 .slideshow-container {
