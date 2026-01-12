@@ -95,12 +95,12 @@ footer {
 
 @media (max-width: 700px) {
   .autor-foto {
-    width: 100%;
+    width: 43%;
   }
 
   .sobre-autor {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
   }
 
   .apollo-gif {
@@ -193,4 +193,11 @@ footer {
 
 .button:active {
   transform: scale(0.97);
+}
+
+.title-image {
+  display: block;
+  margin: 0 auto 30px;
+  width: auto;
+  height: 100px;
 }
