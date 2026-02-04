@@ -86,7 +86,7 @@ footer {
   height: auto;
   margin: 0 5px 10px 0;
   shape-margin: 1rem;
-  shape-outside: url(other\ images/AnfÍbio\ Site.gif);
+  shape-outside: url(other\ images/Anfíbio\ Site.gif);
 }
 
 .sobre {
@@ -206,4 +206,5 @@ footer {
   margin: 0 auto 30px;
   width: auto;
   height: 100px;
+
 }
