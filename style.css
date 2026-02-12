@@ -7,7 +7,7 @@ body {
   background-image: url("Backgrounds/background-new-texture-paper-shape-high-quality-have-copy-space-text_440279-941.avif");
   background-color: #dadada;
   color: #333;
-  padding: 15px;
+  border-radius: 15px;
 }
 
 header {
@@ -66,7 +66,7 @@ footer {
   float: left;
   width: 500px;
   height: auto;
-  margin: 0 20px 10px 0;
+  margin: 0 20px 10px 20px;
   shape-margin: 1rem;
   shape-outside: url(other\ images/1000172301.png);
 }
@@ -75,7 +75,7 @@ footer {
   float: left;
   width: 16%;
   height: auto;
-  margin: 0 10px 5px 0;
+  margin: 0 10px 0 20px;
   shape-margin: 1rem;
   shape-outside: url(other\ images/Apollo\ Site.gif);
 }
@@ -84,7 +84,7 @@ footer {
   float: right;
   width: 18%;
   height: auto;
-  margin: 0 5px 10px 0;
+  margin: 0 20px 0 10px;
   shape-margin: 1rem;
   shape-outside: url(other\ images/Anfíbio\ Site.gif);
 }
@@ -206,4 +206,14 @@ footer {
   margin: 0 auto 30px;
   width: auto;
   height: 100px;
+}
+
+.comment-container {
+  max-width: 1000px;
+  margin: auto;
+  background-image: url("Backgrounds/background-new-texture-paper-shape-high-quality-have-copy-space-text_440279-941.avif");
+  padding: 60px;
+  padding-top: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+  border-radius: 10px;
 }
