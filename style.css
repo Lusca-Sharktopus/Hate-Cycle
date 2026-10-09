@@ -229,3 +229,9 @@ footer {
 /* Espaço menor entre os títulos de "Sobre" e o texto seguinte */
 #sobre h2 { margin-bottom: 4px; }
 #sobre > p, #sobre .sobre-autor > p:first-child { margin-top: 6px; }
+
+/* Margem lateral maior entre o conteúdo e as bordas da tela */
+main { padding-left: clamp(16px, 2vw, 150px); padding-right: clamp(16px, 2vw, 150px); }
+
+/* Com a margem lateral maior, as quebras de linha manuais do "Sobre o autor" deixavam linhas picotadas */
+.sobre-autor p:first-child br { display: none; }
