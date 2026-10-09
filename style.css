@@ -3,7 +3,7 @@
 }
 
 body {
-  font-family: 'Lexend', sans-serif;
+  font-family: 'Lexend', serif;
   background-image: url("Backgrounds/background-new-texture-paper-shape-high-quality-have-copy-space-text_440279-941.avif");
   background-color: #dadada;
   color: #333;
@@ -226,3 +226,12 @@ footer {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
   border-radius: 10px;
 }
+/* Espaço menor entre os títulos de "Sobre" e o texto seguinte */
+#sobre h2 { margin-bottom: 4px; }
+#sobre > p, #sobre .sobre-autor > p:first-child { margin-top: 6px; }
+
+/* Margem lateral maior entre o conteúdo e as bordas da tela */
+main { padding-left: clamp(16px, 8vw, 150px); padding-right: clamp(16px, 8vw, 150px); }
+
+/* Com a margem lateral maior, as quebras de linha manuais do "Sobre o autor" deixavam linhas picotadas */
+.sobre-autor p:first-child br { display: none; }
