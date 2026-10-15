@@ -356,7 +356,7 @@ Ainda **não** existem: a raiz `/`, a `404.html`, os `feed.xml` e os redirects d
 
 ## 10. Rode você mesmo
 
-Antes, faça a **Parte 0** do `00-mapa.md` (Node 22.12+, pnpm 10, VS Code com a extensão Astro). Depois, no terminal, dentro da pasta do projeto:
+Antes, faça a **Parte 0** do `00-mapa.md` (Node 24, pnpm 10, VS Code com a extensão Astro). Depois, no terminal, dentro da pasta do projeto:
 
 ```bash
 pnpm install     # uma vez (e de novo sempre que o package.json mudar). Cria node_modules/

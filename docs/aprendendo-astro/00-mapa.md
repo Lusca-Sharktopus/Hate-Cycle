@@ -10,8 +10,9 @@ Como usar cada lição:
 
 ## Parte 0 — Preparar a sua máquina (faça antes da T05)
 
-1. **Node.js 22.12 ou mais novo** (o projeto usa o **Astro 7**, que não roda em Node 18/20). Baixe a versão LTS em nodejs.org e confira com `node -v`.
-2. **pnpm 10** (gerenciador de pacotes, mais rápido e econômico que o npm; o projeto foi montado com o 10.28.0, registrado em `package.json → packageManager`): `npm install -g pnpm@10` e confira com `pnpm -v`.
+1. **Node.js 24 (LTS)** — em nodejs.org, escolha a versão **24** (o Astro 7 pede 22.12 ou mais novo; o pnpm 10 suporta oficialmente até o Node 24, então evite o 25 e o 26 por enquanto). Instale com as opções padrão e confira num terminal novo com `node -v` (deve mostrar `v24.…`).
+2. **pnpm 10** (gerenciador de pacotes, mais rápido e econômico que o npm; o projeto foi montado com o 10.28.0, registrado em `package.json → packageManager`): `npm install -g pnpm@10` e confira com `pnpm -v` (deve mostrar `10.…`). Não instale sem o `@10`: o padrão hoje é uma versão mais nova.
+   - **Windows, se o PowerShell disser que "a execução de scripts foi desabilitada"** ao rodar `pnpm`: rode uma vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, responda `S`, e abra um terminal novo.
 3. **Editor:** VS Code com a extensão oficial **Astro** (realce, autocompletar e erros de tipo nos arquivos `.astro`).
 4. Desde a T05: na pasta do projeto, `pnpm install` uma vez e depois `pnpm dev` (prévia com recarregamento instantâneo em `http://localhost:4321/pt/`). Passo a passo na lição 01.
 
