@@ -188,6 +188,9 @@ export const showExtras = config.show_extras;
 /** `emissaries.hide` do config.json: pastas de content/emissaries/ que não aparecem no site (ex.: ["saf"]). */
 export const emissariosEscondidos: readonly string[] = config.emissaries.hide;
 
+/** `emissaries.show_texts` do config.json: o texto de apresentação de cada emissário aparece no card? (hoje não) */
+export const emissariosMostramTextos: boolean = config.emissaries.show_texts;
+
 /** Redes sociais do rodapé (config.json → socials). */
 export const socialLinks: readonly Social[] = config.socials;
 
@@ -226,8 +229,16 @@ export function tk(lang: Lang, key: UiEpKey, kind?: string): string {
 /** Valor traduzível dos arquivos de conteúdo: texto simples ou { en, pt }. Como tr() do build.py. */
 export type Translatable = string | { [L in Lang]?: string | undefined };
 
+/**
+ * tr() do build.py (linha ~78), caso a caso:
+ *  - texto simples: ele mesmo; vazio → `fallback`;
+ *  - { en, pt }: o idioma pedido, senão o inglês, senão o PRIMEIRO valor do objeto — mesmo que esteja vazio.
+ *    Só um objeto sem nenhum valor ({}) cai no `fallback`.
+ * (T10, "herdado da T09": antes, o último passo aqui era `|| fallback`, e um título {"en": "", "pt": ""} virava o
+ * nome da pasta, enquanto o Python mostra o texto vazio. Agora os dois fazem a mesma coisa; ver 06-regras.md.)
+ */
 export function tr(value: Translatable | undefined, lang: Lang, fallback = ""): string {
   if (value === undefined) return fallback;
   if (typeof value === "string") return value || fallback;
-  return value[lang] || value.en || Object.values(value)[0] || fallback;
+  return value[lang] || value.en || (Object.values(value)[0] ?? fallback);
 }

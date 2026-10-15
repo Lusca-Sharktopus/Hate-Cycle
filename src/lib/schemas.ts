@@ -145,15 +145,23 @@ const figurinhas = () =>
     });
   });
 
-/** Valor traduzível do work.json: "texto" (igual nos dois idiomas) ou {"en": "…", "pt": "…"}. */
+/**
+ * Valor traduzível do work.json: "texto" (igual nos dois idiomas) ou {"en": "…", "pt": "…"}.
+ * (T10: é um `partialRecord`, e não um objeto com campos fixos, de propósito: o Zod devolve os campos de um objeto na
+ * ORDEM DO SCHEMA, e o tr() do Python, quando o idioma pedido e o inglês estão vazios, usa o PRIMEIRO valor do arquivo —
+ * `{"pt": "Só PT", "en": ""}` tem de continuar começando por "pt". O record guarda a ordem em que o autor escreveu.)
+ */
 const traduzivel = () =>
   z.union(
     [
       z.string(),
-      z.strictObject(
-        { en: texto().optional(), pt: texto().optional() },
-        { error: (i) => (i.code === "unrecognized_keys" ? `tem de ser um texto ou {"en": "…", "pt": "…"}: só as chaves en e pt (veio ${i.keys.map((k) => `"${k}"`).join(", ")}).` : undefined) },
-      ),
+      z.partialRecord(z.enum(langs as [Lang, ...Lang[]]), texto(), {
+        // chave que não é idioma (o Zod avisa como "unrecognized_keys"; o tipo dele não lista esse código, por isso o `as`)
+        error: (i) => {
+          const { code, keys } = i as { code: string; keys?: string[] };
+          return code === "unrecognized_keys" ? `tem de ser um texto ou {"en": "…", "pt": "…"}: só as chaves en e pt (veio ${(keys ?? []).map((k) => `"${k}"`).join(", ")}).` : undefined;
+        },
+      }),
     ],
     { error: (i) => `tem de ser um texto ou {"en": "…", "pt": "…"}, mas veio ${descrever(i.input)}.` },
   );

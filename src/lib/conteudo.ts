@@ -9,6 +9,7 @@
 // Todas as funções aceitam `comRascunhos` para quem precisar forçar um modo.
 import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 import { emissariosEscondidos, langs, showExtras, type Lang } from "./config";
+import { dadosDoIdioma as montarDadosDoIdioma } from "./idioma";
 import type { SecaoDeItens } from "./leitor";
 import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, obraListada, obraNoIndice, obraTemPagina } from "./visibilidade";
 
@@ -75,4 +76,22 @@ export async function temPaginaDeObra(o: Obra, lang: Lang, comRascunhos = COM_RA
 /** A obra pode ser citada em [[works/x]] e related naquele idioma? (capítulos listados ou link para fora) */
 export async function obraCitavel(o: Obra, lang: Lang, comRascunhos = COM_RASCUNHOS): Promise<boolean> {
   return obraNoIndice(o, (await capitulos(o.id, lang, comRascunhos)).listados.length, lang);
+}
+
+/**
+ * Tudo o que as páginas de um idioma precisam (obras em ordem, destaques, notícias, "Últimas atualizações", emissários,
+ * Universo/Personagens, índice dos [[links]]): lê as coleções e aplica as regras de src/lib/idioma.ts.
+ * É a única chamada de que a home, Histórias, Notícias e Emissários precisam para saber O QUE mostrar e EM QUE ORDEM.
+ */
+export async function dadosDoIdioma(lang: Lang, comRascunhos = COM_RASCUNHOS) {
+  const [news, works, chapters, emissaries, universe, characters, pages] = await Promise.all([
+    getCollection("news"),
+    getCollection("works"),
+    getCollection("chapters"),
+    getCollection("emissaries"),
+    getCollection("universe"),
+    getCollection("characters"),
+    getCollection("pages"),
+  ]);
+  return montarDadosDoIdioma({ news, works, chapters, emissaries, universe, characters, pages }, lang, { comRascunhos, mostrarExtras: showExtras, emissariosEscondidos, todosOsIdiomas: langs });
 }

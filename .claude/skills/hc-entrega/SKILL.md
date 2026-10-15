@@ -21,7 +21,7 @@ Enquanto o autor não usar `git pull` na máquina dele, ele **também** recebe a
 
 2. **Conferir o que mudou visualmente** com a skill `hc-conferencia-visual` sempre que a mudança afetar HTML, CSS, JS ou conteúdo. Mudança só em documentação não precisa.
 
-2b. **Se o conteúdo mudou** (`content/`, `config.json`): durante a migração, rode `python3 tools/frontmatter_ref.py` e `python3 tools/markdown_ref.py` (atualizam as referências do Python em `tests/fixtures/`) e depois `pnpm test` — todos verdes. Se a mudança foi em Astro (`src/`), rode também `pnpm check` e `pnpm build`.
+2b. **Se o conteúdo mudou** (`content/`, `config.json`): durante a migração, rode `python3 tools/frontmatter_ref.py`, `python3 tools/markdown_ref.py` e `python3 tools/regras_ref.py` (atualizam as referências do Python em `tests/fixtures/`) e depois `pnpm test` — todos verdes. Se a mudança foi em Astro (`src/`), rode também `pnpm check` e `pnpm build`.
 
 3. **Limpar** o que não é entregue:
    ```bash
