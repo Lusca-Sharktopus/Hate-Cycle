@@ -6,7 +6,7 @@ Mudar uma decisão daqui = nova entrada neste arquivo (com data), não edição 
 
 ---
 
-## D1 — Framework: Astro 6
+## D1 — Framework: Astro 6 → Astro 7 (atualizado em 15/10/2026, ver abaixo)
 
 - **Contexto:** o site é estático, bilíngue, com muito texto em Markdown e regras próprias de escrita (versalete, IPA, `[[links]]`, divisor de cena, `{{atalhos}}`). O gerador atual é um único arquivo Python de ~1000 linhas, difícil de testar e de evoluir.
 - **Decisão:** **Astro 6.** Gera site estático sem JavaScript por padrão, com ilhas só onde precisa; coleções de conteúdo com schemas Zod; i18n `en`/`pt` com prefixo nos dois idiomas; Markdown + MDX; `astro:assets` para imagens; API de fontes; `@astrojs/rss` e sitemap. Requer **Node ≥ 22.12**. A Cloudflare comprou o Astro em jan/2026; o projeto segue open source.
@@ -16,6 +16,12 @@ Mudar uma decisão daqui = nova entrada neste arquivo (com data), não edição 
   - **Next / Nuxt / SvelteKit** — frameworks de aplicação; excesso para um site de leitura.
   - **Python modular** (Jinja2, markdown-it-py, pydantic) — plano B, se o Astro não servir.
 - **Consequências:** o autor precisa de Node 22.12+ e pnpm na máquina (Parte 0 do mapa de lições). Erros de conteúdo passam a ser apontados no build (arquivo e campo). Os plugins de Markdown precisam reproduzir exatamente o `make_md()` atual (T09).
+- **Atualização de 15/10/2026 — Astro 7 (T05):** o projeto começa direto no **Astro 7** (instalado: `astro` 7.3.8, com Vite 8). Motivo: o Astro 6 parou de receber atualizações em junho de 2026 (a 7.0.0 saiu em 22/06/2026); começar na 6 seria herdar uma migração logo de cara. O resto da decisão (site estático, i18n com prefixo, coleções, Node ≥ 22.12) não muda. Mudanças da 7 que afetam este site:
+  - **`compressHTML`** passou a ter padrão `'jsx'`, que apaga o espaço entre elementos quando há quebra de linha no meio (testado no 7.3.8: `<span class="hc">Hate Cycle</span>`, quebra de linha, `<a>continua</a>` sai como "Hate Cyclecontinua"). O site depende desses espaços (versalete em `<span class="hc">`, links no meio de frases). **Decisão: `compressHTML: false`** — o HTML sai com os espaços como foram escritos, igual ao `build.py` (que não comprime nada). `true` (o padrão da 6, que mantém um espaço) também serviria; `false` foi escolhido por ser o mais próximo do site atual e mais fácil de comparar na T18. Reavaliar na T17 (desempenho), se valer a pena.
+  - **Markdown (observação para a T09):** o processador padrão agora é o **Sätteri**, e o `@astrojs/markdown-remark` deixou de vir instalado. Os plugins remark/rehype da T09 exigem instalar `@astrojs/markdown-remark` e configurar `markdown.processor: unified()` (importado de `@astrojs/markdown-remark`); `markdown.remarkPlugins`/`rehypePlugins` continuam existindo, mas só funcionam com esse pacote. O Sätteri também aceita plugins MDAST/HAST — a T09 decide qual caminho reproduz melhor o `make_md()`.
+  - **Compilador em Rust**, mais rígido: tag não fechada vira erro de build, e aninhamento inválido (ex.: `<div>` dentro de `<p>`) não é mais "consertado" — passa como está. Atenção na T09/T12 com o HTML cru dos capítulos (cena 1 de Ossos, tiras, carta).
+  - **Servidores em segundo plano quando rodados por um agente:** `astro dev`/`astro preview` detectam o Claude e se desligam do terminal. Nas sessões, usar `--ignore-lock` (fica em primeiro plano, respeita o `timeout`) ou `astro preview stop`. No computador do autor, nada muda.
+  - `src/fetch.ts` passou a ser um nome reservado (roteamento avançado): não criar um arquivo com esse nome.
 
 ## D2 — Linguagem e ferramentas: TypeScript estrito + pnpm
 

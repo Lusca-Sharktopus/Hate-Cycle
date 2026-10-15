@@ -10,10 +10,10 @@ Como usar cada lição:
 
 ## Parte 0 — Preparar a sua máquina (faça antes da T05)
 
-1. **Node.js 22.12 ou mais novo** (o Astro 6 não roda em Node 18/20). Baixe a versão LTS em nodejs.org e confira com `node -v`.
-2. **pnpm** (gerenciador de pacotes, mais rápido e econômico que o npm): `npm install -g pnpm` e confira com `pnpm -v`.
+1. **Node.js 22.12 ou mais novo** (o projeto usa o **Astro 7**, que não roda em Node 18/20). Baixe a versão LTS em nodejs.org e confira com `node -v`.
+2. **pnpm 10** (gerenciador de pacotes, mais rápido e econômico que o npm; o projeto foi montado com o 10.28.0, registrado em `package.json → packageManager`): `npm install -g pnpm@10` e confira com `pnpm -v`.
 3. **Editor:** VS Code com a extensão oficial **Astro** (realce, autocompletar e erros de tipo nos arquivos `.astro`).
-4. Quando a T05 chegar: na pasta do projeto, `pnpm install` uma vez e depois `pnpm dev` (prévia com recarregamento instantâneo em `http://localhost:4321`).
+4. Desde a T05: na pasta do projeto, `pnpm install` uma vez e depois `pnpm dev` (prévia com recarregamento instantâneo em `http://localhost:4321/pt/`). Passo a passo na lição 01.
 
 O gerador em Python continua funcionando em paralelo até a virada (T20): `python build.py serve` segue valendo.
 
@@ -21,7 +21,7 @@ O gerador em Python continua funcionando em paralelo até a virada (T20): `pytho
 
 | Lição | Tarefa | O que você vai entender | Substitui no `build.py` |
 |---|---|---|---|
-| 01 | T05 | Anatomia de um projeto Astro: `astro.config.mjs`, roteamento por arquivo em `src/pages/`, o que é um componente `.astro` (o bloco `---` roda no build, o resto é HTML), i18n com `/en/` e `/pt/`, `base` do GitHub Pages | `shell()` (só o esqueleto), `write()`, `BASE` |
+| [01](01-anatomia.md) | T05 | Anatomia de um projeto Astro: `package.json`, `astro.config.mjs`, roteamento por arquivo em `src/pages/`, o que é um componente `.astro` (o bloco `---` roda no build, o resto é HTML), i18n com `/en/` e `/pt/`, `site` × `base` (o site fica na raiz do domínio, sem `base`) | `shell()` (só o esqueleto), `write()`, `BASE` |
 | 02 | T06 | Layouts e componentes com *props*; slots; CSS com escopo × CSS global; tokens da marca; `<head>` com hreflang e Open Graph | `shell()`, `T()`/`TK()`/`tr()` |
 | 03 | T07 | Lógica em TypeScript que roda no build; gerador aleatório com semente; como portar um algoritmo e provar que é igual com um teste | `rune_imprint()` |
 | 04 | T08 | Coleções de conteúdo: loaders, schemas Zod, `getCollection()`, referências entre itens, erros de build que apontam o arquivo e o campo | `parse()`, `scalar()`, `load_items()`, `load_works()` |

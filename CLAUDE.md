@@ -23,6 +23,15 @@ python build.py new news nome         # também: new chapter <obra> · new work 
   ```
 - Depois de conferir: `rm -rf public __pycache__` (não são entregues nem versionados).
 
+### Astro (em migração; Node ≥ 22.12 + pnpm — lição `docs/aprendendo-astro/01-anatomia.md`)
+
+```bash
+pnpm install    # uma vez (e quando package.json mudar)
+pnpm dev        # prévia com recarregamento em http://localhost:4321/pt/
+pnpm build      # gera o site Astro em dist/ (hoje: só /en/ e /pt/ de esqueleto)
+pnpm check      # verificação de tipos (astro check): tem de dar 0 errors, 0 warnings
+```
+
 ## Mapa de pastas
 
 | Caminho | O que é |
@@ -37,6 +46,7 @@ python build.py new news nome         # também: new chapter <obra> · new work 
 | `docs/` | Documentação: guia do autor, comentários, histórico, arquitetura, backlog, lições de Astro. |
 | `.claude/` | `skills/` (procedimentos) e `rules/` (regras que carregam por caminho). |
 | `public/` | Saída gerada (ignorada pelo git). |
+| `src/`, `astro.config.mjs`, `package.json` | Projeto Astro (T05 em diante): `pages/`, `layouts/`, `components/`, `lib/`, `styles/`. Saída em `dist/`; `node_modules/`, `dist/` e `.astro/` são ignorados pelo git. |
 
 ## Invariantes — nunca quebrar
 
@@ -74,6 +84,8 @@ Em *Ossos do Ofício* (`content/works/all-in-a-nights-work/01/en.md`) o texto em
 
 - **Entregas (skill `hc-entrega`):** todo trabalho é commit + `git push origin migracao-astro`; o pull request #1 (rascunho, `migracao-astro` → `main`) se atualiza sozinho. **Não fazer merge nem push na `main` até a T20**: a `main` é o site antigo no ar em hatecycle.com (também guardado na tag `site-antigo`). Enquanto o autor não usar `git pull`, o zip só com os arquivos alterados continua sendo enviado a ele também.
 - **Nunca use `pkill`.** Servidores de teste sempre sob `timeout` (ex.: `timeout 300 python3 -m http.server 8790 -d public`); porta ocupada → use outra.
+- No sandbox, comandos pnpm/npm precisam passar pelo proxy: remova `registry.npmjs.org` do `NO_PROXY` (ver `docs/aprendendo-astro/01-anatomia.md`, seção "Rede do sandbox").
+- O Astro 7 percebe que está sendo rodado por um agente e põe `astro dev`/`astro preview` em segundo plano, escapando do `timeout`. Use `--ignore-lock` para ficar em primeiro plano (ex.: `timeout 120 pnpm preview --port 4329 --ignore-lock`); se escapou, `pnpm astro preview stop` (ou `dev stop`).
 - Arquivos temporários (screenshots, extrações, scripts) no scratchpad da sessão, **nunca dentro do projeto**.
 - O sandbox **não alcança o Google Fonts** (Lexend, Oswald, PT Serif, Road Rage, Vollkorn SC, Noto das runas): os screenshots mostram fontes de reserva. Diga ao autor quais fontes não puderam ser vistas.
 - **Olhe o screenshot** (ferramenta Read no PNG) antes de afirmar que algo ficou certo. Mudanças de layout: 1100 px e 390 px.
@@ -83,7 +95,7 @@ Em *Ossos do Ofício* (`content/works/all-in-a-nights-work/01/en.md`) o texto em
 
 ## Estado da migração (Astro)
 
-- O site vai migrar para **Astro** (decisão aprovada pelo autor em 14/10/2026). Decisões e motivos: `docs/ARQUITETURA.md`. Tarefas, ordem, status e pendências do autor: `docs/BACKLOG.md`. Lições para o autor aprender Astro com o próprio site: `docs/aprendendo-astro/00-mapa.md`.
+- O site vai migrar para **Astro** (decisão aprovada pelo autor em 14/10/2026; **Astro 7** desde a T05, 15/10/2026). Decisões e motivos: `docs/ARQUITETURA.md`. Tarefas, ordem, status e pendências do autor: `docs/BACKLOG.md`. Lições para o autor aprender Astro com o próprio site: `docs/aprendendo-astro/00-mapa.md`.
 - **Durante a migração os dois geradores convivem**: o Astro lê `content/`, `static/` e `config.json` no lugar onde estão — nada é duplicado. Conteúdo novo continua sendo escrito normalmente em `content/`.
 - O `build.py` e o CSS ficam **congelados para mudanças estruturais** até a virada (T20): só correções de bug e conteúdo.
 - Invariantes da migração: URLs idênticas, IDs de comentários idênticos, mesmo jeito de escrever, visual das páginas-chave conferido por screenshot contra a baseline (T03).

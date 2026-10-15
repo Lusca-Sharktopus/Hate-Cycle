@@ -1,0 +1,28 @@
+---
+// Moldura de toda página (o esqueleto do shell() do build.py).
+// Esta parte, entre as linhas ---, roda só no build (no seu computador), nunca no navegador.
+import { siteName, htmlLang, type Lang } from "../lib/config";
+
+interface Props {
+  lang: Lang;
+  /** Título da página. Sem título (ou igual ao nome do site), a aba mostra só o nome do site. */
+  title?: string;
+}
+
+const { lang, title } = Astro.props;
+
+// Mesma regra do shell(): ttl = site if title == site else f"{title} | {site}"
+const fullTitle = !title || title === siteName ? siteName : `${title} | ${siteName}`;
+---
+
+<!doctype html>
+<html lang={htmlLang(lang)}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

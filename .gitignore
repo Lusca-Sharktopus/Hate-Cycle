@@ -6,11 +6,15 @@ __pycache__/
 *-atualizacao.zip
 # ajustes pessoais do autor (não versionar daqui)
 static/custom.css
-# futuros (Astro)
+# Astro (T05): pacotes instalados, site gerado, cache/tipos gerados, segredos locais
 node_modules/
 dist/
 .astro/
 .env
 .env.*
+# registros de erro do pnpm/npm e lixo do macOS
+pnpm-debug.log*
+npm-debug.log*
+.DS_Store
 # baseline (T03): screenshots são regerados por tools/baseline.py
 baseline/screens/

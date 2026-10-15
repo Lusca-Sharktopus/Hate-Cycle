@@ -1,0 +1,12 @@
+---
+// Este arquivo vira a página /pt/ (src/pages/pt/index.astro → dist/pt/index.html).
+// Por enquanto é só um esqueleto: a home de verdade (capas, últimas atualizações) é a T11.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { siteName, t } from "../../lib/config";
+---
+
+<BaseLayout lang="pt">
+  <h1>{siteName}</h1>
+  <p>{t("pt", "tagline")}</p>
+  <p>{t("pt", "hero_sub")}</p>
+</BaseLayout>
