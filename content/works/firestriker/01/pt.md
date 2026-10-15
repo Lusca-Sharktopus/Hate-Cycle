@@ -1,7 +1,7 @@
 ---
 date: 2025-04-18
 title: Pederneira
-summary: 
+summary: “Estamos perdidos!”, exclamou Harry, meu jovem assistente.
 ---
 
 “Estamos perdidos!”, exclamou Harry, meu jovem assistente. Cansaço, frustração e o que eu só posso interpretar como um gemido causado por dor muscular eram todos audíveis em sua voz.
