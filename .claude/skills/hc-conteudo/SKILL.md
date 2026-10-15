@@ -14,7 +14,8 @@ description: Criar, editar, esconder ou mostrar conteúdo do site Hᴀᴛᴇ Cʏ
 3. **Aspas e apóstrofos curvos** (“ ” ’) no texto corrido. Ao copiar texto do autor, mantenha exatamente o que ele escreveu — inclusive aspas retas se ele usou.
 4. **Versalete** se escreve com as letras Unicode (`ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡʏᴢ`); o gerador converte para `<span class="hc">`. Transcrições fonéticas entre barras (`/ˈwɪθ/`) viram `<span class="ipa">`.
 5. **Texto final do autor é final.** Não reescreva, não "melhore". Erros aparentes: mantenha e aponte na resposta.
-6. Todo item é **bilíngue**: pasta com `en.md` e `pt.md`. Se o autor só mandar um idioma, pergunte se traduz ou se publica só naquele (apagar o outro arquivo = existe só num idioma). Ao traduzir, aplique a mesma regra de nomes da marca nos dois.
+6. **Trocas de fonte e cor são narrativas.** Em Ossos do Ofício, o texto passa de Times New Roman para PT Serif #111012 quando Giuseppe adormece; tudo até "Giuseppe opened his eyes" é sonho. Preserve esse tipo de troca.
+7. Todo item é **bilíngue**: pasta com `en.md` e `pt.md`. Se o autor só mandar um idioma, pergunte se traduz ou se publica só naquele (apagar o outro arquivo = existe só num idioma). Ao traduzir, aplique a mesma regra de nomes da marca nos dois.
 
 ## Comandos (gerador atual, Python)
 
