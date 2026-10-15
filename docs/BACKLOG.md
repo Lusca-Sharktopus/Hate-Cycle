@@ -19,7 +19,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | médio ¹ | T02 | médio | feita (15/10/2026) — PR #1 |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | feita (15/10/2026) — [lição 01](aprendendo-astro/01-anatomia.md) |
 | T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | feita (15/10/2026) — [lição 02](aprendendo-astro/02-layout.md) |
-| T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | em andamento |
+| T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | feita (15/10/2026) — [lição 03](aprendendo-astro/03-runas.md) |
 | T08 | Coleções de conteúdo e schemas | 2 | Opus | alto | T05 | médio | pendente |
 | T09 | Pipeline de Markdown com paridade | 2 | Opus | muito alto | T08 | **alto** | pendente |
 | T10 | Regras do site em `src/lib` + testes | 3 | Sonnet | alto | T08 | médio | pendente |
@@ -73,8 +73,8 @@ Tarefas de risco **alto** recebem, além da thread de construção, uma thread c
 - **Aceite:** cabeçalho e rodapé iguais aos da baseline em 1100 e 390 px (screenshots lado a lado no relatório); lição `02`.
 
 ### T07 — Runas e tela de abertura
-- **Escopo:** componente `RuneImprint` com o mesmo algoritmo de `rune_imprint()`. **Meta: arranjo idêntico ao atual** — reimplementar o gerador do Python (Mersenne Twister com semente via `init_by_array`, `random()` de 53 bits, `shuffle` via `getrandbits`). Se a igualdade exata não sair, parar e perguntar ao autor se aceita arranjos diferentes (mas fixos por página). Tela de abertura (`intro`) com as mesmas regras de sessão e "reduzir movimento".
-- **Aceite:** teste comparando posições geradas pelo Python e pelo TS para 10 URLs; lição `03`.
+- **Escopo:** componente `Runas.astro` (lógica em `src/lib/runas.ts`) com o mesmo algoritmo de `rune_imprint()`. **Meta: arranjo idêntico ao atual** — reimplementar o gerador do Python (Mersenne Twister com semente via `init_by_array`, `random()` de 53 bits, `shuffle` via `getrandbits`). Se a igualdade exata não sair, parar e perguntar ao autor se aceita arranjos diferentes (mas fixos por página). Tela de abertura (`intro`) com as mesmas regras de sessão e "reduzir movimento".
+- **Aceite:** teste comparando posições geradas pelo Python e pelo TS para 10 URLs; lição `03`. **Feito:** `pnpm test` compara 692 sementes (as 192 páginas + 500 sorteadas) contra `tests/fixtures/runas-python.json` (refazer com `python3 tools/runas_ref.py`): 100% iguais.
 
 ### T08 — Coleções de conteúdo e schemas
 - **Escopo:** `src/content.config.ts` com loaders `glob()` apontando para `content/` (notícias, páginas, emissários, personagens, universo, capítulos) e para os `work.json`; schemas Zod com todos os campos de `hc-conteudo`; referências (`related`, `appears_in`) validadas; utilitário de rascunho (`draft` só na prévia).

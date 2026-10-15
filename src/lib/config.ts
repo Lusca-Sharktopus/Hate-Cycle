@@ -131,7 +131,7 @@ export interface Social {
   icon: string;
 }
 
-/** Tela de abertura (config.json → intro). Só o tipo por enquanto: quem usa é a T07. */
+/** Tela de abertura (config.json → intro). Usada por src/components/Abertura.astro (T07). */
 export interface IntroConfig {
   enabled: boolean;
   video: string;
@@ -180,6 +180,9 @@ export const showExtras = config.show_extras;
 
 /** Redes sociais do rodapé (config.json → socials). */
 export const socialLinks: readonly Social[] = config.socials;
+
+/** Tela de abertura (config.json → intro): liga/desliga, vídeo, fundo e tempos mínimo/máximo em milissegundos. */
+export const introConfig: Readonly<IntroConfig> = config.intro;
 
 /** Os idiomas, na ordem do config.json (usada no seletor de idioma e nos hreflang). */
 export const langs = Object.keys(config.languages) as Lang[];

@@ -5,7 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { siteName, t } from "../../lib/config";
 ---
 
-<BaseLayout lang="pt" alternates={{ en: "/en/", pt: "/pt/" }}>
+<BaseLayout lang="pt" alternates={{ en: "/en/", pt: "/pt/" }} seed="/pt/">
   <h1>{siteName}</h1>
   <p>{t("pt", "tagline")}</p>
   <p>{t("pt", "hero_sub")}</p>

@@ -24,7 +24,7 @@ O gerador em Python continua funcionando em paralelo até a virada (T20): `pytho
 |---|---|---|---|
 | [01](01-anatomia.md) | T05 | Anatomia de um projeto Astro: `package.json`, `astro.config.mjs`, roteamento por arquivo em `src/pages/`, o que é um componente `.astro` (o bloco `---` roda no build, o resto é HTML), i18n com `/en/` e `/pt/`, `site` × `base` (o site fica na raiz do domínio, sem `base`) | `shell()` (só o esqueleto), `write()`, `BASE` |
 | [02](02-layout.md) | T06 | Layouts e componentes com *props*; slots; CSS com escopo × CSS global; tokens da marca; camadas de CSS (`@layer`) para o `custom.css` do autor continuar mandando; `<script>` em componente; textos da interface com chaves tipadas; `<head>` com hreflang e Open Graph | `shell()`, `T()`/`TK()`/`tr()` |
-| 03 | T07 | Lógica em TypeScript que roda no build; gerador aleatório com semente; como portar um algoritmo e provar que é igual com um teste | `rune_imprint()` |
+| [03](03-runas.md) | T07 | Lógica em TypeScript que roda no build; gerador aleatório com semente; como portar um algoritmo e provar que é igual com um teste (`pnpm test`); `is:inline` × script processado (tela de abertura) | `rune_imprint()`, `rune_fonts_links()`, intro do `shell()` e do `site.js` |
 | 04 | T08 | Coleções de conteúdo: loaders, schemas Zod, `getCollection()`, referências entre itens, erros de build que apontam o arquivo e o campo | `parse()`, `scalar()`, `load_items()`, `load_works()` |
 | 05 | T09 | Como o Markdown vira HTML (árvores remark/rehype) e como escrever um plugin pequeno (versalete, `[[links]]`, divisor de cena) | `make_md()`, `smallcaps()` |
 | 06 | T10 | Separar regras de apresentação: funções puras em `src/lib` e testes com Vitest | ordenação, "Últimas atualizações", visibilidade |

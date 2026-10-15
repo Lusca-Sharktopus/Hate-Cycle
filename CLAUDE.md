@@ -30,6 +30,7 @@ pnpm install    # uma vez (e quando package.json mudar)
 pnpm dev        # prévia com recarregamento em http://localhost:4321/pt/
 pnpm build      # gera o site Astro em dist/ (hoje: só /en/ e /pt/ de esqueleto)
 pnpm check      # verificação de tipos (astro check): tem de dar 0 errors, 0 warnings
+pnpm test       # testes automáticos (vitest); hoje: as runas iguais às do Python em 692 casos
 ```
 
 ## Mapa de pastas

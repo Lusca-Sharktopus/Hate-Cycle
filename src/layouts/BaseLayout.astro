@@ -5,8 +5,11 @@ import "../styles/tokens.css";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Runas from "../components/Runas.astro";
+import Abertura from "../components/Abertura.astro";
 import { assetUrl, assetVersioned } from "../lib/assets";
 import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config";
+import { runasFontesHtml } from "../lib/runas";
 
 interface Props {
   lang: Lang;
@@ -22,13 +25,15 @@ interface Props {
   noindex?: boolean;
   /** Classes do <body> (ex.: "reader" no leitor de capítulos: a página não ganha a "folha" de papel). */
   bodyClass?: string;
-  /** Semente das runas do fundo (T07). Padrão do shell(): o endereço da página. Ainda não usada. */
+  /** Semente das runas do fundo: o endereço da página, como o page() do build.py passa (ex.: "/pt/").
+   *  Sem semente, usa o endereço desta página. Exceção conhecida: a 404 do build.py usa "404" (T14). */
   seed?: string;
 }
 
-const { lang, title, description, image, alternates = {}, noindex = false, bodyClass = "", seed: _seed } = Astro.props;
+const { lang, title, description, image, alternates = {}, noindex = false, bodyClass = "", seed } = Astro.props;
 
 const pagina = Astro.url.pathname; // ex.: "/pt/"
+const semente = seed ?? pagina;
 
 // Mesma regra do shell(): ttl = site if title == site else f"{title} | {site}"
 const fullTitle = !title || title === siteName ? siteName : `${title} | ${siteName}`;
@@ -65,12 +70,14 @@ const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     {ogImage && <meta property="og:image" content={ogImage} />}
-    <!-- T07: aqui entra o script da tela de abertura (classe "intro" no <html>), como intro_head do shell() -->
+    <Abertura parte="cabeca" />
     <link rel="icon" href="/logos/favicon.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={googleFonts} />
-    <!-- T07: aqui entram os links das fontes Noto das runas (rune_fonts_links do shell()) -->
+    <!-- Fontes Noto das runas: uma <link> por família, só com os símbolos usados (rune_fonts_links do build.py; otimização: T17) -->
+    <!-- (set:html: o texto entra exatamente como o build.py escreve, com "&" cru nos endereços; o teste prova que é igual) -->
+    <Fragment set:html={runasFontesHtml()} />
     <!-- Os estilos da moldura (tokens.css, global.css e os dos componentes) o Astro empacota sozinho em /_astro/. -->
     <!-- custom.css é o arquivo pessoal do autor (static/custom.css): vem DEPOIS, para ganhar dos demais. Pode não existir. -->
     <link rel="stylesheet" href={assetVersioned("custom.css")} />
@@ -78,7 +85,8 @@ const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha
     {siteUrl && <link rel="alternate" type="application/rss+xml" href={`/${lang}/feed.xml`} />}
   </head>
   <body class={bodyClass}>
-    <!-- T07: aqui entram as runas do fundo (rune_imprint do shell(), com a semente `seed`) e a tela de abertura -->
+    <Runas seed={semente} />
+    <Abertura parte="corpo" />
     <a class="skip" href="#main">Skip to content</a>
     <Header lang={lang} alternates={todos} />
     <div class="layout">
