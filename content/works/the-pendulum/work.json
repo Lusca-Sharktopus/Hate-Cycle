@@ -1,0 +1,27 @@
+{
+  "kind": "film",
+  "universe": true,
+  "oneshot": true,
+  "title": {
+    "en": "The Pendulum",
+    "pt": "O Pêndulo"
+  },
+  "blurb": {
+    "en": "Retired superhero Lucas di Vario helps his friend with their problem with time loops.",
+    "pt": "O super-herói aposentado Lucas di Vario ajuda seu amigo com seu problema com loops temporais."
+  },
+  "cover": {
+    "en": "covers/EN/Cover Pendulum.png",
+    "pt": "covers/PT/Capa Pendulo.png"
+  },
+  "logo": {
+    "en": "logos/EN/The Pendulum 1.png",
+    "pt": "logos/PT/O Pêndulo 1.png"
+  },
+  "order": {
+    "release": 6,
+    "chrono": 11
+  },
+  "listed": false,
+  "media": "short-film"
+}

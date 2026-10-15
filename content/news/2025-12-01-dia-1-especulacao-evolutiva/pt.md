@@ -1,0 +1,24 @@
+---
+title: Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele
+date: 2025-12-01
+thumb: news/dia-1-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-dia-1}}
+
+O haoʻumbwa (Arctopithecus angolensis) é um primata cercopitecídeo, pertencente à tribo Papioini. É encontrado principalmente em Angola, mas também ocorre em partes do Congo, da Zâmbia e da República Democrática do Congo.
+
+Os haoʻumbwas são primatas de grande porte, atingindo de 1,4 a 2,8 m de comprimento da cabeça ao corpo (sem contar a cauda) e mais de 1,5 m de altura nos ombros. Essas dimensões são aproximadamente equivalentes às de ursos-pardos, embora A. angolensis seja mais leve, chegando a no máximo 110 kg.
+
+Seu tamanho não é a única semelhança com os ursos-pardos: ecologicamente, eles ocupam um nicho bastante semelhante ao de um grande mamífero altamente onívoro. Alimentam-se de peixes, frutos, insetos, gramíneas, cogumelos, raízes, aves, répteis, pequenos mamíferos e, eventualmente, até mesmo de mamíferos maiores, como antílopes.
+
+Os machos apresentam uma coloração verde iridescente na gengiva superior, utilizada para atrair as fêmeas. Essa coloração não é causada por pigmentos verdes, mas sim por coloração estrutural, de maneira semelhante à observada em seus parentes relativamente próximos, os mandris.
+
+Arctopithecus angolensis não é apenas o parente vivo mais próximo do extinto Dinopithecus ingens: também foram propostas mudanças na classificação de D. ingens, que passaria a ser denominado Arctopithecus ingens.
+
+Seu nome é pronunciado /ɦaʊ̯.ˈʔu.ᵐbʷa/. Ele deriva da língua ghnolli; a parte ʻumbwa também é utilizada para designar outros primatas aparentados, como os babuínos-amarelos (Papio cynocephalus), que ocorrem na mesma região. Já hao significa “feroz” ou “perigoso (de se ter por perto)”.
+
+O nome científico, por sua vez, é composto por “Arctos”, do grego άρκτος, que significa “urso”, e “pithecus”, do grego πίθηκος, que significa “macaco”.

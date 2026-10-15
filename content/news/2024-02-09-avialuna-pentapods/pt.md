@@ -1,0 +1,16 @@
+---
+title: Os Pentápodes de Avialuna
+date: 2024-02-09
+thumb: news/avialuna-pentapods.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-avialuna-pentapods}}
+
+Os celacantos foram uma das cinco espécies de animais trazidas da Terra para Avialuna há cerca de 110 milhões de anos, espalhando-se rapidamente e se desenvolvendo em inúmeras linhagens. Entre essas linhagens estão os pentápodes, vertebrados terrestres com cinco membros, na forma de duas asas e três pernas.
+
+As asas são nadadeiras peitorais, homólogas aos membros anteriores dos tetrápodes, enquanto os membros anteriores dos pentápodes são nadadeiras pélvicas, homólogas aos membros posteriores dos tetrápodes. O único membro posterior é uma nadadeira anal adaptada, que se perde nos tetrápodes.
+
+A principal hipótese para sua evolução é que eles desenvolveram asas primeiro para caçar caranguejos voadores (o equivalente dos insetos em Avialuna), que voavam para a terra, forçando os peixes a aprender a voltar para a água rastejando e, por fim, caminhando.

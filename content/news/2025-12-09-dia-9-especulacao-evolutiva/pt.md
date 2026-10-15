@@ -1,0 +1,18 @@
+---
+title: Dia 9 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele
+date: 2025-12-09
+thumb: news/dia-9-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-9}}
+
+Os cogumelos-cobra (Ophiomycena spp.) são um gênero de cogumelo de lamelas da família Agaricaceae encontrado em quase todo o continente africano, com exceção do deserto do Saara e da bacia do Congo. Essa é, e não por coincidência, a mesma distribuição geográfica do secretário (Sagittarius serpentarius).
+
+A aparência impressionantemente semelhante à de cobras, especificamente cobras-naja, é uma forma de mimetismo do cogumelo para ajudar a propagar seus esporos, que não só se espalham pela área geral onde a interação acontece, como também grudam nos pés da ave, muitas vezes por horas ou até dias, permitindo que se espalhem por uma área muito maior.
+
+Uma coisa que Ophiomycena spp. não compartilha com as najas é a toxicidade: na verdade, são perfeitamente comestíveis para humanos e fazem parte da culinária de vários povos da África subsaariana. Os ghnolli, por exemplo, têm um prato chamado siTsughíktsa (pronunciado /si.t͡su.'xɪ.ᵏǃa/), um ensopado feito de cogumelos-cobra e carne de avestruz.
+
+O nome pode ser dividido no grego ὄφις, que significa serpente, e μύκης, que significa fungo ou cogumelo.

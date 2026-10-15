@@ -1,0 +1,29 @@
+{
+  "kind": "prose",
+  "universe": true,
+  "oneshot": true,
+  "listed": true,
+  "title": {
+    "en": "All in a Night's Work",
+    "pt": "Ossos do Ofício"
+  },
+  "blurb": {
+    "en": "Giuseppe di Vario deals with the hardships of working as an exorcist",
+    "pt": "Giuseppe di Vario lida com as dificuldades de trabalhar como um exorcista"
+  },
+  "logo": {
+    "en": "logos/EN/All in a Night's Work 2.png",
+    "pt": "logos/PT/Ossos do Ofício 2.png"
+  },
+  "divider": "other images/AIANW Scene Divider.png",
+  "order": {
+    "release": 4,
+    "chrono": 4
+  },
+  "cover": {
+    "en": "covers/EN/Cover All in a Night's Work.png",
+    "pt": "covers/PT/Capa Ossos do Ofício.png"
+  },
+  "reading_font": "times",
+  "media": "short-story"
+}

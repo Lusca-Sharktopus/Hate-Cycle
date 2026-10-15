@@ -1,0 +1,17 @@
+---
+title: Arte Oficial: Kartekta
+date: 2023-08-20
+thumb: news/kartekta.png
+tags:
+  - Post
+  - Arte Oficial
+  - Worldbuilding
+---
+
+{{embed:https://www.instagram.com/p/CwLsGn-LFsz/}}
+
+As Libélulas-grúticas-gigantes, ou "Kartekta'i" como são chamadas na linguagem local, são Meganeurídeos, um grupo que se acreditava estar extinto desde o carbonífero, a mais de 300 milhões de anos atrás.
+
+Seu exoesqueleto apresenta uma cor iridescente verde-azulada, possivelmente por conseqüência de coloração estrutural. Seus olhos são avermelhados e bioluminescentes, o que os ajuda a enxergar em meio ao ambiente escuro das grutas onde vivem.
+
+Esses animais tem quase 40cm de comprimento e 70cm de envergadura das asas, o que ainda intriga nossa equipe quanto a como esses animais conseguem manter seu tamanho, visto que os Meganeurídeos do carbonífero apenas conseguiam tal feito graças aos níveis de oxigênio da época.

@@ -1,0 +1,14 @@
+# saída do gerador e caches
+public/
+__pycache__/
+*.pyc
+# entregas empacotadas
+*-atualizacao.zip
+# ajustes pessoais do autor (não versionar daqui)
+static/custom.css
+# futuros (Astro)
+node_modules/
+dist/
+.astro/
+.env
+.env.*

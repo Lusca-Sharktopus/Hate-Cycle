@@ -1,0 +1,22 @@
+{
+  "kind": "prose",
+  "universe": false,
+  "langs": [
+    "pt"
+  ],
+  "title": {
+    "pt": "Two Ways"
+  },
+  "blurb": {
+    "pt": "Em um mundo cruel que não tem lugar para os fracos, onde um Imperador e seus domínios crescem a cada dia, o caçador de recompensas Tyler Fumetsu recebe uma proposta que pode mudar a sua vida."
+  },
+  "cover": {
+    "pt": "covers/PT/Capa Two Ways.png"
+  },
+  "external": {
+    "pt": "https://xbato.com/series/80739/two-ways"
+  },
+  "cta": {
+    "pt": "Leia Aqui"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "kind": "video",
+  "universe": false,
+  "langs": [
+    "pt"
+  ],
+  "title": {
+    "pt": "Goblin: Ascenção"
+  },
+  "blurb": {
+    "pt": "Guiados por Bassen, o grupo de, agora, hobgoblins parte em direção a Sinnouah, a Cidade do Norte, enfrentando não só o clima extremo das terras gélidas, mas também os perigos que espreitam entre montanhas e florestas congeladas."
+  },
+  "cover": {
+    "pt": "covers/PT/Capa Ascencao.png"
+  },
+  "external": {
+    "pt": "https://youtube.com/playlist?list=PLxDFuZd3xgjTcAG9dzJJihuOMuhM1Ymbg&si=8iHHnOwOhBRRS9X5"
+  },
+  "cta": {
+    "pt": "Assista no YouTube"
+  }
+}
