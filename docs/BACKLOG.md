@@ -18,7 +18,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | feita (15/10/2026) — `docs/baseline.md` |
 | T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | médio ¹ | T02 | médio | feita (15/10/2026) — PR #1 |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | feita (15/10/2026) — [lição 01](aprendendo-astro/01-anatomia.md) |
-| T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | em andamento |
+| T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | feita (15/10/2026) — [lição 02](aprendendo-astro/02-layout.md) |
 | T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | pendente |
 | T08 | Coleções de conteúdo e schemas | 2 | Opus | alto | T05 | médio | pendente |
 | T09 | Pipeline de Markdown com paridade | 2 | Opus | muito alto | T08 | **alto** | pendente |
@@ -155,3 +155,5 @@ CLAUDE.md, `.claude/rules` e todas as skills refletindo os comandos e a estrutur
 | B14 | `NOTICIAS-PENDENTES.md` (posts do Reddit) citado no antigo LEIA-ME, mas o arquivo não existe; há embeds do Reddit em `content/embeds/` | Ainda falta cadastrar algum post? |
 | B15 | Criar a tag `site-antigo` no commit `31904c2` da `main` (o envio de tags é bloqueado nesta sessão): GitHub → Releases → *Draft a new release* → *Choose a tag* → digite `site-antigo` → *Create new tag* com alvo `main` → *Publish release* (ou só salve como rascunho). | Autor, quando puder (precisa existir antes da T20) |
 | B16 | Redirects de Ossos do Ofício no `config.json` (arquivo do autor): `ossos.html` → `/pt/` e `nights.html` → `/en/`. **Resposta do autor (15/10): a versão em português vem depois** — manter como está. Quando o capítulo em PT sair, o autor troca `ossos.html` para `/pt/works/all-in-a-nights-work/01/` (e, se quiser, `nights.html` para `/en/works/all-in-a-nights-work/01/`). | Autor, junto com a publicação de Ossos em PT |
+| B17 | O link "Skip to content" (pular para o conteúdo, usado por leitores de tela e teclado) e o rótulo do menu (`aria-label="Main"`) estão em inglês também nas páginas em português — herdado do site atual (achado na T06). | Traduzir? Se sim, o autor acrescenta chaves novas em `config.json → ui` (ex.: `skip` e `nav_label`) e o Astro passa a usá-las. |
+| B18 | `config.json` tem `copyright_from: 2024`, mas o rodapé sempre mostrou "© 2023 - …" (o 2023 está fixo no `build.py`). O Astro manteve 2023 para ficar igual (achado na T06). | Qual é o ano certo? Se for 2024, o Astro passa a ler o `copyright_from`. |

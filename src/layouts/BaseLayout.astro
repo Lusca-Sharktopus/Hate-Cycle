@@ -1,18 +1,57 @@
 ---
-// Moldura de toda página (o esqueleto do shell() do build.py).
+// Moldura de toda página (o shell() do build.py): <head> completo, cabeçalho, conteúdo e rodapé.
 // Esta parte, entre as linhas ---, roda só no build (no seu computador), nunca no navegador.
-import { siteName, htmlLang, type Lang } from "../lib/config";
+import "../styles/tokens.css";
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { assetUrl, assetVersioned } from "../lib/assets";
+import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config";
 
 interface Props {
   lang: Lang;
   /** Título da página. Sem título (ou igual ao nome do site), a aba mostra só o nome do site. */
   title?: string;
+  /** Descrição para buscadores e redes sociais. Padrão: a frase de apresentação do site (ui.hero_sub). */
+  description?: string;
+  /** Imagem de pré-visualização (og:image), relativa a static/ (ex.: "covers/x.png"). */
+  image?: string;
+  /** Endereço desta mesma página em cada idioma (vira <link hreflang> e o seletor de idioma). */
+  alternates?: Partial<Record<Lang, string>>;
+  /** Página fora dos buscadores (capítulos "unlisted"). */
+  noindex?: boolean;
+  /** Classes do <body> (ex.: "reader" no leitor de capítulos: a página não ganha a "folha" de papel). */
+  bodyClass?: string;
+  /** Semente das runas do fundo (T07). Padrão do shell(): o endereço da página. Ainda não usada. */
+  seed?: string;
 }
 
-const { lang, title } = Astro.props;
+const { lang, title, description, image, alternates = {}, noindex = false, bodyClass = "", seed: _seed } = Astro.props;
+
+const pagina = Astro.url.pathname; // ex.: "/pt/"
 
 // Mesma regra do shell(): ttl = site if title == site else f"{title} | {site}"
 const fullTitle = !title || title === siteName ? siteName : `${title} | ${siteName}`;
+const desc = description || t(lang, "hero_sub");
+
+// og:image precisa ser um endereço completo. Aqui a base é o `site` do astro.config.mjs (https://hatecycle.com).
+// DIFERENÇA INTENCIONAL do shell(): lá o resultado era site_url + asset(image), e como BASE (config.json → base_url)
+// está como endereço completo, saía "https://hatecycle.comhttps://…" (bug B1). Aqui não existe `base`, então não duplica.
+const site = Astro.site ?? new URL(siteUrl);
+const ogImage = image ? (/^https?:/.test(image) ? image : new URL(assetUrl(image), site).href) : undefined;
+
+// Um hreflang por idioma. O próprio idioma da página sempre entra (o page() do build.py faz alt.setdefault(lang, url)).
+const todos: Partial<Record<Lang, string>> = { [lang]: pagina, ...alternates };
+const hreflangs = langs.flatMap((l) => {
+  const href = todos[l];
+  return href ? [{ lang: l, href }] : [];
+});
+
+// Fontes do Google Fonts: o MESMO link do shell(). Fontes servidas pelo próprio site: T17.
+const googleFonts =
+  "https://fonts.googleapis.com/css2?family=Lexend:wght@300..800&family=Oswald:wght@300..700&family=Vollkorn+SC:wght@400;600;700&family=Noto+Emoji:wght@300..700&family=PT+Serif:ital@0;1&family=Road+Rage&display=swap";
+
+const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha a "folha" de papel
 ---
 
 <!doctype html>
@@ -21,8 +60,33 @@ const fullTitle = !title || title === siteName ? siteName : `${title} | ${siteNa
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="description" content={desc} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <!-- T07: aqui entra o script da tela de abertura (classe "intro" no <html>), como intro_head do shell() -->
+    <link rel="icon" href="/logos/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={googleFonts} />
+    <!-- T07: aqui entram os links das fontes Noto das runas (rune_fonts_links do shell()) -->
+    <!-- Os estilos da moldura (tokens.css, global.css e os dos componentes) o Astro empacota sozinho em /_astro/. -->
+    <!-- custom.css é o arquivo pessoal do autor (static/custom.css): vem DEPOIS, para ganhar dos demais. Pode não existir. -->
+    <link rel="stylesheet" href={assetVersioned("custom.css")} />
+    {hreflangs.map((h) => <link rel="alternate" hreflang={h.lang} href={h.href} />)}
+    {siteUrl && <link rel="alternate" type="application/rss+xml" href={`/${lang}/feed.xml`} />}
   </head>
-  <body>
-    <slot />
+  <body class={bodyClass}>
+    <!-- T07: aqui entram as runas do fundo (rune_imprint do shell(), com a semente `seed`) e a tela de abertura -->
+    <a class="skip" href="#main">Skip to content</a>
+    <Header lang={lang} alternates={todos} />
+    <div class="layout">
+      <main id="main" class={isReader ? undefined : "sheet"}>
+        <slot />
+      </main>
+    </div>
+    <Footer lang={lang} />
+    <!-- site.js (ordenação, carrossel, notícias…) volta como <script> dos componentes que o usam: T11 em diante -->
   </body>
 </html>

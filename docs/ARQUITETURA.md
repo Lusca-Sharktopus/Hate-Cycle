@@ -83,7 +83,7 @@ Mudar uma decisão daqui = nova entrada neste arquivo (com data), não edição 
 
 ## D9 — Fora do escopo por enquanto
 
-- **Tailwind** — o site tem direção de arte sob medida; fica CSS com tokens + estilos por componente.
+- **Tailwind** — o site tem direção de arte sob medida; fica CSS com tokens + estilos por componente. Desde a T06 (15/10/2026), todo CSS do Astro fica em `@layer site`, para que o `custom.css` do autor (fora de camada) continue vencendo; regra em `.claude/rules/astro-estilos.md`.
 - **CMS no navegador** — o autor escreve em arquivos.
 - **Monorepo** — um site só.
 - **Servidor / SSR** — o site continua estático.

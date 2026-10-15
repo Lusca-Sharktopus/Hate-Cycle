@@ -1,0 +1,40 @@
+---
+// Rodapé: redes sociais, "© 2023 - ano by autor" e o link do feed RSS (o <footer> do shell() do build.py).
+// A barra lateral (SIDEBAR_ON do build.py) está desligada, então as redes ficam aqui.
+import { assetUrl } from "../lib/assets";
+import { authorName, siteUrl, socialLinks, t, type Lang } from "../lib/config";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const ano = new Date().getFullYear(); // ano do build, como datetime.date.today().year
+---
+
+<footer class="site-footer">
+  <div class="social">
+    {
+      socialLinks.map((s) => (
+        <a href={s.url} target="_blank" rel="noopener" title={s.name}>
+          <img src={assetUrl(s.icon)} alt={s.name} />
+        </a>
+      ))
+    }
+  </div>
+  <p>&copy; 2023 - {ano} by {authorName} {siteUrl && <a href={`/${lang}/feed.xml`}>{t(lang, "rss")}</a>}</p>
+</footer>
+
+<style>
+  @layer site {
+    /* Copiado de static/style.css (seção "rodapé"), mesmos valores. */
+    .site-footer {
+      text-align: center; margin-top: 2.2rem; padding: 1rem 1rem 2rem; color: var(--on-brand); font-size: 1.05rem; font-weight: 500;
+      position: relative; z-index: 1;
+    }
+    .site-footer a { color: var(--on-brand); }
+    .social { display: flex; justify-content: center; gap: .9rem; margin-bottom: .8rem; }
+    .social img { width: 34px; height: 34px; object-fit: contain; }
+    .site-footer p { margin: .25rem 0; }
+  }
+</style>

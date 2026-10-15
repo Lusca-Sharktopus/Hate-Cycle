@@ -1,0 +1,56 @@
+/* Estilos globais da moldura (T06): reset, corpo da página, tipografia base e as peças que a moldura
+   precisa (.skip, .layout, .sheet, .hc). Copiados de static/style.css com os mesmos valores.
+   Estilos de componente ficam NO componente (src/components/*.astro) e valem só para ele.
+   Os valores de cor/fonte/largura vêm de tokens.css. */
+
+@layer site {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; min-height: 100vh; font-family: var(--font-text); line-height: 1.6; color: var(--ink);
+    background: linear-gradient(to bottom, var(--top) 0, var(--green) 420px, var(--teal) 100%) no-repeat, var(--teal);
+  }
+  img { max-width: 100%; height: auto; }
+  a { color: var(--teal); }
+  a:hover { color: var(--green); }
+  :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 4px; }
+
+  /* link "pular para o conteúdo": escondido até receber foco pelo teclado */
+  .skip { position: absolute; left: -999px; top: 0; background: var(--on-brand); padding: .5rem 1rem; z-index: 20; }
+  .skip:focus { left: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  h1, h2, h3, .chapter-title { font-family: var(--font-head); font-weight: 600; line-height: 1.1; color: var(--green); margin: 0 0 .5em; text-shadow: 0 3px 4px #0000002e; }
+  h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); }
+  h2 { font-size: clamp(2rem, 5vw, 3.4rem); margin-top: 1.1em; }
+  h3 { font-size: 1.3rem; text-shadow: none; }
+
+  /* "Hate Cycle" em versalete (H e C grandes): o texto do autor usa as letras Unicode (Hᴀᴛᴇ Cʏᴄʟᴇ) e,
+     quando o Markdown virar HTML (T09), elas viram <span class="hc">Hate Cycle</span> */
+  .hc { font-variant: small-caps; letter-spacing: .02em; }
+
+  /* a "folha" de papel que contém cada página */
+  .sheet {
+    max-width: var(--w-sheet); margin: 0 auto; padding: clamp(1.4rem, 5vw, 3.6rem) clamp(1.2rem, 5vw, 3.6rem);
+    background: var(--paper), var(--sheet); background-color: var(--sheet); border-radius: var(--sheet-radius);
+    box-shadow: var(--shadow-sheet); width: calc(100% - 2rem);
+  }
+
+  /* moldura: a folha (e, quando ligada, a barra lateral) lado a lado; em tela estreita, uma sobre a outra */
+  .layout { display: flex; align-items: flex-start; gap: 1.2rem; max-width: var(--w-layout); margin: 0 auto; padding: 0 1rem; }
+  .layout > main { flex: 1 1 0; min-width: 0; }
+  .layout > main.sheet { width: auto; margin: 0; }
+  .layout > main:not(.sheet) { padding: 0; }
+  @media (max-width: 1099px) {
+    .layout { display: block; padding: 0; }
+    .layout > main.sheet { width: calc(100% - 2rem); margin: 0 auto; }
+  }
+
+  /* camadas: o conteúdo fica acima das runas do fundo (T07); o cabeçalho (z-index 5, no componente)
+     fica acima do conteúdo para o menu suspenso não ser coberto. Escala completa: .claude/rules/estilos.md */
+  main { position: relative; z-index: 1; }   /* o rodapé faz o mesmo no próprio componente */
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+  }
+}
