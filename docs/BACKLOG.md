@@ -22,7 +22,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | feita (15/10/2026) — [lição 03](aprendendo-astro/03-runas.md) |
 | T08 | Coleções de conteúdo e schemas | 2 | Opus | alto | T05 | médio | feita (15/10/2026) — [lição 04](aprendendo-astro/04-colecoes.md) |
 | T09 | Pipeline de Markdown com paridade | 2 | Opus | muito alto | T08 | **alto** | feita (15/10/2026) — [lição 05](aprendendo-astro/05-markdown.md); revisão independente aprovada com ressalvas |
-| T10 | Regras do site em `src/lib` + testes | 3 | Sonnet | alto | T08 | médio | pendente |
+| T10 | Regras do site em `src/lib` + testes | 3 | Sonnet | alto | T08 | médio | em andamento |
 | T11 | Home, Histórias, página da obra, Emissários | 3 | Sonnet | alto | T06, T09, T10 | médio | pendente |
 | T12 | Leitor de capítulos (prosa, HQ, vídeo, episódios) | 3 | Opus | alto | T11 | **alto** | pendente |
 | T13 | Notícias (lista, artigo, colagem, backdrop, embeds) | 3 | Sonnet | alto | T11 | médio | pendente |
