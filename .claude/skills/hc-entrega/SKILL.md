@@ -26,13 +26,13 @@ O autor recebe as mudanças como um zip com **só os arquivos alterados**, mante
    ```bash
    last=$(git tag -l 'entregue-*' --sort=-creatordate | head -1)
    git add -A && git status --short
-   git diff --name-only --diff-filter=ACMR "$last" -- . ':!config.json' ':!static/custom.css'
-   git diff --name-only --diff-filter=D "$last"      # apagados: listar na mensagem, o zip não apaga nada
+   git diff --no-renames --name-only --diff-filter=ACMR "$last" -- . ':!config.json' ':!static/custom.css'
+   git diff --no-renames --name-only --diff-filter=D "$last"      # apagados: listar na mensagem, o zip não apaga nada
    ```
 
 5. **Empacotar** com o nome fixo `1-hatecycle-site-atualizacao.zip` (o "1-" faz o arquivo aparecer primeiro na pasta de downloads do autor):
    ```bash
-   git diff --name-only -z --diff-filter=ACMR "$last" -- . ':!config.json' ':!static/custom.css' \
+   git diff --no-renames --name-only -z --diff-filter=ACMR "$last" -- . ':!config.json' ':!static/custom.css' \
      | xargs -0 zip -q 1-hatecycle-site-atualizacao.zip
    ls -la 1-hatecycle-site-atualizacao.zip
    ```
