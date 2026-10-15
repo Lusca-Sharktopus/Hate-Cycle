@@ -15,7 +15,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 |---|---|---|---|---|---|---|---|
 | T01 | Skills do projeto | 0 | Opus | alto | — | baixo | feita (15/10/2026) |
 | T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | feita (15/10/2026) |
-| T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | pendente |
+| T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | em andamento |
 | T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | médio ¹ | T02 | médio | feita (15/10/2026) — PR #1 |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | pendente |
 | T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | pendente |
