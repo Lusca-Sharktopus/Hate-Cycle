@@ -16,7 +16,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T01 | Skills do projeto | 0 | Opus | alto | — | baixo | feita (15/10/2026) |
 | T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | feita (15/10/2026) |
 | T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | pendente |
-| T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | baixo | T02 | médio | **bloqueada** (instalar o app do Claude no repositório) |
+| T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | médio ¹ | T02 | médio | em andamento |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | pendente |
 | T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | pendente |
 | T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | pendente |
@@ -36,6 +36,8 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T20 | Virada: deploy automático e branch legado | 6 | Sonnet | médio | T19b, T04 | **alto** | pendente |
 | T21 | Qualidade contínua (testes no CI, links, acessibilidade) | 7 | Sonnet | médio | T20 | baixo | pendente |
 | T22 | Atualizar CLAUDE.md, regras e skills para o Astro | 7 | Sonnet | médio | T20 | baixo | pendente |
+
+¹ Subiu de baixo para médio: a branch nova não tem histórico em comum com a `main` (precisa ser reconstruída sobre ela para o pull request existir) e o envio de ~119 MB tem de ser feito em partes.
 
 Tarefas de risco **alto** recebem, além da thread de construção, uma thread curta de revisão com um agente que não participou dela.
 
