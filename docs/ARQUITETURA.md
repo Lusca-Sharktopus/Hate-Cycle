@@ -52,7 +52,7 @@ Mudar uma decisão daqui = nova entrada neste arquivo (com data), não edição 
     - **Versalete:** como no `build.py` (o `shell()` aplica a todo o `<main>`), o `rendered.html` vem **sem** versalete; cada página aplica `versaleteEntreTags()` **uma vez** no `<main>` inteiro (T11+). Aplicar duas vezes não dá o mesmo resultado.
     - **Atalhos** `{{stories}}`/`{{emissaries}}`/`{{other-stories}}`: no `rendered.html` viram marcadores `<!--hc:atalho:nome-->`; a página troca pelo HTML dos componentes com `aplicarAtalhos()` **antes** do versalete (T11/T14).
     - Na prévia, o carregador relê o `content/` inteiro a cada mudança (o HTML de uma entrada depende de outras: títulos dos `[[links]]`, embeds, `work.json`).
-    - Diferença conhecida e aceita: `\w`/`\d` do porte usam o Unicode do Node (16.0); o Python 3.13 usa o 15.1. Divergem só em 4382 letras e 80 algarismos que o Python ainda não conhece (o teste confere); nenhum aparece no conteúdo.
+    - Diferença conhecida e aceita: `\w`/`\d` do porte usam o Unicode do Node (16.0); o Python 3.13 usa o 15.1. Divergem só em 4382 caracteres de `\w` (4302 letras + 80 algarismos) que o Python ainda não conhece (o teste confere); nenhum aparece no conteúdo.
     - Um capítulo que um dia virar `.mdx` (D4 original, T12) não passa por este conversor; a T12 decide como os dois convivem.
 
 ## D5 — Comentários: Supabase continua, banco versionado

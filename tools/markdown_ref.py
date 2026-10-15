@@ -109,7 +109,10 @@ def build_de_verdade(drafts):
 
         def render_gravando(text):
             salvo = build.SHORT.get(lang)
-            build.SHORT[lang] = dict(ATALHOS)          # os cards de verdade dão lugar aos marcadores do Astro
+            # Os cards de verdade dão lugar aos marcadores do Astro. Atenção (revisão da T09): no build.py, o texto dos
+            # EMISSÁRIOS é convertido enquanto SHORT[lang] ainda está sendo montado, então lá um {{atalho}} sumiria (""),
+            # enquanto no Astro fica o marcador. Nenhum emissário usa atalho hoje; se um dia usar, decidir o comportamento.
+            build.SHORT[lang] = dict(ATALHOS)
             try:
                 html = render_original(text)
             finally:

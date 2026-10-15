@@ -16,7 +16,7 @@ O site no ar **não muda nada**, e o **jeito de escrever também não**. Ainda n
 
 ## Abra lado a lado (nesta ordem)
 
-1. No `build.py`: `make_md()` (linhas ~127–185), `smallcaps()`/`ipa_ok()` (~40–59), a linha ~358 do `shell()` (o versalete no `<main>`), `url_embed()`/`embed_html()` (~522–575) e a página Sobre (~913–921).
+1. No `build.py`: `make_md()` (linhas ~128–188), `smallcaps()`/`ipa_ok()` (~45–60), a linha ~358 do `shell()` (o versalete no `<main>`), `url_embed()`/`embed_html()` (~527–600) e a página Sobre (~920).
 2. `src/lib/markdown.ts`: o porte do `make_md()`, do versalete e dos embeds.
 3. `src/lib/corpos.ts`: o "contexto" de cada texto (idioma, divisor, índice dos links, atalhos, página Sobre).
 4. `src/lib/leitor.ts`, parte final (`carregador`): onde o HTML é guardado.

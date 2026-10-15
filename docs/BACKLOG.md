@@ -21,7 +21,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | feita (15/10/2026) — [lição 02](aprendendo-astro/02-layout.md) |
 | T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | feita (15/10/2026) — [lição 03](aprendendo-astro/03-runas.md) |
 | T08 | Coleções de conteúdo e schemas | 2 | Opus | alto | T05 | médio | feita (15/10/2026) — [lição 04](aprendendo-astro/04-colecoes.md) |
-| T09 | Pipeline de Markdown com paridade | 2 | Opus | muito alto | T08 | **alto** | em andamento |
+| T09 | Pipeline de Markdown com paridade | 2 | Opus | muito alto | T08 | **alto** | feita (15/10/2026) — [lição 05](aprendendo-astro/05-markdown.md); revisão independente aprovada com ressalvas |
 | T10 | Regras do site em `src/lib` + testes | 3 | Sonnet | alto | T08 | médio | pendente |
 | T11 | Home, Histórias, página da obra, Emissários | 3 | Sonnet | alto | T06, T09, T10 | médio | pendente |
 | T12 | Leitor de capítulos (prosa, HQ, vídeo, episódios) | 3 | Opus | alto | T11 | **alto** | pendente |
@@ -81,16 +81,19 @@ Tarefas de risco **alto** recebem, além da thread de construção, uma thread c
 - **Aceite:** build passa com todo o conteúdo atual; um campo inválido proposital gera erro claro (teste); contagens por coleção iguais às do gerador Python; erros reais encontrados no conteúdo listados (não corrigir texto do autor sem perguntar); lição `04`.
 
 ### T09 — Pipeline de Markdown com paridade ⚠
-- **Escopo:** plugins remark/rehype para: quebras de linha "suaves" do gerador atual, blocos de HTML cru, prefixo `@/`, `---` → divisor de cena da obra, `[[links]]`, versalete Unicode → `.hc`, IPA → `.ipa`, atalhos `{{stories}}`/`{{emissaries}}`/`{{other-stories}}`/`{{embed:…}}`.
-- **Aceite:** teste que renderiza **todos** os `.md` com o `make_md()` do Python e com o pipeline novo, normaliza e compara — zero diferenças não explicadas; lição `05`. Revisão independente.
+- **Escopo (como foi feito):** porte fiel de `make_md()`, `smallcaps()`/`ipa_ok()` e `url_embed()`/`embed_html()` em `src/lib/markdown.ts`, **em vez de plugins remark/rehype** (ARQUITETURA D4, 15/10/2026: o Markdown padrão do Astro 7 sai diferente em 189 de 189 textos). Contexto de cada entrada em `src/lib/corpos.ts` (idioma, `divider` só nos capítulos, índice dos `[[links]]` com rascunho/`unlisted`/`show_extras`, página Sobre = Projeto + Sobre, atalhos como marcadores `<!--hc:atalho:nome-->`). O carregador preenche `rendered.html`; as páginas usam `render()`/`<Content />` e depois `aplicarAtalhos()` e `versaleteEntreTags()` **uma vez** no `<main>`. Ferramenta só da prévia: `/dev/markdown/`.
+- **Aceite (cumprido):** `tests/markdown.test.ts` contra `tools/markdown_ref.py`, texto a texto, sem normalização (todos os corpos, build e prévia, com e sem versalete; chamadas reais do `build()`; 1132 casos inventados; embeds; classes `\w`/`\s`/`\d`); teste de mutação; prova com `render()` no Astro real; lição `05`. **Revisão independente: aprovado com ressalvas** — fuzzer próprio, 303.000 casos, 302.998 iguais (os 2 restantes: nome de embed com mais de 255 bytes, em que o Python para com erro e o Astro devolve vazio).
+- **Ressalvas registradas (hipotéticas, nenhuma afeta o conteúdo de hoje):** embed com nome gigante (acima); letras novas do Unicode 16 em volta de `*`; `work.json` com título vazio (`tr()` do Astro cai no nome da pasta, o Python mostra vazio — alinhar na T10 ou proibir título vazio no schema); `{{atalho}}` dentro de texto de emissário (some no Python, fica o marcador no Astro); `title: true` vira erro de schema (melhor que o Python). A referência só cobre `show_extras: false`.
 
 ### T10 — Regras do site em `src/lib`
 - **Escopo:** listagem/ordem de obras (lançamento, cronológica, alfabética), obras "outras histórias", capítulos ocultos, "Últimas atualizações" (incl. fusão notícia+capítulo em até 3 dias), emissários (ordem, ocultos), itens do menu, datas PT/EN. Funções puras.
 - **Aceite:** testes Vitest comparando com saídas exportadas do Python; lição `06`.
+- **Herdado da T09:** alinhar `tr()` com o Python para traduzíveis vazios (`{"en": "", "pt": ""}`) ou proibir texto vazio no schema.
 
 ### T11 — Home, Histórias, obra, Emissários
 - **Escopo:** rotas dinâmicas e componentes (`WorkCard`, carrossel, seletor de ordem/filtro/busca de histórias em TS, grade de emissários, página da obra com lista de capítulos).
 - **Aceite:** screenshots iguais à baseline (1100/390); seletor testado no Playwright; lição `07`.
+- **Herdado da revisão da T09 (obrigatório):** o layout captura o `<main>` inteiro como texto (ex.: `Astro.slots.render`) e aplica `aplicarAtalhos()` e depois `versaleteEntreTags()` **uma única vez**, como o `shell()` (o Python aplica o versalete a todo texto do `<main>`, inclusive títulos, cards e paginação). Teste do `<main>` inteiro de cada página contra o Python.
 
 ### T12 — Leitor de capítulos ⚠
 - **Escopo:** prosa (`reading_font`, divisor, Giuseppe com `shape-outside`, cena 1 de Ossos, tiras do quadrinho, carta que vira), HQ (`pages_glob` em ordem numérica), vídeo (YouTube, episódios de Luz & Sangue), oneshot, links externos, anterior/próximo, aviso de rascunho, seção de comentários com os **mesmos IDs**.
@@ -103,6 +106,7 @@ Tarefas de risco **alto** recebem, além da thread de construção, uma thread c
 ### T14 — Páginas restantes e endpoints
 - **Escopo:** Sobre/Projeto (layout largo, GIFs contornados), Apoio, Extras atrás de `show_extras`, raiz que escolhe o idioma, 404, RSS (`@astrojs/rss`, links corretos), sitemap, redirects do site antigo.
 - **Aceite:** lista de URLs igual à da baseline (+ sitemap); RSS válido; lição `09`.
+- **Atenção (revisão da T09):** no `pnpm dev`/`preview`, caminhos sem idioma (ex.: `/dev/markdown/`) respondem HTTP 404 por causa da regra do i18n do Astro, embora mostrem a página. Vai afetar a raiz `/` e as páginas de redirect no dev/preview: conferir e resolver aqui.
 
 ### T15 — Comentários ⚠
 - **Escopo:** `comments.js` → módulo TypeScript com `@supabase/supabase-js` instalado e com versão fixa, carregado só onde há comentários; mesmos IDs de página; `supabase/migrations/` a partir do `supabase-setup.sql` (Supabase CLI), documentação.
