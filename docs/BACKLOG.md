@@ -32,7 +32,8 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T17 | Imagens e fontes otimizadas | 5 | Sonnet | alto | T14 | médio | pendente |
 | T18 | Paridade com a baseline + correções | 6 | Opus | alto | T15, T17 | **alto** | pendente |
 | T19 | Revisão independente da migração | 6 | Opus | muito alto | T18 | **alto** | pendente |
-| T20 | Virada: deploy automático e branch legado | 6 | Sonnet | médio | T19, T04 | **alto** | pendente |
+| T19b | Acabamento do autor no site novo (elementos gráficos, detalhes, notícias novas) | 6 | Sonnet (quando precisar) | médio | T19 | baixo | pendente |
+| T20 | Virada: deploy automático e branch legado | 6 | Sonnet | médio | T19b, T04 | **alto** | pendente |
 | T21 | Qualidade contínua (testes no CI, links, acessibilidade) | 7 | Sonnet | médio | T20 | baixo | pendente |
 | T22 | Atualizar CLAUDE.md, regras e skills para o Astro | 7 | Sonnet | médio | T20 | baixo | pendente |
 
@@ -118,6 +119,9 @@ Pagefind para busca de texto completo em histórias e notícias; captcha (Turnst
 
 ### T19 — Revisão independente ⚠
 Agente que não participou de nada: audita o relatório da T18, sorteia 20 páginas para conferir à mão, revisa segurança dos comentários e acessibilidade básica. Saída: "pode virar" ou lista de impedimentos.
+
+### T19b — Acabamento do autor
+Decisão do autor (15/10/2026): **o site antigo continua no ar em hatecycle.com até o novo ficar pronto**. Depois do Astro pronto e revisado (T19), o autor ainda acrescenta elementos gráficos, detalhes e talvez mais notícias; as threads desta fase são pedidos pontuais dele. Só depois do OK explícito do autor vem a virada.
 
 ### T20 — Virada ⚠
 - **Escopo:** workflow do GitHub Actions publicando no GitHub Pages; `base`/`site` corretos; branch `legado-python` com o gerador antigo; `build.py`, `public/` e afins saem da branch principal; `static/` reorganizado entre `public/` e `src/assets/`.
