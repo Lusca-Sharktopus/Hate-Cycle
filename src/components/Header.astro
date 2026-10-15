@@ -15,7 +15,7 @@ interface Props {
 const { lang, alternates = {}, current = Astro.url.pathname } = Astro.props;
 
 // Itens do menu na mesma ordem do shell(): Histórias sempre; depois Sobre, Notícias, Extras e Apoio se existirem.
-const menu = menuDoIdioma(lang);
+const menu = await menuDoIdioma(lang);
 const links: MenuLink[] = [{ href: `/${lang}/works/`, label: t(lang, "works") }];
 if (menu.about) links.push({ href: `/${lang}/about/`, label: t(lang, "about") });
 if (menu.news) links.push({ href: `/${lang}/news/`, label: t(lang, "news") });

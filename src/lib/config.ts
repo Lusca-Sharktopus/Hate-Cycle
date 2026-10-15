@@ -2,9 +2,9 @@
 //
 // O arquivo é lido NO LUGAR, sem cópia: o caminho ../../config.json sai de src/lib/ e volta à raiz.
 // Só os campos importados abaixo entram no site; o resto do config.json (inclusive as chaves
-// do Supabase em `comments`, além de `base_url`, `email`, `redirects`, `emissaries`…) não é importado
+// do Supabase em `comments`, além de `base_url`, `email`, `redirects`…) não é importado
 // aqui. NUNCA importe nem exporte `comments` neste arquivo.
-import { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui } from "../../config.json";
+import { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries } from "../../config.json";
 
 /** Os idiomas do site. Têm de ser os mesmos de config.json → languages e de astro.config.mjs → i18n.locales. */
 export type Lang = "en" | "pt";
@@ -140,6 +140,12 @@ export interface IntroConfig {
   max_ms: number;
 }
 
+/** Emissários (config.json → emissaries): textos ligados/desligados e pastas escondidas. Usado desde a T08. */
+export interface EmissariesConfig {
+  show_texts: boolean;
+  hide: string[];
+}
+
 /** O pedaço do config.json que o Astro usa. Campo novo entra aqui quando for usado. */
 interface SiteConfig {
   site_name: string;
@@ -147,6 +153,7 @@ interface SiteConfig {
   logo: string;
   author: string;
   show_extras: boolean;
+  emissaries: EmissariesConfig;
   socials: Social[];
   languages: Record<Lang, { name: string; html: string }>;
   intro: IntroConfig;
@@ -155,7 +162,7 @@ interface SiteConfig {
 
 // Se algum desses campos sumir, mudar de tipo ou de nome no config.json, `pnpm check` acusa erro AQUI
 // (em vez de o site sair com um buraco).
-const config: SiteConfig = { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui };
+const config: SiteConfig = { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries };
 
 // Trava contra o outro erro: uma chave de `ui` que o tipo UiText não conhece (por exemplo, um texto novo
 // que alguém acrescentou no config.json e esqueceu de declarar acima). Se isso acontecer, o tipo abaixo
@@ -177,6 +184,9 @@ export const authorName = config.author;
 
 /** `show_extras` do config.json: liga/desliga Universo e Personagens (hoje desligado). */
 export const showExtras = config.show_extras;
+
+/** `emissaries.hide` do config.json: pastas de content/emissaries/ que não aparecem no site (ex.: ["saf"]). */
+export const emissariosEscondidos: readonly string[] = config.emissaries.hide;
 
 /** Redes sociais do rodapé (config.json → socials). */
 export const socialLinks: readonly Social[] = config.socials;
@@ -214,7 +224,7 @@ export function tk(lang: Lang, key: UiEpKey, kind?: string): string {
 }
 
 /** Valor traduzível dos arquivos de conteúdo: texto simples ou { en, pt }. Como tr() do build.py. */
-export type Translatable = string | Partial<Record<Lang, string>>;
+export type Translatable = string | { [L in Lang]?: string | undefined };
 
 export function tr(value: Translatable | undefined, lang: Lang, fallback = ""): string {
   if (value === undefined) return fallback;

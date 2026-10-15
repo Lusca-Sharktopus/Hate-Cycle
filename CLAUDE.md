@@ -30,8 +30,11 @@ pnpm install    # uma vez (e quando package.json mudar)
 pnpm dev        # prévia com recarregamento em http://localhost:4321/pt/
 pnpm build      # gera o site Astro em dist/ (hoje: só /en/ e /pt/ de esqueleto)
 pnpm check      # verificação de tipos (astro check): tem de dar 0 errors, 0 warnings
-pnpm test       # testes automáticos (vitest); hoje: as runas iguais às do Python em 692 casos
+pnpm test       # testes automáticos (vitest): runas (692 casos) e conteúdo igual ao Python (front matter, coleções, contagens com/sem rascunhos)
 ```
+
+- **Coleções (T08, lição `04-colecoes.md`):** `src/content.config.ts`; campos aceitos e mensagens de erro em `src/lib/schemas.ts` (campo desconhecido = erro); páginas pedem conteúdo por `src/lib/conteudo.ts` (regras de rascunho/`unlisted`/`listed`). O front matter é lido pelo porte do `parse()` (`src/lib/frontmatter.ts`), não por YAML.
+- **Mudou algo em `content/`?** Rode `python3 tools/frontmatter_ref.py` antes do `pnpm test` (a referência `tests/fixtures/conteudo-python.json` é uma foto do conteúdo).
 
 ## Mapa de pastas
 
@@ -47,7 +50,7 @@ pnpm test       # testes automáticos (vitest); hoje: as runas iguais às do Pyt
 | `docs/` | Documentação: guia do autor, comentários, histórico, arquitetura, backlog, lições de Astro. |
 | `.claude/` | `skills/` (procedimentos) e `rules/` (regras que carregam por caminho). |
 | `public/` | Saída gerada (ignorada pelo git). |
-| `src/`, `astro.config.mjs`, `package.json` | Projeto Astro (T05 em diante): `pages/`, `layouts/`, `components/`, `lib/`, `styles/`. Saída em `dist/`; `node_modules/`, `dist/` e `.astro/` são ignorados pelo git. |
+| `src/`, `astro.config.mjs`, `package.json` | Projeto Astro (T05 em diante): `content.config.ts` (coleções, T08), `pages/`, `layouts/`, `components/`, `lib/`, `styles/`. Saída em `dist/`; `node_modules/`, `dist/` e `.astro/` são ignorados pelo git. |
 
 ## Invariantes — nunca quebrar
 

@@ -1,11 +1,10 @@
 // Quais itens do menu existem em cada idioma — a regra de `has` no build() do build.py (linhas ~656–669).
 //
-// PROVISÓRIO ATÉ A T08: as coleções de conteúdo ainda não existem no Astro, então este arquivo olha
-// direto as pastas de content/ para saber o que existe. Na T08 a leitura (`lerFatos`) é trocada por
-// getCollection(); a regra (`calcularMenu`) é função pura e fica como está.
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+// Desde a T08 os fatos vêm das coleções de conteúdo (src/lib/conteudo.ts), com as mesmas regras de
+// rascunho e de `show_extras` do build.py. A regra (`calcularMenu`) é função pura: o teste
+// tests/conteudo.test.ts confere que ela dá o mesmo `has` do Python, com e sem rascunhos.
 import { showExtras, t, type Lang } from "./config";
+import { COM_RASCUNHOS, itensPublicados, tituloDoItem } from "./conteudo";
 
 export interface MenuLink {
   href: string;
@@ -57,55 +56,25 @@ export function calcularMenu(lang: Lang, fatos: FatosDoConteudo, mostrarExtras: 
   };
 }
 
-// ───────────── leitura provisória de content/ (sai na T08) ─────────────
-
-/** Front matter mínimo (o mesmo YAML simples de parse()/scalar() do build.py): só campos de uma linha. */
-function frontMatter(texto: string): Record<string, string | boolean> {
-  const m = /^---\n([\s\S]*?)\n---\n?/.exec(texto.replace(/^﻿/, "").replace(/\r\n/g, "\n"));
-  const campos: Record<string, string | boolean> = {};
-  for (const linha of (m?.[1] ?? "").split("\n")) {
-    if (!linha.trim() || linha.trimStart().startsWith("#") || /^\s+-(\s|$)/.test(linha)) continue;
-    const i = linha.indexOf(":");
-    if (i < 0) continue;
-    const valor = linha.slice(i + 1).trim();
-    const entreAspas = valor.length > 1 && valor[0] === valor.at(-1) && (valor[0] === '"' || valor[0] === "'");
-    campos[linha.slice(0, i).trim()] = entreAspas ? valor.slice(1, -1) : valor.toLowerCase() === "true" ? true : valor.toLowerCase() === "false" ? false : valor;
-  }
-  return campos;
-}
-
-/** As subpastas de content/<seção>/ que têm <idioma>.md, em ordem alfabética (como load_items). */
-function itensDaSecao(secao: string, lang: Lang, comRascunhos: boolean) {
-  const pasta = join(process.cwd(), "content", secao);
-  if (!existsSync(pasta)) return [];
-  return readdirSync(pasta, { withFileTypes: true })
-    .filter((d) => d.isDirectory())
-    .map((d) => d.name)
-    .sort()
-    .flatMap((slug) => {
-      const arquivo = join(pasta, slug, `${lang}.md`);
-      if (!existsSync(arquivo)) return [];
-      const fm = frontMatter(readFileSync(arquivo, "utf-8"));
-      if (fm["draft"] === true && !comRascunhos) return [];
-      const titulo = fm["title"];
-      return [{ slug, title: typeof titulo === "string" && titulo ? titulo : slug, menu: String(fm["menu"] ?? "") }];
-    });
-}
-
 /**
- * O menu de um idioma, lendo content/ (provisório até a T08).
+ * O menu de um idioma, a partir das coleções.
  * Rascunhos (`draft: true`) só contam na prévia (`pnpm dev`), como no `python build.py serve`;
  * no `pnpm build` ficam de fora, como no `python build.py`.
  */
-export function menuDoIdioma(lang: Lang): Menu {
-  const comRascunhos = import.meta.env.DEV;
+export async function menuDoIdioma(lang: Lang, comRascunhos = COM_RASCUNHOS): Promise<Menu> {
+  const [news, universe, characters, pages] = await Promise.all([
+    itensPublicados("news", lang, comRascunhos),
+    itensPublicados("universe", lang, comRascunhos),
+    itensPublicados("characters", lang, comRascunhos),
+    itensPublicados("pages", lang, comRascunhos),
+  ]);
   return calcularMenu(
     lang,
     {
-      news: itensDaSecao("news", lang, comRascunhos).length,
-      universe: itensDaSecao("universe", lang, comRascunhos).length,
-      characters: itensDaSecao("characters", lang, comRascunhos).length,
-      pages: itensDaSecao("pages", lang, comRascunhos),
+      news: news.length,
+      universe: universe.length,
+      characters: characters.length,
+      pages: pages.map((p) => ({ slug: p.data._origem.slug, title: tituloDoItem(p), menu: p.data.menu ?? "" })),
     },
     showExtras,
   );
