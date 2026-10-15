@@ -14,7 +14,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | ID | Tarefa | Fase | Modelo | Esforço | Depende de | Risco | Status |
 |---|---|---|---|---|---|---|---|
 | T01 | Skills do projeto | 0 | Opus | alto | — | baixo | feita (15/10/2026) |
-| T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | em andamento |
+| T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | feita (15/10/2026) |
 | T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | pendente |
 | T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | baixo | T02 | médio | **bloqueada** (conectar GitHub) |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | pendente |
@@ -131,10 +131,17 @@ CLAUDE.md, `.claude/rules` e todas as skills refletindo os comandos e a estrutur
 
 | ID | Item | Situação |
 |---|---|---|
-| B1 | **Bug:** `config.json → base_url` está como URL completa (`https://Lusca-Sharktopus.github.io/Hate-Cycle`). Os links do RSS saem como `https://hatecycle.comhttps://Lusca-Sharktopus.github.io/…` e a `og:image` também. Corrigir: `base_url` = `/Hate-Cycle` e `site_url` = o endereço que está no ar de fato. | Precisa saber se `hatecycle.com` aponta para o site |
+| B1 | **Bug:** `config.json → base_url` está como URL completa (`https://Lusca-Sharktopus.github.io/Hate-Cycle`). Os links do RSS e a `og:image` saem como `https://hatecycle.comhttps://Lusca-Sharktopus.github.io/…`. O repositório tem `CNAME` = `hatecycle.com`, ou seja, o site fica na raiz do domínio: o certo é `"base_url": ""` e `"site_url": "https://hatecycle.com"`. | O autor troca no `config.json` dele antes de publicar o site novo |
 | B2 | Login com Google não funciona | Aguardando a mensagem de erro / o que acontece ao clicar |
 | B3 | Barra lateral de botões (desligada) | Aguardando assets finais e link do Ko-fi / Tip Jar |
 | B4 | Fotos de perfil nos comentários | Adiado a pedido |
 | B5 | Adolas Podcast nos Emissários (oculto com `draft: true`) | Restaurar? |
-| B6 | Publicar Ossos do Ofício (hoje fora da lista) | Quando? |
+| B6 | Publicar Ossos do Ofício: hoje aparece como "Em breve"; o capítulo 01 existe só em inglês e está `unlisted` | Quando? Vai ter versão em português? |
 | B7 | Assets ainda sem uso: `ossos-memoria-vito.png`, `feliz-natal-di-vario-ilustracao.jpg` | Onde entram? |
+| B8 | O gerador diz "Python 3.8+", mas só roda no **Python 3.12+** (f-strings novas no `build.py`; conferido com 3.11 e 3.12) | Qual Python o autor tem? Se for < 3.12, corrigir as linhas (exceção ao congelamento) |
+| B9 | Textos dos Emissários ocultos (`config.json → emissaries.show_texts: false`) | Voltar a mostrar? |
+| B10 | Extras (Universo, Personagens) retirados (`show_extras: false`); 3 páginas de exemplo em rascunho (`harry`, `olivia-purinna`, `hidden-magic`) | Editar, apagar ou religar? |
+| B11 | "Outras histórias" fora da home e da página Sobre (voltam com `{{other-stories}}`) | Trazer de volta? |
+| B12 | *O Pêndulo* e *Beira de Estrada* ocultos (`"listed": false`) | Quando mostrar? |
+| B13 | Pasta `static/Produtos` sem uso em nenhuma página | Página de produtos/merch no futuro? |
+| B14 | `NOTICIAS-PENDENTES.md` (posts do Reddit) citado no antigo LEIA-ME, mas o arquivo não existe; há embeds do Reddit em `content/embeds/` | Ainda falta cadastrar algum post? |
