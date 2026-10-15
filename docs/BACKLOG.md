@@ -14,7 +14,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | ID | Tarefa | Fase | Modelo | Esforço | Depende de | Risco | Status |
 |---|---|---|---|---|---|---|---|
 | T01 | Skills do projeto | 0 | Opus | alto | — | baixo | feita (15/10/2026) |
-| T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | pendente |
+| T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | em andamento |
 | T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | pendente |
 | T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | baixo | T02 | médio | **bloqueada** (conectar GitHub) |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | pendente |
