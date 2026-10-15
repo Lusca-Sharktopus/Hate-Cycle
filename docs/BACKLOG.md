@@ -16,7 +16,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T01 | Skills do projeto | 0 | Opus | alto | — | baixo | feita (15/10/2026) |
 | T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | feita (15/10/2026) |
 | T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | pendente |
-| T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | baixo | T02 | médio | **bloqueada** (conectar GitHub) |
+| T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | baixo | T02 | médio | **bloqueada** (instalar o app do Claude no repositório) |
 | T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | pendente |
 | T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | pendente |
 | T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | pendente |
@@ -54,7 +54,9 @@ Tarefas de risco **alto** recebem, além da thread de construção, uma thread c
 - **Aceite:** um comando gera tudo; contagens batem com o build atual (192 páginas); `docs/baseline.md` explica como usar na comparação (T18).
 
 ### T04 — Levar o projeto ao repositório do GitHub
-- **Bloqueio:** conectar o GitHub em claude.ai → Configurações → Conectores e dizer qual é o repositório.
+- **Situação (15/10):** conta conectada e repositório `Lusca-Sharktopus/Hate-Cycle` anexado à sessão (leitura ok). Falta o **app do Claude no GitHub** ter acesso ao repositório para permitir envio: https://github.com/apps/claude/installations/select_target .
+- **O que há no repositório:** a `main` tem o **site antigo** (HTML feito à mão) e `CNAME` = `hatecycle.com` — é o que está no ar. A `main` não deve ser tocada até a virada (T20).
+- **Tamanho:** a branch nova leva ~119 MB de objetos que o repositório ainda não tem (imagens). Enviar em partes (commits intermediários com lotes de imagens) para não estourar o limite por envio.
 - **Escopo:** anexar o repositório, comparar com a cópia local, decidir junto com o autor se o repositório guarda o código-fonte ou só o site gerado, subir numa branch `migracao-astro` e abrir PR. A partir daí, entregas viram PRs (atualizar `hc-entrega`).
 - **Aceite:** PR aberto com o estado atual; nenhuma alteração direta na branch principal.
 
