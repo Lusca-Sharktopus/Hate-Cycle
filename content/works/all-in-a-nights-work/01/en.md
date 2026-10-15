@@ -37,7 +37,7 @@ unlisted: true
 
 <img class="jusep" src="/other images/Giuseppe.png" alt="Giuseppe">
 
-<div class="s1 ps">“Its Giuseppe, Giuseppe di Vario”</div>
+<div class="s1 ps">“It’s Giuseppe, Giuseppe di Vario”</div>
 
 <div class="s1 ps">“Mine’s Elijah Smith”</div>
 
@@ -59,7 +59,7 @@ unlisted: true
 
 <div class="s1 ps">“Um… Looking for that?” Elijah points at the watch, gently resting in the seat next to Giuseppe’s snoring friend. “You took it off a few minutes ago.”</div>
 
-<div class="s1 ps">Elijah does the same motion and looks at his own watch. “It’s 3:00 AM. Maybe you need a some rest”</div>
+<div class="s1 ps">Elijah does the same motion and looks at his own watch. “It’s 3:00 AM. Maybe you need some rest”</div>
 
 <div class="s1 ps">“Perhaps”, Giuseppe said, seemingly remembering something. “But I can’t. Not yet”</div>
 
@@ -67,7 +67,7 @@ unlisted: true
 
 <div class="s1 ps">“You actually can’t”. This response startled Elijah. Giuseppe looked away again, staring at the door at the end of the train car. Giuseppe noticed he couldn’t distinguish the faces of other passengers. Their features were there, but he couldn’t make sense of them, as if trying to read the greek or cyrillic script when you’re only familiarized with the latin alphabet; they’re similar enough for you to almost figure out what’s written, but it’s ultimately useless. It felt like having a stroke.</div>
 
-<div class="s1 ps">“I’m sorry if I sounded intrusive!</div>
+<div class="s1 ps">“I’m sorry if I sounded intrusive!”</div>
 
 <div class="s1 ps dashes">——————————————————————————————————————————————————</div>
 
@@ -79,7 +79,7 @@ unlisted: true
 
 <div class="s1 ps">“The carriage never had any other passengers!” He said. Giuseppe kept walking.</div>
 
-<div class="s1 ps">“Sir, if you don’t back off now i’m gonna have to call the guards” He warned. Giuseppe kept walking, but he never seemed to get any closer. As soon as he noticed this…</div>
+<div class="s1 ps">“Sir, if you don’t back off now I’m gonna have to call the guards” He warned. Giuseppe kept walking, but he never seemed to get any closer. As soon as he noticed this…</div>
 
 <div class="s1 ps"><i>snap</i></div>
 
@@ -87,11 +87,11 @@ unlisted: true
 
 <div class="s1 ps">Giuseppe took off his reading glasses as the skin of the man in front of him, being choked by this spectral hand, started to peel off in small chunks, like dry ink in a wall, revealing underneath a humanoid being with a dark void for a face surrounded by long rotten teeth that formed a spiral going into the void. It was skinny like a starved child, with the outline of its bones visible through its skin. Its nails were long and sharp, like the ones you would see in a movie witch, and it screeched in agony like an animal in a slaughterhouse.</div>
 
-<div class="s1 ps">“Its been a while since I've seen one of <i>these</i>”, Giuseppe said, holding the creature as it struggled to get off his grasp. Reality started to collapse around them, no longer being held together by the demon.</div>
+<div class="s1 ps">“It’s been a while since I've seen one of <i>these</i>”, Giuseppe said, holding the creature as it struggled to get off his grasp. Reality started to collapse around them, no longer being held together by the demon.</div>
 
 <div class="s1 ps">A dark glow emanated from the creature’s face’s abyss, almost like a shadow. “YOU WILL DIE, EXORCIST” The demon shouted. Its voice echoed as if the unending vacuum in its face acted as a chamber.</div>
 
-<div class="s1 ps">“May the L<span class="sc">ᴏʀᴅ</span> receive me when i do” Giuseppe said, as cross-shaped knuckleduster appeared in his hand.</div>
+<div class="s1 ps">“May the L<span class="sc">ᴏʀᴅ</span> receive me when I do” Giuseppe said, as a cross-shaped knuckleduster appeared in his hand.</div>
 
 <div class="s1 ps">“YOU WILL REGRET <span class="zalgo">T̷H̷I̶S̸ Y̵͎̅O̷͍͠Ú̸ͅ ̴̙͊͗W̵̛͕͋ͅILL R̴̨̡͔̒͑̊E̶̝̳̊́G̸̻̥͚̯͒Ṛ̵͗̊͛̚͝E̷̦̘̞̟̲̅͋́̽̕̚Ț̵̚͜ ̴͍̾̅́̊T̷͉̰̪͉͕̫̹͂H̶̲̑̀͛Ỉ̸̡̩̩̙̣͚̎̾̓͗͝ͅŚ̸̜͓̃ Y̷̢̧̧̢͕̤̖̟͕̣̟̊͊̈́̔͗̏͆Õ̷̪̠͉̠̰̥̤̩̗̘̓̓̃͐̊̚͝Ų̵̢̛̥̳̥͈̣̺͗̉̃̉̓̊̐͋̅̚ ̸̫͉̤̰̬̣̘̩͇̥̀̍͛͗͗̌̓ͅW̵͎͓͎̳̲͖̭̜͔̒͑́͂̍͂́I̵̛̛̩͗͗͝L̴͕̻̠͈̙̥̳̇̎̽̊̀̈́̈́L̷̻̞̯̞̄̇͆͑̿̒̆̇̾͌ ̶̨͉̔̑̽̆R̸͖̦̝̭̫̤̙̪̙̋ͅE̸͓̞̣̤͙̍͛͂̕͠ͅG̵̖̙͍̱̮̣̐̾̓͛̅̒̏̕͜R̵̦̱͇̺̠̖͎̻̣̦̀Ē̶̡̡͚̇́̈͗͘T̸͇̫̫̟̫͇͈̓͐͛̀͂́̉ ̴͉̙̭͍͓̀̄͊͊̔̽̆̊̀͒̑T̵̞͇̫̟̤̯̳̺͉̘̓͗͋̄̀H̵̛̛̱̙͚̜̹̹͓͉͔̫̗̄̐̋͋I̸͉͖̤̩̱̬̝̒S̴̪̹̆̉͒́͘</span>” The monster kept saying;  over and over. Giuseppe clenched his fist and closed his eyes</div>
 
@@ -115,7 +115,7 @@ unlisted: true
 
 <div class="s1">“I’m aware, but I prefer it the way I said” Giuseppe said, doubling down on his mistake</div>
 
-<div class="s1">“As long as you know you’re wrong, I’m content with it” He said as they left the trainstation.</div>
+<div class="s1">“As long as you know you’re wrong, I’m content with it” He said as they left the train station.</div>
 
 <div class="s1-art"><img src="@/other images/ossos-cena-1-final.png" alt="Giuseppe, eyes glowing gold, lifts the demon off the train seat by the neck with his spectral golden arm, drawing back his other fist" loading="lazy"></div>
 
