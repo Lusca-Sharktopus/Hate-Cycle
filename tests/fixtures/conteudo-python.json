@@ -2359,8 +2359,8 @@
     "pt": "Ossos do Ofício"
    },
    "blurb": {
-    "en": "Giuseppe di Vario deals with the hardships of working as an exorcist",
-    "pt": "Giuseppe di Vario lida com as dificuldades de trabalhar como um exorcista"
+    "en": "Giuseppe di Vario deals with the hardships of working as an exorcist.",
+    "pt": "Giuseppe di Vario lida com as dificuldades de trabalhar como um exorcista."
    },
    "logo": {
     "en": "logos/EN/All in a Night's Work 2.png",
@@ -2405,50 +2405,6 @@
    },
    "reading_font": "times",
    "media": "short-story"
-  },
-  "goblin-ascencao": {
-   "kind": "video",
-   "universe": false,
-   "langs": [
-    "pt"
-   ],
-   "title": {
-    "pt": "Goblin: Ascenção"
-   },
-   "blurb": {
-    "pt": "Guiados por Bassen, o grupo de, agora, hobgoblins parte em direção a Sinnouah, a Cidade do Norte, enfrentando não só o clima extremo das terras gélidas, mas também os perigos que espreitam entre montanhas e florestas congeladas."
-   },
-   "cover": {
-    "pt": "covers/PT/Capa Ascencao.png"
-   },
-   "external": {
-    "pt": "https://youtube.com/playlist?list=PLxDFuZd3xgjTcAG9dzJJihuOMuhM1Ymbg&si=8iHHnOwOhBRRS9X5"
-   },
-   "cta": {
-    "pt": "Assista no YouTube"
-   }
-  },
-  "goblin-era-do-guardiao": {
-   "kind": "video",
-   "universe": false,
-   "langs": [
-    "pt"
-   ],
-   "title": {
-    "pt": "Goblin: A Era do Guardião"
-   },
-   "blurb": {
-    "pt": "Destinados ao improvável, quatro humanos de origens distintas encontram uma morte que foge ao natural. Porém, em vez do fim, renascem como criaturas subdesenvolvidas de, em sua maioria, pele esverdeada, lançados em um mundo que os rejeita com a mesma força que os desafia a sobreviver."
-   },
-   "cover": {
-    "pt": "covers/PT/Capa Ego.png"
-   },
-   "external": {
-    "pt": "https://youtube.com/playlist?list=PLxDFuZd3xgjTv-ntbl87vUkbWd1NVln_K&si=safIEPYff4oSy5sY"
-   },
-   "cta": {
-    "pt": "Assista no YouTube"
-   }
   },
   "hdvr": {
    "kind": "video",
@@ -2512,8 +2468,8 @@
     "pt": "Beira de Estrada"
    },
    "blurb": {
-    "en": "After strange appearances in front of his house, a weird little girl shows up in César's restaurant, carrying powers that will change his life forever.",
-    "pt": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cezar, carregando poderes que mudarão sua vida para sempre"
+    "en": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
+    "pt": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre."
    },
    "order": {
     "release": 5,
@@ -2530,7 +2486,7 @@
    "media": "webcomic"
   },
   "the-pendulum": {
-   "kind": "film",
+   "kind": "video",
    "universe": true,
    "oneshot": true,
    "title": {
@@ -2555,50 +2511,6 @@
    },
    "listed": false,
    "media": "short-film"
-  },
-  "trilha-do-cacador": {
-   "kind": "video",
-   "universe": false,
-   "langs": [
-    "pt"
-   ],
-   "title": {
-    "pt": "A Trilha do Caçador"
-   },
-   "blurb": {
-    "pt": "Após relatos perturbadores envolvendo o sobrenatural, Klaus e Kane, membros da enigmática Trilha do Caçador, são enviados à isolada cidade de Mar'gem, no condado de Nova Carolina"
-   },
-   "cover": {
-    "pt": "covers/PT/Capa Trilha.png"
-   },
-   "external": {
-    "pt": "https://youtube.com/playlist?list=PLxDFuZd3xgjRLX8rd_NwIlDaEP1a8aOxN&si=cmC2BThmBMCWGeZt"
-   },
-   "cta": {
-    "pt": "Assista no YouTube"
-   }
-  },
-  "two-ways": {
-   "kind": "prose",
-   "universe": false,
-   "langs": [
-    "pt"
-   ],
-   "title": {
-    "pt": "Two Ways"
-   },
-   "blurb": {
-    "pt": "Em um mundo cruel que não tem lugar para os fracos, onde um Imperador e seus domínios crescem a cada dia, o caçador de recompensas Tyler Fumetsu recebe uma proposta que pode mudar a sua vida."
-   },
-   "cover": {
-    "pt": "covers/PT/Capa Two Ways.png"
-   },
-   "external": {
-    "pt": "https://xbato.com/series/80739/two-ways"
-   },
-   "cta": {
-    "pt": "Leia Aqui"
-   }
   }
  },
  "sinteticos": [
@@ -3241,14 +3153,10 @@
    "obras": [
     "all-in-a-nights-work",
     "firestriker",
-    "goblin-ascencao",
-    "goblin-era-do-guardiao",
     "hdvr",
     "light-and-blood",
     "roadside",
-    "the-pendulum",
-    "trilha-do-cacador",
-    "two-ways"
+    "the-pendulum"
    ],
    "obras_listadas": {
     "en": [
@@ -3260,12 +3168,8 @@
     "pt": [
      "all-in-a-nights-work",
      "firestriker",
-     "goblin-ascencao",
-     "goblin-era-do-guardiao",
      "hdvr",
-     "light-and-blood",
-     "trilha-do-cacador",
-     "two-ways"
+     "light-and-blood"
     ]
    },
    "capitulos": {
@@ -3604,12 +3508,8 @@
     "en:pages/about",
     "en:pages/project",
     "en:works/firestriker",
-    "en:works/goblin-ascencao",
-    "en:works/goblin-era-do-guardiao",
     "en:works/hdvr",
     "en:works/light-and-blood",
-    "en:works/trilha-do-cacador",
-    "en:works/two-ways",
     "pt:emissaries/joao-revan",
     "pt:emissaries/kaisui",
     "pt:emissaries/saf",
@@ -3700,12 +3600,8 @@
     "pt:pages/about",
     "pt:pages/project",
     "pt:works/firestriker",
-    "pt:works/goblin-ascencao",
-    "pt:works/goblin-era-do-guardiao",
     "pt:works/hdvr",
-    "pt:works/light-and-blood",
-    "pt:works/trilha-do-cacador",
-    "pt:works/two-ways"
+    "pt:works/light-and-blood"
    ]
   },
   "previa": {
@@ -3948,14 +3844,10 @@
    "obras": [
     "all-in-a-nights-work",
     "firestriker",
-    "goblin-ascencao",
-    "goblin-era-do-guardiao",
     "hdvr",
     "light-and-blood",
     "roadside",
-    "the-pendulum",
-    "trilha-do-cacador",
-    "two-ways"
+    "the-pendulum"
    ],
    "obras_listadas": {
     "en": [
@@ -3967,12 +3859,8 @@
     "pt": [
      "all-in-a-nights-work",
      "firestriker",
-     "goblin-ascencao",
-     "goblin-era-do-guardiao",
      "hdvr",
-     "light-and-blood",
-     "trilha-do-cacador",
-     "two-ways"
+     "light-and-blood"
     ]
    },
    "capitulos": {
@@ -4315,12 +4203,8 @@
     "en:pages/project",
     "en:pages/support",
     "en:works/firestriker",
-    "en:works/goblin-ascencao",
-    "en:works/goblin-era-do-guardiao",
     "en:works/hdvr",
     "en:works/light-and-blood",
-    "en:works/trilha-do-cacador",
-    "en:works/two-ways",
     "pt:emissaries/adolas-podcast",
     "pt:emissaries/joao-revan",
     "pt:emissaries/kaisui",
@@ -4413,12 +4297,8 @@
     "pt:pages/project",
     "pt:pages/support",
     "pt:works/firestriker",
-    "pt:works/goblin-ascencao",
-    "pt:works/goblin-era-do-guardiao",
     "pt:works/hdvr",
-    "pt:works/light-and-blood",
-    "pt:works/trilha-do-cacador",
-    "pt:works/two-ways"
+    "pt:works/light-and-blood"
    ]
   }
  }

@@ -78,16 +78,12 @@
     "covers/EN/Cover Light & Blood.png": "4b62d0760099d762",
     "covers/EN/Cover Pendulum.png": "c8ba984691bc11ac",
     "covers/EN/Cover Roadside.png": "3657b6394c9f4236",
-    "covers/PT/Capa Ascencao.png": "a2718fed24c4ef3a",
     "covers/PT/Capa Beira de Estrada.png": "3657b6394c9f4236",
-    "covers/PT/Capa Ego.png": "f5875bd70a8e8231",
     "covers/PT/Capa HDVR.png": "f2af0170676ba72e",
     "covers/PT/Capa Luz & Sangue.png": "4b62d0760099d762",
     "covers/PT/Capa Ossos do Ofício.png": "2d699e4c30035fe5",
     "covers/PT/Capa Pederneira.png": "e562052d17174640",
     "covers/PT/Capa Pendulo.png": "c8ba984691bc11ac",
-    "covers/PT/Capa Trilha.png": "f81d8ba28dce38d8",
-    "covers/PT/Capa Two Ways.png": "186492baf74a78b8",
     "emissaries/Revan.png": "d23ad2d4bf8b179e",
     "emissaries/Tutti.jpg": "f347272f492e38a7",
     "emissaries/adolas.png": "56cd56093dd0cf57",
@@ -268,5 +264,5 @@
     "social/youtube.png": "e4513c97a9baa6f7",
     "style.css": "3f987b62115bdf12"
   },
-  "total": 266
+  "total": 262
 }
