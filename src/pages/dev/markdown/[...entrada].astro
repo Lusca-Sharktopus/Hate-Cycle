@@ -1,0 +1,74 @@
+---
+// FERRAMENTA DA PRÉVIA — não é uma página do site.
+// Só existe no `pnpm dev`: no `pnpm build`, getStaticPaths() devolve uma lista vazia e nada é gerado em dist/.
+// Mostra, para qualquer entrada de content/, o Markdown que você escreveu, o HTML que o Astro gerou
+// (render() / <Content />) e como ele fica com o versalete. Endereço: http://localhost:4321/dev/markdown/
+// Lição: docs/aprendendo-astro/05-markdown.md (seção "Tente").
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { aplicarAtalhos } from "../../../lib/corpos";
+import { versaleteEntreTags } from "../../../lib/markdown";
+
+type ComCorpo = "news" | "pages" | "chapters" | "emissaries" | "characters" | "universe";
+type Item = { colecao: ComCorpo; entrada: CollectionEntry<ComCorpo> };
+
+export async function getStaticPaths() {
+  if (!import.meta.env.DEV) return []; // no build, nenhuma página
+  const colecoes: ComCorpo[] = ["news", "pages", "chapters", "emissaries", "characters", "universe"];
+  const todas: Item[] = (await Promise.all(colecoes.map(async (colecao) => (await getCollection(colecao)).map((entrada) => ({ colecao, entrada }))))).flat();
+  return [
+    { params: { entrada: undefined }, props: { todas } },
+    ...todas.map((item) => ({ params: { entrada: `${item.colecao}/${item.entrada.id}` }, props: { item } })),
+  ];
+}
+
+const { todas, item } = Astro.props as { todas?: Item[]; item?: Item };
+const Conteudo = item ? (await render(item.entrada)).Content : undefined;
+const html = item?.entrada.rendered?.html ?? "";
+// como as páginas vão mostrar (T11+): atalhos trocados (aqui, por nada) e versalete aplicado UMA vez
+const comVersalete = versaleteEntreTags(`<div class="prose">${aplicarAtalhos(html, {})}</div>`);
+const titulo = item ? `${item.colecao}/${item.entrada.id}` : "Markdown → HTML";
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>{titulo} · prévia do Markdown</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body style="background:#f4f1ea;color:#111;padding:1.5rem;font-family:system-ui,sans-serif">
+<p style="background:#ffe9a8;padding:.5rem 1rem"><strong>Ferramenta da prévia</strong> (só no <code>pnpm dev</code>; não existe no site publicado). <a href="/dev/markdown/">Todas as entradas</a></p>
+{todas && (
+  <main>
+    <h1>Markdown → HTML: todas as entradas de content/</h1>
+    {(["news", "pages", "chapters", "emissaries", "characters", "universe"] as const).map((c) => (
+      <section>
+        <h2>{c}</h2>
+        <ul>
+          {todas.filter((t) => t.colecao === c).map((t) => (
+            <li><a href={`/dev/markdown/${c}/${t.entrada.id}/`}>{t.entrada.id}</a>{t.entrada.data.draft ? " (rascunho)" : ""}</li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </main>
+)}
+{item && Conteudo && (
+  <main>
+    <h1>{titulo}</h1>
+    <p>Arquivo: <code>{item.entrada.filePath}</code></p>
+    {item.colecao === "pages" && item.entrada.id.startsWith("about/") && (
+      <p>A página Sobre é montada com o texto de <code>content/pages/project</code> na frente, como o <code>build.py</code> faz: por isso o HTML (caixas 1 a 3) tem mais do que o Markdown deste arquivo (caixa 4).</p>
+    )}
+    <h2>1. Como fica (com versalete, como nas páginas)</h2>
+    <div style="background:#fff;padding:1rem 2rem;border:1px solid #ccc" set:html={comVersalete}></div>
+    <h2>2. O que &lt;Content /&gt; devolve (sem versalete: as páginas aplicam no &lt;main&gt; inteiro)</h2>
+    <div style="background:#fff;padding:1rem 2rem;border:1px solid #ccc"><Conteudo /></div>
+    <h2>3. O HTML (texto)</h2>
+    <pre style="white-space:pre-wrap;background:#222;color:#eee;padding:1rem">{html}</pre>
+    <h2>4. O Markdown que você escreveu</h2>
+    <pre style="white-space:pre-wrap;background:#222;color:#eee;padding:1rem">{item.entrada.body}</pre>
+  </main>
+)}
+</body>
+</html>

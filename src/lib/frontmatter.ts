@@ -20,7 +20,8 @@ export type FrontMatter = Record<string, ValorFm>;
 // Os "espaços" do Python (str.strip() e o \s das expressões regulares): os mesmos do JavaScript,
 // MAIS \x1c–\x1f e \x85, e SEM o ﻿ (o JavaScript trata o BOM como espaço; o Python, não).
 // Conferido carácter por carácter, de 0 a 0x10FFFF, nas duas linguagens.
-const ESPACOS_PY = "\\t\\n\\v\\f\\r\\x1c-\\x20\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000";
+// (Exportado para src/lib/markdown.ts, que usa o mesmo \s do Python nas expressões regulares do make_md.)
+export const ESPACOS_PY ="\\t\\n\\v\\f\\r\\x1c-\\x20\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000";
 const RE_PONTAS = new RegExp(`^[${ESPACOS_PY}]+|[${ESPACOS_PY}]+$`, "g");
 const RE_INICIO = new RegExp(`^[${ESPACOS_PY}]+`);
 /** `re.match(r"\s+-(\s|$)", line)` do parse(): linha recuada que começa com "-" (item de lista). */

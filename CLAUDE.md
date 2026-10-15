@@ -30,11 +30,12 @@ pnpm install    # uma vez (e quando package.json mudar)
 pnpm dev        # prévia com recarregamento em http://localhost:4321/pt/
 pnpm build      # gera o site Astro em dist/ (hoje: só /en/ e /pt/ de esqueleto)
 pnpm check      # verificação de tipos (astro check): tem de dar 0 errors, 0 warnings
-pnpm test       # testes automáticos (vitest): runas (692 casos) e conteúdo igual ao Python (front matter, coleções, contagens com/sem rascunhos)
+pnpm test       # testes automáticos (vitest), tudo comparado com o Python: runas, conteúdo (front matter, coleções, rascunhos) e Markdown → HTML
 ```
 
 - **Coleções (T08, lição `04-colecoes.md`):** `src/content.config.ts`; campos aceitos e mensagens de erro em `src/lib/schemas.ts` (campo desconhecido = erro); páginas pedem conteúdo por `src/lib/conteudo.ts` (regras de rascunho/`unlisted`/`listed`). O front matter é lido pelo porte do `parse()` (`src/lib/frontmatter.ts`), não por YAML.
-- **Mudou algo em `content/`?** Rode `python3 tools/frontmatter_ref.py` antes do `pnpm test` (a referência `tests/fixtures/conteudo-python.json` é uma foto do conteúdo).
+- **Mudou algo em `content/`?** Rode `python3 tools/frontmatter_ref.py` e `python3 tools/markdown_ref.py` antes do `pnpm test` (as referências em `tests/fixtures/` são fotos do conteúdo).
+- **Markdown (T09, lição `05-markdown.md`):** porte fiel do `make_md()` em `src/lib/markdown.ts`; o carregador guarda o HTML em `rendered` (páginas: `render()`/`<Content />`, depois `aplicarAtalhos()` e `versaleteEntreTags()` uma vez no `<main>`). Prévia do HTML de qualquer texto: `pnpm dev` → `/dev/markdown/`.
 
 ## Mapa de pastas
 

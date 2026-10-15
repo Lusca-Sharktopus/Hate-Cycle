@@ -12,7 +12,7 @@
 //   show_extras → build(): `if not CFG.get("show_extras", True)` → Universo e Personagens somem
 //   emissaries.hide → build(): `emis[l] = [e for e in emis[l] if e["slug"] not in hide_emi]`
 import { tr, type Lang, type Translatable } from "./config";
-import { compararComoPython, compararNatural } from "./leitor";
+import { compararComoPython, compararNatural } from "./ordem";
 
 // Formatos mínimos que as regras precisam (as entradas das coleções têm isso e mais).
 export interface ItemVisivel {

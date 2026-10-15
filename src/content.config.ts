@@ -9,7 +9,10 @@
 //   news, pages, emissaries, characters, universe → "<pasta>/<idioma>"         ex.: "2023-08-18-orcs/pt"
 //   chapters                                     → "<obra>/<capítulo>/<idioma>" ex.: "firestriker/01/en"
 //   works (os work.json)                          → "<obra>"                     ex.: "firestriker"
-// Fica de fora: content/embeds/*.html (códigos de incorporação, usados pelo {{embed:…}} — T09/T13).
+// Desde a T09 o carregador também transforma o CORPO de cada entrada em HTML, igual ao make_md() do build.py
+// (src/lib/corpos.ts + src/lib/markdown.ts): é o que render(entrada) / <Content /> devolvem.
+// Explicação: docs/aprendendo-astro/05-markdown.md.
+// Fica de fora (não é coleção): content/embeds/*.html, lidos pelo {{embed:…}} na hora de converter o texto.
 import { join } from "node:path";
 import { defineCollection } from "astro:content";
 import { carregador, indiceDoDisco } from "./lib/leitor";

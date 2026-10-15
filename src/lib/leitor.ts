@@ -11,8 +11,10 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Loader } from "astro/loaders";
-import { langs } from "./config";
+import { langs, showExtras } from "./config";
+import { htmlDosCorpos, lerEmbedDoDisco } from "./corpos";
 import { decodificar, parse, type FrontMatter } from "./frontmatter";
+import { compararComoPython, compararNatural } from "./ordem";
 import type { Colecao, Indice } from "./schemas";
 
 /** As seções de content/ que são "uma pasta por item, com en.md e/ou pt.md dentro" (as do load_items). */
@@ -25,7 +27,7 @@ export interface EntradaBruta {
   id: string;
   /** Campos do front matter (ou do work.json) + `_origem` (de onde veio). Ainda não validados. */
   data: Record<string, unknown>;
-  /** Corpo em Markdown, cru (renderizar é a T09). Obras (work.json) não têm. */
+  /** Corpo em Markdown, cru. Obras (work.json) não têm. O HTML (T09) vai em `rendered`: ver o carregador, abaixo. */
   body?: string;
   /** Caminho completo do arquivo. */
   arquivo: string;
@@ -34,34 +36,8 @@ export interface EntradaBruta {
 }
 
 // ───────────── ordem das pastas, como o Python ─────────────
-
-/** Compara como o Python compara textos: ponto de código por ponto de código (o sort() do JavaScript usa UTF-16). */
-export function compararComoPython(a: string, b: string): number {
-  const x = Array.from(a, (c) => c.codePointAt(0) ?? 0);
-  const y = Array.from(b, (c) => c.codePointAt(0) ?? 0);
-  for (let i = 0; i < Math.min(x.length, y.length); i++) {
-    if (x[i] !== y[i]) return (x[i] ?? 0) - (y[i] ?? 0);
-  }
-  return x.length - y.length;
-}
-
-/**
- * natural() do build.py: "2" vem antes de "10" (números comparados como números).
- * (O \d do Python também aceita algarismos de outras escritas; nomes de pasta aqui são sempre ASCII.)
- */
-export function compararNatural(a: string, b: string): number {
-  const partes = (s: string) => s.split(/(\d+)/).map((t, i) => (i % 2 === 1 ? Number(t) : t.toLowerCase()));
-  const x = partes(a);
-  const y = partes(b);
-  for (let i = 0; i < Math.min(x.length, y.length); i++) {
-    const p = x[i] ?? "";
-    const q = y[i] ?? "";
-    if (p === q) continue;
-    if (typeof p === "number" && typeof q === "number") return p - q;
-    return compararComoPython(String(p), String(q));
-  }
-  return x.length - y.length;
-}
+// compararComoPython() e compararNatural() moram em src/lib/ordem.ts desde a T09; continuam exportadas daqui.
+export { compararComoPython, compararNatural };
 
 /** Subpastas de `dir` (seguindo atalhos, como o is_dir() do Python), em ordem. */
 function subpastas(dir: string, comparar = compararComoPython): string[] {
@@ -155,6 +131,23 @@ export function lerColecao(raiz: string, colecao: Colecao): EntradaBruta[] {
   return lerItens(raiz, colecao);
 }
 
+/**
+ * Lê as sete coleções de uma vez (T09). Transformar o corpo de UMA entrada em HTML depende das outras:
+ * os [[links]] usam títulos e rascunhos de todas as seções, o divisor vem do work.json, e a página Sobre
+ * leva o texto da página Projeto.
+ */
+export function lerTudo(raiz: string): Record<Colecao, EntradaBruta[]> {
+  return {
+    news: lerItens(raiz, "news"),
+    pages: lerItens(raiz, "pages"),
+    emissaries: lerItens(raiz, "emissaries"),
+    characters: lerItens(raiz, "characters"),
+    universe: lerItens(raiz, "universe"),
+    works: lerObras(raiz),
+    chapters: lerCapitulos(raiz),
+  };
+}
+
 // ───────────── referências ─────────────
 
 /**
@@ -201,9 +194,17 @@ function semNegrito(erro: unknown): string {
 }
 
 /**
+ * Rascunhos no índice dos [[links]]: com eles na prévia (`pnpm dev`), sem eles no `pnpm build` — o DRAFTS do
+ * build.py (o mesmo critério de COM_RASCUNHOS em src/lib/conteudo.ts, que não pode ser importado aqui).
+ */
+const COM_RASCUNHOS: boolean = import.meta.env.DEV;
+
+/**
  * Carregador (loader) de uma coleção, no formato da Content Layer API do Astro:
  * um objeto { name, load } — load() lê os arquivos, valida cada um com o schema (parseData) e guarda no store.
- * Na prévia (pnpm dev), recarrega a coleção quando algo muda dentro da pasta dela.
+ * Desde a T09 também transforma o corpo de cada entrada em HTML (src/lib/corpos.ts → src/lib/markdown.ts) e o
+ * guarda em `rendered.html`: é o que `render(entrada)` / <Content /> devolvem nas páginas.
+ * Na prévia (pnpm dev), recarrega a coleção quando algo muda em content/.
  */
 export function carregador(colecao: Colecao): Loader {
   return {
@@ -215,7 +216,9 @@ export function carregador(colecao: Colecao): Loader {
       const relativo = (arquivo: string) => relative(raizDoSite, arquivo).split(sep).join("/");
 
       async function sincronizar() {
-        const entradas = lerColecao(raiz, colecao);
+        // os work.json não têm corpo; as outras coleções precisam do content/ inteiro para virar HTML
+        const tudo = colecao === "works" ? undefined : lerTudo(raiz);
+        const entradas = tudo ? tudo[colecao] : lerColecao(raiz, colecao);
         const validas = [];
         const erros: { erro: unknown; arquivo: string }[] = [];
         for (const e of entradas) {
@@ -231,14 +234,22 @@ export function carregador(colecao: Colecao): Loader {
           for (const { erro, arquivo } of erros.slice(1)) logger.error(`${relativo(arquivo)}:\n${semNegrito(erro)}`);
           throw erros[0]?.erro;
         }
+        // O corpo de cada entrada → HTML, no contexto em que o build.py o renderiza (idioma, divisor, [[links]]…).
+        const html =
+          tudo && colecao !== "works"
+            ? htmlDosCorpos(tudo, colecao, { comRascunhos: COM_RASCUNHOS, mostrarExtras: showExtras, lerEmbed: lerEmbedDoDisco(raiz) })
+            : undefined;
         store.clear();
         for (const e of validas) {
+          const h = html?.get(e.id);
           store.set({
             id: e.id,
             data: e.data,
             filePath: relativo(e.arquivo),
-            digest: generateDigest(e.texto),
+            // o HTML depende de outros arquivos (títulos dos [[links]], embeds…): entra no carimbo também
+            digest: generateDigest(h === undefined ? e.texto : `${e.texto}\u0000${h}`),
             ...(e.body !== undefined ? { body: e.body } : {}),
+            ...(h !== undefined ? { rendered: { html: h } } : {}),
           });
           for (const [campo, caminho] of imagensQueFaltam(e.data, pastaStatic)) {
             logger.warn(`${relativo(e.arquivo)}: ${campo} "${caminho}" não existe em static/.`);
@@ -249,7 +260,9 @@ export function carregador(colecao: Colecao): Loader {
       await sincronizar();
 
       if (watcher) {
-        const pasta = join(raiz, colecao === "chapters" ? "works" : colecao);
+        // Os work.json só dependem de content/works/. As outras coleções dependem do content/ INTEIRO (desde a T09):
+        // o título de uma notícia muda o [[link]] que aponta para ela; um embed novo, o {{embed:…}}; e assim por diante.
+        const pasta = colecao === "works" ? join(raiz, "works") : raiz;
         watcher.add(pasta);
         // Criar uma pasta com um arquivo dentro gera vários avisos seguidos: espera 150 ms e relê uma vez só.
         let espera: ReturnType<typeof setTimeout> | undefined;
