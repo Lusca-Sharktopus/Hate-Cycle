@@ -1,0 +1,3949 @@
+{
+  "/": {
+    "alternates": [],
+    "canonical": "",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/en/",
+    "og": {},
+    "title": "Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/404.html": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {},
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "404 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "404 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/PT.html": {
+    "alternates": [],
+    "canonical": "/pt/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/pt/",
+    "og": {},
+    "title": ""
+  },
+  "/en/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/",
+      "pt": "/pt/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/about/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "The world of Hᴀᴛᴇ Cʏᴄʟᴇ is one of inherent magic and wonder, even if hidden underneath many layers of fear, oppression and hate.",
+    "hreflang": {
+      "en": "/en/about/",
+      "pt": "/pt/about/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "The world of Hᴀᴛᴇ Cʏᴄʟᴇ is one of inherent magic and wonder, even if hidden underneath many layers of fear, oppression and hate.",
+      "og:title": "About the author | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "About the author | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/",
+      "pt": "/pt/news/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "News Feed | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "News Feed | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2023-08-18-orcs/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2023-08-18-orcs/",
+      "pt": "/pt/news/2023-08-18-orcs/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Orcs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Orcs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2023-08-19-conheca-os-talassimbiontes/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2023-08-19-conheca-os-talassimbiontes/",
+      "pt": "/pt/news/2023-08-19-conheca-os-talassimbiontes/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Meet the Thalassymbiotes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Meet the Thalassymbiotes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2023-08-20-kartekta/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2023-08-20-kartekta/",
+      "pt": "/pt/news/2023-08-20-kartekta/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Kartekta | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Kartekta | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-01-09-white-mans-wendigo/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-01-09-white-mans-wendigo/",
+      "pt": "/pt/news/2024-01-09-white-mans-wendigo/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: White Man’s Wendigo | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: White Man’s Wendigo | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-01-25-gnomes/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-01-25-gnomes/",
+      "pt": "/pt/news/2024-01-25-gnomes/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Gnomes of the Hᴀᴛᴇ Cʏᴄʟᴇ world | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Gnomes of the Hᴀᴛᴇ Cʏᴄʟᴇ world | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-01-28-shizuku-doodle/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-01-28-shizuku-doodle/",
+      "pt": "/pt/news/2024-01-28-shizuku-doodle/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Shizuku Doodle | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Shizuku Doodle | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-02-09-avialuna-pentapods/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-02-09-avialuna-pentapods/",
+      "pt": "/pt/news/2024-02-09-avialuna-pentapods/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Avialuna's Pentapods | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Avialuna's Pentapods | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-02-23-avialuna-aeternogyrinians/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-02-23-avialuna-aeternogyrinians/",
+      "pt": "/pt/news/2024-02-23-avialuna-aeternogyrinians/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Avialuna's aeternogyrinians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Avialuna's aeternogyrinians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-02-23-avialuna-selenichthyans/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-02-23-avialuna-selenichthyans/",
+      "pt": "/pt/news/2024-02-23-avialuna-selenichthyans/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Avialuna's Selenichthyans | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Avialuna's Selenichthyans | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-02-29-baby/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-02-29-baby/",
+      "pt": "/pt/news/2024-02-29-baby/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: baby | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: baby | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-03-05-ceratoctopodidae/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-03-05-ceratoctopodidae/",
+      "pt": "/pt/news/2024-03-05-ceratoctopodidae/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Ceractopodidae - parasite octopi | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Ceractopodidae - parasite octopi | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-03-06-dragon-rizz/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-03-06-dragon-rizz/",
+      "pt": "/pt/news/2024-03-06-dragon-rizz/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Dragon Rizz | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Dragon Rizz | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-11-earths-goofiest-superheroes/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Earth’s Goofiest Superheroes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Earth’s Goofiest Superheroes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-11-is-that-how-she-does/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-04-11-is-that-how-she-does/",
+      "pt": "/pt/news/2024-04-11-is-that-how-she-does/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Is That How She Does? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Is That How She Does? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-16-friday-thirteenth/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-04-16-friday-thirteenth/",
+      "pt": "/pt/news/2024-04-16-friday-thirteenth/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Friday Thirteenth | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Friday Thirteenth | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-16-the-chain/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-04-16-the-chain/",
+      "pt": "/pt/news/2024-04-16-the-chain/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: The Chain | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: The Chain | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-18-trupizianos/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "I think I finally managed to create a final design for them, huh.",
+    "hreflang": {
+      "en": "/en/news/2024-04-18-trupizianos/",
+      "pt": "/pt/news/2024-04-18-trupizianos/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "I think I finally managed to create a final design for them, huh.",
+      "og:title": "Trupizians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Trupizians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-25-non-canon-funny-exchange/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-04-25-non-canon-funny-exchange/",
+      "pt": "/pt/news/2024-04-25-non-canon-funny-exchange/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Non-Canon Funny Exchange on Twitter | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Non-Canon Funny Exchange on Twitter | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-29-hygranocianos/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "New alien race fresh out of the oven! Hygranocians are radially symmetric beings, having seven legs, seven eyes, seven antennae, etc.",
+    "hreflang": {
+      "en": "/en/news/2024-04-29-hygranocianos/",
+      "pt": "/pt/news/2024-04-29-hygranocianos/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "New alien race fresh out of the oven! Hygranocians are radially symmetric beings, having seven legs, seven eyes, seven antennae, etc.",
+      "og:title": "Hygranocians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Hygranocians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-04-30-solonianos-monocarianos/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Solonians are a nomadic people that float through Solonia’s dense atmosphere, following the migratory patterns of Mauloys…",
+    "hreflang": {
+      "en": "/en/news/2024-04-30-solonianos-monocarianos/",
+      "pt": "/pt/news/2024-04-30-solonianos-monocarianos/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Solonians are a nomadic people that float through Solonia’s dense atmosphere, following the migratory patterns of Mauloys…",
+      "og:title": "Solonians and Monocarians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Solonians and Monocarians | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-05-02-fotomorfos-geomorfos/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Photomorphs are one of the two sapient races of the planet Bulbix. It is not known exactly how Bulbix’s life came to be, but the life forms of this planet are living crystals.",
+    "hreflang": {
+      "en": "/en/news/2024-05-02-fotomorfos-geomorfos/",
+      "pt": "/pt/news/2024-05-02-fotomorfos-geomorfos/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Photomorphs are one of the two sapient races of the planet Bulbix. It is not known exactly how Bulbix’s life came to be, but the life forms of this planet are living crystals.",
+      "og:title": "Photomorphs and Geomorphs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Photomorphs and Geomorphs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-05-09-on-stage/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-05-09-on-stage/",
+      "pt": "/pt/news/2024-05-09-on-stage/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: On Stage | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: On Stage | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-05-13-water-sommelier/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-05-13-water-sommelier/",
+      "pt": "/pt/news/2024-05-13-water-sommelier/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Water Sommelier | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Water Sommelier | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-05-17-sun-in-the-palm-of-my-hand/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-05-17-sun-in-the-palm-of-my-hand/",
+      "pt": "/pt/news/2024-05-17-sun-in-the-palm-of-my-hand/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: The Sun in the Palm of My Hand | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: The Sun in the Palm of My Hand | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-05-27-fight-poses/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-05-27-fight-poses/",
+      "pt": "/pt/news/2024-05-27-fight-poses/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Fight Poses | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Fight Poses | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-06-13-primeiro-video-hdvr/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-06-13-primeiro-video-hdvr/",
+      "pt": "/pt/news/2024-06-13-primeiro-video-hdvr/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "The First Video of Hello? Di Vario Residency | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "The First Video of Hello? Di Vario Residency | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-06-14-lucas-viciado-em-cafeina/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-06-14-lucas-viciado-em-cafeina/",
+      "pt": "/pt/news/2024-06-14-lucas-viciado-em-cafeina/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Lucas is addicted to caffeine | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Lucas is addicted to caffeine | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-06-21-genius-genius-dumb/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-06-21-genius-genius-dumb/",
+      "pt": "/pt/news/2024-06-21-genius-genius-dumb/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Genius + Genius = Dumb² | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Genius + Genius = Dumb² | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-07-25-apollo-no-diffs/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-07-25-apollo-no-diffs/",
+      "pt": "/pt/news/2024-07-25-apollo-no-diffs/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Apollo No Diffs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Apollo No Diffs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-10-28-rain/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-10-28-rain/",
+      "pt": "/pt/news/2024-10-28-rain/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Rain | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Rain | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2024-11-04-he-a-little-guy/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2024-11-04-he-a-little-guy/",
+      "pt": "/pt/news/2024-11-04-he-a-little-guy/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: He a little guy | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: He a little guy | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-03-09-was-bored-at-a-restaurant/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-03-09-was-bored-at-a-restaurant/",
+      "pt": "/pt/news/2025-03-09-was-bored-at-a-restaurant/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Was Bored at a Restaurant | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Was Bored at a Restaurant | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-04-04-guia-produtos-arcanos/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-04-04-guia-produtos-arcanos/",
+      "pt": "/pt/news/2025-04-04-guia-produtos-arcanos/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Quick Guide to visually differentiating between similar looking Arcane Products | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Quick Guide to visually differentiating between similar looking Arcane Products | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-04-14-speedpaint-pederneira/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-04-14-speedpaint-pederneira/",
+      "pt": "/pt/news/2025-04-14-speedpaint-pederneira/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Speedpaint of the cover for Firestriker | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Speedpaint of the cover for Firestriker | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-04-18-saiu-pederneira/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-04-18-saiu-pederneira/",
+      "pt": "/pt/news/2025-04-18-saiu-pederneira/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Firestriker is out! The first short story in the Hᴀᴛᴇ Cʏᴄʟᴇ Universe!! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Firestriker is out! The first short story in the Hᴀᴛᴇ Cʏᴄʟᴇ Universe!! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-04-19-wythawnr-lingua-dos-dragoes/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-04-19-wythawnr-lingua-dos-dragoes/",
+      "pt": "/pt/news/2025-04-19-wythawnr-lingua-dos-dragoes/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Meet W̆y̆thăw̆nr, the language of dragons!! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Meet W̆y̆thăw̆nr, the language of dragons!! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-07-24-guia-produtos-arcanos-atualizado/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-07-24-guia-produtos-arcanos-atualizado/",
+      "pt": "/pt/news/2025-07-24-guia-produtos-arcanos-atualizado/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "(Updated) guide to visually differentiating between similar looking Arcane Products (and other important/interesting information) | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "(Updated) guide to visually differentiating between similar looking Arcane Products (and other important/interesting information) | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-10-11-dorothy-shopher/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-10-11-dorothy-shopher/",
+      "pt": "/pt/news/2025-10-11-dorothy-shopher/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Dorothy can’t spell shopher | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dorothy can’t spell shopher | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-10-12-what-are-those/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-10-12-what-are-those/",
+      "pt": "/pt/news/2025-10-12-what-are-those/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "WHAT ARE THOSE?? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "WHAT ARE THOSE?? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-10-14-henrique-not-having-it/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-10-14-henrique-not-having-it/",
+      "pt": "/pt/news/2025-10-14-henrique-not-having-it/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Henrique is not having it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Henrique is not having it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-10-17-a-bit-slow/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-10-17-a-bit-slow/",
+      "pt": "/pt/news/2025-10-17-a-bit-slow/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "They’re a bit slow sometimes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "They’re a bit slow sometimes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-10-18-best-friends/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-10-18-best-friends/",
+      "pt": "/pt/news/2025-10-18-best-friends/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Best Friends in every universe | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Best Friends in every universe | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-10-18-nerds-same-wavelength/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-10-18-nerds-same-wavelength/",
+      "pt": "/pt/news/2025-10-18-nerds-same-wavelength/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "The nerds sometimes are on the same wavelength | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "The nerds sometimes are on the same wavelength | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-11-25-amphibious-doodles/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-11-25-amphibious-doodles/",
+      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Amphibious Doodles | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Amphibious Doodles | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-11-25-amphibious-sonic-pose/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-11-25-amphibious-sonic-pose/",
+      "pt": "/pt/news/2025-11-25-amphibious-sonic-pose/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Amphibious Doing the Sonic Pose | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Amphibious Doing the Sonic Pose | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-11-26-proto-articulado/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Proto-Articulate was a language spoken by the Articulates approximately 4 thousand years ago, when they began to develop sapience",
+    "hreflang": {
+      "en": "/en/news/2025-11-26-proto-articulado/",
+      "pt": "/pt/news/2025-11-26-proto-articulado/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Proto-Articulate was a language spoken by the Articulates approximately 4 thousand years ago, when they began to develop sapience",
+      "og:title": "Proto-Articulate, the language of the crabs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Proto-Articulate, the language of the crabs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-01-dia-1-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-01-dia-1-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 1 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 1 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-02-dia-2-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-02-dia-2-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-02-dia-2-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 2 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 2 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-03-dia-3-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-03-dia-3-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-03-dia-3-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 3 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 3 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-04-dia-4-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-04-dia-4-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-04-dia-4-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 4 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 4 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-05-dia-5-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-05-dia-5-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-05-dia-5-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 5 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 5 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-06-dia-6-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-06-dia-6-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-06-dia-6-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 6 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 6 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-07-dia-7-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-07-dia-7-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-07-dia-7-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 7 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 7 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-08-dia-8-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-08-dia-8-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-08-dia-8-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 8 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 8 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-09-dia-9-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-09-dia-9-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-09-dia-9-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 9 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 9 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-10-dia-10-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-10-dia-10-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-10-dia-10-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 10 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 10 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-11-dia-11-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-11-dia-11-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-11-dia-11-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 11 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 11 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-12-dia-12-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-12-dia-12-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-12-dia-12-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 12 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 12 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-13-dia-13-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-13-dia-13-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-13-dia-13-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 13 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 13 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-14-dia-14-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-14-dia-14-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-14-dia-14-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 14 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 14 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-14-nova-arte-oficial/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-14-nova-arte-oficial/",
+      "pt": "/pt/news/2025-12-14-nova-arte-oficial/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: It Was Her Birthday | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: It Was Her Birthday | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-15-dia-15-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-15-dia-15-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-15-dia-15-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 15 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 15 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-16-dia-16-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-16-dia-16-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-16-dia-16-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 16 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 16 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-17-dia-17-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-17-dia-17-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-17-dia-17-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 17 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 17 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-18-amphibious-maguire/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-18-amphibious-maguire/",
+      "pt": "/pt/news/2025-12-18-amphibious-maguire/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Amphibious Maguire | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Amphibious Maguire | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-18-dia-18-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-18-dia-18-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-18-dia-18-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 18 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 18 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-19-dia-19-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-19-dia-19-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-19-dia-19-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 19 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 19 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-20-dia-20-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-20-dia-20-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-20-dia-20-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 20 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 20 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-21-dia-21-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-21-dia-21-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-21-dia-21-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 21 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 21 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-22-clip-studio-test-drive/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-22-clip-studio-test-drive/",
+      "pt": "/pt/news/2025-12-22-clip-studio-test-drive/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: Clip Studio Test Drive | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: Clip Studio Test Drive | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-22-dia-22-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-22-dia-22-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-22-dia-22-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 22 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 22 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-23-dia-23-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-23-dia-23-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-23-dia-23-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 23 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 23 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-24-dia-24-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-25-dia-25-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 25 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 25 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-25-feliz-natal-di-vario/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-25-feliz-natal-di-vario/",
+      "pt": "/pt/news/2025-12-25-feliz-natal-di-vario/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: The di Varios wish everyone a Merry Christmas! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: The di Varios wish everyone a Merry Christmas! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-26-dia-26-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-27-dia-27-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-27-dia-27-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-27-dia-27-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 27 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 27 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-28-dia-28-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-28-dia-28-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-28-dia-28-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 28 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 28 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2025-12-29-dia-29-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2025-12-29-dia-29-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-29-dia-29-especulacao-evolutiva/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Day 29 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Day 29 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2026-06-06-bem-vindos-luz-e-sangue/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2026-06-06-bem-vindos-luz-e-sangue/",
+      "pt": "/pt/news/2026-06-06-bem-vindos-luz-e-sangue/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Welcome to Light & Blood! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Welcome to Light & Blood! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2026-07-14-ruach-hakodesh/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2026-07-14-ruach-hakodesh/",
+      "pt": "/pt/news/2026-07-14-ruach-hakodesh/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: רוח הקודש | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: רוח הקודש | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2026-08-18-novo-episodio-luz-e-sangue/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2026-08-18-novo-episodio-luz-e-sangue/",
+      "pt": "/pt/news/2026-08-18-novo-episodio-luz-e-sangue/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "New Episode of Light & Blood! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "New Episode of Light & Blood! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/news/2026-08-19-more-amphibious-doodles/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/news/2026-08-19-more-amphibious-doodles/",
+      "pt": "/pt/news/2026-08-19-more-amphibious-doodles/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Official Artwork: More Amphibious Doodles | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Official Artwork: More Amphibious Doodles | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/works/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/works/",
+      "pt": "/pt/works/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:title": "Stories | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Stories | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/works/all-in-a-nights-work/01/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {},
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:image": "https://hatecycle.com/covers/EN/Cover%20All%20in%20a%20Night%27s%20Work.png",
+      "og:title": "All in a Night's Work | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "All in a Night's Work | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/works/firestriker/01/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "\"We're lost!\", shouted Harry, my young assistant.",
+    "hreflang": {
+      "en": "/en/works/firestriker/01/",
+      "pt": "/pt/works/firestriker/01/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "\"We're lost!\", shouted Harry, my young assistant.",
+      "og:image": "https://hatecycle.com/covers/EN/Cover%20Firestriker.png",
+      "og:title": "Firestriker | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Firestriker | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/works/light-and-blood/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "John Magnus & Oliver Mors investigate, alongside detective Eleanor O'Dochartaigh, the uneventful city of Duckwater.",
+    "hreflang": {
+      "en": "/en/works/light-and-blood/",
+      "pt": "/pt/works/light-and-blood/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "John Magnus & Oliver Mors investigate, alongside detective Eleanor O'Dochartaigh, the uneventful city of Duckwater.",
+      "og:image": "https://hatecycle.com/covers/EN/Cover%20Light%20%26%20Blood.png",
+      "og:title": "Light & Blood | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Light & Blood | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/works/light-and-blood/01/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/works/light-and-blood/01/",
+      "pt": "/pt/works/light-and-blood/01/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:image": "https://hatecycle.com/covers/EN/Cover%20Light%20%26%20Blood.png",
+      "og:title": "Light & Blood — Episode 1 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Light & Blood — Episode 1 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/en/works/light-and-blood/02/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+    "hreflang": {
+      "en": "/en/works/light-and-blood/02/",
+      "pt": "/pt/works/light-and-blood/02/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
+      "og:image": "https://hatecycle.com/covers/EN/Cover%20Light%20%26%20Blood.png",
+      "og:title": "Light & Blood — Episode 2 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Light & Blood — Episode 2 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/firestriker.html": {
+    "alternates": [],
+    "canonical": "/en/works/firestriker/01/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/en/works/firestriker/01/",
+    "og": {},
+    "title": ""
+  },
+  "/light.html": {
+    "alternates": [],
+    "canonical": "/en/works/light-and-blood/01/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/en/works/light-and-blood/01/",
+    "og": {},
+    "title": ""
+  },
+  "/luz.html": {
+    "alternates": [],
+    "canonical": "/pt/works/light-and-blood/01/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/pt/works/light-and-blood/01/",
+    "og": {},
+    "title": ""
+  },
+  "/nights.html": {
+    "alternates": [],
+    "canonical": "/en/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/en/",
+    "og": {},
+    "title": ""
+  },
+  "/ossos.html": {
+    "alternates": [],
+    "canonical": "/pt/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/pt/",
+    "og": {},
+    "title": ""
+  },
+  "/pederneira.html": {
+    "alternates": [],
+    "canonical": "/pt/works/firestriker/01/",
+    "description": "",
+    "hreflang": {},
+    "lang": "",
+    "meta_refresh": "0; url=/pt/works/firestriker/01/",
+    "og": {},
+    "title": ""
+  },
+  "/pt/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/",
+      "pt": "/pt/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/about/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "O mundo de Hᴀᴛᴇ Cʏᴄʟᴇ é um de magia e maravilhas inerentes, ainda que escondidas sob muitas camadas de medo, opressão e ódio.",
+    "hreflang": {
+      "en": "/en/about/",
+      "pt": "/pt/about/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "O mundo de Hᴀᴛᴇ Cʏᴄʟᴇ é um de magia e maravilhas inerentes, ainda que escondidas sob muitas camadas de medo, opressão e ódio.",
+      "og:title": "Sobre o autor | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Sobre o autor | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/",
+      "pt": "/pt/news/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Notícias | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Notícias | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2023-08-18-orcs/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2023-08-18-orcs/",
+      "pt": "/pt/news/2023-08-18-orcs/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Orcs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Orcs | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2023-08-19-conheca-os-talassimbiontes/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2023-08-19-conheca-os-talassimbiontes/",
+      "pt": "/pt/news/2023-08-19-conheca-os-talassimbiontes/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Conheça os Talassimbiontes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Conheça os Talassimbiontes | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2023-08-20-kartekta/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2023-08-20-kartekta/",
+      "pt": "/pt/news/2023-08-20-kartekta/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Kartekta | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Kartekta | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-01-09-white-mans-wendigo/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-01-09-white-mans-wendigo/",
+      "pt": "/pt/news/2024-01-09-white-mans-wendigo/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Wendigo do Homem Branco | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Wendigo do Homem Branco | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-01-25-gnomes/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-01-25-gnomes/",
+      "pt": "/pt/news/2024-01-25-gnomes/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Gnomos do mundo de Hᴀᴛᴇ Cʏᴄʟᴇ | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Gnomos do mundo de Hᴀᴛᴇ Cʏᴄʟᴇ | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-01-28-shizuku-doodle/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-01-28-shizuku-doodle/",
+      "pt": "/pt/news/2024-01-28-shizuku-doodle/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Rabisco da Shizuku | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Rabisco da Shizuku | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-02-09-avialuna-pentapods/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-02-09-avialuna-pentapods/",
+      "pt": "/pt/news/2024-02-09-avialuna-pentapods/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Os Pentápodes de Avialuna | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Os Pentápodes de Avialuna | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-02-23-avialuna-aeternogyrinians/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-02-23-avialuna-aeternogyrinians/",
+      "pt": "/pt/news/2024-02-23-avialuna-aeternogyrinians/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Os Eternogirinos de Avialuna | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Os Eternogirinos de Avialuna | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-02-23-avialuna-selenichthyans/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-02-23-avialuna-selenichthyans/",
+      "pt": "/pt/news/2024-02-23-avialuna-selenichthyans/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Os Seleníctios de Avialuna | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Os Seleníctios de Avialuna | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-02-29-baby/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-02-29-baby/",
+      "pt": "/pt/news/2024-02-29-baby/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: baby | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: baby | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-03-05-ceratoctopodidae/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-03-05-ceratoctopodidae/",
+      "pt": "/pt/news/2024-03-05-ceratoctopodidae/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Ceractopodidae - polvos parasitas | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Ceractopodidae - polvos parasitas | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-03-06-dragon-rizz/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-03-06-dragon-rizz/",
+      "pt": "/pt/news/2024-03-06-dragon-rizz/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Dragon Rizz | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Dragon Rizz | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-11-earths-goofiest-superheroes/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-11-is-that-how-she-does/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-04-11-is-that-how-she-does/",
+      "pt": "/pt/news/2024-04-11-is-that-how-she-does/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: É Assim Que Ela Faz? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: É Assim Que Ela Faz? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-16-friday-thirteenth/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-04-16-friday-thirteenth/",
+      "pt": "/pt/news/2024-04-16-friday-thirteenth/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Sexta-feira 13 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Sexta-feira 13 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-16-the-chain/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-04-16-the-chain/",
+      "pt": "/pt/news/2024-04-16-the-chain/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: A Corrente | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: A Corrente | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-18-trupizianos/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Acho que eu finalmente consegui criar um design final pra eles hein",
+    "hreflang": {
+      "en": "/en/news/2024-04-18-trupizianos/",
+      "pt": "/pt/news/2024-04-18-trupizianos/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Acho que eu finalmente consegui criar um design final pra eles hein",
+      "og:title": "Trupizianos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Trupizianos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-25-non-canon-funny-exchange/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-04-25-non-canon-funny-exchange/",
+      "pt": "/pt/news/2024-04-25-non-canon-funny-exchange/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Troca Engraçada Não Canônica no Twitter | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Troca Engraçada Não Canônica no Twitter | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-29-hygranocianos/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Nova raça alienígena saindo do forno! Hygranocianos são seres de simetria radial, tendo sete pernas, sete olhos, sete antenas, etc.",
+    "hreflang": {
+      "en": "/en/news/2024-04-29-hygranocianos/",
+      "pt": "/pt/news/2024-04-29-hygranocianos/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Nova raça alienígena saindo do forno! Hygranocianos são seres de simetria radial, tendo sete pernas, sete olhos, sete antenas, etc.",
+      "og:title": "Hygranocianos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Hygranocianos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-04-30-solonianos-monocarianos/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Solonianos são um povo nômade que flutua pela atmosfera densa de Solonia seguindo os padrões migratórios de Mauloys…",
+    "hreflang": {
+      "en": "/en/news/2024-04-30-solonianos-monocarianos/",
+      "pt": "/pt/news/2024-04-30-solonianos-monocarianos/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Solonianos são um povo nômade que flutua pela atmosfera densa de Solonia seguindo os padrões migratórios de Mauloys…",
+      "og:title": "Solonianos e Monocarianos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Solonianos e Monocarianos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-05-02-fotomorfos-geomorfos/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Fotomorfos são uma das duas raças sapientes do planeta Bulbix. Não se sabe exatamente como a vida de Bulbix veio a ser, mas as formas de vida desse planeta são cristais vivos.",
+    "hreflang": {
+      "en": "/en/news/2024-05-02-fotomorfos-geomorfos/",
+      "pt": "/pt/news/2024-05-02-fotomorfos-geomorfos/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Fotomorfos são uma das duas raças sapientes do planeta Bulbix. Não se sabe exatamente como a vida de Bulbix veio a ser, mas as formas de vida desse planeta são cristais vivos.",
+      "og:title": "Fotomorfos e Geomorfos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Fotomorfos e Geomorfos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-05-09-on-stage/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-05-09-on-stage/",
+      "pt": "/pt/news/2024-05-09-on-stage/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: No Palco | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: No Palco | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-05-13-water-sommelier/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-05-13-water-sommelier/",
+      "pt": "/pt/news/2024-05-13-water-sommelier/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Sommelier de Água | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Sommelier de Água | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-05-17-sun-in-the-palm-of-my-hand/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-05-17-sun-in-the-palm-of-my-hand/",
+      "pt": "/pt/news/2024-05-17-sun-in-the-palm-of-my-hand/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: O Sol na Palma da Minha Mão | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: O Sol na Palma da Minha Mão | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-05-27-fight-poses/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-05-27-fight-poses/",
+      "pt": "/pt/news/2024-05-27-fight-poses/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Poses de Luta | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Poses de Luta | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-06-13-primeiro-video-hdvr/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-06-13-primeiro-video-hdvr/",
+      "pt": "/pt/news/2024-06-13-primeiro-video-hdvr/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "O Primeiro vídeo de Alô? Residência dos di Vario | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "O Primeiro vídeo de Alô? Residência dos di Vario | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-06-14-lucas-viciado-em-cafeina/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-06-14-lucas-viciado-em-cafeina/",
+      "pt": "/pt/news/2024-06-14-lucas-viciado-em-cafeina/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Lucas é viciado em cafeína | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Lucas é viciado em cafeína | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-06-21-genius-genius-dumb/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-06-21-genius-genius-dumb/",
+      "pt": "/pt/news/2024-06-21-genius-genius-dumb/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Gênio + Gênio = Burro² | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Gênio + Gênio = Burro² | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-07-25-apollo-no-diffs/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-07-25-apollo-no-diffs/",
+      "pt": "/pt/news/2024-07-25-apollo-no-diffs/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Apollo Sola | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Apollo Sola | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-10-28-rain/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-10-28-rain/",
+      "pt": "/pt/news/2024-10-28-rain/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Chuva | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Chuva | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2024-11-04-he-a-little-guy/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2024-11-04-he-a-little-guy/",
+      "pt": "/pt/news/2024-11-04-he-a-little-guy/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: He a little guy | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: He a little guy | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-03-09-was-bored-at-a-restaurant/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-03-09-was-bored-at-a-restaurant/",
+      "pt": "/pt/news/2025-03-09-was-bored-at-a-restaurant/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Estava Entediado em um Restaurante | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Estava Entediado em um Restaurante | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-04-04-guia-produtos-arcanos/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-04-04-guia-produtos-arcanos/",
+      "pt": "/pt/news/2025-04-04-guia-produtos-arcanos/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Guia rápido para diferenciar visualmente Produtos Arcanos de aparência semelhante | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Guia rápido para diferenciar visualmente Produtos Arcanos de aparência semelhante | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-04-14-speedpaint-pederneira/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-04-14-speedpaint-pederneira/",
+      "pt": "/pt/news/2025-04-14-speedpaint-pederneira/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Speedpaint da capa de Pederneira | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Speedpaint da capa de Pederneira | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-04-18-saiu-pederneira/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-04-18-saiu-pederneira/",
+      "pt": "/pt/news/2025-04-18-saiu-pederneira/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Saiu Pederneira, o primeiro Conto do universo de Hᴀᴛᴇ Cʏᴄʟᴇ! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Saiu Pederneira, o primeiro Conto do universo de Hᴀᴛᴇ Cʏᴄʟᴇ! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-04-19-wythawnr-lingua-dos-dragoes/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-04-19-wythawnr-lingua-dos-dragoes/",
+      "pt": "/pt/news/2025-04-19-wythawnr-lingua-dos-dragoes/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Conheça W̆y̆thăw̆nr, a língua dos dragões!! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Conheça W̆y̆thăw̆nr, a língua dos dragões!! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-07-24-guia-produtos-arcanos-atualizado/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-07-24-guia-produtos-arcanos-atualizado/",
+      "pt": "/pt/news/2025-07-24-guia-produtos-arcanos-atualizado/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Guia (atualizado) para diferenciar visualmente Produtos Arcanos de aparência semelhante (e outras informações importantes/interessantes) | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Guia (atualizado) para diferenciar visualmente Produtos Arcanos de aparência semelhante (e outras informações importantes/interessantes) | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-10-11-dorothy-shopher/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-10-11-dorothy-shopher/",
+      "pt": "/pt/news/2025-10-11-dorothy-shopher/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dorothy não sabe soletrar “shopher” | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dorothy não sabe soletrar “shopher” | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-10-12-what-are-those/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-10-12-what-are-those/",
+      "pt": "/pt/news/2025-10-12-what-are-those/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "O QUE É ISSO?? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "O QUE É ISSO?? | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-10-14-henrique-not-having-it/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-10-14-henrique-not-having-it/",
+      "pt": "/pt/news/2025-10-14-henrique-not-having-it/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Henrique não está aceitando isso | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Henrique não está aceitando isso | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-10-17-a-bit-slow/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-10-17-a-bit-slow/",
+      "pt": "/pt/news/2025-10-17-a-bit-slow/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Às vezes eles são um pouco lentos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Às vezes eles são um pouco lentos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-10-18-best-friends/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-10-18-best-friends/",
+      "pt": "/pt/news/2025-10-18-best-friends/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Melhores amigos em todos os universos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Melhores amigos em todos os universos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-10-18-nerds-same-wavelength/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-10-18-nerds-same-wavelength/",
+      "pt": "/pt/news/2025-10-18-nerds-same-wavelength/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Às vezes os nerds estão na mesma sintonia | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Às vezes os nerds estão na mesma sintonia | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-11-25-amphibious-doodles/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-11-25-amphibious-doodles/",
+      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-11-25-amphibious-sonic-pose/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-11-25-amphibious-sonic-pose/",
+      "pt": "/pt/news/2025-11-25-amphibious-sonic-pose/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-11-26-proto-articulado/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "O Proto-Articulado foi uma língua falada pelos Articulados a aproximadamente 4 mil anos atrás, quando eles começaram a desenvolver sapiência",
+    "hreflang": {
+      "en": "/en/news/2025-11-26-proto-articulado/",
+      "pt": "/pt/news/2025-11-26-proto-articulado/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "O Proto-Articulado foi uma língua falada pelos Articulados a aproximadamente 4 mil anos atrás, quando eles começaram a desenvolver sapiência",
+      "og:title": "Proto-Articulado, a linguagem dos caranguejos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Proto-Articulado, a linguagem dos caranguejos | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-01-dia-1-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-02-dia-2-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-02-dia-2-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-02-dia-2-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 2 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 2 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-03-dia-3-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-03-dia-3-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-03-dia-3-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 3 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 3 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-04-dia-4-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-04-dia-4-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-04-dia-4-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 4 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 4 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-05-dia-5-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-05-dia-5-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-05-dia-5-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 5 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 5 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-06-dia-6-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-06-dia-6-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-06-dia-6-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 6 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 6 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-07-dia-7-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-07-dia-7-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-07-dia-7-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 7 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 7 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-08-dia-8-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-08-dia-8-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-08-dia-8-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 8 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 8 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-09-dia-9-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-09-dia-9-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-09-dia-9-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 9 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 9 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-10-dia-10-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-10-dia-10-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-10-dia-10-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 10 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 10 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-11-dia-11-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-11-dia-11-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-11-dia-11-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 11 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 11 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-12-dia-12-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-12-dia-12-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-12-dia-12-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 12 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 12 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-13-dia-13-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-13-dia-13-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-13-dia-13-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 13 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 13 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-14-dia-14-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-14-dia-14-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-14-dia-14-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 14 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 14 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-14-nova-arte-oficial/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-14-nova-arte-oficial/",
+      "pt": "/pt/news/2025-12-14-nova-arte-oficial/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Era o Aniversário Dela | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Era o Aniversário Dela | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-15-dia-15-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-15-dia-15-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-15-dia-15-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 15 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 15 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-16-dia-16-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-16-dia-16-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-16-dia-16-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 16 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 16 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-17-dia-17-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-17-dia-17-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-17-dia-17-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 17 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 17 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-18-amphibious-maguire/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-18-amphibious-maguire/",
+      "pt": "/pt/news/2025-12-18-amphibious-maguire/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Anfíbio Maguire | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Anfíbio Maguire | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-18-dia-18-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-18-dia-18-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-18-dia-18-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 18 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 18 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-19-dia-19-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-19-dia-19-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-19-dia-19-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 19 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 19 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-20-dia-20-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-20-dia-20-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-20-dia-20-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 20 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 20 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-21-dia-21-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-21-dia-21-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-21-dia-21-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 21 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 21 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-22-clip-studio-test-drive/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-22-clip-studio-test-drive/",
+      "pt": "/pt/news/2025-12-22-clip-studio-test-drive/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Test Drive do Clip Studio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Test Drive do Clip Studio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-22-dia-22-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-22-dia-22-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-22-dia-22-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 22 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 22 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-23-dia-23-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-23-dia-23-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-23-dia-23-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 23 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 23 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 25 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 25 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-25-feliz-natal-di-vario/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-25-feliz-natal-di-vario/",
+      "pt": "/pt/news/2025-12-25-feliz-natal-di-vario/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 26 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 26 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-27-dia-27-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-27-dia-27-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-27-dia-27-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 27 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 27 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-28-dia-28-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-28-dia-28-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-28-dia-28-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 28 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 28 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2025-12-29-dia-29-especulacao-evolutiva/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2025-12-29-dia-29-especulacao-evolutiva/",
+      "pt": "/pt/news/2025-12-29-dia-29-especulacao-evolutiva/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Dia 29 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Dia 29 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2026-06-06-bem-vindos-luz-e-sangue/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2026-06-06-bem-vindos-luz-e-sangue/",
+      "pt": "/pt/news/2026-06-06-bem-vindos-luz-e-sangue/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Bem Vindos a Luz & Sangue! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Bem Vindos a Luz & Sangue! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2026-07-14-ruach-hakodesh/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2026-07-14-ruach-hakodesh/",
+      "pt": "/pt/news/2026-07-14-ruach-hakodesh/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: רוח הקודש | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: רוח הקודש | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2026-08-18-novo-episodio-luz-e-sangue/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2026-08-18-novo-episodio-luz-e-sangue/",
+      "pt": "/pt/news/2026-08-18-novo-episodio-luz-e-sangue/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Novo Episódio de Luz & Sangue! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Novo Episódio de Luz & Sangue! | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/news/2026-08-19-more-amphibious-doodles/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/news/2026-08-19-more-amphibious-doodles/",
+      "pt": "/pt/news/2026-08-19-more-amphibious-doodles/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Arte Oficial: Mais Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Arte Oficial: Mais Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/works/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/works/",
+      "pt": "/pt/works/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:title": "Histórias | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Histórias | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/works/firestriker/01/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/works/firestriker/01/",
+      "pt": "/pt/works/firestriker/01/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:image": "https://hatecycle.com/covers/PT/Capa%20Pederneira.png",
+      "og:title": "Pederneira | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Pederneira | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/works/light-and-blood/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Os aprendizes de exorcista John Magnus e Oliver Mors investigam, ao lado da detetive Eleanor O'Dochartaigh, a pacata cidade de Duckwater.",
+    "hreflang": {
+      "en": "/en/works/light-and-blood/",
+      "pt": "/pt/works/light-and-blood/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Os aprendizes de exorcista John Magnus e Oliver Mors investigam, ao lado da detetive Eleanor O'Dochartaigh, a pacata cidade de Duckwater.",
+      "og:image": "https://hatecycle.com/covers/PT/Capa%20Luz%20%26%20Sangue.png",
+      "og:title": "Luz & Sangue | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Luz & Sangue | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/works/light-and-blood/01/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/works/light-and-blood/01/",
+      "pt": "/pt/works/light-and-blood/01/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:image": "https://hatecycle.com/covers/PT/Capa%20Luz%20%26%20Sangue.png",
+      "og:title": "Luz & Sangue — Episódio 1 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Luz & Sangue — Episódio 1 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/works/light-and-blood/02/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+    "hreflang": {
+      "en": "/en/works/light-and-blood/02/",
+      "pt": "/pt/works/light-and-blood/02/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ conta as histórias de um mundo ferido tentando voltar a sonhar.",
+      "og:image": "https://hatecycle.com/covers/PT/Capa%20Luz%20%26%20Sangue.png",
+      "og:title": "Luz & Sangue — Episódio 2 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Luz & Sangue — Episódio 2 | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  }
+}

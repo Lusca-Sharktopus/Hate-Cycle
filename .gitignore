@@ -12,3 +12,5 @@ dist/
 .astro/
 .env
 .env.*
+# baseline (T03): screenshots são regerados por tools/baseline.py
+baseline/screens/

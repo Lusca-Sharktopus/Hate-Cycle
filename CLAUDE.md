@@ -87,4 +87,5 @@ Em *Ossos do Ofício* (`content/works/all-in-a-nights-work/01/en.md`) o texto em
 - **Durante a migração os dois geradores convivem**: o Astro lê `content/`, `static/` e `config.json` no lugar onde estão — nada é duplicado. Conteúdo novo continua sendo escrito normalmente em `content/`.
 - O `build.py` e o CSS ficam **congelados para mudanças estruturais** até a virada (T20): só correções de bug e conteúdo.
 - Invariantes da migração: URLs idênticas, IDs de comentários idênticos, mesmo jeito de escrever, visual das páginas-chave conferido por screenshot contra a baseline (T03).
+- A "foto" do site atual para conferir a paridade (URLs, IDs de comentários, textos, screenshots): `docs/baseline.md` (`python3 tools/baseline.py`).
 - Após a virada, o gerador Python fica na branch `legado-python` e este arquivo é atualizado (T22).
