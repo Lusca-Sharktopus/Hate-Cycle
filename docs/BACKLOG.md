@@ -17,7 +17,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T02 | CLAUDE.md, regras e docs | 0 | Opus | médio | T01 | baixo | feita (15/10/2026) |
 | T03 | Foto do site atual (baseline) | 0 | Sonnet | médio | T02 | baixo | feita (15/10/2026) — `docs/baseline.md` |
 | T04 | Levar o projeto ao repositório do GitHub | 0 | Sonnet | médio ¹ | T02 | médio | feita (15/10/2026) — PR #1 |
-| T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | pendente |
+| T05 | Projeto Astro lado a lado | 1 | Opus | alto | T03 | médio | em andamento |
 | T06 | Layout base (tokens, cabeçalho, rodapé, idiomas, SEO) | 1 | Sonnet | alto | T05 | médio | pendente |
 | T07 | Runas e tela de abertura | 1 | Opus | médio | T06 | baixo | pendente |
 | T08 | Coleções de conteúdo e schemas | 2 | Opus | alto | T05 | médio | pendente |
@@ -64,7 +64,7 @@ Tarefas de risco **alto** recebem, além da thread de construção, uma thread c
 - **Aceite:** PR aberto com o estado atual; nenhuma alteração direta na branch principal.
 
 ### T05 — Projeto Astro lado a lado
-- **Escopo:** Astro 6 + TypeScript estrito + pnpm na raiz (`package.json`, `astro.config.mjs`, `tsconfig.json`, `.nvmrc` com Node ≥ 22.12); i18n `en`/`pt` com prefixo nos dois; `publicDir: "static"` (provisório); saída em `dist/`; `src/` com estrutura da arquitetura; `BaseLayout` mínimo e uma página por idioma; lê `config.json` direto (sem duplicar).
+- **Escopo:** Astro 7 (a 6 parou de receber atualizações em junho de 2026; a 7.x é a atual) + TypeScript estrito + pnpm na raiz (`package.json`, `astro.config.mjs`, `tsconfig.json`, `.nvmrc` com Node ≥ 22.12); i18n `en`/`pt` com prefixo nos dois; `publicDir: "static"` (provisório); saída em `dist/`; `src/` com estrutura da arquitetura; `BaseLayout` mínimo e uma página por idioma; lê `config.json` direto (sem duplicar).
 - **Fora do escopo:** visual, conteúdo, componentes reais.
 - **Aceite:** `pnpm build` e `pnpm astro check` sem erros; `dist/en/index.html` e `dist/pt/index.html` existem; o `python3 build.py` continua gerando 192 páginas; lição `01`.
 
