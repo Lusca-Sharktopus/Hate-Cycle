@@ -1,17 +1,21 @@
 ---
 name: hc-entrega
-description: Entregar ao autor uma atualização do site Hᴀᴛᴇ Cʏᴄʟᴇ — gerar, conferir, empacotar só os arquivos alterados num zip e enviar. Use ao terminar qualquer mudança no projeto, enquanto o repositório do GitHub não estiver conectado.
+description: Entregar ao autor uma atualização do site Hᴀᴛᴇ Cʏᴄʟᴇ — gerar, conferir, commitar e enviar para a branch migracao-astro no GitHub, e também empacotar num zip só os arquivos alterados. Use ao terminar qualquer mudança no projeto.
 ---
 
 # Entregar uma atualização
 
-O autor recebe as mudanças como um zip com **só os arquivos alterados**, mantendo os caminhos do projeto, e copia por cima da cópia dele. Quando o GitHub estiver conectado, esta skill é trocada por branch + pull request (tarefa T04 do `docs/BACKLOG.md`).
+O repositório do GitHub (`Lusca-Sharktopus/Hate-Cycle`) está conectado: o trabalho vive na branch `migracao-astro`, com o pull request #1 em rascunho aberto contra a `main`. **Nunca faça push na `main` nem merge** até a virada (T20): a `main` é o site antigo no ar em hatecycle.com.
+
+Enquanto o autor não usar `git pull` na máquina dele, ele **também** recebe as mudanças como um zip com **só os arquivos alterados**, mantendo os caminhos do projeto, e copia por cima da cópia dele.
 
 ## Passos
 
-1. **Gerar o site** e confirmar que não há erro:
+0. **Toda entrega agora é commit + `git push origin migracao-astro`** (o pull request se atualiza sozinho). Faça isso no passo 6, depois de gerar e conferir; o zip dos passos 4–5 continua sendo enviado ao autor além do push. Um envio de cada vez (o proxy do GitHub aceita só 2 operações simultâneas) e, se vier HTTP 413, divida em commits menores.
+
+1. **Gerar o site** e confirmar que não há erro (na raiz do repositório, ex.: `/home/claude/hate-cycle`):
    ```bash
-   cd /home/claude/hatecycle-site && python3 build.py
+   python3 build.py
    ```
    A última linha deve ser `✔ site gerado em … (N páginas)`. Se N mudou sem motivo, investigue antes de seguir.
 
@@ -39,11 +43,12 @@ O autor recebe as mudanças como um zip com **só os arquivos alterados**, mante
    - **Nunca** incluir `config.json` (tem as chaves do Supabase do autor) nem `static/custom.css` (ajustes pessoais dele).
    - Limite de envio ≈ 30 MB. Se passar, divida em dois zips (`1-…-parte1.zip`, `2-…-parte2.zip`) separando as imagens grandes.
 
-6. **Registrar a entrega** no git:
+6. **Registrar a entrega** no git e **enviar para o GitHub**:
    ```bash
    git commit -qm "<resumo em português>
 
    Co-Authored-By: <linha de atribuição da sessão>" && git tag "entregue-$(date +%Y%m%d-%H%M)"
+   git push origin migracao-astro      # a tag entregue-* é local; não envie
    ```
 
 7. **Enviar** o zip com `SendUserFile` e responder em português, curto:

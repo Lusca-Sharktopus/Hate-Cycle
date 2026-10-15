@@ -12,7 +12,7 @@ Nunca diga que algo "ficou certo" sem ter olhado o screenshot. O autor manda cap
 O `config.json` do autor tem `base_url` absoluto (GitHub Pages), então o site gerado normalmente aponta CSS e imagens para fora do sandbox e aparece **sem estilo**. Para conferir, gere com `BASE` vazio (e, se quiser ver rascunhos, `DRAFTS=True`):
 
 ```bash
-cd /home/claude/hatecycle-site
+cd <raiz do repositório>   # ex.: /home/claude/hate-cycle
 python3 -c "import build as b; b.BASE=''; b.build()"            # publicado
 python3 -c "import build as b; b.BASE=''; b.DRAFTS=True; b.build()"   # com rascunhos
 ```

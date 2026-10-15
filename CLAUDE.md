@@ -72,7 +72,7 @@ Em *Ossos do Ofício* (`content/works/all-in-a-nights-work/01/en.md`) o texto em
 
 ### Regras práticas
 
-- **Entregas por zip só com os arquivos alterados** (skill `hc-entrega`) até o GitHub ser conectado (T04); depois, por pull request.
+- **Entregas (skill `hc-entrega`):** todo trabalho é commit + `git push origin migracao-astro`; o pull request #1 (rascunho, `migracao-astro` → `main`) se atualiza sozinho. **Não fazer merge nem push na `main` até a T20**: a `main` é o site antigo no ar em hatecycle.com (também guardado na tag `site-antigo`). Enquanto o autor não usar `git pull`, o zip só com os arquivos alterados continua sendo enviado a ele também.
 - **Nunca use `pkill`.** Servidores de teste sempre sob `timeout` (ex.: `timeout 300 python3 -m http.server 8790 -d public`); porta ocupada → use outra.
 - Arquivos temporários (screenshots, extrações, scripts) no scratchpad da sessão, **nunca dentro do projeto**.
 - O sandbox **não alcança o Google Fonts** (Lexend, Oswald, PT Serif, Road Rage, Vollkorn SC, Noto das runas): os screenshots mostram fontes de reserva. Diga ao autor quais fontes não puderam ser vistas.

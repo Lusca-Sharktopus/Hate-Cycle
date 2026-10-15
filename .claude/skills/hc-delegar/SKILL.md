@@ -22,7 +22,7 @@ Ferramenta Agent, `subagent_type: general-purpose`, com `model` e `effort` da ta
 
 ```
 Você vai executar a tarefa <ID> — <título> do projeto Hᴀᴛᴇ Cʏᴄʟᴇ (site bilíngue PT/EN do autor Lusca Sharktopus),
-em /home/claude/hatecycle-site. Responda e escreva documentação em português.
+na raiz do repositório (ex.: /home/claude/hate-cycle). Responda e escreva documentação em português.
 
 Leia primeiro: CLAUDE.md (ou LEIA-ME.md se ainda não existir), docs/BACKLOG.md (linha <ID>),
 <arquivos específicos>, e as skills relevantes em .claude/skills/<...>/SKILL.md.

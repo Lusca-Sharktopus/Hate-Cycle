@@ -15,9 +15,9 @@ A cópia do autor é a **fonte da verdade**: ele edita arquivos direto (textos, 
    ```
    O zip costuma trazer uma pasta `hatecycle-site/` dentro.
 
-2. **Comparar** (ignorando saída gerada e cache):
+2. **Comparar com a raiz do repositório** (ex.: `/home/claude/hate-cycle`; ignorando saída gerada e cache):
    ```bash
-   diff -rq $Z/hatecycle-site /home/claude/hatecycle-site \
+   diff -rq $Z/hatecycle-site <raiz do repositório> \
      -x public -x __pycache__ -x .git -x .claude -x '*.zip' -x guardados -x node_modules
    ```
 
