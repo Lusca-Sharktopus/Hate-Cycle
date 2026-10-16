@@ -1,0 +1,15 @@
+---
+// O topo de um capítulo: a logo da obra (link para a página da obra, quando não é obra de capítulo único), o título e a
+// data. Só desenha: tudo vem decidido em `cabecalho` (src/lib/leitura.ts → cabecalhoDoCapitulo, build.py ~792–799).
+import { assetUrl } from "../lib/assets";
+import type { CabecalhoDoCapitulo } from "../lib/leitura";
+
+interface Props {
+  cabecalho: CabecalhoDoCapitulo;
+}
+
+const { cabecalho: c } = Astro.props;
+const logo = c.logo ? { src: assetUrl(c.logo.arquivo), alt: c.logo.alt } : null;
+---
+
+{logo && (c.linkDaLogo ? <a href={c.linkDaLogo}><img class="title-image" src={logo.src} alt={logo.alt} /></a> : <img class="title-image" src={logo.src} alt={logo.alt} />)}<h1 class={c.classeDoTitulo}>{c.titulo}</h1>{c.data && <p class="chapter-date"><time datetime={c.data.iso}>{c.data.texto}</time></p>}

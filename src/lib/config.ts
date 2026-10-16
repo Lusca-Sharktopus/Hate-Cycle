@@ -3,7 +3,8 @@
 // O arquivo é lido NO LUGAR, sem cópia: o caminho ../../config.json sai de src/lib/ e volta à raiz.
 // Só os campos importados abaixo entram no site; o resto do config.json (inclusive as chaves
 // do Supabase em `comments`, além de `base_url`, `email`, `redirects`…) não é importado
-// aqui. NUNCA importe nem exporte `comments` neste arquivo.
+// aqui. NUNCA importe nem exporte `comments` neste arquivo: desde a T12, o ÚNICO arquivo que lê
+// `comments` é src/lib/comentarios.ts (que monta a caixa de comentários igual à do build.py).
 import { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries } from "../../config.json";
 
 /** Os idiomas do site. Têm de ser os mesmos de config.json → languages e de astro.config.mjs → i18n.locales. */

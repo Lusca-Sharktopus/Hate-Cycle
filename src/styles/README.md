@@ -2,6 +2,7 @@ CSS do site Astro (T06).
 
 - `tokens.css` — as variáveis da marca (cores, fontes, raios, sombras, larguras), com os mesmos valores do `:root` do `static/style.css`.
 - `global.css` — reset, corpo da página, tipografia base, `.hc`, `.skip`, `.layout`, `.sheet`.
+- `prosa.css` (T12) — o que estiliza o **texto do autor** dentro de `.prose`: figuras, divisor de cena, vídeos e posts incorporados, ficha de feitiço e os efeitos das histórias (Giuseppe, carta que vira, tiras, a cena 1 de Ossos com o sonho em PT Serif #111012). Importado pelo `Leitor`; as notícias (T13) importam o mesmo. Trocas de fonte e cor ali são narrativas.
 - Estilos de cada peça ficam **no próprio componente** (`src/components/*.astro`, bloco `<style>`), com escopo.
 
 Os dois arquivos daqui são importados uma vez, no `src/layouts/BaseLayout.astro`.

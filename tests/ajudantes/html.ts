@@ -168,3 +168,8 @@ export function canonicoDoMiolo(htmlDoMiolo: string): string {
   if (!main) throw new Error("sem <main>");
   return canonico(main);
 }
+
+/** Os IDs das conversas de comentários de uma página: todo atributo data-page, na ordem (o mesmo critério de tools/baseline.py). */
+export function idsDeComentarios(html: string): string[] {
+  return varrer(parse(html), (e) => attr(e, "data-page") !== undefined).map((e) => attr(e, "data-page") ?? "");
+}

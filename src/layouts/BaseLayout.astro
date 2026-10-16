@@ -21,8 +21,10 @@ interface Props {
   description?: string;
   /** Imagem de pré-visualização (og:image), relativa a static/ (ex.: "covers/x.png"). */
   image?: string;
-  /** Endereço desta mesma página em cada idioma (vira <link hreflang> e o seletor de idioma). */
-  alternates?: Partial<Record<Lang, string>>;
+  /** Endereço desta mesma página em cada idioma (vira <link hreflang> e o seletor de idioma).
+   *  `null` = "esta página não existe (ou não é anunciada) naquele idioma", inclusive no próprio: é o caso do capítulo
+   *  `unlisted` (T12), que no build.py recebe alt_c com o próprio idioma valendo None e por isso fica sem nenhum hreflang. */
+  alternates?: Partial<Record<Lang, string | null>>;
   /** Página fora dos buscadores (capítulos "unlisted"). */
   noindex?: boolean;
   /** Classes do <body> (ex.: "reader" no leitor de capítulos: a página não ganha a "folha" de papel). */
@@ -47,12 +49,14 @@ const desc = description || t(lang, "hero_sub");
 const site = Astro.site ?? new URL(siteUrl);
 const ogImage = image ? (/^https?:/.test(image) ? image : new URL(assetUrl(image), site).href) : undefined;
 
-// Um hreflang por idioma. O próprio idioma da página sempre entra (o page() do build.py faz alt.setdefault(lang, url)).
-const todos: Partial<Record<Lang, string>> = { [lang]: pagina, ...alternates };
+// Um hreflang por idioma. O próprio idioma da página entra, a não ser que `alternates` diga outra coisa para ele
+// (o page() do build.py faz alt.setdefault(lang, url): só preenche se a chave não existe; ver `alternates` acima).
+const todos: Partial<Record<Lang, string | null>> = { [lang]: pagina, ...alternates };
 const hreflangs = langs.flatMap((l) => {
   const href = todos[l];
   return href ? [{ lang: l, href }] : [];
 });
+const paraOSeletor = Object.fromEntries(hreflangs.map((h) => [h.lang, h.href])) as Partial<Record<Lang, string>>;
 
 // Fontes do Google Fonts: o MESMO link do shell(). Fontes servidas pelo próprio site: T17.
 const googleFonts =
@@ -102,7 +106,7 @@ const { html: main, scripts } = finalizarMain(miolo, lang, atalhos);
     <Runas seed={semente} />
     <Abertura parte="corpo" />
     <a class="skip" href="#main">Skip to content</a>
-    <Header lang={lang} alternates={todos} />
+    <Header lang={lang} alternates={paraOSeletor} />
     <div class="layout">
       <main id="main" class={isReader ? undefined : "sheet"}>
         <Fragment set:html={main} />
