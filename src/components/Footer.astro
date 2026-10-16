@@ -16,9 +16,7 @@ const ano = new Date().getFullYear(); // ano do build, como datetime.date.today(
   <div class="social">
     {
       socialLinks.map((s) => (
-        <a href={s.url} target="_blank" rel="noopener" title={s.name}>
-          <img src={assetUrl(s.icon)} alt={s.name} />
-        </a>
+        <a href={s.url} target="_blank" rel="noopener" title={s.name}><img src={assetUrl(s.icon)} alt={s.name} /></a>
       ))
     }
   </div>

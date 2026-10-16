@@ -1,0 +1,100 @@
+---
+// O carrossel de histórias da home: uma fileira de cartões que rola para os lados, com setas, e que no fim leva à página
+// Histórias. O HTML é o <div class="works" data-more-url …> da home do build.py; as setas são criadas pelo <script> abaixo
+// (o bloco 2 do static/site.js, agora em TypeScript).
+//
+// Os atributos data-prev / data-next (o texto das setas) NÃO estão aqui: o acabamento do <main> (src/lib/pagina.ts) os
+// acrescenta a class="works", como o shell() do build.py faz com toda página.
+import type { CartaoDaObra } from "../lib/obras";
+import WorkCard from "./WorkCard.astro";
+
+interface Props {
+  cartoes: CartaoDaObra[];
+  /** Para onde a seta do fim do carrossel leva (a página Histórias) e o texto dela. */
+  maisUrl: string;
+  maisRotulo: string;
+}
+
+const { cartoes, maisUrl, maisRotulo } = Astro.props;
+---
+
+<div class="works" data-more-url={maisUrl} data-more-label={maisRotulo}>{cartoes.map((c) => <WorkCard cartao={c} />)}</div>
+
+<script>
+  // Setas + esmaecer a borda quando há mais cartões para o lado (bloco 2 do static/site.js).
+  const SETA_DIREITA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.5v15l11.5-7.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+  const SETA_ESQUERDA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4.5v15L4.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+
+  document.querySelectorAll<HTMLElement>(".works:not(.grid)").forEach((cartoes) => {
+    const trilho = document.createElement("div");
+    trilho.className = "rail";
+    cartoes.parentNode?.insertBefore(trilho, cartoes);
+    trilho.appendChild(cartoes);
+
+    function criarBotao(direcao: "prev" | "next"): HTMLButtonElement {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = `rail-btn rail-${direcao}`;
+      botao.innerHTML = direcao === "prev" ? SETA_ESQUERDA : SETA_DIREITA;
+      botao.setAttribute("aria-label", cartoes.dataset[direcao] || direcao);
+      if (direcao === "next" && cartoes.dataset["moreUrl"]) {
+        const rotulo = document.createElement("span");
+        rotulo.className = "rail-label";
+        rotulo.textContent = cartoes.dataset["moreLabel"] ?? "";
+        botao.insertBefore(rotulo, botao.firstChild);
+      }
+      botao.addEventListener("click", () => {
+        if (botao.classList.contains("is-link")) {
+          location.href = cartoes.dataset["moreUrl"] ?? "";
+          return;
+        } // fim do carrossel: vai para a página de Histórias
+        const cartao = cartoes.querySelector<HTMLElement>(".work-card:not([hidden])");
+        const passo = (cartao ? cartao.offsetWidth : 240) + 22;
+        cartoes.scrollBy({ left: direcao === "next" ? passo : -passo, behavior: "smooth" });
+      });
+      trilho.appendChild(botao);
+      return botao;
+    }
+    const anterior = criarBotao("prev");
+    const proximo = criarBotao("next");
+
+    function atualizar() {
+      const max = cartoes.scrollWidth - cartoes.clientWidth;
+      const esquerda = cartoes.scrollLeft > 4;
+      const direita = cartoes.scrollLeft < max - 4;
+      anterior.style.display = esquerda ? "" : "none";
+      if (cartoes.dataset["moreUrl"]) {
+        // carrossel com "ver todas": a seta fica sempre, e no fim vira link
+        proximo.style.display = "";
+        proximo.classList.toggle("is-link", !direita);
+        proximo.setAttribute("aria-label", !direita ? (cartoes.dataset["moreLabel"] ?? "") : (cartoes.dataset["next"] || "next"));
+      } else proximo.style.display = direita ? "" : "none";
+      cartoes.style.setProperty("--fl", esquerda ? "90px" : "0px");
+      cartoes.style.setProperty("--fr", direita ? "90px" : "0px");
+    }
+    cartoes.addEventListener("scroll", atualizar, { passive: true });
+    window.addEventListener("resize", atualizar);
+    window.addEventListener("load", atualizar);
+    new MutationObserver(atualizar).observe(cartoes, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden"] });
+    atualizar();
+  });
+</script>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seções "cards de histórias" e "carrossel da home"), mesmos valores e mesma ordem. */
+    .rail > .works { scrollbar-width: none; -ms-overflow-style: none; }   /* com as setas ativas, esconde a barra */
+    .rail > .works::-webkit-scrollbar { display: none; }
+    .rail { position: relative; }
+    .rail-btn { position: absolute; top: 34%; z-index: 2; width: 58px; height: 58px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer;
+      background: var(--green); color: #eafff8; box-shadow: 0 4px 14px #0004; transition: transform .2s, box-shadow .3s; }
+    .rail-btn:hover { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
+    .rail-btn svg { width: 30px; height: 30px; }
+    .rail-next { right: .6rem; } .rail-prev { left: .6rem; }
+    .works[data-more-url] { padding-right: 190px; }
+    .rail-btn .rail-label { display: none; font: 700 1rem var(--font-text, inherit); white-space: nowrap; }
+    .rail-btn.is-link { width: auto; border-radius: 40px; padding: 0 1.1rem 0 1.3rem; gap: .6rem; grid-auto-flow: column; }
+    .rail-btn.is-link .rail-label { display: inline; }
+    @media (max-width: 600px) { .works[data-more-url] { padding-right: 150px; } .rail-btn.is-link .rail-label { display: none; } .rail-btn.is-link { width: 58px; padding: 0; } }
+  }
+</style>

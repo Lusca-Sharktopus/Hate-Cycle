@@ -28,7 +28,7 @@ python build.py new news nome         # também: new chapter <obra> · new work 
 ```bash
 pnpm install    # uma vez (e quando package.json mudar)
 pnpm dev        # prévia com recarregamento em http://localhost:4321/pt/
-pnpm build      # gera o site Astro em dist/ (hoje: só /en/ e /pt/ de esqueleto)
+pnpm build      # gera o site Astro em dist/ (hoje: 6 páginas, home, Histórias e a obra Luz & Sangue, em /en/ e /pt/)
 pnpm check      # verificação de tipos (astro check): tem de dar 0 errors, 0 warnings
 pnpm test       # testes automáticos (vitest), tudo comparado com o Python: runas, conteúdo (front matter, coleções, rascunhos), Markdown → HTML e regras do site (ordens, datas, "Últimas atualizações", RSS)
 ```
@@ -36,6 +36,7 @@ pnpm test       # testes automáticos (vitest), tudo comparado com o Python: run
 - **Coleções (T08, lição `04-colecoes.md`):** `src/content.config.ts`; campos aceitos e mensagens de erro em `src/lib/schemas.ts` (campo desconhecido = erro); páginas pedem conteúdo por `src/lib/conteudo.ts` (regras de rascunho/`unlisted`/`listed`). O front matter é lido pelo porte do `parse()` (`src/lib/frontmatter.ts`), não por YAML.
 - **Mudou algo em `content/`?** Rode `python3 tools/frontmatter_ref.py`, `python3 tools/markdown_ref.py` e `python3 tools/regras_ref.py` antes do `pnpm test` (as referências em `tests/fixtures/` são fotos do conteúdo).
 - **Regras (T10, lição `06-regras.md`):** o que aparece, em que ordem e com que texto são funções puras em `src/lib/` (`datas`, `obras`, `capitulos`, `noticias`, `atualizacoes`, `emissarios`, `extras`, `idioma`); as páginas só desenham o que `dadosDoIdioma()` devolve. Provadas contra o `build()` do Python em `tests/regras.test.ts`.
+- **Páginas (T11, lição `07-paginas.md`):** `src/pages/[lang]/` (home, Histórias, obra com `getStaticPaths`), componentes em `src/components/`, acabamento do `<main>` em `src/lib/pagina.ts` (`finalizarMain()`: atalhos, versalete uma vez, `data-prev`/`data-next`). Paridade com o Python, página a página (`<main>` e `<head>`, comparação estrutural com parse5): `python3 tools/paginas_ref.py` (refaz as fotos; as próximas tarefas acrescentam seu grupo em `GRUPOS`) e `HC_DIST=dist pnpm vitest run paginas` (ou só `pnpm test`, que constrói o site). Seletor de Histórias no navegador, Astro × Python: `python3 tools/seletor_playwright.py --python 8791 --astro 8792` (servidores sob `timeout`; instruções no topo do script).
 - **Markdown (T09, lição `05-markdown.md`):** porte fiel do `make_md()` em `src/lib/markdown.ts`; o carregador guarda o HTML em `rendered` (páginas: `render()`/`<Content />`, depois `aplicarAtalhos()` e `versaleteEntreTags()` uma vez no `<main>`). Prévia do HTML de qualquer texto: `pnpm dev` → `/dev/markdown/`.
 
 ## Mapa de pastas

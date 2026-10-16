@@ -8,6 +8,7 @@
 //   redesDoEmissario   → card_emissary    linhas ~488–492 (NETWORKS)
 //   inicialDoEmissario → card_emissary    linha ~487  (a letra no lugar da foto)
 //   mostraTexto        → card_emissary    linha ~493  (config.json → emissaries.show_texts)
+//   cartaoDoEmissario  → card_emissary    linhas ~484–497 (os dados que o card mostra, sem HTML; T11)
 import { compararComoPython, compararNatural } from "./ordem";
 import type { Lang } from "./config";
 
@@ -81,4 +82,32 @@ export function inicialDoEmissario(e: EmissarioComDados): string {
 /** O texto de apresentação aparece no card? Só se o emissário tem texto e `config.json → emissaries.show_texts` não for false. */
 export function mostraTexto(e: EmissarioComDados, mostrarTextos: boolean): boolean {
   return mostrarTextos && (e.body ?? "").trim() !== "";
+}
+
+/** Tudo o que o card de um emissário mostra (o card_emissary do build.py), sem HTML. */
+export interface CartaoDoEmissario {
+  titulo: string;
+  /** `role:` do front matter ("" se não tem). */
+  papel: string;
+  /** Foto (relativa a static/); "" = sem foto: o card mostra `inicial` num quadrado. */
+  imagem: string;
+  inicial: string;
+  redes: RedeDoEmissario[];
+  /** O texto de apresentação já em HTML ("" = o card não mostra texto). */
+  texto: string;
+}
+
+/**
+ * card_emissary(): os dados do card. `htmlDoTexto` é o corpo do emissário já convertido em HTML (o `rendered.html` da
+ * entrada, com os atalhos trocados por nada); só entra no card se `mostraTexto` deixar.
+ */
+export function cartaoDoEmissario(e: EmissarioComDados, htmlDoTexto: string, mostrarTextos: boolean): CartaoDoEmissario {
+  return {
+    titulo: e.data.title || e.data._origem.slug,
+    papel: e.data.role ?? "",
+    imagem: e.data.image ?? "",
+    inicial: inicialDoEmissario(e),
+    redes: redesDoEmissario(e),
+    texto: mostraTexto(e, mostrarTextos) ? htmlDoTexto : "",
+  };
 }

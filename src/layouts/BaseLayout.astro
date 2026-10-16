@@ -9,6 +9,8 @@ import Runas from "../components/Runas.astro";
 import Abertura from "../components/Abertura.astro";
 import { assetUrl, assetVersioned } from "../lib/assets";
 import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config";
+import { ATALHOS } from "../lib/corpos";
+import { finalizarMain } from "../lib/pagina";
 import { runasFontesHtml } from "../lib/runas";
 
 interface Props {
@@ -57,6 +59,18 @@ const googleFonts =
   "https://fonts.googleapis.com/css2?family=Lexend:wght@300..800&family=Oswald:wght@300..700&family=Vollkorn+SC:wght@400;600;700&family=Noto+Emoji:wght@300..700&family=PT+Serif:ital@0;1&family=Road+Rage&display=swap";
 
 const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha a "folha" de papel
+
+// O MIOLO da página como TEXTO (T11). O shell() do build.py recebe o <main> como texto e faz o acabamento sobre ele
+// (src/lib/pagina.ts: atalhos, versalete UMA vez, data-prev/data-next). Aqui o Astro faz o mesmo: Astro.slots.render()
+// executa os componentes do miolo e devolve o HTML pronto; depois passa pelo mesmo acabamento.
+// Atalhos ({{stories}} etc.): a página que os usa entrega o componente de cada um num slot com nome "atalho-<nome>"
+// (ex.: <SecaoHistorias slot="atalho-stories" />); aqui o HTML de cada slot é trocado no lugar do marcador do texto.
+const miolo = await Astro.slots.render("default");
+const atalhos: Partial<Record<(typeof ATALHOS)[number], string>> = {};
+for (const nome of ATALHOS) {
+  if (Astro.slots.has(`atalho-${nome}`)) atalhos[nome] = await Astro.slots.render(`atalho-${nome}`);
+}
+const { html: main, scripts } = finalizarMain(miolo, lang, atalhos);
 ---
 
 <!doctype html>
@@ -91,10 +105,12 @@ const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha
     <Header lang={lang} alternates={todos} />
     <div class="layout">
       <main id="main" class={isReader ? undefined : "sheet"}>
-        <slot />
+        <Fragment set:html={main} />
       </main>
     </div>
     <Footer lang={lang} />
-    <!-- site.js (ordenação, carrossel, notícias…) volta como <script> dos componentes que o usam: T11 em diante -->
+    {/* O site.js (ordenação, carrossel, imagem ausente…) virou <script> dos componentes que o usam. O Astro os deixa dentro do miolo;
+        finalizarMain() os tira de lá e eles voltam aqui, no fim da página, como o <script src="site.js"> do build.py. */}
+    <Fragment set:html={scripts} />
   </body>
 </html>

@@ -1,0 +1,35 @@
+---
+// O miolo da página de uma obra (/pt/works/light-and-blood/): capa, título, resumo, os dois botões e a lista de capítulos.
+// Só desenha: tudo já vem decidido em `pagina` (src/lib/capitulos.ts → paginaDaObra).
+import { assetUrl } from "../lib/assets";
+import type { PaginaDaObra } from "../lib/capitulos";
+
+interface Props {
+  pagina: PaginaDaObra;
+}
+
+const { pagina: p } = Astro.props;
+---
+
+<div class="wrap block work-head">{p.capa && <img class="cover" src={assetUrl(p.capa)} alt="" />}<div><h1>{p.titulo}</h1><p>{p.descricao}</p><div class="hero-actions"><a class="button" href={p.primeiro.url}>{p.primeiro.rotulo}</a>
+<a class="button ghost" href={p.ultimo.url}>{p.ultimo.rotulo}</a></div></div></div>
+<section class="wrap block"><h2>{p.tituloDaLista}</h2><ol class="chapter-list">{p.capitulos.map((c) => <li><a href={c.url}><span class="n">{c.numero}</span><span class="t">{c.titulo}</span><time>{c.data}</time></a></li>)}</ol></section>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "obra" e a parte dela no @media de 700px), mesmos valores e mesma ordem. */
+    .work-head { display: grid; grid-template-columns: minmax(150px, 240px) 1fr; gap: 2rem; align-items: start; }
+    .work-head .cover { border-radius: var(--radius); box-shadow: 0 6px 18px #0003; width: 100%; }
+    .chapter-list { list-style: none; padding: 0; margin: 0; }
+    .chapter-list a { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; padding: .8rem 1rem; text-decoration: none; color: inherit; border-bottom: 1px solid #0000001a; }
+    .chapter-list a:hover { background: #ffffffa0; }
+    .chapter-list .n { font-family: var(--font-head); color: var(--teal); font-size: 1.4rem; }
+    .chapter-list .t { font-weight: 500; }
+    @media (max-width: 700px) {
+      .work-head { grid-template-columns: 1fr; }
+      .work-head .cover { max-width: 260px; }
+      .chapter-list a { grid-template-columns: 2rem 1fr; }
+      .chapter-list time { display: none; }
+    }
+  }
+</style>

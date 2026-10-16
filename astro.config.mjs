@@ -12,7 +12,8 @@ export default defineConfig({
   // Pastas. `static/` é a mesma pasta que o build.py copia para public/ (provisório até a virada, T20).
   // O site Astro sai em dist/, para não se misturar com o public/ do gerador Python.
   publicDir: "./static",
-  outDir: "./dist",
+  // HC_OUT_DIR: só para os testes (tests/paginas.test.ts constrói o site numa pasta temporária, sem mexer no dist/ de quem trabalha).
+  outDir: process.env["HC_OUT_DIR"] ?? "./dist",
 
   // Endereços iguais aos de hoje: /pt/news/x/ (com barra no fim) → arquivo pt/news/x/index.html.
   trailingSlash: "always",

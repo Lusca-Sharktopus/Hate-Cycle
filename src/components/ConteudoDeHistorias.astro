@@ -1,0 +1,16 @@
+---
+// O miolo da página Histórias (/pt/works/): o <main> do build.py é o título escondido (para leitores de tela) e o atalho
+// {{stories}} dentro de uma coluna de texto. Aqui o texto é só o marcador do atalho; o componente das histórias
+// (SecaoHistorias) chega pelo slot "atalho-stories" do layout, que troca o marcador pelo HTML dele.
+// (Se um dia o texto desta página vier de um arquivo em content/, o marcador virá dentro dele e nada muda aqui.)
+import { t, type Lang } from "../lib/config";
+import { marcadorDeAtalho } from "../lib/corpos";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<div class="wrap wide block page-project"><h1 class="sr-only">{t(lang, "works")}</h1><div class="prose"><Fragment set:html={marcadorDeAtalho("stories")} /></div></div>

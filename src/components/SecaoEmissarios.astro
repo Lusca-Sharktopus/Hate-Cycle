@@ -1,0 +1,17 @@
+---
+// A seção "Emissários" (a grade de gente que ajuda o projeto): o atalho {{emissaries}} (SHORT["emissaries"] do build.py).
+// Sem nenhum emissário publicado, não desenha nada — e o atalho vira texto vazio, como no build.py.
+import type { Lang } from "../lib/config";
+import { t } from "../lib/config";
+import type { CartaoDoEmissario } from "../lib/emissarios";
+import CardEmissario from "./CardEmissario.astro";
+
+interface Props {
+  lang: Lang;
+  cartoes: CartaoDoEmissario[];
+}
+
+const { lang, cartoes } = Astro.props;
+---
+
+{cartoes.length > 0 && <section class="emissaries"><h2>{t(lang, "emissaries")}</h2><p class="sub">{t(lang, "emissaries_sub")}</p><div class="emi-grid">{cartoes.map((c) => <CardEmissario cartao={c} />)}</div></section>}
