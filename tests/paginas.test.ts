@@ -16,7 +16,14 @@
 // autor. A referência foi gravada com MARCADORES no lugar delas; aqui, as do dist/ são conferidas (sem nunca imprimi-las)
 // e trocadas pelos mesmos marcadores antes de comparar.
 //
-// Atalho para iterar: `HC_DIST=dist pnpm vitest run paginas` usa um dist/ já construído em vez de construir de novo.
+// T14 (grupo t14 = páginas avulsas, Universo/Personagens e a 404) mais as provas do SITE INTEIRO:
+//   - a lista de endereços do dist/ é exatamente a de baseline/urls.json (192 páginas HTML + os 2 feeds + CNAME) mais o sitemap;
+//   - a raiz, as páginas do site antigo e os feeds RSS saem IGUAIS BYTE A BYTE ao que o build.py gera;
+//   - o sitemap tem as páginas publicadas e indexáveis (e só elas), conferido contra o dist/;
+//   - uma SEGUNDA construção, com rascunhos e Extras ligados (`NODE_ENV=development HC_SHOW_EXTRAS=1 pnpm build`: o que o autor verá
+//     se ligar `show_extras`), confere o cabeçalho e o <main> de TODAS as páginas contra o build.py com DRAFTS=True e show_extras=True.
+// Atalho para iterar: `HC_DIST=dist pnpm vitest run paginas` usa um dist/ já construído em vez de construir de novo
+// (e `HC_DIST_EXTRAS=<pasta>` para a segunda construção).
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -25,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { idsDeComentarios, lerPagina, type PaginaLida } from "./ajudantes/html";
+import { canonicoDoMiolo, idsDeComentarios, lerPagina, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -34,8 +41,8 @@ interface Referencia {
   paginas: Record<string, string>;
   marcadores?: { url: string; key: string };
 }
-/** Os grupos de páginas já migrados. A T14 acrescenta o seu aqui (e em GRUPOS de tools/paginas_ref.py). */
-const GRUPOS = ["t11", "t12", "t13"] as const;
+/** Os grupos de páginas já migrados (os mesmos de GRUPOS em tools/paginas_ref.py). */
+const GRUPOS = ["t11", "t12", "t13", "t14"] as const;
 const refs: Referencia[] = GRUPOS.map((g) => JSON.parse(readFileSync(new URL(`./fixtures/paginas-${g}-python.json`, import.meta.url), "utf8")));
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 const REFAZER = "A referência está velha: rode `python3 tools/paginas_ref.py` e depois `pnpm test` de novo.";
@@ -47,27 +54,43 @@ let pastaTemporaria = "";
  *  variáveis VITEST*; o build filho herdaria isso e se trataria como "dev" (import.meta.env.DEV = true = COM rascunhos, que
  *  faria o site sair com o link Apoio e a "Prévia"). Aqui o build é sempre o de produção, como o `pnpm build`. */
 const DO_VITEST = new Set(["MODE", "DEV", "PROD", "SSR", "TEST", "BASE_URL", "SITE", "ASSETS_PREFIX", "FORCE_TTY"]);
-function ambienteDoBuild(saida: string): NodeJS.ProcessEnv {
+function ambienteDoBuild(saida: string, extra: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = { ...process.env, NODE_ENV: "production", HC_OUT_DIR: saida };
   for (const chave of Object.keys(env)) if (chave.startsWith("VITEST") || DO_VITEST.has(chave)) delete env[chave];
-  return env;
+  delete env["HC_SHOW_EXTRAS"]; // o build normal lê só o config.json
+  return { ...env, ...extra };
+}
+
+/** `astro build` numa pasta; `extra` muda o ambiente (a construção "com rascunhos e Extras" usa NODE_ENV=development e HC_SHOW_EXTRAS=1). */
+function construir(saida: string, extra: NodeJS.ProcessEnv = {}): void {
+  const r = spawnSync(process.execPath, [join(RAIZ, "node_modules", "astro", "bin", "astro.mjs"), "build"], { cwd: RAIZ, env: ambienteDoBuild(saida, extra), encoding: "utf8" });
+  if (r.status !== 0) throw new Error(`astro build falhou:\n${r.stdout}\n${r.stderr}`);
 }
 
 beforeAll(() => {
   if (dist) return;
   pastaTemporaria = mkdtempSync(join(tmpdir(), "hc-astro-dist-"));
-  const r = spawnSync(process.execPath, [join(RAIZ, "node_modules", "astro", "bin", "astro.mjs"), "build"], {
-    cwd: RAIZ,
-    env: ambienteDoBuild(pastaTemporaria),
-    encoding: "utf8",
-  });
-  if (r.status !== 0) throw new Error(`astro build falhou:\n${r.stdout}\n${r.stderr}`);
+  construir(pastaTemporaria);
   dist = pastaTemporaria;
 }, 240_000);
 afterAll(() => {
   if (pastaTemporaria) rmSync(pastaTemporaria, { recursive: true, force: true });
+  if (pastaDaSegunda) rmSync(pastaDaSegunda, { recursive: true, force: true });
   jaLidas.clear();
 });
+
+/** A segunda construção (rascunhos + Extras), feita só quando alguém precisa dela. */
+let pastaDaSegunda = "";
+let distDaSegunda = process.env["HC_DIST_EXTRAS"] ? join(RAIZ, process.env["HC_DIST_EXTRAS"]) : "";
+function segundaConstrucao(): string {
+  if (!distDaSegunda) {
+    pastaDaSegunda = mkdtempSync(join(tmpdir(), "hc-astro-dist-extras-"));
+    // NODE_ENV=development faz o build se tratar como a prévia (import.meta.env.DEV = true = COM rascunhos, o DRAFTS=True do build.py)
+    construir(pastaDaSegunda, { NODE_ENV: "development", HC_SHOW_EXTRAS: "1" });
+    distDaSegunda = pastaDaSegunda;
+  }
+  return distDaSegunda;
+}
 
 /** Todas as páginas HTML de uma pasta: endereço (/pt/works/) → caminho do arquivo. (Lida uma vez só: são ~180 páginas e cada uma pergunta.) */
 const jaLidas = new Map<string, Map<string, string>>();
@@ -80,6 +103,7 @@ function paginasDoDist(pasta: string): Map<string, string> {
       const caminho = join(dir, nome);
       if (statSync(caminho).isDirectory()) andar(caminho);
       else if (nome === "index.html") achadas.set("/" + relative(pasta, caminho).split(sep).slice(0, -1).join("/") + (dir === pasta ? "" : "/"), caminho);
+      else if (nome === "404.html" && dir === pasta) achadas.set("/404.html", caminho); // a 404 é um arquivo solto, não uma pasta
     }
   };
   andar(pasta);
@@ -207,6 +231,173 @@ describe("IDs dos comentários (data-page) de TODAS as páginas do Astro = basel
     // a mesma conversa em /en/ e /pt/: o ID não leva o idioma
     for (const id of doAstro) expect(id).not.toMatch(/^(en|pt)\/|\/(en|pt)$/);
   });
+});
+
+// ───────────── T14: a lista de endereços, os arquivos exatos, o sitemap e o site inteiro com Extras ─────────────
+
+interface ReferenciaT14 extends Referencia {
+  exatos: Record<string, string>;
+  construcao_com_rascunhos_e_extras: { paginas: Record<string, string>; partes: Record<string, { header: string; main: string }> };
+}
+const t14 = refs.find((r) => r.grupo === "t14") as ReferenciaT14;
+const baselineUrls: { html: string[]; outros_gerados: string[]; outros_de_static_relevantes: string[]; redirects_site_antigo: Record<string, string> } = JSON.parse(
+  readFileSync(join(RAIZ, "baseline", "urls.json"), "utf8"),
+);
+
+/** Todos os arquivos de uma pasta, relativos a ela e com "/" (ex.: "en/feed.xml"). */
+function arquivosDe(pasta: string): string[] {
+  const achados: string[] = [];
+  const andar = (dir: string) => {
+    for (const nome of readdirSync(dir)) {
+      const caminho = join(dir, nome);
+      if (statSync(caminho).isDirectory()) andar(caminho);
+      else achados.push(relative(pasta, caminho).split(sep).join("/"));
+    }
+  };
+  andar(pasta);
+  return achados.sort();
+}
+/** O endereço de um arquivo .html do dist/: "en/about/index.html" → "/en/about/"; "index.html" → "/"; "PT.html" → "/PT.html". */
+function enderecoDoHtml(arquivo: string): string {
+  if (arquivo === "index.html") return "/";
+  return arquivo.endsWith("/index.html") ? "/" + arquivo.slice(0, -"index.html".length) : "/" + arquivo;
+}
+
+describe("a lista de endereços do dist/ é a da baseline (mais o sitemap)", () => {
+  test("as 192 páginas HTML são exatamente as do site atual (nenhuma a mais, nenhuma a menos)", () => {
+    const html = arquivosDe(dist).filter((a) => a.endsWith(".html")).map(enderecoDoHtml).sort();
+    expect(html).toEqual([...baselineUrls.html].sort());
+    expect(html).toHaveLength(192);
+  });
+  test("os feeds, o CNAME e o sitemap estão lá; nada mais fora do que o site publica (nem /dev/)", () => {
+    const todos = arquivosDe(dist);
+    for (const f of baselineUrls.outros_gerados) expect(todos, f).toContain(f.slice(1));
+    for (const f of baselineUrls.outros_de_static_relevantes) expect(todos, f).toContain(f.slice(1));
+    expect(todos).toContain("sitemap.xml");
+    expect(todos.filter((a) => a.startsWith("dev/")), "a ferramenta /dev/markdown/ não pode ir para o site publicado").toEqual([]);
+  });
+  test("os redirecionamentos do site antigo são os de config.json → redirects (menos index.html e os que vão para /)", () => {
+    const doConfig = JSON.parse(readFileSync(join(RAIZ, "config.json"), "utf8")) as { redirects: Record<string, string> };
+    const esperados = Object.fromEntries(Object.entries(doConfig.redirects).filter(([antigo, novo]) => novo !== "/" && antigo !== "index.html").map(([a, n]) => ["/" + a, n]));
+    expect(esperados).toEqual(baselineUrls.redirects_site_antigo);
+    for (const [antigo, novo] of Object.entries(esperados)) {
+      const html = readFileSync(join(dist, antigo.slice(1)), "utf8");
+      expect(html, antigo).toContain(`<meta http-equiv="refresh" content="0; url=${novo}">`);
+    }
+  });
+});
+
+describe("raiz, páginas do site antigo e feeds: IGUAIS, byte a byte, aos do build.py", () => {
+  test.each(Object.keys(t14.exatos))("%s", (url) => {
+    const arquivo = url === "/" ? "index.html" : url.slice(1);
+    const doAstro = readFileSync(join(dist, arquivo), "utf8");
+    // toBe com texto grande mostra a diferença inteira; aqui a primeira linha que difere já basta
+    expect(doAstro === t14.exatos[url], REFAZER).toBe(true);
+  });
+  test("os feeds têm a forma de um RSS 2.0 (prólogo, uma só raiz, itens com título, link, guid, data de e-mail e descrição)", () => {
+    // Não há leitor de XML no projeto (e não vale instalar um só para isto): o byte a byte acima já prova que é o feed de hoje, e
+    // tools/paginas_ref.py confere cada feed do Python com um leitor de XML de verdade (xml.etree) antes de gravar a referência.
+    for (const lang of ["en", "pt"]) {
+      const xml = readFileSync(join(dist, lang, "feed.xml"), "utf8");
+      expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>')).toBe(true);
+      expect(xml.endsWith("</channel></rss>")).toBe(true);
+      const itens = [...xml.matchAll(/<item>(.*?)<\/item>/g)].map((m) => m[1] ?? "");
+      expect(itens.length).toBeGreaterThan(5);
+      expect(itens.length).toBeLessThanOrEqual(30);
+      for (const item of itens) {
+        expect(item).toMatch(new RegExp(`^<title>[^<>]*</title><link>https://hatecycle\\.com/${lang}/[a-z0-9/-]+/</link><guid>https://hatecycle\\.com/${lang}/[a-z0-9/-]+/</guid><pubDate>[A-Z][a-z]{2}, \\d{2} [A-Z][a-z]{2} \\d{4} 00:00:00 \\+0000</pubDate><description>[^<>]*</description>$`));
+      }
+    }
+  });
+});
+
+describe("sitemap.xml", () => {
+  const RE_NOINDEX = /<meta name="robots" content="noindex, nofollow"\s*\/?>/;
+  /** O que o sitemap deve listar numa construção: todas as páginas, menos a raiz, a 404, os redirects, as noindex e o /dev/. */
+  function esperadas(pasta: string): string[] {
+    const baseDeRedirects = new Set(arquivosDe(pasta).filter((a) => /^[^/]+\.html$/.test(a) && a !== "404.html" && a !== "index.html"));
+    return arquivosDe(pasta)
+      .filter((a) => a.endsWith(".html") && a !== "index.html" && a !== "404.html" && !baseDeRedirects.has(a) && !a.startsWith("dev/"))
+      .filter((a) => !RE_NOINDEX.test(readFileSync(join(pasta, a), "utf8")))
+      .map((a) => "https://hatecycle.com" + enderecoDoHtml(a))
+      .sort();
+  }
+  function listadas(pasta: string): string[] {
+    const xml = readFileSync(join(pasta, "sitemap.xml"), "utf8");
+    // o formato inteiro, linha por linha (sitemaps.org): prólogo, <urlset> e um <url><loc> por endereço, sem "&" ou "<" soltos
+    expect(xml).toMatch(/^<\?xml version="1.0" encoding="UTF-8"\?>\n<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">\n(  <url><loc>https:\/\/hatecycle\.com\/[^<>&"' ]*<\/loc><\/url>\n)+<\/urlset>\n$/);
+    return [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1] ?? "").sort();
+  }
+  test("lista as páginas publicadas e indexáveis do site (e só elas), com endereço absoluto", () => {
+    expect(listadas(dist)).toEqual(esperadas(dist));
+    expect(listadas(dist).length).toBeGreaterThan(150);
+  });
+  test("não lista a raiz, a 404, os redirects do site antigo nem os capítulos noindex (Ossos do Ofício)", () => {
+    const l = listadas(dist);
+    for (const fora of ["https://hatecycle.com/", "https://hatecycle.com/404.html", "https://hatecycle.com/PT.html", "https://hatecycle.com/en/works/all-in-a-nights-work/01/"]) expect(l, fora).not.toContain(fora);
+    expect(l).toContain("https://hatecycle.com/en/");
+    expect(l).toContain("https://hatecycle.com/pt/about/");
+    expect(new Set(l).size, "endereços repetidos").toBe(l.length);
+  });
+  test("com rascunhos e Extras ligados, o sitemap também acompanha o site (Apoio, Universo, Personagens)", () => {
+    const outra = segundaConstrucao();
+    expect(listadas(outra)).toEqual(esperadas(outra));
+    expect(listadas(outra)).toContain("https://hatecycle.com/pt/characters/harry/");
+    expect(listadas(outra)).toContain("https://hatecycle.com/en/support/");
+  }, 240_000);
+});
+
+describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se ligar show_extras) = build.py com DRAFTS=True e show_extras=True", () => {
+  const c = t14.construcao_com_rascunhos_e_extras;
+  const outra = () => segundaConstrucao();
+  /** As chaves do Supabase do autor viram os marcadores da referência (antes, confere que são as do config.json). */
+  const lerComMarcadores = (arquivo: string): string => {
+    const r = comMarcadores(readFileSync(arquivo, "utf8"), { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
+    if (!r.conferem) throw new Error(`${arquivo}: a URL ou a chave do window.HC não são as do config.json`);
+    return r.html;
+  };
+  const miolo = (html: string) => /<main\b[^>]*>([\s\S]*)<\/main>/.exec(html)?.[1] ?? "";
+  const cabecalho = (html: string) => /<header class="site-header"[^>]*>[\s\S]*?<\/header>/.exec(html)?.[0] ?? "";
+
+  test("as mesmas páginas (nenhuma a mais, nenhuma a menos; fora o /dev/ da prévia)", () => {
+    const dir = outra();
+    const doAstro = arquivosDe(dir).filter((a) => a.endsWith(".html") && !a.startsWith("dev/")).map(enderecoDoHtml).filter((u) => /^\/(en|pt)\//.test(u)).sort();
+    expect(doAstro, REFAZER).toEqual([...Object.keys(c.paginas), ...Object.keys(c.partes)].sort());
+  }, 240_000);
+
+  test.each(Object.keys(c.paginas))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
+    const py = lerPagina(c.paginas[url] ?? "");
+    const astro = lerPagina(lerComMarcadores(join(outra(), url.slice(1), "index.html")));
+    expect(astro.cabeca.titulo).toBe(py.cabeca.titulo);
+    expect(astro.cabeca.metas).toEqual(py.cabeca.metas);
+    expect(astro.cabeca.links).toEqual(py.cabeca.links);
+    expect(astro.main).toBe(py.main);
+    expect(astro.runas).toBe(py.runas);
+    expect(astro.cabecalho).toBe(py.cabecalho);
+    expect(astro.classeDoCorpo).toBe(py.classeDoCorpo);
+    expect(semAno(astro.rodape)).toBe(semAno(py.rodape));
+  }, 240_000);
+
+  test("sanidade da referência: com Extras ligados o cabeçalho do Python traz Universo, Personagens e Apoio", () => {
+    const h = c.partes["/en/"]?.header ?? "";
+    expect(h).toContain('href="/en/universe/"');
+    expect(h).toContain('href="/en/characters/"');
+    expect(h).toContain('href="/en/support/"');
+  });
+
+  const outras = Object.keys(c.partes);
+  test("o cabeçalho (menu com Extras e Apoio) e o <main> de todas as outras páginas", () => {
+    const dir = outra();
+    const diferentes: string[] = [];
+    for (const url of outras) {
+      const py = c.partes[url];
+      if (!py) continue;
+      const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
+      if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
+      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(py.main)) diferentes.push(`${url} (<main>)`);
+    }
+    expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);
+  }, 240_000);
 });
 
 test("o dist/ existe", () => {

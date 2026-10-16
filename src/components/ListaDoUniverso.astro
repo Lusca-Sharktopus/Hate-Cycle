@@ -1,0 +1,24 @@
+---
+// A página /<idioma>/universe/ (só existe com `show_extras: true`): os verbetes agrupados por categoria.
+// O <main> do build() (linhas ~884–888): <div class="wrap block"><h1>Universo</h1> <section><h2>categoria</h2><ul class="wiki-list">…</ul></section>… </div>
+// Só desenha: tudo vem decidido em `lista` (src/lib/paginasDeExtras.ts). Escrito "colado" de propósito: não quebre as linhas do HTML.
+import type { ListaDoUniverso } from "../lib/paginasDeExtras";
+
+interface Props {
+  lista: ListaDoUniverso;
+}
+
+const { lista } = Astro.props;
+---
+
+<div class="wrap block"><h1>{lista.titulo}</h1>{lista.grupos.map((g) => <section><h2>{g.categoria}</h2><ul class="wiki-list">{g.itens.map((i) => <li><a href={i.url}><strong>{i.titulo}</strong><span>{i.resumo}</span></a></li>)}</ul></section>)}</div>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "universo / personagens", a parte do .wiki-list), mesmos valores e mesma ordem. */
+    .wiki-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+    .wiki-list a { display: block; padding: .7rem 1rem; background: #f6f9f8; border-radius: 8px; text-decoration: none; color: inherit; border-left: 5px solid var(--mint); }
+    .wiki-list a:hover { background: #fff; }
+    .wiki-list span { display: block; color: var(--muted); font-size: .9rem; }
+  }
+</style>

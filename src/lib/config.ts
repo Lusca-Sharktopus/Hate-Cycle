@@ -5,9 +5,9 @@
 // do Supabase em `comments`, além de `base_url`, `email`, `redirects`…) não é importado
 // aqui. NUNCA importe nem exporte `comments` neste arquivo: desde a T12, o ÚNICO arquivo que lê
 // `comments` é src/lib/comentarios.ts (que monta a caixa de comentários igual à do build.py).
-import { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries } from "../../config.json";
+import { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries, redirects } from "../../config.json";
 
-/** Os idiomas do site. Têm de ser os mesmos de config.json → languages e de astro.config.mjs → i18n.locales. */
+/** Os idiomas do site. Têm de ser os mesmos de config.json → languages (os valores de `[lang]` em src/pages/ vêm daí). */
 export type Lang = "en" | "pt";
 
 /** Todos os textos da interface (config.json → ui). Cada idioma tem de ter TODAS as chaves. */
@@ -154,6 +154,8 @@ interface SiteConfig {
   logo: string;
   author: string;
   show_extras: boolean;
+  /** Endereços do site antigo → endereço novo (config.json → redirects). */
+  redirects: Record<string, string>;
   emissaries: EmissariesConfig;
   socials: Social[];
   languages: Record<Lang, { name: string; html: string }>;
@@ -163,7 +165,7 @@ interface SiteConfig {
 
 // Se algum desses campos sumir, mudar de tipo ou de nome no config.json, `pnpm check` acusa erro AQUI
 // (em vez de o site sair com um buraco).
-const config: SiteConfig = { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries };
+const config: SiteConfig = { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries, redirects };
 
 // Trava contra o outro erro: uma chave de `ui` que o tipo UiText não conhece (por exemplo, um texto novo
 // que alguém acrescentou no config.json e esqueceu de declarar acima). Se isso acontecer, o tipo abaixo
@@ -183,8 +185,25 @@ export const logoFile = config.logo;
 /** Nome do autor, usado no "© 2023 - ano by …" do rodapé. */
 export const authorName = config.author;
 
-/** `show_extras` do config.json: liga/desliga Universo e Personagens (hoje desligado). */
-export const showExtras = config.show_extras;
+/**
+ * `show_extras` do config.json: liga/desliga Universo e Personagens (hoje desligado).
+ *
+ * Só para PROVAR o lado "ligado" sem mexer no config.json do autor (T14): a variável de ambiente `HC_SHOW_EXTRAS` vence o
+ * arquivo — `1`/`true` liga, `0`/`false` desliga, qualquer outra coisa (ou ausente) deixa valer o config.json. Exemplo:
+ * `HC_SHOW_EXTRAS=1 pnpm dev` (prévia COM rascunhos, que é onde o conteúdo de exemplo de universe/ e characters/ aparece).
+ * O site publicado nunca usa isto: o `pnpm build` sem a variável lê só o config.json.
+ */
+export const showExtras: boolean = deAmbiente(process.env["HC_SHOW_EXTRAS"], config.show_extras);
+
+function deAmbiente(valor: string | undefined, padrao: boolean): boolean {
+  const v = (valor ?? "").trim().toLowerCase();
+  if (v === "1" || v === "true") return true;
+  if (v === "0" || v === "false") return false;
+  return padrao;
+}
+
+/** Os redirecionamentos do site antigo (config.json → redirects): `firestriker.html` → `/en/works/firestriker/01/`. */
+export const redirectsDoSiteAntigo: Readonly<Record<string, string>> = config.redirects;
 
 /** `emissaries.hide` do config.json: pastas de content/emissaries/ que não aparecem no site (ex.: ["saf"]). */
 export const emissariosEscondidos: readonly string[] = config.emissaries.hide;

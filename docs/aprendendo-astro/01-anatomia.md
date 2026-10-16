@@ -147,23 +147,9 @@ O Astro 7 mudou o padrão desta opção para `'jsx'`, que apaga o espaço entre 
 
 O site depende desses espaços o tempo todo: o versalete Hᴀᴛᴇ Cʏᴄʟᴇ vira `<span class="hc">` e há links no meio das frases. Com `false`, o HTML sai com os espaços exatamente como foram escritos, como o `build.py` já faz (ele não comprime nada). A diferença de tamanho é pequena.
 
-### `i18n` — dois idiomas, os dois com prefixo
+### `i18n` — dois idiomas, os dois com prefixo (removido na T14)
 
-```js
-i18n: {
-  locales: ["en", "pt"],
-  defaultLocale: "en",
-  routing: {
-    prefixDefaultLocale: true,
-    redirectToDefaultLocale: false,
-  },
-},
-```
-
-- **`locales`**: os idiomas, com os mesmos nomes das chaves de `config.json → languages` e das pastas `src/pages/en/` e `src/pages/pt/`.
-- **`defaultLocale: "en"`**: hoje, a raiz `/` tenta adivinhar o idioma do navegador e, quando não reconhece, cai em `/en/`; a página 404 também usa o inglês como idioma principal (`<html lang="en">`). O inglês é o idioma "padrão" do site atual, então ficou igual.
-- **`prefixDefaultLocale: true`**: sem isso, o Astro colocaria o idioma padrão sem prefixo (o inglês ficaria em `/` e não em `/en/`). Com `true`, os dois idiomas têm prefixo, como hoje.
-- **`redirectToDefaultLocale: false`**: com `true`, o Astro faria a raiz `/` mandar sempre para `/en/`. Mas a raiz de hoje é mais esperta (lembra a escolha do visitante e olha o idioma do navegador), e ela será refeita à mão na T14. Por isso fica `false` (que já é o padrão; está escrito só para ficar claro). **Enquanto a T14 não chega, o Astro não gera página nenhuma em `/`**: na prévia, `http://localhost:4321/` dá "404". É esperado.
+Na T05 o `astro.config.mjs` tinha um bloco `i18n` (`locales: ["en", "pt"]`, `defaultLocale: "en"`, `prefixDefaultLocale: true`). **Na T14 ele foi removido**: o site já tem a rota `[lang]` (uma página por idioma) e a raiz e a 404 são escritas à mão (lição 09), então o recurso só atrapalhava. Com ele ligado, o Astro respondia 404 em `/` e em `/dev/markdown/` na prévia. Sem ele, os idiomas continuam valendo pelo que está em `config.json → languages` e pela rota `[lang]`.
 
 ## 3. `tsconfig.json` — o revisor de tipos
 
@@ -338,7 +324,7 @@ Por enquanto o layout é **só o esqueleto**: sem CSS, sem cabeçalho, sem rodap
 | `BASE`, `u()`, `asset()` | `site: "https://hatecycle.com"` e nenhum `base` (site na raiz do domínio) |
 | `OUT = ROOT / "public"` | `outDir: "./dist"` |
 | `shutil.copytree(STATIC, OUT, …)` | `publicDir: "./static"` |
-| `LANGS = list(CFG["languages"])` | `i18n.locales: ["en", "pt"]` |
+| `LANGS = list(CFG["languages"])` | `config.json → languages` lido por `src/lib/config.ts` (o bloco `i18n` do Astro foi removido na T14) |
 | `python build.py` | `pnpm build` |
 | `python build.py serve` (porta 8000) | `pnpm dev` (porta 4321) |
 

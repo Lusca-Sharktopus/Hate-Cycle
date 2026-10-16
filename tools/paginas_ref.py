@@ -40,6 +40,7 @@ Só biblioteca padrão. Não cria public/ nem __pycache__. As chaves do Supabase
 usado nas capturas leva chaves de mentira, como em regras_ref.py).
 """
 import contextlib, hashlib, io, json, re, shutil, sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.dont_write_bytecode = True                      # não deixar __pycache__ no projeto
@@ -54,6 +55,8 @@ GRUPOS = {
     "t11": re.compile(r"^/(en|pt)/(works/([^/]+/)?)?$"),     # home, Histórias, página de obra (NÃO os capítulos, que têm 4 níveis)
     "t12": re.compile(r"^/(en|pt)/works/[^/]+/[^/]+/$"),     # capítulos (o leitor)
     "t13": re.compile(r"^/(en|pt)/news/([^/]+/)?$"),         # as duas listas de notícias e cada notícia
+    # páginas avulsas (Sobre, Apoio…), Universo e Personagens (listas e itens, só com show_extras) e a 404
+    "t14": re.compile(r"^(/(en|pt)/(?!works/|news/)[^/]+/([^/]+/)?|/404\.html)$"),
 }
 ESCOPO = re.compile("|".join(p.pattern for p in GRUPOS.values()))
 FIXTURES = ROOT / "tests" / "fixtures"
@@ -75,21 +78,32 @@ def pasta_static(pasta):
         build.STATIC = salvo
 
 
-def capturar(raiz, cfg_extra, rascunhos, static=None):
+# o que a T14 compara BYTE A BYTE (não pela estrutura): a raiz, as páginas do site antigo (`/PT.html`…) e os feeds RSS
+EXATOS = re.compile(r"^(/|/(?!404\.html$)[^/]+\.html|/(en|pt)/feed\.xml)$")
+
+
+def capturar(raiz, cfg_extra, rascunhos, static=None, escopo=None, exatos=None):
     """Roda o build() de verdade sobre a pasta content/ `raiz`. Devolve ({url: HTML completo}, {idioma: SHORT},
-    {url: argumentos do shell()}) só das páginas do ESCOPO. Nada é gravado em disco (write() só anota; static/ não é copiado)."""
+    {url: argumentos do shell()}) só das páginas do ESCOPO (ou de `escopo`, uma expressão regular). Nada é gravado em disco
+    (write() só anota; static/ não é copiado). Se `exatos` for um dict, ele recebe {url: conteúdo} da raiz, das páginas do site
+    antigo e dos feeds (EXATOS)."""
     paginas, shells = {}, {}
+    escopo = escopo or ESCOPO
 
     def anota(url, conteudo):
-        if ESCOPO.match(url):
+        if escopo.match(url):
             paginas[url] = conteudo
+        if exatos is not None and EXATOS.match(url):
+            exatos[url] = conteudo
 
     with rr.ambiente(raiz, cfg_extra, rascunhos), pasta_static(static):
         shell_de_verdade = build.shell
 
         def anota_shell(lang, title, main, alt=None, cls="", desc="", image="", has=None, noindex=False, seed=""):
-            shells[seed] = {"titulo": title, "alt": {k: v for k, v in (alt or {}).items() if k != "_self" and v},
-                            "cls": cls, "desc": desc, "imagem": image, "noindex": noindex}
+            # a 404 não passa semente (o shell() usa o título "404") nem tem endereço no page(): a chave dela é o próprio endereço
+            chave = seed or ("/404.html" if title == "404" else title)
+            shells[chave] = {"titulo": title, "alt": {k: v for k, v in (alt or {}).items() if k != "_self" and v},
+                             "cls": cls, "desc": desc, "imagem": image, "noindex": noindex}
             return shell_de_verdade(lang, title, main, alt, cls, desc, image, has, noindex, seed)
 
         build.write, build.shell, build.clean_out, build.OUT = anota, anota_shell, (lambda: None), Path("/nao-usado")
@@ -97,7 +111,7 @@ def capturar(raiz, cfg_extra, rascunhos, static=None):
         with contextlib.redirect_stdout(io.StringIO()):
             build.build()
         short = {l: dict(build.SHORT[l]) for l in build.LANGS}
-    return paginas, short, {u: a for u, a in shells.items() if ESCOPO.match(u)}
+    return paginas, short, {u: a for u, a in shells.items() if escopo.match(u)}
 
 
 def com_marcadores(html):
@@ -337,6 +351,90 @@ def config_do_ambiente(cfg):
             "ui_c": {l: {k: v for k, v in efetivo["ui"].get(l, {}).items() if k.startswith("c_")} for l in efetivo["ui"]}}
 
 
+# ═════════════════════════════ T14: páginas avulsas, extras, 404, raiz, redirects e feeds ═════════════════════════════
+
+def cenario_paginas():
+    """O cenário 'variado' de tools/regras_ref.py (todas as obras, notícias, emissários, Universo, Personagens e páginas) mais o que
+    as páginas da T14 desenham e o 'variado' não tem: Sobre larga com o texto do Projeto na frente, {{emissaries}} / {{stories}} /
+    {{other-stories}} dentro de páginas, carta que vira e posts alternados num texto de página, página sem título e sem resumo,
+    página só em um idioma, Apoio em rascunho; verbete com figura (nome com espaço), 'Veja também' (existente, inexistente,
+    rascunho, de outra seção) e rascunho; ficha com retrato, papel com & e <, 'Aparece em' com obra externa / de capítulo único /
+    com página / sem capítulo / escondida / só em um idioma, e personagem só em um idioma."""
+    a = dict(rr.cenario_variado())
+    item = rr.item
+    cartas = '<div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">x</div></div></div>'
+    a.update(item("pages", "about",
+                  dict(title="About the author", layout="wide", summary='About & "us" <b>x</b>'), dict(title="Sobre o autor", layout="wide", summary='Sobre & "nós" <b>x</b>'),
+                  corpo_en=('## About the author\n\n<img class="autor-foto" src="/other images/foto.png" alt="Me">\n\nHello **world**, see [[works/a-oneshot]], [[universe/magia]] and [[characters/harry]]; '
+                            "Hᴀᴛᴇ Cʏᴄʟᴇ /ˈwɪθ/.\n\n{{emissaries}}\n\n## Contact\n\nWrite to [me](mailto:a@b.c).\n\n" + cartas),
+                  corpo_pt=('## Sobre o autor\n\n<img class="autor-foto" src="/other images/foto.png" alt="Eu">\n\nOlá **mundo**, veja [[works/a-oneshot]], [[universe/magia]] e [[characters/harry]]; '
+                            "Hᴀᴛᴇ Cʏᴄʟᴇ.\n\n{{emissaries}}\n\n## Contato\n\nEscreva [para mim](mailto:a@b.c).")))
+    a.update(item("pages", "project",
+                  dict(title="The project", route=False, layout="wide", summary="Project summary"), dict(title="O projeto", route=False, layout="wide", summary="Resumo do projeto"),
+                  corpo_en='## About the project\n\n<img class="apollo-gif" src="/other images/Apollo Site.gif" alt="">\n\n<img class="anfibio-gif" src="/other images/Anfibio Site.gif" alt="">\n\nThe project text.\n\n{{other-stories}}',
+                  corpo_pt='## Sobre o projeto\n\n<img class="apollo-gif" src="/other images/Apollo Site.gif" alt="">\n\nO texto do projeto.\n\n{{other-stories}}'))
+    a.update(item("pages", "support", dict(title="Support", draft=True, summary="Help us"), dict(title="Apoio", draft=True), corpo_en="Draft support page.", corpo_pt="Página de apoio em rascunho."))
+    a.update(item("pages", "atalhos", dict(title="Shortcuts", layout="wide"), dict(title="Atalhos", layout="wide"),
+                  corpo_en="Before.\n\n{{stories}}\n\n{{other-stories}}\n\n{{emissaries}}\n\n{{nada}}\n\nAfter.", corpo_pt="Antes.\n\n{{stories}}\n\n{{emissaries}}\n\nDepois."))
+    a.update(item("pages", "regras", dict(), dict(),   # sem título e sem resumo: vale o nome da pasta e a frase padrão do site
+                  corpo_en="Plain page.\n\n{{embed:https://x.com/a/status/1 | https://www.instagram.com/p/abc/}}", corpo_pt="Página simples."))
+    a.update(item("pages", "so-en", dict(title="Only English page", summary="Only EN"), None, corpo_en="English only."))
+    a.update(item("pages", "so-pt", None, dict(title="Só português", menu="extras"), corpo_pt="Só em português."))
+    # ── Universo ──
+    a.update(item("universe", "magia", dict(title="Magic", category="Magia", order=2, summary='S & "q" <b>', image="universe/arte com espaço.png", related=["works/a-oneshot", "characters/harry", "universe/runas", "universe/rascunho", "pages/about", "news/2025-12-30-alfa", "universe/so-pt"]),
+                  dict(title="Magia", category="Magia", order=2, summary="S", image="universe/arte com espaço.png", related=["universe/runas"]), corpo_en="Magic text, Hᴀᴛᴇ Cʏᴄʟᴇ.", corpo_pt="Texto da magia."))
+    a.update(item("universe", "rascunho", dict(title="Draft entry", category="Magia", draft=True), dict(title="Verbete rascunho", category="Magia", draft=True), corpo_en="Draft.", corpo_pt="Rascunho."))
+    a.update(item("universe", "so-pt", None, dict(title="Só em português", category="Bestas", summary="Resumo"), corpo_pt="Só PT."))
+    # ── Personagens ──
+    a.update(item("characters", "harry", dict(title="Harry", role="Assistant & <friend>", order=2, summary="Sum", image="characters/harry retrato.png",
+                                                 appears_in=["b-serial", "a-oneshot", "k-escondida", "i-externa", "m-sem-ordem", "c-video", "t-sem-nada", "l-so-pt", "j-externa-com-cap"],
+                                                 related=["works/a-oneshot", "universe/magia", "characters/olivia", "characters/rascunho"]),
+                  dict(title="Harry", role="Assistente", order=2, appears_in=["b-serial", "a-oneshot", "i-externa"], related=["universe/magia"]), corpo_en="Harry text.\n\n" + cartas, corpo_pt="Texto do Harry."))
+    a.update(item("characters", "rascunho", dict(title="Draft", role="X", draft=True, appears_in=["a-oneshot"]), dict(title="Rascunho", role="X", draft=True), corpo_en="Draft.", corpo_pt="Rascunho."))
+    a.update(item("characters", "so-en", dict(title="Only English", role="R", image="characters/so en.png"), None, corpo_en="English only."))
+    return a
+
+
+REDIRECTS_INVENTADOS = {"a.html": "/en/x/", "index.html": "/", "b.html": "/", "c.html": "/pt/?q=1&r=2", "PT.html": "/pt/"}
+
+
+def ambientes_t14():
+    """(nome, arquivos ou None = o content/ de verdade, config extra) dos ambientes da T14. Cada um roda em build e em prévia."""
+    return [
+        ("real", None, {}),
+        ("real-extras", None, {"show_extras": True}),
+        ("paginas", cenario_paginas(), {"show_extras": True}),
+        ("paginas-sem-extras", cenario_paginas(), {"show_extras": False}),
+        ("redirects", rr.cenario_enxuto(), {"show_extras": False, "redirects": REDIRECTS_INVENTADOS}),
+    ] + [(nome, criar(), cfg) for nome, criar, cfg in rr.CENARIOS]
+
+
+def pagina_do_ambiente(paginas, shells):
+    """Do que o build() escreveu: as páginas do grupo t14, com os argumentos do shell() e o <main> final."""
+    t14 = GRUPOS["t14"]
+    return {u: {"shell": shells[u], "main": main_final(h)} for u, h in sorted(paginas.items()) if t14.match(u)}
+
+
+def partes_da_pagina(html):
+    """O cabeçalho e o <main> de uma página, como o build.py os escreveu (para comparar o site INTEIRO sem guardar tudo)."""
+    cab = re.search(r'<header class="site-header">.*?</header>', html, re.S)
+    assert cab, html[:200]
+    return {"header": cab.group(0), "main": main_final(html)}
+
+
+def construcao_do_site_inteiro():
+    """O site de verdade inteiro, COM rascunhos e COM show_extras ligado (o que `NODE_ENV=development HC_SHOW_EXTRAS=1 pnpm build`
+    constrói): o menu "Extras" e o link Apoio em TODAS as páginas, o botão "Explorar o universo" da home, os [[links]] que passam a
+    existir… Páginas do grupo t14: HTML completo. Das outras: só o cabeçalho e o <main>."""
+    t14 = GRUPOS["t14"]
+    todas, _short, _shells = capturar(build.CONTENT, {"show_extras": True}, True, escopo=re.compile(r"^/(en|pt)/([^.]*/)?$"))
+    return {
+        "paginas": {u: com_marcadores(h) for u, h in sorted(todas.items()) if t14.match(u)},
+        "partes": {u: {k: com_marcadores(v) for k, v in partes_da_pagina(h).items()} for u, h in sorted(todas.items()) if not t14.match(u) and u.endswith("/")},
+    }
+
+
+
 def main():
     import tempfile
     ambientes, leitor, noticias = [], [], []
@@ -380,17 +478,47 @@ def main():
                 paginas, _short, shells = capturar(tmp, cfg, rascunhos)
             noticias.append({"nome": nome, "rascunhos": rascunhos, "arquivos_sha1": sha(arquivos), "config": config_do_ambiente(cfg),
                              "noticias": noticias_do_ambiente(paginas, shells)})
+    # os ambientes da T14 (content/ de verdade, o de verdade com Extras ligado e os inventados): páginas, raiz/redirects/feeds exatos
+    t14_ambientes, exatos_reais = [], None
+    for nome, arquivos, cfg in ambientes_t14():
+        for rascunhos in (False, True):
+            exatos = {}
+            if arquivos is None:
+                paginas, _short, shells = capturar(build.CONTENT, cfg, rascunhos, exatos=exatos)
+            else:
+                with tempfile.TemporaryDirectory(prefix="hc-t14-") as tmp:
+                    rr.gravar(tmp, arquivos)
+                    paginas, _short, shells = capturar(tmp, cfg, rascunhos, exatos=exatos)
+            for url, conteudo in exatos.items():
+                if url.endswith(".xml"):
+                    ET.fromstring(conteudo.encode("utf-8"))        # o feed é XML bem formado (levanta erro se não for)
+            if nome == "real" and not rascunhos:
+                exatos_reais = dict(exatos)
+            efetivo = dict(build.CFG)
+            efetivo.update(cfg)
+            config = dict(config_do_ambiente(cfg), redirects=efetivo["redirects"], site_url=efetivo.get("site_url", ""),
+                          emissaries_hide=efetivo.get("emissaries", {}).get("hide", []), emissaries_show_texts=efetivo.get("emissaries", {}).get("show_texts", False))
+            t14_ambientes.append({"nome": nome, "rascunhos": rascunhos, "arquivos_sha1": sha(arquivos) if arquivos is not None else None,
+                                  "config": config,
+                                  "paginas": pagina_do_ambiente(paginas, shells), "exatos": exatos})
+    construcao = construcao_do_site_inteiro()
     leia = ("Gerado por tools/paginas_ref.py a partir do build.py. Não edite à mão: rode `python3 tools/paginas_ref.py` de novo. "
             "Usado por tests/paginas.test.ts, tests/componentes.test.ts, tests/leitor.test.ts e tests/noticias.test.ts.")
     FIXTURES.mkdir(parents=True, exist_ok=True)
     resumo = []
     for grupo, padrao in GRUPOS.items():
-        com_chaves = grupo in ("t12", "t13")      # os grupos cujas páginas têm comentários (window.HC com as chaves de mentira)
+        com_chaves = grupo in ("t12", "t13", "t14")      # os grupos cujas páginas têm comentários (window.HC com as chaves de mentira); no t14 só a construção inteira
         doGrupo = {u: (com_marcadores(h) if com_chaves else h) for u, h in sorted(paginas_reais.items()) if padrao.match(u)}
         dados = {"_leia": leia, "python": sys.version.split()[0], "grupo": grupo, "escopo": padrao.pattern, "paginas": doGrupo}
         if com_chaves:
             assert all("chave-de-mentira" not in h and "exemplo.supabase.co" not in h for h in doGrupo.values()), "sobrou chave de mentira"
             dados["marcadores"] = {"url": "__SUPABASE_URL__", "key": "__SUPABASE_ANON_KEY__"}
+        if grupo == "t14":
+            dados["arquivos_das_paginas"] = cenario_paginas()
+            dados["arquivos_do_redirect"] = rr.cenario_enxuto()
+            dados["ambientes"] = t14_ambientes
+            dados["exatos"] = exatos_reais
+            dados["construcao_com_rascunhos_e_extras"] = construcao
         if grupo == "t13":
             dados["arquivos_das_noticias"] = {"noticias": cenario_noticias(), "noticias-so-pt": cenario_noticias_so_pt()}
             dados["ambientes"] = noticias
@@ -407,7 +535,8 @@ def main():
     noti = sum(len(a["noticias"]) for a in noticias)
     print("✔ " + "; ".join(resumo) + f"; {len(ambientes)} ambientes, {n} <main> → {SAIDA_COMPONENTES.relative_to(ROOT)}; "
           f"leitor: {len(leitor)} ambientes, {caps} capítulos → tests/fixtures/paginas-t12-python.json; "
-          f"notícias: {len(noticias)} ambientes, {noti} páginas → tests/fixtures/paginas-t13-python.json")
+          f"notícias: {len(noticias)} ambientes, {noti} páginas → tests/fixtures/paginas-t13-python.json; "
+          f"T14: {len(t14_ambientes)} ambientes, {sum(len(a['paginas']) for a in t14_ambientes)} páginas → tests/fixtures/paginas-t14-python.json")
 
 
 if __name__ == "__main__":

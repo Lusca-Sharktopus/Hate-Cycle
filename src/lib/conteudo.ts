@@ -95,3 +95,9 @@ export async function dadosDoIdioma(lang: Lang, comRascunhos = COM_RASCUNHOS) {
   ]);
   return montarDadosDoIdioma({ news, works, chapters, emissaries, universe, characters, pages }, lang, { comRascunhos, mostrarExtras: showExtras, emissariosEscondidos, todosOsIdiomas: langs });
 }
+
+/** `dadosDoIdioma()` de TODOS os idiomas de uma vez: as páginas que mostram "esta página no outro idioma" precisam do que existe nos dois. */
+export async function dadosDeTodosOsIdiomas(comRascunhos = COM_RASCUNHOS): Promise<Record<Lang, Awaited<ReturnType<typeof dadosDoIdioma>>>> {
+  const pares = await Promise.all(langs.map(async (lang) => [lang, await dadosDoIdioma(lang, comRascunhos)] as const));
+  return Object.fromEntries(pares) as Record<Lang, Awaited<ReturnType<typeof dadosDoIdioma>>>;
+}

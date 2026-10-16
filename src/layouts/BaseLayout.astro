@@ -30,11 +30,13 @@ interface Props {
   /** Classes do <body> (ex.: "reader" no leitor de capítulos: a página não ganha a "folha" de papel). */
   bodyClass?: string;
   /** Semente das runas do fundo: o endereço da página, como o page() do build.py passa (ex.: "/pt/").
-   *  Sem semente, usa o endereço desta página. Exceção conhecida: a 404 do build.py usa "404" (T14). */
+   *  Sem semente, usa o endereço desta página. Exceção: a 404 do build.py usa o título, "404" (src/pages/404.astro passa seed="404"). */
   seed?: string;
+  /** Menu só com "Histórias" e o seletor de idioma, sem Sobre/Notícias/Extras/Apoio: é como o build.py monta a página 404. */
+  menuMinimo?: boolean;
 }
 
-const { lang, title, description, image, alternates = {}, noindex = false, bodyClass = "", seed } = Astro.props;
+const { lang, title, description, image, alternates = {}, noindex = false, bodyClass = "", seed, menuMinimo = false } = Astro.props;
 
 const pagina = Astro.url.pathname; // ex.: "/pt/"
 const semente = seed ?? pagina;
@@ -106,7 +108,7 @@ const { html: main, scripts } = finalizarMain(miolo, lang, atalhos);
     <Runas seed={semente} />
     <Abertura parte="corpo" />
     <a class="skip" href="#main">Skip to content</a>
-    <Header lang={lang} alternates={paraOSeletor} />
+    <Header lang={lang} alternates={paraOSeletor} menuMinimo={menuMinimo} />
     <div class="layout">
       <main id="main" class={isReader ? undefined : "sheet"}>
         <Fragment set:html={main} />

@@ -2,7 +2,7 @@
 // Cabeçalho do site: logo, menu e seletor de idioma (o <header> do shell() do build.py).
 import { assetUrl } from "../lib/assets";
 import { langName, htmlLang, langs, logoFile, siteName, t, type Lang } from "../lib/config";
-import { menuDoIdioma, type MenuLink } from "../lib/nav";
+import { menuDoIdioma, type Menu, type MenuLink } from "../lib/nav";
 
 interface Props {
   lang: Lang;
@@ -10,12 +10,14 @@ interface Props {
   alternates?: Partial<Record<Lang, string>>;
   /** Endereço da página atual (marca o item do menu com aria-current). Padrão: o endereço real da página. */
   current?: string;
+  /** Só "Histórias" + o seletor de idioma (a página 404 do build.py passa todas as bandeiras do menu como falsas). */
+  menuMinimo?: boolean;
 }
 
-const { lang, alternates = {}, current = Astro.url.pathname } = Astro.props;
+const { lang, alternates = {}, current = Astro.url.pathname, menuMinimo = false } = Astro.props;
 
 // Itens do menu na mesma ordem do shell(): Histórias sempre; depois Sobre, Notícias, Extras e Apoio se existirem.
-const menu = await menuDoIdioma(lang);
+const menu: Menu = menuMinimo ? { about: false, news: false, support: false, extras: [] } : await menuDoIdioma(lang);
 const links: MenuLink[] = [{ href: `/${lang}/works/`, label: t(lang, "works") }];
 if (menu.about) links.push({ href: `/${lang}/about/`, label: t(lang, "about") });
 if (menu.news) links.push({ href: `/${lang}/news/`, label: t(lang, "news") });

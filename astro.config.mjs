@@ -52,13 +52,9 @@ export default defineConfig({
   // `false` deixa o HTML exatamente com os espaços escritos, como o build.py faz hoje.
   compressHTML: false,
 
-  // Dois idiomas, os dois com prefixo (/en/… e /pt/…), como no site atual.
-  i18n: {
-    locales: ["en", "pt"], // mesma ordem e mesmas chaves de config.json → languages
-    defaultLocale: "en", // a raiz "/" de hoje cai em /en/ quando não reconhece o idioma do navegador
-    routing: {
-      prefixDefaultLocale: true, // /en/ também leva prefixo (sem isso, o inglês ficaria em /)
-      redirectToDefaultLocale: false, // a página raiz "/" é feita à mão na T14 (já é o padrão; fica explícito)
-    },
-  },
+  // Idiomas: NÃO há bloco `i18n` aqui (T14). Os dois idiomas têm prefixo (/en/… e /pt/…) por causa da pasta `src/pages/[lang]/`,
+  // cujos valores vêm de config.json → languages (src/lib/config.ts → langs). O bloco `i18n` do Astro existia desde a T05 mas nada
+  // do site usa os atalhos dele (astro:i18n, Astro.currentLocale), e a regra automática dele ("endereço sem /en/ ou /pt/ = HTTP 404")
+  // fazia a prévia (`pnpm dev`) responder 404 em endereços sem idioma que existem, como /dev/markdown/ (embora mostrasse a página).
+  // O site gerado (dist/) é idêntico com ou sem o bloco; a raiz "/" é uma página à mão (src/pages/index.astro).
 });

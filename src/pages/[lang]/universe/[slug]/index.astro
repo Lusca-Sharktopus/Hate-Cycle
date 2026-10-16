@@ -1,0 +1,27 @@
+---
+// Um verbete do Universo: /pt/universe/hidden-magic/. SÓ EXISTE com `show_extras: true` (hoje false). Lição: docs/aprendendo-astro/09-endpoints.md.
+// É o laço "UNIVERSO" do build() do build.py (~889–897): uma página por verbete publicado de cada idioma.
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import VerbeteDoUniverso from "../../../../components/VerbeteDoUniverso.astro";
+import { langs, type Lang } from "../../../../lib/config";
+import { dadosDeTodosOsIdiomas } from "../../../../lib/conteudo";
+import { verbetesDoUniverso, type VerbeteDoUniverso as Verbete } from "../../../../lib/paginasDeExtras";
+
+export async function getStaticPaths() {
+  const dadosDe = await dadosDeTodosOsIdiomas();
+  const publicados = Object.fromEntries(langs.map((l) => [l, dadosDe[l].universoExtra])) as Record<Lang, (typeof dadosDe)[Lang]["universoExtra"]>;
+  return langs.flatMap((lang) =>
+    verbetesDoUniverso(dadosDe[lang].universoExtra, lang, { publicadosPorIdioma: publicados, relacionadosDe: dadosDe[lang].relacionadosDe }).map((verbete) => ({
+      params: { lang, slug: verbete.pasta },
+      props: { verbete },
+    })),
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { verbete } = Astro.props as { verbete: Verbete };
+---
+
+<BaseLayout lang={lang} title={verbete.tituloDaPagina} description={verbete.descricao} image={verbete.imagem} alternates={verbete.alternativas}>
+  <VerbeteDoUniverso verbete={verbete} />
+</BaseLayout>
