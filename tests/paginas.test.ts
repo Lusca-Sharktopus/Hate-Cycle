@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canonicoDoMiolo, idsDeComentarios, lerPagina, type PaginaLida } from "./ajudantes/html";
+import { canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semScriptsAntigosDosComentarios, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -160,7 +160,10 @@ for (const ref of refs) {
       let py: PaginaLida;
       let astro: PaginaLida;
       beforeAll(() => {
-        py = lerPagina(ref.paginas[url] ?? "");
+        // T15: a única diferença aceita — o Python carrega o supabase-js do CDN e o /comments.js; o Astro, o script empacotado
+        const doPython = semScriptsAntigosDosComentarios(ref.paginas[url] ?? "");
+        if (doPython.sobrou) throw new Error(`${url}: o Python tem supabase-js/comments.js fora do lugar de sempre (depois do window.HC)`);
+        py = lerPagina(doPython.html);
         const arquivo = paginasDoDist(dist).get(url);
         if (!arquivo) throw new Error(`o Astro não gerou ${url}`);
         let html = readFileSync(arquivo, "utf8");
@@ -366,7 +369,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
   }, 240_000);
 
   test.each(Object.keys(c.paginas))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
-    const py = lerPagina(c.paginas[url] ?? "");
+    const py = lerPagina(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html);
     const astro = lerPagina(lerComMarcadores(join(outra(), url.slice(1), "index.html")));
     expect(astro.cabeca.titulo).toBe(py.cabeca.titulo);
     expect(astro.cabeca.metas).toEqual(py.cabeca.metas);
@@ -394,10 +397,78 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
       if (!py) continue;
       const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
       if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
-      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(py.main)) diferentes.push(`${url} (<main>)`);
+      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(semScriptsAntigosDosComentarios(py.main).html)) diferentes.push(`${url} (<main>)`);
     }
     expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);
   }, 240_000);
+});
+
+// ───────────── T15: o script dos comentários (empacotado, com o @supabase/supabase-js de versão fixa) ─────────────
+
+describe("T15: o script dos comentários só nas páginas com comentários, sem CDN e sem as chaves dentro", () => {
+  const RE_CAIXA = /<section class="hc-comments" data-page="/;
+  const srcDe = (script: string) => /src="([^"]+)"/.exec(script)?.[1] ?? "";
+  /** Os arquivos JS de /_astro/ que um HTML carrega (<script src> e import dentro de <script type="module"> inline), e o que eles importam. */
+  function jsCarregados(html: string): Set<string> {
+    const achados = new Set<string>();
+    const fila = [...html.matchAll(/<script\b[^>]*\bsrc="(\/_astro\/[^"]+\.js)"/g)].map((m) => m[1] ?? "");
+    for (const m of html.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)) for (const i of (m[1] ?? "").matchAll(/["'](\/_astro\/[^"']+\.js)["']/g)) fila.push(i[1] ?? "");
+    while (fila.length) {
+      const arquivo = fila.shift() ?? "";
+      if (achados.has(arquivo)) continue;
+      achados.add(arquivo);
+      const js = readFileSync(join(dist, arquivo.slice(1)), "utf8");
+      for (const i of js.matchAll(/(?:\bfrom|\bimport)\s*\(?\s*["'](\.{1,2}\/[^"']+\.js)["']/g)) fila.push(new URL(i[1] ?? "", `https://x${arquivo}`).pathname);
+    }
+    return achados;
+  }
+  const ehSupabase = (arquivo: string) => /@supabase\/supabase-js/.test(readFileSync(join(dist, arquivo.slice(1)), "utf8"));
+
+  test("cada página com a caixa tem o script UMA vez, fora do <main>; nenhuma outra o tem; nenhuma usa o CDN nem o /comments.js", () => {
+    let comCaixa = 0;
+    for (const [url, arquivo] of paginasDoDist(dist)) {
+      const html = readFileSync(arquivo, "utf8");
+      const scripts = html.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
+      const temCaixa = RE_CAIXA.test(html);
+      if (temCaixa) comCaixa++;
+      expect(scripts.length, url).toBe(temCaixa ? 1 : 0);
+      if (temCaixa) expect(html.indexOf(scripts[0] ?? ""), `${url}: o script vai depois do </main>`).toBeGreaterThan(html.indexOf("</main>"));
+      expect(html, url).not.toMatch(/cdn\.jsdelivr\.net\/npm\/@supabase|\/comments\.js/);
+    }
+    expect(comCaixa, "as páginas com comentários (capítulos e notícias)").toBe(Object.keys(JSON.parse(readFileSync(join(RAIZ, "baseline", "comentarios.json"), "utf8")).por_pagina).length);
+  });
+
+  test("o pacote: um arquivo só, com o supabase-js dentro e sem a URL nem a chave do config.json", () => {
+    const srcs = new Set<string>();
+    for (const [, arquivo] of paginasDoDist(dist)) for (const s of readFileSync(arquivo, "utf8").match(RE_SCRIPT_DOS_COMENTARIOS) ?? []) srcs.add(srcDe(s));
+    expect(srcs.size).toBe(1);
+    const [src] = [...srcs];
+    const todos = jsCarregados(`<script type="module" src="${src}"></script>`);
+    expect([...todos].some(ehSupabase), "o supabase-js está empacotado no script dos comentários").toBe(true);
+    for (const arquivo of todos) {
+      const js = readFileSync(join(dist, arquivo.slice(1)), "utf8");
+      // sem expect(js).not.toContain(chave): em caso de erro o vitest imprimiria a chave
+      const temUrl = temChaves && js.includes(limparUrlDoSupabase(String(chavesDoAutor.supabase_url)));
+      const temChave = temChaves && js.includes(pyStrip(String(chavesDoAutor.supabase_anon_key)));
+      expect({ arquivo, temUrl, temChave }).toEqual({ arquivo, temUrl: false, temChave: false });
+    }
+  });
+
+  test("as páginas SEM comentários não carregam o supabase-js (nem por um arquivo importado por outro)", () => {
+    for (const [url, arquivo] of paginasDoDist(dist)) {
+      const html = readFileSync(arquivo, "utf8");
+      if (RE_CAIXA.test(html)) continue;
+      expect([...jsCarregados(html)].filter(ehSupabase), url).toEqual([]);
+    }
+  });
+
+  test("versão fixa: o package.json pede uma versão exata do @supabase/supabase-js, e é ela que está instalada", () => {
+    const pacote = JSON.parse(readFileSync(join(RAIZ, "package.json"), "utf8")) as { dependencies: Record<string, string> };
+    const pedida = pacote.dependencies["@supabase/supabase-js"] ?? "";
+    expect(pedida).toMatch(/^\d+\.\d+\.\d+$/);
+    const instalada = (JSON.parse(readFileSync(join(RAIZ, "node_modules", "@supabase", "supabase-js", "package.json"), "utf8")) as { version: string }).version;
+    expect(instalada).toBe(pedida);
+  });
 });
 
 test("o dist/ existe", () => {

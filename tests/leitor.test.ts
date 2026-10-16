@@ -11,14 +11,13 @@
 // componente Leitor (Container API do Astro) e acabado pelo MESMO finalizarMain() do layout. Comparação estrutural
 // (tests/ajudantes/html.ts). As páginas REAIS (o site construído de verdade) são provadas em tests/paginas.test.ts.
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync, copyFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { afterAll, describe, expect, test } from "vitest";
 import Leitor from "../src/components/Leitor.astro";
-import { assetVersioned } from "../src/lib/assets";
 import { jsonComoPython, limparUrlDoSupabase, secaoDeComentarios, type ChavesDoSupabase, type TextosDaInterface } from "../src/lib/comentarios";
 import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
@@ -27,7 +26,7 @@ import { versaleteEntreTags } from "../src/lib/markdown";
 import { compararNatural } from "../src/lib/ordem";
 import { finalizarMain, protegerAtributos, separarScripts, textoDoAutor, versaleteNoMain } from "../src/lib/pagina";
 import { arquivosDoGlob, globNaPasta } from "../src/lib/quadrinhos";
-import { canonicoDoMiolo } from "./ajudantes/html";
+import { canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, semScriptsAntigosDosComentarios } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -74,10 +73,9 @@ function pythonJson(o: unknown): string {
 }
 const sha = (arquivos: Record<string, string>) => createHash("sha1").update(pythonJson(arquivos)).digest("hex");
 
-// static/ dos cenários do leitor: as imagens (vazias) dos quadrinhos inventados e uma cópia do comments.js de verdade
+// static/ dos cenários do leitor: as imagens (vazias) dos quadrinhos inventados. (O Python também recebe uma cópia do
+// comments.js, para o carimbo ?v=; o Astro não usa mais esse arquivo desde a T15.)
 const staticDoLeitor = pastaTemporaria(Object.fromEntries(ref.estaticos_do_leitor.map((rel) => [rel, new Uint8Array()])));
-copyFileSync(join(RAIZ, "static", "comments.js"), join(staticDoLeitor, "comments.js"));
-const SCRIPT_DOS_COMENTARIOS = assetVersioned("comments.js");
 
 const container = await AstroContainer.create();
 
@@ -95,7 +93,7 @@ for (const amb of ref.ambientes) {
   const ferramentas = {
     glob: (padrao: string) => arquivosDoGlob(pastaStatic, padrao),
     comentarios: (lang: Lang, id: string | null) =>
-      secaoDeComentarios(lang, id, { chaves: amb.config.comments, ui: amb.config.ui_c, comRascunhos: amb.rascunhos, scriptDosComentarios: SCRIPT_DOS_COMENTARIOS }),
+      secaoDeComentarios(lang, id, { chaves: amb.config.comments, ui: amb.config.ui_c, comRascunhos: amb.rascunhos }),
   };
   const leituras: LeituraDoCapitulo[] = [];
   for (const lang of langs) {
@@ -122,9 +120,15 @@ for (const amb of ref.ambientes) {
       expect({ titulo: leitura.tituloDaPagina, alt: altDefinidas, cls: leitura.classeDoCorpo, desc: leitura.descricao, imagem: leitura.imagem, noindex: leitura.noindex }, url).toEqual(py.shell);
       // o <main>: o Leitor + o acabamento do layout (versalete, data-prev/next; scripts de componente vão para o fim)
       const pronto = finalizarMain(await container.renderToString(Leitor, { props: { leitura } }), leitura.lang);
-      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(py.main));
-      // JavaScript só onde precisa: a carta que vira / os posts alternados
-      expect(pronto.scripts !== "", `${url}: scripts de componente`).toBe(leitura.temCartaQueVira || leitura.temPostsAlternados);
+      // T15: o Python tem o supabase-js do CDN e o /comments.js depois do window.HC; o Astro, o script empacotado no fim da página
+      const semAntigos = semScriptsAntigosDosComentarios(py.main);
+      const temCaixa = leitura.comentarios?.tipo === "caixa";
+      expect({ pares: semAntigos.quantos, sobrou: semAntigos.sobrou }, url).toEqual({ pares: temCaixa ? 1 : 0, sobrou: false });
+      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(semAntigos.html));
+      // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
+      const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
+      expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);
+      expect(pronto.scripts.replace(RE_SCRIPT_DOS_COMENTARIOS, "") !== "", `${url}: scripts de componente`).toBe(leitura.temCartaQueVira || leitura.temPostsAlternados);
       comparados++;
     });
   });
@@ -152,7 +156,7 @@ describe("peças soltas", () => {
 
   test("comments: false → nada, em build e em prévia", () => {
     for (const comRascunhos of [false, true]) {
-      expect(secaoDeComentarios("pt", null, { chaves: { supabase_url: "u", supabase_anon_key: "k" }, ui: {}, comRascunhos, scriptDosComentarios: "/c.js" })).toBeNull();
+      expect(secaoDeComentarios("pt", null, { chaves: { supabase_url: "u", supabase_anon_key: "k" }, ui: {}, comRascunhos })).toBeNull();
     }
   });
 

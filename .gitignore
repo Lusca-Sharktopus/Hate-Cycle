@@ -18,3 +18,6 @@ npm-debug.log*
 .DS_Store
 # baseline (T03): screenshots são regerados por tools/baseline.py
 baseline/screens/
+# Supabase CLI (T15): o "supabase link" guarda aqui o ID do projeto ligado e caches locais (não versionar)
+supabase/.temp/
+supabase/.branches/

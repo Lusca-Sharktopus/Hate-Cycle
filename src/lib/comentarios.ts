@@ -1,20 +1,22 @@
-// A seção de COMENTÁRIOS de uma página: o MESMO HTML que comments() do build.py (linhas ~577–598) monta, para que o
-// static/comments.js atual continue funcionando sem mudança (o porte dele para TypeScript é a T15).
+// A seção de COMENTÁRIOS de uma página: o HTML que comments() do build.py (linhas ~583–598) monta — a
+// <section class="hc-comments" data-page="…"> e o <script> com window.HC —, MENOS os dois <script src> do site Python
+// (o supabase-js do jsDelivr e o /comments.js?v=…). Desde a T15 quem faz a caixa funcionar é o script empacotado de
+// src/components/CaixaDeComentarios.astro (src/scripts/comentarios/), com o @supabase/supabase-js de versão fixa.
 //
 // ⚠ ESTE É O ÚNICO ARQUIVO DO ASTRO QUE LÊ config.json → "comments" (a URL do projeto Supabase e a chave "anon").
 //   - A chave anon é pública por desenho (vai para o navegador no window.HC, como no site atual); quem protege os dados
-//     é o RLS do banco (supabase-setup.sql). Mesmo assim: os valores NÃO são exportados daqui para outros módulos,
+//     é o RLS do banco (supabase/migrations/). Mesmo assim: os valores NÃO são exportados daqui para outros módulos,
 //     não vão para documentos, testes nem fixtures, e só aparecem no HTML das páginas que têm comentários.
 //   - Nunca importe este arquivo num <script> de componente (iria para o JavaScript do navegador junto com o config.json).
+//     O script dos comentários (src/scripts/comentarios/) não importa nada de src/lib/: lê o window.HC da página.
 //
 // O que a página recebe (SecaoDeComentarios), conforme o caso — a mesma regra do Python:
 //   - `comments: false` no front matter  → null (nada; o build.py devolve "");
 //   - sem as duas chaves no config.json  → null no site publicado; na prévia (pnpm dev), o aviso `c_not_configured`;
-//   - com as duas chaves                 → a <section class="hc-comments" data-page="…"> + window.HC + supabase-js + comments.js.
-// Prova: tests/leitor.test.ts (sites inventados: chaves com sujeira, sem chaves, só uma chave, textos faltando) e
-// tests/paginas.test.ts (as páginas reais, com as chaves trocadas por marcadores antes de comparar).
+//   - com as duas chaves                 → a <section class="hc-comments" data-page="…"> + window.HC (+ o script empacotado).
+// Prova: tests/leitor.test.ts e tests/noticias.test.ts (sites inventados: chaves com sujeira, sem chaves, só uma chave,
+// textos faltando) e tests/paginas.test.ts (as páginas reais, com as chaves trocadas por marcadores antes de comparar).
 import configDoSite from "../../config.json";
-import { assetVersioned } from "./assets";
 import type { Lang } from "./config";
 import { pyStrip } from "./frontmatter";
 
@@ -23,9 +25,6 @@ export const TEXTOS_PADRAO_DOS_COMENTARIOS: Readonly<Record<string, Readonly<Rec
   en: { c_google: "Continue with Google", c_or: "or", c_close: "Close", c_login_title: "Log in to comment", c_edit: "Edit", c_save: "Save", c_edited: "edited" },
   pt: { c_google: "Continuar com o Google", c_or: "ou", c_close: "Fechar", c_login_title: "Entre para comentar", c_edit: "Editar", c_save: "Salvar", c_edited: "editado" },
 };
-
-/** O supabase-js carregado do jsDelivr, como no site atual (versão "2", sem fixar: fixar é parte da T15). */
-export const SUPABASE_JS = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
 /** config.json → comments (pode faltar, ou ter só uma das chaves). */
 export interface ChavesDoSupabase {
@@ -43,8 +42,6 @@ export interface OpcoesDosComentarios {
   ui: TextosDaInterface;
   /** true na prévia (pnpm dev): sem chaves, aparece o aviso em vez de nada. */
   comRascunhos: boolean;
-  /** Endereço do static/comments.js com o carimbo ?v= (como o ver("/comments.js") do Python). */
-  scriptDosComentarios: string;
 }
 
 export type SecaoDeComentarios =
@@ -59,8 +56,6 @@ export type SecaoDeComentarios =
       titulo: string;
       /** O texto do <script> que cria window.HC, exatamente como o Python escreve. */
       configuracao: string;
-      supabaseJs: string;
-      script: string;
     };
 
 /** T(lang, chave) do build.py sobre um `ui` dado: o texto do idioma; vazio ou ausente → o do inglês → a própria chave. */
@@ -117,8 +112,6 @@ export function secaoDeComentarios(lang: Lang, idDaPagina: string | null, o: Opc
     titulo: textoDaInterface(o.ui, lang, "c_title"),
     // conf.replace("</", "<\/"): um "</script>" dentro de um texto não fecha o <script> antes da hora
     configuracao: `window.HC=${jsonComoPython(hc).replaceAll("</", "<\\/")};`,
-    supabaseJs: SUPABASE_JS,
-    script: o.scriptDosComentarios,
   };
 }
 
@@ -128,5 +121,5 @@ const doAutor = configDoSite as { comments?: ChavesDoSupabase; ui: TextosDaInter
 
 /** A seção de comentários de uma página do site, com o config.json do autor. `comRascunhos`: COM_RASCUNHOS (src/lib/conteudo.ts). */
 export function comentariosDaPagina(lang: Lang, idDaPagina: string | null, comRascunhos: boolean): SecaoDeComentarios | null {
-  return secaoDeComentarios(lang, idDaPagina, { chaves: doAutor.comments, ui: doAutor.ui, comRascunhos, scriptDosComentarios: assetVersioned("comments.js") });
+  return secaoDeComentarios(lang, idDaPagina, { chaves: doAutor.comments, ui: doAutor.ui, comRascunhos });
 }

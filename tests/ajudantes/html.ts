@@ -169,6 +169,32 @@ export function canonicoDoMiolo(htmlDoMiolo: string): string {
   return canonico(main);
 }
 
+// ───────────── T15: a única diferença aceita no HTML dos comentários ─────────────
+//
+// O site Python carrega a caixa de comentários com DOIS <script src> logo depois do <script>window.HC=…</script>: o
+// supabase-js do jsDelivr (versão "2", sem fixar) e o /comments.js?v=…. Desde a T15 o Astro não tem nenhum dos dois: o
+// script dos comentários é empacotado (src/components/CaixaDeComentarios.astro → /_astro/CaixaDeComentarios…js, no fim
+// da página, fora do <main>). Para comparar o resto do <main> com o do Python, tira-se do HTML do PYTHON exatamente esse
+// par, e só quando ele vem colado no window.HC. Qualquer outro script continua sendo comparado.
+
+/** O par de <script src> do comments() do build.py, colado ao window.HC (o grupo 1 é o window.HC, que fica). */
+const RE_SCRIPTS_ANTIGOS_DOS_COMENTARIOS =
+  /(<script>window\.HC=\{[\s\S]*?\};<\/script>)<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js@2"><\/script><script src="\/comments\.js\?v=[0-9a-f]+"><\/script>/g;
+
+/**
+ * O HTML do Python sem o supabase-js do CDN e sem o /comments.js (só o par que vem depois de um window.HC). Devolve também
+ * quantos pares saíram e se sobrou algum desses dois endereços em outro lugar (não deveria: o teste confere).
+ */
+export function semScriptsAntigosDosComentarios(htmlDoPython: string): { html: string; quantos: number; sobrou: boolean } {
+  let quantos = 0;
+  const html = htmlDoPython.replace(RE_SCRIPTS_ANTIGOS_DOS_COMENTARIOS, (_tudo, hc: string) => (quantos++, hc));
+  const sobrou = /cdn\.jsdelivr\.net\/npm\/@supabase|\/comments\.js\?v=/.test(html);
+  return { html, quantos, sobrou };
+}
+
+/** O <script type="module"> do script empacotado dos comentários (o nome do arquivo leva o nome do componente). */
+export const RE_SCRIPT_DOS_COMENTARIOS = /<script type="module" src="[^"]*CaixaDeComentarios\.astro[^"]*"><\/script>/g;
+
 /** Os IDs das conversas de comentários de uma página: todo atributo data-page, na ordem (o mesmo critério de tools/baseline.py). */
 export function idsDeComentarios(html: string): string[] {
   return varrer(parse(html), (e) => attr(e, "data-page") !== undefined).map((e) => attr(e, "data-page") ?? "");

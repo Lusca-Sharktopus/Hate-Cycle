@@ -21,13 +21,12 @@ import { afterAll, describe, expect, test } from "vitest";
 import ArtigoDeNoticia from "../src/components/ArtigoDeNoticia.astro";
 import ListaDeNoticias from "../src/components/ListaDeNoticias.astro";
 import { artigosDasNoticias, desenhoDaNoticia, estiloDaImagemDeFundo, figurinhaDaLinha, paginaDaListaDeNoticias, type NoticiaParaArtigo } from "../src/lib/artigos";
-import { assetVersioned } from "../src/lib/assets";
 import { secaoDeComentarios, type ChavesDoSupabase, type TextosDaInterface } from "../src/lib/comentarios";
 import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { barraDePaginas, combinaComBusca, ITENS_POR_PAGINA, itensDaPagina, normalizarBusca, paginaPedida, paginaValida, palavrasDaBusca, totalDePaginas } from "../src/lib/paginacao";
 import { finalizarMain } from "../src/lib/pagina";
-import { canonicoDoMiolo } from "./ajudantes/html";
+import { canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, semScriptsAntigosDosComentarios } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -73,7 +72,6 @@ function pythonJson(o: unknown): string {
 }
 const sha = (arquivos: Record<string, string>) => createHash("sha1").update(pythonJson(arquivos)).digest("hex");
 
-const SCRIPT_DOS_COMENTARIOS = assetVersioned("comments.js");
 const container = await AstroContainer.create();
 
 let comparadas = 0;
@@ -92,7 +90,7 @@ for (const amb of ref.ambientes) {
   const ferramentas = {
     noticiasPorIdioma,
     comentarios: (lang: Lang, id: string | null) =>
-      secaoDeComentarios(lang, id, { chaves: amb.config.comments, ui: amb.config.ui_c, comRascunhos: amb.rascunhos, scriptDosComentarios: SCRIPT_DOS_COMENTARIOS }),
+      secaoDeComentarios(lang, id, { chaves: amb.config.comments, ui: amb.config.ui_c, comRascunhos: amb.rascunhos }),
   };
   const listas = langs.flatMap((l) => {
     const p = paginaDaListaDeNoticias(dadosDe[l].noticias, l, quantas);
@@ -127,9 +125,15 @@ for (const amb of ref.ambientes) {
       expect({ titulo: artigo.tituloDaPagina, alt: artigo.alternativas, cls: artigo.classeDoCorpo, desc: artigo.descricao, imagem: artigo.imagem, noindex: false }, url).toEqual(py.shell);
       // o <main>: o artigo + o acabamento do layout (versalete, data-prev/next; scripts de componente vão para o fim)
       const pronto = finalizarMain(await container.renderToString(ArtigoDeNoticia, { props: { artigo } }), artigo.lang);
-      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(py.main));
-      // JavaScript só onde precisa: a carta que vira / os posts alternados
-      expect(pronto.scripts !== "", `${url}: scripts de componente`).toBe(artigo.temCartaQueVira || artigo.temPostsAlternados);
+      // T15: o Python tem o supabase-js do CDN e o /comments.js depois do window.HC; o Astro, o script empacotado no fim da página
+      const semAntigos = semScriptsAntigosDosComentarios(py.main);
+      const temCaixa = artigo.comentarios?.tipo === "caixa";
+      expect({ pares: semAntigos.quantos, sobrou: semAntigos.sobrou }, url).toEqual({ pares: temCaixa ? 1 : 0, sobrou: false });
+      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(semAntigos.html));
+      // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
+      const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
+      expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);
+      expect(pronto.scripts.replace(RE_SCRIPT_DOS_COMENTARIOS, "") !== "", `${url}: scripts de componente`).toBe(artigo.temCartaQueVira || artigo.temPostsAlternados);
       comparadas++;
     });
   });

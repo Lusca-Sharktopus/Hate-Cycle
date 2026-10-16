@@ -52,5 +52,5 @@ Larguras padrão: **1100** (desktop) e **390** (celular). Mudanças de layout pe
 ## Limitações a declarar ao autor
 
 - **Fontes do Google Fonts não carregam aqui** (Road Rage, PT Serif, Lexend, Oswald, Vollkorn SC, runas Noto). O screenshot mostra a fonte de reserva; diga isso e peça para ele conferir no navegador dele.
-- Login real do Supabase e Google não é testável aqui; só a interface com o mock `--supabase`.
+- Login real do Supabase e Google não é testável aqui; só a interface com o mock `--supabase` (**só no site Python**: o Astro empacota o supabase-js desde a T15). Para os comentários nos dois sites, use `python3 tools/comentarios_playwright.py --python <porta> --astro <porta> --fotos <pasta no scratchpad>`.
 - A tela de abertura com vídeo (`static/intro/logo.webm`) é pulada de propósito; para testá-la, rode sem o init script.

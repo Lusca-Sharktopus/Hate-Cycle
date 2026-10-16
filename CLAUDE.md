@@ -41,6 +41,7 @@ pnpm test       # testes automáticos (vitest), tudo comparado com o Python: run
 - **Notícias (T13, final da lição `08-leitor.md`):** rotas `src/pages/[lang]/news/` e `news/[slug]/`, dados em `src/lib/artigos.ts` (3 desenhos: comum, fundo, colagem) e `src/lib/paginacao.ts` (busca e páginas da lista; **sem imports**, vai para o navegador). Prova: grupo t13 de `paginas.test.ts`, `tests/noticias.test.ts` (sites inventados) e, no navegador, `python3 tools/noticias_playwright.py --python 8791 --astro 8792`.
 - **Páginas restantes (T14, lição `09-endpoints.md`):** avulsas em `src/pages/[lang]/[pagina]/`, Universo/Personagens em `universe/` e `characters/` (só com `show_extras`), raiz `src/pages/index.astro`, `404.astro`, redirects `[antigo].html.ts` (lê `config.json → redirects`), RSS `[lang]/feed.xml.ts` e `sitemap.xml.ts` (endpoints próprios, byte a byte iguais ao Python no RSS/raiz/redirects); regras em `src/lib/{paginasAvulsas,paginasDeExtras,raiz,rss,sitemap}.ts`. Prova: grupo t14 de `paginas.test.ts`, `tests/avulsas.test.ts`. Para ver os Extras: `NODE_ENV=development HC_SHOW_EXTRAS=1 pnpm build` (só teste/prévia; não mexe no `config.json`).
 - **Chaves do Supabase no Astro:** só `src/lib/comentarios.ts` lê `config.json → comments` (window.HC igual ao do `comments()`); nunca importe esse arquivo num `<script>` de componente. Testes e fixtures usam marcadores, nunca as chaves.
+- **Comentários (T15, lição `10-comentarios.md`):** script do navegador em `src/scripts/comentarios/` (`regras.ts` e `dom.ts` sem imports; texto do visitante só por `el(…, { texto })`, nunca `innerHTML`), carregado pela `CaixaDeComentarios.astro` só onde há comentários, com o `@supabase/supabase-js` de versão exata do `package.json` (sem CDN). O `static/comments.js` fica para o Python até a T20. Banco: `supabase/migrations/` (a inicial = `supabase-setup.sql` byte a byte; mudança nova = migração nova). Prova: `tests/comentarios.test.ts`, `tests/supabase.test.ts`, bloco T15 de `paginas.test.ts` e, no navegador, `python3 tools/comentarios_playwright.py --python 8791 --astro 8792 [--fotos <pasta>]` (Supabase falso).
 - **Markdown (T09, lição `05-markdown.md`):** porte fiel do `make_md()` em `src/lib/markdown.ts`; o carregador guarda o HTML em `rendered` (páginas: `render()`/`<Content />`, depois `aplicarAtalhos()` e `versaleteEntreTags()` uma vez no `<main>`). Prévia do HTML de qualquer texto: `pnpm dev` → `/dev/markdown/`.
 
 ## Mapa de pastas
@@ -52,7 +53,8 @@ pnpm test       # testes automáticos (vitest), tudo comparado com o Python: run
 | `build.py` | O gerador inteiro (um arquivo). |
 | `config.json` | Nome do site, idiomas, textos da interface (`ui`), redirects, intro, emissários, `show_extras` e as chaves do Supabase do autor. |
 | `cronologia.json` | Planilha completa da linha do tempo (inclui obras que ainda não estão no site); fonte do `order.chrono`. |
-| `supabase-setup.sql` | Banco dos comentários (rodado à mão no Supabase pelo autor). |
+| `supabase-setup.sql` | Banco dos comentários (rodado à mão no Supabase pelo autor). Congelado: referência histórica. |
+| `supabase/migrations/` | O banco em migrações do Supabase CLI (T15); a inicial é o `supabase-setup.sql`. Mudança nova = arquivo novo. |
 | `guardados/` | Arquivos guardados para uso futuro. **Não é publicado.** |
 | `docs/` | Documentação: guia do autor, comentários, histórico, arquitetura, backlog, lições de Astro. |
 | `.claude/` | `skills/` (procedimentos) e `rules/` (regras que carregam por caminho). |

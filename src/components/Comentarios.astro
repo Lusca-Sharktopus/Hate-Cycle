@@ -1,13 +1,16 @@
 ---
-// A seção de comentários (comments() do build.py), com o MESMO HTML do site atual, para o static/comments.js continuar
-// funcionando como está: <section class="hc-comments" data-page="…">, o <script> com window.HC, o supabase-js do jsDelivr
-// e o /comments.js?v=…. Os três <script> são "is:inline": o Astro os deixa exatamente como estão (não empacota).
-// O porte do comments.js para TypeScript, com o supabase-js instalado e versão fixa, é a T15.
+// A seção de comentários (comments() do build.py). Dois casos:
+//   - "aviso" (prévia sem chaves): <section class="hc-comments"><p class="c-note">…</p></section>, sem JavaScript;
+//   - "caixa": a CaixaDeComentarios — a <section class="hc-comments" data-page="…">, o <script> com window.HC e o script
+//     empacotado dos comentários (T15). Ficar num componente separado é o que garante que SÓ as páginas com a caixa de
+//     verdade recebem o JavaScript (e o @supabase/supabase-js): o Astro só põe na página o <script> de um componente
+//     que foi desenhado nela.
 // Só desenha: o que entra vem de src/lib/comentarios.ts (o ÚNICO arquivo que lê as chaves do config.json).
 //
 // O data-page é o ID da conversa: works/<obra>/<capítulo> (ou news/<slug>), IGUAL nos dois idiomas. Mudar esse ID faz as
 // conversas "sumirem" (invariante 2 do CLAUDE.md); o teste tests/paginas.test.ts compara a lista inteira com a baseline.
 import type { SecaoDeComentarios } from "../lib/comentarios";
+import CaixaDeComentarios from "./CaixaDeComentarios.astro";
 
 interface Props {
   secao: SecaoDeComentarios;
@@ -16,12 +19,13 @@ interface Props {
 const { secao: s } = Astro.props;
 ---
 
-{s.tipo === "aviso" ? <section class="hc-comments"><p class="c-note">{s.texto}</p></section> : <Fragment><section class="hc-comments" data-page={s.idDaPagina}><h2>{s.titulo}</h2><div class="c-app"></div></section><script is:inline set:html={s.configuracao}></script><script is:inline src={s.supabaseJs}></script><script is:inline src={s.script}></script></Fragment>}
+{s.tipo === "aviso" ? <section class="hc-comments"><p class="c-note">{s.texto}</p></section> : <CaixaDeComentarios idDaPagina={s.idDaPagina} titulo={s.titulo} configuracao={s.configuracao} />}
 
 <style is:global>
   @layer site {
     /* Copiado de static/style.css: seção "comentários" e seção "comentários: barra compacta + pop-up de login",
-       mesmos valores e mesma ordem. O comments.js monta o resto da caixa (formulários, lista, modal) com estas classes. */
+       mesmos valores e mesma ordem. O script dos comentários (src/scripts/comentarios/caixa.ts) monta o resto da caixa
+       (formulários, lista, janela de login) com estas classes. */
     .hc-comments { margin-top: 1rem; }
     .hc-comments h2 { font-size: 1.8rem; margin-top: .2em; }
     .c-note { font-size: .85rem; color: var(--muted); }
@@ -50,6 +54,12 @@ const { secao: s } = Astro.props;
 
     .c-bar { display: flex; gap: .6rem; align-items: flex-end; margin: .4rem 0 1rem; }
     .c-bar textarea { flex: 1; font: inherit; padding: .6rem .8rem; border: 2px solid #0003; border-radius: .5rem; background: #fff; resize: none; min-height: 2.8rem; max-height: 220px; overflow-y: auto; }
+    /* B23 (T15), a ÚNICA diferença de propósito em relação ao static/style.css: no celular o texto de exemplo
+       ("Escreva um comentário…") quebra em duas linhas e a barra, de uma linha só, cortava a segunda ao meio.
+       Com field-sizing: content a barra vazia já nasce com a altura do texto de exemplo (no computador, uma linha, como
+       antes); depois o script dos comentários continua mandando na altura enquanto se digita (até 220 px).
+       Navegador que ainda não conhece field-sizing ignora a linha e fica como no site atual. */
+    .c-bar textarea { field-sizing: content; }
     .c-bar .button { white-space: nowrap; }
     .c-who { margin: 0 0 .5rem; }
     .c-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; background: rgba(0, 0, 0, .65); overflow-y: auto; }
