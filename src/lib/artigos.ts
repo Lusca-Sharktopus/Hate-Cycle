@@ -99,6 +99,8 @@ export interface ArtigoDaNoticia {
   descricao: string;
   imagem: string;
   alternativas: Alternativas;
+  /** Classe do <body>: "news-page" (o cls="news-page" do build.py). Faz o <main> virar só o espaço das duas caixas: a da notícia e a dos comentários. */
+  classeDoCorpo: string;
   /** "Rascunho — só aparece na prévia"; null = não é rascunho. */
   avisoDeRascunho: string | null;
   data: string;
@@ -183,6 +185,7 @@ export function artigosDasNoticias(ordenadas: readonly NoticiaParaArtigo[], lang
       descricao: p.descricao,
       imagem: p.imagem,
       alternativas: alternativasDeItem("news", n.data._origem.slug, ferramentas.noticiasPorIdioma),
+      classeDoCorpo: "news-page",
       avisoDeRascunho: n.data.draft === true ? t(lang, "draft") : null,
       data: p.data,
       titulo: p.titulo,

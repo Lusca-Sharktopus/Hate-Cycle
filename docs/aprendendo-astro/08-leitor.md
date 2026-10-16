@@ -201,6 +201,12 @@ As notícias não ganharam lição própria porque quase tudo já existia: a not
 - `aria-label="Chapters"` no pager das notícias (já listado acima).
 - `?p=2x` vale 2 (o `parseInt` do navegador), `?p=0`, `?p=abc` e `?p=-2` valem 1 e `?p=99` vale a última página.
 
+### Ajustes pedidos pelo autor (16/10/2026): título cortado no pager e comentários em caixa própria
+
+- **Corte do título** (`cortarTitulo()` em `src/lib/titulos.ts`, porte de `clip_title()` do `build.py`): as laterais do pager mostram no máximo 40 caracteres (contados como o Python: versalete e emoji valem 1), cortando no fim de palavra, sem pontuação solta, e terminando em "…". Quem corta é a regra pura (`paginador()` em `leitura.ts`); o componente `Pager` só desenha o `title` e o `aria-label` com o título inteiro (só quando houve corte). Vale também para os capítulos, onde nada muda (títulos de até 28 letras).
+- **Duas caixas:** a notícia fica em `.news-box` e os comentários em `.reader-box.paper.slim`, como nos capítulos; o `<body>` ganha `news-page` para o `<main>` virar só o espaço das duas caixas. Notícia com `comments: false` não leva a caixa vazia.
+- Prova: `cortarTitulo()` × Python em `tests/regras.test.ts` (casos inventados e os títulos reais) e, nas páginas, o grupo t13 de `paginas.test.ts`.
+
 ### Tente (notícias)
 
 1. **Quebre a busca de propósito** (e desfaça). Em `src/lib/paginacao.ts`, troque `palavras.every` por `palavras.some` em `combinaComBusca`. Rode `pnpm test`: os testes de `tests/noticias.test.ts` apontam a busca que deixou de bater. Para ver no navegador, `pnpm dev`, abra `/pt/news/` e busque duas palavras de títulos diferentes: com `some` aparecem notícias demais. Desfaça a mudança.

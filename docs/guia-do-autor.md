@@ -228,6 +228,7 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 
 Contas + comentários próprios do site (sem Disqus), no Supabase. Como ligar, login com Google e edição: `docs/comentarios-supabase.md`.
 Cada capítulo e cada notícia tem comentários; a conversa é a mesma nos dois idiomas. Sem o Supabase configurado, no site publicado não aparece nada e, na prévia local, aparece um aviso no lugar.
+Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da notícia (nas três versões de notícia: comum, com fundo e colagem). Nos botões de anterior/próximo do fim da notícia, o título da notícia vizinha é cortado em 40 caracteres com "…" (o título inteiro aparece ao passar o mouse); isso é automático, não muda o título da notícia.
 
 ## 13. Menu e Extras
 

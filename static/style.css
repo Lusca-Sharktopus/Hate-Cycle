@@ -208,6 +208,8 @@ hr.scene-divider { border-top: 1px solid #0004; width: 40%; margin: 2rem auto; }
 .pg-btn svg { width: 28px; height: 28px; }
 .pager .pg:hover .pg-btn { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
 .pager .mid { flex-direction: row; padding: .35rem .9rem; border: 1px solid currentColor; border-radius: 99px; color: var(--teal); }
+/* pedido do autor (16/10/2026): o botão do meio nunca é espremido pelos títulos das laterais (que o build.py já corta em 40 caracteres) */
+.pager .mid { flex: none; white-space: nowrap; }
 .reader-comic .pager .mid, .reader-comic .pager .pg { color: var(--mint); }
 
 .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
@@ -443,9 +445,17 @@ html.intro-out .intro-screen { opacity: 0; pointer-events: none; }
 .news-bd.bottom { bottom: 0; aspect-ratio: 3.5 / 1; background-position: bottom center; -webkit-mask-image: linear-gradient(transparent 0, #000 58%); mask-image: linear-gradient(transparent 0, #000 58%); }
 .news-special .prose { max-width: none; }
 .news-after { padding: 0 clamp(1.2rem, 5vw, 3.6rem) clamp(1.4rem, 5vw, 3.6rem); }
-@media (max-width: 560px) { .news-after .pager { flex-wrap: wrap; justify-content: center; } .news-after .pager .pg { max-width: 100%; } .news-after .pager .mid { order: -1; width: 100%; justify-content: center; } }
+/* celular: o botão do meio numa linha própria, no alto; antes só valia nas notícias de fundo/colagem (.news-after), agora em todas (pedido do autor, 16/10/2026) */
+@media (max-width: 560px) { .news-box .pager { flex-wrap: wrap; justify-content: center; } .news-box .pager .pg { max-width: 100%; } .news-box .pager .mid { order: -1; width: 100%; justify-content: center; text-align: center; } }
 
 .news-special .news-hero-in > time { display: block; color: #4d4a57; font-weight: 600; text-shadow: 0 0 8px #fff9; }
+
+/* ── Notícia: caixa da notícia + caixa só dos comentários (pedido do autor, 16/10/2026) ──
+   Como nos capítulos (.reader-box + .reader-box.paper.slim): o <main class="sheet"> vira só o espaço das duas caixas
+   (mesma largura e posição de antes) e a folha de papel passa para .news-box. */
+.news-page main.sheet { padding: 0; background: none; box-shadow: none; border-radius: 0; }
+.news-box { padding: clamp(1.4rem, 5vw, 3.6rem) clamp(1.2rem, 5vw, 3.6rem); background: var(--paper), var(--sheet); background-color: var(--sheet); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; }
+.news-page .reader-box { max-width: none; width: 100%; margin: 1.5rem 0 0; }
 
 /* posts incorporados: rótulos dos botões sem hifenização */
 .embed-btn { white-space: nowrap; hyphens: none; -webkit-hyphens: none; }

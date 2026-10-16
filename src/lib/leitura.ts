@@ -16,6 +16,7 @@ import { langs, t, type Lang } from "./config";
 import { pyStrip } from "./frontmatter";
 import { logoDaObra, tituloDaObra, urlDaObra, type ObraComDados } from "./obras";
 import { paginasDoQuadrinho } from "./quadrinhos";
+import { cortarTitulo } from "./titulos";
 
 /** Uma obra, com o que o leitor lê do work.json além do que as regras da T10 já leem. */
 export interface ObraParaLer extends ObraComDados {
@@ -33,10 +34,21 @@ export interface CapituloParaLer extends CapituloDeLeitura {
 
 // ───────────── as peças da página ─────────────
 
+/**
+ * Um lado do pager (anterior ou próximo). `titulo` já vem CORTADO (cortarTitulo, 40 caracteres: pedido do autor, 16/10/2026);
+ * se foi cortado, `completo` leva o título inteiro e o rótulo para leitor de tela ("Anterior: título inteiro"), que vão no
+ * `title` (dica do mouse) e no `aria-label` do link. null = não foi cortado, nada a acrescentar.
+ */
+export interface LadoDoPaginador {
+  url: string;
+  titulo: string;
+  completo: { titulo: string; rotulo: string } | null;
+}
+
 /** Anterior / próximo / "voltar" — a barra pager() do build.py. Também serve às notícias (T13). */
 export interface Paginador {
-  anterior: Vizinho | null;
-  proximo: Vizinho | null;
+  anterior: LadoDoPaginador | null;
+  proximo: LadoDoPaginador | null;
   /** O botão do meio ("Voltar à obra", "Todas as notícias"); null = não tem. */
   meio: { url: string; rotulo: string } | null;
   /** "Anterior" e "Próximo" no idioma da página. */
@@ -125,10 +137,17 @@ function comNulos(alt: Alternativas): Partial<Record<Lang, string | null>> {
   return Object.fromEntries(langs.map((l) => [l, alt[l] ?? null]));
 }
 
+/** Um lado do pager: o título cortado e, se foi cortado, o completo (side() dentro de pager() do build.py). */
+function ladoDoPaginador(lang: Lang, v: Vizinho | null, direcao: "prev" | "next"): LadoDoPaginador | null {
+  if (!v) return null;
+  const curto = cortarTitulo(v.titulo);
+  return { url: v.url, titulo: curto, completo: curto === v.titulo ? null : { titulo: v.titulo, rotulo: `${t(lang, direcao)}: ${v.titulo}` } };
+}
+
 /** pager(lang, prev, nxt, mid) do build.py: só existe se tiver ao menos um dos três. */
 export function paginador(lang: Lang, anterior: Vizinho | null, proximo: Vizinho | null, meio: { url: string; rotulo: string } | null): Paginador | null {
   if (!anterior && !proximo && !meio) return null;
-  return { anterior, proximo, meio, rotuloAnterior: t(lang, "prev"), rotuloProximo: t(lang, "next") };
+  return { anterior: ladoDoPaginador(lang, anterior, "prev"), proximo: ladoDoPaginador(lang, proximo, "next"), meio, rotuloAnterior: t(lang, "prev"), rotuloProximo: t(lang, "next") };
 }
 
 /** O texto do capítulo, se tiver algo além de espaços (`make_md(...)(body) if body.strip() else ""`). */

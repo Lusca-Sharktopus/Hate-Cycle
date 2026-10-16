@@ -128,6 +128,36 @@ EXCERPT_CASOS = [
 ]
 EXCERPT_LIMITES = [130, 10, 1, 0, 50, 131, 100000]
 
+# Textos para clip_title() (corte dos títulos das laterais do pager, pedido do autor de 16/10/2026): cada canto da regra.
+CORTE_CASOS = [
+    ("vazio", ""), ("curto", "Curto"), ("exato-40", "a" * 40), ("40-com-palavras", "um dois tres quatro cinco seis sete oit"),
+    ("41-uma-palavra", "a" * 41), ("39-mais-1", "a" * 39 + " b"), ("40-mais-1", "a" * 40 + " b"), ("corta-no-espaco", "x" * 39 + " yyyy"),
+    ("corta-no-meio-da-palavra", "Dia 28 desenhando uma criatura de Especulação"), ("virgula-no-corte", "Primeiro vídeo da HDVR, um teste de verdade mesmo"),
+    ("pontuacao-solta", "abcdefghi jklmnopq rstuvwxyz abcdef -- ghijkl mnop"), ("travessao", "Primeiro vídeo da HDVR — um teste, de verdade, mesmo"),
+    ("dois-pontos", "Capítulo um: o começo de tudo que importa aqui"), ("reticencias-no-corte", "Esperando por você... e por mais um dia inteiro aqui"),
+    ("parenteses", "Resultado (parcial) do sorteio de ontem à noite aqui"), ("aspas-curvas", "Ele disse “não vou” e saiu sem olhar para trás nunca"),
+    ("exclamacao", "Saiu o capítulo novo, venham ler agora mesmo pessoal!"), ("interrogacao", "Será que alguém vai ler essa história inteira aqui?"),
+    ("so-pontuacao", "." * 60), ("espaco-e-pontuacao", ". " * 40), ("espacos-nbsp", "palavra\xa0palavra\xa0palavra\xa0palavra\xa0palavra\xa0palavra"),
+    ("tabs-e-quebras", "um\tdois\ttres\nquatro cinco seis sete oito nove dez"), ("espacos-unicode", "um\u2003dois\u3000tres quatro cinco seis sete oito nove"),
+    ("versalete", "Dia 28 desenhando uma criatura de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias"), ("versalete-no-corte", "Dia 28 de criaturas em Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias seguidos"),
+    ("versalete-40", "Hᴀᴛᴇ Cʏᴄʟᴇ " * 3 + "Hᴀᴛᴇ"), ("versalete-41", "Hᴀᴛᴇ Cʏᴄʟᴇ " * 3 + "Hᴀᴛᴇ!"),
+    ("astral-40", "😀" * 40), ("astral-41", "😀" * 41), ("astral-com-espaco", "😀 " * 30), ("astral-matematico", "𝓗𝓪𝓽𝓮 " * 12),
+    ("emoji-zwj", "👨‍👩‍👧‍👦 família " * 5), ("acentos", "ação ação ação ação ação ação ação ação ação ação"), ("zalgo", "t̷e̷x̷t̷o̷ ̷g̷l̷i̷t̷c̷h̷ ̷d̷e̷m̷a̷i̷s̷"),
+    ("ingles-longo", "Day 28 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook"),
+    ("portugues-longo", "Dia 28 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo"),
+]
+CORTE_LIMITES = [40, 1, 2, 3, 10, 20, 39, 41, 100]
+
+
+def titulos_reais():
+    """O `title:` de cada .md de content/ (notícias e capítulos), como o build.py o lê."""
+    r = {}
+    for p in sorted(build.CONTENT.rglob("*.md")):
+        fm, _ = build.parse(p)
+        if fm.get("title"):
+            r[p.relative_to(build.CONTENT).as_posix()] = str(fm["title"])
+    return r
+
 
 def tabelas():
     near = pegar_near()
@@ -144,6 +174,13 @@ def tabelas():
         "rss_data": [{"d": d, "saida": data_do_rss(d)} for d in DATAS_RSS],
         "excerpt": [{"nome": n, "texto": t, "limite": lim, "saida": build.excerpt(t, lim)} for n, t in EXCERPT_CASOS for lim in EXCERPT_LIMITES],
         "plain": [{"nome": n, "texto": t, "saida": build.plain(t)} for n, t in EXCERPT_CASOS],
+        "corte_do_titulo": {
+            "limite_padrao": build.PAGER_TITLE_MAX,
+            "inventados": [{"nome": n, "texto": t, "limite": lim, "saida": build.clip_title(t, lim)} for n, t in CORTE_CASOS for lim in CORTE_LIMITES],
+            "padrao": [{"nome": n, "texto": t, "saida": build.clip_title(t)} for n, t in CORTE_CASOS],
+            # todos os títulos de verdade (notícias e capítulos, nos dois idiomas), com o limite do site
+            "reais": {rel: build.clip_title(titulo) for rel, titulo in titulos_reais().items()},
+        },
         "excerpt_real": exc_real,
         "plain_real": plain_real,
         "midias": {"rotulos": build.MEDIA_LABELS, "ui": {k: list(v) for k, v in build.MEDIA_UI.items()}},
@@ -256,9 +293,10 @@ def vizinhos(main, lang):
     """anterior/próximo/voltar de uma página (o pager, ou os botões laterais do vídeo)."""
     prefixo = {d: build.T(lang, d) + ": " for d in ("prev", "next")}
     def um(d):
-        m = re.search(r'<a class="pg %s" rel="%s" href="([^"]*)">.*?<small>(.*?)</small>' % (d, d), main, re.S)
+        # título longo vem CORTADO no <small> (pedido do autor, 16/10/2026) e inteiro no title do link: a regra é sobre o título inteiro
+        m = re.search(r'<a class="pg %s" rel="%s" href="([^"]*)"(?: title="([^"]*)" aria-label="[^"]*")?>.*?<small>(.*?)</small>' % (d, d), main, re.S)
         if m:
-            return {"url": U(m.group(1)), "titulo": U(m.group(2))}
+            return {"url": U(m.group(1)), "titulo": U(m.group(2) if m.group(2) is not None else m.group(3))}
         m = re.search(r'<a class="side-btn %s" rel="%s" href="([^"]*)" title="([^"]*)"' % (d, d), main, re.S)
         if m:
             t = U(m.group(2))

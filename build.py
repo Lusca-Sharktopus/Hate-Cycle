@@ -604,11 +604,42 @@ def arrow(direction):
     d = "M8 4.5v15l11.5-7.5z" if direction == "next" else "M16 4.5v15L4.5 12z"
     return f'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="{d}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
 
+# Pedido do autor (16/10/2026): títulos longos de anterior/próximo espremiam o botão "Todas as notícias".
+# Limite de caracteres (code points do Python) nos títulos das laterais do pager; passou, corta no fim de palavra + "…".
+PAGER_TITLE_MAX = 40
+_PAGER_LOOSE = re.compile(r"[\s,;:.\-–—_/\\|&+=…·(\[{«“‘\"']+$")   # o que não fica pendurado antes das reticências (fecha-aspas, ! ? e ) ficam)
+
+def clip_title(t, limit=PAGER_TITLE_MAX):
+    """Título curto para o pager: cabe em `limit` caracteres contando as reticências; só corta se passar do limite."""
+    if len(t) <= limit:
+        return t
+    cut = t[:limit - 1]
+    if not t[limit - 1].isspace():            # o corte caiu no meio de uma palavra: descarta a palavra partida
+        m = re.search(r"\s\S*$", cut)
+        if m:
+            cut = cut[:m.start()]
+    cut = _PAGER_LOOSE.sub("", cut)
+    return (cut or t[:limit - 1].rstrip()) + "…"
+
 def pager(lang, prev, nxt, mid=None):
-    a = (f'<a class="pg prev" rel="prev" href="{u(prev["url"])}"><span class="pg-btn">{arrow("prev")}</span>'
-         f'<span class="pg-txt">{esc(T(lang, "prev"))}<small>{esc(prev["title"])}</small></span></a>') if prev else "<span></span>"
-    b = (f'<a class="pg next" rel="next" href="{u(nxt["url"])}"><span class="pg-txt">{esc(T(lang, "next"))}'
-         f'<small>{esc(nxt["title"])}</small></span><span class="pg-btn">{arrow("next")}</span></a>') if nxt else "<span></span>"
+    def side(ch, d):
+        full = ch["title"]
+        short = clip_title(full)
+        # título cortado: o completo vai no title (dica do mouse) e no aria-label (leitor de tela lê inteiro)
+        extra = f' title="{esc(full)}" aria-label="{esc(T(lang, d))}: {esc(full)}"' if short != full else ""
+        return short, extra
+    if prev:
+        s_, x_ = side(prev, "prev")
+        a = (f'<a class="pg prev" rel="prev" href="{u(prev["url"])}"{x_}><span class="pg-btn">{arrow("prev")}</span>'
+             f'<span class="pg-txt">{esc(T(lang, "prev"))}<small>{esc(s_)}</small></span></a>')
+    else:
+        a = "<span></span>"
+    if nxt:
+        s_, x_ = side(nxt, "next")
+        b = (f'<a class="pg next" rel="next" href="{u(nxt["url"])}"{x_}><span class="pg-txt">{esc(T(lang, "next"))}'
+             f'<small>{esc(s_)}</small></span><span class="pg-btn">{arrow("next")}</span></a>')
+    else:
+        b = "<span></span>"
     m = f'<a class="mid" href="{u(mid[0])}">{esc(mid[1])}</a>' if mid else ""
     return f'<nav class="pager" aria-label="Chapters">{a}{m}{b}</nav>'
 
@@ -852,6 +883,10 @@ def build():
                 prev, nxt = (news[lang][i + 1] if i + 1 < len(news[lang]) else None), (news[lang][i - 1] if i else None)
                 bt, bb = n["fm"].get("backdrop_top"), n["fm"].get("backdrop_bottom")
                 stk = n["fm"].get("stickers")
+                # Pedido do autor (16/10/2026): comentários em caixa PRÓPRIA, separada da caixa da notícia, como nos capítulos
+                # (reader-box paper slim). Sem comentários (comments: false / site sem chaves) não sobra caixa vazia.
+                cm = comments(lang, f"news/{n['slug']}", n['title'], n['fm'])
+                cbox = f'<div class="reader-box paper slim">{cm}</div>' if cm else ""
                 if stk:   # notícia "colagem": figurinhas espalhadas pela folha + papel amassado por cima (stickers: "arquivo | l3 t2 w26 a-4"; overlay: imagem do papel)
                     sh = ""
                     for line in stk:
@@ -865,19 +900,16 @@ def build():
                         sh += f'<img class="news-stk" src="{asset(f_.strip())}" alt="" style="{";".join(css)}" aria-hidden="true">'
                     ov = n["fm"].get("overlay")
                     paper = f'<div class="news-paper" style="background-image:url({asset(ov)})" aria-hidden="true"></div>' if ov else ""
-                    main = f"""<article class="news-special news-collage">{draft_banner(lang, n)}<div class="news-hero">{sh}{paper}<div class="news-sp top"></div><div class="news-hero-in"><time>{esc(fmt_date(lang, n["fm"].get("date", "")))}</time><h1>{esc(n['title'])}</h1>{tags}
-<div class="prose">{md(n['body'])}</div></div><div class="news-sp bottom"></div></div><div class="news-after">{related_html(lang, n['fm'])}{pager(lang, prev, nxt, (f"/{lang}/news/", T(lang, "all_news")))}
-{comments(lang, f"news/{n['slug']}", n['title'], n['fm'])}</div></article>"""
+                    main = f"""<div class="news-box"><article class="news-special news-collage">{draft_banner(lang, n)}<div class="news-hero">{sh}{paper}<div class="news-sp top"></div><div class="news-hero-in"><time>{esc(fmt_date(lang, n["fm"].get("date", "")))}</time><h1>{esc(n['title'])}</h1>{tags}
+<div class="prose">{md(n['body'])}</div></div><div class="news-sp bottom"></div></div><div class="news-after">{related_html(lang, n['fm'])}{pager(lang, prev, nxt, (f"/{lang}/news/", T(lang, "all_news")))}</div></article></div>{cbox}"""
                 elif bt or bb:   # notícia com design especial: imagens de fundo no topo e no pé da folha (backdrop_top / backdrop_bottom no cabeçalho)
                     bd = "".join(f'<div class="news-bd {pos}" style="background-image:url({asset(src)})" aria-hidden="true"></div>' for pos, src in (("top", bt), ("bottom", bb)) if src)
-                    main = f"""<article class="news-special">{draft_banner(lang, n)}<div class="news-hero">{bd}<div class="news-sp top"></div><div class="news-hero-in"><time>{esc(fmt_date(lang, n["fm"].get("date", "")))}</time><h1>{esc(n['title'])}</h1>{tags}
-<div class="prose">{md(n['body'])}</div></div><div class="news-sp bottom"></div></div><div class="news-after">{related_html(lang, n['fm'])}{pager(lang, prev, nxt, (f"/{lang}/news/", T(lang, "all_news")))}
-{comments(lang, f"news/{n['slug']}", n['title'], n['fm'])}</div></article>"""
+                    main = f"""<div class="news-box"><article class="news-special">{draft_banner(lang, n)}<div class="news-hero">{bd}<div class="news-sp top"></div><div class="news-hero-in"><time>{esc(fmt_date(lang, n["fm"].get("date", "")))}</time><h1>{esc(n['title'])}</h1>{tags}
+<div class="prose">{md(n['body'])}</div></div><div class="news-sp bottom"></div></div><div class="news-after">{related_html(lang, n['fm'])}{pager(lang, prev, nxt, (f"/{lang}/news/", T(lang, "all_news")))}</div></article></div>{cbox}"""
                 else:
-                    main = f"""<article class="wrap narrow block">{draft_banner(lang, n)}<time>{esc(fmt_date(lang, n["fm"].get("date", "")))}</time><h1>{esc(n['title'])}</h1>{tags}{img}
-<div class="prose">{md(n['body'])}</div>{related_html(lang, n['fm'])}{pager(lang, prev, nxt, (f"/{lang}/news/", T(lang, "all_news")))}
-{comments(lang, f"news/{n['slug']}", n['title'], n['fm'])}</article>"""
-                page(n["url"], lang, n["title"], main, alt_for("news", n["slug"]), desc=n["fm"].get("summary", ""), image=n["fm"].get("image", ""))
+                    main = f"""<div class="news-box"><article class="wrap narrow block">{draft_banner(lang, n)}<time>{esc(fmt_date(lang, n["fm"].get("date", "")))}</time><h1>{esc(n['title'])}</h1>{tags}{img}
+<div class="prose">{md(n['body'])}</div>{related_html(lang, n['fm'])}{pager(lang, prev, nxt, (f"/{lang}/news/", T(lang, "all_news")))}</article></div>{cbox}"""
+                page(n["url"], lang, n["title"], main, alt_for("news", n["slug"]), cls="news-page", desc=n["fm"].get("summary", ""), image=n["fm"].get("image", ""))
 
         # ── UNIVERSO
         if universe[lang]:

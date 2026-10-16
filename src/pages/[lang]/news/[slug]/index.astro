@@ -27,6 +27,6 @@ const lang = Astro.params.lang as Lang;
 const { artigo } = Astro.props as { artigo: ArtigoDaNoticia };
 ---
 
-<BaseLayout lang={lang} title={artigo.tituloDaPagina} description={artigo.descricao} image={artigo.imagem} alternates={artigo.alternativas}>
+<BaseLayout lang={lang} title={artigo.tituloDaPagina} bodyClass={artigo.classeDoCorpo} description={artigo.descricao} image={artigo.imagem} alternates={artigo.alternativas}>
   <ArtigoDeNoticia artigo={artigo} />
 </BaseLayout>

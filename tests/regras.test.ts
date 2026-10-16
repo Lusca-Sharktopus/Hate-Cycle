@@ -26,6 +26,7 @@ import { alternativasDaLista, alternativasDaObra, alternativasDeItem, alternativ
 import { assetUrl } from "../src/lib/assets";
 import { ATUALIZACOES_NA_HOME, itensDoRss, rotuloDaAtualizacao, type Atualizacao } from "../src/lib/atualizacoes";
 import { paginaDaObra, paginasDosCapitulos } from "../src/lib/capitulos";
+import { cortarTitulo, LIMITE_DO_TITULO_NO_PAGER } from "../src/lib/titulos";
 import { langs, tr, type Lang, type Translatable } from "../src/lib/config";
 import { dataParaRss, datasProximas, formatarData } from "../src/lib/datas";
 import { inicialDoEmissario, mostraTexto, REDES, redesDoEmissario } from "../src/lib/emissarios";
@@ -111,6 +112,12 @@ interface Referencia {
     rss_data: { d: string; saida: string | null }[];
     excerpt: { nome: string; texto: string; limite: number; saida: string }[];
     plain: { nome: string; texto: string; saida: string }[];
+    corte_do_titulo: {
+      limite_padrao: number;
+      inventados: { nome: string; texto: string; limite: number; saida: string }[];
+      padrao: { nome: string; texto: string; saida: string }[];
+      reais: Record<string, string>;
+    };
     excerpt_real: Record<string, string>;
     plain_real: Record<string, { sha1: string; tamanho: number }>;
     midias: { rotulos: Record<Lang, Record<string, string>>; ui: Record<Lang, [string, string]> };
@@ -192,6 +199,42 @@ describe("resumos: excerpt() e plain()", () => {
       igual("resumoAutomatico() — excerpt (corpos reais)", resumoAutomatico(body), tab.excerpt_real[nome], nome);
       const puro = textoPuro(body);
       igual("textoPuro() — plain (corpos reais, sha1+tamanho)", { sha1: createHash("sha1").update(puro, "utf8").digest("hex"), tamanho: Array.from(puro).length }, tab.plain_real[nome], nome);
+    }
+  });
+});
+
+describe("corte dos títulos do pager: cortarTitulo() = clip_title() do build.py (pedido do autor, 16/10/2026)", () => {
+  const c = tab.corte_do_titulo;
+  test("o limite é o mesmo do Python (PAGER_TITLE_MAX)", () => {
+    igual("cortarTitulo() — limite padrão", LIMITE_DO_TITULO_NO_PAGER, c.limite_padrao, REFAZER);
+  });
+  test.each(c.inventados.map((x, i) => [i, x] as const))("caso inventado %i", (_i, x) => {
+    igual("cortarTitulo() — casos inventados × limites", cortarTitulo(x.texto, x.limite), x.saida, `${x.nome} limite ${x.limite}`);
+  });
+  test("com o limite do site, cabe em 40 caracteres (como o Python conta) e só termina em … se foi cortado", () => {
+    for (const x of c.padrao) {
+      const saida = cortarTitulo(x.texto);
+      igual("cortarTitulo() — limite do site", saida, x.saida, x.nome);
+      expect(Array.from(saida).length, x.nome).toBeLessThanOrEqual(LIMITE_DO_TITULO_NO_PAGER);
+      if (Array.from(x.texto).length <= LIMITE_DO_TITULO_NO_PAGER) expect(saida, x.nome).toBe(x.texto);
+      else expect(saida.endsWith("…"), x.nome).toBe(true);
+    }
+  });
+  test("regras em palavras: curto fica igual, corta no fim de palavra, sem pontuação solta, versalete e emoji contam 1", () => {
+    expect(cortarTitulo("Dia 27")).toBe("Dia 27");
+    expect(cortarTitulo("a".repeat(40))).toBe("a".repeat(40));
+    expect(cortarTitulo("Dia 28 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias")).toBe("Dia 28 desenhando uma criatura de…");
+    expect(cortarTitulo("Primeiro vídeo da HDVR, um teste, de verdade, mesmo")).toBe("Primeiro vídeo da HDVR, um teste, de…");
+    expect(cortarTitulo("Hᴀᴛᴇ Cʏᴄʟᴇ ".repeat(3) + "Hᴀᴛᴇ")).toBe("Hᴀᴛᴇ Cʏᴄʟᴇ ".repeat(3) + "Hᴀᴛᴇ"); // 37 caracteres: cabe, fica igual
+    expect(Array.from(cortarTitulo("😀".repeat(41))).length).toBe(40);
+    expect(cortarTitulo("😀".repeat(41))).toBe("😀".repeat(39) + "…");
+  });
+  test(`todos os ${Object.keys(c.reais).length} títulos de content/ (notícias e capítulos, em/pt): mesmo corte do Python`, () => {
+    const nomes = Object.keys(c.reais).sort();
+    expect(nomes.length, REFAZER).toBeGreaterThan(80);
+    for (const nome of nomes) {
+      const { fm } = parseArquivo(join(RAIZ, nome));
+      igual("cortarTitulo() — títulos reais de content/", cortarTitulo(String(fm["title"] ?? "")), c.reais[nome], nome);
     }
   });
 });

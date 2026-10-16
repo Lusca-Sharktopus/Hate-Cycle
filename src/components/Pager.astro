@@ -2,7 +2,8 @@
 // A barra "anterior · voltar · próximo" (pager() do build.py): botões redondos com seta, o título do vizinho embaixo do
 // rótulo e, no meio, o botão de voltar (à obra; nas notícias, T13, a "Todas as notícias").
 // Só desenha: tudo vem decidido em `paginador` (src/lib/leitura.ts → paginador()). Lado vazio = <span></span>, para o
-// outro lado não sair do lugar. O rótulo "Chapters" do <nav> é fixo, como no site atual (até nas notícias).
+// outro lado não sair do lugar. Título de lateral longo vem CORTADO (src/lib/titulos.ts, 40 caracteres, pedido do autor 16/10/2026) e
+// o inteiro vai no title e no aria-label do link (só quando foi cortado). O rótulo "Chapters" do <nav> é fixo, como no site atual (até nas notícias).
 import type { Paginador } from "../lib/leitura";
 import Seta from "./Seta.astro";
 
@@ -13,7 +14,7 @@ interface Props {
 const { paginador: p } = Astro.props;
 ---
 
-<nav class="pager" aria-label="Chapters">{p.anterior ? <a class="pg prev" rel="prev" href={p.anterior.url}><span class="pg-btn"><Seta direcao="prev" /></span><span class="pg-txt">{p.rotuloAnterior}<small>{p.anterior.titulo}</small></span></a> : <span></span>}{p.meio && <a class="mid" href={p.meio.url}>{p.meio.rotulo}</a>}{p.proximo ? <a class="pg next" rel="next" href={p.proximo.url}><span class="pg-txt">{p.rotuloProximo}<small>{p.proximo.titulo}</small></span><span class="pg-btn"><Seta direcao="next" /></span></a> : <span></span>}</nav>
+<nav class="pager" aria-label="Chapters">{p.anterior ? <a class="pg prev" rel="prev" href={p.anterior.url} title={p.anterior.completo?.titulo} aria-label={p.anterior.completo?.rotulo}><span class="pg-btn"><Seta direcao="prev" /></span><span class="pg-txt">{p.rotuloAnterior}<small>{p.anterior.titulo}</small></span></a> : <span></span>}{p.meio && <a class="mid" href={p.meio.url}>{p.meio.rotulo}</a>}{p.proximo ? <a class="pg next" rel="next" href={p.proximo.url} title={p.proximo.completo?.titulo} aria-label={p.proximo.completo?.rotulo}><span class="pg-txt">{p.rotuloProximo}<small>{p.proximo.titulo}</small></span><span class="pg-btn"><Seta direcao="next" /></span></a> : <span></span>}</nav>
 
 <style is:global>
   @layer site {
@@ -28,5 +29,7 @@ const { paginador: p } = Astro.props;
     .pg-btn svg { width: 28px; height: 28px; }
     .pager .pg:hover .pg-btn { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
     .pager .mid { flex-direction: row; padding: .35rem .9rem; border: 1px solid currentColor; border-radius: 99px; color: var(--teal); }
+    /* pedido do autor (16/10/2026): o botão do meio nunca é espremido pelos títulos das laterais */
+    .pager .mid { flex: none; white-space: nowrap; }
   }
 </style>

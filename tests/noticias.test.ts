@@ -124,7 +124,7 @@ for (const amb of ref.ambientes) {
       const py = amb.noticias[url];
       if (!py) throw new Error(`o Python não gerou ${url}`);
       // o que vai para o <head> e o <body> (BaseLayout): os mesmos argumentos do shell()
-      expect({ titulo: artigo.tituloDaPagina, alt: artigo.alternativas, cls: "", desc: artigo.descricao, imagem: artigo.imagem, noindex: false }, url).toEqual(py.shell);
+      expect({ titulo: artigo.tituloDaPagina, alt: artigo.alternativas, cls: artigo.classeDoCorpo, desc: artigo.descricao, imagem: artigo.imagem, noindex: false }, url).toEqual(py.shell);
       // o <main>: o artigo + o acabamento do layout (versalete, data-prev/next; scripts de componente vão para o fim)
       const pronto = finalizarMain(await container.renderToString(ArtigoDeNoticia, { props: { artigo } }), artigo.lang);
       expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(py.main));

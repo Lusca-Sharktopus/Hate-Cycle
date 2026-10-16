@@ -26,8 +26,8 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T11 | Home, Histórias, página da obra, Emissários | 3 | Sonnet | alto | T06, T09, T10 | médio | feita (16/10/2026) — [lição 07](aprendendo-astro/07-paginas.md) |
 | T12 | Leitor de capítulos (prosa, HQ, vídeo, episódios) | 3 | Opus | alto | T11 | **alto** | feita (16/10/2026) — [lição 08](aprendendo-astro/08-leitor.md); revisão independente aprovada com ressalvas (corrigidas) |
 | T13 | Notícias (lista, artigo, colagem, backdrop, embeds) | 3 | Sonnet | alto | T11 | médio | feita (16/10/2026) — seção "Notícias" na [lição 08](aprendendo-astro/08-leitor.md) |
-| T13b | Ajustes pedidos pelo autor nas notícias: títulos do anterior/próximo com limite de caracteres e reticências (o botão "Todas as notícias" não pode ser espremido) e comentários numa caixa separada da notícia, como nos capítulos — **nos dois geradores** (Python e Astro), para a paridade continuar valendo | 3 | Sonnet | médio | T13 | baixo | em andamento |
-| T14 | Páginas restantes, 404, raiz, RSS, sitemap, redirects | 3 | Sonnet | médio | T13 | médio | pendente |
+| T13b | Ajustes pedidos pelo autor nas notícias: títulos do anterior/próximo com limite de caracteres e reticências (o botão "Todas as notícias" não pode ser espremido) e comentários numa caixa separada da notícia, como nos capítulos — **nos dois geradores** (Python e Astro), para a paridade continuar valendo | 3 | Sonnet | médio | T13 | baixo | feita (16/10/2026) — seção "Notícias" da [lição 08](aprendendo-astro/08-leitor.md) |
+| T14 | Páginas restantes, 404, raiz, RSS, sitemap, redirects | 3 | Sonnet | médio | T13 | médio | em andamento |
 | T15 | Comentários em TypeScript + migrações do Supabase | 4 | Opus | alto | T12, T13 | **alto** | pendente |
 | T16 | Busca (Pagefind) e anti-spam no cadastro | 4 | Sonnet | médio | T15 | baixo | **bloqueada** (decisão do autor) |
 | T17 | Imagens e fontes otimizadas | 5 | Sonnet | alto | T14 | médio | pendente |
