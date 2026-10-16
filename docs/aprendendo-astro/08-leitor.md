@@ -8,7 +8,7 @@ Até a T11 o Astro já desenhava a home, Histórias e a página de Luz & Sangue.
 | Pederneira (capítulo único, fonte Times, o degradê do fim) | `/pt/works/firestriker/01/` e `/en/works/firestriker/01/` |
 | Luz & Sangue, episódios 1 e 2 (vídeo, com setas e "Todos os episódios") | `/pt/works/light-and-blood/01/`, `…/02/` e os dois em `/en/` |
 
-Para o visitante **nada muda**. As 10 capturas lado a lado (Python × Astro, 1100 px e 390 px) saíram **idênticas pixel a pixel**, inclusive o sonho de Ossos, o Giuseppe contornado pelo texto, as tiras, a carta (frente e verso) e o degradê de Pederneira. Os comentários continuam com **os mesmos IDs**, e o `comments.js` de hoje funciona sem mudança.
+Para o visitante **nada muda**. As 10 capturas lado a lado (Python × Astro, 1100 px e 390 px) só diferem no que se mexe sozinho: o brilho das runas animadas do fundo e o quadro do GIF animado de Ossos ("NO… …I CAN'T…"). Com as runas paradas ("reduzir movimento") e o GIF congelado num quadro, saíram idênticas pixel a pixel, inclusive o sonho de Ossos, o Giuseppe contornado pelo texto, as tiras, a carta (frente e verso) e o degradê de Pederneira. Os comentários continuam com **os mesmos IDs**, e o `comments.js` de hoje funciona sem mudança.
 
 > **Mudança de plano em relação ao mapa original.** O mapa previa "componentes dentro do texto (MDX)" para os efeitos das histórias. Na T09 a decisão D4 mudou (`docs/ARQUITETURA.md`): o Markdown do site é um **porte fiel do `make_md()`**, sem MDX. Esta lição mostra por que isso basta: os efeitos são **HTML cru com classes** dentro do seu texto, e continuam funcionando sem nenhum componente no meio do texto.
 
@@ -96,7 +96,7 @@ O seu Markdown já tem HTML cru, e é ele que faz os efeitos:
 O caminho até a tela:
 
 1. O carregador (T09) passa o seu texto pelo porte do `make_md()`. Blocos que começam com `<div`, `<img`… **passam sem mudança** (o `@/` vira o caminho certo). Resultado: `rendered.html`.
-2. O `Leitor` põe esse HTML dentro de `<div class="prose story font-times">` com `<Fragment set:html={nota} />`, que significa "cole este HTML como está".
+2. O `Leitor` põe esse HTML dentro de `<div class="prose story font-times">` com `<Fragment set:html={textoDoAutor(c.nota)} />`. `set:html` significa "cole este HTML como está"; `textoDoAutor()` (`src/lib/pagina.ts`) marca o trecho como **seu**, para o acabamento do `<main>` não mexer nele além do que o Python mexe (seção 8).
 3. O CSS das classes está em `src/styles/prosa.css`, copiado de `static/style.css` **com os mesmos valores**. Por exemplo, o sonho:
 
 ```css
@@ -133,7 +133,7 @@ O mesmo vale para `PostsAlternados.astro` (o botão que alterna entre dois posts
 ## 8. Como se prova que é igual
 
 - **As 7 páginas reais**: `tests/paginas.test.ts`, grupo t12. É a mesma comparação estrutural da lição 07 (`<head>`, `<main>`, runas, cabeçalho, rodapé), contra o HTML que o `build.py` gera (`tests/fixtures/paginas-t12-python.json`, tirado por `python3 tools/paginas_ref.py`).
-- **O que hoje não existe no site**: `tests/leitor.test.ts` refaz 7 sites (o real, os 3 inventados da T10 e 3 inventados para o leitor), cada um em build e em prévia, e compara **454 capítulos** com o Python: quadrinhos com `pages`/`pages_glob` (ordem natural, pastas, `**`, arquivo oculto), vídeo com e sem setas, prosa com fonte, divisor e logo, oneshot com e sem logo, obra externa, escondida e só-pt, rascunho, `unlisted`, `comments: false`, comentários sem chaves (nada no build, aviso na prévia), com só uma chave, e com chaves "sujas" (espaços e `/rest/v1/` no fim, que o `build.py` limpa).
+- **O que hoje não existe no site**: `tests/leitor.test.ts` refaz 7 sites (o real, os 3 inventados da T10 e 3 inventados para o leitor), cada um em build e em prévia, e compara **514 capítulos** com o Python: quadrinhos com `pages`/`pages_glob` (ordem natural, pastas, `**`, arquivo oculto), vídeo com e sem setas, prosa com fonte, divisor e logo, oneshot com e sem logo, obra externa, escondida e só-pt, rascunho, `unlisted`, `comments: false`, comentários sem chaves (nada no build, aviso na prévia), com só uma chave, e com chaves "sujas" (espaços e `/rest/v1/` no fim, que o `build.py` limpa). Depois da revisão independente: títulos com `<`, `>` e versalete que vão parar em atributos (`A -> Hᴀᴛᴇ <- B` no alt das páginas da HQ, no alt da logo, no title/aria-label das setas do vídeo), HTML cru do autor com `<`/`>` num atributo, um `<script type="module">` escrito pelo autor e páginas de HQ com algarismos de outras escritas (`p１.png`, `p٣.png`) e números enormes no nome.
 - **No navegador**: capturas lado a lado e o teste da carta (seção 7).
 
 ### Diferenças técnicas aceitas
@@ -144,7 +144,8 @@ O mesmo vale para `PostsAlternados.astro` (o botão que alterna entre dois posts
 | `shape-outside` do Giuseppe aponta para `/other%20images/Giuseppe.png` (no `style.css`, `other images/…` relativo) | O CSS empacotado mora em `/_astro/`, então o caminho precisa começar na raiz; o Vite escreve o espaço como `%20` | Não (mesmo arquivo) |
 | O script da carta é um `<script type="module">` no fim da página, e só em Ossos | Antes era o `site.js` em toda página | Não |
 | `BaseLayout` aceita `null` em `alternates` | Para imitar o `alt_c` do Python: capítulo `unlisted` sem `hreflang` | Não (o HTML sai igual) |
-| GIF animado ("NO… …I CAN'T…") pode aparecer em outro quadro numa captura | É uma animação; com o GIF congelado no 1º quadro, as duas capturas são idênticas | Não |
+| GIF animado ("NO… …I CAN'T…") e runas do fundo podem aparecer em outro instante numa captura | São animações; com as runas paradas e o GIF congelado no 1º quadro, as duas capturas são idênticas | Não |
+| Marcas `<!--hc:autor-->…<!--/hc:autor-->` em volta do seu texto, só durante o acabamento | O Astro escreve `<` e `>` crus nos atributos (o Python escreve `&lt;`/`&gt;`). Sem cuidado, o versalete do `<main>` entraria num `alt="A -> Hᴀᴛᴇ <- B"` e quebraria o HTML. O acabamento protege os atributos dos componentes, mas deixa o seu texto exatamente como o Python o trata, inclusive um `<script type="module">` seu, que fica no lugar | Não (as marcas somem antes de a página ser gravada) |
 
 ### Bugs do site atual reproduzidos (de propósito, até a virada)
 
@@ -161,18 +162,18 @@ O mesmo vale para `PostsAlternados.astro` (o botão que alterna entre dois posts
 pnpm dev                                       # http://localhost:4321/pt/works/firestriker/01/
 pnpm build                                     # 13 páginas (as 6 da T11 + os 7 capítulos)
 HC_DIST=dist pnpm vitest run paginas           # as páginas reais e a lista de IDs de comentários
-pnpm vitest run leitor                         # os 454 capítulos dos sites inventados
+pnpm vitest run leitor                         # os 514 capítulos dos sites inventados
 python3 tools/paginas_ref.py                   # refaz as fotos do Python (depois de mudar content/ ou config.json)
 ```
 
 ## Tente
 
 1. **Ache o divisor de cena de Pederneira.** Abra `/pt/works/firestriker/01/` no `pnpm dev` e encontre a imagem entre as cenas (inspecione: `<img class="scene-divider" …>`). Agora siga o rastro no código: a linha `---` no seu `content/works/firestriker/01/pt.md` → o `divider` do `content/works/firestriker/work.json` → `contextoDoCorpo()` em `src/lib/corpos.ts` (só capítulos recebem o divisor da obra) → `markdownParaHtml()` em `src/lib/markdown.ts` (procure `scene-divider`) → o CSS `.scene-divider` em `src/styles/prosa.css`. Em nenhum momento um `.astro` decidiu algo.
-2. **Veja o seu HTML passar intacto.** Crie uma notícia de teste (`python3 build.py new news teste-sonho`) e, nos dois arquivos (`en.md` e `pt.md`), tire o `#` da linha `# draft: true` para ela virar rascunho. Escreva no corpo, num parágrafo sozinho: `<div class="s1 ps">Um trecho do sonho.</div>`. Abra `http://localhost:4321/dev/markdown/` e escolha a notícia: o HTML gerado mantém o `<div class="s1 ps">` exatamente como você escreveu. A fonte **não** muda ali, porque a regra exige estar dentro de `.story` (seção 4). Depois **apague a pasta** `content/news/<data>-teste-sonho/`.
+2. **Veja o seu HTML passar intacto.** Crie uma notícia de teste (`python3 build.py new news teste-sonho`) e, nos dois arquivos (`en.md` e `pt.md`), troque a linha `# draft: true   (tire o # para esconder do site publicado)` por uma linha só com `draft: true` (sem o `#` e **sem** o comentário entre parênteses, que viraria parte do valor: o Astro pararia com erro e o Python não trataria a notícia como rascunho). Escreva no corpo, num parágrafo sozinho: `<div class="s1 ps">Um trecho do sonho.</div>`. Abra `http://localhost:4321/dev/markdown/` e escolha a notícia: o HTML gerado mantém o `<div class="s1 ps">` exatamente como você escreveu. A fonte **não** muda ali, porque a regra exige estar dentro de `.story` (seção 4). Depois **apague a pasta** `content/news/<data>-teste-sonho/`.
 3. **Quebre um ID de comentário de propósito** (e desfaça). Em `src/lib/capitulos.ts`, acrescente `/${lang}` ao fim do `idDosComentarios`, rode `pnpm build` e `HC_DIST=dist pnpm vitest run paginas`. O teste da lista de IDs aponta exatamente quais conversas "sumiriam". Desfaça a mudança.
 
 ## O que as próximas tarefas reaproveitam
 
-- **T13 (notícias):** `Pager` (com o meio "Todas as notícias"), `Comentarios` + `src/lib/comentarios.ts` (`comentariosDaPagina(lang, "news/<slug>", COM_RASCUNHOS)`), `src/styles/prosa.css` (embeds, Shorts, ficha de feitiço), `PostsAlternados` e `CartaQueVira` (incluídos quando o texto precisa, com `usaClasse()` de `leitura.ts`), o aviso de rascunho (`.draft-banner` já está em `prosa.css`). Acrescentar o grupo `t13` em `GRUPOS` (`tools/paginas_ref.py`) e em `GRUPOS` de `tests/paginas.test.ts`. O teste da lista de IDs passa a cobrir as notícias sozinho.
+- **T13 (notícias):** todo HTML de `content/` que entrar por `set:html` vai embrulhado em `textoDoAutor()` (`src/lib/pagina.ts`), como no `Leitor` e no `CardEmissario`: é o que mantém o versalete e os scripts do seu texto exatamente como no Python. Reaproveitar também `Pager` (com o meio "Todas as notícias"), `Comentarios` + `src/lib/comentarios.ts` (`comentariosDaPagina(lang, "news/<slug>", COM_RASCUNHOS)`), `src/styles/prosa.css` (embeds, Shorts, ficha de feitiço), `PostsAlternados` e `CartaQueVira` (incluídos quando o texto precisa, com `usaClasse()` de `leitura.ts`), o aviso de rascunho (`.draft-banner` já está em `prosa.css`). Acrescentar o grupo `t13` em `GRUPOS` (`tools/paginas_ref.py`) e em `GRUPOS` de `tests/paginas.test.ts`. O teste da lista de IDs passa a cobrir as notícias sozinho.
 - **T14:** o `BaseLayout` já aceita `null` em `alternates`, se alguma página precisar de "sem hreflang".
 - **T15:** trocar o HTML de `Comentarios.astro` (os 3 `<script is:inline>`) pelo módulo TypeScript, **mantendo o `data-page`**, e manter o teste da lista de IDs. As chaves continuam só em `comentarios.ts`.

@@ -160,6 +160,20 @@ def cenario_leitor():
     cap("escondida", "02", dict(date="2026-09-02"), dict(date="2026-09-02"), corpo_en="Dois.")
     a["works/so-pt/work.json"] = wj(kind="prose", langs=["pt"], title="Só PT", order={"release": 9})
     cap("so-pt", "01", dict(date="2026-10-01"), dict(date="2026-10-01"), corpo_en="Texto.")
+    # ── revisão da T12: "<" e ">" junto com versalete em textos que vão para ATRIBUTOS (alt da HQ, alt da logo, title e
+    #    aria-label das setas do vídeo, title do iframe); o Python escapa os atributos, então o versalete nunca entra neles ──
+    a["works/setas/work.json"] = wj(kind="comic", title="Setas -> Hᴀᴛᴇ <- B", logo="logos/setas.png", order={"release": 10})
+    cap("setas", "01", dict(date="2026-11-01", title="A -> Hᴀᴛᴇ <- B", pages_glob="comics/hq/02/*.png"), dict(date="2026-11-01", title="A -> Hᴀᴛᴇ <- B", pages_glob="comics/hq/02/*.png"),
+        corpo_en="Nota -> Hᴀᴛᴇ <- fim.")
+    # ordem natural com algarismos NÃO ASCII (p１) e números maiores que o JavaScript guarda num Number (mais de 15 algarismos)
+    cap("setas", "02", dict(date="2026-11-08", pages_glob="comics/hq/06/*.png"), dict(date="2026-11-08", pages_glob="comics/hq/06/*.png"))
+    a["works/setas-video/work.json"] = wj(kind="video", title={"en": "Video -> Hᴀᴛᴇ <- B", "pt": "Vídeo > Hᴀᴛᴇ"}, logo="logos/setas.png", order={"release": 11})
+    cap("setas-video", "01", dict(date="2026-12-01", youtube="GGGGGGGGGGG", title="A -> Hᴀᴛᴇ <- B"), dict(date="2026-12-01", youtube="GGGGGGGGGGG", title="A -> Hᴀᴛᴇ <- B"))
+    cap("setas-video", "02", dict(date="2026-12-08", youtube="HHHHHHHHHHH", title='Aspas "Hᴀᴛᴇ" & <b>'), dict(date="2026-12-08", youtube="HHHHHHHHHHH", title='Aspas "Hᴀᴛᴇ" & <b>'),
+        corpo_en='<div title="raw -> Hᴀᴛᴇ <- html">Raw attr</div>')
+    # um <script type="module"> escrito pelo AUTOR no texto: o Python o deixa no lugar (e aplica o versalete dentro dele também)
+    cap("setas-video", "03", dict(date="2026-12-15", youtube="IIIIIIIIIII"), dict(date="2026-12-15", youtube="IIIIIIIIIII"),
+        corpo_en="Antes.\n\n<script type=\"module\">console.log('Hᴀᴛᴇ > 1 < 2', \"a > Hᴀᴛᴇ <\")</script>\n\nDepois.")
     return a
 
 
@@ -167,7 +181,10 @@ def cenario_leitor():
 # porque nesse caso a ordem do Python depende do sistema de arquivos (ver src/lib/quadrinhos.ts)
 ESTATICOS_DO_LEITOR = ["comics/hq/01/1.png", "comics/hq/01/2.png", "comics/hq/01/10.png", "comics/hq/01/.oculta.png", "comics/hq/01/A.PNG",
                        "comics/hq/01/b 3.png", "comics/hq/01/extra/9.png", "comics/hq/02/04.png", "comics/hq/02/5.png", "comics/hq/02/12.png",
-                       "comics/u/x/7.png", "comics/u/y/8.png"]
+                       "comics/u/x/7.png", "comics/u/y/8.png",
+                       "comics/hq/06/p\uff11.png", "comics/hq/06/p2.png", "comics/hq/06/p10.png", "comics/hq/06/p\u0663.png",
+                       "comics/hq/06/n12345678901234567891.png", "comics/hq/06/n12345678901234567890.png",
+                       "comics/hq/06/n9007199254740993.png", "comics/hq/06/n9007199254740992.png"]
 
 
 def ui_dos_comentarios(cfg_ui, mexer):

@@ -2,7 +2,8 @@
 // O LEITOR de um capítulo: o miolo inteiro da página /pt/works/<obra>/<capítulo>/ (o `inner` do build.py, ~788–827).
 // Duas "folhas": a de cima com o capítulo (prosa, vídeo ou quadrinho) e a de baixo, fina, com os comentários.
 // Só desenha: tudo vem decidido em `leitura` (src/lib/leitura.ts). O texto do autor entra como HTML pronto
-// (`nota`, feito pelo carregador a partir do Markdown, T09) e os efeitos dele (sonho de Ossos, Giuseppe, a carta que
+// (`nota`, feito pelo carregador a partir do Markdown, T09), marcado por textoDoAutor() (src/lib/pagina.ts: o acabamento
+// do <main> não mexe nele além do que o Python mexe), e os efeitos dele (sonho de Ossos, Giuseppe, a carta que
 // vira, as tiras, o degradê de Pederneira) funcionam pelas classes e estilos que o próprio texto traz: o CSS está em
 // src/styles/prosa.css. O versalete é aplicado depois, UMA vez, no <main> inteiro (BaseLayout → finalizarMain).
 //
@@ -11,6 +12,7 @@
 import "../styles/prosa.css";
 import type { LeituraDoCapitulo } from "../lib/leitura";
 import { assetUrl } from "../lib/assets";
+import { textoDoAutor } from "../lib/pagina";
 import CabecalhoDoCapitulo from "./CabecalhoDoCapitulo.astro";
 import CartaQueVira from "./CartaQueVira.astro";
 import Comentarios from "./Comentarios.astro";
@@ -26,9 +28,9 @@ const { leitura: l } = Astro.props;
 const c = l.conteudo;
 ---
 
-{c.formato === "prose" && <div class="reader-box paper">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} /><hr class="thin" /><div class={c.fonteTimes ? "prose story font-times" : "prose story"}><Fragment set:html={c.nota} /></div>{c.paginador && <Pager paginador={c.paginador} />}</div>}
-{c.formato === "video" && <div class="reader-box paper">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} />{c.lados ? <div class="player-row">{c.lados.anterior ? <a class="side-btn prev" rel="prev" href={c.lados.anterior.url} title={c.lados.anterior.rotulo} aria-label={c.lados.anterior.rotulo}><Seta direcao="prev" /></a> : <span class="side-btn prev ghost"></span>}<div class="video-wrapper"><iframe src={`https://www.youtube.com/embed/${c.youtube}`} allowfullscreen title={c.tituloDoVideo}></iframe></div>{c.lados.proximo ? <a class="side-btn next" rel="next" href={c.lados.proximo.url} title={c.lados.proximo.rotulo} aria-label={c.lados.proximo.rotulo}><Seta direcao="next" /></a> : <span class="side-btn next ghost"></span>}</div> : <div class="video-wrapper"><iframe src={`https://www.youtube.com/embed/${c.youtube}`} allowfullscreen title={c.tituloDoVideo}></iframe></div>}{c.nota && <div class="prose"><Fragment set:html={c.nota} /></div>}{c.paginador && <Pager paginador={c.paginador} />}</div>}
-{c.formato === "comic" && <div class="reader-box">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} />{c.paginador && <Pager paginador={c.paginador} />}<div class="comic">{c.paginas.map((p) => <img src={assetUrl(p.arquivo)} alt={p.alt} loading="lazy" />)}</div>{c.nota && <div class="author-note prose"><Fragment set:html={c.nota} /></div>}{c.paginador && <Pager paginador={c.paginador} />}</div>}
+{c.formato === "prose" && <div class="reader-box paper">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} /><hr class="thin" /><div class={c.fonteTimes ? "prose story font-times" : "prose story"}><Fragment set:html={textoDoAutor(c.nota)} /></div>{c.paginador && <Pager paginador={c.paginador} />}</div>}
+{c.formato === "video" && <div class="reader-box paper">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} />{c.lados ? <div class="player-row">{c.lados.anterior ? <a class="side-btn prev" rel="prev" href={c.lados.anterior.url} title={c.lados.anterior.rotulo} aria-label={c.lados.anterior.rotulo}><Seta direcao="prev" /></a> : <span class="side-btn prev ghost"></span>}<div class="video-wrapper"><iframe src={`https://www.youtube.com/embed/${c.youtube}`} allowfullscreen title={c.tituloDoVideo}></iframe></div>{c.lados.proximo ? <a class="side-btn next" rel="next" href={c.lados.proximo.url} title={c.lados.proximo.rotulo} aria-label={c.lados.proximo.rotulo}><Seta direcao="next" /></a> : <span class="side-btn next ghost"></span>}</div> : <div class="video-wrapper"><iframe src={`https://www.youtube.com/embed/${c.youtube}`} allowfullscreen title={c.tituloDoVideo}></iframe></div>}{c.nota && <div class="prose"><Fragment set:html={textoDoAutor(c.nota)} /></div>}{c.paginador && <Pager paginador={c.paginador} />}</div>}
+{c.formato === "comic" && <div class="reader-box">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} />{c.paginador && <Pager paginador={c.paginador} />}<div class="comic">{c.paginas.map((p) => <img src={assetUrl(p.arquivo)} alt={p.alt} loading="lazy" />)}</div>{c.nota && <div class="author-note prose"><Fragment set:html={textoDoAutor(c.nota)} /></div>}{c.paginador && <Pager paginador={c.paginador} />}</div>}
 <div class="reader-box paper slim">{l.comentarios && <Comentarios secao={l.comentarios} />}</div>
 {l.temCartaQueVira && <CartaQueVira />}
 {l.temPostsAlternados && <PostsAlternados />}
