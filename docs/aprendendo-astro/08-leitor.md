@@ -177,3 +177,32 @@ python3 tools/paginas_ref.py                   # refaz as fotos do Python (depoi
 - **T13 (notícias):** todo HTML de `content/` que entrar por `set:html` vai embrulhado em `textoDoAutor()` (`src/lib/pagina.ts`), como no `Leitor` e no `CardEmissario`: é o que mantém o versalete e os scripts do seu texto exatamente como no Python. Reaproveitar também `Pager` (com o meio "Todas as notícias"), `Comentarios` + `src/lib/comentarios.ts` (`comentariosDaPagina(lang, "news/<slug>", COM_RASCUNHOS)`), `src/styles/prosa.css` (embeds, Shorts, ficha de feitiço), `PostsAlternados` e `CartaQueVira` (incluídos quando o texto precisa, com `usaClasse()` de `leitura.ts`), o aviso de rascunho (`.draft-banner` já está em `prosa.css`). Acrescentar o grupo `t13` em `GRUPOS` (`tools/paginas_ref.py`) e em `GRUPOS` de `tests/paginas.test.ts`. O teste da lista de IDs passa a cobrir as notícias sozinho.
 - **T14:** o `BaseLayout` já aceita `null` em `alternates`, se alguma página precisar de "sem hreflang".
 - **T15:** trocar o HTML de `Comentarios.astro` (os 3 `<script is:inline>`) pelo módulo TypeScript, **mantendo o `data-page`**, e manter o teste da lista de IDs. As chaves continuam só em `comentarios.ts`.
+
+## Notícias (T13): a lista e o artigo
+
+As notícias não ganharam lição própria porque quase tudo já existia: a notícia é um "capítulo" com outro desenho. O que é novo:
+
+- **A lista** (`/pt/news/`): 10 notícias por página, caixa de busca e barra de páginas. As regras (busca por todas as palavras, sem acento nem maiúscula; `?p=3`; os botões com "…") ficam em `src/lib/paginacao.ts`, **sem nenhum `import`** de propósito: esse arquivo vai para o navegador, e qualquer import traria junto o `config.json`. O `<script>` de `ListaDeNoticias.astro` só liga essas funções à página (é o bloco 6 do `site.js`). Sem JavaScript, as 83 notícias ficam visíveis e a barra de páginas fica vazia, como hoje.
+- **Os 3 desenhos do artigo** (`desenhoDaNoticia()` em `src/lib/artigos.ts`): a **colagem** (`stickers:` + `overlay:`) vence o **fundo** (`backdrop_top:`/`backdrop_bottom:`), que vence o **comum** (figura grande `image:`). Cada um tem seu trecho em `ArtigoDeNoticia.astro`.
+- **Posts alternados** (botões Instagram/TikTok/YouTube) e carta que vira entram só nas páginas cujo texto os usa.
+- **Reaproveitado da T12:** `Pager` (com "Todas as notícias" no meio), `Comentarios` (ID `news/<pasta>`, igual nos dois idiomas) e `prosa.css`. O que é só de notícia e já serve à T14: `Relacionados` ("Veja também").
+
+### Diferenças técnicas aceitas
+
+| O que difere | Por quê | O visitante nota? |
+|---|---|---|
+| CSS em `/_astro/…css` | Empacotamento do Astro (lição 07) | Não |
+| O script da lista é um `<script type="module">` no fim da página, em vez do `site.js` | Mesmo motivo do leitor | Não |
+| O esquema é mais rígido que o Python: figurinha com posição inválida (`stickers:`) ou `related:` para notícia que não existe **dão erro no build**; o Python ignora em silêncio | Erro cedo é melhor que figurinha sumida | Só você, ao escrever |
+
+### Bugs do site atual reproduzidos (de propósito, até a virada)
+
+- **Buscar "hate" não acha nada** nas notícias cujo título tem "Hᴀᴛᴇ Cʏᴄʟᴇ": o `data-search` guarda as letras do versalete, e "hate" (letras normais) não combina. Buscar "Hᴀᴛᴇ" acha. Consertar é decisão sua (T20).
+- `aria-label="Chapters"` no pager das notícias (já listado acima).
+- `?p=2x` vale 2 (o `parseInt` do navegador), `?p=0`, `?p=abc` e `?p=-2` valem 1 e `?p=99` vale a última página.
+
+### Tente (notícias)
+
+1. **Quebre a busca de propósito** (e desfaça). Em `src/lib/paginacao.ts`, troque `palavras.every` por `palavras.some` em `combinaComBusca`. Rode `pnpm test`: os testes de `tests/noticias.test.ts` apontam a busca que deixou de bater. Para ver no navegador, `pnpm dev`, abra `/pt/news/` e busque duas palavras de títulos diferentes: com `some` aparecem notícias demais. Desfaça a mudança.
+
+Para conferir tudo contra o site atual: `HC_DIST=dist pnpm vitest run paginas` (as 168 páginas de notícias) e `python3 tools/noticias_playwright.py --python 8791 --astro 8792` (busca, páginas e botões dos posts no navegador, passo a passo; leva uns 2 min e as instruções estão no topo do script).

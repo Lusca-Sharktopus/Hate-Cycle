@@ -1,0 +1,16 @@
+---
+// O fim de uma notícia, nas três versões do artigo: "Veja também", anterior · "Todas as notícias" · próxima e os comentários.
+// (No build.py são as três chamadas {related_html}{pager}{comments} no fim de cada versão do artigo.)
+import type { ArtigoDaNoticia } from "../lib/artigos";
+import Comentarios from "./Comentarios.astro";
+import Pager from "./Pager.astro";
+import Relacionados from "./Relacionados.astro";
+
+interface Props {
+  artigo: ArtigoDaNoticia;
+}
+
+const { artigo: a } = Astro.props;
+---
+
+{a.relacionados && <Relacionados rotulo={a.relacionados.rotulo} links={a.relacionados.links} />}<Pager paginador={a.paginador} />{a.comentarios && <Comentarios secao={a.comentarios} />}

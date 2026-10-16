@@ -1,0 +1,32 @@
+---
+// O artigo de cada notícia: /pt/news/2024-06-14-lucas-viciado-em-cafeina/ (rota ANINHADA: [lang] e [slug]).
+// getStaticPaths() cria uma página por notícia publicada de cada idioma (rascunho só na prévia, `pnpm dev`) — o laço das
+// notícias do build() do build.py (~849–880). O ID dos comentários é `news/<pasta>`, IGUAL nos dois idiomas.
+// Tudo o que a página mostra vem decidido de src/lib/artigos.ts; o ArtigoDeNoticia só desenha.
+// Lição: docs/aprendendo-astro/08-leitor.md (seção "Notícias").
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import ArtigoDeNoticia from "../../../../components/ArtigoDeNoticia.astro";
+import { artigosDasNoticias, type ArtigoDaNoticia } from "../../../../lib/artigos";
+import { comentariosDaPagina } from "../../../../lib/comentarios";
+import { langs, type Lang } from "../../../../lib/config";
+import { COM_RASCUNHOS, dadosDoIdioma } from "../../../../lib/conteudo";
+
+export async function getStaticPaths() {
+  const dadosDe = Object.fromEntries(await Promise.all(langs.map(async (lang) => [lang, await dadosDoIdioma(lang)] as const))) as Record<Lang, Awaited<ReturnType<typeof dadosDoIdioma>>>;
+  const noticiasPorIdioma = Object.fromEntries(langs.map((l) => [l, dadosDe[l].noticias])) as Record<Lang, (typeof dadosDe)[Lang]["noticias"]>;
+  return langs.flatMap((lang) =>
+    artigosDasNoticias(dadosDe[lang].noticias, lang, {
+      noticiasPorIdioma,
+      relacionadosDe: dadosDe[lang].relacionadosDe,
+      comentarios: (l, id) => comentariosDaPagina(l, id, COM_RASCUNHOS),
+    }).map((artigo) => ({ params: { lang, slug: artigo.pasta }, props: { artigo } })),
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { artigo } = Astro.props as { artigo: ArtigoDaNoticia };
+---
+
+<BaseLayout lang={lang} title={artigo.tituloDaPagina} description={artigo.descricao} image={artigo.imagem} alternates={artigo.alternativas}>
+  <ArtigoDeNoticia artigo={artigo} />
+</BaseLayout>

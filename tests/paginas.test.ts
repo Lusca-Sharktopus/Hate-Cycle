@@ -1,7 +1,7 @@
 // Prova de que as PÁGINAS do site Astro (T11 em diante) saem iguais às do site Python, página a página.
 //
 // A referência de cada grupo (tests/fixtures/paginas-<grupo>-python.json: t11 = home, Histórias e página de obra;
-// t12 = capítulos) é o HTML completo que o build.py gera, tirado por
+// t12 = capítulos; t13 = as duas listas de notícias e as 166 notícias) é o HTML completo que o build.py gera, tirado por
 //   python3 tools/paginas_ref.py
 // O teste constrói o site Astro de verdade (`astro build`, numa pasta temporária) e compara, para CADA página de cada grupo:
 //   - o <head>: título, descrição, og:*, robots, hreflang e alternate (RSS), ícone, fontes, scripts da abertura;
@@ -34,8 +34,8 @@ interface Referencia {
   paginas: Record<string, string>;
   marcadores?: { url: string; key: string };
 }
-/** Os grupos de páginas já migrados. A T13 (notícias) e a T14 acrescentam os seus aqui (e em GRUPOS de tools/paginas_ref.py). */
-const GRUPOS = ["t11", "t12"] as const;
+/** Os grupos de páginas já migrados. A T14 acrescenta o seu aqui (e em GRUPOS de tools/paginas_ref.py). */
+const GRUPOS = ["t11", "t12", "t13"] as const;
 const refs: Referencia[] = GRUPOS.map((g) => JSON.parse(readFileSync(new URL(`./fixtures/paginas-${g}-python.json`, import.meta.url), "utf8")));
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 const REFAZER = "A referência está velha: rode `python3 tools/paginas_ref.py` e depois `pnpm test` de novo.";
@@ -66,10 +66,14 @@ beforeAll(() => {
 }, 240_000);
 afterAll(() => {
   if (pastaTemporaria) rmSync(pastaTemporaria, { recursive: true, force: true });
+  jaLidas.clear();
 });
 
-/** Todas as páginas HTML de uma pasta: endereço (/pt/works/) → caminho do arquivo. */
+/** Todas as páginas HTML de uma pasta: endereço (/pt/works/) → caminho do arquivo. (Lida uma vez só: são ~180 páginas e cada uma pergunta.) */
+const jaLidas = new Map<string, Map<string, string>>();
 function paginasDoDist(pasta: string): Map<string, string> {
+  const guardadas = jaLidas.get(pasta);
+  if (guardadas) return guardadas;
   const achadas = new Map<string, string>();
   const andar = (dir: string) => {
     for (const nome of readdirSync(dir)) {
@@ -79,6 +83,7 @@ function paginasDoDist(pasta: string): Map<string, string> {
     }
   };
   andar(pasta);
+  jaLidas.set(pasta, achadas);
   return achadas;
 }
 

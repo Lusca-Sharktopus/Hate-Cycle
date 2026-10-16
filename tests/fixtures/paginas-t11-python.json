@@ -1,5 +1,5 @@
 {
- "_leia": "Gerado por tools/paginas_ref.py a partir do build.py. Não edite à mão: rode `python3 tools/paginas_ref.py` de novo. Usado por tests/paginas.test.ts, tests/componentes.test.ts e tests/leitor.test.ts.",
+ "_leia": "Gerado por tools/paginas_ref.py a partir do build.py. Não edite à mão: rode `python3 tools/paginas_ref.py` de novo. Usado por tests/paginas.test.ts, tests/componentes.test.ts, tests/leitor.test.ts e tests/noticias.test.ts.",
  "python": "3.13.16",
  "grupo": "t11",
  "escopo": "^/(en|pt)/(works/([^/]+/)?)?$",

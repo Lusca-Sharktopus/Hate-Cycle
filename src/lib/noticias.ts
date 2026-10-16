@@ -7,11 +7,12 @@
 //   ordenarNoticias        → build()   linha ~671   (mais nova primeiro)
 //   linhaDaLista…          → build()   linhas ~833–842 (miniatura, etiquetas, resumo, texto de busca)
 //   vizinhasDaNoticia      → build()   linha ~852
-//   paginasDaLista         → static/site.js, bloco 6 (10 por página, números com "…")
+//   barraDePaginas e cia   → static/site.js, bloco 6 (10 por página, números com "…"): src/lib/paginacao.ts
 import type { Lang } from "./config";
 import { formatarData } from "./datas";
 import { resumoDaNoticia, textoDeBuscaDaNoticia } from "./resumos";
 import { compararComoPython } from "./ordem";
+import { ITENS_POR_PAGINA } from "./paginacao";
 
 /** O que as regras leem de uma notícia (front matter validado, corpo cru e de onde veio). */
 export interface NoticiaComDados {
@@ -51,7 +52,7 @@ export function ordenarNoticias<T extends NoticiaComDados>(noticias: readonly T[
 // ───────────── a lista de notícias ─────────────
 
 /** Quantas notícias aparecem por página da lista (`data-per` do HTML, usado por static/site.js). */
-export const NOTICIAS_POR_PAGINA = 10;
+export const NOTICIAS_POR_PAGINA = ITENS_POR_PAGINA;
 
 export interface LinhaDaListaDeNoticias {
   url: string;
@@ -121,45 +122,6 @@ export function paginasDasNoticias(ordenadas: readonly NoticiaComDados[], lang: 
 }
 
 // ───────────── páginas da lista (static/site.js, bloco 6) ─────────────
-
-/** Um botão da barra de páginas: um número, "anterior", "próximo" ou as reticências entre blocos de números. */
-export type ItemDaBarraDePaginas =
-  | { tipo: "anterior"; pagina: number }
-  | { tipo: "numero"; pagina: number; atual: boolean }
-  | { tipo: "reticencias" }
-  | { tipo: "proximo"; pagina: number };
-
-/** Quantas páginas tem uma lista (sempre pelo menos 1). */
-export function totalDePaginas(totalDeItens: number, porPagina = NOTICIAS_POR_PAGINA): number {
-  return Math.max(1, Math.ceil(totalDeItens / porPagina));
-}
-
-/** A página pedida, corrigida para existir (render() do site.js: nem menos de 1, nem mais que a última). */
-export function paginaValida(pedida: number, totalDeItens: number, porPagina = NOTICIAS_POR_PAGINA): number {
-  return Math.min(Math.max(1, pedida), totalDePaginas(totalDeItens, porPagina));
-}
-
-/**
- * A barra de páginas, como o site.js a monta: "‹ anterior", a primeira, a última e as 2 de cada lado da atual, com "…"
- * onde falta número, e "próximo ›". Uma página só = barra vazia.
- */
-export function barraDePaginas(atual: number, total: number): ItemDaBarraDePaginas[] {
-  if (total <= 1) return [];
-  const itens: ItemDaBarraDePaginas[] = [];
-  if (atual > 1) itens.push({ tipo: "anterior", pagina: atual - 1 });
-  const mostrados: number[] = [];
-  for (let n = 1; n <= total; n++) if (n === 1 || n === total || Math.abs(n - atual) <= 2) mostrados.push(n);
-  mostrados.forEach((n, i) => {
-    const antes = mostrados[i - 1];
-    if (i > 0 && antes !== undefined && n - antes > 1) itens.push({ tipo: "reticencias" });
-    itens.push({ tipo: "numero", pagina: n, atual: n === atual });
-  });
-  if (atual < total) itens.push({ tipo: "proximo", pagina: atual + 1 });
-  return itens;
-}
-
-/** Os itens da página `pagina` (1, 2, 3…) de uma lista. */
-export function itensDaPagina<T>(itens: readonly T[], pagina: number, porPagina = NOTICIAS_POR_PAGINA): T[] {
-  const p = paginaValida(pagina, itens.length, porPagina);
-  return itens.slice((p - 1) * porPagina, p * porPagina);
-}
+// As regras de busca e de páginas moram em src/lib/paginacao.ts (sem imports, porque vão para o navegador). Reexportadas aqui
+// para quem já as pedia de "noticias".
+export { barraDePaginas, itensDaPagina, paginaValida, totalDePaginas, type ItemDaBarraDePaginas } from "./paginacao";

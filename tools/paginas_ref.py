@@ -20,7 +20,14 @@ O que grava (tudo saído do build.py de verdade, com BASE = "" como no Astro):
      os argumentos que o build() passou ao shell() (título, links de idioma, classe do <body>, descrição, imagem, noindex)
      e o <main> final. O tests/leitor.test.ts recria cada site numa pasta temporária e compara.
 
-As próximas tarefas (T13–T14) acrescentam seus grupos em GRUPOS (um padrão de endereços cada) e rodam este script de novo.
+  4. tests/fixtures/paginas-t13-python.json (T13, notícias) — as 2 listas e as 166 notícias do site de verdade (HTML completo,
+     como o item 1) e "ambientes": as notícias e as listas dos sites INVENTADOS (os cenários de tools/regras_ref.py e os de
+     notícias, abaixo: design comum, com backdrop só no topo/só no pé/nos dois, colagem com e sem papel, figurinhas sem posição,
+     posts alternados A | B, Short vertical, tags vazias ou com HTML, "Veja também" que não existe no idioma ou é rascunho,
+     notícia só em um idioma, sem título/data/resumo, rascunho, comments: false, comentários sem chaves ou com chaves "sujas"),
+     cada um em build e em prévia. O tests/noticias.test.ts recria cada site numa pasta temporária e compara.
+
+A próxima tarefa de páginas (T14) acrescenta o seu grupo em GRUPOS (um padrão de endereços) e roda este script de novo.
 
 Chaves do Supabase: as capturas usam as chaves de mentira de regras_ref.py; nas páginas reais gravadas, os valores de
 mentira são trocados por marcadores (MARCADORES, abaixo) — o teste troca as chaves de verdade do dist/ pelos mesmos
@@ -46,6 +53,7 @@ import regras_ref as rr  # noqa: E402  (cenários inventados e o "ambiente" que 
 GRUPOS = {
     "t11": re.compile(r"^/(en|pt)/(works/([^/]+/)?)?$"),     # home, Histórias, página de obra (NÃO os capítulos, que têm 4 níveis)
     "t12": re.compile(r"^/(en|pt)/works/[^/]+/[^/]+/$"),     # capítulos (o leitor)
+    "t13": re.compile(r"^/(en|pt)/news/([^/]+/)?$"),         # as duas listas de notícias e cada notícia
 }
 ESCOPO = re.compile("|".join(p.pattern for p in GRUPOS.values()))
 FIXTURES = ROOT / "tests" / "fixtures"
@@ -177,6 +185,77 @@ def cenario_leitor():
     return a
 
 
+# ═════════════════════════════ T13: sites inventados para as notícias ═════════════════════════════
+
+def cenario_noticias():
+    """Notícias que o conteúdo de hoje não tem: design comum sem nada (sem título, data, resumo, imagem, etiquetas) e completo;
+    backdrop só no topo, só no pé e nos dois; colagem com e sem papel, com figurinhas sem posição, com decimais e negativos,
+    e com backdrop junto (a colagem vence); posts alternados (A | B e A | B | C), post de arquivo e Short vertical; etiquetas
+    vazias, com HTML e com versalete; "Veja também" que não existe naquele idioma ou é rascunho; só em um idioma; rascunho
+    (comum e colagem); comments: false; título/resumo com & < > e aspas; mesma data; mais de 10 (a lista tem 2 páginas)."""
+    md, wj, a = rr.md, rr.wj, {}
+    def n(pasta, en=None, pt=None, corpo_en="", corpo_pt=None):
+        if en is not None: a[f"news/{pasta}/en.md"] = md(en, corpo_en)
+        if pt is not None: a[f"news/{pasta}/pt.md"] = md(pt, corpo_en if corpo_pt is None else corpo_pt)
+    a["works/obra/work.json"] = wj(kind="prose", oneshot=True, title={"en": "Work", "pt": "Obra"}, cover="covers/obra.png", order={"release": 1})
+    for l in ("en", "pt"):
+        a[f"works/obra/01/{l}.md"] = md(dict(date="2026-01-01"), "Cap.")
+        a[f"universe/magia/{l}.md"] = md(dict(title="Magia" if l == "pt" else "Magic", category="Magia"), "Texto.")
+    a["embeds/post-x.html"] = ('<blockquote class="twitter-tweet"><a href="https://x.com/a/status/9"></a></blockquote>\n'
+                               '<script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>\n')
+    # ── completa, design comum ──
+    n("2026-02-01-completa", dict(title="Complete Hᴀᴛᴇ Cʏᴄʟᴇ news", date="2026-02-01", summary='Summary with & ampersand, <tags> and "quotes" for Hᴀᴛᴇ Cʏᴄʟᴇ', thumb="news/thumb.png", image="news/lead image.png",
+                                   tags=["New Work", "Hᴀᴛᴇ Cʏᴄʟᴇ", '<b> & "q" end'], related=["works/obra", "universe/magia", "news/2026-02-03-so-en", "news/2026-02-04-so-pt", "news/2026-02-20-rascunho", "news/2026-02-02-minima"]),
+      dict(title="Notícia completa de Hᴀᴛᴇ Cʏᴄʟᴇ", date="2026-02-01", summary='Resumo com & e <tags> e "aspas"', thumb="news/thumb.png", image="news/lead image.png",
+           tags=["Nova Obra", "Hᴀᴛᴇ Cʏᴄʟᴇ"], related=["works/obra", "universe/magia", "news/2026-02-03-so-en", "news/2026-02-04-so-pt", "news/2026-02-20-rascunho", "news/2026-02-02-minima"]),
+      corpo_en="First paragraph with **bold**, _italic_ and a /ˈwɪθ/ transcription.\n\nSee [[works/obra]] and [[universe/magia|the magic]] and [a link](https://exemplo.com).\n\n![A figure](news/fig.png)\n\n> A quote.\n\n---\n\nAfter the divider, Hᴀᴛᴇ Cʏᴄʟᴇ.",
+      corpo_pt="Primeiro parágrafo com **negrito**, _itálico_ e a transcrição /ˈwɪθ/.\n\nVeja [[works/obra]] e [[universe/magia|a magia]] e [um link](https://exemplo.com).\n\n![Uma figura](news/fig.png)\n\n> Uma citação.\n\n---\n\nDepois do divisor, Hᴀᴛᴇ Cʏᴄʟᴇ.")
+    # ── mínima: sem título, data, resumo, etiquetas, imagem ──
+    n("2026-02-02-minima", dict(), dict(), corpo_en="x")
+    n("2026-02-02-minima-vazia", dict(title="Empty body", date="2026-02-02", tags=[]), dict(title="Corpo vazio", date="2026-02-02", tags=[]), corpo_en="")
+    # ── só em um idioma ──
+    n("2026-02-03-so-en", dict(title="Only English", date="2026-02-03", image="news/so-en.png"), None, corpo_en="English only.")
+    n("2026-02-04-so-pt", None, dict(title="Só português", date="2026-02-04", summary="Resumo só PT"), corpo_en="Só em português.")
+    # ── sem comentários ──
+    n("2026-02-05-sem-comentarios", dict(title="No comments", date="2026-02-05", comments=False), dict(title="Sem comentários", date="2026-02-05", comments=False), corpo_en="Comments off.")
+    # ── colagem ──
+    n("2026-02-06-colagem", dict(title="Collage", date="2026-02-06", image="news/ignorada.png", backdrop_top="news/ignorado.jpg", overlay="news/papel 1.jpg",
+                                  stickers=["news/stickers/a.png | l3 t2 w26 a-4", "news/stickers/b b.png | r4 t1 w17 a8", "news/stickers/c.png | l3 b3 w21 a-5.5", "news/stickers/d.png | l38 b2 w15.5 a4"], tags=["Collage"]),
+      dict(title="Colagem", date="2026-02-06", overlay="news/papel 1.jpg", stickers=["news/stickers/a.png | l3 t2 w26 a-4"]),
+      corpo_en="Collage text.\n\n{{embed:https://www.youtube.com/shorts/ABCDEFGHIJK}}", corpo_pt="Texto da colagem.")
+    n("2026-02-07-colagem-sem-papel", dict(title="Collage without paper", date="2026-02-07", stickers=["news/stickers/solta.png", "news/stickers/com espaco.png|l1 a0", "  news/stickers/espacos.png  |   t5    w10   "]),
+      dict(title="Colagem sem papel", date="2026-02-07", stickers=["news/stickers/solta.png"], overlay=""), corpo_en="No paper.")
+    # ── backdrop ──
+    n("2026-02-08-fundo-topo", dict(title="Top only", date="2026-02-08", backdrop_top="news/topo.jpg", tags=["Fundo"]), dict(title="Só topo", date="2026-02-08", backdrop_top="news/topo.jpg"), corpo_en="Top backdrop.")
+    n("2026-02-09-fundo-pe", dict(title="Bottom only", date="2026-02-09", backdrop_bottom="news/pe.jpg", image="news/ignorada.png"), dict(title="Só pé", date="2026-02-09", backdrop_bottom="news/pe.jpg"), corpo_en="Bottom backdrop.")
+    n("2026-02-10-fundo-ambos", dict(title="Both", date="2026-02-10", backdrop_top="news/o topo.jpg", backdrop_bottom="news/o topo.jpg", tags=["A", "B"]), dict(title="Ambos", date="2026-02-10", backdrop_top="news/o topo.jpg", backdrop_bottom="news/pe.jpg"), corpo_en="Both backdrops.")
+    # ── posts incorporados ──
+    n("2026-02-11-embeds", dict(title="Embeds", date="2026-02-11"), dict(title="Incorporados", date="2026-02-11"),
+      corpo_en=("One: {{embed:https://x.com/a/status/1}}\n\n{{embed:https://x.com/a/status/1 | https://www.instagram.com/p/abc/}}\n\n"
+                "{{embed:post-x | https://www.tiktok.com/@u/video/123 | https://www.youtube.com/watch?v=ABCDEFGHIJK}}\n\n{{embed:post-x}}\n\n"
+                "{{embed:https://www.youtube.com/shorts/ABCDEFGHIJK}}\n\n{{embed:https://www.reddit.com/r/a/comments/b/c_d}}\n\n{{embed:nao-existe}}\n\n"
+                '<div class="flip-card"><div class="flip-card-inner">x</div></div>'))
+    n("2026-02-12-aspas-e-simbolos", dict(title="Q&A <live> & “x” a>b", date="2026-02-12", summary="Resumo <b>x</b> & y > z", tags=["a&b", "c<d"]),
+      dict(title="Q&A <live> & “x” a>b", date="2026-02-12", summary="Resumo <b>x</b> & y > z", tags=["a&b", "c<d"]), corpo_en="1 < 2 and 3 > 2 & more.")
+    n("2026-02-12-mesma-data", dict(title="Same date", date="2026-02-12"), dict(title="Mesma data", date="2026-02-12"), corpo_en="Same date.")
+    # ── rascunhos ──
+    n("2026-02-20-rascunho", dict(title="Draft", date="2026-02-20", draft=True, related=["works/obra"]), dict(title="Rascunho", date="2026-02-20", draft=True), corpo_en="Draft.")
+    n("2026-02-21-rascunho-colagem", dict(title="Draft collage", date="2026-02-21", draft=True, stickers=["news/stickers/a.png | l1 t1"]), dict(title="Colagem rascunho", date="2026-02-21", draft=True, stickers=["news/stickers/a.png | l1 t1"]), corpo_en="Draft collage.")
+    # ── enchimento: passa de 10 (a lista tem 2 páginas) ──
+    for k in range(1, 12):
+        n(f"2025-12-{k:02d}-enchimento", dict(title=f"Filler {k}", date=f"2025-12-{k:02d}"), dict(title=f"Enchimento {k}", date=f"2025-12-{k:02d}"), corpo_en=f"Filler text number {k}.")
+    return a
+
+
+def cenario_noticias_so_pt():
+    """Idioma sem notícias: no build o inglês só tem um rascunho (sem lista nem link "News" no menu); na prévia, tem 1."""
+    md, a = rr.md, {}
+    a["news/2026-03-01-so-pt/pt.md"] = md(dict(title="Só português", date="2026-03-01"), "Texto.")
+    a["news/2026-03-02-rascunho-en/en.md"] = md(dict(title="Only a draft", date="2026-03-02", draft=True), "Draft.")
+    a["news/2026-03-02-rascunho-en/pt.md"] = md(dict(title="Só um rascunho", date="2026-03-02", draft=True), "Rascunho.")
+    return a
+
+
 # os arquivos de static/ que os quadrinhos inventados usam (vazios: só o nome importa) — sem empates de nome entre pastas,
 # porque nesse caso a ordem do Python depende do sistema de arquivos (ver src/lib/quadrinhos.ts)
 ESTATICOS_DO_LEITOR = ["comics/hq/01/1.png", "comics/hq/01/2.png", "comics/hq/01/10.png", "comics/hq/01/.oculta.png", "comics/hq/01/A.PNG",
@@ -236,6 +315,20 @@ def capitulos_do_ambiente(paginas, shells):
     return {u: {"shell": shells[u], "main": main_final(h)} for u, h in sorted(paginas.items()) if t12.match(u)}
 
 
+def noticias_do_ambiente(paginas, shells):
+    """Do que o build() escreveu: as listas e as notícias (grupo t13), com os argumentos do shell() e o <main> final."""
+    t13 = GRUPOS["t13"]
+    return {u: {"shell": shells[u], "main": main_final(h)} for u, h in sorted(paginas.items()) if t13.match(u)}
+
+
+def ambientes_de_noticias():
+    """(nome, arquivos, config extra) dos sites inventados das notícias: o mesmo conteúdo com os três arranjos de comentários
+    do leitor (chaves "sujas" e textos mexidos, sem chaves, só a URL) e um site em que um idioma só tem rascunho."""
+    com_chaves, sem_chaves, so_url = (cfg for _n, _a, cfg in ambientes_do_leitor())
+    a, b = cenario_noticias(), cenario_noticias_so_pt()
+    return [("noticias", a, com_chaves), ("noticias-sem-chaves", a, sem_chaves), ("noticias-so-url", a, so_url), ("noticias-so-pt", b, com_chaves)]
+
+
 def config_do_ambiente(cfg):
     """O que o teste precisa saber do config de um ambiente (o build.py junta o config.json com o cfg_extra, como em rr.ambiente)."""
     efetivo = dict(build.CFG, comments=dict(rr.CHAVES_DE_MENTIRA))
@@ -246,7 +339,7 @@ def config_do_ambiente(cfg):
 
 def main():
     import tempfile
-    ambientes, leitor = [], []
+    ambientes, leitor, noticias = [], [], []
     paginas_reais = None
     t11 = GRUPOS["t11"]
     for nome, raiz, cfg, arquivos in [("real", build.CONTENT, {}, None)] + [
@@ -264,6 +357,9 @@ def main():
                               "short": short, "mains": {u: main_final(h) for u, h in sorted(paginas.items()) if t11.match(u)}})
             leitor.append({"nome": nome, "rascunhos": rascunhos, "arquivos_sha1": sha(arquivos) if arquivos is not None else None,
                            "config": config_do_ambiente(cfg), "capitulos": capitulos_do_ambiente(paginas, shells)})
+            if arquivos is not None:     # o site de verdade já tem as páginas inteiras no grupo t13 (e não tem rascunhos)
+                noticias.append({"nome": nome, "rascunhos": rascunhos, "arquivos_sha1": sha(arquivos),
+                                 "config": config_do_ambiente(cfg), "noticias": noticias_do_ambiente(paginas, shells)})
     # os sites inventados do leitor: content/ e static/ de mentira (static/ com uma cópia do comments.js de verdade, para o carimbo ?v=)
     for nome, arquivos, cfg in ambientes_do_leitor():
         for rascunhos in (False, True):
@@ -276,16 +372,29 @@ def main():
                 paginas, _short, shells = capturar(tmp, cfg, rascunhos, static=st)
             leitor.append({"nome": nome, "rascunhos": rascunhos, "arquivos_sha1": sha(arquivos), "config": config_do_ambiente(cfg),
                            "capitulos": capitulos_do_ambiente(paginas, shells)})
+    # os sites inventados das notícias (content/ de mentira; as notícias não leem static/, então não precisa de uma pasta static/)
+    for nome, arquivos, cfg in ambientes_de_noticias():
+        for rascunhos in (False, True):
+            with tempfile.TemporaryDirectory(prefix="hc-noticias-") as tmp:
+                rr.gravar(tmp, arquivos)
+                paginas, _short, shells = capturar(tmp, cfg, rascunhos)
+            noticias.append({"nome": nome, "rascunhos": rascunhos, "arquivos_sha1": sha(arquivos), "config": config_do_ambiente(cfg),
+                             "noticias": noticias_do_ambiente(paginas, shells)})
     leia = ("Gerado por tools/paginas_ref.py a partir do build.py. Não edite à mão: rode `python3 tools/paginas_ref.py` de novo. "
-            "Usado por tests/paginas.test.ts, tests/componentes.test.ts e tests/leitor.test.ts.")
+            "Usado por tests/paginas.test.ts, tests/componentes.test.ts, tests/leitor.test.ts e tests/noticias.test.ts.")
     FIXTURES.mkdir(parents=True, exist_ok=True)
     resumo = []
     for grupo, padrao in GRUPOS.items():
-        doGrupo = {u: (com_marcadores(h) if grupo == "t12" else h) for u, h in sorted(paginas_reais.items()) if padrao.match(u)}
+        com_chaves = grupo in ("t12", "t13")      # os grupos cujas páginas têm comentários (window.HC com as chaves de mentira)
+        doGrupo = {u: (com_marcadores(h) if com_chaves else h) for u, h in sorted(paginas_reais.items()) if padrao.match(u)}
         dados = {"_leia": leia, "python": sys.version.split()[0], "grupo": grupo, "escopo": padrao.pattern, "paginas": doGrupo}
-        if grupo == "t12":
+        if com_chaves:
             assert all("chave-de-mentira" not in h and "exemplo.supabase.co" not in h for h in doGrupo.values()), "sobrou chave de mentira"
             dados["marcadores"] = {"url": "__SUPABASE_URL__", "key": "__SUPABASE_ANON_KEY__"}
+        if grupo == "t13":
+            dados["arquivos_das_noticias"] = {"noticias": cenario_noticias(), "noticias-so-pt": cenario_noticias_so_pt()}
+            dados["ambientes"] = noticias
+        if grupo == "t12":
             dados["arquivos_do_leitor"] = cenario_leitor()
             dados["estaticos_do_leitor"] = ESTATICOS_DO_LEITOR
             dados["ambientes"] = leitor
@@ -295,8 +404,10 @@ def main():
     SAIDA_COMPONENTES.write_text(json.dumps({"_leia": leia, "python": sys.version.split()[0], "ambientes": ambientes}, ensure_ascii=False, indent=1) + "\n", "utf-8")
     n = sum(len(a["mains"]) for a in ambientes)
     caps = sum(len(a["capitulos"]) for a in leitor)
+    noti = sum(len(a["noticias"]) for a in noticias)
     print("✔ " + "; ".join(resumo) + f"; {len(ambientes)} ambientes, {n} <main> → {SAIDA_COMPONENTES.relative_to(ROOT)}; "
-          f"leitor: {len(leitor)} ambientes, {caps} capítulos → tests/fixtures/paginas-t12-python.json")
+          f"leitor: {len(leitor)} ambientes, {caps} capítulos → tests/fixtures/paginas-t12-python.json; "
+          f"notícias: {len(noticias)} ambientes, {noti} páginas → tests/fixtures/paginas-t13-python.json")
 
 
 if __name__ == "__main__":
