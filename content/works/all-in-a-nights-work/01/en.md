@@ -31,7 +31,7 @@ unlisted: true
 
 <div class="s1 ps">“I’m sorry if I have disturbed your reading”. The man with the newspaper seems concerned about being rude. He glances at the book the tall man is holding. “La Sacra Bibbia” written in golden letters engraved on a black leather cover.</div>
 
-<div class="s1 ps">“I wasn’t really reading”, the Italian man clarified. “I was looking for a specific text, but couldn’t remember where it was”. He then looked at the man sitting beside him, who’s peacefully sleeping with his head tilted backwards. The sleeping – and snoring – moustache man seems to be quite a few years older. “My friend here would know exactly where it is, but I don't want to wake him up”.</div>
+<div class="s1 ps">“I wasn’t really reading”, the Italian man clarified. “I was looking for a specific text, but couldn’t remember where it was”. He then looked at the man sitting beside him, who’s peacefully sleeping with his head tilted backwards. The sleeping – and snoring – moustache man seems to be quite a few years older. “My friend here would know exactly where it is, but I don’t want to wake him up”.</div>
 
 <div class="s1 ps">“I wish I could help”, the newspaper man added. “I’m not really a religious person. Oh, how rude of me! I didn’t ask for your name”</div>
 
@@ -49,7 +49,7 @@ unlisted: true
 
 <div class="s1 ps">“How interesting” responded Giuseppe back, looking back again to the man in front of him. “Plenty of people say I look like I work in finance. It’s very specific, I know, but many that know me say I would be good at it. I have even considered it at some point, but ended up deciding against it”.</div>
 
-<div class="s1 ps">Giuseppe then looked back</div>
+<div class="s1 ps">Giuseppe then looked back.</div>
 
 <div class="s1 ps">“Oh, I don’t know what your job is, but I assure you it’s better than this”, Elijah joked.</div>
 
@@ -71,11 +71,11 @@ unlisted: true
 
 <div class="s1 ps dashes">——————————————————————————————————————————————————</div>
 
-<div class="s1 ps">“You think I didn't notice we’re the only ones in this carriage?” Giuseppe side eyed Elijah, looking straight into his eyes, with his face still pointing towards the window. He squinted his eyes while his amber irises emitted a golden glow. “You can’t make the view convincing and keep the passengers snoring, do you?”.</div>
+<div class="s1 ps">“You think I didn’t notice we’re the only ones in this carriage?” Giuseppe side eyed Elijah, looking straight into his eyes, with his face still pointing towards the window. He squinted his eyes while his amber irises emitted a golden glow. “You can’t make the view convincing and keep the passengers snoring, do you?”.</div>
 
-<div class="s1 ps">Giuseppe stood up; the 188cm man's head almost touched the ceiling of the relatively short train carriage. He looked at this “Elijah” he had been entertaining and slowly walked towards him, closing the already small gap between their seats.</div>
+<div class="s1 ps">Giuseppe stood up; the 188cm man’s head almost touched the ceiling of the relatively short train carriage. He looked at this “Elijah” he had been entertaining and slowly walked towards him, closing the already small gap between their seats.</div>
 
-<div class="s1 ps">“Look, sir, I don't know what you are talking about…” Elijah said. Giuseppe kept walking.</div>
+<div class="s1 ps">“Look, sir, I don’t know what you are talking about…” Elijah said. Giuseppe kept walking.</div>
 
 <div class="s1 ps">“The carriage never had any other passengers!” He said. Giuseppe kept walking.</div>
 
@@ -83,11 +83,11 @@ unlisted: true
 
 <div class="s1 ps"><i>snap</i></div>
 
-<div class="s1 ps">A golden cloud surrounded Giuseppe, shaping itself into an arm, floating above Giuseppe’s shoulder as if connected to his body, holding Elijah's neck and raising his body off the seat. It was golden and white and had what seemed like a ring made of golden light floating around its wrist.</div>
+<div class="s1 ps">A golden cloud surrounded Giuseppe, shaping itself into an arm, floating above Giuseppe’s shoulder as if connected to his body, holding Elijah’s neck and raising his body off the seat. It was golden and white and had what seemed like a ring made of golden light floating around its wrist.</div>
 
 <div class="s1 ps">Giuseppe took off his reading glasses as the skin of the man in front of him, being choked by this spectral hand, started to peel off in small chunks, like dry ink in a wall, revealing underneath a humanoid being with a dark void for a face surrounded by long rotten teeth that formed a spiral going into the void. It was skinny like a starved child, with the outline of its bones visible through its skin. Its nails were long and sharp, like the ones you would see in a movie witch, and it screeched in agony like an animal in a slaughterhouse.</div>
 
-<div class="s1 ps">“It’s been a while since I've seen one of <i>these</i>”, Giuseppe said, holding the creature as it struggled to get off his grasp. Reality started to collapse around them, no longer being held together by the demon.</div>
+<div class="s1 ps">“It’s been a while since I’ve seen one of <i>these</i>”, Giuseppe said, holding the creature as it struggled to get off his grasp. Reality started to collapse around them, no longer being held together by the demon.</div>
 
 <div class="s1 ps">A dark glow emanated from the creature’s face’s abyss, almost like a shadow. “YOU WILL DIE, EXORCIST” The demon shouted. Its voice echoed as if the unending vacuum in its face acted as a chamber.</div>
 
@@ -111,7 +111,7 @@ unlisted: true
 
 <div class="s1">Giuseppe took the cloth and cleaned the nosebleed himself as he stood up and they walked out of the train and into the train station.</div>
 
-<div class="s1">“You know it’s all in a <i><u>day's</u></i> work, right?” Giacomo said with a smug demeanor and equally smug countenance.</div>
+<div class="s1">“You know it’s all in a <i><u>day’s</u></i> work, right?” Giacomo said with a smug demeanor and equally smug countenance.</div>
 
 <div class="s1">“I’m aware, but I prefer it the way I said” Giuseppe said, doubling down on his mistake</div>
 
@@ -153,4 +153,4 @@ Giuseppe took a good look into the letter. The movement of his eyes didn’t ind
 
 <div class="lead-in">Lying on the floor…</div>
 
-<div class="strip"><img src="@/other images/ossos-memoria-1.png" alt="Giuseppe's memory of his childhood: Signor Filippo explains that souls are made of Æther, and that angels' souls are made of the same Æther as his" loading="lazy"><div class="strip-row"><img src="@/other images/ossos-memoria-2.png" alt="" loading="lazy"><p>And as he stood up, holding his bleeding shoulder with his other arm, a golden mist emanated from his body, creating a cloud that thundered harmonically like a choir of storms, with golden lightning rapidly forming and dissipating.</p></div><img src="@/other images/ossos-memoria-3.png" alt="" loading="lazy"></div>
+<div class="strip"><img src="@/other images/ossos-memoria-1.png" alt="Giuseppe’s memory of his childhood: Signor Filippo explains that souls are made of Æther, and that angels’ souls are made of the same Æther as his" loading="lazy"><div class="strip-row"><img src="@/other images/ossos-memoria-2.png" alt="" loading="lazy"><p>And as he stood up, holding his bleeding shoulder with his other arm, a golden mist emanated from his body, creating a cloud that thundered harmonically like a choir of storms, with golden lightning rapidly forming and dissipating.</p></div><img src="@/other images/ossos-memoria-3.png" alt="" loading="lazy"></div>
