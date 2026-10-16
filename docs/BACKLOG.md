@@ -25,7 +25,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T10 | Regras do site em `src/lib` + testes | 3 | Sonnet | alto | T08 | médio | feita (15/10/2026) — [lição 06](aprendendo-astro/06-regras.md) |
 | T11 | Home, Histórias, página da obra, Emissários | 3 | Sonnet | alto | T06, T09, T10 | médio | feita (16/10/2026) — [lição 07](aprendendo-astro/07-paginas.md) |
 | T12 | Leitor de capítulos (prosa, HQ, vídeo, episódios) | 3 | Opus | alto | T11 | **alto** | feita (16/10/2026) — [lição 08](aprendendo-astro/08-leitor.md); revisão independente aprovada com ressalvas (corrigidas) |
-| T13 | Notícias (lista, artigo, colagem, backdrop, embeds) | 3 | Sonnet | alto | T11 | médio | pendente |
+| T13 | Notícias (lista, artigo, colagem, backdrop, embeds) | 3 | Sonnet | alto | T11 | médio | em andamento |
 | T14 | Páginas restantes, 404, raiz, RSS, sitemap, redirects | 3 | Sonnet | médio | T13 | médio | pendente |
 | T15 | Comentários em TypeScript + migrações do Supabase | 4 | Opus | alto | T12, T13 | **alto** | pendente |
 | T16 | Busca (Pagefind) e anti-spam no cadastro | 4 | Sonnet | médio | T15 | baixo | **bloqueada** (decisão do autor) |
