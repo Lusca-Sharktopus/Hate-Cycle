@@ -36,11 +36,12 @@ Enquanto o autor não usar `git pull` na máquina dele, ele **também** recebe a
    git diff --no-renames --name-only --diff-filter=D "$last"      # apagados: listar na mensagem, o zip não apaga nada
    ```
 
-5. **Empacotar** com o nome fixo `1-hatecycle-site-atualizacao.zip` (o "1-" faz o arquivo aparecer primeiro na pasta de downloads do autor):
+5. **Empacotar** com o nome fixo `1-hatecycle-site-atualizacao.zip` (o "1-" faz o arquivo aparecer primeiro na pasta de downloads do autor), **a partir do commit da entrega** (nunca da árvore de trabalho, que pode ter trabalho pela metade de uma thread) e **com tudo dentro de uma pasta `hatecycle-site/`** (pedido do autor: ele extrai e arrasta a pasta por cima da dele, escolhendo "Substituir"):
    ```bash
-   git diff --no-renames --name-only -z --diff-filter=ACMR "$last" -- . ':!config.json' ':!static/custom.css' \
-     | xargs -0 zip -q 1-hatecycle-site-atualizacao.zip
-   ls -la 1-hatecycle-site-atualizacao.zip
+   t=<tag da entrega deste passo 6, ou HEAD já commitado>
+   git diff --no-renames --name-only -z --diff-filter=ACMR "$last" "$t" -- . ':!config.json' ':!static/custom.css' \
+     | xargs -0 git archive --format=zip --prefix=hatecycle-site/ -o 1-hatecycle-site-atualizacao.zip "$t" --
+   unzip -l 1-hatecycle-site-atualizacao.zip | head   # tudo começa com hatecycle-site/
    ```
    - **Nunca** incluir `config.json` (tem as chaves do Supabase do autor) nem `static/custom.css` (ajustes pessoais dele).
    - Limite de envio ≈ 30 MB. Se passar, divida em dois zips (`1-…-parte1.zip`, `2-…-parte2.zip`) separando as imagens grandes.
