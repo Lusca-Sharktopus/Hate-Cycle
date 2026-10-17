@@ -28,7 +28,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T13 | Notícias (lista, artigo, colagem, backdrop, embeds) | 3 | Sonnet | alto | T11 | médio | feita (16/10/2026) — seção "Notícias" na [lição 08](aprendendo-astro/08-leitor.md) |
 | T13b | Ajustes pedidos pelo autor nas notícias: títulos do anterior/próximo com limite de caracteres e reticências (o botão "Todas as notícias" não pode ser espremido) e comentários numa caixa separada da notícia, como nos capítulos — **nos dois geradores** (Python e Astro), para a paridade continuar valendo | 3 | Sonnet | médio | T13 | baixo | feita (16/10/2026) — seção "Notícias" da [lição 08](aprendendo-astro/08-leitor.md) |
 | T14 | Páginas restantes, 404, raiz, RSS, sitemap, redirects | 3 | Sonnet | médio | T13 | médio | feita (16/10/2026) — [lição 09](aprendendo-astro/09-endpoints.md) |
-| T15 | Comentários em TypeScript + migrações do Supabase | 4 | Opus | alto | T12, T13 | **alto** | em andamento |
+| T15 | Comentários em TypeScript + migrações do Supabase | 4 | Opus | alto | T12, T13 | **alto** | feita (17/10/2026) — [lição 10](aprendendo-astro/10-comentarios.md); revisão independente de segurança aprovada com ressalvas (corrigidas) |
 | T16 | Busca (Pagefind) e anti-spam no cadastro | 4 | Sonnet | médio | T15 | baixo | **bloqueada** (decisão do autor) |
 | T17 | Imagens e fontes otimizadas | 5 | Sonnet | alto | T14 | médio | pendente |
 | T18 | Paridade com a baseline + correções | 6 | Opus | alto | T15, T17 | **alto** | pendente |
@@ -115,6 +115,7 @@ Tarefas de risco **alto** recebem, além da thread de construção, uma thread c
 - **Escopo:** `comments.js` → módulo TypeScript com `@supabase/supabase-js` instalado e com versão fixa, carregado só onde há comentários; mesmos IDs de página; `supabase/migrations/` a partir do `supabase-setup.sql` (Supabase CLI), documentação.
 - **Aceite:** testes Playwright com Supabase simulado (comentar, responder, editar, "(editado)", Enter/Shift+Enter, modal de login); revisão independente de segurança (RLS, chave anônima); lição `10`.
 - **Feito na construção (16/10/2026):** `src/scripts/comentarios/` + `CaixaDeComentarios.astro`, `@supabase/supabase-js` 2.117.2 (exata), `supabase/migrations/20261016000000_inicial.sql`, `tools/comentarios_playwright.py`, [lição 10](aprendendo-astro/10-comentarios.md); B23 corrigido no Astro; achados em B25/B26. **Na T20 saem** o `static/comments.js` (só o Python o usa) e, se o autor concordar, o `supabase-setup.sql` (a migração inicial passa a ser a referência; o guia do Supabase deixa de mandar colá-lo).
+- **Revisão independente de segurança (16–17/10):** aprovada com ressalvas, nenhum problema médio ou alto vindo da T15. Corrigidos: (A1) o `pnpm test` agora monta a caixa num DOM simulado (`tests/comentarios-dom.test.ts`, happy-dom 20.14.5) e acusa texto do visitante entrando como HTML, inclusive disfarçado; o `el()` passou a recusar também `href`, `src`, `srcdoc`, `formaction`, `action`, `xlink:href` e `style`. Achados que já existiam no banco e no site: B25 (ampliado), B27 (sessão × posts incorporados) e B28 (rotina de atualização do supabase-js). 6475 testes.
 
 ### T16 — Busca e anti-spam (aguarda decisão)
 Pagefind para busca de texto completo em histórias e notícias; captcha (Turnstile ou hCaptcha) no cadastro do Supabase.

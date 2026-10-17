@@ -4,6 +4,10 @@
 //   - texto só entra com `textContent` (o navegador mostra "<img onerror=…>" como letras, nunca como HTML);
 //   - atributos só com `setAttribute`, e o nome do atributo nunca pode começar com "on" (onclick, onerror…): isso
 //     ligaria código. Eventos só pela lista `ao` (addEventListener com uma função deste script);
+//   - também são recusados os atributos que carregam endereço, HTML ou CSS (ATRIBUTOS_RECUSADOS: href, src, srcdoc,
+//     formaction, action, xlink:href, style): um valor ali pode virar "javascript:…", um documento inteiro ou um CSS que
+//     cobre a página. A caixa não precisa de nenhum deles (a altura da barra é a PROPRIEDADE style.height, não o atributo).
+//     Se um dia precisar, abra um caminho explícito para valores fixos do código; não tire o nome desta lista;
 //   - nada de innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser nem createContextualFragment em
 //     src/scripts/comentarios/ (tests/comentarios.test.ts procura essas palavras nos arquivos e falha se achar).
 // É o mesmo cuidado do el() do static/comments.js, com duas travas a mais: lá, uma chave "on…" virava evento e qualquer
@@ -24,8 +28,10 @@ export interface OpcoesDoElemento {
 
 /** Nome de atributo aceito: letras, números, "-", "_", ":" e "."; nunca "on…" (atributos de evento). */
 const NOME_DE_ATRIBUTO = /^[a-zA-Z_:][a-zA-Z0-9_.:-]*$/;
+/** Atributos que levam endereço, HTML ou CSS: recusados sempre (comparação sem diferenciar maiúsculas). */
+export const ATRIBUTOS_RECUSADOS: ReadonlySet<string> = new Set(["href", "src", "srcdoc", "formaction", "action", "xlink:href", "style"]);
 export function atributoPermitido(nome: string): boolean {
-  return NOME_DE_ATRIBUTO.test(nome) && !/^on/i.test(nome);
+  return NOME_DE_ATRIBUTO.test(nome) && !/^on/i.test(nome) && !ATRIBUTOS_RECUSADOS.has(nome.toLowerCase());
 }
 
 /** Cria um elemento com atributos, texto, eventos e filhos. */

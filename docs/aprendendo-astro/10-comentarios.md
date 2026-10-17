@@ -95,9 +95,12 @@ Comentário e nome de usuário são escritos por qualquer pessoa. Se um deles en
 
 - texto só com `textContent` (o navegador mostra os sinais `<` e `>` como letras);
 - atributos só com `setAttribute`, e **nome de atributo começando com `on` é recusado** (`onerror`, `onclick`…): evento só pela lista `ao` (`addEventListener` com uma função do próprio script);
+- também são recusados, qualquer que seja o valor, os atributos que levam endereço, HTML ou CSS: `href`, `src`, `srcdoc`, `formaction`, `action`, `xlink:href` e `style` (a lista `ATRIBUTOS_RECUSADOS`, ajuste pedido pela revisão de segurança). Um valor ali poderia virar `javascript:…`, um documento inteiro ou um CSS cobrindo a página. A caixa não precisa de nenhum: a altura da barra é a **propriedade** `style.height`, não o atributo;
 - `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `DOMParser`, `eval`… não existem em `src/scripts/comentarios/` (o teste procura essas palavras e falha se achar).
 
-O `comments.js` de hoje **já era seguro** nesse ponto (também usava `textContent`); o porte só acrescentou as travas e as provas. As capturas mostram `<img src=y onerror=window.__xss=3>` como nome e `<img …><script>…</script>` como comentário, escritos como texto.
+O `comments.js` de hoje **já era seguro** nesse ponto (também usava `textContent`); o porte só acrescentou as travas e as provas.
+
+A varredura das palavras proibidas lê só o **texto** do código, e a revisão de segurança mostrou que isso não basta: `d["inner" + "HTML"] = c.body` não contém a palavra e passava. Por isso existe `tests/comentarios-dom.test.ts`, que olha o **resultado** (seção 9). As capturas mostram `<img src=y onerror=window.__xss=3>` como nome e `<img …><script>…</script>` como comentário, escritos como texto.
 
 ## 7. B23: o texto de exemplo cortado no celular
 
@@ -117,6 +120,7 @@ O banco foi criado à mão, colando o `supabase-setup.sql` no SQL Editor. A part
 
 **No vitest** (`pnpm test`):
 - `tests/comentarios.test.ts` — as regras (mensagens de erro, Enter/Shift+Enter/Ctrl/Alt/composição, texto vazio, árvore de respostas com pai que não veio, datas em pt e en, quem pode o quê, `window.HC` incompleto); o `el()` com um `document` falso que **explode** se alguém usar `innerHTML` (ataques `<img onerror>`, `<script>`, `<svg onload>` em texto e em atributo; nomes de atributo `onerror`, `ONload`… recusados); e a varredura do código.
+- `tests/comentarios-dom.test.ts` — a caixa **inteira** num navegador simulado (**happy-dom** 20.14.5, só nos testes, versão exata; escolhido em vez do jsdom por ter 4 dependências diretas contra 20, e por não rodar o JavaScript da página por padrão). Chama a mesma função que o site chama, `iniciarComentarios()`, com um cliente do Supabase **falso** passado por parâmetro (nenhuma mudança na entrada foi necessária, e nada vai à rede). O banco falso devolve comentário, resposta e nome de usuário com `<img src=x onerror=…>`, `<script>` e `<b>`. Deslogado, conectado (nome com HTML na linha "Conectado como…"), com a janela de login aberta e com os formulários de resposta e de edição abertos, o teste confere que só existem as tags que o código cria (`section`, `h2`, `div`, `form`, `textarea`, `button`, `p`, `span`, `strong`, `time`, `h3`, `input`) e que cada texto do visitante é **um só nó de texto**, igual ao do banco. Prova de que pega o disfarce: numa cópia do projeto, trocar `texto: c.body` por `d["inner" + "HTML"] = c.body` deixou a varredura passando (73 de 73) e derrubou os 3 testes deste arquivo; a mesma troca no nome do autor também derrubou os 3.
 - `tests/supabase.test.ts` — a migração inicial é o `supabase-setup.sql` byte a byte, os cinco blocos estão lá, o bloco 4 (virar admin) continua comentado, nenhum segredo nos arquivos.
 - `tests/paginas.test.ts` — o `<main>` de todas as páginas continua igual ao do Python, com **uma exceção estreita** (`semScriptsAntigosDosComentarios()` em `tests/ajudantes/html.ts`): do HTML do Python sai exatamente o par `<script src="…jsdelivr…supabase-js@2">` + `<script src="/comments.js?v=…">` que vem colado no `window.HC`, e só ele; o `window.HC` continua sendo comparado. Mais o bloco "T15" da seção 4. Os IDs × `baseline/comentarios.json` continuam verdes. `tests/leitor.test.ts` e `tests/noticias.test.ts` usam a mesma exceção nos sites inventados e conferem que o script dos comentários aparece só quando há a caixa de verdade.
 
@@ -142,5 +146,5 @@ O roteiro no navegador (servidores sob `timeout`; instruções no topo de `tools
 
 1. Abra `dist/pt/news/2023-08-18-orcs/index.html` e procure `CaixaDeComentarios`: o script está depois do `</main>`. Agora procure `jsdelivr`: não há.
 2. Em `src/scripts/comentarios/regras.ts`, apague o `!e.shiftKey` de `enterEnvia` e rode `pnpm vitest run comentarios`: o teste de Shift+Enter falha. Desfaça.
-3. Em `src/scripts/comentarios/dom.ts`, troque `n.textContent = o.texto` por `n.innerHTML = o.texto` e rode o mesmo teste: falha ("innerHTML usado", e a varredura do código). Desfaça.
+3. Em `src/scripts/comentarios/dom.ts`, troque `n.textContent = o.texto` por `n.innerHTML = o.texto` e rode o mesmo teste: falha ("innerHTML usado", a varredura do código e o teste com DOM simulado, que acha `<img>`, `<script>` e `<b>` na caixa). Desfaça.
 4. Num comentário de teste no seu site, escreva `<b>oi</b>`: aparece com os sinais, não em negrito.

@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, test } from "vitest";
 import { lerConfiguracao } from "../src/scripts/comentarios/caixa";
-import { atributoPermitido, el } from "../src/scripts/comentarios/dom";
+import { ATRIBUTOS_RECUSADOS, atributoPermitido, el } from "../src/scripts/comentarios/dom";
 import {
   COLUNAS,
   COLUNAS_COM_EDICAO,
@@ -208,7 +208,16 @@ describe("segurança: el() (o único jeito de a caixa criar elementos)", () => {
     expect(atributoPermitido(nome)).toBe(false);
     expect(() => comDocumentoFalso(() => el("div", { attrs: { [nome]: "1" } }))).toThrow(/recusado/);
   });
-  test.each(["class", "aria-label", "data-page", "datetime", "maxlength", "aria-pressed"])("atributo %s é aceito", (nome) => {
+  test.each(["href", "src", "srcdoc", "formaction", "action", "xlink:href", "style", "HREF", "Style", "SrcDoc"])("atributo %s (endereço, HTML ou CSS) é recusado, qualquer que seja o valor", (nome) => {
+    expect(atributoPermitido(nome)).toBe(false);
+    for (const valor of ["javascript:alert(1)", "https://exemplo.test/", "<script>alert(1)</script>", "position:fixed;inset:0"]) {
+      expect(() => comDocumentoFalso(() => el("a", { attrs: { [nome]: valor } }))).toThrow(/recusado/);
+    }
+  });
+  test("a lista de recusados é a documentada em dom.ts", () => {
+    expect([...ATRIBUTOS_RECUSADOS].sort()).toEqual(["action", "formaction", "href", "src", "srcdoc", "style", "xlink:href"]);
+  });
+  test.each(["class", "aria-label", "data-page", "datetime", "maxlength", "aria-pressed", "title", "type", "name", "placeholder", "rows", "minlength", "autocomplete", "required", "role", "aria-modal"])("atributo %s é aceito", (nome) => {
     expect(atributoPermitido(nome)).toBe(true);
   });
   test("eventos só por addEventListener (lista `ao`)", () => {
@@ -228,8 +237,9 @@ describe("segurança: o código que vai para o navegador", () => {
   test("os quatro arquivos existem", () => {
     expect(arquivos.sort()).toEqual(["caixa.ts", "dom.ts", "index.ts", "regras.ts"]);
   });
-  test.each(["caixa.ts", "dom.ts", "index.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function", (a) => {
-    expect(codigo(a)).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b|srcdoc/);
+  test.each(["caixa.ts", "dom.ts", "index.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
+    // (srcdoc não entra aqui: ele aparece de propósito na lista ATRIBUTOS_RECUSADOS de dom.ts, e a trava é testada acima)
+    expect(codigo(a)).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
   });
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
