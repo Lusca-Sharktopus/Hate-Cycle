@@ -30,7 +30,7 @@ Uma **thread por tarefa, em sequência**: a próxima só começa depois que a at
 | T14 | Páginas restantes, 404, raiz, RSS, sitemap, redirects | 3 | Sonnet | médio | T13 | médio | feita (16/10/2026) — [lição 09](aprendendo-astro/09-endpoints.md) |
 | T15 | Comentários em TypeScript + migrações do Supabase | 4 | Opus | alto | T12, T13 | **alto** | feita (17/10/2026) — [lição 10](aprendendo-astro/10-comentarios.md); revisão independente de segurança aprovada com ressalvas (corrigidas) |
 | T16 | Busca (Pagefind) e anti-spam no cadastro | 4 | Sonnet | médio | T15 | baixo | **bloqueada** (decisão do autor) |
-| T17 | Imagens e fontes otimizadas | 5 | Sonnet | alto | T14 | médio | pendente |
+| T17 | Imagens e fontes otimizadas | 5 | Sonnet | alto | T14 | médio | em andamento |
 | T18 | Paridade com a baseline + correções | 6 | Opus | alto | T15, T17 | **alto** | pendente |
 | T19 | Revisão independente da migração | 6 | Opus | muito alto | T18 | **alto** | pendente |
 | T19b | Acabamento do autor no site novo (elementos gráficos, detalhes, notícias novas) | 6 | Sonnet (quando precisar) | médio | T19 | baixo | pendente |
