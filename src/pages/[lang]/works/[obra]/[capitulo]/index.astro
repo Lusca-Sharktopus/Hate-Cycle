@@ -1,0 +1,43 @@
+---
+// A página de cada capítulo: /pt/works/firestriker/01/, /en/works/light-and-blood/02/… (rota ANINHADA: [obra] e [capitulo]).
+// getStaticPaths() cria uma página por capítulo de cada obra (inclusive obras escondidas das listas e capítulos
+// `unlisted`, que existem mas ficam fora dos buscadores) — o laço dos capítulos do build() do build.py (~788–828).
+// Rascunhos (`draft: true`) só existem na prévia (pnpm dev), como no `python build.py serve`.
+// Tudo o que a página mostra vem decidido de src/lib/leitura.ts; o Leitor só desenha. Lição: docs/aprendendo-astro/08-leitor.md.
+import { join } from "node:path";
+import BaseLayout from "../../../../../layouts/BaseLayout.astro";
+import Leitor from "../../../../../components/Leitor.astro";
+import { comentariosDaPagina } from "../../../../../lib/comentarios";
+import { langs, type Lang } from "../../../../../lib/config";
+import { COM_RASCUNHOS, dadosDoIdioma } from "../../../../../lib/conteudo";
+import { leiturasDaObra, type LeituraDoCapitulo } from "../../../../../lib/leitura";
+import { arquivosDoGlob } from "../../../../../lib/quadrinhos";
+
+export async function getStaticPaths() {
+  // os capítulos de cada obra nos DOIS idiomas: servem para o seletor de idioma (o mesmo capítulo no outro idioma)
+  const porIdioma = await Promise.all(langs.map(async (lang) => [lang, await dadosDoIdioma(lang)] as const));
+  const dadosDe = Object.fromEntries(porIdioma) as Record<Lang, Awaited<ReturnType<typeof dadosDoIdioma>>>;
+  const pastaStatic = join(process.cwd(), "static");
+  const ferramentas = {
+    glob: (padrao: string) => arquivosDoGlob(pastaStatic, padrao),
+    comentarios: (lang: Lang, id: string | null) => comentariosDaPagina(lang, id, COM_RASCUNHOS),
+  };
+  const saidas = [];
+  for (const lang of langs) {
+    for (const obra of dadosDe[lang].obras) {
+      const capitulos = Object.fromEntries(langs.map((l) => [l, dadosDe[l].capitulosDe(obra)])) as Record<Lang, ReturnType<(typeof dadosDe)[Lang]["capitulosDe"]>>;
+      for (const leitura of leiturasDaObra(obra, lang, capitulos, ferramentas)) {
+        saidas.push({ params: { lang, obra: obra.data._origem.slug, capitulo: leitura.pasta }, props: { leitura } });
+      }
+    }
+  }
+  return saidas;
+}
+
+const lang = Astro.params.lang as Lang;
+const { leitura } = Astro.props as { leitura: LeituraDoCapitulo };
+---
+
+<BaseLayout lang={lang} title={leitura.tituloDaPagina} description={leitura.descricao} image={leitura.imagem} alternates={leitura.alternativas} noindex={leitura.noindex} bodyClass={leitura.classeDoCorpo}>
+  <Leitor leitura={leitura} />
+</BaseLayout>

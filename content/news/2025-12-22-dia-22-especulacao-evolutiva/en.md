@@ -1,0 +1,20 @@
+---
+title: Day 22 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it
+date: 2025-12-22
+thumb: news/dia-22-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-22}}
+
+The Yi-Yi-Bá (Crystalarachne linnaeusi) is the go to example when talking about the life on the planet of Bulbix; it’s a fully crystalline living being with a soul; it doesn't have organs, flesh, blood or even cells (at least not like life on other planets do).
+
+Life on Bulbix is formed by crystallized photopigments that arrange themselves into intricate organisms; those constituent crystals are called cells. Crystallozoans (Bulbix’s equivalent to animals), move by arranging their cells in such a way that, as they move, cells that are more loosely attached hit the walls of their sockets, generating piezoelectricity that is stored to be used to move the animal further; this, though, is not enough to keep the organism alive for the same reason a perpetual motion engine is impossible; instead, since they’re made of photopigments, they can use a sort of “pseudo-photosynthesis” to help them generate energy. This makes it so that most species only live on the bright side of the planet, which is tidally locked with their planetary system’s star.
+
+It is unknown how Crystalobiotes (Bulbix life) first came to be, but there are a few hypotheses. The first one is that life in Bulbix is completely independent from all other life in the universe, having evolved naturally from piezoelectric crystals with properties similar to potassium hydrogen phthalate crystals that can carry information when they replicate.
+
+Another hypothesis is that biological life came to Bulbix through Magical Portals like it did with every other planet other than Earth, but at some point a Soul (perhaps from a ghost or a psionic astral projecting) inhabited a crystal with just the right properties and used its psionic powers to make it move and, when this crystal replicated itself, a part of that soul went into the daughter crystal. As the planet became tidally locked with the star, all biological life on the planet went extinct and only Crystalozoans were left.
+
+The name Yi-Yi-Bá is a transliteration of the [[news/2024-05-02-fotomorfos-geomorfos|Geomorph]] name for the animal using the Telepathic Method, since Geomorph language uses flashes of light forming different patterns and colours to form “syllables”; The genus can be divided into the greek roots κρύσταλλος, meaning “crystal” and ἀράχνη, meaning spider. The epithet is a reference to the father of Taxonomy, Carl Nilsson Linnæus, in reference to the fact that his Sistema Naturæ gives scientific names to minerals. The species was named before it was known on Earth about Bulbix as a planet after some unknown magical phenomena teleported one of these to Earth.

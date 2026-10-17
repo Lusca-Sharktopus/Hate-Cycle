@@ -1,0 +1,81 @@
+---
+// O ARTIGO de uma notícia (/pt/news/<pasta>/): o miolo do <main> do build.py (linhas ~849–880), em duas caixas (desde 16/10/2026,
+// pedido do autor): a da notícia (.news-box) e, embaixo, a só dos comentários (.reader-box.paper.slim, como nos capítulos). A notícia, em três versões:
+//   - comum:    folha de papel do site, data, título, etiquetas, a figura grande (`image:`), o texto, "Veja também", pager;
+//   - fundo:    notícia com design (backdrop_top / backdrop_bottom): imagens que sangram até as bordas da folha, esmaecendo no texto;
+//   - colagem:  figurinhas (stickers) espalhadas pela folha e, por cima, a imagem de papel amassado (overlay).
+// Só desenha: tudo vem decidido em `artigo` (src/lib/artigos.ts). O texto do autor entra como HTML pronto (`html`, feito
+// pelo carregador, T09), marcado por textoDoAutor() (src/lib/pagina.ts): o acabamento do <main> não mexe nele além do que o
+// Python mexe. O CSS do texto (embeds, Shorts, fichas) está em src/styles/prosa.css; o .pager, em Pager.astro.
+//
+// ⚠ Escrito "colado" de propósito: espaço entre dois elementos em linha aparece na tela, e o teste compara a estrutura com a
+// do site atual. Não quebre as linhas longas do HTML abaixo.
+import "../styles/prosa.css";
+import type { ArtigoDaNoticia } from "../lib/artigos";
+import { estiloDaImagemDeFundo } from "../lib/artigos";
+import { assetUrl } from "../lib/assets";
+import { textoDoAutor } from "../lib/pagina";
+import Comentarios from "./Comentarios.astro";
+import CartaQueVira from "./CartaQueVira.astro";
+import PostsAlternados from "./PostsAlternados.astro";
+import RodapeDoArtigo from "./RodapeDoArtigo.astro";
+
+interface Props {
+  artigo: ArtigoDaNoticia;
+}
+
+const { artigo: a } = Astro.props;
+const d = a.desenho;
+---
+
+{d.tipo === "comum" && <div class="news-box"><article class="wrap narrow block">{a.avisoDeRascunho && <p class="draft-banner">{a.avisoDeRascunho}</p>}<time>{a.data}</time><h1>{a.titulo}</h1>{a.tags.map((tag) => <span class="tag">{tag}</span>)}{d.imagem && <figure class="lead"><img src={assetUrl(d.imagem)} alt="" /></figure>}<div class="prose"><Fragment set:html={textoDoAutor(a.html)} /></div><RodapeDoArtigo artigo={a} /></article></div>}
+{d.tipo === "fundo" && <div class="news-box"><article class="news-special">{a.avisoDeRascunho && <p class="draft-banner">{a.avisoDeRascunho}</p>}<div class="news-hero">{d.topo && <div class="news-bd top" style={estiloDaImagemDeFundo(d.topo)} aria-hidden="true"></div>}{d.pe && <div class="news-bd bottom" style={estiloDaImagemDeFundo(d.pe)} aria-hidden="true"></div>}<div class="news-sp top"></div><div class="news-hero-in"><time>{a.data}</time><h1>{a.titulo}</h1>{a.tags.map((tag) => <span class="tag">{tag}</span>)}<div class="prose"><Fragment set:html={textoDoAutor(a.html)} /></div></div><div class="news-sp bottom"></div></div><div class="news-after"><RodapeDoArtigo artigo={a} /></div></article></div>}
+{d.tipo === "colagem" && <div class="news-box"><article class="news-special news-collage">{a.avisoDeRascunho && <p class="draft-banner">{a.avisoDeRascunho}</p>}<div class="news-hero">{d.figurinhas.map((f) => <img class="news-stk" src={assetUrl(f.arquivo)} alt="" style={f.estilo} aria-hidden="true" />)}{d.papel && <div class="news-paper" style={estiloDaImagemDeFundo(d.papel)} aria-hidden="true"></div>}<div class="news-sp top"></div><div class="news-hero-in"><time>{a.data}</time><h1>{a.titulo}</h1>{a.tags.map((tag) => <span class="tag">{tag}</span>)}<div class="prose"><Fragment set:html={textoDoAutor(a.html)} /></div></div><div class="news-sp bottom"></div></div><div class="news-after"><RodapeDoArtigo artigo={a} /></div></article></div>}
+{a.comentarios && <div class="reader-box paper slim"><Comentarios secao={a.comentarios} /></div>}
+{a.temCartaQueVira && <CartaQueVira />}
+{a.temPostsAlternados && <PostsAlternados />}
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (a figura grande de .lead, "Notícia com design especial" e "Notícia colagem"), mesmos valores e
+       mesma ordem. O .related e o .pager estão nos componentes deles; o texto do autor (embeds, Shorts…), em src/styles/prosa.css. */
+    .lead { margin: 1rem 0 1.5rem; } .lead img { border-radius: var(--radius); }
+
+    /* ── Notícia com design especial (backdrop_top / backdrop_bottom): imagens sangrando até as bordas da folha ── */
+    .news-special { --spy: clamp(1.4rem, 5vw, 3.6rem); --spx: clamp(1.2rem, 5vw, 3.6rem); position: relative; margin: calc(-1 * var(--spy)) calc(-1 * var(--spx)); border-radius: var(--sheet-radius); overflow: hidden; }
+    .news-hero { position: relative; }
+    .news-hero-in { position: relative; z-index: 1; padding: 0 clamp(1.2rem, 9%, 8.5rem); }
+    .news-sp.top { aspect-ratio: 4.4 / 1; min-height: 90px; }
+    .news-sp.bottom { aspect-ratio: 3.4 / 1; min-height: 150px; }
+    .news-bd { position: absolute; left: 0; right: 0; background-size: cover; pointer-events: none; }
+    .news-bd.top { top: 0; aspect-ratio: 3.2 / 1; background-position: top center; -webkit-mask-image: linear-gradient(#000 42%, transparent 100%); mask-image: linear-gradient(#000 42%, transparent 100%); }
+    .news-bd.bottom { bottom: 0; aspect-ratio: 3.5 / 1; background-position: bottom center; -webkit-mask-image: linear-gradient(transparent 0, #000 58%); mask-image: linear-gradient(transparent 0, #000 58%); }
+    .news-special .prose { max-width: none; }
+    .news-after { padding: 0 clamp(1.2rem, 5vw, 3.6rem) clamp(1.4rem, 5vw, 3.6rem); }
+    /* celular: o botão do meio numa linha própria, no alto; antes só valia nas notícias de fundo/colagem (.news-after), agora em todas (pedido do autor, 16/10/2026) */
+    @media (max-width: 560px) { .news-box .pager { flex-wrap: wrap; justify-content: center; } .news-box .pager .pg { max-width: 100%; } .news-box .pager .mid { order: -1; width: 100%; justify-content: center; text-align: center; } }
+
+    .news-special .news-hero-in > time { display: block; color: #4d4a57; font-weight: 600; text-shadow: 0 0 8px #fff9; }
+
+    /* ── Notícia: caixa da notícia + caixa só dos comentários (pedido do autor, 16/10/2026) ──
+       Como nos capítulos (.reader-box + .reader-box.paper.slim, copiados de Leitor.astro): o <main class="sheet"> vira só o espaço
+       das duas caixas (mesma largura e posição de antes) e a folha de papel passa para .news-box. O <body> leva a classe news-page. */
+    .reader-box { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; }
+    .reader-box.paper { background: var(--paper), var(--sheet); background-color: var(--sheet); }
+    .reader-box.slim { padding-top: .8rem; padding-bottom: .8rem; }
+    .news-page main.sheet { padding: 0; background: none; box-shadow: none; border-radius: 0; }
+    .news-box { padding: clamp(1.4rem, 5vw, 3.6rem) clamp(1.2rem, 5vw, 3.6rem); background: var(--paper), var(--sheet); background-color: var(--sheet); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; }
+    .news-page .reader-box { max-width: none; width: 100%; margin: 1.5rem 0 0; }
+
+    /* ── Notícia "colagem" (stickers + papel amassado por cima) ── */
+    .news-collage .news-stk { position:absolute; height:auto; z-index:0; pointer-events:none; transform: rotate(var(--a,0deg)); filter: drop-shadow(0 3px 6px #0004); }
+    .news-collage .news-paper { position:absolute; inset:0; z-index:0; pointer-events:none; background-size:cover; background-position:center; mix-blend-mode:multiply; opacity:1; }
+    .news-collage .news-sp.top { aspect-ratio: 5.2 / 1; min-height: 120px; }
+    .news-collage .news-sp.bottom { aspect-ratio: 4 / 1; min-height: 190px; }
+    .news-collage .news-hero-in { padding-right: clamp(1.2rem, 15%, 11rem); }
+    @media (max-width: 640px){ .news-collage .news-hero-in { padding-right: clamp(1.2rem, 9%, 8.5rem); } }
+    @media (max-width: 640px){ .news-collage .news-stk { transform: rotate(var(--a,0deg)) scale(1.55); } }
+
+    .news-collage .news-hero { background:#fff; isolation:isolate; }
+  }
+</style>

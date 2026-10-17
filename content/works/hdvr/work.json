@@ -1,0 +1,26 @@
+{
+  "kind": "video",
+  "universe": true,
+  "title": {
+    "en": "Hello? Di Vario Residency",
+    "pt": "Alô? Residência dos Di Vario"
+  },
+  "blurb": {
+    "en": "The di Vario family is many things. \"Normal\" is not one of them!",
+    "pt": "A família Di Vario é muitas coisas. \"Normal\" não é uma delas!"
+  },
+  "cover": {
+    "en": "covers/EN/Cover HDVR.png",
+    "pt": "covers/PT/Capa HDVR.png"
+  },
+  "external": "https://www.youtube.com/@ResidenciaDosDiVario",
+  "cta": {
+    "en": "Watch on YouTube",
+    "pt": "Assista no YouTube"
+  },
+  "order": {
+    "release": 1,
+    "chrono": false
+  },
+  "media": "misc"
+}

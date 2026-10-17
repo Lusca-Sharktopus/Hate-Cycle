@@ -1,0 +1,20 @@
+---
+title: Dia 29 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele
+date: 2025-12-29
+thumb: news/dia-29-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-29}}
+
+Os homnísios (Homo sapiens) são uma espécie humana nativa de Midgard; é provável que você, que está lendo isto, seja um. Os homnísios são o que muitas mídias de fantasia anteriores à ressurgência arcana, como O Senhor dos Anéis e Dungeons & Dragons, chamavam apenas de “humanos”; isso foi brevemente verdade no mundo real quando outras raças sapientes se tornaram de conhecimento público, mas logo se difundiu a consciência de que raças como elfos, anões, gigantes, fadas, valquírias e abarimon também eram humanas e deveriam ser chamadas assim. Isso foi facilitado ao dissociar a ideia de “humano” da ideia de “pessoa”; goblins, hobgoblins, dragões, [[news/2023-08-19-conheca-os-talassimbiontes|talassimbiontes]], [[news/2025-11-26-proto-articulado|articulados]] e filhos de Hastris, por exemplo, são pessoas, apesar de não serem humanos.
+
+Embora a maioria das raças sapientes tenha poderes mágicos distintos, os homnísios não têm. Pelo menos não inerentes à espécie como um todo; todas as fadas são selenomantes e todos os abarimon são piromantes, mas os homnísios não têm esse nível de consistência; não só muitos homnísios são triviais ou dependem de Magia Acadêmica para usar magia, como os que possuem algum poder arcano variam muito quanto a quais são. Alguns produtos mágicos, como a Sincronicidade e a Tanatomancia, só ocorrem em homnísios, já que são os únicos produtos de suas respectivas presenças, e nenhuma raça sapiente tem afinidade natural com a Roda da Fortuna ou o Enforcado.
+
+Todo ser vivo, no início da vida, passa por algo conhecido como Período de Suscetibilidade Arcana. É um momento na vida da criatura em que sua própria biologia é altamente sensível à exposição à magia, que age como uma forma de radiação, causando mutações em suas células; só que, em vez de caóticas, essas mutações tendem fortemente a ser benéficas. É daí que vem grande parte dos Poderes Triviais; a exposição à magia durante a gestação de um personagem pode ter lhe concedido níveis sobrenaturais de força, agilidade, regeneração, sentidos aguçados ou até pele endurecida. Para a maioria das espécies, esse período crítico termina ainda durante a gestação, mas nos homnísios ele nunca realmente termina. Homnísios que se expõem regularmente à magia inevitavelmente desenvolverão capacidades sobre-humanas.
+
+A maioria das outras raças humanas, com exceção de gigantes, anões, halflings e pés-grandes, evoluiu a partir de populações homnísias. Os abarimon eram uma tribo homnísia nativa da América do Sul; os elfos eram uma população de homnísios que chegou a Alfheim pelo portal da Irlanda; os Humanos foram a primeira espécie sapiente a evoluir, com o primeiro humano sapiente tendo atingido 101 de Éter há cerca de 2,75 milhões de anos, provavelmente um Homo habilis.
+
+O nome homnísio vem da raiz latina ʜᴏᴍᴏ, que significa “homem” ou “humano”, e da raiz grega νῆσος, que significa “ilha”. É uma adaptação do termo Tatwengkalispur /ta.tʷeŋ.ka.lis.ˈpur/, do arkani fakwimos, que significa literalmente “povo da ilha”. Isso porque o arkani fakwimos costuma usar a raiz Tatweng, que significa “ilha”, para dar a ideia de isolamento. Isso porque os homnisianos passaram a ser considerados uma raça “isolada” do resto dos povos sapientes de Yggdrasil depois do Colapso Arcano.

@@ -1,0 +1,27 @@
+{
+  "listed": false,
+  "kind": "comic",
+  "universe": true,
+  "oneshot": true,
+  "title": {
+    "en": "Roadside",
+    "pt": "Beira de Estrada"
+  },
+  "blurb": {
+    "en": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
+    "pt": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre."
+  },
+  "order": {
+    "release": 5,
+    "chrono": 7
+  },
+  "cover": {
+    "en": "covers/EN/Cover Roadside.png",
+    "pt": "covers/PT/Capa Beira de Estrada.png"
+  },
+  "logo": {
+    "en": "logos/EN/Roadside 4.png",
+    "pt": "logos/PT/Beira de Estrada 4.png"
+  },
+  "media": "webcomic"
+}

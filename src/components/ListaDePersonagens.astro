@@ -1,0 +1,27 @@
+---
+// A página /<idioma>/characters/ (só existe com `show_extras: true`): um cartão por personagem, com foto (ou bloco liso) e o papel.
+// O <main> do build() (linhas ~899–903): <div class="wrap block"><h1>Personagens</h1><div class="chars"><a class="char-card">…</a>…</div></div>
+// Só desenha: tudo vem decidido em `lista` (src/lib/paginasDeExtras.ts). Escrito "colado" de propósito: não quebre as linhas do HTML.
+import { assetUrl } from "../lib/assets";
+import type { ListaDePersonagens } from "../lib/paginasDeExtras";
+
+interface Props {
+  lista: ListaDePersonagens;
+}
+
+const { lista } = Astro.props;
+---
+
+<div class="wrap block"><h1>{lista.titulo}</h1><div class="chars">{lista.cartoes.map((c) => <a class="char-card" href={c.url}>{c.imagem ? <img src={assetUrl(c.imagem)} alt="" loading="lazy" /> : <div class="nocover"></div>}<strong>{c.titulo}</strong><span>{c.papel}</span></a>)}</div></div>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "universo / personagens", a parte de .chars e .char-card), mesmos valores e mesma ordem. */
+    .chars { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.2rem; }
+    .char-card { display: flex; flex-direction: column; gap: .15rem; text-decoration: none; color: inherit; }
+    .char-card img, .char-card .nocover { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--radius); background: #cfdcd6; box-shadow: 0 4px 12px #0002; }
+    .char-card strong { font-family: var(--font-head); font-weight: 600; font-size: 1.25rem; margin-top: .5rem; color: var(--green); }
+    .char-card span { color: var(--muted); font-size: .88rem; }
+    .char-card:hover img { box-shadow: 0 0 16px var(--cyan); }
+  }
+</style>

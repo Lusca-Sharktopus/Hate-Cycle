@@ -1,0 +1,133 @@
+---
+// A página Notícias (/pt/news/): título, caixa de busca, as notícias (10 por página), "nenhum resultado" e a barra de páginas.
+// O miolo do <main> do build.py (linhas ~833–847). Só desenha: tudo vem decidido em `pagina` (src/lib/artigos.ts →
+// paginaDaListaDeNoticias). O HTML já traz TODAS as notícias, da 11ª em diante escondidas; é o <script> daqui que mostra
+// a página certa, filtra pela busca e monta os botões (o bloco 6 do static/site.js).
+//
+// ⚠ Escrito "colado" de propósito: espaço entre dois elementos em linha aparece na tela, e o teste compara a estrutura com a
+// do site atual. Não quebre as linhas longas do HTML abaixo.
+import { assetUrl } from "../lib/assets";
+import type { PaginaDaLista } from "../lib/artigos";
+
+interface Props {
+  pagina: PaginaDaLista;
+}
+
+const { pagina: p } = Astro.props;
+const semScript = "<style>.news-item[hidden]{display:block}</style>";
+---
+
+<div class="wrap block news-wrap"><h1>{p.titulo}</h1><div class="news-tools"><input type="search" class="news-search" placeholder={p.busca.placeholder} aria-label={p.busca.placeholder} autocomplete="off" /></div><div class="news-list">{p.linhas.map((n) => <article class="news-item" hidden={n.escondidaNoInicio} data-search={n.busca}><time>{n.data}</time><h2>{n.titulo}</h2><div class="news-body">{n.miniatura && <a class="news-thumb" href={n.url} tabindex="-1" aria-hidden="true"><img src={assetUrl(n.miniatura)} alt="" loading="lazy" /></a>}<div class="news-text">{n.tags.length > 0 && <div class="chips">{n.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}<p>{n.resumo} <a class="more" href={n.url}>{p.rotuloDoLink}</a></p></div></div></article>)}</div><p class="news-none" hidden>{p.busca.semResultados}</p><nav class="pagination" aria-label={p.paginacao.rotulo} data-prev={p.paginacao.anterior} data-next={p.paginacao.proximo} data-per={p.paginacao.porPagina}></nav><noscript set:html={semScript}></noscript></div>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "notícias: lista no estilo do design"), mesmos valores e mesma ordem.
+       (O .embed que fica no meio dessa seção é do texto do autor: está em src/styles/prosa.css.) */
+    .news-wrap { max-width: 1040px; }
+    .news-tools { margin: -.2rem 0 1rem; }
+    .news-search { font: 500 1rem var(--font-text); height: 3rem; width: min(100%, 24rem); padding: 0 1rem; border: 2px solid var(--green); border-radius: .35rem; background: #fff; color: var(--night); }
+    .news-search:focus { outline: 3px solid var(--cyan); outline-offset: 2px; }
+    .news-item { padding: 1.5rem 0 1.7rem; border-bottom: 1px solid #00000033; }
+    .news-item[hidden] { display: none; }
+    .news-item time { display: block; color: #6d6878; font-size: .95rem; }
+    .news-item h2 { font-size: clamp(1.7rem, 4.2vw, 2.7rem); margin: .1em 0 .55rem; color: var(--green); }
+    .news-item h2 a { color: var(--green); text-decoration: none; }
+    .news-item h2 a:hover { text-shadow: 0 0 14px var(--cyan); }
+    .news-body { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .news-thumb { flex: none; width: clamp(96px, 16vw, 160px); aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px #0003; background: #cfdcd6; }
+    .news-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .news-thumb:hover { opacity: .92; }   /* hover discreto */
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; }
+    .news-text p { margin: 0; max-width: 62ch; font-size: 1.05rem; line-height: 1.45; }
+    .news-text .more { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+    .news-none { text-align: center; color: var(--muted); padding: 2rem 0; }
+    .pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .4rem; margin: 1.8rem 0 .4rem; }
+    .pagination a, .pagination span { min-width: 2.6rem; height: 2.6rem; padding: 0 .8rem; display: inline-flex; align-items: center; justify-content: center; border-radius: .4rem; font-weight: 600; text-decoration: none; color: var(--green); }
+    .pagination a:hover { background: #ffffffb0; box-shadow: 0 0 10px var(--cyan); }
+    .pagination [aria-current] { background: var(--green); color: #fff; }
+    .pagination .pg-gap { min-width: 1.4rem; padding: 0; color: var(--muted); }
+    @media (max-width: 560px) { .news-body { flex-direction: column; } .news-thumb { width: 120px; } }
+  }
+</style>
+
+<script>
+  // Notícias: 10 por página, números de página (como numa pesquisa) e busca em todas as notícias.
+  // Porte do bloco 6 do static/site.js; as regras (busca sem acento, quais botões aparecem) estão em src/lib/paginacao.ts.
+  import { barraDePaginas, combinaComBusca, ITENS_POR_PAGINA, normalizarBusca, paginaPedida, paginaValida, palavrasDaBusca } from "../lib/paginacao";
+
+  function iniciarListaDeNoticias() {
+    const lista = document.querySelector<HTMLElement>(".news-list");
+    if (!lista) return;
+    const itens = Array.from(lista.querySelectorAll<HTMLElement>(".news-item"));
+    const campo = document.querySelector<HTMLInputElement>(".news-search");
+    const barraOuNada = document.querySelector<HTMLElement>(".pagination");
+    const nenhumaOuNada = document.querySelector<HTMLElement>(".news-none");
+    if (!barraOuNada || !nenhumaOuNada) return;
+    const barra: HTMLElement = barraOuNada;
+    const nenhuma: HTMLElement = nenhumaOuNada;
+    const caixa: HTMLElement = lista;
+    const porPagina = parseInt(barra.dataset["per"] ?? "", 10) || ITENS_POR_PAGINA;
+    let pagina = paginaPedida(location.search);
+    // o texto de busca de cada notícia, já normalizado (minúsculas, sem acentos)
+    const textos = new Map(itens.map((it) => [it, normalizarBusca(it.dataset["search"])]));
+
+    function filtradas(): HTMLElement[] {
+      const palavras = palavrasDaBusca(campo ? campo.value : "");
+      return itens.filter((it) => combinaComBusca(textos.get(it) ?? "", palavras));
+    }
+
+    function botao(rotulo: string, n: number, classe: string, atual = false): HTMLElement {
+      const a = document.createElement(atual ? "span" : "a");
+      a.textContent = rotulo;
+      if (classe) a.className = classe;
+      if (atual) a.setAttribute("aria-current", "page");
+      else {
+        (a as HTMLAnchorElement).href = "?p=" + n;
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          ir(n, true);
+        });
+      }
+      return a;
+    }
+
+    function desenhar() {
+      const f = filtradas();
+      pagina = paginaValida(pagina, f.length, porPagina);
+      itens.forEach((it) => (it.hidden = true));
+      f.slice((pagina - 1) * porPagina, pagina * porPagina).forEach((it) => (it.hidden = false));
+      nenhuma.hidden = f.length > 0;
+      barra.textContent = "";
+      for (const item of barraDePaginas(pagina, Math.max(1, Math.ceil(f.length / porPagina)))) {
+        if (item.tipo === "anterior") barra.appendChild(botao("‹ " + (barra.dataset["prev"] ?? ""), item.pagina, "pg-step"));
+        else if (item.tipo === "proximo") barra.appendChild(botao((barra.dataset["next"] ?? "") + " ›", item.pagina, "pg-step"));
+        else if (item.tipo === "reticencias") {
+          const vao = document.createElement("span");
+          vao.className = "pg-gap";
+          vao.textContent = "…";
+          barra.appendChild(vao);
+        } else barra.appendChild(botao(String(item.pagina), item.pagina, "pg-num", item.atual));
+      }
+      if (window.history && history.replaceState) history.replaceState(null, "", pagina > 1 ? "?p=" + pagina : location.pathname);
+    }
+
+    function ir(n: number, rolar: boolean) {
+      pagina = n;
+      desenhar();
+      if (rolar) caixa.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    if (campo)
+      campo.addEventListener("input", () => {
+        pagina = 1;
+        desenhar();
+      });
+    desenhar();
+  }
+
+  try {
+    iniciarListaDeNoticias();
+  } catch (erro) {
+    if (window.console) console.error("noticias:", erro);
+  }
+</script>

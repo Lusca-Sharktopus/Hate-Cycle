@@ -1,0 +1,26 @@
+{
+  "kind": "video",
+  "universe": true,
+  "oneshot": false,
+  "title": {
+    "en": "Light & Blood",
+    "pt": "Luz & Sangue"
+  },
+  "blurb": {
+    "en": "John Magnus & Oliver Mors investigate, alongside detective Eleanor O'Dochartaigh, the uneventful city of Duckwater.",
+    "pt": "Os aprendizes de exorcista John Magnus e Oliver Mors investigam, ao lado da detetive Eleanor O'Dochartaigh, a pacata cidade de Duckwater."
+  },
+  "cover": {
+    "en": "covers/EN/Cover Light & Blood.png",
+    "pt": "covers/PT/Capa Luz & Sangue.png"
+  },
+  "logo": {
+    "en": "logos/EN/Light & Blood 6.png",
+    "pt": "logos/PT/Luz e Sangue 6.png"
+  },
+  "order": {
+    "release": 3,
+    "chrono": 5
+  },
+  "media": "live-ttrpg"
+}

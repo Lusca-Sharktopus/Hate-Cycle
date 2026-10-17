@@ -1,0 +1,305 @@
+// Schemas das coleções: quais campos cada tipo de conteúdo aceita, de que tipo, e as mensagens de erro.
+//
+// Fonte dos campos: a skill hc-conteudo (.claude/skills/hc-conteudo/SKILL.md), as regras de conteúdo
+// (.claude/rules/conteudo.md) e — a palavra final — o que o build.py realmente lê (fm.get(...) / meta.get(...)).
+// Explicação com exemplos: docs/aprendendo-astro/04-colecoes.md.
+//
+// Regras gerais (decisões da T08):
+//  - CAMPO DESCONHECIDO = ERRO. O build.py ignora em silêncio um campo que não conhece, então um erro de
+//    digitação ("dat:" no lugar de "date:", "unlsited: true") passava despercebido e o site saía errado.
+//    Aqui ele pára o build e a mensagem lista os campos aceitos. Campo novo de propósito = acrescentar aqui.
+//  - Os valores ficam como o Python os lê (front matter pelo parser mínimo: datas e números são TEXTO).
+//    Única normalização: lista vazia escrita como "tags:" (texto vazio) vira [] — o build.py trata os dois
+//    do mesmo jeito (`fm.get("tags", []) or []`).
+//  - Referências (related, appears_in) são conferidas: apontar para algo que não existe = erro.
+//  - Mensagens em português, sempre com o valor que veio. O Astro acrescenta a coleção, o item e o arquivo.
+import { z } from "astro/zod";
+import { langs, type Lang } from "./config";
+
+// ───────────── valores permitidos ─────────────
+
+/** Tipos de obra (work.json → kind). "film" é usado por the-pendulum; o build.py o trata como "prose". */
+export const TIPOS_DE_OBRA = ["prose", "comic", "video", "film"] as const;
+
+/** Tipos de mídia (work.json → media): as chaves de MEDIA_LABELS no build.py (os rótulos vêm na T10). */
+export const MIDIAS = ["short-story", "webcomic", "live-ttrpg", "short-film", "animated-show", "videogame", "misc"] as const;
+
+/** Seções que um `related:` pode citar (as chaves do INDEX do build.py: "seção/pasta"). */
+export const SECOES_REFERENCIAVEIS = ["news", "universe", "characters", "pages", "emissaries", "works"] as const;
+
+// ───────────── referências ─────────────
+
+/** O que existe em content/, para conferir referências. Ver indiceDoDisco() em src/lib/leitor.ts. */
+export interface Indice {
+  /** "characters/harry", "works/firestriker"…: true se o item existe em algum idioma (rascunho também conta). */
+  existe(ref: string): boolean;
+}
+
+/** Explica o que há de errado com uma referência "seção/pasta"; undefined = está certa. */
+export function problemaDaReferencia(ref: string, indice: Indice): string | undefined {
+  const m = /^([^/]+)\/([^/]+)$/.exec(ref);
+  const secao = m?.[1] ?? "";
+  if (!m || !(SECOES_REFERENCIAVEIS as readonly string[]).includes(secao)) {
+    return `"${ref}" não está no formato seção/pasta (ex.: characters/harry). Seções: ${SECOES_REFERENCIAVEIS.join(", ")}.`;
+  }
+  if (!indice.existe(ref)) {
+    const onde = secao === "works" ? `content/${ref}/work.json` : `content/${ref}/ com en.md ou pt.md`;
+    return `"${ref}" não existe (não há ${onde}). Erro de digitação ou item apagado/renomeado?`;
+  }
+  return undefined;
+}
+
+// ───────────── peças ─────────────
+
+/** O valor que veio, escrito para a mensagem de erro. */
+function descrever(v: unknown): string {
+  if (v === undefined) return "nada";
+  if (typeof v === "string") return v === "" ? "um texto vazio" : `"${v}"`;
+  if (Array.isArray(v)) return `a lista ${JSON.stringify(v)}`;
+  return JSON.stringify(v) ?? String(v);
+}
+
+const texto = () => z.string({ error: (i) => `tem de ser um texto, mas veio ${descrever(i.input)}.` });
+
+const simNao = () =>
+  z.boolean({ error: (i) => `tem de ser true ou false, sem aspas, mas veio ${descrever(i.input)}.` });
+
+/** "AAAA-MM-DD" com mês e dia que existem, ou vazio (o build.py trata data vazia como "sem data"). */
+export function dataValida(v: string): boolean {
+  if (v === "") return true;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  if (!m) return false;
+  const [a, me, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const dt = new Date(Date.UTC(a, me - 1, d));
+  return dt.getUTCFullYear() === a && dt.getUTCMonth() === me - 1 && dt.getUTCDate() === d;
+}
+
+const data = () =>
+  texto().refine(dataValida, {
+    error: (i) => `${descrever(i.input)} não é uma data válida: use AAAA-MM-DD, com mês e dia que existam (ex.: 2024-08-18).`,
+  });
+
+/** Lista de textos. Escrita como [a, b] ou com uma linha "  - item" por item; "tags:" vazio = lista vazia. */
+const listaDeTextos = () =>
+  z
+    .union([z.literal(""), z.array(z.string())], {
+      error: (i) => {
+        if (Array.isArray(i.input)) {
+          const n = i.input.findIndex((x) => typeof x !== "string");
+          return `tem de ser uma lista de textos, mas o item ${n + 1} é ${descrever(i.input[n])}.`;
+        }
+        return `tem de ser uma lista (ex.: [a, b], ou uma linha "  - item" para cada item), mas veio ${descrever(i.input)}.`;
+      },
+    })
+    .transform((v): string[] => (v === "" ? [] : v));
+
+/** Lista de referências "seção/pasta" (related). */
+const referencias = (indice: Indice) =>
+  listaDeTextos().superRefine((lista, ctx) => {
+    lista.forEach((ref, n) => {
+      const problema = problemaDaReferencia(ref, indice);
+      if (problema) ctx.addIssue({ code: "custom", path: [n], message: problema, input: ref });
+    });
+  });
+
+/** Lista de obras (appears_in: [firestriker]): pastas de content/works/ com work.json. */
+const obrasCitadas = (indice: Indice) =>
+  listaDeTextos().superRefine((lista, ctx) => {
+    lista.forEach((obra, n) => {
+      if (!indice.existe(`works/${obra}`)) {
+        ctx.addIssue({ code: "custom", path: [n], input: obra, message: `"${obra}" não é uma obra: não existe content/works/${obra}/work.json.` });
+      }
+    });
+  });
+
+const umDe = <const T extends readonly [string, ...string[]]>(valores: T, oQue: string) =>
+  z.enum(valores, { error: (i) => `${descrever(i.input)} não é ${oQue} conhecido. Use um destes: ${valores.join(", ")}.` });
+
+/** ID de vídeo do YouTube (o que vem depois de "v=" no link): 11 letras, números, "-" ou "_". */
+const idDoYoutube = () =>
+  texto().refine((v) => v === "" || /^[\w-]{11}$/.test(v), {
+    error: (i) => `${descrever(i.input)} não parece um ID de vídeo do YouTube: são 11 caracteres, o que vem depois de "v=" no link (ex.: J2j6xoIz0LE).`,
+  });
+
+/** Uma posição de figurinha: l, r, t, b (lados), w (largura) ou a (giro) + número. Igual ao build.py. */
+const RE_POSICAO = /^(l|r|t|b|w|a)(-?[\d.]+)$/;
+
+/** stickers: uma linha por figurinha, "arquivo | l3 t2 w26 a-4". */
+const figurinhas = () =>
+  listaDeTextos().superRefine((linhas, ctx) => {
+    linhas.forEach((linha, n) => {
+      const barra = linha.indexOf("|");
+      const arquivo = (barra < 0 ? linha : linha.slice(0, barra)).trim();
+      const posicoes = barra < 0 ? [] : linha.slice(barra + 1).trim().split(/\s+/).filter(Boolean);
+      const ruim = posicoes.find((p) => !RE_POSICAO.test(p));
+      if (!arquivo) {
+        ctx.addIssue({ code: "custom", path: [n], input: linha, message: `a figurinha ${n + 1} não diz o arquivo (formato: "arquivo.png | l3 t2 w26 a-4").` });
+      } else if (ruim !== undefined) {
+        ctx.addIssue({
+          code: "custom",
+          path: [n],
+          input: linha,
+          message: `a figurinha ${n + 1} tem "${ruim}", que não é uma posição: use l, r, t, b, w ou a seguido de um número (ex.: l3 t2 w26 a-4).`,
+        });
+      }
+    });
+  });
+
+/**
+ * Valor traduzível do work.json: "texto" (igual nos dois idiomas) ou {"en": "…", "pt": "…"}.
+ * (T10: é um `partialRecord`, e não um objeto com campos fixos, de propósito: o Zod devolve os campos de um objeto na
+ * ORDEM DO SCHEMA, e o tr() do Python, quando o idioma pedido e o inglês estão vazios, usa o PRIMEIRO valor do arquivo —
+ * `{"pt": "Só PT", "en": ""}` tem de continuar começando por "pt". O record guarda a ordem em que o autor escreveu.)
+ */
+const traduzivel = () =>
+  z.union(
+    [
+      z.string(),
+      z.partialRecord(z.enum(langs as [Lang, ...Lang[]]), texto(), {
+        // chave que não é idioma (o Zod avisa como "unrecognized_keys"; o tipo dele não lista esse código, por isso o `as`)
+        error: (i) => {
+          const { code, keys } = i as { code: string; keys?: string[] };
+          return code === "unrecognized_keys" ? `tem de ser um texto ou {"en": "…", "pt": "…"}: só as chaves en e pt (veio ${(keys ?? []).map((k) => `"${k}"`).join(", ")}).` : undefined;
+        },
+      }),
+    ],
+    { error: (i) => `tem de ser um texto ou {"en": "…", "pt": "…"}, mas veio ${descrever(i.input)}.` },
+  );
+
+/**
+ * Objeto com os campos dados, em que QUALQUER outro campo é erro (com a lista dos aceitos).
+ * (O tipo devolvido é o do objeto simples: como campos a mais nunca passam, ele é exato.)
+ */
+function objeto<S extends z.ZodRawShape>(onde: string, campos: S) {
+  const base = z.object(campos);
+  const aceitos = Object.keys(campos).filter((k) => !k.startsWith("_"));
+  const desconhecido = z.custom<unknown>(() => false, {
+    error: () => `campo desconhecido (erro de digitação?). Campos aceitos em ${onde}: ${aceitos.join(", ")}.`,
+  });
+  return base.catchall(desconhecido) as unknown as typeof base;
+}
+
+// ───────────── de onde o item veio (preenchido pelo carregador, não pelo autor) ─────────────
+
+const idioma = z.enum(langs as [Lang, ...Lang[]]);
+
+/** Itens de content/<seção>/<pasta>/<idioma>.md: a pasta (que é o "slug" do endereço) e o idioma. */
+const origemDoItem = z.object({ slug: z.string(), lang: idioma });
+
+/** Capítulos: obra, pasta do capítulo, idioma e a posição da pasta entre as da obra (1, 2, 3…, como o `i` do load_works). */
+const origemDoCapitulo = z.object({ obra: z.string(), capitulo: z.string(), lang: idioma, posicao: z.number() });
+
+// ───────────── as coleções ─────────────
+
+/** Campos que todo .md aceita ("Comuns" na skill hc-conteudo). */
+const comuns = (indice: Indice) => ({
+  title: texto().optional(),
+  date: data().optional(),
+  summary: texto().optional(),
+  image: texto().optional(),
+  tags: listaDeTextos().optional(),
+  related: referencias(indice).optional(),
+  /** Só aparece na prévia (pnpm dev / python build.py serve). */
+  draft: simNao().optional(),
+  /** false = sem comentários. */
+  comments: simNao().optional(),
+});
+
+/** Monta os schemas. `indice` diz o que existe em content/ (para conferir referências). */
+export function criarSchemas(indice: Indice) {
+  return {
+    news: objeto("notícias", {
+      ...comuns(indice),
+      thumb: texto().optional(),
+      backdrop_top: texto().optional(),
+      backdrop_bottom: texto().optional(),
+      stickers: figurinhas().optional(),
+      overlay: texto().optional(),
+      _origem: origemDoItem,
+    }),
+
+    pages: objeto("páginas", {
+      ...comuns(indice),
+      layout: umDe(["wide"], "um layout").optional(),
+      menu: umDe(["extras"], "um menu").optional(),
+      /** false = não gera página própria (ex.: content/pages/project, usado dentro de "Sobre"). */
+      route: simNao().optional(),
+      _origem: origemDoItem,
+    }),
+
+    emissaries: objeto("emissários", {
+      ...comuns(indice),
+      role: texto().optional(),
+      order: texto().optional(),
+      instagram: texto().optional(),
+      tiktok: texto().optional(),
+      youtube: texto().optional(),
+      x: texto().optional(),
+      bluesky: texto().optional(),
+      website: texto().optional(),
+      email: texto().optional(),
+      _origem: origemDoItem,
+    }),
+
+    characters: objeto("personagens", {
+      ...comuns(indice),
+      role: texto().optional(),
+      appears_in: obrasCitadas(indice).optional(),
+      order: texto().optional(),
+      _origem: origemDoItem,
+    }),
+
+    universe: objeto("universo", {
+      ...comuns(indice),
+      category: texto().optional(),
+      order: texto().optional(),
+      _origem: origemDoItem,
+    }),
+
+    chapters: objeto("capítulos", {
+      ...comuns(indice),
+      /** true = página existe, mas fica fora das listas (noindex). */
+      unlisted: simNao().optional(),
+      /** Número exibido, se diferente da ordem das pastas. */
+      chapter: texto().optional(),
+      youtube: idDoYoutube().optional(),
+      pages: listaDeTextos().optional(),
+      pages_glob: texto().optional(),
+      _origem: origemDoCapitulo,
+    }),
+
+    works: objeto("work.json", {
+      kind: umDe(TIPOS_DE_OBRA, "um tipo de obra (kind)").optional(),
+      /** true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias". Padrão: true. */
+      universe: simNao().optional(),
+      oneshot: simNao().optional(),
+      /** false esconde a obra inteira. Padrão: true. */
+      listed: simNao().optional(),
+      langs: z.array(idioma, { error: (i) => `tem de ser uma lista de idiomas (${langs.join(", ")}), mas veio ${descrever(i.input)}.` }).optional(),
+      title: traduzivel().optional(),
+      blurb: traduzivel().optional(),
+      cover: traduzivel().optional(),
+      logo: traduzivel().optional(),
+      cta: traduzivel().optional(),
+      external: traduzivel().optional(),
+      divider: texto().optional(),
+      order: z
+        .strictObject(
+          {
+            release: z.number({ error: (i) => `tem de ser um número, sem aspas, mas veio ${descrever(i.input)}.` }).optional(),
+            chrono: z.union([z.number(), z.literal(false)], { error: (i) => `tem de ser um número ou false, mas veio ${descrever(i.input)}.` }).optional(),
+          },
+          { error: (i) => (i.code === "unrecognized_keys" ? `só aceita "release" e "chrono".` : `tem de ser {"release": n, "chrono": n}, mas veio ${descrever(i.input)}.`) },
+        )
+        .optional(),
+      reading_font: umDe(["times"], "uma fonte de leitura").optional(),
+      media: umDe(MIDIAS, "um tipo de mídia (media)").optional(),
+      updated: data().optional(),
+      _origem: z.object({ slug: z.string() }),
+    }),
+  };
+}
+
+export type Schemas = ReturnType<typeof criarSchemas>;
+/** Os nomes das coleções. */
+export type Colecao = keyof Schemas;

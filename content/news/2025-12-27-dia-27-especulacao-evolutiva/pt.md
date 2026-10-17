@@ -1,0 +1,20 @@
+---
+title: Dia 27 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele
+date: 2025-12-27
+thumb: news/dia-27-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-27}}
+
+O qilin (Hydropotes inermis × Shen long) é um dos principais exemplos de como funcionam os dragonborn. Durante o colapso arcano, muitas das espécies caçadas desenvolveram algo chamado Biomancia Transformativa: a capacidade de ter duas formas distintas entre as quais se pode alternar por meio de magia; geralmente uma delas sendo humana ou de um animal “normal”, para se esconder dos triviais à vista de todos. Isso não é realmente biomancia; é, na verdade, a única forma de magia Arcana sem elemento; parece evoluir como biomancia verdadeira primeiro e depois deixa de “contar” para a 1ª lei de Thester.
+
+Os dragões, sendo os primeiros a desenvolver essa capacidade, são famosos por cruzar com as espécies que imitam; as cocatrizes cruzam com galinhas comuns, as jormungandrs com baleias e os dragões-das-montanhas-britânicos com humanos. Dragonborn e Thunderborn chegam a preferir consistentemente a forma de suas mães: ou seja, se a mãe era humana, consideram a forma humana sua forma “verdadeira”; se era um dragão (ou um pássaro-trovão, no caso dos Thunderborn), essa será a forma preferida do Dragonborn/Thunderborn. Isso porque a espécie da mãe determina a forma com que um Dragonborn nasce. Um Dragonborn filho de mãe dragão e pai humano terá eclodido de um ovo e nascerá em sua forma dracônica; do contrário, não seria capaz de quebrar a casca com seu dente de ovo. Já os Dragonborn nascidos de mães humanas se desenvolvem no útero das mães em suas formas humanas, já que, do contrário, seriam incapazes de nascer por parto natural.
+
+Alguns dragões podem se transformar em formas diferentes dependendo do indivíduo ou da população; o Dragão do Rio Hwangh (Shen long) tem três variantes diferentes: S. l. long, que possui uma forma humana, S. l. equus, com uma forma de cavalo, e o extinto S. l. qilin, que tinha uma forma de cervo. Este último não foi extinto por caça ou competição, mas sim absorvido pela população de cervos ao redor do Rio Hwangh, tornando-se o qilin.
+
+Debate-se se o qilin deveria ao menos ser tratado como um híbrido, como os ursos-grolares e os ligres, ou como uma espécie própria, merecedora de seu próprio nome de espécie. Dracopotes qilin é o binômio proposto para a espécie, caso seja validada. Um forte argumento a favor da validação de D. qilin como espécie própria é que os qilin conseguem detectar se um cervo-d'água é realmente só isso ou outro qilin disfarçado, percebendo padrões sutis de comportamento, como movimentos e pequenas variações na vocalização, e usam isso para evitar cruzar com cervos comuns.
+
+Os qilin não conseguem usar aeromancia para voar como seus primos mais “puros”, mas conseguem fazê-lo, embora de forma mais limitada, com meteoromancia. O raio mais forte já registrado evocado por um qilin usando meteoromancia teve uma potência de ??? volts //o que equivale a 3d8 de Dano Elétrico//.

@@ -1,0 +1,42 @@
+---
+// Uma PÁGINA AVULSA (Sobre, Apoio…): o <article> que o laço "PÁGINAS AVULSAS" do build() escreve (linha ~920).
+//   <article class="wrap wide|narrow block page-<pasta>"> [aviso de rascunho] <h1> <div class="prose"> texto do autor </div> </article>
+// Com `layout: wide` o <h1> existe só para leitor de tela (a página Sobre abre com o "## Sobre o autor" do próprio texto).
+// Só desenha: tudo vem decidido em `pagina` (src/lib/paginasAvulsas.ts). O texto do autor entra como HTML pronto, marcado por
+// textoDoAutor() (src/lib/pagina.ts) — e os atalhos ({{emissaries}}…) ainda são marcadores, que o BaseLayout troca pelos
+// componentes que a página entrega nos slots "atalho-*". O CSS do texto está em src/styles/prosa.css.
+//
+// ⚠ Escrito "colado" de propósito (ver ArtigoDeNoticia.astro): não quebre as linhas do HTML.
+import "../styles/prosa.css";
+import type { PaginaAvulsa } from "../lib/paginasAvulsas";
+import { textoDoAutor } from "../lib/pagina";
+import CartaQueVira from "./CartaQueVira.astro";
+import PostsAlternados from "./PostsAlternados.astro";
+
+interface Props {
+  pagina: PaginaAvulsa;
+}
+
+const { pagina: p } = Astro.props;
+---
+
+<article class={`wrap ${p.largura} block ${p.classe}`}>{p.avisoDeRascunho && <p class="draft-banner">{p.avisoDeRascunho}</p>}<h1 class={p.largura === "wide" ? "sr-only" : undefined}>{p.titulo}</h1><div class="prose"><Fragment set:html={textoDoAutor(p.html)} /></div></article>
+{p.temCartaQueVira && <CartaQueVira />}
+{p.temPostsAlternados && <PostsAlternados />}
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (bloco "página Sobre: personagens e fotos flutuando com o texto contornando o desenho"),
+       mesmos valores e mesma ordem. Duas diferenças técnicas: o shape-outside usa o endereço a partir da raiz do site (este CSS mora em
+       /_astro/, e "other images/…" ali não seria achado) e o celular (390 px) vem logo abaixo, na mesma regra de @media do original.
+       Nota: o bloco 3 do static/site.js (gifs que encolhem para não passar do fim do texto) procura `.page-project .prose`, e
+       nenhuma página tem essa classe + gifs juntos hoje (a Sobre é `page-about`; Histórias é `page-project` mas sem gifs):
+       no site atual ele não faz nada na Sobre, então não foi portado (ver docs/aprendendo-astro/09-endpoints.md). */
+    .page-about h2, .page-project h2 { clear: both; }
+    .apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
+    .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("/other images/Apollo Site.gif"); }
+    .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("/other images/Anfíbio Site.gif"); }
+    .autor-foto { float: left; width: clamp(200px, 48%, 560px); margin: 0 1.4rem .5rem 0; shape-outside: url("/other images/1000172301.png"); }
+    @media (max-width: 700px) { .autor-foto { width: 100%; float: none; margin: 0 0 1rem; } }
+  }
+</style>

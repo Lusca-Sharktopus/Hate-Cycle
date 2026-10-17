@@ -1,0 +1,38 @@
+---
+// A página de uma obra com vários capítulos: /pt/works/light-and-blood/ (hoje, só Luz & Sangue).
+// Obras de capítulo único (oneshot), com link para fora ou sem capítulos NÃO têm esta página: o botão do cartão já
+// leva direto ao destino. Quem decide é paginaDaObra() (src/lib/capitulos.ts), que devolve null nesses casos;
+// getStaticPaths() só cria uma página para quem não é null.
+// Lição: docs/aprendendo-astro/07-paginas.md.
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import ConteudoDaObra from "../../../../components/ConteudoDaObra.astro";
+import { alternativasDaObra } from "../../../../lib/alternativas";
+import { paginaDaObra, type PaginaDaObra } from "../../../../lib/capitulos";
+import { langs, type Lang } from "../../../../lib/config";
+import { dadosDoIdioma } from "../../../../lib/conteudo";
+
+export async function getStaticPaths() {
+  // os capítulos listados de cada obra nos DOIS idiomas: servem para o seletor de idioma (a mesma obra no outro idioma)
+  const porIdioma = await Promise.all(langs.map(async (lang) => [lang, await dadosDoIdioma(lang)] as const));
+  const dadosDe = Object.fromEntries(porIdioma) as Record<Lang, Awaited<ReturnType<typeof dadosDoIdioma>>>;
+  const saidas = [];
+  for (const lang of langs) {
+    const dados = dadosDe[lang];
+    for (const obra of dados.obras) {
+      const slug = obra.data._origem.slug;
+      const pagina = paginaDaObra(obra, lang, dados.capitulosDe(obra));
+      if (!pagina) continue;
+      const listados = Object.fromEntries(langs.map((l) => [l, dadosDe[l].capitulosDe(obra).listados])) as Record<Lang, unknown[]>;
+      saidas.push({ params: { lang, obra: slug }, props: { pagina, alternates: alternativasDaObra(slug, listados) } });
+    }
+  }
+  return saidas;
+}
+
+const lang = Astro.params.lang as Lang;
+const { pagina, alternates } = Astro.props as { pagina: PaginaDaObra; alternates: Partial<Record<Lang, string>> };
+---
+
+<BaseLayout lang={lang} title={pagina.titulo} description={pagina.descricao} image={pagina.capa} alternates={alternates}>
+  <ConteudoDaObra pagina={pagina} />
+</BaseLayout>

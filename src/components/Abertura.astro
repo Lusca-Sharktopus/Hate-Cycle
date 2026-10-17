@@ -1,0 +1,129 @@
+---
+// Tela de abertura: o vídeo da logo sobre o fundo roxo, na primeira página que o visitante abre na visita.
+// Substitui o intro_head/intro_body do shell() (build.py) e o bloco 5 do static/site.js.
+//
+// Ela tem três peças, em lugares diferentes da página — por isso o componente é usado duas vezes no layout:
+//   <Abertura parte="cabeca" />  no <head>:  decide ANTES da primeira pintura se a abertura aparece
+//                                            (põe a classe "intro" no <html>);
+//   <Abertura parte="corpo" />   no <body>:  a tela em si (div #intro), o <video> e a lógica de saída.
+// Regras (as mesmas de hoje):
+//   - aparece uma vez por visita (sessionStorage "hc-intro"); não aparece com "reduzir movimento" no sistema;
+//   - "?intro" no endereço força a abertura (para testar);
+//   - fica no mínimo min_ms e no máximo max_ms; sai com fade quando a página terminou de carregar e
+//     (o vídeo acabou, ou deu erro, ou já passou o mínimo);
+//   - trava de segurança: a classe "intro" sai sozinha em max_ms + 3 s, mesmo se algum script falhar.
+// Tudo isso só existe se config.json → intro.enabled for true.
+import { assetUrl } from "../lib/assets";
+import { introConfig } from "../lib/config";
+
+interface Props {
+  parte: "cabeca" | "corpo";
+}
+
+const { parte } = Astro.props;
+const ligada = introConfig.enabled;
+const minMs = Math.trunc(introConfig.min_ms ?? 4200);
+const maxMs = Math.trunc(introConfig.max_ms ?? 10000);
+const limite = maxMs + 3000; // a trava de segurança do script do <head>
+const video = assetUrl(introConfig.video ?? "");
+const fundo = introConfig.background ? `background-image:url('${assetUrl(introConfig.background)}')` : "";
+---
+
+{
+  ligada && parte === "cabeca" && (
+    /* is:inline (implícito no define:vars): fica exatamente aqui, no <head>, e roda na hora, ANTES de a página
+       ser pintada. Se fosse um script processado pelo Astro (type="module"), rodaria só depois de a página
+       aparecer, e o visitante veria o site "piscar" antes da abertura. */
+    <script is:inline define:vars={{ limite }}>
+      var d = document.documentElement;
+      try {
+        if ((!sessionStorage.getItem("hc-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) || /[?&]intro/.test(location.search)) {
+          d.classList.add("intro");
+          setTimeout(function () { d.classList.remove("intro"); }, limite);
+        }
+      } catch (e) {}
+    </script>
+  )
+}
+
+{
+  ligada && parte === "corpo" && (
+    <>
+      <div class="intro-screen" id="intro" aria-hidden="true" data-min={minMs} data-max={maxMs} style={fundo}></div>
+      {/* is:inline: o vídeo começa a carregar logo depois da div, sem esperar o resto da página
+          (e só é criado quando a abertura vai mesmo aparecer: quem já viu não baixa o vídeo). */}
+      <script is:inline define:vars={{ video }}>
+        if (document.documentElement.classList.contains("intro")) {
+          var v = document.createElement("video");
+          v.muted = true;
+          v.autoplay = true;
+          v.setAttribute("playsinline", "");
+          v.preload = "auto";
+          v.src = video;
+          document.getElementById("intro").appendChild(v);
+          var p = v.play && v.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+      </script>
+    </>
+  )
+}
+
+{
+  ligada && parte === "corpo" && (
+    /* Script PROCESSADO pelo Astro (sem atributos): vira um módulo empacotado que roda depois de a página ser lida,
+       como o site.js (defer) de hoje. Pode ser TypeScript e não precisa rodar antes da pintura. */
+    <script>
+      const d = document.documentElement;
+      const intro = document.getElementById("intro");
+      if (intro && d.classList.contains("intro")) {
+        try {
+          sessionStorage.setItem("hc-intro", "1");
+        } catch {}
+        const min = parseInt(intro.dataset["min"] ?? "", 10) || 4200;
+        const max = parseInt(intro.dataset["max"] ?? "", 10) || 10000;
+        const start = Date.now();
+        let loaded = document.readyState === "complete";
+        let ended = false;
+        let failed = false;
+        let closing = false;
+        const v = intro.querySelector("video");
+        const close = () => {
+          if (closing) return;
+          closing = true;
+          d.classList.add("intro-out"); // fundo e vídeo desvanecem juntos
+          setTimeout(() => {
+            d.classList.remove("intro", "intro-out");
+            intro.remove();
+          }, 1000);
+        };
+        const check = () => {
+          if (closing || !loaded) return;
+          const waited = Date.now() - start;
+          if (failed || ended || waited >= min) close();
+          else setTimeout(check, Math.max(50, min - waited));
+        };
+        if (v) {
+          v.addEventListener("ended", () => { ended = true; check(); });
+          v.addEventListener("error", () => { failed = true; check(); });
+        }
+        if (!loaded) window.addEventListener("load", () => { loaded = true; check(); });
+        setTimeout(close, max); // garantia: nunca prende o visitante
+        check();
+      }
+    </script>
+  )
+}
+
+<style is:global>
+  /* Global: html.intro e html.intro-out são classes do <html>, fora deste componente. Mesmos valores do static/style.css. */
+  @layer site {
+    /* ── tela de abertura ── */
+    .intro-screen { display: none; }
+    html.intro { overflow: hidden; }
+    html.intro .intro-screen { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity .9s ease;
+      background: #1b1228 center / cover no-repeat; }
+    .intro-screen video { width: min(94vw, 1100px); max-height: 94vh; object-fit: contain; pointer-events: none; }
+    html.intro-out .intro-screen { opacity: 0; pointer-events: none; }
+  }
+</style>

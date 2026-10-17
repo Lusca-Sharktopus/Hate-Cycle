@@ -1,0 +1,28 @@
+{
+  "kind": "prose",
+  "universe": true,
+  "oneshot": true,
+  "title": {
+    "en": "Firestriker",
+    "pt": "Pederneira"
+  },
+  "blurb": {
+    "en": "Olivia Purinna is absolutely certain that dragons exist, and she’s determined to prove it no matter how disastrous her journey may be!",
+    "pt": "Olivia Purinna tem absoluta certeza de que dragões existem, e ela vai provar isso não importa o quão desastrosa a jornada dela seja!"
+  },
+  "cover": {
+    "en": "covers/EN/Cover Firestriker.png",
+    "pt": "covers/PT/Capa Pederneira.png"
+  },
+  "logo": {
+    "en": "logos/EN/Firestriker 2.png",
+    "pt": "logos/PT/Pederneira - Black.png"
+  },
+  "divider": "other images/Firestriker Scene Divider.png",
+  "order": {
+    "release": 2,
+    "chrono": 6
+  },
+  "reading_font": "times",
+  "media": "short-story"
+}
