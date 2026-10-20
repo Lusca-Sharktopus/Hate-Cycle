@@ -20,7 +20,7 @@ O `build.py` está **congelado para mudanças estruturais** até a virada para A
 
 1. **Utilidades:** `esc`, `u` (prefixa `BASE`), `asset` (caminho de `static/` com `BASE` e `quote`), `smallcaps`/`_smallcaps` (letras Unicode → `<span class="hc">`) e `ipa_ok` (transcrições `/…/` → `<span class="ipa">`), `ver` (carimbo `?v=` por hash), `T`/`TK`/`tr` (textos de `config.json → ui` e campos `{"en","pt"}`), `natural`, `fmt_date`, `scalar`/`parse` (front matter YAML mínimo), `write`.
 2. **Markdown mínimo:** `make_md(lang, divider)` — parágrafos, `[[links]]` (via `INDEX`), `@/` em HTML cru, `---` → divisor de cena, `{{atalhos}}` (via `SHORT`) e `{{embed:…}}`.
-3. **Carregamento:** `load_items(section)`, `load_works()` (capítulos, `draft`/`unlisted`, `oneshot`), helpers `wtitle`, `wcover`, `wlogo`, `wlisted`, `wlink`, `wcta`.
+3. **Carregamento:** `load_items(section)`, `load_works()` (capítulos, `draft`/`unlisted`, `oneshot`; **obra inteira em rascunho** = `"draft": true` no `work.json`: `load_works()` pula a obra quando `DRAFTS` é falso, então ela some de tudo no site publicado e só aparece na prévia `serve`; T17c), helpers `wtitle`, `wcover`, `wlogo`, `wlisted`, `wlink`, `wcta`.
 4. **Componentes HTML:** `rune_fonts_links`/`rune_imprint` (runas no fundo, sorteio com semente = endereço da página; `RUNES`, `n=26`, `size`, `rot` ±45°, `lo`/`hi`/`dur`), barra lateral (`SIDEBAR_UI`, `AUTHOR_SOCIALS`, `PARTNERS`, `KOFI_URL`, `sidebar()`), `shell()` (página completa: `<head>`, fontes do Google, tela de abertura, cabeçalho, rodapé), cards (`card_work`, `card_emissary`), `sorter_html` + `MEDIA_LABELS`/`MEDIA_UI`, embeds (`url_embed`, `embed_html`), `comments()`, `draft_banner`, `pager`, `related_html`, `clean_out`.
 5. **`build()`:** o loop principal (por idioma: home, Histórias, obras, capítulos, notícias, páginas, universo/personagens, RSS, 404, raiz, redirects).
 6. **Scaffolding:** `SKEL` + `scaffold()` para `python build.py new …`.
@@ -46,6 +46,7 @@ O `config.json` é do autor: **não edite**; diga a ele qual chave mudar.
 - URLs `/en/…` e `/pt/…`; raiz escolhe o idioma; redirects de `config.json → redirects`.
 - `comments(lang, ident, …)` com `ident` = `works/<obra>/<capítulo>` ou `news/<slug>`, igual nos dois idiomas.
 - Capítulos `unlisted` geram página com `noindex`, fora de listas.
+- Obra com `"draft": true` no `work.json` não existe no site publicado (nem cartão, nem Histórias, nem home, nem "Últimas atualizações", nem sitemap/feed/alternativas de idioma, nem páginas de capítulo): é o interruptor único da obra inteira. O Astro tem a mesma regra (`obrasPublicadas()` em `src/lib/visibilidade.ts`); a prova de que os dois concordam está em `tools/regras_ref.py` (cenário variado, obras `u-`…`x-`) e `tests/regras.test.ts`.
 - Ao terminar, rode `python3 build.py` e confira a última linha (`(193 páginas)` hoje); depois `rm -rf public __pycache__`.
 
 ## Bug conhecido (não corrigir sem o autor)

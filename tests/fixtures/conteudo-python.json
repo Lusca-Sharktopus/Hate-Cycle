@@ -2352,6 +2352,7 @@
    "universe": true,
    "oneshot": true,
    "listed": true,
+   "draft": true,
    "title": {
     "en": "All in a Night's Work",
     "pt": "Ossos do Ofício"
@@ -2454,10 +2455,14 @@
     "release": 3,
     "chrono": 5
    },
+   "order_images": [
+    "ordem/Luz e Sangue-ordem-1.png",
+    "ordem/Luz e Sangue-ordem-2.png"
+   ],
    "media": "live-ttrpg"
   },
   "roadside": {
-   "listed": false,
+   "draft": true,
    "kind": "comic",
    "universe": true,
    "oneshot": true,
@@ -2473,6 +2478,10 @@
     "release": 5,
     "chrono": 7
    },
+   "order_images": [
+    "ordem/Beira de Estrada-ordem-1.png",
+    "ordem/Beira de Estrada-ordem-2.png"
+   ],
    "cover": {
     "en": "covers/EN/Cover Roadside.png",
     "pt": "covers/PT/Capa Beira de Estrada.png"
@@ -2507,7 +2516,7 @@
     "release": 6,
     "chrono": 11
    },
-   "listed": false,
+   "draft": true,
    "media": "short-film"
   }
  },
@@ -3151,22 +3160,17 @@
     ]
    },
    "obras": [
-    "all-in-a-nights-work",
     "firestriker",
     "hdvr",
-    "light-and-blood",
-    "roadside",
-    "the-pendulum"
+    "light-and-blood"
    ],
    "obras_listadas": {
     "en": [
-     "all-in-a-nights-work",
      "firestriker",
      "hdvr",
      "light-and-blood"
     ],
     "pt": [
-     "all-in-a-nights-work",
      "firestriker",
      "hdvr",
      "light-and-blood"
@@ -3854,13 +3858,17 @@
      "all-in-a-nights-work",
      "firestriker",
      "hdvr",
-     "light-and-blood"
+     "light-and-blood",
+     "roadside",
+     "the-pendulum"
     ],
     "pt": [
      "all-in-a-nights-work",
      "firestriker",
      "hdvr",
-     "light-and-blood"
+     "light-and-blood",
+     "roadside",
+     "the-pendulum"
     ]
    },
    "capitulos": {

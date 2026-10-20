@@ -57,6 +57,9 @@ export const PERFIS = {
   figuraDeNoticia: { nome: "figura-de-noticia", larguras: [480, 760, 1140], sizes: "(max-width: 800px) 100vw, 760px", qualidade: 82 },
   /** Figurinhas (stickers) da notícia colagem: 149–284 px, com transparência. */
   figurinha: { nome: "figurinha", larguras: [300, 600], sizes: "300px", qualidade: 85 },
+  /** Bloco "estou lendo em ordem…" do fim do capítulo (T17c): a arte de cada lado, ~34% da folha (até ~340 px; 46% da tela no celular), com transparência.
+   *  Também serve à capa usada no lugar da arte (obra sem `order_images`). */
+  ordemDeLeitura: { nome: "ordem-de-leitura", larguras: [300, 600, 900], sizes: "(max-width: 700px) 46vw, 340px", qualidade: 85 },
   /** Logo do título de um capítulo (as "title-image"): 159–370 px, com transparência. */
   tituloDeCapitulo: { nome: "titulo-de-capitulo", larguras: [380, 760], sizes: "380px", qualidade: 85 },
   /** Páginas de quadrinho no leitor: a largura do leitor, até 900 px. */

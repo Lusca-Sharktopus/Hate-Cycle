@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semScriptsAntigosDosComentarios, type PaginaLida } from "./ajudantes/html";
+import { canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semBlocoDeOrdem, semScriptsAntigosDosComentarios, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -166,7 +166,8 @@ for (const ref of refs) {
         py = lerPagina(doPython.html);
         const arquivo = paginasDoDist(dist).get(url);
         if (!arquivo) throw new Error(`o Astro não gerou ${url}`);
-        let html = readFileSync(arquivo, "utf8");
+        // T17c: o bloco "estou lendo em ordem…" só existe no Astro (tests/ajudantes/html.ts → semBlocoDeOrdem; tests/ordem.test.ts prova que só ele sai)
+        let html = semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html;
         if (ref.marcadores) {
           const r = comMarcadores(html, ref.marcadores);
           // sem expect(valor) aqui de propósito: em caso de erro, o vitest imprimiria a chave
@@ -355,7 +356,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
   const outra = () => segundaConstrucao();
   /** As chaves do Supabase do autor viram os marcadores da referência (antes, confere que são as do config.json). */
   const lerComMarcadores = (arquivo: string): string => {
-    const r = comMarcadores(readFileSync(arquivo, "utf8"), { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
+    const r = comMarcadores(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html, { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
     if (!r.conferem) throw new Error(`${arquivo}: a URL ou a chave do window.HC não são as do config.json`);
     return r.html;
   };
@@ -469,6 +470,106 @@ describe("T15: o script dos comentários só nas páginas com comentários, sem 
     const instalada = (JSON.parse(readFileSync(join(RAIZ, "node_modules", "@supabase", "supabase-js", "package.json"), "utf8")) as { version: string }).version;
     expect(instalada).toBe(pedida);
   });
+});
+
+// ───────────── T17c: o bloco "estou lendo em ordem…" no fim dos capítulos ─────────────
+
+describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a caixa do capítulo e a dos comentários", () => {
+  const ehCapitulo = (url: string) => /^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url);
+  const RE_SCRIPT_DA_ORDEM = /<script type="module">(?:(?!<\/script>)[\s\S])*\[data-story-order\](?:(?!<\/script>)[\s\S])*<\/script>/g;
+  /** Os dois lados de cada ordem de um bloco: { chrono: { prev: href|null, next: href|null }, release: … } e o que cada lado diz. */
+  function lados(bloco: string) {
+    const doDiv = (ordem: string) => new RegExp(`<div class="so-order" data-ordem="${ordem}"(?: hidden)?>([\\s\\S]*?)</div>(?=<div class="so-order"|</section>)`).exec(bloco)?.[1] ?? "";
+    const lado = (div: string, qual: "prev" | "next") => {
+      const m = new RegExp(`<(a|div) class="so-side ${qual}[^"]*"([^>]*)>([\\s\\S]*?)</\\1>`).exec(div);
+      if (!m) return null;
+      const href = /href="([^"]*)"/.exec(m[2] ?? "")?.[1] ?? null;
+      const texto = (/<span class="so-label">([^<]*)/.exec(m[3] ?? "")?.[1] ?? "").replaceAll("&amp;", "&");
+      return { href, texto, externo: /target="_blank"/.test(m[2] ?? "") };
+    };
+    return Object.fromEntries(["chrono", "release"].map((o) => [o, { prev: lado(doDiv(o), "prev"), next: lado(doDiv(o), "next") }])) as Record<"chrono" | "release", { prev: ReturnType<typeof lado>; next: ReturnType<typeof lado> }>;
+  }
+  function verificarPaginas(pasta: string) {
+    const capitulos: string[] = [];
+    for (const [url, arquivo] of paginasDoDist(pasta)) {
+      const html = readFileSync(arquivo, "utf8");
+      const r = semBlocoDeOrdem(html);
+      const scripts = html.match(RE_SCRIPT_DA_ORDEM) ?? [];
+      if (!ehCapitulo(url)) {
+        expect(r.removidos, `${url}: bloco fora de capítulo`).toEqual([]);
+        expect(scripts, `${url}: script da ordem fora de capítulo`).toEqual([]);
+        continue;
+      }
+      capitulos.push(url);
+      expect(r.removidos, `${url}: exatamente 1 bloco`).toHaveLength(1);
+      expect(r.filhasDiretasDoMain, `${url}: o bloco é filho direto do <main>`).toEqual([true]);
+      // entre a caixa do capítulo e a caixa (fina) dos comentários
+      expect(html, url).toMatch(/<\/div>\s*<section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<div class="reader-box paper slim">/);
+      expect(scripts, `${url}: o script do bloco, uma vez`).toHaveLength(1);
+      expect(html.indexOf(scripts[0] ?? ""), `${url}: o script vai depois do </main>`).toBeGreaterThan(html.indexOf("</main>"));
+      expect(scripts[0], `${url}: o script não leva nada do config.json`).not.toMatch(/supabase|window\.HC|anon/i);
+      // os comentários continuam os mesmos: a sua própria caixa, uma vez (ID = o da página), e o bloco não tem nenhum
+      expect(r.removidos[0], url).not.toMatch(/data-page|hc-comments|<script/);
+      // todas as imagens do bloco passam pelo caminho das imagens (T17): src original + srcset/sizes/width/height, carregamento preguiçoso
+      for (const img of r.removidos[0]?.match(/<img\b[^>]*>/g) ?? []) {
+        expect(img, `${url}: ${img}`).toMatch(/ srcset="[^"]+" /);
+        expect(img, url).toMatch(/ sizes="[^"]+"/);
+        expect(img, url).toMatch(/ width="\d+"/);
+        expect(img, url).toMatch(/ height="\d+"/);
+        expect(img, url).toMatch(/ loading="lazy"/);
+        expect(img, url).toMatch(/ alt=""/);
+      }
+    }
+    return capitulos.sort();
+  }
+  const blocoDe = (pasta: string, url: string) => semBlocoDeOrdem(readFileSync(paginasDoDist(pasta).get(url) ?? "", "utf8")).removidos[0] ?? "";
+
+  test("site publicado: todo capítulo tem o bloco (1), nenhuma outra página tem", () => {
+    const capitulos = verificarPaginas(dist);
+    expect(capitulos).toEqual(["/en/works/firestriker/01/", "/en/works/light-and-blood/01/", "/en/works/light-and-blood/02/", "/pt/works/firestriker/01/", "/pt/works/light-and-blood/01/", "/pt/works/light-and-blood/02/"]);
+  });
+
+  test("site publicado, Pederneira (PDF do autor): cronológica → antes Luz & Sangue, depois NINGUÉM; lançamento → antes Alô?, depois Luz & Sangue", () => {
+    const l = lados(blocoDe(dist, "/pt/works/firestriker/01/"));
+    expect(l.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
+    expect(l.chrono.next).toBeNull();
+    expect(l.release.prev?.externo).toBe(true);
+    expect(l.release.prev?.href).toMatch(/^https:\/\//);
+    expect(l.release.prev?.texto).toMatch(/^Assistir /);
+    expect(l.release.next).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
+    expect(blocoDe(dist, "/pt/works/firestriker/01/")).toContain("estou lendo em ordem");
+    expect(blocoDe(dist, "/pt/works/light-and-blood/02/")).toContain("estou assistindo em ordem");
+  });
+
+  test("site publicado: a obra de rascunho não aparece em lado nenhum (nem Beira de Estrada, nem O Pêndulo, nem Ossos do Ofício)", () => {
+    for (const url of ["/pt/works/firestriker/01/", "/en/works/firestriker/01/", "/pt/works/light-and-blood/01/", "/en/works/light-and-blood/02/"]) {
+      expect(blocoDe(dist, url), url).not.toMatch(/Beira de Estrada|Roadside|P[eê]ndulo|Pendulum|Ossos|All in a Night|roadside|the-pendulum|all-in-a-nights-work/);
+    }
+  });
+
+  test("site publicado: a mesma regra dos cartões de Histórias — o destino de cada lado é o botão do cartão da obra na página de Histórias", () => {
+    const historias = readFileSync(paginasDoDist(dist).get("/pt/works/") ?? "", "utf8");
+    const botoes = new Set([...historias.matchAll(/<a class="button" href="([^"]+)"/g)].map((m) => m[1]));
+    const alvos = new Set<string>();
+    for (const url of ["/pt/works/firestriker/01/", "/pt/works/light-and-blood/01/"]) {
+      const l = lados(blocoDe(dist, url));
+      for (const o of ["chrono", "release"] as const) for (const lado of [l[o].prev, l[o].next]) if (lado?.href) alvos.add(lado.href);
+    }
+    expect(alvos.size).toBeGreaterThan(0);
+    for (const a of alvos) expect(botoes.has(a), `o botão do cartão de Histórias leva a ${a}`).toBe(true);
+  });
+
+  test("prévia (rascunhos): todo capítulo tem o bloco; Beira de Estrada aparece depois da Pederneira (cronológica), sem link (ainda sem capítulos)", () => {
+    const dir = segundaConstrucao();
+    const capitulos = verificarPaginas(dir);
+    expect(capitulos.length).toBeGreaterThanOrEqual(6);
+    const l = lados(blocoDe(dir, "/pt/works/firestriker/01/"));
+    expect(l.chrono.prev?.texto).toBe("Assistir Luz & Sangue");
+    expect(l.chrono.next?.texto).toMatch(/^Em breve: Beira de Estrada$|^Ler Beira de Estrada$/);
+    expect(l.chrono.next?.texto).toBe("Em breve: Beira de Estrada"); // hoje a obra ainda não tem capítulos (T17d)
+    expect(l.chrono.next?.href).toBeNull();
+    expect(blocoDe(dir, "/en/works/firestriker/01/")).toContain("Coming soon: Roadside");
+  }, 240_000);
 });
 
 test("o dist/ existe", () => {

@@ -1,0 +1,23 @@
+---
+// Um lado do bloco "estou lendo em ordem…" (T17c): a arte da história anterior ou da seguinte e, embaixo, "Assistir Luz & Sangue ←".
+// Só desenha: tudo vem decidido em `lado` (src/lib/ordemDeLeitura.ts → ladoDaObra). O link vai para o mesmo lugar do cartão da obra em
+// Histórias (obra externa abre em outra aba, como o cartão). Obra sem nada para abrir vira um bloco sem link ("Em breve: …").
+//
+// A arte é decorativa (alt vazio): o texto do link já diz o nome da história. Duas <img> empilhadas: a normal e a do mouse por cima
+// (a troca e o leve crescimento são do CSS do ProximaHistoria.astro). Sem arte própria, a capa da obra ocupa a mesma caixa.
+import { assetUrl } from "../lib/assets";
+import type { LadoDaOrdem } from "../lib/ordemDeLeitura";
+
+interface Props {
+  lado: LadoDaOrdem;
+  /** "prev" = a anterior (seta para a esquerda, à esquerda); "next" = a seguinte. */
+  direcao: "prev" | "next";
+}
+
+const { lado, direcao } = Astro.props;
+const link = lado.destino.tipo === "link" ? lado.destino : null;
+const classes = `so-side ${direcao}${lado.arte?.ehCapa ? " is-cover" : ""}${link ? "" : " so-soon"}`;
+---
+
+{/* Uma linha só por lado, "colado": o HTML sai exatamente como está escrito (compressHTML: false). */}
+{link ? <a class={classes} href={link.href} target={link.externo ? "_blank" : undefined} rel={link.externo ? "noopener noreferrer" : undefined}><span class="so-art">{lado.arte ? <img class="so-img so-img-1" src={assetUrl(lado.arte.principal)} alt="" loading="lazy" /> : null}{lado.arte?.hover ? <img class="so-img so-img-2" src={assetUrl(lado.arte.hover)} alt="" loading="lazy" /> : null}</span><span class="so-label">{lado.rotulo}<svg class="so-arrow" viewBox="0 0 120 14" aria-hidden="true"><path d={direcao === "prev" ? "M3 7H117M3 7l9-5.5M3 7l9 5.5" : "M117 7H3M117 7l-9-5.5M117 7l-9 5.5"} fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></a> : <div class={classes}><span class="so-art">{lado.arte ? <img class="so-img so-img-1" src={assetUrl(lado.arte.principal)} alt="" loading="lazy" /> : null}</span><span class="so-label">{lado.rotulo}</span></div>}

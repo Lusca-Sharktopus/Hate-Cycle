@@ -11,7 +11,7 @@ import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 import { emissariosEscondidos, langs, showExtras, type Lang } from "./config";
 import { dadosDoIdioma as montarDadosDoIdioma } from "./idioma";
 import type { SecaoDeItens } from "./leitor";
-import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, obraListada, obraNoIndice, obraTemPagina } from "./visibilidade";
+import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, obraListada, obraNoIndice, obraTemPagina, obrasPublicadas } from "./visibilidade";
 
 /** true na prévia (`pnpm dev`), false no `pnpm build`. É o DRAFTS do build.py. */
 export const COM_RASCUNHOS: boolean = import.meta.env.DEV;
@@ -48,14 +48,15 @@ export function tituloDoItem(item: Noticia | Pagina | Emissario | Personagem | V
   return item.data.title || item.data._origem.slug;
 }
 
-/** Todas as obras (pastas de content/works/ com work.json), em ordem alfabética da pasta. */
-export async function obras(): Promise<Obra[]> {
-  return (await getCollection("works")).sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+/** Todas as obras publicadas (pastas de content/works/ com work.json; as de `draft: true` só na prévia), em ordem alfabética da pasta. */
+export async function obras(comRascunhos = COM_RASCUNHOS): Promise<Obra[]> {
+  return obrasPublicadas(await getCollection("works"), comRascunhos).sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 
-/** Uma obra pelo nome da pasta (ex.: "firestriker"), ou undefined. */
-export async function obra(slug: string): Promise<Obra | undefined> {
-  return getEntry("works", slug);
+/** Uma obra pelo nome da pasta (ex.: "firestriker"), ou undefined (também se ela é rascunho e estamos no build). */
+export async function obra(slug: string, comRascunhos = COM_RASCUNHOS): Promise<Obra | undefined> {
+  const o = await getEntry("works", slug);
+  return o && obrasPublicadas([o], comRascunhos).length ? o : undefined;
 }
 
 /** Obras que aparecem nas listas de um idioma (`listed` e `langs`), como wlisted(). */

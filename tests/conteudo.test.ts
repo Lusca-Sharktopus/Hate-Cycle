@@ -21,7 +21,7 @@ import { decodificar, parse, parseArquivo, type FrontMatter } from "../src/lib/f
 import { compararNatural, imagensQueFaltam, indiceDoDisco, lerCapitulos, lerItens, lerObras, SECOES_DE_ITENS, type SecaoDeItens } from "../src/lib/leitor";
 import { calcularMenu } from "../src/lib/nav";
 import { criarSchemas, type Indice } from "../src/lib/schemas";
-import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, obraListada, obraNoIndice, obraTemPagina } from "../src/lib/visibilidade";
+import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, obraListada, obraNoIndice, obraTemPagina, obrasPublicadas } from "../src/lib/visibilidade";
 
 // ───────────── a referência do Python ─────────────
 
@@ -152,7 +152,7 @@ const v = {
 function publicacaoAstro(comRascunhos: boolean): Publicado {
   const porIdioma = <T>(f: (l: Lang) => T) => Object.fromEntries(langs.map((l) => [l, f(l)])) as Record<Lang, T>;
   const slugs = (xs: { data: { _origem: { slug: string } } }[]) => xs.map((x) => x.data._origem.slug);
-  const obras = [...v.works].sort((a, b) => (a.id < b.id ? -1 : 1));
+  const obras = obrasPublicadas(v.works, comRascunhos).sort((a, b) => (a.id < b.id ? -1 : 1));
   const caps = (l: Lang) => obras.map((o) => ({ o, ...capitulosDaObra(v.chapters, o.id, l, comRascunhos) }));
   const nomeCap = (c: { data: { _origem: { obra: string; capitulo: string } } }) => `${c.data._origem.obra}/${c.data._origem.capitulo}`;
 

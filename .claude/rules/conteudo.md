@@ -46,7 +46,7 @@ Comuns: `title`, `date: AAAA-MM-DD`, `summary`, `image`, `tags: [a, b]`, `relate
 
 ## `work.json` (uma obra)
 
-`kind` (`prose` | `comic` | `video`; `the-pendulum` está com `"film"`, valor que o gerador não trata de forma especial), `universe` (true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias"), `oneshot` (história de um capítulo só: o card vai direto ao capítulo), `title` / `blurb` / `cover` / `logo` / `cta` com `{"en": …, "pt": …}`, `divider` (imagem do divisor de cena), `order: {"release": n, "chrono": n}`, `reading_font: "times"` (Times New Roman no leitor, usado em Ossos do Ofício), `media`, `listed` (false esconde a obra inteira), `langs` (idiomas em que a obra aparece), `external` (link para fora: YouTube, Tapas…), `updated: "AAAA-MM-DD"` (conta como atualização para o carrossel da home).
+`kind` (`prose` | `comic` | `video`; `the-pendulum` está com `"film"`, valor que o gerador não trata de forma especial), `universe` (true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias"), `oneshot` (história de um capítulo só: o card vai direto ao capítulo), `title` / `blurb` / `cover` / `logo` / `cta` com `{"en": …, "pt": …}`, `divider` (imagem do divisor de cena), `order: {"release": n, "chrono": n}`, `reading_font: "times"` (Times New Roman no leitor, usado em Ossos do Ofício), `media`, `listed` (false esconde a obra das listas, mas a página de leitura continua existindo), `draft` (true = obra inteira em rascunho: some do site publicado em todo lugar e só aparece na prévia; tirar a linha para publicar), `order_images` (lista com 1 ou 2 imagens de `static/`, a normal e a que troca ao passar o mouse; arte do bloco "estou lendo em ordem" no Astro; sem ela vale a capa), `langs` (idiomas em que a obra aparece), `external` (link para fora: YouTube, Tapas…), `updated: "AAAA-MM-DD"` (conta como atualização para o carrossel da home).
 
 ### `media` (filtro da página Histórias)
 
@@ -59,7 +59,7 @@ Comuns: `title`, `date: AAAA-MM-DD`, `summary`, `image`, `tags: [a, b]`, `relate
 
 ## Mostrar / esconder
 
-- Obra inteira: `"listed": false` (hoje: O Pêndulo, Beira de Estrada).
+- Obra inteira em rascunho: `"draft": true` no `work.json` (hoje: Ossos do Ofício, Beira de Estrada e O Pêndulo; só a prévia as mostra; para publicar, apague a linha). `"listed": false` só tira a obra das listas e cartões (a página dela continua acessível por link) e não é o jeito de "guardar para depois".
 - Obra sem capítulo publicado aparece com botão cinza "Em breve" (sem link).
 - Capítulo/notícia: `draft: true` (só prévia) ou `unlisted: true` (capítulo acessível por link direto; na prévia o card ganha "👁 Prévia da página de leitura"). Lançar = apagar a linha.
 - Emissário: `draft: true` nos dois `.md` ou `config.json → "emissaries": {"hide": ["slug"]}`; textos de todos: `"show_texts"`.

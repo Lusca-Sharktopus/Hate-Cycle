@@ -3,6 +3,7 @@
   "universe": true,
   "oneshot": true,
   "listed": true,
+  "draft": true,
   "title": {
     "en": "All in a Night's Work",
     "pt": "Ossos do Ofício"

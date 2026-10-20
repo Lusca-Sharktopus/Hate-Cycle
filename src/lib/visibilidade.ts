@@ -6,6 +6,7 @@
 //
 // De onde vem cada regra no build.py:
 //   draft      → load_items()/load_works(): `fm.get("draft") is True and not DRAFTS` → fica de fora
+//   draft de OBRA → load_works(): `meta.get("draft") is True and not DRAFTS` → a obra inteira fica de fora (T17c)
 //   unlisted   → load_works(): `fm.get("unlisted") is True` → capítulo vai para "hidden" (página existe, fora das listas)
 //   listed/langs → wlisted(): `meta.get("listed", True) and l in meta.get("langs", LANGS)`
 //   external   → load_works()/wlink(): obra com link para fora e sem capítulos ainda entra no índice de links
@@ -23,6 +24,7 @@ export interface CapituloVisivel {
 }
 export interface ObraVisivel {
   data: {
+    draft?: boolean | undefined;
     listed?: boolean | undefined;
     langs?: Lang[] | undefined;
     oneshot?: boolean | undefined;
@@ -51,6 +53,14 @@ export function extrasDoIdioma<T extends ItemVisivel>(itens: readonly T[], lang:
 /** Emissários: tira também os escondidos em config.json → emissaries.hide. */
 export function emissariosDoIdioma<T extends ItemVisivel>(itens: readonly T[], lang: Lang, comRascunhos: boolean, escondidos: readonly string[]): T[] {
   return itensDoIdioma(itens, lang, comRascunhos).filter((e) => !escondidos.includes(e.data._origem.slug));
+}
+
+/**
+ * Obra inteira em rascunho (`"draft": true` no work.json): fora do site publicado, na prévia aparece como as outras.
+ * Quem usa: o load_works() do build.py (pula a obra) e `dadosDoIdioma()` (só entram as obras que passam por aqui).
+ */
+export function obrasPublicadas<T extends ObraVisivel>(obras: readonly T[], comRascunhos: boolean): T[] {
+  return obras.filter((o) => passaRascunho(o, comRascunhos));
 }
 
 /** wlisted(): a obra aparece nas listas daquele idioma? (`listed: false` esconde; `langs` limita os idiomas.) */

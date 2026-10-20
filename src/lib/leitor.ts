@@ -179,6 +179,10 @@ export function imagensQueFaltam(data: Record<string, unknown>, pastaStatic: str
       for (const [lang, x] of Object.entries(v)) if (typeof x === "string") citados.push([`${campo}.${lang}`, x]);
     }
   }
+  const arteDaOrdem = data["order_images"]; // work.json (T17c): lista de 1 ou 2 caminhos
+  if (Array.isArray(arteDaOrdem)) {
+    arteDaOrdem.forEach((a, n) => typeof a === "string" && citados.push([`order_images.${n}`, a]));
+  }
   const stickers = data["stickers"];
   if (Array.isArray(stickers)) {
     stickers.forEach((s, n) => typeof s === "string" && citados.push([`stickers.${n}`, (s.split("|")[0] ?? "").trim()]));

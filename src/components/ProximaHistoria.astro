@@ -1,0 +1,93 @@
+---
+// O bloco "estou lendo em ordem…" (T17c) que fecha todo capítulo: uma caixa de papel entre a do capítulo e a dos comentários, com a história
+// que vem ANTES (à esquerda) e a que vem DEPOIS (à direita) na ordem que o visitante escolheu (Cronológica ou Lançamento). Só no Astro: o
+// build.py não tem este bloco (tests/ajudantes/html.ts ignora exatamente esta <section>; lição 08-leitor.md).
+//
+// Só desenha: tudo vem decidido em `bloco` (src/lib/ordemDeLeitura.ts), nas DUAS ordens. O servidor desenha as duas listas (a padrão
+// visível, a outra com `hidden`) e o seletor desabilitado; o <script> (src/scripts/ordem/) só alterna qual lista aparece e lembra a escolha
+// no navegador. Sem JavaScript o bloco aparece na ordem padrão, com os links funcionando.
+//
+// O seletor é um <select> de verdade, transparente, por cima do texto "Cronológica ▼": a pessoa clica/toca/usa o teclado no controle
+// nativo (acessível, no celular abre o seletor do aparelho) e vê o texto do desenho do autor. O rótulo dele é a frase de cima.
+import { ORDENS } from "../scripts/ordem/regras";
+import type { BlocoDaOrdem } from "../lib/ordemDeLeitura";
+import LadoDaOrdem from "./LadoDaOrdem.astro";
+
+interface Props {
+  bloco: BlocoDaOrdem;
+}
+
+const { bloco: b } = Astro.props;
+const ID_DO_TITULO = "story-order-title";
+const nomeDaInicial = b.opcoes.find((o) => o.valor === b.ordemInicial)?.rotulo ?? "";
+---
+
+{/* Atenção às quebras de linha: o HTML sai exatamente como está escrito (compressHTML: false). */}
+<section class="reader-box paper story-order" data-story-order data-ordem={b.ordemInicial} aria-labelledby={ID_DO_TITULO}><div class="so-top"><p class="so-title" id={ID_DO_TITULO}>{b.titulo}</p><div class="so-pick"><span class="so-valor" aria-hidden="true">{nomeDaInicial}</span><select class="so-select" aria-labelledby={ID_DO_TITULO} disabled>{b.opcoes.map((o) => <option value={o.valor} selected={o.valor === b.ordemInicial}>{o.rotulo}</option>)}</select></div></div>{ORDENS.map((ordem) => <div class="so-order" data-ordem={ordem} hidden={ordem !== b.ordemInicial}>{b.listas[ordem].anterior && <LadoDaOrdem lado={b.listas[ordem].anterior} direcao="prev" />}{b.listas[ordem].proximo && <LadoDaOrdem lado={b.listas[ordem].proximo} direcao="next" />}{b.listas[ordem].foraDaOrdem && <p class="so-note">{b.avisosDeForaDaOrdem[ordem]}</p>}</div>)}</section>
+
+<script>
+  import "../scripts/ordem/index";
+</script>
+
+<style is:global>
+  @layer site {
+    /* O bloco "estou lendo em ordem…" (T17c). Mesmo papel das outras caixas do leitor (.reader-box.paper); medidas tiradas do desenho do
+       autor (proxima historia.png): a arte encosta nas bordas, a frase e o seletor ficam no centro, em cima, e o nome da história e a seta
+       ficam embaixo de cada lado. Cores e fonte são os tokens do site. */
+    .story-order { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); padding: .4rem clamp(.5rem, 1.6vw, 1.1rem) clamp(.9rem, 2vw, 1.3rem); overflow: hidden; color: var(--green); font-family: var(--font-text); }
+    .so-top { position: absolute; top: clamp(.5rem, 1.6vw, 1rem); left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; width: max-content; max-width: 60%; text-align: center; pointer-events: none; }
+    .so-title { margin: 0; white-space: nowrap; font-size: clamp(.95rem, 2.5vw, 1.8rem); font-weight: 400; line-height: 1.15; text-shadow: 1px 2px 3px #00000030; }
+    .so-pick { position: relative; display: inline-flex; margin-top: .15rem; pointer-events: auto; }
+    .so-valor { font-size: clamp(1.25rem, 3.2vw, 2.3rem); font-weight: 500; line-height: 1.15; text-shadow: 1px 2px 3px #00000030; white-space: nowrap; }
+    .so-valor::after { content: ""; display: inline-block; margin-left: .4em; border-left: .3em solid transparent; border-right: .3em solid transparent; border-top: .5em solid currentColor; vertical-align: .08em; }
+    .so-select { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; font: inherit; cursor: pointer; appearance: none; }
+    .so-select:disabled { cursor: default; }
+    .so-pick:has(.so-select:focus-visible) { outline: 3px solid var(--teal); outline-offset: 4px; border-radius: 8px; }
+
+    .so-order { grid-column: 1; grid-row: 1; display: grid; grid-template-columns: minmax(0, 38%) minmax(0, 1fr) minmax(0, 38%); align-items: end; }
+    .so-order[hidden] { display: none; }
+    .so-side.prev { grid-column: 1; }
+    .so-side.next { grid-column: 3; }
+    .so-side { display: flex; flex-direction: column; min-width: 0; color: var(--green); text-decoration: none; }
+    .so-side.prev { align-items: flex-start; text-align: left; }
+    .so-side.next { align-items: flex-end; text-align: right; }
+    .so-art { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); width: 89%; aspect-ratio: 7 / 6; min-height: 0; overflow: clip; transform-origin: 50% 92%; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+    .so-img { grid-area: 1 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transition: opacity .4s ease; }
+    .so-img-2 { opacity: 0; }
+    .so-side.is-cover .so-img { border-radius: 8px; object-fit: contain; }
+    .so-side.is-cover.prev .so-img { object-position: 0 100%; }
+    .so-side.is-cover.next .so-img { object-position: 100% 100%; }
+    .so-label { display: flex; flex-direction: column; gap: .3rem; max-width: 100%; margin-top: .1rem; font-size: clamp(.95rem, 2.5vw, 1.8rem); font-weight: 500; line-height: 1.2; text-shadow: 1px 2px 3px #00000030; text-wrap: balance; }
+    .so-side.next .so-label { align-items: flex-end; }
+    .so-arrow { display: block; width: clamp(62px, 10vw, 125px); height: auto; filter: drop-shadow(1px 2px 2px #00000030); }
+    .so-side.so-soon { opacity: .75; }
+
+    /* mouse por cima (e teclado): a arte troca da 1 para a 2 com um leve crescimento */
+    a.so-side:is(:hover, :focus-visible) .so-art { transform: scale(1.07); }
+    a.so-side:is(:hover, :focus-visible) .so-img-2 { opacity: 1; }
+    a.so-side:is(:hover, :focus-visible) .so-img-1:not(:only-child) { opacity: 0; }
+    a.so-side:is(:hover, :focus-visible) .so-label { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
+    a.so-side:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-radius: 12px; }
+    /* movimento reduzido: a troca acontece, mas sem crescer e sem transição */
+    @media (prefers-reduced-motion: reduce) {
+      .so-art, .so-img { transition: none; }
+      a.so-side:is(:hover, :focus-visible) .so-art { transform: none; }
+    }
+
+    .so-note { grid-column: 1 / -1; align-self: center; margin: 5rem 0 2rem; text-align: center; font-size: 1.05rem; }
+
+    /* celular: a frase e o seletor vão para cima, no fluxo, e as duas artes dividem a largura */
+    @media (max-width: 700px) {
+      .story-order { padding-top: .9rem; }
+      .so-top { position: static; transform: none; width: auto; max-width: none; margin-bottom: .3rem; }
+      .so-title { white-space: normal; }
+      .so-top, .so-order { grid-column: 1; }
+      .so-top { grid-row: 1; }
+      .so-order { grid-row: 2; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .3rem; }
+      .so-side.prev { grid-column: 1; }
+      .so-side.next { grid-column: 2; }
+      .so-art { width: 100%; }
+      .so-note { margin: .5rem 0; }
+    }
+  }
+</style>

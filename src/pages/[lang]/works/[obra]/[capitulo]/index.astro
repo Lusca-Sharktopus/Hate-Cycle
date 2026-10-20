@@ -11,6 +11,7 @@ import { comentariosDaPagina } from "../../../../../lib/comentarios";
 import { langs, type Lang } from "../../../../../lib/config";
 import { COM_RASCUNHOS, dadosDoIdioma } from "../../../../../lib/conteudo";
 import { leiturasDaObra, type LeituraDoCapitulo } from "../../../../../lib/leitura";
+import { blocoDaOrdem, type BlocoDaOrdem } from "../../../../../lib/ordemDeLeitura";
 import { arquivosDoGlob } from "../../../../../lib/quadrinhos";
 
 export async function getStaticPaths() {
@@ -26,8 +27,10 @@ export async function getStaticPaths() {
   for (const lang of langs) {
     for (const obra of dadosDe[lang].obras) {
       const capitulos = Object.fromEntries(langs.map((l) => [l, dadosDe[l].capitulosDe(obra)])) as Record<Lang, ReturnType<(typeof dadosDe)[Lang]["capitulosDe"]>>;
+      // o bloco "estou lendo em ordem…" (T17c) é o mesmo para todos os capítulos da obra: quem vem antes e depois dela, nas duas ordens
+      const ordem = blocoDaOrdem(obra, lang, dadosDe[lang].universo, dadosDe[lang].capitulosDe, COM_RASCUNHOS);
       for (const leitura of leiturasDaObra(obra, lang, capitulos, ferramentas)) {
-        saidas.push({ params: { lang, obra: obra.data._origem.slug, capitulo: leitura.pasta }, props: { leitura } });
+        saidas.push({ params: { lang, obra: obra.data._origem.slug, capitulo: leitura.pasta }, props: { leitura, ordem } });
       }
     }
   }
@@ -35,9 +38,9 @@ export async function getStaticPaths() {
 }
 
 const lang = Astro.params.lang as Lang;
-const { leitura } = Astro.props as { leitura: LeituraDoCapitulo };
+const { leitura, ordem } = Astro.props as { leitura: LeituraDoCapitulo; ordem: BlocoDaOrdem };
 ---
 
 <BaseLayout lang={lang} title={leitura.tituloDaPagina} description={leitura.descricao} image={leitura.imagem} alternates={leitura.alternativas} noindex={leitura.noindex} bodyClass={leitura.classeDoCorpo}>
-  <Leitor leitura={leitura} />
+  <Leitor leitura={leitura} ordem={ordem} />
 </BaseLayout>

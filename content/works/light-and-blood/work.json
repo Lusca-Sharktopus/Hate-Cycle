@@ -22,5 +22,9 @@
     "release": 3,
     "chrono": 5
   },
+  "order_images": [
+    "ordem/Luz e Sangue-ordem-1.png",
+    "ordem/Luz e Sangue-ordem-2.png"
+  ],
   "media": "live-ttrpg"
 }

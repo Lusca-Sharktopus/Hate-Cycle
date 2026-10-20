@@ -35,6 +35,8 @@ const { pagina: p } = Astro.props;
        nenhuma página tem essa classe + gifs juntos hoje (a Sobre é `page-about`; Histórias é `page-project` mas sem gifs):
        no site atual ele não faz nada na Sobre, então não foi portado (ver docs/aprendendo-astro/09-endpoints.md). */
     .page-about h2, .page-project h2 { clear: both; }
+    /* Copiado de static/style.css: página "Apoio": o texto e as imagens ocupam a coluna inteira (o .prose de 70ch ficava encostado à esquerda). */
+    .page-support .prose { max-width: none; }
     .apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
     .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("/silhuetas/apollo.png"); }
     .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("/silhuetas/anfibio.png"); }

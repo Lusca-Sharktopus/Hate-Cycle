@@ -527,6 +527,15 @@ def cenario_variado():
     a.update(cap2("s-titulo-vazio", "01", date="2026-05-20"))
     a.update(cap2("s-titulo-vazio", "02", date="2026-05-21", title="Segundo"))
     a["works/t-sem-nada/work.json"] = wj()
+    # T17c: obra INTEIRA em rascunho (work.json → draft: true): some de tudo no build; na prévia aparece como as outras
+    a["works/u-obra-rascunho/work.json"] = wj(kind="prose", draft=True, title={"en": "U Draft Work", "pt": "U Obra Rascunho"}, blurb={"en": "Draft.", "pt": "Rascunho."},
+                                               cover="covers/u.png", order={"release": 13, "chrono": 4}, media="short-story")
+    a.update(cap2("u-obra-rascunho", "01", date="2026-04-20", summary=""))
+    a["works/v-rascunho-externa/work.json"] = wj(kind="video", draft=True, title="V Rascunho Externa", external="https://exemplo.com/v", order={"release": 14}, media="misc")
+    a["works/w-rascunho-falso/work.json"] = wj(kind="prose", draft=False, title="W Rascunho Falso", order={"release": 15})
+    a.update(cap2("w-rascunho-falso", "01", date="2026-04-22", summary=""))
+    a["works/x-rascunho-escondida/work.json"] = wj(kind="prose", draft=True, listed=False, title="X Rascunho Escondida", order={"release": 16})
+    a.update(cap2("x-rascunho-escondida", "01", date="2026-04-23", summary=""))
     # ── notícias ──
     def n(nome, en, pt=None, corpo_en="", corpo_pt=None):    # notícia nos dois idiomas, com o mesmo texto (salvo se corpo_pt for dado)
         return item("news", nome, en, pt if pt is not None else en, corpo_en=corpo_en, corpo_pt=corpo_en if corpo_pt is None else corpo_pt)
@@ -546,9 +555,10 @@ def cenario_variado():
     a.update(n("2026-04-10-escondida", dict(title="Hidden Work News", date="2026-04-10"), corpo_en="Cita [[works/k-escondida]]."))
     a.update(n("2026-05-01-sem-resumo", dict(title="Rich", date="2026-05-01", tags=[]), corpo_en="<div class=\"x\">caixa</div>\n\n{{embed:https://x.com/a/status/1}}\n\nUm [link](https://x.com), uma ![imagem](a.png), e [[universe/magia|a magia]] e [[characters/harry]] ocupam a abertura deste texto longo."))
     a.update(item("news", "2026-05-02-so-pt", None, dict(title="Só em português", date="2026-05-02", related=["works/a-oneshot", "universe/magia", "characters/harry", "news/2025-12-30-alfa", "emissaries/ana"]), corpo_pt="Só PT."))
+    a.update(n("2026-04-21-obra-rascunho", dict(title="Draft Work News", date="2026-04-21"), corpo_en="Cita [[works/u-obra-rascunho]] e [[works/v-rascunho-externa]], que são obras inteiras em rascunho."))
     a.update(n("2026-05-03-sem-data", dict(title="No date"), corpo_en="Sem data nenhuma, cita [[works/a-oneshot]]."))
     a.update(n("2026-05-04-rascunho", dict(title="Draft news", date="2026-05-04", draft=True), corpo_en="Rascunho."))
-    a.update(n("2026-05-05-relacionados", dict(title="Related", date="2026-05-05", related=["works/a-oneshot", "works/m-sem-ordem", "works/i-externa", "works/t-sem-nada", "universe/magia", "news/2026-05-04-rascunho", "pages/about"]), corpo_en="Tem relacionados."))
+    a.update(n("2026-05-05-relacionados", dict(title="Related", date="2026-05-05", related=["works/a-oneshot", "works/m-sem-ordem", "works/i-externa", "works/t-sem-nada", "works/u-obra-rascunho", "works/v-rascunho-externa", "universe/magia", "news/2026-05-04-rascunho", "pages/about"]), corpo_en="Tem relacionados."))
     for dia in range(1, 6):    # mais notícias: passam das 10 da primeira página
         a.update(n(f"2026-05-1{dia}-enchimento", dict(title=f"Filler {dia}", date=f"2026-05-1{dia}"), corpo_en=f"Texto de enchimento número {dia}."))
     # ── emissários ──
@@ -576,7 +586,7 @@ def cenario_variado():
     a.update(u_("dup-b", dict(title="Zeta", category="Bestas", order=7)))
     a.update(u_("dup-a", dict(title="Alfa", category="Bestas", order=7)))
     c_ = lambda nome, en, pt=None, **k: item("characters", nome, en, pt if pt is not None else en, **k)
-    a.update(c_("harry", dict(title="Harry", role="Assistente", order=2, appears_in=["b-serial", "a-oneshot", "k-escondida", "i-externa", "m-sem-ordem", "c-video"], related=["works/a-oneshot", "universe/magia"])))
+    a.update(c_("harry", dict(title="Harry", role="Assistente", order=2, appears_in=["b-serial", "a-oneshot", "k-escondida", "i-externa", "m-sem-ordem", "c-video", "u-obra-rascunho", "v-rascunho-externa"], related=["works/a-oneshot", "universe/magia"])))
     a.update(c_("olivia", dict(title="Olivia", order=1, appears_in=["a-oneshot"])))
     a.update(c_("sem-ordem", dict(title="Sem Ordem")))
     a.update(item("pages", "about", dict(title="About", summary="S"), dict(title="Sobre", summary="S")))

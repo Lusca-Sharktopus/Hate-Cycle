@@ -212,3 +212,29 @@ As notícias não ganharam lição própria porque quase tudo já existia: a not
 1. **Quebre a busca de propósito** (e desfaça). Em `src/lib/paginacao.ts`, troque `palavras.every` por `palavras.some` em `combinaComBusca`. Rode `pnpm test`: os testes de `tests/noticias.test.ts` apontam a busca que deixou de bater. Para ver no navegador, `pnpm dev`, abra `/pt/news/` e busque duas palavras de títulos diferentes: com `some` aparecem notícias demais. Desfaça a mudança.
 
 Para conferir tudo contra o site atual: `HC_DIST=dist pnpm vitest run paginas` (as 168 páginas de notícias) e `python3 tools/noticias_playwright.py --python 8791 --astro 8792` (busca, páginas e botões dos posts no navegador, passo a passo; leva uns 2 min e as instruções estão no topo do script).
+
+## "Estou lendo em ordem…" (T17c): quem vem antes e depois, e a obra inteira em rascunho
+
+Duas coisas novas que se apoiam uma na outra. A primeira é uma **regra de publicação**; a segunda, um **bloco novo no fim de cada capítulo**, que só existe no Astro (o `build.py` está congelado e não o tem).
+
+### 1. `"draft": true` no `work.json` = a obra inteira não existe no site publicado
+
+- **O que o visitante vê:** no site publicado, uma obra em rascunho não aparece em lugar nenhum: nem cartão (nem o cinza "Em breve"), nem em Histórias, na home, em "Últimas atualizações", no mapa do site, no RSS ou no seletor de idioma, e as páginas de capítulo dela não são geradas. Na prévia (`python build.py serve` ou `pnpm dev`) ela aparece como qualquer rascunho. Publicar = apagar a linha.
+- **Hoje:** *Ossos do Ofício*, *Beira de Estrada* e *O Pêndulo* (estas duas tinham `"listed": false`; `draft` virou o **interruptor único** de "ainda não publicado", e `listed: false` ficou só para "fora das listas, mas a página existe").
+- **No código:** o schema aceita `draft` (`src/lib/schemas.ts`, como qualquer campo: campo desconhecido é erro) e **uma função** decide: `obrasPublicadas(obras, comRascunhos)` em `src/lib/visibilidade.ts`. Quem monta o site (`dadosDoIdioma()`, `src/lib/idioma.ts`), os índices de links (`corpos.ts`) e as páginas (`conteudo.ts`) passam as obras por ela **antes** de qualquer regra (ordem, cartões, atualizações, sitemap…). Assim não há "uma regra por lugar" para esquecer. No Python a mesma regra são 2 linhas em `load_works()`.
+- **Prova:** `tools/regras_ref.py` ganhou obras inventadas (rascunho com capítulo, rascunho externa, `draft: false`, rascunho + `listed: false`) e uma notícia que cita cada uma; o `build()` do Python, em build e em prévia, é a referência de `tests/conteudo.test.ts` e `tests/regras.test.ts`.
+
+### 2. O bloco "estou lendo em ordem"
+
+- **Os dados são regras puras:** `src/lib/ordemDeLeitura.ts` (`blocoDaOrdem()`). Ele **reaproveita** `organizarCartoes()` (a ordenação da grade de Histórias) e `cartaoDaObra()` (o destino do botão do cartão): não há regra de ordem nova. Por isso o `"chrono": false`, os empates, o "sem número vai para o fim" e "só existe o que o site mostra naquele modo" valem aqui do mesmo jeito que em Histórias.
+- **O desenho:** `ProximaHistoria.astro` (a caixa) e `LadoDaOrdem.astro` (cada lado). O servidor desenha **as duas ordens** e esconde a que não é a padrão; o seletor vem `disabled`. Sem JavaScript o bloco já funciona na Cronológica; com JavaScript o seletor é ligado.
+- **O script** (`src/scripts/ordem/`): `regras.ts` (sem nenhum `import`: lembrar a escolha em `localStorage`, tudo dentro de `try/catch`), `bloco.ts` (só alterna `hidden`, o `value` do seletor e o texto do nome da ordem por `textContent`) e `index.ts`. Nada de `innerHTML` e nada que leia o `config.json`: `tests/ordem-dom.test.ts` olha o código e, num navegador simulado, o resultado.
+- **Os textos** moram em `src/lib/textosDaOrdem.ts` (não no `config.json`, que é seu). Os de inglês são proposta.
+- **As imagens:** `order_images` no `work.json` (lista de 1 ou 2 caminhos em `static/`); sem ela, a capa. Passam pelo caminho das imagens da T17 (perfil `ordemDeLeitura` em `src/lib/imagens.ts`: `srcset` WebP, `width`/`height`, carregamento preguiçoso).
+- **Prova da paridade:** o Python não tem o bloco, então `tests/ajudantes/html.ts → semBlocoDeOrdem()` tira do HTML do Astro **só** as `<section data-story-order>` antes de comparar com o Python. A exceção é estreita de propósito: `tests/ordem.test.ts` prova que, sem o bloco, o Leitor é idêntico ao de antes, que o que sai não tem comentários, scripts nem texto do autor, e `tests/paginas.test.ts` (grupo "T17c") confere nas páginas reais que há **exatamente um** bloco por capítulo, como filho direto do `<main>`, entre a caixa do capítulo e a dos comentários, e nenhum em outras páginas. Os IDs dos comentários não mudam.
+- **No navegador:** `python3 tools/ordem_playwright.py` (instruções no topo do script).
+
+### Tente (ordem)
+
+1. **Veja uma história nova entrar na fila.** Copie `content/works/roadside/` para `content/works/teste/`, troque o título e os números de `order` (ex.: `"release": 5.5, "chrono": 8`), rode `pnpm dev` e abra um capítulo de *Beira de Estrada* ou de *O Pêndulo*: o vizinho mudou sozinho. Apague a pasta `teste` depois.
+2. **Quebre a ordem de propósito.** Em `src/lib/ordemDeLeitura.ts`, troque `decrescente: false` por `true` em `sequenciaDaOrdem()` e rode `pnpm vitest run ordem`: os testes do exemplo do PDF falham. Desfaça.

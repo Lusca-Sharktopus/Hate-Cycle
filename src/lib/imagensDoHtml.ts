@@ -50,6 +50,7 @@ export function perfilDoLugar(lugar: Lugar): Perfil | null {
   if (em("news-thumb")) return PERFIS.miniatura;
   if (p.has("news-stk")) return PERFIS.figurinha;
   if (p.has("cover") && a.has("work-head")) return PERFIS.capaDaObra;
+  if (p.has("so-img")) return PERFIS.ordemDeLeitura;
   if (p.has("title-image")) return PERFIS.tituloDeCapitulo;
   if (a.has("comic")) return PERFIS.paginaDeQuadrinho;
   if (a.has("lead")) return PERFIS.figuraDeNoticia;

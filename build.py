@@ -212,6 +212,8 @@ def load_works():
         return works
     for wd in sorted(p for p in d.iterdir() if p.is_dir() and (p / "work.json").exists()):
         meta = json.loads((wd / "work.json").read_text("utf-8"))
+        if meta.get("draft") is True and not DRAFTS:   # obra inteira em rascunho: só aparece na prévia (serve)
+            continue
         w = dict(slug=wd.name, meta=meta, chapters={l: [] for l in LANGS}, hidden={l: [] for l in LANGS})
         for i, cd in enumerate(sorted((p for p in wd.iterdir() if p.is_dir()), key=lambda p: natural(p.name)), 1):
             for lang in LANGS:

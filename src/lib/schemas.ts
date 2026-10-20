@@ -93,6 +93,15 @@ const listaDeTextos = () =>
     })
     .transform((v): string[] => (v === "" ? [] : v));
 
+/** order_images do work.json: a imagem normal e, se houver, a do mouse por cima (no máximo duas). */
+const listaOrdemDeImagens = () =>
+  listaDeTextos().superRefine((lista, ctx) => {
+    if (lista.length > 2) ctx.addIssue({ code: "custom", input: lista, message: `tem de ter no máximo 2 imagens (a normal e a do mouse por cima), mas veio a lista ${JSON.stringify(lista)}.` });
+    lista.forEach((arquivo, n) => {
+      if (arquivo.trim() === "") ctx.addIssue({ code: "custom", path: [n], input: arquivo, message: `a imagem ${n + 1} está vazia: escreva o caminho dentro de static/ (ex.: ordem/Minha Obra-ordem-1.png).` });
+    });
+  });
+
 /** Lista de referências "seção/pasta" (related). */
 const referencias = (indice: Indice) =>
   listaDeTextos().superRefine((lista, ctx) => {
@@ -273,8 +282,13 @@ export function criarSchemas(indice: Indice) {
       /** true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias". Padrão: true. */
       universe: simNao().optional(),
       oneshot: simNao().optional(),
-      /** false esconde a obra inteira. Padrão: true. */
+      /** false esconde a obra inteira (das listas; as páginas dos capítulos existem). Padrão: true. */
       listed: simNao().optional(),
+      /** true = obra INTEIRA em rascunho: some de tudo no site publicado (cartões, Histórias, home, atualizações, sitemap, feed, capítulos)
+       *  e só aparece na prévia (`pnpm dev`), como um capítulo ou notícia `draft: true`. Tira a linha para publicar. */
+      draft: simNao().optional(),
+      /** Imagens do bloco "estou lendo em ordem…" (T17c): [normal] ou [normal, com o mouse por cima], caminhos em static/. Sem elas, o bloco usa a capa. */
+      order_images: listaOrdemDeImagens().optional(),
       langs: z.array(idioma, { error: (i) => `tem de ser uma lista de idiomas (${langs.join(", ")}), mas veio ${descrever(i.input)}.` }).optional(),
       title: traduzivel().optional(),
       blurb: traduzivel().optional(),

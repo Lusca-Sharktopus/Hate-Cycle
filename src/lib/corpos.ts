@@ -18,7 +18,7 @@ import { decodificar } from "./frontmatter";
 import type { EntradaBruta } from "./leitor";
 import { markdownParaHtml, type IndiceDoIdioma } from "./markdown";
 import type { Colecao } from "./schemas";
-import { capitulosDaObra, itensDoIdioma, obraNoIndice, passaRascunho, type CapituloVisivel, type ItemVisivel, type ObraVisivel } from "./visibilidade";
+import { capitulosDaObra, itensDoIdioma, obraNoIndice, obrasPublicadas, passaRascunho, type CapituloVisivel, type ItemVisivel, type ObraVisivel } from "./visibilidade";
 
 // ───────────── atalhos: marcadores que a página troca pelo HTML de verdade ─────────────
 
@@ -80,7 +80,8 @@ const SECOES_DO_INDICE = ["news", "universe", "characters", "pages", "emissaries
  *    endereço /<idioma>/<seção>/<pasta>/ (páginas: /<idioma>/<pasta>/). Emissários e páginas com `route: false`
  *    também entram, como no Python (mesmo sem página própria).
  *  - obras: entram se têm capítulo listado naquele idioma (não `unlisted`, não rascunho fora da prévia) OU link
- *    externo; endereço = o 1º capítulo, se `oneshot`, senão a página da obra. `listed: false` NÃO tira do índice.
+ *    externo; endereço = o 1º capítulo, se `oneshot`, senão a página da obra. `listed: false` NÃO tira do índice;
+ *    obra inteira em rascunho (`draft: true` no work.json) só entra na prévia.
  *  - show_extras: false tira Universo e Personagens.
  */
 export function indiceDeLinks(c: ConteudoDoIndice, lang: Lang, comRascunhos: boolean, mostrarExtras: boolean): Map<string, readonly [string, string]> {
@@ -93,7 +94,7 @@ export function indiceDeLinks(c: ConteudoDoIndice, lang: Lang, comRascunhos: boo
       indice.set(`${secao}/${slug}`, [titulo, secao === "pages" ? `/${lang}/${slug}/` : `/${lang}/${secao}/${slug}/`]);
     }
   }
-  for (const obra of c.works) {
+  for (const obra of obrasPublicadas(c.works, comRascunhos)) {
     const slug = obra.data._origem.slug;
     const { listados } = capitulosDaObra(c.chapters, slug, lang, comRascunhos);
     if (!obraNoIndice(obra, listados.length, lang)) continue;

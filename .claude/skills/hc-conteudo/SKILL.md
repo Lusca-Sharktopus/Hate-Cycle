@@ -33,13 +33,13 @@ description: Criar, editar, esconder ou mostrar conteúdo do site Hᴀᴛᴇ Cʏ
 Notícias com design: `backdrop_top`/`backdrop_bottom`; colagem: `stickers` (linhas `arquivo | l3 t2 w26 a-4`) + `overlay`.
 Emissário: `title`, `role`, `image` (quadrada, em `static/emissaries/`), `order`, redes (`instagram`, `tiktok`, `youtube`, `x`, `bluesky`, `website`, `email`).
 
-**`work.json`**: `kind` (`prose` | `comic` | `video`), `universe` (true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias"), `oneshot`, `title`/`blurb`/`cover`/`logo` com `{"en","pt"}`, `divider` (imagem do `---`), `order: {"release": n, "chrono": n}`, `reading_font: "times"`, `media`, `listed` (false esconde a obra inteira), `langs`, `external` (link para fora), `updated`.
+**`work.json`**: `kind` (`prose` | `comic` | `video`), `universe` (true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias"), `oneshot`, `title`/`blurb`/`cover`/`logo` com `{"en","pt"}`, `divider` (imagem do `---`), `order: {"release": n, "chrono": n}`, `reading_font: "times"`, `media`, `listed` (false tira das listas, mas a página existe), `draft` (true = obra inteira em rascunho, só na prévia), `order_images` (1 ou 2 imagens para o bloco "estou lendo em ordem"; sem elas vale a capa), `langs`, `external` (link para fora), `updated`.
 
 **`media`** (filtro da página Histórias; rótulos em `MEDIA_LABELS` no `build.py`): `short-story`, `webcomic`, `live-ttrpg`, `short-film`, `animated-show`, `videogame`, `misc` (PT "Miscelânea", EN "Miscellaneous").
 
 ## Mostrar / esconder
 
-- Obra inteira: `"listed": false` no `work.json` (ex.: O Pêndulo, Beira de Estrada).
+- Obra inteira: `"draft": true` no `work.json` (ex.: Ossos do Ofício, Beira de Estrada, O Pêndulo); publicar = apagar a linha.
 - Capítulo/notícia: `draft: true` (só prévia) ou `unlisted: true` (capítulo acessível por link).
 - Emissário: `draft: true` nos dois `.md` ou `config.json → "emissaries": {"hide": ["slug"]}`.
 - "Extras" (Universo, Personagens): `config.json → "show_extras"`.

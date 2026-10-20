@@ -11,6 +11,7 @@
 // tela, e o teste compara a estrutura com a do site atual. Não quebre as linhas longas do HTML abaixo.
 import "../styles/prosa.css";
 import type { LeituraDoCapitulo } from "../lib/leitura";
+import type { BlocoDaOrdem } from "../lib/ordemDeLeitura";
 import { assetUrl } from "../lib/assets";
 import { textoDoAutor } from "../lib/pagina";
 import CabecalhoDoCapitulo from "./CabecalhoDoCapitulo.astro";
@@ -18,19 +19,23 @@ import CartaQueVira from "./CartaQueVira.astro";
 import Comentarios from "./Comentarios.astro";
 import Pager from "./Pager.astro";
 import PostsAlternados from "./PostsAlternados.astro";
+import ProximaHistoria from "./ProximaHistoria.astro";
 import Seta from "./Seta.astro";
 
 interface Props {
   leitura: LeituraDoCapitulo;
+  /** O bloco "estou lendo em ordem…" (T17c) que fica entre a caixa do capítulo e a dos comentários; sem ele, a página sai como a do Python. */
+  ordem?: BlocoDaOrdem | undefined;
 }
 
-const { leitura: l } = Astro.props;
+const { leitura: l, ordem } = Astro.props;
 const c = l.conteudo;
 ---
 
 {c.formato === "prose" && <div class="reader-box paper">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} /><hr class="thin" /><div class={c.fonteTimes ? "prose story font-times" : "prose story"}><Fragment set:html={textoDoAutor(c.nota)} /></div>{c.paginador && <Pager paginador={c.paginador} />}</div>}
 {c.formato === "video" && <div class="reader-box paper">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} />{c.lados ? <div class="player-row">{c.lados.anterior ? <a class="side-btn prev" rel="prev" href={c.lados.anterior.url} title={c.lados.anterior.rotulo} aria-label={c.lados.anterior.rotulo}><Seta direcao="prev" /></a> : <span class="side-btn prev ghost"></span>}<div class="video-wrapper"><iframe src={`https://www.youtube.com/embed/${c.youtube}`} allowfullscreen title={c.tituloDoVideo}></iframe></div>{c.lados.proximo ? <a class="side-btn next" rel="next" href={c.lados.proximo.url} title={c.lados.proximo.rotulo} aria-label={c.lados.proximo.rotulo}><Seta direcao="next" /></a> : <span class="side-btn next ghost"></span>}</div> : <div class="video-wrapper"><iframe src={`https://www.youtube.com/embed/${c.youtube}`} allowfullscreen title={c.tituloDoVideo}></iframe></div>}{c.nota && <div class="prose"><Fragment set:html={textoDoAutor(c.nota)} /></div>}{c.paginador && <Pager paginador={c.paginador} />}</div>}
 {c.formato === "comic" && <div class="reader-box">{l.avisoDeRascunho && <p class="draft-banner">{l.avisoDeRascunho}</p>}<CabecalhoDoCapitulo cabecalho={l.cabecalho} />{c.paginador && <Pager paginador={c.paginador} />}<div class="comic">{c.paginas.map((p) => <img src={assetUrl(p.arquivo)} alt={p.alt} loading="lazy" />)}</div>{c.nota && <div class="author-note prose"><Fragment set:html={textoDoAutor(c.nota)} /></div>}{c.paginador && <Pager paginador={c.paginador} />}</div>}
+{ordem && <ProximaHistoria bloco={ordem} />}
 <div class="reader-box paper slim">{l.comentarios && <Comentarios secao={l.comentarios} />}</div>
 {l.temCartaQueVira && <CartaQueVira />}
 {l.temPostsAlternados && <PostsAlternados />}

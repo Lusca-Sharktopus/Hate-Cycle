@@ -11,7 +11,7 @@
 //   - `&#x27;` × `&#39;` e outras formas de escrever o mesmo caractere são iguais (o parser decodifica as duas).
 // Não conta: comentários HTML e atributos `data-astro-cid-*` (a marca de escopo dos estilos do Astro — nenhum dos componentes
 // da T11 tem, mas o Header e o Footer da T06 têm; é uma diferença técnica documentada em docs/aprendendo-astro/07-paginas.md).
-import { parse, type DefaultTreeAdapterMap } from "parse5";
+import { parse, parseFragment, type DefaultTreeAdapterMap } from "parse5";
 
 type No = DefaultTreeAdapterMap["node"];
 type Elemento = DefaultTreeAdapterMap["element"];
@@ -223,4 +223,39 @@ export const RE_SCRIPT_DOS_COMENTARIOS = /<script type="module" src="[^"]*CaixaD
 /** Os IDs das conversas de comentários de uma página: todo atributo data-page, na ordem (o mesmo critério de tools/baseline.py). */
 export function idsDeComentarios(html: string): string[] {
   return varrer(parse(html), (e) => attr(e, "data-page") !== undefined).map((e) => attr(e, "data-page") ?? "");
+}
+
+// ───────────── T17c: a única diferença aceita no <main> dos capítulos ─────────────
+//
+// O bloco "estou lendo em ordem…" (src/components/ProximaHistoria.astro) só existe no Astro: o build.py não o tem (funcionalidade nova,
+// o gerador Python está congelado). Para comparar o resto do <main> do capítulo com o do Python, tira-se do HTML do ASTRO exatamente
+// as <section> que levam o atributo `data-story-order` — o atributo só esse componente usa. Nada mais é removido: tests/ordem.test.ts
+// confere que, em toda página, saem 0 (fora dos capítulos) ou 1 (capítulos) dessas seções, que cada uma é filha direta do <main>,
+// fica entre a caixa do capítulo e a dos comentários, e que não leva nem comentários, nem script, nem texto do autor.
+
+export interface SemBlocoDeOrdem {
+  /** O HTML sem as seções do bloco. */
+  html: string;
+  /** O HTML de cada seção removida, na ordem. */
+  removidos: string[];
+  /** Para cada removida: o `<main>` é o pai direto? */
+  filhasDiretasDoMain: boolean[];
+}
+
+/** O HTML do Astro (página inteira ou pedaço do miolo) sem o bloco "estou lendo em ordem…". */
+export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
+  const arvore = /<html[\s>]/i.test(html) ? parse(html, { sourceCodeLocationInfo: true }) : parseFragment(html, { sourceCodeLocationInfo: true });
+  const achadas = varrer(arvore as unknown as No, (e) => e.tagName === "section" && attr(e, "data-story-order") !== undefined);
+  const cortes = achadas.map((e) => ({ de: e.sourceCodeLocation?.startOffset ?? -1, ate: e.sourceCodeLocation?.endOffset ?? -1, pai: (e.parentNode as Elemento | null)?.tagName }));
+  if (cortes.some((c) => c.de < 0 || c.ate < c.de)) throw new Error("não consegui achar onde o bloco de ordem começa e termina");
+  let saida = "";
+  let pos = 0;
+  const removidos: string[] = [];
+  for (const c of [...cortes].sort((a, b) => a.de - b.de)) {
+    saida += html.slice(pos, c.de);
+    removidos.push(html.slice(c.de, c.ate));
+    pos = c.ate;
+  }
+  saida += html.slice(pos);
+  return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main") };
 }

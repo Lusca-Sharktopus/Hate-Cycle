@@ -15,7 +15,7 @@ import type { IndiceDoIdioma } from "./markdown";
 import { ordenarNoticias, type NoticiaComDados } from "./noticias";
 import { destaquesDaHome, obrasPorPasta, separarObras, type ObraComDados } from "./obras";
 import type { CapituloDeLeitura } from "./capitulos";
-import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, type CapituloVisivel, type ItemVisivel, type ObraVisivel } from "./visibilidade";
+import { capitulosDaObra, emissariosDoIdioma, extrasDoIdioma, itensDoIdioma, obrasPublicadas, type CapituloVisivel, type ItemVisivel, type ObraVisivel } from "./visibilidade";
 
 /** As entradas das sete coleções (todas as obras, em todos os idiomas), como o Astro ou o leitor de content/ as entregam. */
 export interface EntradasDoSite<
@@ -58,7 +58,7 @@ export interface DadosDoIdioma<
   P extends PaginaParaChamada,
 > {
   lang: Lang;
-  /** Todas as obras na ordem das pastas (inclusive as escondidas das listas: as páginas delas existem). */
+  /** Todas as obras publicadas (as de rascunho só na prévia) na ordem das pastas (inclusive as escondidas das listas: as páginas delas existem). */
   obras: O[];
   /** Capítulos listados e ocultos de uma obra neste idioma. */
   capitulosDe: (obra: O) => { listados: K[]; ocultos: K[] };
@@ -97,7 +97,8 @@ export function dadosDoIdioma<
   P extends PaginaParaChamada & ItemVisivel,
 >(entradas: EntradasDoSite<N, O, K, E, X, Y, P>, lang: Lang, opcoes: OpcoesDoSite): DadosDoIdioma<N, O, K, E, X, Y, P> {
   const { comRascunhos, mostrarExtras, emissariosEscondidos, todosOsIdiomas } = opcoes;
-  const obras = obrasPorPasta(entradas.works);
+  // obra inteira em rascunho (`draft: true` no work.json): fora do site publicado, em todo lugar (T17c)
+  const obras = obrasPorPasta(obrasPublicadas(entradas.works, comRascunhos));
   const memoria = new Map<string, { listados: K[]; ocultos: K[] }>();
   const capitulosDe = (obra: O) => {
     const slug = obra.data._origem.slug;

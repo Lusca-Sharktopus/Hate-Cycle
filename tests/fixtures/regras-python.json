@@ -7611,7 +7611,6 @@
    "estado": {
     "en": {
      "listadas": [
-      "all-in-a-nights-work",
       "firestriker",
       "hdvr",
       "light-and-blood"
@@ -7619,33 +7618,15 @@
      "universo": [
       "hdvr",
       "firestriker",
-      "light-and-blood",
-      "all-in-a-nights-work"
+      "light-and-blood"
      ],
      "outras": [],
      "destaques": [
       "light-and-blood",
       "firestriker",
-      "hdvr",
-      "all-in-a-nights-work"
+      "hdvr"
      ],
      "cartoes": {
-      "all-in-a-nights-work": {
-       "titulo": "All in a Night's Work",
-       "titulo_dado": "All in a Night's Work",
-       "resumo": "Giuseppe di Vario deals with the hardships of working as an exorcist.",
-       "imagem": "/covers/EN/Cover%20All%20in%20a%20Night%27s%20Work.png",
-       "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Soon"
-       },
-       "previa": null,
-       "ordem": {
-        "chrono": "4",
-        "release": "4"
-       },
-       "midia": "short-story"
-      },
       "firestriker": {
        "titulo": "Firestriker",
        "titulo_dado": "Firestriker",
@@ -7699,38 +7680,6 @@
         "release": "3"
        },
        "midia": "live-ttrpg"
-      },
-      "roadside": {
-       "titulo": "Roadside",
-       "titulo_dado": "Roadside",
-       "resumo": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
-       "imagem": "/covers/EN/Cover%20Roadside.png",
-       "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Soon"
-       },
-       "previa": null,
-       "ordem": {
-        "chrono": "7",
-        "release": "5"
-       },
-       "midia": "webcomic"
-      },
-      "the-pendulum": {
-       "titulo": "The Pendulum",
-       "titulo_dado": "The Pendulum",
-       "resumo": "Retired superhero Lucas di Vario helps his friend with their problem with time loops.",
-       "imagem": "/covers/EN/Cover%20Pendulum.png",
-       "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Soon"
-       },
-       "previa": null,
-       "ordem": {
-        "chrono": "11",
-        "release": "6"
-       },
-       "midia": "short-film"
       }
      },
      "seletor": {
@@ -8726,7 +8675,6 @@
     },
     "pt": {
      "listadas": [
-      "all-in-a-nights-work",
       "firestriker",
       "hdvr",
       "light-and-blood"
@@ -8734,33 +8682,15 @@
      "universo": [
       "hdvr",
       "firestriker",
-      "light-and-blood",
-      "all-in-a-nights-work"
+      "light-and-blood"
      ],
      "outras": [],
      "destaques": [
       "light-and-blood",
       "firestriker",
-      "hdvr",
-      "all-in-a-nights-work"
+      "hdvr"
      ],
      "cartoes": {
-      "all-in-a-nights-work": {
-       "titulo": "Ossos do Ofício",
-       "titulo_dado": "Ossos do Ofício",
-       "resumo": "Giuseppe di Vario lida com as dificuldades de trabalhar como um exorcista.",
-       "imagem": "/covers/PT/Capa%20Ossos%20do%20Of%C3%ADcio.png",
-       "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Em breve"
-       },
-       "previa": null,
-       "ordem": {
-        "chrono": "4",
-        "release": "4"
-       },
-       "midia": "short-story"
-      },
       "firestriker": {
        "titulo": "Pederneira",
        "titulo_dado": "Pederneira",
@@ -8814,38 +8744,6 @@
         "release": "3"
        },
        "midia": "live-ttrpg"
-      },
-      "roadside": {
-       "titulo": "Beira de Estrada",
-       "titulo_dado": "Beira de Estrada",
-       "resumo": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre.",
-       "imagem": "/covers/PT/Capa%20Beira%20de%20Estrada.png",
-       "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Em breve"
-       },
-       "previa": null,
-       "ordem": {
-        "chrono": "7",
-        "release": "5"
-       },
-       "midia": "webcomic"
-      },
-      "the-pendulum": {
-       "titulo": "O Pêndulo",
-       "titulo_dado": "O Pêndulo",
-       "resumo": "O super-herói aposentado Lucas di Vario ajuda seu amigo com seu problema com loops temporais.",
-       "imagem": "/covers/PT/Capa%20Pendulo.png",
-       "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Em breve"
-       },
-       "previa": null,
-       "ordem": {
-        "chrono": "11",
-        "release": "6"
-       },
-       "midia": "short-film"
       }
      },
      "seletor": {
@@ -18248,20 +18146,25 @@
       "all-in-a-nights-work",
       "firestriker",
       "hdvr",
-      "light-and-blood"
+      "light-and-blood",
+      "roadside",
+      "the-pendulum"
      ],
      "universo": [
       "hdvr",
       "firestriker",
       "light-and-blood",
-      "all-in-a-nights-work"
+      "all-in-a-nights-work",
+      "roadside",
+      "the-pendulum"
      ],
      "outras": [],
      "destaques": [
       "light-and-blood",
       "firestriker",
       "all-in-a-nights-work",
-      "hdvr"
+      "hdvr",
+      "the-pendulum"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -18415,6 +18318,14 @@
         {
          "valor": "live-ttrpg",
          "rotulo": "Live TTRPG"
+        },
+        {
+         "valor": "webcomic",
+         "rotulo": "Webcomic"
+        },
+        {
+         "valor": "short-film",
+         "rotulo": "Short Film"
         }
        ]
       }
@@ -19390,20 +19301,25 @@
       "all-in-a-nights-work",
       "firestriker",
       "hdvr",
-      "light-and-blood"
+      "light-and-blood",
+      "roadside",
+      "the-pendulum"
      ],
      "universo": [
       "hdvr",
       "firestriker",
       "light-and-blood",
-      "all-in-a-nights-work"
+      "all-in-a-nights-work",
+      "roadside",
+      "the-pendulum"
      ],
      "outras": [],
      "destaques": [
       "light-and-blood",
       "firestriker",
       "hdvr",
-      "all-in-a-nights-work"
+      "the-pendulum",
+      "roadside"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -19555,6 +19471,14 @@
         {
          "valor": "live-ttrpg",
          "rotulo": "RPG ao Vivo"
+        },
+        {
+         "valor": "webcomic",
+         "rotulo": "Webcomic"
+        },
+        {
+         "valor": "short-film",
+         "rotulo": "Curta-metragem"
         }
        ]
       }
@@ -29015,6 +28939,16 @@
     "works/s-titulo-vazio/02/en.md": "---\ndate: 2026-05-21\ntitle: Segundo\n---\n\nTexto do capítulo em inglês.\n",
     "works/s-titulo-vazio/02/pt.md": "---\ndate: 2026-05-21\ntitle: Segundo\n---\n\nTexto do capítulo em português.\n",
     "works/t-sem-nada/work.json": "{}\n",
+    "works/u-obra-rascunho/work.json": "{\n  \"kind\": \"prose\",\n  \"draft\": true,\n  \"title\": {\n    \"en\": \"U Draft Work\",\n    \"pt\": \"U Obra Rascunho\"\n  },\n  \"blurb\": {\n    \"en\": \"Draft.\",\n    \"pt\": \"Rascunho.\"\n  },\n  \"cover\": \"covers/u.png\",\n  \"order\": {\n    \"release\": 13,\n    \"chrono\": 4\n  },\n  \"media\": \"short-story\"\n}\n",
+    "works/u-obra-rascunho/01/en.md": "---\ndate: 2026-04-20\nsummary: \n---\n\nTexto do capítulo em inglês.\n",
+    "works/u-obra-rascunho/01/pt.md": "---\ndate: 2026-04-20\nsummary: \n---\n\nTexto do capítulo em português.\n",
+    "works/v-rascunho-externa/work.json": "{\n  \"kind\": \"video\",\n  \"draft\": true,\n  \"title\": \"V Rascunho Externa\",\n  \"external\": \"https://exemplo.com/v\",\n  \"order\": {\n    \"release\": 14\n  },\n  \"media\": \"misc\"\n}\n",
+    "works/w-rascunho-falso/work.json": "{\n  \"kind\": \"prose\",\n  \"draft\": false,\n  \"title\": \"W Rascunho Falso\",\n  \"order\": {\n    \"release\": 15\n  }\n}\n",
+    "works/w-rascunho-falso/01/en.md": "---\ndate: 2026-04-22\nsummary: \n---\n\nTexto do capítulo em inglês.\n",
+    "works/w-rascunho-falso/01/pt.md": "---\ndate: 2026-04-22\nsummary: \n---\n\nTexto do capítulo em português.\n",
+    "works/x-rascunho-escondida/work.json": "{\n  \"kind\": \"prose\",\n  \"draft\": true,\n  \"listed\": false,\n  \"title\": \"X Rascunho Escondida\",\n  \"order\": {\n    \"release\": 16\n  }\n}\n",
+    "works/x-rascunho-escondida/01/en.md": "---\ndate: 2026-04-23\nsummary: \n---\n\nTexto do capítulo em inglês.\n",
+    "works/x-rascunho-escondida/01/pt.md": "---\ndate: 2026-04-23\nsummary: \n---\n\nTexto do capítulo em português.\n",
     "news/2025-12-30-alfa/en.md": "---\ntitle: News Alpha\ndate: 2025-12-30\nsummary: Resumo da notícia alfa\nthumb: news/a.png\ntags:\n  - Post\n  - Arte: oficial\n---\n\nVeja [[works/a-oneshot]] agora.\n",
     "news/2025-12-30-alfa/pt.md": "---\ntitle: News Alpha\ndate: 2025-12-30\nsummary: Resumo da notícia alfa\nthumb: news/a.png\ntags:\n  - Post\n  - Arte: oficial\n---\n\nVeja a obra agora, sem link.\n",
     "news/2026-01-05-beta/en.md": "---\ntitle: News Beta\ndate: 2026-01-05\nimage: news/b.png\n---\n\nTexto da notícia beta que cita [[works/b-serial/02]] e também [[works/nao-existe]], sem resumo escrito: **negrito** e _ênfase_ e mais palavras para passar de cento e trinta caracteres e cortar no meio.\n",
@@ -29046,12 +28980,14 @@
     "news/2026-05-01-sem-resumo/en.md": "---\ntitle: Rich\ndate: 2026-05-01\ntags:\n---\n\n<div class=\"x\">caixa</div>\n\n{{embed:https://x.com/a/status/1}}\n\nUm [link](https://x.com), uma ![imagem](a.png), e [[universe/magia|a magia]] e [[characters/harry]] ocupam a abertura deste texto longo.\n",
     "news/2026-05-01-sem-resumo/pt.md": "---\ntitle: Rich\ndate: 2026-05-01\ntags:\n---\n\n<div class=\"x\">caixa</div>\n\n{{embed:https://x.com/a/status/1}}\n\nUm [link](https://x.com), uma ![imagem](a.png), e [[universe/magia|a magia]] e [[characters/harry]] ocupam a abertura deste texto longo.\n",
     "news/2026-05-02-so-pt/pt.md": "---\ntitle: Só em português\ndate: 2026-05-02\nrelated:\n  - works/a-oneshot\n  - universe/magia\n  - characters/harry\n  - news/2025-12-30-alfa\n  - emissaries/ana\n---\n\nSó PT.\n",
+    "news/2026-04-21-obra-rascunho/en.md": "---\ntitle: Draft Work News\ndate: 2026-04-21\n---\n\nCita [[works/u-obra-rascunho]] e [[works/v-rascunho-externa]], que são obras inteiras em rascunho.\n",
+    "news/2026-04-21-obra-rascunho/pt.md": "---\ntitle: Draft Work News\ndate: 2026-04-21\n---\n\nCita [[works/u-obra-rascunho]] e [[works/v-rascunho-externa]], que são obras inteiras em rascunho.\n",
     "news/2026-05-03-sem-data/en.md": "---\ntitle: No date\n---\n\nSem data nenhuma, cita [[works/a-oneshot]].\n",
     "news/2026-05-03-sem-data/pt.md": "---\ntitle: No date\n---\n\nSem data nenhuma, cita [[works/a-oneshot]].\n",
     "news/2026-05-04-rascunho/en.md": "---\ntitle: Draft news\ndate: 2026-05-04\ndraft: true\n---\n\nRascunho.\n",
     "news/2026-05-04-rascunho/pt.md": "---\ntitle: Draft news\ndate: 2026-05-04\ndraft: true\n---\n\nRascunho.\n",
-    "news/2026-05-05-relacionados/en.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
-    "news/2026-05-05-relacionados/pt.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
+    "news/2026-05-05-relacionados/en.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - works/u-obra-rascunho\n  - works/v-rascunho-externa\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
+    "news/2026-05-05-relacionados/pt.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - works/u-obra-rascunho\n  - works/v-rascunho-externa\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
     "news/2026-05-11-enchimento/en.md": "---\ntitle: Filler 1\ndate: 2026-05-11\n---\n\nTexto de enchimento número 1.\n",
     "news/2026-05-11-enchimento/pt.md": "---\ntitle: Filler 1\ndate: 2026-05-11\n---\n\nTexto de enchimento número 1.\n",
     "news/2026-05-12-enchimento/en.md": "---\ntitle: Filler 2\ndate: 2026-05-12\n---\n\nTexto de enchimento número 2.\n",
@@ -29101,8 +29037,8 @@
     "universe/dup-b/pt.md": "---\ntitle: Zeta\ncategory: Bestas\norder: 7\n---\n\nCorpo em português.\n",
     "universe/dup-a/en.md": "---\ntitle: Alfa\ncategory: Bestas\norder: 7\n---\n\nCorpo em inglês.\n",
     "universe/dup-a/pt.md": "---\ntitle: Alfa\ncategory: Bestas\norder: 7\n---\n\nCorpo em português.\n",
-    "characters/harry/en.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em inglês.\n",
-    "characters/harry/pt.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em português.\n",
+    "characters/harry/en.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\n  - u-obra-rascunho\n  - v-rascunho-externa\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em inglês.\n",
+    "characters/harry/pt.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\n  - u-obra-rascunho\n  - v-rascunho-externa\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em português.\n",
     "characters/olivia/en.md": "---\ntitle: Olivia\norder: 1\nappears_in:\n  - a-oneshot\n---\n\nCorpo em inglês.\n",
     "characters/olivia/pt.md": "---\ntitle: Olivia\norder: 1\nappears_in:\n  - a-oneshot\n---\n\nCorpo em português.\n",
     "characters/sem-ordem/en.md": "---\ntitle: Sem Ordem\n---\n\nCorpo em inglês.\n",
@@ -29155,7 +29091,8 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -29172,6 +29109,7 @@
        "q-par3",
        "r-par4",
        "j-externa-com-cap",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -29522,6 +29460,23 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -29701,6 +29656,24 @@
         "title": "Rich",
         "kind": "tag_news",
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
+        "image": "",
+        "work": null
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/en/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-21",
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "title": "Draft Work News",
+        "kind": "tag_news",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
         "image": "",
         "work": null
        },
@@ -29932,6 +29905,7 @@
        "2026-05-11-enchimento",
        "2026-05-05-relacionados",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -30172,7 +30146,8 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -30190,6 +30165,7 @@
        "r-par4",
        "j-externa-com-cap",
        "l-so-pt",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -30540,6 +30516,23 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -30728,6 +30721,24 @@
         "title": "Rich",
         "kind": "tag_news",
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
+        "image": "",
+        "work": null
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-21",
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "title": "Draft Work News",
+        "kind": "tag_news",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
         "image": "",
         "work": null
        },
@@ -30978,6 +30989,7 @@
        "2026-05-05-relacionados",
        "2026-05-02-so-pt",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -32373,6 +32385,67 @@
        }
       }
      },
+     "/en/works/w-rascunho-falso/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 22, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/w-rascunho-falso/01/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "Apr 22, 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/w-rascunho-falso/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
      "/en/news/": {
       "lang": "en",
       "titulo": "News Feed",
@@ -32457,6 +32530,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  Apr 21, 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "Apr 21, 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/en/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": false,
         "busca": "Hidden Work News  Apr 10, 2026 Cita k-escondida.",
         "data": "Apr 10, 2026",
         "titulo": "Hidden Work News",
@@ -32476,7 +32559,7 @@
         "url": "/en/news/2026-03-02-duas-obras/"
        },
        {
-        "escondida": false,
+        "escondida": true,
         "busca": "Same Day  Mar 1, 2026 Cita g-mesmo-dia.",
         "data": "Mar 1, 2026",
         "titulo": "Same Day",
@@ -32804,12 +32887,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/en/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/en/news/2026-05-05-relacionados/",
         "titulo": "Related"
+       },
+       "voltar": {
+        "url": "/en/news/",
+        "rotulo": "All news"
+       }
+      }
+     },
+     "/en/news/2026-04-21-obra-rascunho/": {
+      "lang": "en",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "Apr 21, 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/en/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/en/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/en/news/",
@@ -32838,8 +32951,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/en/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/en/news/",
@@ -34694,6 +34807,67 @@
        }
       }
      },
+     "/pt/works/w-rascunho-falso/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "22 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/w-rascunho-falso/01/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "22 de abr. de 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/w-rascunho-falso/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
      "/pt/news/": {
       "lang": "pt",
       "titulo": "Notícias",
@@ -34788,6 +34962,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  21 de abr. de 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "21 de abr. de 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/pt/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": false,
         "busca": "Hidden Work News  10 de abr. de 2026 Cita k-escondida.",
         "data": "10 de abr. de 2026",
         "titulo": "Hidden Work News",
@@ -34797,7 +34981,7 @@
         "url": "/pt/news/2026-04-10-escondida/"
        },
        {
-        "escondida": false,
+        "escondida": true,
         "busca": "Two Works  2 de mar. de 2026 Cita g-mesmo-dia e c-video e nao-existe.",
         "data": "2 de mar. de 2026",
         "titulo": "Two Works",
@@ -35164,12 +35348,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/pt/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/pt/news/2026-05-02-so-pt/",
         "titulo": "Só em português"
+       },
+       "voltar": {
+        "url": "/pt/news/",
+        "rotulo": "Todas as notícias"
+       }
+      }
+     },
+     "/pt/news/2026-04-21-obra-rascunho/": {
+      "lang": "pt",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "21 de abr. de 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/pt/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/pt/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -35198,8 +35412,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/pt/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -35927,6 +36141,18 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "W Rascunho Falso — Chapter 1",
+       "link": "https://hatecycle.com/en/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "Draft Work News",
+       "link": "https://hatecycle.com/en/news/2026-04-21-obra-rascunho/",
+       "data": "Tue, 21 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Only PT — Chapter 1",
        "link": "https://hatecycle.com/en/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -36015,18 +36241,6 @@
        "link": "https://hatecycle.com/en/works/a-oneshot/01/",
        "data": "Wed, 31 Dec 2025 00:00:00 +0000",
        "descricao": "Resumo da notícia alfa"
-      },
-      {
-       "titulo": "Before 4",
-       "link": "https://hatecycle.com/en/news/2025-12-28-antes-4/",
-       "data": "Sun, 28 Dec 2025 00:00:00 +0000",
-       "descricao": "Cita f-antes 4 dias antes."
-      },
-      {
-       "titulo": "D Three — Chapter 1",
-       "link": "https://hatecycle.com/en/works/d-tres/01/",
-       "data": "Wed, 28 Feb 2024 00:00:00 +0000",
-       "descricao": "Cita d-tres."
       }
      ],
      "pt": [
@@ -36115,6 +36329,18 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "W Rascunho Falso — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "Draft Work News",
+       "link": "https://hatecycle.com/pt/news/2026-04-21-obra-rascunho/",
+       "data": "Tue, 21 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Só PT — Capítulo 1",
        "link": "https://hatecycle.com/pt/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -36197,18 +36423,6 @@
        "link": "https://hatecycle.com/pt/works/b-serial/01/",
        "data": "Fri, 02 Jan 2026 00:00:00 +0000",
        "descricao": "Texto da notícia beta que cita 02 e também nao-existe, sem resumo escrito: negrito e ênfase e mais palavras para passar de cento…"
-      },
-      {
-       "titulo": "F Antes — Capítulo 1",
-       "link": "https://hatecycle.com/pt/works/f-antes/01/",
-       "data": "Thu, 01 Jan 2026 00:00:00 +0000",
-       "descricao": "Cita f-antes 3 dias antes."
-      },
-      {
-       "titulo": "Uma Só",
-       "link": "https://hatecycle.com/pt/works/a-oneshot/01/",
-       "data": "Wed, 31 Dec 2025 00:00:00 +0000",
-       "descricao": ""
       }
      ]
     }
@@ -36243,7 +36457,10 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -36260,6 +36477,9 @@
        "q-par3",
        "r-par4",
        "j-externa-com-cap",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -36613,6 +36833,75 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "u-obra-rascunho": {
+        "titulo": "U Draft Work",
+        "titulo_dado": "U Draft Work",
+        "resumo": "Draft.",
+        "imagem": "/covers/u.png",
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/u-obra-rascunho/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "chrono": "4",
+         "release": "13"
+        },
+        "midia": "short-story"
+       },
+       "v-rascunho-externa": {
+        "titulo": "V Rascunho Externa",
+        "titulo_dado": "V Rascunho Externa",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "https://exemplo.com/v",
+         "externo": true,
+         "rotulo": "Watch here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "14"
+        },
+        "midia": "misc"
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
+       },
+       "x-rascunho-escondida": {
+        "titulo": "X Rascunho Escondida",
+        "titulo_dado": "X Rascunho Escondida",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/x-rascunho-escondida/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "16"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -36803,6 +37092,33 @@
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
         "image": "",
         "work": null
+       },
+       {
+        "date": "2026-04-23",
+        "url": "/en/works/x-rascunho-escondida/01/",
+        "title": "X Rascunho Escondida — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "x-rascunho-escondida"
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/en/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-20",
+        "url": "/en/works/u-obra-rascunho/01/",
+        "title": "U Draft Work — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "image": "covers/u.png",
+        "work": "u-obra-rascunho"
        },
        {
         "date": "2026-04-12",
@@ -37042,6 +37358,7 @@
        "2026-05-05-relacionados",
        "2026-05-04-rascunho",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -37251,6 +37568,14 @@
          "url": "/en/works/i-externa/"
         },
         {
+         "titulo": "U Draft Work",
+         "url": "/en/works/u-obra-rascunho/"
+        },
+        {
+         "titulo": "V Rascunho Externa",
+         "url": "/en/works/v-rascunho-externa/"
+        },
+        {
          "titulo": "Magia",
          "url": "/en/universe/magia/"
         },
@@ -37295,7 +37620,10 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -37313,6 +37641,9 @@
        "r-par4",
        "j-externa-com-cap",
        "l-so-pt",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -37666,6 +37997,75 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "u-obra-rascunho": {
+        "titulo": "U Obra Rascunho",
+        "titulo_dado": "U Obra Rascunho",
+        "resumo": "Rascunho.",
+        "imagem": "/covers/u.png",
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/u-obra-rascunho/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "chrono": "4",
+         "release": "13"
+        },
+        "midia": "short-story"
+       },
+       "v-rascunho-externa": {
+        "titulo": "V Rascunho Externa",
+        "titulo_dado": "V Rascunho Externa",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "https://exemplo.com/v",
+         "externo": true,
+         "rotulo": "Assista aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "14"
+        },
+        "midia": "misc"
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
+       },
+       "x-rascunho-escondida": {
+        "titulo": "X Rascunho Escondida",
+        "titulo_dado": "X Rascunho Escondida",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/x-rascunho-escondida/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "16"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -37865,6 +38265,33 @@
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
         "image": "",
         "work": null
+       },
+       {
+        "date": "2026-04-23",
+        "url": "/pt/works/x-rascunho-escondida/01/",
+        "title": "X Rascunho Escondida — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "x-rascunho-escondida"
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-20",
+        "url": "/pt/works/u-obra-rascunho/01/",
+        "title": "U Obra Rascunho — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "image": "covers/u.png",
+        "work": "u-obra-rascunho"
        },
        {
         "date": "2026-04-12",
@@ -38123,6 +38550,7 @@
        "2026-05-04-rascunho",
        "2026-05-02-so-pt",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -38321,6 +38749,14 @@
         {
          "titulo": "I Externa",
          "url": "/pt/works/i-externa/"
+        },
+        {
+         "titulo": "U Obra Rascunho",
+         "url": "/pt/works/u-obra-rascunho/"
+        },
+        {
+         "titulo": "V Rascunho Externa",
+         "url": "/pt/works/v-rascunho-externa/"
         },
         {
          "titulo": "Magia",
@@ -39570,6 +40006,189 @@
        }
       }
      },
+     "/en/works/u-obra-rascunho/": {
+      "lang": "en",
+      "titulo": "U Draft Work",
+      "cls": "",
+      "desc": "Draft.",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/",
+       "pt": "/pt/works/u-obra-rascunho/"
+      },
+      "obra": {
+       "capa": "/covers/u.png",
+       "titulo": "U Draft Work",
+       "resumo": "Draft.",
+       "primeiro": {
+        "url": "/en/works/u-obra-rascunho/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/u-obra-rascunho/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/u-obra-rascunho/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 20, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/u-obra-rascunho/01/": {
+      "lang": "en",
+      "titulo": "U Draft Work — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/01/",
+       "pt": "/pt/works/u-obra-rascunho/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-20",
+        "texto": "Apr 20, 2026"
+       },
+       "comentarios": "works/u-obra-rascunho/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/u-obra-rascunho/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
+     "/en/works/w-rascunho-falso/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 22, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/w-rascunho-falso/01/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "Apr 22, 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/w-rascunho-falso/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
+     "/en/works/x-rascunho-escondida/": {
+      "lang": "en",
+      "titulo": "X Rascunho Escondida",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/",
+       "pt": "/pt/works/x-rascunho-escondida/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "X Rascunho Escondida",
+       "resumo": "",
+       "primeiro": {
+        "url": "/en/works/x-rascunho-escondida/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/x-rascunho-escondida/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/x-rascunho-escondida/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 23, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/x-rascunho-escondida/01/": {
+      "lang": "en",
+      "titulo": "X Rascunho Escondida — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/01/",
+       "pt": "/pt/works/x-rascunho-escondida/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-23",
+        "texto": "Apr 23, 2026"
+       },
+       "comentarios": "works/x-rascunho-escondida/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/x-rascunho-escondida/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
      "/en/news/": {
       "lang": "en",
       "titulo": "News Feed",
@@ -39664,6 +40283,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  Apr 21, 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "Apr 21, 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/en/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": false,
         "busca": "Hidden Work News  Apr 10, 2026 Cita k-escondida.",
         "data": "Apr 10, 2026",
         "titulo": "Hidden Work News",
@@ -39673,7 +40302,7 @@
         "url": "/en/news/2026-04-10-escondida/"
        },
        {
-        "escondida": false,
+        "escondida": true,
         "busca": "Two Works  Mar 2, 2026 Cita g-mesmo-dia e c-video e nao-existe.",
         "data": "Mar 2, 2026",
         "titulo": "Two Works",
@@ -40041,12 +40670,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/en/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/en/news/2026-05-04-rascunho/",
         "titulo": "Draft news"
+       },
+       "voltar": {
+        "url": "/en/news/",
+        "rotulo": "All news"
+       }
+      }
+     },
+     "/en/news/2026-04-21-obra-rascunho/": {
+      "lang": "en",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "Apr 21, 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/en/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/en/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/en/news/",
@@ -40075,8 +40734,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/en/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/en/news/",
@@ -40679,6 +41338,14 @@
         {
          "titulo": "C Vídeo",
          "href": "/en/works/c-video/"
+        },
+        {
+         "titulo": "U Draft Work",
+         "href": "/en/works/u-obra-rascunho/"
+        },
+        {
+         "titulo": "V Rascunho Externa",
+         "href": "https://exemplo.com/v"
         }
        ]
       }
@@ -41970,6 +42637,189 @@
        }
       }
      },
+     "/pt/works/u-obra-rascunho/": {
+      "lang": "pt",
+      "titulo": "U Obra Rascunho",
+      "cls": "",
+      "desc": "Rascunho.",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/",
+       "pt": "/pt/works/u-obra-rascunho/"
+      },
+      "obra": {
+       "capa": "/covers/u.png",
+       "titulo": "U Obra Rascunho",
+       "resumo": "Rascunho.",
+       "primeiro": {
+        "url": "/pt/works/u-obra-rascunho/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/u-obra-rascunho/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/u-obra-rascunho/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "20 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/u-obra-rascunho/01/": {
+      "lang": "pt",
+      "titulo": "U Obra Rascunho — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/01/",
+       "pt": "/pt/works/u-obra-rascunho/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-20",
+        "texto": "20 de abr. de 2026"
+       },
+       "comentarios": "works/u-obra-rascunho/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/u-obra-rascunho/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
+     "/pt/works/w-rascunho-falso/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "22 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/w-rascunho-falso/01/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "22 de abr. de 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/w-rascunho-falso/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
+     "/pt/works/x-rascunho-escondida/": {
+      "lang": "pt",
+      "titulo": "X Rascunho Escondida",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/",
+       "pt": "/pt/works/x-rascunho-escondida/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "X Rascunho Escondida",
+       "resumo": "",
+       "primeiro": {
+        "url": "/pt/works/x-rascunho-escondida/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/x-rascunho-escondida/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/x-rascunho-escondida/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "23 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/x-rascunho-escondida/01/": {
+      "lang": "pt",
+      "titulo": "X Rascunho Escondida — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/01/",
+       "pt": "/pt/works/x-rascunho-escondida/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-23",
+        "texto": "23 de abr. de 2026"
+       },
+       "comentarios": "works/x-rascunho-escondida/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/x-rascunho-escondida/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
      "/pt/news/": {
       "lang": "pt",
       "titulo": "Notícias",
@@ -42074,6 +42924,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  21 de abr. de 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "21 de abr. de 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/pt/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": true,
         "busca": "Hidden Work News  10 de abr. de 2026 Cita k-escondida.",
         "data": "10 de abr. de 2026",
         "titulo": "Hidden Work News",
@@ -42480,12 +43340,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/pt/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/pt/news/2026-05-02-so-pt/",
         "titulo": "Só em português"
+       },
+       "voltar": {
+        "url": "/pt/news/",
+        "rotulo": "Todas as notícias"
+       }
+      }
+     },
+     "/pt/news/2026-04-21-obra-rascunho/": {
+      "lang": "pt",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "21 de abr. de 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/pt/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/pt/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -42514,8 +43404,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/pt/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -43118,6 +44008,14 @@
         {
          "titulo": "C Vídeo",
          "href": "/pt/works/c-video/"
+        },
+        {
+         "titulo": "U Obra Rascunho",
+         "href": "/pt/works/u-obra-rascunho/"
+        },
+        {
+         "titulo": "V Rascunho Externa",
+         "href": "https://exemplo.com/v"
         }
        ]
       }
@@ -43249,6 +44147,24 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "X Rascunho Escondida — Chapter 1",
+       "link": "https://hatecycle.com/en/works/x-rascunho-escondida/01/",
+       "data": "Thu, 23 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "W Rascunho Falso — Chapter 1",
+       "link": "https://hatecycle.com/en/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "U Draft Work — Chapter 1",
+       "link": "https://hatecycle.com/en/works/u-obra-rascunho/01/",
+       "data": "Mon, 20 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Only PT — Chapter 1",
        "link": "https://hatecycle.com/en/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -43325,24 +44241,6 @@
        "link": "https://hatecycle.com/en/works/b-serial/02/",
        "data": "Mon, 05 Jan 2026 00:00:00 +0000",
        "descricao": "Resumo do capítulo 2"
-      },
-      {
-       "titulo": "B Serial — Início",
-       "link": "https://hatecycle.com/en/works/b-serial/01/",
-       "data": "Fri, 02 Jan 2026 00:00:00 +0000",
-       "descricao": "Texto da notícia beta que cita 02 e também nao-existe, sem resumo escrito: negrito e ênfase e mais palavras para passar de cento…"
-      },
-      {
-       "titulo": "F Antes — Chapter 1",
-       "link": "https://hatecycle.com/en/works/f-antes/01/",
-       "data": "Thu, 01 Jan 2026 00:00:00 +0000",
-       "descricao": "Cita f-antes 3 dias antes."
-      },
-      {
-       "titulo": "A One",
-       "link": "https://hatecycle.com/en/works/a-oneshot/01/",
-       "data": "Wed, 31 Dec 2025 00:00:00 +0000",
-       "descricao": "Resumo da notícia alfa"
       }
      ],
      "pt": [
@@ -43437,6 +44335,24 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "X Rascunho Escondida — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/x-rascunho-escondida/01/",
+       "data": "Thu, 23 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "W Rascunho Falso — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "U Obra Rascunho — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/u-obra-rascunho/01/",
+       "data": "Mon, 20 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Só PT — Capítulo 1",
        "link": "https://hatecycle.com/pt/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -43507,24 +44423,6 @@
        "link": "https://hatecycle.com/pt/news/2026-01-09-beta-longe/",
        "data": "Fri, 09 Jan 2026 00:00:00 +0000",
        "descricao": "Cita b-serial, mas longe de 02 (4 dias) e de 01."
-      },
-      {
-       "titulo": "News Beta Twin",
-       "link": "https://hatecycle.com/pt/news/2026-01-05-beta-gemea/",
-       "data": "Mon, 05 Jan 2026 00:00:00 +0000",
-       "descricao": "Outra no mesmo dia, sem citar obra."
-      },
-      {
-       "titulo": "B Seriado — Capítulo 2",
-       "link": "https://hatecycle.com/pt/works/b-serial/02/",
-       "data": "Mon, 05 Jan 2026 00:00:00 +0000",
-       "descricao": "Resumo do capítulo 2"
-      },
-      {
-       "titulo": "B Seriado — Começo",
-       "link": "https://hatecycle.com/pt/works/b-serial/01/",
-       "data": "Fri, 02 Jan 2026 00:00:00 +0000",
-       "descricao": "Texto da notícia beta que cita 02 e também nao-existe, sem resumo escrito: negrito e ênfase e mais palavras para passar de cento…"
       }
      ]
     }
@@ -43602,6 +44500,16 @@
     "works/s-titulo-vazio/02/en.md": "---\ndate: 2026-05-21\ntitle: Segundo\n---\n\nTexto do capítulo em inglês.\n",
     "works/s-titulo-vazio/02/pt.md": "---\ndate: 2026-05-21\ntitle: Segundo\n---\n\nTexto do capítulo em português.\n",
     "works/t-sem-nada/work.json": "{}\n",
+    "works/u-obra-rascunho/work.json": "{\n  \"kind\": \"prose\",\n  \"draft\": true,\n  \"title\": {\n    \"en\": \"U Draft Work\",\n    \"pt\": \"U Obra Rascunho\"\n  },\n  \"blurb\": {\n    \"en\": \"Draft.\",\n    \"pt\": \"Rascunho.\"\n  },\n  \"cover\": \"covers/u.png\",\n  \"order\": {\n    \"release\": 13,\n    \"chrono\": 4\n  },\n  \"media\": \"short-story\"\n}\n",
+    "works/u-obra-rascunho/01/en.md": "---\ndate: 2026-04-20\nsummary: \n---\n\nTexto do capítulo em inglês.\n",
+    "works/u-obra-rascunho/01/pt.md": "---\ndate: 2026-04-20\nsummary: \n---\n\nTexto do capítulo em português.\n",
+    "works/v-rascunho-externa/work.json": "{\n  \"kind\": \"video\",\n  \"draft\": true,\n  \"title\": \"V Rascunho Externa\",\n  \"external\": \"https://exemplo.com/v\",\n  \"order\": {\n    \"release\": 14\n  },\n  \"media\": \"misc\"\n}\n",
+    "works/w-rascunho-falso/work.json": "{\n  \"kind\": \"prose\",\n  \"draft\": false,\n  \"title\": \"W Rascunho Falso\",\n  \"order\": {\n    \"release\": 15\n  }\n}\n",
+    "works/w-rascunho-falso/01/en.md": "---\ndate: 2026-04-22\nsummary: \n---\n\nTexto do capítulo em inglês.\n",
+    "works/w-rascunho-falso/01/pt.md": "---\ndate: 2026-04-22\nsummary: \n---\n\nTexto do capítulo em português.\n",
+    "works/x-rascunho-escondida/work.json": "{\n  \"kind\": \"prose\",\n  \"draft\": true,\n  \"listed\": false,\n  \"title\": \"X Rascunho Escondida\",\n  \"order\": {\n    \"release\": 16\n  }\n}\n",
+    "works/x-rascunho-escondida/01/en.md": "---\ndate: 2026-04-23\nsummary: \n---\n\nTexto do capítulo em inglês.\n",
+    "works/x-rascunho-escondida/01/pt.md": "---\ndate: 2026-04-23\nsummary: \n---\n\nTexto do capítulo em português.\n",
     "news/2025-12-30-alfa/en.md": "---\ntitle: News Alpha\ndate: 2025-12-30\nsummary: Resumo da notícia alfa\nthumb: news/a.png\ntags:\n  - Post\n  - Arte: oficial\n---\n\nVeja [[works/a-oneshot]] agora.\n",
     "news/2025-12-30-alfa/pt.md": "---\ntitle: News Alpha\ndate: 2025-12-30\nsummary: Resumo da notícia alfa\nthumb: news/a.png\ntags:\n  - Post\n  - Arte: oficial\n---\n\nVeja a obra agora, sem link.\n",
     "news/2026-01-05-beta/en.md": "---\ntitle: News Beta\ndate: 2026-01-05\nimage: news/b.png\n---\n\nTexto da notícia beta que cita [[works/b-serial/02]] e também [[works/nao-existe]], sem resumo escrito: **negrito** e _ênfase_ e mais palavras para passar de cento e trinta caracteres e cortar no meio.\n",
@@ -43633,12 +44541,14 @@
     "news/2026-05-01-sem-resumo/en.md": "---\ntitle: Rich\ndate: 2026-05-01\ntags:\n---\n\n<div class=\"x\">caixa</div>\n\n{{embed:https://x.com/a/status/1}}\n\nUm [link](https://x.com), uma ![imagem](a.png), e [[universe/magia|a magia]] e [[characters/harry]] ocupam a abertura deste texto longo.\n",
     "news/2026-05-01-sem-resumo/pt.md": "---\ntitle: Rich\ndate: 2026-05-01\ntags:\n---\n\n<div class=\"x\">caixa</div>\n\n{{embed:https://x.com/a/status/1}}\n\nUm [link](https://x.com), uma ![imagem](a.png), e [[universe/magia|a magia]] e [[characters/harry]] ocupam a abertura deste texto longo.\n",
     "news/2026-05-02-so-pt/pt.md": "---\ntitle: Só em português\ndate: 2026-05-02\nrelated:\n  - works/a-oneshot\n  - universe/magia\n  - characters/harry\n  - news/2025-12-30-alfa\n  - emissaries/ana\n---\n\nSó PT.\n",
+    "news/2026-04-21-obra-rascunho/en.md": "---\ntitle: Draft Work News\ndate: 2026-04-21\n---\n\nCita [[works/u-obra-rascunho]] e [[works/v-rascunho-externa]], que são obras inteiras em rascunho.\n",
+    "news/2026-04-21-obra-rascunho/pt.md": "---\ntitle: Draft Work News\ndate: 2026-04-21\n---\n\nCita [[works/u-obra-rascunho]] e [[works/v-rascunho-externa]], que são obras inteiras em rascunho.\n",
     "news/2026-05-03-sem-data/en.md": "---\ntitle: No date\n---\n\nSem data nenhuma, cita [[works/a-oneshot]].\n",
     "news/2026-05-03-sem-data/pt.md": "---\ntitle: No date\n---\n\nSem data nenhuma, cita [[works/a-oneshot]].\n",
     "news/2026-05-04-rascunho/en.md": "---\ntitle: Draft news\ndate: 2026-05-04\ndraft: true\n---\n\nRascunho.\n",
     "news/2026-05-04-rascunho/pt.md": "---\ntitle: Draft news\ndate: 2026-05-04\ndraft: true\n---\n\nRascunho.\n",
-    "news/2026-05-05-relacionados/en.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
-    "news/2026-05-05-relacionados/pt.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
+    "news/2026-05-05-relacionados/en.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - works/u-obra-rascunho\n  - works/v-rascunho-externa\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
+    "news/2026-05-05-relacionados/pt.md": "---\ntitle: Related\ndate: 2026-05-05\nrelated:\n  - works/a-oneshot\n  - works/m-sem-ordem\n  - works/i-externa\n  - works/t-sem-nada\n  - works/u-obra-rascunho\n  - works/v-rascunho-externa\n  - universe/magia\n  - news/2026-05-04-rascunho\n  - pages/about\n---\n\nTem relacionados.\n",
     "news/2026-05-11-enchimento/en.md": "---\ntitle: Filler 1\ndate: 2026-05-11\n---\n\nTexto de enchimento número 1.\n",
     "news/2026-05-11-enchimento/pt.md": "---\ntitle: Filler 1\ndate: 2026-05-11\n---\n\nTexto de enchimento número 1.\n",
     "news/2026-05-12-enchimento/en.md": "---\ntitle: Filler 2\ndate: 2026-05-12\n---\n\nTexto de enchimento número 2.\n",
@@ -43688,8 +44598,8 @@
     "universe/dup-b/pt.md": "---\ntitle: Zeta\ncategory: Bestas\norder: 7\n---\n\nCorpo em português.\n",
     "universe/dup-a/en.md": "---\ntitle: Alfa\ncategory: Bestas\norder: 7\n---\n\nCorpo em inglês.\n",
     "universe/dup-a/pt.md": "---\ntitle: Alfa\ncategory: Bestas\norder: 7\n---\n\nCorpo em português.\n",
-    "characters/harry/en.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em inglês.\n",
-    "characters/harry/pt.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em português.\n",
+    "characters/harry/en.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\n  - u-obra-rascunho\n  - v-rascunho-externa\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em inglês.\n",
+    "characters/harry/pt.md": "---\ntitle: Harry\nrole: Assistente\norder: 2\nappears_in:\n  - b-serial\n  - a-oneshot\n  - k-escondida\n  - i-externa\n  - m-sem-ordem\n  - c-video\n  - u-obra-rascunho\n  - v-rascunho-externa\nrelated:\n  - works/a-oneshot\n  - universe/magia\n---\n\nCorpo em português.\n",
     "characters/olivia/en.md": "---\ntitle: Olivia\norder: 1\nappears_in:\n  - a-oneshot\n---\n\nCorpo em inglês.\n",
     "characters/olivia/pt.md": "---\ntitle: Olivia\norder: 1\nappears_in:\n  - a-oneshot\n---\n\nCorpo em português.\n",
     "characters/sem-ordem/en.md": "---\ntitle: Sem Ordem\n---\n\nCorpo em inglês.\n",
@@ -43736,7 +44646,8 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -43753,6 +44664,7 @@
        "q-par3",
        "r-par4",
        "j-externa-com-cap",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -44103,6 +45015,23 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -44282,6 +45211,24 @@
         "title": "Rich",
         "kind": "tag_news",
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
+        "image": "",
+        "work": null
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/en/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-21",
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "title": "Draft Work News",
+        "kind": "tag_news",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
         "image": "",
         "work": null
        },
@@ -44513,6 +45460,7 @@
        "2026-05-11-enchimento",
        "2026-05-05-relacionados",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -44737,7 +45685,8 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -44755,6 +45704,7 @@
        "r-par4",
        "j-externa-com-cap",
        "l-so-pt",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -45105,6 +46055,23 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -45293,6 +46260,24 @@
         "title": "Rich",
         "kind": "tag_news",
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
+        "image": "",
+        "work": null
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-21",
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "title": "Draft Work News",
+        "kind": "tag_news",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
         "image": "",
         "work": null
        },
@@ -45543,6 +46528,7 @@
        "2026-05-05-relacionados",
        "2026-05-02-so-pt",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -46914,6 +47900,67 @@
        }
       }
      },
+     "/en/works/w-rascunho-falso/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 22, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/w-rascunho-falso/01/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "Apr 22, 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/w-rascunho-falso/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
      "/en/news/": {
       "lang": "en",
       "titulo": "News Feed",
@@ -46998,6 +48045,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  Apr 21, 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "Apr 21, 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/en/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": false,
         "busca": "Hidden Work News  Apr 10, 2026 Cita k-escondida.",
         "data": "Apr 10, 2026",
         "titulo": "Hidden Work News",
@@ -47017,7 +48074,7 @@
         "url": "/en/news/2026-03-02-duas-obras/"
        },
        {
-        "escondida": false,
+        "escondida": true,
         "busca": "Same Day  Mar 1, 2026 Cita g-mesmo-dia.",
         "data": "Mar 1, 2026",
         "titulo": "Same Day",
@@ -47345,12 +48402,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/en/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/en/news/2026-05-05-relacionados/",
         "titulo": "Related"
+       },
+       "voltar": {
+        "url": "/en/news/",
+        "rotulo": "All news"
+       }
+      }
+     },
+     "/en/news/2026-04-21-obra-rascunho/": {
+      "lang": "en",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "Apr 21, 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/en/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/en/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/en/news/",
@@ -47379,8 +48466,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/en/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/en/news/",
@@ -49041,6 +50128,67 @@
        }
       }
      },
+     "/pt/works/w-rascunho-falso/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "22 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/w-rascunho-falso/01/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "22 de abr. de 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/w-rascunho-falso/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
      "/pt/news/": {
       "lang": "pt",
       "titulo": "Notícias",
@@ -49135,6 +50283,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  21 de abr. de 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "21 de abr. de 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/pt/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": false,
         "busca": "Hidden Work News  10 de abr. de 2026 Cita k-escondida.",
         "data": "10 de abr. de 2026",
         "titulo": "Hidden Work News",
@@ -49144,7 +50302,7 @@
         "url": "/pt/news/2026-04-10-escondida/"
        },
        {
-        "escondida": false,
+        "escondida": true,
         "busca": "Two Works  2 de mar. de 2026 Cita g-mesmo-dia e c-video e nao-existe.",
         "data": "2 de mar. de 2026",
         "titulo": "Two Works",
@@ -49511,12 +50669,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/pt/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/pt/news/2026-05-02-so-pt/",
         "titulo": "Só em português"
+       },
+       "voltar": {
+        "url": "/pt/news/",
+        "rotulo": "Todas as notícias"
+       }
+      }
+     },
+     "/pt/news/2026-04-21-obra-rascunho/": {
+      "lang": "pt",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "21 de abr. de 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/pt/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/pt/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -49545,8 +50733,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/pt/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -50080,6 +51268,18 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "W Rascunho Falso — Chapter 1",
+       "link": "https://hatecycle.com/en/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "Draft Work News",
+       "link": "https://hatecycle.com/en/news/2026-04-21-obra-rascunho/",
+       "data": "Tue, 21 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Only PT — Chapter 1",
        "link": "https://hatecycle.com/en/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -50168,18 +51368,6 @@
        "link": "https://hatecycle.com/en/works/a-oneshot/01/",
        "data": "Wed, 31 Dec 2025 00:00:00 +0000",
        "descricao": "Resumo da notícia alfa"
-      },
-      {
-       "titulo": "Before 4",
-       "link": "https://hatecycle.com/en/news/2025-12-28-antes-4/",
-       "data": "Sun, 28 Dec 2025 00:00:00 +0000",
-       "descricao": "Cita f-antes 4 dias antes."
-      },
-      {
-       "titulo": "D Three — Chapter 1",
-       "link": "https://hatecycle.com/en/works/d-tres/01/",
-       "data": "Wed, 28 Feb 2024 00:00:00 +0000",
-       "descricao": "Cita d-tres."
       }
      ],
      "pt": [
@@ -50268,6 +51456,18 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "W Rascunho Falso — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "Draft Work News",
+       "link": "https://hatecycle.com/pt/news/2026-04-21-obra-rascunho/",
+       "data": "Tue, 21 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Só PT — Capítulo 1",
        "link": "https://hatecycle.com/pt/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -50350,18 +51550,6 @@
        "link": "https://hatecycle.com/pt/works/b-serial/01/",
        "data": "Fri, 02 Jan 2026 00:00:00 +0000",
        "descricao": "Texto da notícia beta que cita 02 e também nao-existe, sem resumo escrito: negrito e ênfase e mais palavras para passar de cento…"
-      },
-      {
-       "titulo": "F Antes — Capítulo 1",
-       "link": "https://hatecycle.com/pt/works/f-antes/01/",
-       "data": "Thu, 01 Jan 2026 00:00:00 +0000",
-       "descricao": "Cita f-antes 3 dias antes."
-      },
-      {
-       "titulo": "Uma Só",
-       "link": "https://hatecycle.com/pt/works/a-oneshot/01/",
-       "data": "Wed, 31 Dec 2025 00:00:00 +0000",
-       "descricao": ""
       }
      ]
     }
@@ -50393,7 +51581,10 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -50410,6 +51601,9 @@
        "q-par3",
        "r-par4",
        "j-externa-com-cap",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -50763,6 +51957,75 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "u-obra-rascunho": {
+        "titulo": "U Draft Work",
+        "titulo_dado": "U Draft Work",
+        "resumo": "Draft.",
+        "imagem": "/covers/u.png",
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/u-obra-rascunho/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "chrono": "4",
+         "release": "13"
+        },
+        "midia": "short-story"
+       },
+       "v-rascunho-externa": {
+        "titulo": "V Rascunho Externa",
+        "titulo_dado": "V Rascunho Externa",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "https://exemplo.com/v",
+         "externo": true,
+         "rotulo": "Watch here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "14"
+        },
+        "midia": "misc"
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
+       },
+       "x-rascunho-escondida": {
+        "titulo": "X Rascunho Escondida",
+        "titulo_dado": "X Rascunho Escondida",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/en/works/x-rascunho-escondida/",
+         "externo": false,
+         "rotulo": "Read here"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "16"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -50953,6 +52216,33 @@
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
         "image": "",
         "work": null
+       },
+       {
+        "date": "2026-04-23",
+        "url": "/en/works/x-rascunho-escondida/01/",
+        "title": "X Rascunho Escondida — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "x-rascunho-escondida"
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/en/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-20",
+        "url": "/en/works/u-obra-rascunho/01/",
+        "title": "U Draft Work — Chapter 1",
+        "kind": "tag_chapter",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "image": "covers/u.png",
+        "work": "u-obra-rascunho"
        },
        {
         "date": "2026-04-12",
@@ -51192,6 +52482,7 @@
        "2026-05-05-relacionados",
        "2026-05-04-rascunho",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -51399,6 +52690,14 @@
          "url": "/en/works/i-externa/"
         },
         {
+         "titulo": "U Draft Work",
+         "url": "/en/works/u-obra-rascunho/"
+        },
+        {
+         "titulo": "V Rascunho Externa",
+         "url": "/en/works/v-rascunho-externa/"
+        },
+        {
          "titulo": "Draft news",
          "url": "/en/news/2026-05-04-rascunho/"
         },
@@ -51429,7 +52728,10 @@
        "q-par3",
        "r-par4",
        "s-titulo-vazio",
-       "t-sem-nada"
+       "t-sem-nada",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso"
       ],
       "universo": [
        "b-serial",
@@ -51447,6 +52749,9 @@
        "r-par4",
        "j-externa-com-cap",
        "l-so-pt",
+       "u-obra-rascunho",
+       "v-rascunho-externa",
+       "w-rascunho-falso",
        "s-titulo-vazio",
        "m-sem-ordem",
        "t-sem-nada"
@@ -51800,6 +53105,75 @@
         "previa": null,
         "ordem": {},
         "midia": null
+       },
+       "u-obra-rascunho": {
+        "titulo": "U Obra Rascunho",
+        "titulo_dado": "U Obra Rascunho",
+        "resumo": "Rascunho.",
+        "imagem": "/covers/u.png",
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/u-obra-rascunho/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "chrono": "4",
+         "release": "13"
+        },
+        "midia": "short-story"
+       },
+       "v-rascunho-externa": {
+        "titulo": "V Rascunho Externa",
+        "titulo_dado": "V Rascunho Externa",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "https://exemplo.com/v",
+         "externo": true,
+         "rotulo": "Assista aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "14"
+        },
+        "midia": "misc"
+       },
+       "w-rascunho-falso": {
+        "titulo": "W Rascunho Falso",
+        "titulo_dado": "W Rascunho Falso",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/w-rascunho-falso/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "15"
+        },
+        "midia": null
+       },
+       "x-rascunho-escondida": {
+        "titulo": "X Rascunho Escondida",
+        "titulo_dado": "X Rascunho Escondida",
+        "resumo": "",
+        "imagem": null,
+        "botao": {
+         "tipo": "link",
+         "href": "/pt/works/x-rascunho-escondida/",
+         "externo": false,
+         "rotulo": "Leia aqui"
+        },
+        "previa": null,
+        "ordem": {
+         "release": "16"
+        },
+        "midia": null
        }
       },
       "seletor": {
@@ -51999,6 +53373,33 @@
         "text": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo.",
         "image": "",
         "work": null
+       },
+       {
+        "date": "2026-04-23",
+        "url": "/pt/works/x-rascunho-escondida/01/",
+        "title": "X Rascunho Escondida — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "x-rascunho-escondida"
+       },
+       {
+        "date": "2026-04-22",
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "title": "W Rascunho Falso — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "",
+        "image": "",
+        "work": "w-rascunho-falso"
+       },
+       {
+        "date": "2026-04-20",
+        "url": "/pt/works/u-obra-rascunho/01/",
+        "title": "U Obra Rascunho — Capítulo 1",
+        "kind": "tag_chapter",
+        "text": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "image": "covers/u.png",
+        "work": "u-obra-rascunho"
        },
        {
         "date": "2026-04-12",
@@ -52257,6 +53658,7 @@
        "2026-05-04-rascunho",
        "2026-05-02-so-pt",
        "2026-05-01-sem-resumo",
+       "2026-04-21-obra-rascunho",
        "2026-04-10-escondida",
        "2026-03-02-duas-obras",
        "2026-03-01-mesmo-dia",
@@ -52453,6 +53855,14 @@
         {
          "titulo": "I Externa",
          "url": "/pt/works/i-externa/"
+        },
+        {
+         "titulo": "U Obra Rascunho",
+         "url": "/pt/works/u-obra-rascunho/"
+        },
+        {
+         "titulo": "V Rascunho Externa",
+         "url": "/pt/works/v-rascunho-externa/"
         },
         {
          "titulo": "Draft news",
@@ -53680,6 +55090,189 @@
        }
       }
      },
+     "/en/works/u-obra-rascunho/": {
+      "lang": "en",
+      "titulo": "U Draft Work",
+      "cls": "",
+      "desc": "Draft.",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/",
+       "pt": "/pt/works/u-obra-rascunho/"
+      },
+      "obra": {
+       "capa": "/covers/u.png",
+       "titulo": "U Draft Work",
+       "resumo": "Draft.",
+       "primeiro": {
+        "url": "/en/works/u-obra-rascunho/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/u-obra-rascunho/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/u-obra-rascunho/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 20, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/u-obra-rascunho/01/": {
+      "lang": "en",
+      "titulo": "U Draft Work — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/01/",
+       "pt": "/pt/works/u-obra-rascunho/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-20",
+        "texto": "Apr 20, 2026"
+       },
+       "comentarios": "works/u-obra-rascunho/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/u-obra-rascunho/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
+     "/en/works/w-rascunho-falso/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/w-rascunho-falso/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 22, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/w-rascunho-falso/01/": {
+      "lang": "en",
+      "titulo": "W Rascunho Falso — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "Apr 22, 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/w-rascunho-falso/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
+     "/en/works/x-rascunho-escondida/": {
+      "lang": "en",
+      "titulo": "X Rascunho Escondida",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/",
+       "pt": "/pt/works/x-rascunho-escondida/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "X Rascunho Escondida",
+       "resumo": "",
+       "primeiro": {
+        "url": "/en/works/x-rascunho-escondida/01/",
+        "rotulo": "Start from the beginning"
+       },
+       "ultimo": {
+        "url": "/en/works/x-rascunho-escondida/01/",
+        "rotulo": "Latest chapter"
+       },
+       "titulo_da_lista": "Chapters",
+       "capitulos": [
+        {
+         "url": "/en/works/x-rascunho-escondida/01/",
+         "numero": "1",
+         "titulo": "Chapter 1",
+         "data": "Apr 23, 2026"
+        }
+       ]
+      }
+     },
+     "/en/works/x-rascunho-escondida/01/": {
+      "lang": "en",
+      "titulo": "X Rascunho Escondida — Chapter 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/01/",
+       "pt": "/pt/works/x-rascunho-escondida/01/"
+      },
+      "capitulo": {
+       "h1": "Chapter 1",
+       "data": {
+        "iso": "2026-04-23",
+        "texto": "Apr 23, 2026"
+       },
+       "comentarios": "works/x-rascunho-escondida/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/en/works/x-rascunho-escondida/",
+        "rotulo": "All chapters"
+       }
+      }
+     },
      "/en/news/": {
       "lang": "en",
       "titulo": "News Feed",
@@ -53774,6 +55367,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  Apr 21, 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "Apr 21, 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/en/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": false,
         "busca": "Hidden Work News  Apr 10, 2026 Cita k-escondida.",
         "data": "Apr 10, 2026",
         "titulo": "Hidden Work News",
@@ -53783,7 +55386,7 @@
         "url": "/en/news/2026-04-10-escondida/"
        },
        {
-        "escondida": false,
+        "escondida": true,
         "busca": "Two Works  Mar 2, 2026 Cita g-mesmo-dia e c-video e nao-existe.",
         "data": "Mar 2, 2026",
         "titulo": "Two Works",
@@ -54151,12 +55754,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/en/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/en/news/2026-05-04-rascunho/",
         "titulo": "Draft news"
+       },
+       "voltar": {
+        "url": "/en/news/",
+        "rotulo": "All news"
+       }
+      }
+     },
+     "/en/news/2026-04-21-obra-rascunho/": {
+      "lang": "en",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "Apr 21, 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/en/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/en/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/en/news/",
@@ -54185,8 +55818,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/en/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/en/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/en/news/",
@@ -55886,6 +57519,189 @@
        }
       }
      },
+     "/pt/works/u-obra-rascunho/": {
+      "lang": "pt",
+      "titulo": "U Obra Rascunho",
+      "cls": "",
+      "desc": "Rascunho.",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/",
+       "pt": "/pt/works/u-obra-rascunho/"
+      },
+      "obra": {
+       "capa": "/covers/u.png",
+       "titulo": "U Obra Rascunho",
+       "resumo": "Rascunho.",
+       "primeiro": {
+        "url": "/pt/works/u-obra-rascunho/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/u-obra-rascunho/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/u-obra-rascunho/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "20 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/u-obra-rascunho/01/": {
+      "lang": "pt",
+      "titulo": "U Obra Rascunho — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "covers/u.png",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/u-obra-rascunho/01/",
+       "pt": "/pt/works/u-obra-rascunho/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-20",
+        "texto": "20 de abr. de 2026"
+       },
+       "comentarios": "works/u-obra-rascunho/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/u-obra-rascunho/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
+     "/pt/works/w-rascunho-falso/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/",
+       "pt": "/pt/works/w-rascunho-falso/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "W Rascunho Falso",
+       "resumo": "",
+       "primeiro": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/w-rascunho-falso/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/w-rascunho-falso/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "22 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/w-rascunho-falso/01/": {
+      "lang": "pt",
+      "titulo": "W Rascunho Falso — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/w-rascunho-falso/01/",
+       "pt": "/pt/works/w-rascunho-falso/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-22",
+        "texto": "22 de abr. de 2026"
+       },
+       "comentarios": "works/w-rascunho-falso/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/w-rascunho-falso/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
+     "/pt/works/x-rascunho-escondida/": {
+      "lang": "pt",
+      "titulo": "X Rascunho Escondida",
+      "cls": "",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/",
+       "pt": "/pt/works/x-rascunho-escondida/"
+      },
+      "obra": {
+       "capa": null,
+       "titulo": "X Rascunho Escondida",
+       "resumo": "",
+       "primeiro": {
+        "url": "/pt/works/x-rascunho-escondida/01/",
+        "rotulo": "Começar do início"
+       },
+       "ultimo": {
+        "url": "/pt/works/x-rascunho-escondida/01/",
+        "rotulo": "Último capítulo"
+       },
+       "titulo_da_lista": "Capítulos",
+       "capitulos": [
+        {
+         "url": "/pt/works/x-rascunho-escondida/01/",
+         "numero": "1",
+         "titulo": "Capítulo 1",
+         "data": "23 de abr. de 2026"
+        }
+       ]
+      }
+     },
+     "/pt/works/x-rascunho-escondida/01/": {
+      "lang": "pt",
+      "titulo": "X Rascunho Escondida — Capítulo 1",
+      "cls": "reader reader-prose",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/works/x-rascunho-escondida/01/",
+       "pt": "/pt/works/x-rascunho-escondida/01/"
+      },
+      "capitulo": {
+       "h1": "Capítulo 1",
+       "data": {
+        "iso": "2026-04-23",
+        "texto": "23 de abr. de 2026"
+       },
+       "comentarios": "works/x-rascunho-escondida/01",
+       "formato": "prose",
+       "anterior": null,
+       "proximo": null,
+       "voltar": {
+        "url": "/pt/works/x-rascunho-escondida/",
+        "rotulo": "Todos os capítulos"
+       }
+      }
+     },
      "/pt/news/": {
       "lang": "pt",
       "titulo": "Notícias",
@@ -55990,6 +57806,16 @@
        },
        {
         "escondida": false,
+        "busca": "Draft Work News  21 de abr. de 2026 Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "data": "21 de abr. de 2026",
+        "titulo": "Draft Work News",
+        "miniatura": null,
+        "tags": [],
+        "resumo": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho.",
+        "url": "/pt/news/2026-04-21-obra-rascunho/"
+       },
+       {
+        "escondida": true,
         "busca": "Hidden Work News  10 de abr. de 2026 Cita k-escondida.",
         "data": "10 de abr. de 2026",
         "titulo": "Hidden Work News",
@@ -56396,12 +58222,42 @@
        "tags": [],
        "comentarios": "news/2026-05-01-sem-resumo",
        "anterior": {
-        "url": "/pt/news/2026-04-10-escondida/",
-        "titulo": "Hidden Work News"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "proximo": {
         "url": "/pt/news/2026-05-02-so-pt/",
         "titulo": "Só em português"
+       },
+       "voltar": {
+        "url": "/pt/news/",
+        "rotulo": "Todas as notícias"
+       }
+      }
+     },
+     "/pt/news/2026-04-21-obra-rascunho/": {
+      "lang": "pt",
+      "titulo": "Draft Work News",
+      "cls": "news-page",
+      "desc": "",
+      "imagem": "",
+      "noindex": false,
+      "alt": {
+       "en": "/en/news/2026-04-21-obra-rascunho/",
+       "pt": "/pt/news/2026-04-21-obra-rascunho/"
+      },
+      "noticia": {
+       "data": "21 de abr. de 2026",
+       "h1": "Draft Work News",
+       "tags": [],
+       "comentarios": "news/2026-04-21-obra-rascunho",
+       "anterior": {
+        "url": "/pt/news/2026-04-10-escondida/",
+        "titulo": "Hidden Work News"
+       },
+       "proximo": {
+        "url": "/pt/news/2026-05-01-sem-resumo/",
+        "titulo": "Rich"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -56430,8 +58286,8 @@
         "titulo": "Two Works"
        },
        "proximo": {
-        "url": "/pt/news/2026-05-01-sem-resumo/",
-        "titulo": "Rich"
+        "url": "/pt/news/2026-04-21-obra-rascunho/",
+        "titulo": "Draft Work News"
        },
        "voltar": {
         "url": "/pt/news/",
@@ -56971,6 +58827,24 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "X Rascunho Escondida — Chapter 1",
+       "link": "https://hatecycle.com/en/works/x-rascunho-escondida/01/",
+       "data": "Thu, 23 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "W Rascunho Falso — Chapter 1",
+       "link": "https://hatecycle.com/en/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "U Draft Work — Chapter 1",
+       "link": "https://hatecycle.com/en/works/u-obra-rascunho/01/",
+       "data": "Mon, 20 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Only PT — Chapter 1",
        "link": "https://hatecycle.com/en/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -57047,24 +58921,6 @@
        "link": "https://hatecycle.com/en/works/b-serial/02/",
        "data": "Mon, 05 Jan 2026 00:00:00 +0000",
        "descricao": "Resumo do capítulo 2"
-      },
-      {
-       "titulo": "B Serial — Início",
-       "link": "https://hatecycle.com/en/works/b-serial/01/",
-       "data": "Fri, 02 Jan 2026 00:00:00 +0000",
-       "descricao": "Texto da notícia beta que cita 02 e também nao-existe, sem resumo escrito: negrito e ênfase e mais palavras para passar de cento…"
-      },
-      {
-       "titulo": "F Antes — Chapter 1",
-       "link": "https://hatecycle.com/en/works/f-antes/01/",
-       "data": "Thu, 01 Jan 2026 00:00:00 +0000",
-       "descricao": "Cita f-antes 3 dias antes."
-      },
-      {
-       "titulo": "A One",
-       "link": "https://hatecycle.com/en/works/a-oneshot/01/",
-       "data": "Wed, 31 Dec 2025 00:00:00 +0000",
-       "descricao": "Resumo da notícia alfa"
       }
      ],
      "pt": [
@@ -57159,6 +59015,24 @@
        "descricao": "Um link, uma imagem, e a magia e harry ocupam a abertura deste texto longo."
       },
       {
+       "titulo": "X Rascunho Escondida — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/x-rascunho-escondida/01/",
+       "data": "Thu, 23 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "W Rascunho Falso — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/w-rascunho-falso/01/",
+       "data": "Wed, 22 Apr 2026 00:00:00 +0000",
+       "descricao": ""
+      },
+      {
+       "titulo": "U Obra Rascunho — Capítulo 1",
+       "link": "https://hatecycle.com/pt/works/u-obra-rascunho/01/",
+       "data": "Mon, 20 Apr 2026 00:00:00 +0000",
+       "descricao": "Cita u-obra-rascunho e v-rascunho-externa, que são obras inteiras em rascunho."
+      },
+      {
        "titulo": "L Só PT — Capítulo 1",
        "link": "https://hatecycle.com/pt/works/l-so-pt/01/",
        "data": "Sun, 12 Apr 2026 00:00:00 +0000",
@@ -57229,24 +59103,6 @@
        "link": "https://hatecycle.com/pt/news/2026-01-09-beta-longe/",
        "data": "Fri, 09 Jan 2026 00:00:00 +0000",
        "descricao": "Cita b-serial, mas longe de 02 (4 dias) e de 01."
-      },
-      {
-       "titulo": "News Beta Twin",
-       "link": "https://hatecycle.com/pt/news/2026-01-05-beta-gemea/",
-       "data": "Mon, 05 Jan 2026 00:00:00 +0000",
-       "descricao": "Outra no mesmo dia, sem citar obra."
-      },
-      {
-       "titulo": "B Seriado — Capítulo 2",
-       "link": "https://hatecycle.com/pt/works/b-serial/02/",
-       "data": "Mon, 05 Jan 2026 00:00:00 +0000",
-       "descricao": "Resumo do capítulo 2"
-      },
-      {
-       "titulo": "B Seriado — Começo",
-       "link": "https://hatecycle.com/pt/works/b-serial/01/",
-       "data": "Fri, 02 Jan 2026 00:00:00 +0000",
-       "descricao": "Texto da notícia beta que cita 02 e também nao-existe, sem resumo escrito: negrito e ênfase e mais palavras para passar de cento…"
       }
      ]
     }

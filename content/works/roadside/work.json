@@ -1,5 +1,5 @@
 {
-  "listed": false,
+  "draft": true,
   "kind": "comic",
   "universe": true,
   "oneshot": true,
@@ -15,6 +15,10 @@
     "release": 5,
     "chrono": 7
   },
+  "order_images": [
+    "ordem/Beira de Estrada-ordem-1.png",
+    "ordem/Beira de Estrada-ordem-2.png"
+  ],
   "cover": {
     "en": "covers/EN/Cover Roadside.png",
     "pt": "covers/PT/Capa Beira de Estrada.png"

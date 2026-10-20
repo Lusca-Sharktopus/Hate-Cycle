@@ -172,6 +172,8 @@ time { color: var(--muted); font-size: .85rem; }
 
 /* página "Sobre": personagens e fotos flutuando com o texto contornando o desenho */
 .page-about h2, .page-project h2 { clear: both; }
+/* página "Apoio": o texto e as imagens ocupam a coluna inteira (o .prose de 70ch ficava encostado à esquerda e o conteúdo parecia descentralizado) */
+.page-support .prose { max-width: none; }
 .apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
 .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("other images/Apollo Site.gif"); }
 .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("other images/Anfíbio Site.gif"); }

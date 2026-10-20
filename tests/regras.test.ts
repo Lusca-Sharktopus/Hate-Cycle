@@ -443,7 +443,7 @@ for (const j of conjuntos) {
         igual("agruparUniverso() — seções da página Universo", grupos, paginaUniverso?.universo ?? []);
         for (const p of c.personagens) {
           const slug = p.data._origem.slug;
-          const feito = obrasEmQueAparece(p.data.appears_in, c.v.works, lang, (o) => c.capitulos(o).listados);
+          const feito = obrasEmQueAparece(p.data.appears_in, c.obras, lang, (o) => c.capitulos(o).listados);
           igual("obrasEmQueAparece() — 'Aparece em:'", feito.map((x) => ({ titulo: x.titulo, href: x.href })), j.captura.paginas[`/${lang}/characters/${slug}/`]?.personagem?.aparece_em, slug);
         }
       });

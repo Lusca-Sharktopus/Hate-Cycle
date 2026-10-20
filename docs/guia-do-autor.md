@@ -121,22 +121,23 @@ Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + E
 | Quero… | Como |
 |---|---|
 | Esconder um capítulo/notícia/página (rascunho) | `draft: true` no topo do arquivo. Aparece só na prévia (`python build.py serve`). |
-| Esconder uma obra inteira | `"listed": false` no `work.json` (hoje: *O Pêndulo* e *Beira de Estrada*). Troque para `true` para mostrar. |
+| Guardar uma obra inteira como rascunho (ainda não publicada) | `"draft": true` no `work.json` (hoje: *Ossos do Ofício*, *Beira de Estrada* e *O Pêndulo*). No site publicado a obra **não existe**: some do carrossel, de Histórias, da home, de "Últimas atualizações", dos capítulos, do mapa do site e do RSS. Na prévia (`python build.py serve` ou `pnpm dev`) ela aparece como as outras. **Para publicar, apague a linha `"draft": true`.** |
+| Tirar uma obra só das listas, sem guardá-la | `"listed": false` no `work.json`. A obra não aparece em Histórias, mas as páginas dela continuam existindo e acessíveis por link. (Para "guardar para depois", use `draft`.) |
 | Página pronta, mas fora das listas | `unlisted: true` no topo do capítulo (ver abaixo). |
 | Tirar comentários de uma página | `comments: false` no topo do arquivo. |
 
 ### Histórias "em breve"
 
-- Uma história sem nenhum capítulo publicado aparece no carrossel com o botão cinza "Em breve" (sem link). É o caso de *Ossos do Ofício*.
+- Uma história **publicada** (sem `draft`) mas sem nenhum capítulo ainda aparece no carrossel com o botão cinza "Em breve" (sem link). Quem está com `"draft": true` não aparece, nem como "Em breve", no site publicado; só na prévia.
 - As capas e textos dos cards "em breve" estão em `work.json` (`cover`, `blurb`). Enquanto a capa não existir, o card mostra um bloco liso.
 
-### Página de leitura oculta (`unlisted`) — Ossos do Ofício
+### Página de leitura oculta (`unlisted`)
 
-- **Ossos do Ofício** já tem a página de leitura pronta (em inglês) com `unlisted: true` no topo de `content/works/all-in-a-nights-work/01/en.md`.
-  *unlisted* = a página existe e funciona, mas não aparece no carrossel, na home nem em buscas (`noindex`). Para conferir:
-  - no computador (`python build.py serve`): o card ganha o link "👁 Prévia da página de leitura";
-  - no site publicado: abra direto `seu-site/en/works/all-in-a-nights-work/01/`.
-- Para **lançar**: apague a linha `unlisted: true` (e ponha `date: AAAA-MM-DD` se quiser que apareça em "Últimas atualizações") — o botão vira "Leia aqui" sozinho.
+*unlisted* = a página do capítulo existe e funciona, mas não aparece no carrossel, na home nem em buscas (`noindex`). Serve para mostrar uma página a alguém por link antes de lançar. Para lançar, apague a linha `unlisted: true`.
+
+### Ossos do Ofício (hoje em rascunho)
+
+*Ossos do Ofício* está com `"draft": true` no `work.json` e `draft: true` no `en.md` da cena 1. Só a prévia a mostra. Para publicar: apague o `"draft": true` do `work.json` **e** o `draft: true` do capítulo (e ponha `date: AAAA-MM-DD`, se quiser que apareça em "Últimas atualizações"). Quando só uma das duas linhas é apagada, a obra aparece em Histórias com o botão cinza "Em breve".
 
 ## 6. Página Histórias e carrosséis
 
@@ -147,6 +148,22 @@ O visitante escolhe **Lançamento**, **Cronológica** ou **Alfabética** e pode 
 - **Lançamento** (`release`): Alô? Residência dos Di Vario 1, Pederneira 2, Luz & Sangue 3, Ossos do Ofício 4, Beira de Estrada 5, O Pêndulo 6. Novas obras: 7, 8…
 - **Cronológica** (`chrono`): segue a **posição da obra na planilha da linha do tempo**, guardada completa (inclusive obras que ainda não estão no site) em `cronologia.json`. Hoje: Ossos do Ofício 4, Luz & Sangue 5, Pederneira 6, Beira de Estrada 7, O Pêndulo 11.
 - Obras **sem** número cronológico (como *Alô? Residência dos Di Vario*, `"chrono": false`) somem só nessa ordem.
+
+### "Estou lendo em ordem" no fim de cada capítulo (só no site novo, Astro)
+
+No fim de cada capítulo (entre o texto e os comentários) há uma caixa com a frase **"estou lendo em ordem"** (ou "estou assistindo…" / "estou jogando…", conforme o tipo da história em que o visitante está) e um seletor **Cronológica / Lançamento**. À esquerda fica a história que vem **antes** nessa ordem, à direita a que vem **depois**; o botão diz "Ler …", "Assistir …" ou "Jogar …" conforme o tipo da história de **destino** e vai ao mesmo lugar do cartão dela em Histórias (obra de link externo, como *Alô? Residência dos Di Vario*, leva ao link externo). A primeira da ordem fica sem lado esquerdo e a última sem lado direito. O site lembra a ordem que o visitante escolheu (no navegador dele); na primeira visita vale a Cronológica.
+
+- **Quem entra:** só as histórias que existem no site naquele momento. No site publicado, as publicadas; na prévia, também as em rascunho. Quando você publica uma história nova, quem vinha antes e depois dela se ajusta sozinho (use os números de `order` do `work.json`, como já faz).
+- **Quem não tem número** na ordem (ex.: `"chrono": false`) não entra nela; nessa ordem, a caixa avisa que a história fica fora dela.
+- **Uma história que já aparece no site mas ainda não tem nada para abrir** entra na sequência como "Em breve: Título", sem link.
+- **As imagens (um personagem de cada lado):** ponha os arquivos em `static/ordem/` e ligue-os à obra no `work.json`:
+
+  ```json
+  "order_images": ["ordem/Beira de Estrada-ordem-1.png", "ordem/Beira de Estrada-ordem-2.png"]
+  ```
+
+  A primeira é a imagem normal; a segunda é a que **aparece quando o mouse passa por cima** (ou o link recebe o foco do teclado), com um leve crescimento (sem o crescimento para quem pediu menos movimento no aparelho). Pode ser só uma imagem (então não troca) ou nenhuma: sem `order_images` a caixa usa a **capa** da obra (e, sem capa, a logo). As imagens não são espelhadas: o personagem olha para onde o desenho olha, de qualquer lado em que fique. Hoje há imagens para *Luz & Sangue* e *Beira de Estrada*; *Luz e Sangue-ordem-1* e *-ordem-2* são idênticas, então lá só o crescimento aparece no mouse.
+- **Textos da caixa:** estão em `src/lib/textosDaOrdem.ts` (não no `config.json`). Os em inglês são uma proposta, para você aprovar ou trocar.
 
 ### Filtro por tipo de mídia
 
