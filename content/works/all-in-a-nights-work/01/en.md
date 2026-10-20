@@ -1,6 +1,6 @@
 ---
 title: All in a Night's Work
-unlisted: true
+draft: true
 ---
 
 <div class="s1 indent">It’s 04:00 AM. The sound of raindrops falling on top of the train’s roof would be a winsome invitation for an unconcerned night of sleep in the comfort of the seats encased in crimson velvet.</div>

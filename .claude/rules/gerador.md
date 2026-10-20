@@ -46,7 +46,7 @@ O `config.json` é do autor: **não edite**; diga a ele qual chave mudar.
 - URLs `/en/…` e `/pt/…`; raiz escolhe o idioma; redirects de `config.json → redirects`.
 - `comments(lang, ident, …)` com `ident` = `works/<obra>/<capítulo>` ou `news/<slug>`, igual nos dois idiomas.
 - Capítulos `unlisted` geram página com `noindex`, fora de listas.
-- Ao terminar, rode `python3 build.py` e confira a última linha (`(192 páginas)` hoje); depois `rm -rf public __pycache__`.
+- Ao terminar, rode `python3 build.py` e confira a última linha (`(193 páginas)` hoje); depois `rm -rf public __pycache__`.
 
 ## Bug conhecido (não corrigir sem o autor)
 

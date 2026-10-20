@@ -529,7 +529,7 @@ html.intro-out .intro-screen { opacity: 0; pointer-events: none; }
 /* ── barra lateral de botões ── */
 .layout { display: flex; align-items: flex-start; gap: 1.2rem; max-width: 1500px; margin: 0 auto; padding: 0 1rem; }
 .layout > main { flex: 1 1 0; min-width: 0; }
-.layout > main.sheet { width: auto; margin: 0; }
+.layout > main.sheet { width: auto; margin: 0 auto; }   /* sem barra lateral a folha fica no centro da moldura (com ela, ocupa o espaço todo e a margem não faz nada) */
 .layout > main:not(.sheet) { padding: 0; }
 .sidebar { flex: 0 0 214px; width: 214px; box-sizing: border-box; padding: 1rem .9rem 1.2rem; text-align: center; color: #fff;
   background: #00000030; border-radius: 26px; box-shadow: 0 8px 26px #00000030; }

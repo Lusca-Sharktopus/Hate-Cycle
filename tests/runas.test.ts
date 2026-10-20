@@ -2,7 +2,7 @@
 //
 // A referência (tests/fixtures/runas-python.json) foi gerada pelo próprio Python:
 //   python3 tools/runas_ref.py
-// São 692 sementes: as 192 páginas da baseline (a semente real de cada uma) + 500 sorteadas.
+// São 692 sementes: as 193 páginas da baseline (a semente real de cada uma) + 500 sorteadas.
 // Cada caso compara o HTML inteiro, texto contra texto: um único número diferente já reprova.
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
@@ -25,8 +25,8 @@ const paginas = ref.casos.filter((c) => c.origem === "pagina");
 const sorteadas = ref.casos.filter((c) => c.origem === "sorteada");
 
 describe(`runas iguais às do Python ${ref.python} (${ref.casos.length} sementes)`, () => {
-  test("a referência tem as 192 páginas e pelo menos 500 sementes sorteadas", () => {
-    expect(paginas.length).toBe(192);
+  test("a referência tem as 193 páginas e pelo menos 500 sementes sorteadas", () => {
+    expect(paginas.length).toBe(193);
     expect(sorteadas.length).toBeGreaterThanOrEqual(500);
   });
 

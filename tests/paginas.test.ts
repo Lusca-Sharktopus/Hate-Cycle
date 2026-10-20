@@ -17,7 +17,7 @@
 // e trocadas pelos mesmos marcadores antes de comparar.
 //
 // T14 (grupo t14 = páginas avulsas, Universo/Personagens e a 404) mais as provas do SITE INTEIRO:
-//   - a lista de endereços do dist/ é exatamente a de baseline/urls.json (192 páginas HTML + os 2 feeds + CNAME) mais o sitemap;
+//   - a lista de endereços do dist/ é exatamente a de baseline/urls.json (193 páginas HTML + os 2 feeds + CNAME) mais o sitemap;
 //   - a raiz, as páginas do site antigo e os feeds RSS saem IGUAIS BYTE A BYTE ao que o build.py gera;
 //   - o sitemap tem as páginas publicadas e indexáveis (e só elas), conferido contra o dist/;
 //   - uma SEGUNDA construção, com rascunhos e Extras ligados (`NODE_ENV=development HC_SHOW_EXTRAS=1 pnpm build`: o que o autor verá
@@ -267,10 +267,10 @@ function enderecoDoHtml(arquivo: string): string {
 }
 
 describe("a lista de endereços do dist/ é a da baseline (mais o sitemap)", () => {
-  test("as 192 páginas HTML são exatamente as do site atual (nenhuma a mais, nenhuma a menos)", () => {
+  test("as 193 páginas HTML são exatamente as do site atual (nenhuma a mais, nenhuma a menos)", () => {
     const html = arquivosDe(dist).filter((a) => a.endsWith(".html")).map(enderecoDoHtml).sort();
     expect(html).toEqual([...baselineUrls.html].sort());
-    expect(html).toHaveLength(192);
+    expect(html).toHaveLength(193);
   });
   test("os feeds, o CNAME e o sitemap estão lá; nada mais fora do que o site publica (nem /dev/)", () => {
     const todos = arquivosDe(dist);

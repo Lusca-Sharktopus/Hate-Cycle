@@ -1843,6 +1843,27 @@
     },
     "title": "Official Artwork: More Amphibious Doodles | Hᴀᴛᴇ Cʏᴄʟᴇ"
   },
+  "/en/support/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Ways to support the project.",
+    "hreflang": {
+      "en": "/en/support/",
+      "pt": "/pt/support/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Ways to support the project.",
+      "og:title": "Support | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Support | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
   "/en/works/": {
     "alternates": [
       {
@@ -1863,25 +1884,6 @@
       "og:title": "Stories | Hᴀᴛᴇ Cʏᴄʟᴇ"
     },
     "title": "Stories | Hᴀᴛᴇ Cʏᴄʟᴇ"
-  },
-  "/en/works/all-in-a-nights-work/01/": {
-    "alternates": [
-      {
-        "href": "/en/feed.xml",
-        "type": "application/rss+xml"
-      }
-    ],
-    "canonical": "",
-    "description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
-    "hreflang": {},
-    "lang": "en",
-    "meta_refresh": "",
-    "og": {
-      "og:description": "Hᴀᴛᴇ Cʏᴄʟᴇ tells the stories of a wounded world trying to dream again.",
-      "og:image": "https://hatecycle.com/covers/EN/Cover%20All%20in%20a%20Night%27s%20Work.png",
-      "og:title": "All in a Night's Work | Hᴀᴛᴇ Cʏᴄʟᴇ"
-    },
-    "title": "All in a Night's Work | Hᴀᴛᴇ Cʏᴄʟᴇ"
   },
   "/en/works/firestriker/01/": {
     "alternates": [
@@ -3836,6 +3838,27 @@
       "og:title": "Arte Oficial: Mais Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
     },
     "title": "Arte Oficial: Mais Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/support/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Formas de apoiar o projeto.",
+    "hreflang": {
+      "en": "/en/support/",
+      "pt": "/pt/support/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Formas de apoiar o projeto.",
+      "og:title": "Apoio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Apoio | Hᴀᴛᴇ Cʏᴄʟᴇ"
   },
   "/pt/works/": {
     "alternates": [

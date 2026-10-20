@@ -36,9 +36,7 @@ const outros = langs
 
 <header class="site-header">
   <a class="brand" href={`/${lang}/`}><img src={assetUrl(logoFile)} srcset={logo?.srcset} sizes={logo?.sizes} width={logo?.width} height={logo?.height} alt={siteName} /></a>
-  <nav class="main-nav" aria-label="Main">
-    {links.map((l) => <a href={l.href} aria-current={current === l.href ? "page" : undefined}>{l.label}</a>)}
-    {
+  <nav class="main-nav" aria-label="Main">{links.map((l) => <a href={l.href} aria-current={current === l.href ? "page" : undefined}>{l.label}</a>)}{
       menu.extras.length > 0 && (
         <details class="dd" data-current={menu.extras.some((x) => x.href === current) ? "" : undefined}>
           <summary>{t(lang, "extras")}</summary>
@@ -47,9 +45,7 @@ const outros = langs
           </div>
         </details>
       )
-    }
-    {support && <a href={support.href} aria-current={current === support.href ? "page" : undefined}>{support.label}</a>}
-    {
+    }{support && <a href={support.href} aria-current={current === support.href ? "page" : undefined}>{support.label}</a>}{
       outros.length > 0 && (
         <details class="dd lang-dd">
           <summary>{langName(lang)}</summary>

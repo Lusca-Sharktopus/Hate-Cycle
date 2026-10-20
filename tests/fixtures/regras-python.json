@@ -6743,8 +6743,8 @@
    "pages/about/pt.md": "Sobre o autor Affur Akmosh! Eu sou Lusca Sharktopus, autor das histórias que você vai ler, assistir, ouvir e jogar nesse site!…",
    "pages/project/en.md": "About the project The world of Hᴀᴛᴇ Cʏᴄʟᴇ is one of inherent magic and wonder, even if hidden underneath many layers of fear…",
    "pages/project/pt.md": "Sobre o projeto O mundo de Hᴀᴛᴇ Cʏᴄʟᴇ é um de magia e maravilhas inerentes, ainda que escondidas sob muitas camadas de medo…",
-   "pages/support/en.md": "Placeholder — write here how people can support your work (Ko-fi, Patreon, Apoia.se…). Remove `draft: true` to show \"Support\" in…",
-   "pages/support/pt.md": "Rascunho — escreva aqui como as pessoas podem apoiar seu trabalho (Ko-fi, Patreon, Apoia.se…). Tire o `draft: true` para \"Apoio\"…",
+   "pages/support/en.md": "You can help this universe grow by supporting us monthly on Patreon!! With only five dollars a month you help the world of Hᴀᴛᴇ…",
+   "pages/support/pt.md": "Você pode ajudar este universo a crescer nos apoiando mensalmente no Catarse!! A partir de apenas 5 reais por mês você ajuda o…",
    "universe/hidden-magic/en.md": "Example page — edit or delete. Dragons, goblins, mages and deities hide from humanity out of fear of capture and containment.",
    "universe/hidden-magic/pt.md": "Página de exemplo — edite ou apague. Dragões, goblins, magos e divindades se escondem da humanidade por medo de captura e…",
    "works/all-in-a-nights-work/01/en.md": "The sunny morning after a full night of rain had a distinct aroma; the Sun rays phased through the leaves of the trees; the…",
@@ -7493,12 +7493,12 @@
     "tamanho": 1747
    },
    "pages/support/en.md": {
-    "sha1": "1a744465988d39c3cc7663b7436cf2a9bda8e814",
-    "tamanho": 138
+    "sha1": "2225cc4e19bf5ef54874f7b578c1c497b5e70fdf",
+    "tamanho": 484
    },
    "pages/support/pt.md": {
-    "sha1": "d615a2adf0b0c44da5a4777de3361fcb9eaf4e0b",
-    "tamanho": 146
+    "sha1": "434605c40a75951aba64d872d1f84a61f968cd14",
+    "tamanho": 606
    },
    "universe/hidden-magic/en.md": {
     "sha1": "529cf0cdc7309f5b96b08dc9e92395a83f76ae3f",
@@ -9863,24 +9863,6 @@
      "alt": {
       "en": "/en/works/",
       "pt": "/pt/works/"
-     }
-    },
-    "/en/works/all-in-a-nights-work/01/": {
-     "lang": "en",
-     "titulo": "All in a Night's Work",
-     "cls": "reader reader-prose",
-     "desc": "",
-     "imagem": "covers/EN/Cover All in a Night's Work.png",
-     "noindex": true,
-     "alt": {},
-     "capitulo": {
-      "h1": "All in a Night's Work",
-      "data": null,
-      "comentarios": "works/all-in-a-nights-work/01",
-      "formato": "prose",
-      "anterior": null,
-      "proximo": null,
-      "voltar": null
      }
     },
     "/en/works/firestriker/01/": {
@@ -13858,6 +13840,18 @@
      "alt": {
       "en": "/en/about/",
       "pt": "/pt/about/"
+     }
+    },
+    "/en/support/": {
+     "lang": "en",
+     "titulo": "Support",
+     "cls": "",
+     "desc": "Ways to support the project.",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/support/",
+      "pt": "/pt/support/"
      }
     },
     "/pt/": {
@@ -17860,6 +17854,18 @@
       "en": "/en/about/",
       "pt": "/pt/about/"
      }
+    },
+    "/pt/support/": {
+     "lang": "pt",
+     "titulo": "Apoio",
+     "cls": "",
+     "desc": "Formas de apoiar o projeto.",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/support/",
+      "pt": "/pt/support/"
+     }
     }
    },
    "rss": {
@@ -18254,8 +18260,8 @@
      "destaques": [
       "light-and-blood",
       "firestriker",
-      "hdvr",
-      "all-in-a-nights-work"
+      "all-in-a-nights-work",
+      "hdvr"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -18264,13 +18270,12 @@
        "resumo": "Giuseppe di Vario deals with the hardships of working as an exorcist.",
        "imagem": "/covers/EN/Cover%20All%20in%20a%20Night%27s%20Work.png",
        "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Soon"
-       },
-       "previa": {
+        "tipo": "link",
         "href": "/en/works/all-in-a-nights-work/01/",
-        "rotulo": "Preview reading page (local preview only)"
+        "externo": false,
+        "rotulo": "Read here"
        },
+       "previa": null,
        "ordem": {
         "chrono": "4",
         "release": "4"
@@ -20552,8 +20557,10 @@
      "cls": "reader reader-prose",
      "desc": "",
      "imagem": "covers/EN/Cover All in a Night's Work.png",
-     "noindex": true,
-     "alt": {},
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/all-in-a-nights-work/01/"
+     },
      "capitulo": {
       "h1": "All in a Night's Work",
       "data": null,

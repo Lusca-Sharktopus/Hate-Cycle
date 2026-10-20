@@ -15,7 +15,7 @@ python build.py serve                 # gera COM rascunhos e serve em http://loc
 python build.py new news nome         # também: new chapter <obra> · new work · new page · new character · new universe
 ```
 
-- A última linha de um build bom é `✔ site gerado em … (N páginas)`. Hoje são **192 páginas**; se o número mudar sem motivo, investigue.
+- A última linha de um build bom é `✔ site gerado em … (N páginas)`. Hoje são **193 páginas**; se o número mudar sem motivo, investigue.
 - **Prévia local para conferir:** se o `base_url` do `config.json` não estiver vazio (hoje está absoluto — bug B1), o `public/` normal aponta CSS e imagens para fora do sandbox. Gere sempre a prévia com:
   ```bash
   python3 -c "import build as b; b.BASE=''; b.build()"                 # como publicado
@@ -28,7 +28,7 @@ python build.py new news nome         # também: new chapter <obra> · new work 
 ```bash
 pnpm install    # uma vez (e quando package.json mudar)
 pnpm dev        # prévia com recarregamento em http://localhost:4321/pt/
-pnpm build      # gera o site Astro em dist/ (hoje: 185 páginas do Astro + os 7 redirects antigos = 192 arquivos HTML, a mesma lista do `baseline/urls.json`; mais `sitemap.xml` e os dois `feed.xml`)
+pnpm build      # gera o site Astro em dist/ (hoje: 186 páginas do Astro + os 7 redirects antigos = 193 arquivos HTML, a mesma lista do `baseline/urls.json`; mais `sitemap.xml` e os dois `feed.xml`)
 pnpm check      # verificação de tipos (astro check): tem de dar 0 errors, 0 warnings
 pnpm test       # testes automáticos (vitest), tudo comparado com o Python: runas, conteúdo (front matter, coleções, rascunhos), Markdown → HTML e regras do site (ordens, datas, "Últimas atualizações", RSS)
 ```

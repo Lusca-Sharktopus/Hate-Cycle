@@ -16,7 +16,7 @@ O script gera o site atual (sem `base_url`, sem rascunhos) numa pasta temporári
 
 | Arquivo | Conteúdo |
 |---|---|
-| `urls.json` | `html`: todas as 192 páginas HTML (ex.: `/pt/news/x/`); `redirects_site_antigo`: destino de `/PT.html`, `/ossos.html`…; `outros_gerados`: `/en/feed.xml`, `/pt/feed.xml`; `outros_de_static_relevantes`: `/CNAME`. |
+| `urls.json` | `html`: todas as 193 páginas HTML (ex.: `/pt/news/x/`); `redirects_site_antigo`: destino de `/PT.html`, `/ossos.html`…; `outros_gerados`: `/en/feed.xml`, `/pt/feed.xml`; `outros_de_static_relevantes`: `/CNAME`. |
 | `comentarios.json` | `ids_unicos` (87) e `por_pagina`: os `data-page` de cada página. |
 | `paginas.json` | Por URL: `title`, `description`, `lang`, `canonical`, `hreflang`, `og:*`, links alternativos (RSS) e `meta_refresh`. |
 | `feeds.json` | Itens (título, link, data) dos dois `feed.xml`. |
@@ -24,7 +24,7 @@ O script gera o site atual (sem `base_url`, sem rascunhos) numa pasta temporári
 | `texto/*.txt` | Texto visível de cada página, um arquivo por URL (`/pt/news/x/` vira `pt__news__x.txt`; a raiz é `_raiz.txt`). |
 | `screens/` | PNGs `desktop/` (1100 px) e `mobile/` (390 px) das páginas-chave. **Fora do git** (~77 MB); regere com o script. |
 
-As 192 páginas = 92 em `/en/` + 91 em `/pt/` + 9 na raiz (`/`, `/404.html` e 7 redirects do site antigo).
+As 193 páginas = 92 em `/en/` + 92 em `/pt/` + 9 na raiz (`/`, `/404.html` e 7 redirects do site antigo).
 
 ## Critério do texto normalizado
 

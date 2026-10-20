@@ -85,7 +85,6 @@
     "news/2026-07-14-ruach-hakodesh",
     "news/2026-08-18-novo-episodio-luz-e-sangue",
     "news/2026-08-19-more-amphibious-doodles",
-    "works/all-in-a-nights-work/01",
     "works/firestriker/01",
     "works/light-and-blood/01",
     "works/light-and-blood/02"
@@ -339,9 +338,6 @@
     ],
     "/en/news/2026-08-19-more-amphibious-doodles/": [
       "news/2026-08-19-more-amphibious-doodles"
-    ],
-    "/en/works/all-in-a-nights-work/01/": [
-      "works/all-in-a-nights-work/01"
     ],
     "/en/works/firestriker/01/": [
       "works/firestriker/01"
@@ -611,6 +607,6 @@
       "works/light-and-blood/02"
     ]
   },
-  "total_ids_unicos": 87,
-  "total_paginas_com_comentarios": 173
+  "total_ids_unicos": 86,
+  "total_paginas_com_comentarios": 172
 }

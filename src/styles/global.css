@@ -74,7 +74,7 @@
   /* moldura: a folha (e, quando ligada, a barra lateral) lado a lado; em tela estreita, uma sobre a outra */
   .layout { display: flex; align-items: flex-start; gap: 1.2rem; max-width: var(--w-layout); margin: 0 auto; padding: 0 1rem; }
   .layout > main { flex: 1 1 0; min-width: 0; }
-  .layout > main.sheet { width: auto; margin: 0; }
+  .layout > main.sheet { width: auto; margin: 0 auto; }   /* sem barra lateral a folha fica no centro da moldura (com ela, ocupa o espaço todo e a margem não faz nada) */
   .layout > main:not(.sheet) { padding: 0; }
   @media (max-width: 1099px) {
     .layout { display: block; padding: 0; }
