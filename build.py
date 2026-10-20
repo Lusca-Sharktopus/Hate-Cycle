@@ -258,11 +258,11 @@ def wcta(w, l):
 
 # ───────────────────────── componentes HTML ─────────────────────────
 # ───────── Impressão rúnica: runas no fundo, únicas por página (sorteio com semente = endereço da página) ─────────
-RUNES = ("✝✡ᛁ⚴ᚻᛗᛋᛟᚩ҂ᛃ𐤉Т모ᗐᚣ♐ᚸエꑭⰝ🜁Γᚱᛏ🜂⬡🜄🜃Λᛖ⧮⧰ᛚ𐩹ᛮ𐱃Ⰱ𐊙𑢶⚼ПŁᔨᚫΥ🝂🝘🝃FΣ𐌄Κ𐰤⌗🝧Ѧᛤ⛉𐌇ᛄ𐌙᭻⛩ᚬ⎍ᛇᛒⵅᛞꮤ𐘇𐰭𐤎꓀土◇⧖ᚷ🜲ᛡ⊥‡")
+RUNES = ("✝✡ᛁ⚴ᚻᛗᛋᛟᚩ҂ᛃ𐤉Т모ᗐᚣ♐ᚸエꑭⰝ🜁Γᚱᛏ🜂⬡🜄🜃Λᛖ⧮⧰ᛚ𐩹ᛮ𐱃Ⰱ𐊙𑢶⚼ПŁᔨᚫΥ🝂🝘🝃FΣ𐌄Κ𐰤⌗🝧Ѧᛤ⛉𐌇ᛄ𐌙᭻⛩ᚬ⎍ᛇᛒⵅᛞꮤ𐘇𐰭𐤎꓀土◇⧖ᚷ🜲ᛡ⊥‡◫⋋⏃Иᚳ𐰔⌥ᛝᚹ𝈒𐙎⌤𑀒𝆦山ᛥ🜙√⊹𐌌⋉𐌎🜍ᛠ虫弓⼒Ⱝ")
 RUNES_TEXT_PRES = set("✝✡♐⚴⚼⛉⛩⬡◇⌗")      # ganham o seletor de texto (U+FE0E) para não virarem emoji colorido
 RUNE_FAMILIES_MAIN = ["Noto+Sans", "Noto+Sans+Symbols", "Noto+Sans+Symbols+2", "Noto+Sans+Math", "Noto+Sans+Runic", "Noto+Sans+Cherokee", "Noto+Sans+KR", "Noto+Sans+JP"]
 RUNE_FAMILIES_EXTRA = ["Noto+Sans+Yi", "Noto+Sans+Phoenician", "Noto+Sans+Glagolitic", "Noto+Sans+Tifinagh", "Noto+Sans+Balinese", "Noto+Sans+Canadian+Aboriginal", "Noto+Sans+Old+Turkic",
-                       "Noto+Sans+Old+Italic", "Noto+Sans+Lycian", "Noto+Sans+Linear+A", "Noto+Sans+Old+South+Arabian", "Noto+Sans+Warang+Citi"]
+                       "Noto+Sans+Old+Italic", "Noto+Sans+Lycian", "Noto+Sans+Linear+A", "Noto+Sans+Old+South+Arabian", "Noto+Sans+Warang+Citi", "Noto+Sans+Brahmi", "Noto+Music"]
 
 def rune_fonts_links():
     """Cada fonte vai num <link> próprio, restrita (text=) só aos símbolos usados: se uma fonte não existir no Google Fonts, só ela falha."""

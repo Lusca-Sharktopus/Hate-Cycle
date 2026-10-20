@@ -13,7 +13,7 @@ Como rodar (precisa de `pip install fonttools brotli` e dos pacotes @fontsource 
   mkdir /tmp/noto && cd /tmp/noto
   for p in noto-sans noto-sans-symbols noto-sans-symbols-2 noto-sans-math noto-sans-runic noto-sans-cherokee noto-sans-kr noto-sans-jp \\
            noto-sans-yi noto-sans-phoenician noto-sans-glagolitic noto-sans-tifinagh noto-sans-balinese noto-sans-canadian-aboriginal \\
-           noto-sans-old-turkic noto-sans-old-italic noto-sans-lycian noto-sans-linear-a noto-sans-old-south-arabian noto-sans-warang-citi; do
+           noto-sans-old-turkic noto-sans-old-italic noto-sans-lycian noto-sans-linear-a noto-sans-old-south-arabian noto-sans-warang-citi noto-sans-brahmi noto-music; do
     npm pack @fontsource/$p@5.3.0 --silent; done          # (noto-sans-kr e -jp: @5.3.1)
   for f in *.tgz; do mkdir -p x/${f%.tgz}; tar xzf $f -C x/${f%.tgz} --strip-components=1; done
   python3 tools/gerar_fontes_das_runas.py --pacotes /tmp/noto/x
@@ -37,6 +37,7 @@ FAMILIAS = [
     ("Noto Sans Canadian Aboriginal", "noto-sans-canadian-aboriginal"), ("Noto Sans Old Turkic", "noto-sans-old-turkic"),
     ("Noto Sans Old Italic", "noto-sans-old-italic"), ("Noto Sans Lycian", "noto-sans-lycian"), ("Noto Sans Linear A", "noto-sans-linear-a"),
     ("Noto Sans Old South Arabian", "noto-sans-old-south-arabian"), ("Noto Sans Warang Citi", "noto-sans-warang-citi"),
+    ("Noto Sans Brahmi", "noto-sans-brahmi"), ("Noto Music", "noto-music"),
     ("Noto Sans KR", "noto-sans-kr"), ("Noto Sans JP", "noto-sans-jp"),
 ]
 

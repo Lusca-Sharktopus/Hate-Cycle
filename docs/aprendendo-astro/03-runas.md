@@ -178,6 +178,8 @@ As 20 `<link>` das fontes Noto das runas entram no `<head>` com `set:html`, exat
 | bloco 5 do `static/site.js` | script processado em `Abertura.astro` |
 | CSS de `.runes` e `.intro-screen` em `style.css` | `<style is:global>` nos dois componentes |
 
+**Acrescentar runas ao catálogo:** a lista `RUNES` vive em dois lugares (`build.py` e `src/lib/runas.ts`), na mesma ordem, e as fontes dos glifos novos são recortes gerados por `tools/gerar_fontes_das_runas.py`. O passo a passo está na lição `11-imagens-e-fontes.md`, seção 7 ("Como acrescentar runas novas"). Lembrete: catálogo maior = sorteio diferente em todas as páginas, igual nos dois geradores.
+
 ## 8. Rode você mesmo
 
 ```bash

@@ -13,7 +13,7 @@ import { createHash } from "node:crypto";
 
 /** Os símbolos sorteados (RUNES do build.py). Repetições não contam: vale a 1ª vez que cada um aparece. */
 export const RUNES =
-  "✝✡ᛁ⚴ᚻᛗᛋᛟᚩ҂ᛃ𐤉Т모ᗐᚣ♐ᚸエꑭⰝ🜁Γᚱᛏ🜂⬡🜄🜃Λᛖ⧮⧰ᛚ𐩹ᛮ𐱃Ⰱ𐊙𑢶⚼ПŁᔨᚫΥ🝂🝘🝃FΣ𐌄Κ𐰤⌗🝧Ѧᛤ⛉𐌇ᛄ𐌙᭻⛩ᚬ⎍ᛇᛒⵅᛞꮤ𐘇𐰭𐤎꓀土◇⧖ᚷ🜲ᛡ⊥‡";
+  "✝✡ᛁ⚴ᚻᛗᛋᛟᚩ҂ᛃ𐤉Т모ᗐᚣ♐ᚸエꑭⰝ🜁Γᚱᛏ🜂⬡🜄🜃Λᛖ⧮⧰ᛚ𐩹ᛮ𐱃Ⰱ𐊙𑢶⚼ПŁᔨᚫΥ🝂🝘🝃FΣ𐌄Κ𐰤⌗🝧Ѧᛤ⛉𐌇ᛄ𐌙᭻⛩ᚬ⎍ᛇᛒⵅᛞꮤ𐘇𐰭𐤎꓀土◇⧖ᚷ🜲ᛡ⊥‡◫⋋⏃Иᚳ𐰔⌥ᛝᚹ𝈒𐙎⌤𑀒𝆦山ᛥ🜙√⊹𐌌⋉𐌎🜍ᛠ虫弓⼒Ⱝ";
 
 /** Símbolos que ganham o seletor de texto U+FE0E, para o navegador não desenhá-los como emoji colorido. */
 export const RUNES_TEXT_PRES: ReadonlySet<string> = new Set(Array.from("✝✡♐⚴⚼⛉⛩⬡◇⌗"));
@@ -26,7 +26,7 @@ export const RUNE_FAMILIES_MAIN = [
 export const RUNE_FAMILIES_EXTRA = [
   "Noto+Sans+Yi", "Noto+Sans+Phoenician", "Noto+Sans+Glagolitic", "Noto+Sans+Tifinagh", "Noto+Sans+Balinese",
   "Noto+Sans+Canadian+Aboriginal", "Noto+Sans+Old+Turkic", "Noto+Sans+Old+Italic", "Noto+Sans+Lycian",
-  "Noto+Sans+Linear+A", "Noto+Sans+Old+South+Arabian", "Noto+Sans+Warang+Citi",
+  "Noto+Sans+Linear+A", "Noto+Sans+Old+South+Arabian", "Noto+Sans+Warang+Citi", "Noto+Sans+Brahmi", "Noto+Music",
 ] as const;
 
 /** Os símbolos sem repetição, na ordem da 1ª aparição (o dict.fromkeys(RUNES) do Python).

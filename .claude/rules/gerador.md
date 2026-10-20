@@ -26,6 +26,12 @@ O `build.py` está **congelado para mudanças estruturais** até a virada para A
 6. **Scaffolding:** `SKEL` + `scaffold()` para `python build.py new …`.
 7. `__main__`: `new`, `serve` (porta 8000, `DRAFTS=True`, `BASE=""`, sem cache) ou build.
 
+## Runas do fundo (catálogo e fontes)
+
+- `RUNES` (e `RUNES_TEXT_PRES`) tem de ser **idêntica** à de `src/lib/runas.ts` (mesmos símbolos, mesma ordem): o sorteio com semente é provado igual nos dois (`tests/runas.test.ts`). Símbolo novo vai no **fim** da lista; depois, `python3 tools/runas_ref.py` e `python3 tools/paginas_ref.py` e `pnpm test`.
+- O Python pede as fontes ao Google Fonts (`rune_fonts_links()`), um `<link>` por família com `&text=` só dos símbolos. `RUNE_FAMILIES_MAIN`/`RUNE_FAMILIES_EXTRA` listam as famílias; um glifo que nenhuma família da lista tem vira quadradinho. Família nova entra em `RUNE_FAMILIES_EXTRA` (é correção de dado, não mexe na estrutura) e também em `FAMILIAS` de `tools/gerar_fontes_das_runas.py` e no `font-family` de `Runas.astro`. T17f: entraram `Noto+Sans+Brahmi` (𑀒) e `Noto+Music` (𝈒 𝆦).
+- O sandbox não alcança o Google: o lado do Python só se confere pelo HTML gerado (os `<link>` e o `&text=`), as fontes em si só se veem no Astro.
+
 ## Chaves liga/desliga
 
 | Onde | Chave | Efeito |

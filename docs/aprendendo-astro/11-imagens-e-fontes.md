@@ -31,7 +31,7 @@ Atenção a uma coisa nessa tabela: o "antes" **não inclui as fontes do Google*
 4. **WebP, não AVIF** (e a exceção do JPEG no degradê da abertura).
 5. **Perfis por lugar**: a capa do carrossel, a figura da notícia e a página de quadrinho não têm o mesmo tamanho.
 6. **Fontes do próprio site** com os pacotes `@fontsource`, sem trocar o nome de nenhuma fonte.
-7. **As runas**: de 21 pedidos ao Google para 25 arquivinhos de 15 KB no total.
+7. **As runas**: de 21 pedidos ao Google para 31 arquivinhos de 19 KB no total (eram 25 e 15 KB até o catálogo crescer, T17f).
 8. **Silhuetas**: o truque do texto que contorna o Giuseppe, que baixava a imagem duas vezes.
 9. **Como provar que nada mudou** (testes + navegador).
 10. **O que ficou de fora** e por quê.
@@ -113,13 +113,20 @@ Antes, `<link href="https://fonts.googleapis.com/…">` fazia o navegador ir a *
 
 ## 7. As runas do fundo
 
-O fundo de runas usa 83 símbolos, desenhados por 19 das 20 famílias Noto da lista (a 20ª, Noto Sans JP, fica só de reserva). O Google entregava um recorte por família (`&text=` com os 83 símbolos): 20 `<link>` por página. Agora `tools/gerar_fontes_das_runas.py` (Python com `fonttools`; **só você ou a Claude rodam**, e só se a lista `RUNES` de `src/lib/runas.ts` mudar) faz o mesmo recorte **uma vez** e grava o resultado no projeto:
+O fundo de runas usa 111 símbolos (83 até a T17f, que acrescentou 28), desenhados pelas 22 famílias Noto da lista. O Google entregava um recorte por família (`&text=` com os símbolos): 22 `<link>` por página. Agora `tools/gerar_fontes_das_runas.py` (Python com `fonttools`; **só você ou a Claude rodam**, e só se a lista `RUNES` de `src/lib/runas.ts` mudar) faz o mesmo recorte **uma vez** e grava o resultado no projeto:
 
-- `src/assets/fontes/runas/*.woff2`: 25 arquivos, **15 KB no total**;
+- `src/assets/fontes/runas/*.woff2`: 31 arquivos, **19,1 KB no total** (o do CJK é só o recorte dos 5 ou 6 glifos usados, 0,6 KB cada, nunca a fonte inteira). Por página, o navegador baixa só os recortes das 26 runas sorteadas (unicode-range): média de 9,5 KB, no máximo 12,1 KB (antes: 8,3 e 10,7 KB);
 - `src/styles/fontes-das-runas.css`: um `@font-face` por arquivo, com o `unicode-range` exato dos símbolos dele;
 - `src/assets/fontes/runas/cobertura.json`: o que cada arquivo cobre (os testes conferem com a lista `RUNES`: nenhum símbolo sem fonte, nenhum sobrando).
 
 O navegador escolhe, para cada símbolo, a **primeira** família da lista `font-family` de `.runes i` (`Runas.astro`) que o tem; o gerador usa a mesma regra, então cada símbolo sai da mesma fonte de antes.
+
+**Como acrescentar runas novas** (foi o que a T17f fez com 28 de uma vez):
+
+1. Ponha os símbolos no **fim** da lista `RUNES` nos **dois** lugares, na mesma ordem: `build.py` e `src/lib/runas.ts`. Sem repetir (`python3` com `dict.fromkeys` mostra o que já existe; cuidado com parecidos: o `Ⱝ` U+2C1D que já havia não é o `Ⱝ` U+2C2D de A Força). Símbolo que o navegador desenharia como emoji colorido entra também em `RUNES_TEXT_PRES`. Mudar a lista muda o sorteio do fundo de **todas** as páginas, nos dois geradores por igual.
+2. Descubra qual família Noto tem cada glifo (os pacotes `@fontsource` ficam fora do projeto; as instruções estão no topo de `tools/gerar_fontes_das_runas.py`). Se nenhuma das famílias da lista tem o glifo, o gerador para e diz qual (foi assim que entraram Noto Sans Brahmi e Noto Music). Família nova vai em quatro lugares: `FAMILIAS` do gerador, o `font-family` de `.runes i` em `Runas.astro`, `RUNE_FAMILIES_EXTRA` em `src/lib/runas.ts` e em `build.py` (o Python ainda pede ao Google Fonts, por `&text=`).
+3. Rode `python3 tools/gerar_fontes_das_runas.py --pacotes <pasta>`; confira o `cobertura.json`.
+4. Refaça as referências: `python3 tools/runas_ref.py` e `python3 tools/paginas_ref.py`; depois `pnpm test` (se o número de `<link>` de fonte mudou, `tests/runas.test.ts` pede o número novo). Gere o site e olhe uma página com todas as runas (nenhuma pode ser quadradinho).
 
 ## 8. Silhuetas: o texto que contorna o desenho
 

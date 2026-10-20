@@ -3,10 +3,11 @@
   "familia": "Noto Sans",
   "arquivo": "noto-sans-cyrillic.woff2",
   "glifos": [
+   "418",
    "41F",
    "422"
   ],
-  "bytes": 548
+  "bytes": 616
  },
  {
   "familia": "Noto Sans",
@@ -54,8 +55,10 @@
    "16AB",
    "16AC",
    "16B1",
+   "16B3",
    "16B7",
    "16B8",
+   "16B9",
    "16BB",
    "16C1",
    "16C3",
@@ -67,13 +70,16 @@
    "16D6",
    "16D7",
    "16DA",
+   "16DD",
    "16DE",
    "16DF",
+   "16E0",
    "16E1",
    "16E4",
+   "16E5",
    "16EE"
   ],
-  "bytes": 1288
+  "bytes": 1452
  },
  {
   "familia": "Noto Sans Symbols",
@@ -81,6 +87,7 @@
   "glifos": [
    "2317",
    "238D",
+   "23C3",
    "2650",
    "26B4",
    "26BC",
@@ -91,35 +98,44 @@
    "1F702",
    "1F703",
    "1F704",
+   "1F70D",
+   "1F719",
    "1F732",
    "1F742",
    "1F743",
    "1F758",
    "1F767"
   ],
-  "bytes": 1248
+  "bytes": 1392
  },
  {
   "familia": "Noto Sans Symbols 2",
   "arquivo": "noto-sans-symbols-2-symbols.woff2",
   "glifos": [
+   "2324",
+   "2325",
    "25C7",
+   "25EB",
    "26C9",
    "2B21"
   ],
-  "bytes": 540
+  "bytes": 636
  },
  {
   "familia": "Noto Sans Math",
   "arquivo": "noto-sans-math-latin.woff2",
   "glifos": [
    "2021",
+   "221A",
    "22A5",
+   "22B9",
+   "22C9",
+   "22CB",
    "29D6",
    "29EE",
    "29F0"
   ],
-  "bytes": 752
+  "bytes": 1136
  },
  {
   "familia": "Noto Sans Cherokee",
@@ -152,9 +168,10 @@
   "arquivo": "noto-sans-glagolitic-glagolitic.woff2",
   "glifos": [
    "2C01",
-   "2C1D"
+   "2C1D",
+   "2C2D"
   ],
-  "bytes": 564
+  "bytes": 624
  },
  {
   "familia": "Noto Sans Tifinagh",
@@ -185,11 +202,12 @@
   "familia": "Noto Sans Old Turkic",
   "arquivo": "noto-sans-old-turkic-old-turkic.woff2",
   "glifos": [
+   "10C14",
    "10C24",
    "10C2D",
    "10C43"
   ],
-  "bytes": 528
+  "bytes": 572
  },
  {
   "familia": "Noto Sans Old Italic",
@@ -197,9 +215,11 @@
   "glifos": [
    "10304",
    "10307",
+   "1030C",
+   "1030E",
    "10319"
   ],
-  "bytes": 524
+  "bytes": 596
  },
  {
   "familia": "Noto Sans Lycian",
@@ -213,9 +233,10 @@
   "familia": "Noto Sans Linear A",
   "arquivo": "noto-sans-linear-a-linear-a.woff2",
   "glifos": [
-   "10607"
+   "10607",
+   "1064E"
   ],
-  "bytes": 724
+  "bytes": 748
  },
  {
   "familia": "Noto Sans Old South Arabian",
@@ -232,6 +253,23 @@
    "118B6"
   ],
   "bytes": 432
+ },
+ {
+  "familia": "Noto Sans Brahmi",
+  "arquivo": "noto-sans-brahmi-brahmi.woff2",
+  "glifos": [
+   "11012"
+  ],
+  "bytes": 416
+ },
+ {
+  "familia": "Noto Music",
+  "arquivo": "noto-music-music.woff2",
+  "glifos": [
+   "1D1A6",
+   "1D212"
+  ],
+  "bytes": 436
  },
  {
   "familia": "Noto Sans KR",
@@ -251,10 +289,42 @@
  },
  {
   "familia": "Noto Sans KR",
+  "arquivo": "noto-sans-kr-105.woff2",
+  "glifos": [
+   "5C71"
+  ],
+  "bytes": 560
+ },
+ {
+  "familia": "Noto Sans KR",
   "arquivo": "noto-sans-kr-118.woff2",
   "glifos": [
    "BAA8"
   ],
   "bytes": 580
+ },
+ {
+  "familia": "Noto Sans KR",
+  "arquivo": "noto-sans-kr-86.woff2",
+  "glifos": [
+   "5F13"
+  ],
+  "bytes": 660
+ },
+ {
+  "familia": "Noto Sans KR",
+  "arquivo": "noto-sans-kr-96.woff2",
+  "glifos": [
+   "2F12"
+  ],
+  "bytes": 692
+ },
+ {
+  "familia": "Noto Sans JP",
+  "arquivo": "noto-sans-jp-92.woff2",
+  "glifos": [
+   "866B"
+  ],
+  "bytes": 668
  }
 ]

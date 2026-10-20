@@ -293,7 +293,7 @@ Não repete nas páginas seguintes da mesma visita, e não aparece para quem ped
 
 Cada página ganha uma "impressão rúnica" própria, sorteada a partir do endereço da página (sempre a mesma para a mesma página).
 Está em `rune_imprint()` no `build.py`: lista de símbolos em `RUNES`, quantidade (`n=26`, e nenhuma runa encosta em outra), tamanhos (`size`), giro máximo (±45° em `rot`) e brilho/ritmo (`lo`, `hi`, `dur`).
-As fontes Noto vêm do Google Fonts, restritas a esses símbolos (no site novo, são recortes das mesmas fontes servidos pelo próprio site, `src/assets/fontes/runas/`; se você mudar a lista `RUNES`, peça à Claude para regenerar os recortes). O estilo e a animação ficam no fim do `style.css` (`.runes`); quem pede "reduzir movimento" no sistema vê as runas paradas.
+As fontes Noto vêm do Google Fonts, restritas a esses símbolos (no site novo, são recortes das mesmas fontes servidos pelo próprio site, `src/assets/fontes/runas/`; se você mudar a lista `RUNES`, peça à Claude para regenerar os recortes; hoje são 111 símbolos. Para acrescentar runas, mande os símbolos: a Claude põe no fim da lista nos dois geradores e refaz as fontes. Atenção: com a lista maior, o desenho do fundo de todas as páginas muda). O estilo e a animação ficam no fim do `style.css` (`.runes`); quem pede "reduzir movimento" no sistema vê as runas paradas.
 
 ## 18. Barra lateral de botões (desligada)
 
