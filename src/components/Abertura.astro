@@ -15,6 +15,7 @@
 // Tudo isso só existe se config.json → intro.enabled for true.
 import { assetUrl } from "../lib/assets";
 import { introConfig } from "../lib/config";
+import { fundoLeve } from "../lib/imagens";
 
 interface Props {
   parte: "cabeca" | "corpo";
@@ -26,7 +27,10 @@ const minMs = Math.trunc(introConfig.min_ms ?? 4200);
 const maxMs = Math.trunc(introConfig.max_ms ?? 10000);
 const limite = maxMs + 3000; // a trava de segurança do script do <head>
 const video = assetUrl(introConfig.video ?? "");
-const fundo = introConfig.background ? `background-image:url('${assetUrl(introConfig.background)}')` : "";
+// O degradê de fundo (T17): a versão leve em JPEG (15 KB) em vez do PNG de 287 KB; sem ela (arquivo sumiu), o original. Sem isso a abertura,
+// que é a primeira coisa pintada de quem chega, esperava 287 KB (nos celulares lentos, ~4 s).
+const fundoLeveUrl = introConfig.background ? await fundoLeve(introConfig.background) : null;
+const fundo = introConfig.background ? `background-image:url('${fundoLeveUrl ?? assetUrl(introConfig.background)}')` : "";
 ---
 
 {

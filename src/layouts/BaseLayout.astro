@@ -1,8 +1,14 @@
 ---
 // Moldura de toda página (o shell() do build.py): <head> completo, cabeçalho, conteúdo e rodapé.
 // Esta parte, entre as linhas ---, roda só no build (no seu computador), nunca no navegador.
+import "../styles/fontes.css";
 import "../styles/tokens.css";
 import "../styles/global.css";
+// Fontes principais que quase toda página usa (texto = Lexend, títulos = Oswald), só o recorte "latin" (letras do português e do inglês).
+// O `?url` entrega o endereço final do arquivo (com o carimbo do Vite no nome), o mesmo que o fontes.css usa: o navegador começa a
+// baixar já no <head>, sem esperar o CSS. As outras fontes (e os outros alfabetos) só são baixadas se a página usar.
+import lexendLatin from "@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2?url";
+import oswaldLatin from "@fontsource-variable/oswald/files/oswald-latin-wght-normal.woff2?url";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Runas from "../components/Runas.astro";
@@ -11,7 +17,8 @@ import { assetUrl, assetVersioned } from "../lib/assets";
 import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config";
 import { ATALHOS } from "../lib/corpos";
 import { finalizarMain } from "../lib/pagina";
-import { runasFontesHtml } from "../lib/runas";
+import { otimizarImagensDoHtml } from "../lib/imagensDoHtml";
+import { icones } from "../lib/imagens";
 
 interface Props {
   lang: Lang;
@@ -60,9 +67,9 @@ const hreflangs = langs.flatMap((l) => {
 });
 const paraOSeletor = Object.fromEntries(hreflangs.map((h) => [h.lang, h.href])) as Partial<Record<Lang, string>>;
 
-// Fontes do Google Fonts: o MESMO link do shell(). Fontes servidas pelo próprio site: T17.
-const googleFonts =
-  "https://fonts.googleapis.com/css2?family=Lexend:wght@300..800&family=Oswald:wght@300..700&family=Vollkorn+SC:wght@400;600;700&family=Noto+Emoji:wght@300..700&family=PT+Serif:ital@0;1&family=Road+Rage&display=swap";
+// Ícone da aba: o logos/favicon.png do autor tem 1,7 MB (3508 px) e o navegador o baixaria inteiro para desenhar 16 px. As versões de
+// 32 e 192 px saem do mesmo arquivo (T17); se o arquivo mudar de nome ou sumir, o link volta a apontar para o original.
+const iconesDoSite = await icones("logos/favicon.png", [32, 192]);
 
 const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha a "folha" de papel
 
@@ -76,7 +83,9 @@ const atalhos: Partial<Record<(typeof ATALHOS)[number], string>> = {};
 for (const nome of ATALHOS) {
   if (Astro.slots.has(`atalho-${nome}`)) atalhos[nome] = await Astro.slots.render(`atalho-${nome}`);
 }
-const { html: main, scripts } = finalizarMain(miolo, lang, atalhos);
+const { html: acabado, scripts } = finalizarMain(miolo, lang, atalhos);
+// T17: as imagens do <main> (dos componentes e do texto do autor) ganham as versões leves no srcset; o `src` não muda (src/lib/imagensDoHtml.ts).
+const main = await otimizarImagensDoHtml(acabado);
 ---
 
 <!doctype html>
@@ -91,13 +100,15 @@ const { html: main, scripts } = finalizarMain(miolo, lang, atalhos);
     <meta property="og:description" content={desc} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <Abertura parte="cabeca" />
-    <link rel="icon" href="/logos/favicon.png" type="image/png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={googleFonts} />
-    <!-- Fontes Noto das runas: uma <link> por família, só com os símbolos usados (rune_fonts_links do build.py; otimização: T17) -->
-    <!-- (set:html: o texto entra exatamente como o build.py escreve, com "&" cru nos endereços; o teste prova que é igual) -->
-    <Fragment set:html={runasFontesHtml()} />
+    {
+      iconesDoSite.length > 0
+        ? iconesDoSite.map((i) => <link rel="icon" href={i.href} type="image/png" sizes={`${i.lado}x${i.lado}`} />)
+        : <link rel="icon" href="/logos/favicon.png" type="image/png" />
+    }
+    <!-- Fontes: servidas pelo próprio site (T17; src/styles/fontes.css). Antes vinham do Google Fonts (e as runas do fundo pediam
+         recortes de glifos a ele); agora nenhuma página fala com outro domínio. Só as duas fontes de toda página são pré-carregadas. -->
+    <link rel="preload" href={lexendLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={oswaldLatin} as="font" type="font/woff2" crossorigin />
     <!-- Os estilos da moldura (tokens.css, global.css e os dos componentes) o Astro empacota sozinho em /_astro/. -->
     <!-- custom.css é o arquivo pessoal do autor (static/custom.css): vem DEPOIS, para ganhar dos demais. Pode não existir. -->
     <link rel="stylesheet" href={assetVersioned("custom.css")} />

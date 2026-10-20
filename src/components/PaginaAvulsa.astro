@@ -27,16 +27,18 @@ const { pagina: p } = Astro.props;
 <style is:global>
   @layer site {
     /* Copiado de static/style.css (bloco "página Sobre: personagens e fotos flutuando com o texto contornando o desenho"),
-       mesmos valores e mesma ordem. Duas diferenças técnicas: o shape-outside usa o endereço a partir da raiz do site (este CSS mora em
-       /_astro/, e "other images/…" ali não seria achado) e o celular (390 px) vem logo abaixo, na mesma regra de @media do original.
+       mesmos valores e mesma ordem. Três diferenças técnicas: o shape-outside usa o endereço a partir da raiz do site (este CSS mora em
+       /_astro/, e "other images/…" ali não seria achado); contorna pela SILHUETA do desenho (/silhuetas/<nome>.png, gerada no build:
+       mesmo tamanho e mesmo contorno, poucos KB; T17, src/lib/silhuetas.ts) e não pelo arquivo inteiro, que o navegador baixaria de novo;
+       e o celular (390 px) vem logo abaixo, na mesma regra de @media do original.
        Nota: o bloco 3 do static/site.js (gifs que encolhem para não passar do fim do texto) procura `.page-project .prose`, e
        nenhuma página tem essa classe + gifs juntos hoje (a Sobre é `page-about`; Histórias é `page-project` mas sem gifs):
        no site atual ele não faz nada na Sobre, então não foi portado (ver docs/aprendendo-astro/09-endpoints.md). */
     .page-about h2, .page-project h2 { clear: both; }
     .apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
-    .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("/other images/Apollo Site.gif"); }
-    .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("/other images/Anfíbio Site.gif"); }
-    .autor-foto { float: left; width: clamp(200px, 48%, 560px); margin: 0 1.4rem .5rem 0; shape-outside: url("/other images/1000172301.png"); }
+    .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("/silhuetas/apollo.png"); }
+    .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("/silhuetas/anfibio.png"); }
+    .autor-foto { float: left; width: clamp(200px, 48%, 560px); margin: 0 1.4rem .5rem 0; shape-outside: url("/silhuetas/autor.png"); }
     @media (max-width: 700px) { .autor-foto { width: 100%; float: none; margin: 0 0 1rem; } }
   }
 </style>

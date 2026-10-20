@@ -39,9 +39,21 @@ function filhosDe(n: No): No[] {
   return "childNodes" in alvo ? alvo.childNodes : [];
 }
 
+/**
+ * T17 — a única diferença aceita nas <img>: as versões leves. O Astro acrescenta ao fim da tag `srcset`, `sizes`, `width`, `height` e
+ * (nas preguiçosas) `decoding="async"`; o site Python não tem nada disso (nunca tem `srcset`). Então, numa <img> COM `srcset`, esses cinco
+ * atributos não entram na comparação — todo o resto (src, class, alt, loading, style, a ordem) tem de ser igual ao do Python.
+ * Se o autor já tivesse `width`/`height` ou `decoding` numa imagem com versões leves, o Python teria o atributo e o Astro (que o
+ * descarta aqui) não: a página apareceria como diferente, e é o que se quer (o build nunca duplica atributo do autor; tests/imagens.test.ts).
+ * O que cada versão leve É (arquivo certo, mesma imagem, proporção) é provado em tests/imagens.test.ts, para todas as páginas.
+ */
+const ATRIBUTOS_DAS_VERSOES_LEVES = new Set(["srcset", "sizes", "width", "height", "decoding"]);
+const ehImagemComVersoesLeves = (e: Elemento) => e.tagName === "img" && e.attrs.some((a) => a.name === "srcset");
+
 function atributos(e: Elemento): string {
+  const leve = ehImagemComVersoesLeves(e);
   return e.attrs
-    .filter((a) => !a.name.startsWith("data-astro-cid-"))
+    .filter((a) => !a.name.startsWith("data-astro-cid-") && !(leve && ATRIBUTOS_DAS_VERSOES_LEVES.has(a.name)))
     .map((a) => (a.name === "class" ? ` class="${a.value.split(ESPACO).filter(Boolean).join(" ")}"` : ` ${a.name}=${JSON.stringify(a.value)}`))
     .join("");
 }
@@ -106,6 +118,18 @@ function textoDe(e: Elemento): string {
   return filhosDe(e).map((f) => (ehTexto(f) ? f.value : ehElemento(f) ? textoDe(f) : "")).join("");
 }
 
+// T17 — as únicas diferenças aceitas no <head>, todas sobre FONTES e ÍCONE (o texto delas está em docs/aprendendo-astro/11-imagens-e-fontes.md):
+//   - o site Python pede as fontes ao Google Fonts (2 <link rel="preconnect"> + 1 <link> das fontes do texto + 20 das runas); o Astro as serve
+//     do próprio site (@font-face no CSS empacotado) e só pré-carrega as duas do começo da página (<link rel="preload" as="font">).
+//     Todos esses <link> saem da comparação, dos dois lados; que o Astro NÃO fala com o Google e que os dois pré-carregamentos existem e
+//     apontam para arquivos de verdade está em tests/imagens.test.ts (fontes), para todas as páginas.
+//   - o ícone: o Python tem um <link rel="icon">; o Astro tem dois (32x32 e 192x192, versões leves do mesmo desenho). Comparam-se como um só.
+const ehLinkDeFonte = (e: Elemento) => {
+  const href = attr(e, "href") ?? "";
+  return /^https:\/\/fonts\.(googleapis|gstatic)\.com\b/.test(href) || (attr(e, "rel") === "preload" && attr(e, "as") === "font");
+};
+const ehIcone = (e: Elemento) => attr(e, "rel") === "icon" && /^\/logos\/favicon(_[A-Za-z0-9]+)?\.png$/.test(attr(e, "href") ?? "");
+
 export interface PaginaLida {
   /** <html lang="…"> */
   lang: string;
@@ -146,9 +170,10 @@ export function lerPagina(html: string): PaginaLida {
   const links = varrer(cabeca, (e) => e.tagName === "link")
     .filter((e) => {
       const href = attr(e, "href") ?? "";
-      return !(href.startsWith("/_astro/") || href.startsWith("/style.css"));
+      return !(href.startsWith("/_astro/") || href.startsWith("/style.css")) && !ehLinkDeFonte(e);
     })
-    .map((e) => `<link${atributos(e).replace(/ href="\/custom\.css\?v=[0-9a-f]+"/, ' href="/custom.css"')}>`);
+    .map((e) => (ehIcone(e) ? '<link rel="icon" href="/logos/favicon.png" type="image/png">' : `<link${atributos(e).replace(/ href="\/custom\.css\?v=[0-9a-f]+"/, ' href="/custom.css"')}>`))
+    .filter((l, i, todos) => i === 0 || l !== todos[i - 1] || !l.startsWith('<link rel="icon"')); // os dois tamanhos do ícone viram um só
   const scriptsInline = varrer(cabeca, (e) => e.tagName === "script" && attr(e, "src") === undefined && attr(e, "type") !== "module").map((e) => textoDe(e));
   return {
     lang: attr(raiz, "lang") ?? "",

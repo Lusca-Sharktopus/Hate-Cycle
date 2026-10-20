@@ -1,6 +1,7 @@
 ---
 // Cabeçalho do site: logo, menu e seletor de idioma (o <header> do shell() do build.py).
 import { assetUrl } from "../lib/assets";
+import { otimizar, PERFIS } from "../lib/imagens";
 import { langName, htmlLang, langs, logoFile, siteName, t, type Lang } from "../lib/config";
 import { menuDoIdioma, type Menu, type MenuLink } from "../lib/nav";
 
@@ -23,6 +24,10 @@ if (menu.about) links.push({ href: `/${lang}/about/`, label: t(lang, "about") })
 if (menu.news) links.push({ href: `/${lang}/news/`, label: t(lang, "news") });
 const support: MenuLink | undefined = menu.support ? { href: `/${lang}/support/`, label: t(lang, "support") } : undefined;
 
+// A logo: o `src` continua sendo o arquivo original (logos/Hate Cycle Glow.png, 2,3 MB); as versões leves em WebP vão no `srcset`
+// (T17, src/lib/imagens.ts). Sem `loading="lazy"`: é a primeira coisa da página. width/height = proporção do original (evita pulo).
+const logo = await otimizar(logoFile, PERFIS.logo);
+
 // Os outros idiomas para o seletor: link para a mesma página no outro idioma, ou para a home dele.
 const outros = langs
   .filter((l) => l !== lang)
@@ -30,7 +35,7 @@ const outros = langs
 ---
 
 <header class="site-header">
-  <a class="brand" href={`/${lang}/`}><img src={assetUrl(logoFile)} alt={siteName} /></a>
+  <a class="brand" href={`/${lang}/`}><img src={assetUrl(logoFile)} srcset={logo?.srcset} sizes={logo?.sizes} width={logo?.width} height={logo?.height} alt={siteName} /></a>
   <nav class="main-nav" aria-label="Main">
     {links.map((l) => <a href={l.href} aria-current={current === l.href ? "page" : undefined}>{l.label}</a>)}
     {

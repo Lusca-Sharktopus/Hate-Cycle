@@ -8,12 +8,36 @@ importers:
 
   .:
     dependencies:
+      '@fontsource-variable/lexend':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource-variable/noto-emoji':
+        specifier: 5.3.2
+        version: 5.3.2
+      '@fontsource-variable/oswald':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/pt-serif':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/road-rage':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/vollkorn-sc':
+        specifier: 5.3.0
+        version: 5.3.0
       '@supabase/supabase-js':
         specifier: 2.117.2
         version: 2.117.2
       astro:
         specifier: ^7.3.8
         version: 7.3.8(@types/node@22.20.5)(yaml@2.9.1)
+      parse5:
+        specifier: ^8.0.1
+        version: 8.0.1
+      sharp:
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@22.20.5)
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.10
@@ -24,9 +48,6 @@ importers:
       happy-dom:
         specifier: 20.14.5
         version: 20.14.5
-      parse5:
-        specifier: ^8.0.1
-        version: 8.0.1
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -254,6 +275,24 @@ packages:
 
   '@emnapi/wasi-threads@1.2.3':
     resolution: {integrity: sha512-ELEBe8PsLvvJ6QMr0zLt8ffvOHW/dc1m3CEzNMg7aJUv3bMaoDtw2TXyDAwkYBuroxxuHEwhRTLJSe5sya547g==}
+
+  '@fontsource-variable/lexend@5.3.0':
+    resolution: {integrity: sha512-3SXtiZ8rFbT0oaPzEboCG5RM3jtyhpNxandh1jWNLqvrJRfV/eP3R+GGw+o5e3hS1uqmAGutKxSvaWG5oyrimA==}
+
+  '@fontsource-variable/noto-emoji@5.3.2':
+    resolution: {integrity: sha512-LgtrM0SErtdfSvrI3CqtHeCtToGCVN66hX+HVNv9QHF5KX0Ko1swzUsSMv1y6Jwjxp3Wzkp8e5PPcl7GLZadOw==}
+
+  '@fontsource-variable/oswald@5.3.0':
+    resolution: {integrity: sha512-sSZzcTeaQGNyZbTVlS4tNNHElK38UktFLqKd6NQDLFCBV27320rQC3kXSZVytYm1PPjKmPxqVaGwqj7LEKUWQw==}
+
+  '@fontsource/pt-serif@5.3.0':
+    resolution: {integrity: sha512-ST+j/byBGZw6H+TQMX78o6Qlngfj2Va/Q9fAJxq54Is1ZQk1/FhBIuqyJcLmnpi0trG8V/hWO9Bx6ZY09A0DBQ==}
+
+  '@fontsource/road-rage@5.3.0':
+    resolution: {integrity: sha512-NIVshvT9dt50lMZi+sSqdSvdntuVnX8nhH2oAwslXR4S6dwMH5MTg1jHIn3Rb36hs0hBOPKUII/PItc2jN0oZg==}
+
+  '@fontsource/vollkorn-sc@5.3.0':
+    resolution: {integrity: sha512-gnffNOylOv/bvg3UD1ZgrLO23RF25y14stFFUHZD0UxC6xLM5RNNDBAUbp1eeylq2B1dTlgLQ4UYdGi+nPy3YA==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -1953,8 +1992,19 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@fontsource-variable/lexend@5.3.0': {}
+
+  '@fontsource-variable/noto-emoji@5.3.2': {}
+
+  '@fontsource-variable/oswald@5.3.0': {}
+
+  '@fontsource/pt-serif@5.3.0': {}
+
+  '@fontsource/road-rage@5.3.0': {}
+
+  '@fontsource/vollkorn-sc@5.3.0': {}
+
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.5':
     optionalDependencies:
@@ -2963,7 +3013,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.5
       '@img/sharp-win32-x64': 0.35.5
       '@types/node': 22.20.5
-    optional: true
 
   shiki@4.5.0:
     dependencies:

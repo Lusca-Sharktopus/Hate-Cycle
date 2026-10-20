@@ -31,7 +31,7 @@
   .flip-card img { width: 100%; height: 100%; }
 
   /* ── Ossos do Ofício: Giuseppe com o texto contornando o desenho ── */
-  .jusep { float: left; width: 15rem; max-width: 40%; height: auto; margin: 0 1rem .5rem 0; shape-margin: 1rem; shape-outside: url("/other images/Giuseppe.png"); }
+  .jusep { float: left; width: 15rem; max-width: 40%; height: auto; margin: 0 1rem .5rem 0; shape-margin: 1rem; shape-outside: url("/silhuetas/giuseppe.png"); }
 
   /* ── vídeos verticais (Shorts) ── */
   .short-embed { position: relative; width: min(100%, 340px); aspect-ratio: 9 / 16; margin: 1rem 0; border-radius: 14px; overflow: hidden; background: #000; }

@@ -402,7 +402,9 @@ function pyQuote(s: string): string {
     .replace(/[!'()*]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase());
 }
 
-/** Endereços do Google Fonts das runas: um por família, restrito (text=) aos símbolos usados. */
+/** Endereços do Google Fonts das runas: um por família, restrito (text=) aos símbolos usados.
+ *  Desde a T17 o layout NÃO usa mais isto (as fontes das runas vêm do próprio site: src/styles/fontes-das-runas.css). Fica só como a
+ *  referência do que o site Python pede ao Google, provada igual em tests/runas.test.ts, até o Python sair (T20/T22). */
 export function runasFontesHrefs(): string[] {
   const txt = pyQuote(GLIFOS.join(""));
   return [...RUNE_FAMILIES_MAIN, ...RUNE_FAMILIES_EXTRA].map(

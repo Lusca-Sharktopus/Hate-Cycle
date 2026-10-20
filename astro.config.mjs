@@ -33,7 +33,16 @@ export default defineConfig({
   // (No build.py, o equivalente de `base` é BASE = config.json → base_url; ver o bug B1 no BACKLOG.)
   site: "https://hatecycle.com",
 
-  vite: { plugins: [eComercialNaPrevia()] },
+  vite: {
+    plugins: [eComercialNaPrevia()],
+    build: {
+      // O Vite embute arquivos menores que 4 KB dentro do CSS (em base64). Os recortes de fonte das runas têm de 0,4 a 1,3 KB: embutidos,
+      // virariam ~20 KB de CSS que TODA página baixa antes de aparecer (o CSS bloqueia a pintura), em vez de 1–2 arquivos de 1 KB só
+      // nas páginas cujas runas os usam. Então fonte nunca é embutida; o resto segue a regra normal do Vite (função devolve undefined).
+      /** @param {string} arquivo */
+      assetsInlineLimit: (arquivo) => (/\.woff2?$/i.test(arquivo) ? false : undefined),
+    },
+  },
 
   // Pastas. `static/` é a mesma pasta que o build.py copia para public/ (provisório até a virada, T20).
   // O site Astro sai em dist/, para não se misturar com o public/ do gerador Python.

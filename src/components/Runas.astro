@@ -3,6 +3,7 @@
 // O sorteio (posições, tamanhos, giros, brilho) é feito em src/lib/runas.ts, NO BUILD, com a semente
 // da página: a mesma página tem sempre o mesmo arranjo, idêntico ao do site atual (provado em `pnpm test`).
 // O navegador só recebe o HTML pronto; nenhuma linha de JavaScript vai para a página por causa das runas.
+import "../styles/fontes-das-runas.css"; // os glifos das runas (T17): recortes das fontes Noto servidos pelo próprio site, não mais pelo Google Fonts
 import { estiloDaRuna, sortearRunas } from "../lib/runas";
 
 interface Props {

@@ -110,6 +110,8 @@ Na cena 1 de *Ossos do Ofício*, o texto em Times New Roman muda para **PT Serif
 
 A imagem com `class="jusep"` (Giuseppe) flutua à esquerda e o texto acompanha o contorno do desenho (precisa ser PNG com fundo transparente).
 
+> **No site novo (Astro):** o texto acompanha o contorno pela *silhueta* do desenho (`/silhuetas/giuseppe.png`, gerada sozinha no build a partir do desenho em `static/other images/`; o contorno é o mesmo, só não baixa o arquivo grande de novo). Se você trocar o desenho do Giuseppe, da foto do autor ou dos GIFs da página Sobre por outro de **mesmo nome**, a silhueta é refeita sozinha. Para um desenho **novo** em que o texto deva dar a volta, peça: é uma linha em `src/lib/silhuetas.ts`.
+
 ### Carta que vira
 
 Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + Enter).
@@ -243,6 +245,8 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
   e as fontes (`--font-text` = Lexend, `--font-head` = Oswald).
 - **Seus ajustes pessoais: `static/custom.css`.** Coloque aqui qualquer ajuste de aparência seu. Esse arquivo é carregado depois do `style.css` e ganha dele.
   Quando chegar uma versão nova do site, o `style.css` pode ser substituído sem apagar os seus ajustes — só **não** substitua o `custom.css` (as atualizações nunca o trazem).
+- **Fontes (site novo):** as fontes agora vêm do próprio site, não do Google. Os nomes não mudaram: no seu texto (`style="font-family: 'Road Rage'"`) e no `custom.css` valem **Lexend, Oswald, Vollkorn SC, Noto Emoji, PT Serif e Road Rage**, como sempre. Cada uma só é baixada pelas páginas que a usam.
+  **Para usar uma fonte nova no texto:** peça à Claude ("quero usar a fonte X no texto"). Ela acrescenta a fonte à lista em `tools/gerar_fontes_css.mjs`, instala o pacote `@fontsource` dela (com versão fixa), gera de novo o `src/styles/fontes.css` e você passa a escrever `font-family: 'Nome da Fonte'`. (O site Python antigo, que ainda existe até a virada, só conhece as seis fontes acima.)
 - **Tamanho do logo no topo:** em `static/custom.css`, acrescente `:root { --logo-w: 160px; }` (ajuste o número).
 - **Cache do navegador:** os arquivos de estilo/script levam um carimbo (`?v=...`) que muda sozinho a cada alteração, e a prévia (`serve`) não usa cache.
   Assim o navegador nunca mostra uma versão velha do site depois de uma atualização.
@@ -253,10 +257,14 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 - A pasta `static/Produtos` ainda não é usada por nenhuma página.
 - `guardados/` guarda arquivos para uso futuro; essa pasta **não** é publicada.
 - Capas: `static/covers/EN/` e `static/covers/PT/`; logos das obras: `static/logos/`; imagens das notícias: `static/news/`.
+- **Capa nova:** coloque o arquivo em `static/covers/PT/` (ou `EN/`) com o nome que o `work.json` usa e **não precisa reduzir nem otimizar**: pode ser o PNG ou JPEG grande de sempre. No site novo o build gera sozinho as versões leves em WebP (a capa de 3,5 MB chega ao visitante com ~44 KB) e o navegador escolhe a do tamanho da tela. O arquivo original continua publicado e é o `src` da imagem. Vale para **qualquer** PNG ou JPEG de 30 KB para cima: logos, imagens de notícias, emissários, páginas de quadrinho.
+- **Imagem no meio do texto:** `![descrição](/other images/arquivo.png)` ou `<img src="/other images/arquivo.png" alt="descrição">` funcionam como sempre; o site acrescenta sozinho as versões leves (e `width`/`height`, para o texto não pular). Se você já puser `width`, `height` ou um `srcset` seu na tag, o site respeita o seu. **Não são otimizados:** GIFs animados (peso do arquivo mesmo), vídeos, imagens de outro endereço e arquivos abaixo de 30 KB.
+- **Trocar uma imagem:** salve por cima, com o mesmo nome; as versões leves são refeitas no próximo build (e na prévia) sozinhas.
+- **O que acompanha cada tipo:** pessoas com tela de celular recebem versões de ~280 a 560 px nas capas, de até 900 px nos capítulos e de até 1800 px nas tiras e páginas de quadrinho (para ficarem nítidas ao dar zoom).
 
 ## 16. Tela de abertura
 
-Na primeira página de cada visita aparece `static/intro/fundo.png` cobrindo a tela e a animação da logo (`static/intro/logo.webm`);
+Na primeira página de cada visita aparece `static/intro/fundo.png` (no site novo, uma versão leve em JPEG gerada dele; troque o `fundo.png` normalmente) cobrindo a tela e a animação da logo (`static/intro/logo.webm`);
 os dois desvanecem juntos quando a página termina de carregar, mas só depois de a logo ter aparecido por inteiro (`min_ms`).
 Não repete nas páginas seguintes da mesma visita, e não aparece para quem pediu "reduzir movimento" no sistema.
 
@@ -268,7 +276,7 @@ Não repete nas páginas seguintes da mesma visita, e não aparece para quem ped
 
 Cada página ganha uma "impressão rúnica" própria, sorteada a partir do endereço da página (sempre a mesma para a mesma página).
 Está em `rune_imprint()` no `build.py`: lista de símbolos em `RUNES`, quantidade (`n=26`, e nenhuma runa encosta em outra), tamanhos (`size`), giro máximo (±45° em `rot`) e brilho/ritmo (`lo`, `hi`, `dur`).
-As fontes Noto vêm do Google Fonts, restritas a esses símbolos. O estilo e a animação ficam no fim do `style.css` (`.runes`); quem pede "reduzir movimento" no sistema vê as runas paradas.
+As fontes Noto vêm do Google Fonts, restritas a esses símbolos (no site novo, são recortes das mesmas fontes servidos pelo próprio site, `src/assets/fontes/runas/`; se você mudar a lista `RUNES`, peça à Claude para regenerar os recortes). O estilo e a animação ficam no fim do `style.css` (`.runes`); quem pede "reduzir movimento" no sistema vê as runas paradas.
 
 ## 18. Barra lateral de botões (desligada)
 
