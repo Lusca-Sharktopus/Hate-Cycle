@@ -7,6 +7,8 @@ Precisa só do Python (nada para instalar além dele).
 > **Versão do Python:** o antigo LEIA-ME dizia "Python 3.8+", mas o gerador de hoje só funciona a partir do **Python 3.12** (conferido). Se o comando der erro de sintaxe, atualize o Python.
 
 > **Migração:** o site está sendo migrado para Astro (ver `docs/ARQUITETURA.md` e `docs/BACKLOG.md`). Até a virada, tudo neste guia continua valendo. O jeito de escrever (pastas, `en.md`/`pt.md`, campos no topo dos arquivos) não muda.
+>
+> **Publicação depois da virada (sábado 24/10/2026):** você não sobe mais nenhuma pasta `public/`. O GitHub constrói e publica o site sozinho sempre que uma mudança entra na `main`. Veja a seção [Publicar o site](#publicar-o-site-depois-da-virada) logo abaixo e o roteiro completo em `docs/virada.md`.
 
 ## Sumário
 
@@ -39,7 +41,7 @@ Precisa só do Python (nada para instalar além dele).
 1. Copie suas pastas de imagens (`logos`, `covers`, `other images`, `Backgrounds`, `Produtos`) para dentro de **`static/`**.
    Tudo que está em `static/` vai para o site como está. (Isso já foi feito: ver [Imagens](#15-imagens).)
 2. `python build.py serve` → abre a prévia em http://localhost:8000 (**mostra os rascunhos**).
-3. `python build.py` → gera o site final em `public/` (sem rascunhos). Suba o conteúdo de `public/` para a hospedagem.
+3. `python build.py` → gera o site final em `public/` (sem rascunhos). **Até a virada:** suba o conteúdo de `public/` para a hospedagem. **Depois da virada** isto não é mais preciso: o site é publicado pelo GitHub (ver [Publicar o site](#publicar-o-site-depois-da-virada)); o `public/` serve só para você conferir no seu computador.
 4. Em `config.json`: preencha `site_url` (ex.: `"https://hatecycle.com"`) para ativar o RSS. Se o site ficar
    numa subpasta (ex.: GitHub Pages de projeto), preencha `base_url` (ex.: `"/meu-repo"`).
    - Atenção: hoje o seu `base_url` está como endereço completo, o que estraga os links do RSS. Ver item B1 em `docs/BACKLOG.md`.
@@ -59,7 +61,20 @@ Cada item tem uma pasta com `en.md` e `pt.md`. Só existe em um idioma? Apague o
 | Página avulsa (ex.: sobre)       | `python build.py new page nome`           | `content/pages/nome/` |
 | Adicionar um Emissário           | copie uma pasta de `content/emissaries/`  | `content/emissaries/nome/` (`en.md` e `pt.md`) |
 
-Depois de editar: `python build.py serve` para ver (com rascunhos) e `python build.py` para gerar o site final.
+Depois de editar: `python build.py serve` para ver (com rascunhos) e `python build.py` para gerar o site final (no site novo: `pnpm dev` para ver com rascunhos e `pnpm build` para gerar o site final em `dist/`). Para o site **entrar no ar**, veja a próxima seção.
+
+### Publicar o site (depois da virada)
+
+A partir de sábado 24/10/2026, **publicar = enviar a mudança para a branch `main` do GitHub**. O GitHub então liga uma "linha de montagem" (aba **Actions** do repositório), que confere o código, constrói o site e o coloca em hatecycle.com, tudo sozinho, em **2 a 5 minutos** (mais até 10 minutos de cache, em que algumas pessoas ainda veem a versão anterior).
+
+Há dois caminhos:
+
+1. **Você me manda, eu publico** (o de hoje): você me envia o zip ou os arquivos; eu coloco no projeto, construo o site para conferir, envio para a `main` e te aviso quando estiver no ar.
+2. **Você mesmo, pelo site do GitHub:** no repositório, abra a pasta (ex.: `content/news/`), clique em **Add file → Upload files**, arraste a pasta nova, deixe marcado **Commit directly to the `main` branch** e clique em **Commit changes**. Depois acompanhe em **Actions** até a bolinha ficar verde. Limites do navegador: 100 arquivos por envio e 25 MB por arquivo.
+
+Se a bolinha ficar **vermelha**, o site no ar **não muda** (continua a versão anterior). Clique nela para ler o aviso (ele diz o arquivo e o campo errado); o GitHub também manda e-mail. A linha de montagem confere se o site **constrói**, não se o texto está certo: uma notícia só em um idioma, ou com gralha, vai ao ar assim mesmo.
+
+Se algo der muito errado, o site antigo está guardado e dá para pô-lo de volta em minutos: `docs/virada.md`, seção 3.
 
 **Não renomeie pastas** de obras, capítulos ou notícias que já estão no ar: o endereço da página muda e os comentários daquela página deixam de aparecer.
 
@@ -325,4 +340,5 @@ Onde cada uma aparece hoje: o versalete está no `config.json` (nome do site, te
 
 - As URLs antigas (`firestriker.html`, `PT.html`…) redirecionam para as novas (lista em `config.json → redirects`).
 - Os endereços atuais (`/en/…` e `/pt/…`) não mudam com a migração para Astro.
+- Depois da virada, o site antigo continua guardado na branch `site-antigo` do GitHub (cópia de segurança; como voltar a ele: `docs/virada.md`).
 - O que foi migrado do site antigo, e o que não foi, está em `docs/HISTORICO.md`.

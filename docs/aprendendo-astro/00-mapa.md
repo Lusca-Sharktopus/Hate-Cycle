@@ -16,7 +16,7 @@ Como usar cada lição:
 3. **Editor:** VS Code com a extensão oficial **Astro** (realce, autocompletar e erros de tipo nos arquivos `.astro`).
 4. Desde a T05: na pasta do projeto, `pnpm install` uma vez e depois `pnpm dev` (prévia com recarregamento instantâneo em `http://localhost:4321/pt/`). Passo a passo na lição 01.
 
-O gerador em Python continua funcionando em paralelo até a virada (T20): `python build.py serve` segue valendo.
+O gerador em Python continua funcionando em paralelo até a virada (T20): `python build.py serve` segue valendo. (Depois da virada, a publicação passa a ser automática pelo GitHub: ver a lição 12 e `docs/virada.md`.)
 
 ## As partes
 
@@ -33,7 +33,8 @@ O gerador em Python continua funcionando em paralelo até a virada (T20): `pytho
 | [09](09-endpoints.md) | T14 | Páginas avulsas, endpoints estáticos (RSS, sitemap, redirects do site antigo), a raiz e a página 404; por que à mão e não pelos pacotes do Astro; Extras (Universo e Personagens) provados mesmo desligados; dev × preview | `build()` (avulsas, Universo, Personagens, raiz, 404, redirects), RSS, `site.js` (bloco 3) |
 | [10](10-comentarios.md) | T15 | Um script de verdade no navegador: `<script>` empacotado × `is:inline`; módulo TypeScript separado em regras e tela; pacote instalado com versão fixa × CDN; JavaScript só nas páginas com comentários; onde as chaves moram e por que a *anon* pode ser pública (RLS); texto do visitante nunca vira HTML; migrações do Supabase CLI; teste com um Supabase falso | `comments()` (os dois `<script src>`), `static/comments.js` (sai na T20) |
 | [11](11-imagens-e-fontes.md) | T17 | O que pesa numa página e como medir; `srcset`/`sizes`; `astro:assets` e `getImage()` (por que não `<Image>`: as imagens estão em `static/` e no HTML do autor); WebP × AVIF; perfis por lugar; fontes do próprio site com `@fontsource` sem trocar nenhum nome de fonte; os recortes das runas; silhuetas para o `shape-outside`; como provar que o visual não mudou | `ver()`, cópia de `static/`, `<link>` do Google Fonts, `rune_fonts_links()` |
-| 12 | T20–T21 | Testes de ponta a ponta e visuais (Playwright) e deploy automático com GitHub Actions | publicar `public/` à mão |
+| [12](12-virada.md) | T20 | A virada: o que é o GitHub Actions (workflow, job, step); o workflow do site linha por linha; ações fixadas por SHA; o que o GitHub Pages faz com o pacote (artefato, domínio, HTTPS, cache, 404); por que o `pnpm test` não está no deploy; como voltar atrás em minutos (`site-antigo`); o que muda no dia a dia; a conferência do site no ar | publicar `public/` à mão |
+| 13 | T21 | Testes de ponta a ponta e visuais (Playwright), Vitest e verificador de links no CI; Dependabot | — |
 
 ## Vocabulário mínimo
 
