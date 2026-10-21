@@ -190,7 +190,10 @@ def comparar_par(R: Relatorio, modo: str, py: Path, astro: Path, BLD):
     else:
         R.ok(f"[{nome}] páginas HTML: as mesmas {len(html_p)} nos dois")
     if modo == "publicado":
-        urls = sorted(BL.url_de(f) for f in html_a)
+        # as páginas .html prontas de static/ (B35: produtos.html, night.html…) não são páginas geradas:
+        # a baseline as conta em outros_de_static_relevantes (conferidas logo abaixo)
+        de_static = {f[1:] for f in BLD["urls"]["outros_de_static_relevantes"] if f.endswith(".html")}
+        urls = sorted(BL.url_de(f) for f in html_a if f not in de_static)
         if urls != sorted(BLD["urls"]["html"]):
             R.dif(f"[{nome}] páginas do Astro × baseline/urls.json: só no Astro {sorted(set(urls) - set(BLD['urls']['html']))}, só na baseline {sorted(set(BLD['urls']['html']) - set(urls))}")
         else:
