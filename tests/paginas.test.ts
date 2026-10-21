@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semBlocoDeOrdem, semScriptsAntigosDosComentarios, type PaginaLida } from "./ajudantes/html";
+import { canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -163,11 +163,12 @@ for (const ref of refs) {
         // T15: a única diferença aceita — o Python carrega o supabase-js do CDN e o /comments.js; o Astro, o script empacotado
         const doPython = semScriptsAntigosDosComentarios(ref.paginas[url] ?? "");
         if (doPython.sobrou) throw new Error(`${url}: o Python tem supabase-js/comments.js fora do lugar de sempre (depois do window.HC)`);
-        py = lerPagina(doPython.html);
+        // T17g: o Python tem o <script src> do X/Reddit/Instagram dentro de cada post; o Astro, o quadro "Mostrar post…" (tests/embeds.test.ts)
+        py = lerPagina(semScriptsDosPosts(doPython.html).html);
         const arquivo = paginasDoDist(dist).get(url);
         if (!arquivo) throw new Error(`o Astro não gerou ${url}`);
         // T17c: o bloco "estou lendo em ordem…" só existe no Astro (tests/ajudantes/html.ts → semBlocoDeOrdem; tests/ordem.test.ts prova que só ele sai)
-        let html = semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html;
+        let html = semQuadrosDosPosts(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html).html;
         if (ref.marcadores) {
           const r = comMarcadores(html, ref.marcadores);
           // sem expect(valor) aqui de propósito: em caso de erro, o vitest imprimiria a chave
@@ -359,7 +360,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
   const outra = () => segundaConstrucao();
   /** As chaves do Supabase do autor viram os marcadores da referência (antes, confere que são as do config.json). */
   const lerComMarcadores = (arquivo: string): string => {
-    const r = comMarcadores(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html, { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
+    const r = comMarcadores(semQuadrosDosPosts(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html).html, { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
     if (!r.conferem) throw new Error(`${arquivo}: a URL ou a chave do window.HC não são as do config.json`);
     return r.html;
   };
@@ -373,7 +374,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
   }, 240_000);
 
   test.each(Object.keys(c.paginas))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
-    const py = lerPagina(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html);
+    const py = lerPagina(semScriptsDosPosts(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html).html);
     const astro = lerPagina(lerComMarcadores(join(outra(), url.slice(1), "index.html")));
     expect(astro.cabeca.titulo).toBe(py.cabeca.titulo);
     expect(astro.cabeca.metas).toEqual(py.cabeca.metas);
@@ -401,7 +402,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
       if (!py) continue;
       const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
       if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
-      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(semScriptsAntigosDosComentarios(py.main).html)) diferentes.push(`${url} (<main>)`);
+      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(semScriptsDosPosts(semScriptsAntigosDosComentarios(py.main).html).html)) diferentes.push(`${url} (<main>)`);
     }
     expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);
   }, 240_000);

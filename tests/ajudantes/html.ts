@@ -259,3 +259,95 @@ export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
   saida += html.slice(pos);
   return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main") };
 }
+
+// ───────────── T17g: a única diferença aceita nos posts incorporados (B27) ─────────────
+//
+// No site Python, cada post do X, do Reddit e do Instagram traz o <script src> do serviço logo depois do <blockquote>, dentro do
+// <div class="embed">. O Astro não tem nenhum desses scripts: o build os tira e põe, no fim do mesmo <div class="embed">, o quadro
+// "Mostrar post do …" (`<div class="embed-gate">`) e o atributo `data-embed-servico` no <div class="embed"> (src/lib/embedsComClique.ts).
+// Para comparar o resto do <main> com o do Python:
+//   - do HTML do ASTRO sai SÓ: o atributo data-embed-servico (de um div.embed) e o div.embed-gate que é FILHO DIRETO desse mesmo
+//     div.embed e o último filho dele. Qualquer outro div.embed-gate (fora de um quadro ligado, ou em outro lugar) fica e aparece como diferença;
+//   - do HTML do PYTHON sai SÓ: <script> com src de um dos domínios dos três serviços (DOMINIOS_DOS_SCRIPTS_DOS_POSTS), DENTRO de um
+//     div.embed. Script de outro domínio, ou fora do .embed, fica.
+// tests/embeds.test.ts prova que nada além disso sai (inclusive casos negativos) e que, em toda página, o número de scripts tirados
+// do Python é igual ao de quadros tirados do Astro.
+
+/** Os domínios dos scripts oficiais dos três serviços (X, Reddit, Instagram). */
+export const DOMINIOS_DOS_SCRIPTS_DOS_POSTS: ReadonlySet<string> = new Set(["platform.x.com", "platform.twitter.com", "embed.reddit.com", "www.instagram.com"]);
+const SERVICOS_DOS_POSTS = new Set(["x", "reddit", "instagram"]);
+const temClasse = (e: Elemento, c: string) => (attr(e, "class") ?? "").split(ESPACO).includes(c);
+
+function arvoreComPosicoes(html: string) {
+  return /<html[\s>]/i.test(html) ? parse(html, { sourceCodeLocationInfo: true }) : parseFragment(html, { sourceCodeLocationInfo: true });
+}
+function cortar(html: string, cortes: { de: number; ate: number }[]): string {
+  let saida = "";
+  let pos = 0;
+  for (const c of [...cortes].sort((a, b) => a.de - b.de)) {
+    if (c.de < pos) throw new Error("cortes que se sobrepõem");
+    saida += html.slice(pos, c.de);
+    pos = c.ate;
+  }
+  return saida + html.slice(pos);
+}
+
+export interface SemQuadrosDosPosts {
+  html: string;
+  /** Quantos quadros (div.embed-gate) e atributos data-embed-servico saíram. */
+  quadros: number;
+  atributos: number;
+  /** Algum quadro que saiu NÃO era o último filho direto de um div.embed com data-embed-servico? (não deveria) */
+  quadrosFora: number;
+}
+/** O HTML do Astro (página inteira ou pedaço) sem o quadro "Mostrar post…" e sem o atributo que o acompanha. */
+export function semQuadrosDosPosts(html: string): SemQuadrosDosPosts {
+  const cortes: { de: number; ate: number }[] = [];
+  let quadros = 0;
+  let atributos = 0;
+  const embeds = varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && temClasse(e, "embed") && SERVICOS_DOS_POSTS.has(attr(e, "data-embed-servico") ?? ""));
+  for (const embed of embeds) {
+    const a = embed.sourceCodeLocation?.attrs?.["data-embed-servico"];
+    if (!a) throw new Error("não achei onde o atributo data-embed-servico fica");
+    cortes.push({ de: html[a.startOffset - 1] === " " ? a.startOffset - 1 : a.startOffset, ate: a.endOffset });
+    atributos++;
+    const filhos = filhosDe(embed).filter(ehElemento);
+    const ultimo = filhos.at(-1);
+    if (ultimo && ultimo.tagName === "div" && temClasse(ultimo, "embed-gate")) {
+      const loc = ultimo.sourceCodeLocation;
+      if (!loc) throw new Error("não achei onde o quadro começa e termina");
+      cortes.push({ de: loc.startOffset, ate: loc.endOffset });
+      quadros++;
+    }
+  }
+  return { html: cortar(html, cortes), quadros, atributos, quadrosFora: atributos - quadros };
+}
+
+export interface SemScriptsDosPosts {
+  html: string;
+  /** O src de cada <script> que saiu, na ordem. */
+  removidos: string[];
+}
+/** O HTML do Python (página inteira ou pedaço) sem os <script src> dos três serviços que estão dentro de um div.embed. */
+export function semScriptsDosPosts(html: string): SemScriptsDosPosts {
+  const cortes: { de: number; ate: number }[] = [];
+  const removidos: string[] = [];
+  for (const embed of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && temClasse(e, "embed"))) {
+    for (const s of varrer(embed, (e) => e.tagName === "script")) {
+      const src = attr(s, "src");
+      if (!src) continue;
+      let dominio = "";
+      try {
+        dominio = new URL(src.startsWith("//") ? `https:${src}` : src).hostname;
+      } catch {
+        continue;
+      }
+      if (!DOMINIOS_DOS_SCRIPTS_DOS_POSTS.has(dominio)) continue;
+      const loc = s.sourceCodeLocation;
+      if (!loc) throw new Error("não achei onde o script começa e termina");
+      cortes.push({ de: loc.startOffset, ate: loc.endOffset });
+      removidos.push(src);
+    }
+  }
+  return { html: cortar(html, cortes), removidos };
+}

@@ -238,3 +238,56 @@ Duas coisas novas que se apoiam uma na outra. A primeira é uma **regra de publi
 
 1. **Veja uma história nova entrar na fila.** Copie `content/works/roadside/` para `content/works/teste/`, troque o título e os números de `order` (ex.: `"release": 5.5, "chrono": 8`), rode `pnpm dev` e abra um capítulo de *Beira de Estrada* ou de *O Pêndulo*: o vizinho mudou sozinho. Apague a pasta `teste` depois.
 2. **Quebre a ordem de propósito.** Em `src/lib/ordemDeLeitura.ts`, troque `decrescente: false` por `true` em `sequenciaDaOrdem()` e rode `pnpm vitest run ordem`: os testes do exemplo do PDF falham. Desfaça.
+
+## Posts incorporados só com clique (T17g, B27): nenhum script de terceiros na sua página
+
+### O problema, em uma frase
+
+Quem comenta fica "conectado": o Supabase guarda essa sessão no `localStorage` do **endereço do site**. Até aqui, cada notícia com post do Reddit, do X ou do Instagram punha na página o **script desses sites** (`widgets.js`, `embed.js`), e um script roda com os mesmos poderes do site que o carrega: se um deles fosse adulterado, poderia ler a sessão de quem está conectado, inclusive a sua, de administrador. Eram 144 das 172 páginas com comentários (76 com Reddit, 72 posts do X, 36 do Instagram).
+
+### O que você decidiu e o que o visitante vê agora
+
+Os posts de Reddit, X e Instagram **só carregam depois de um clique**. Antes, aparece uma caixa tracejada com o texto do próprio post (o que o código de incorporação já trazia), o aviso "Este post é do X e só é carregado quando você clica.", o botão **Mostrar post do X** (em inglês, *Show X post*) e o link **Abrir o post original no X ↗**. Nada é pedido a esses sites até o clique. Sem JavaScript, ficam o texto do post e o link (o botão não aparece). Nas alternâncias `{{embed:A | B | C}}`, os botões de troca (X · Instagram · …) funcionam como sempre e **cada post só carrega quando o visitante clica nele**. Vídeos do YouTube e do TikTok (que já eram `iframe` do próprio YouTube e do TikTok, isolados pelo navegador) ficam como estavam. **Você continua escrevendo `{{embed:…}}` igual.**
+
+### Como funciona (e o que mudou no código)
+
+1. **No build** (`src/lib/embedsComClique.ts`, chamado pelo `BaseLayout.astro`): em todo `<div class="embed">`, tira os `<script>` (os três de sempre, mais qualquer outro que apareça: sai e vira aviso no terminal), deixa o `<blockquote>` do autor **exatamente como está**, marca o `<div>` com `data-embed-servico="x|reddit|instagram"` e põe no fim dele o quadro (`<div class="embed-gate">`: aviso, botão e link para o original, com `hidden` no aviso e no botão até o JavaScript ligar). Os arquivos de `content/` **não mudam**: a transformação acontece só ao montar a página. Os textos (os dois idiomas) estão em `src/lib/textosDosEmbeds.ts`, nunca no `config.json`.
+2. **No navegador** (`src/scripts/embeds/`, só nas páginas que têm quadro): o script liga o botão e, **no clique**, cria **um** `<iframe>`. O iframe aponta para a **página de incorporação do próprio serviço** (`embed.reddit.com`, `platform.twitter.com/embed/Tweet.html`, `www.instagram.com/…/embed/`), com `sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"` (sem `allow-top-navigation`, formulários, downloads nem diálogos). O código do serviço roda **na origem dele**; o navegador não deixa essa origem tocar no `localStorage` do seu site. **Nenhum script de terceiros é carregado na origem do site**, nem antes nem depois do clique.
+3. **A altura:** o serviço avisa a altura do post por `postMessage`; o script só aceita mensagem **da janela daquele iframe e da origem do serviço**, no formato do serviço, e limita a altura entre 60 e 3.000 px. Qualquer outra mensagem é ignorada. Antes da primeira medida, o quadro usa a altura que o próprio Reddit gravou no código (`data-embed-height`) ou uma padrão por serviço, com rolagem por dentro.
+4. **Se o post não carregar:** o link para o original fica **sempre** visível (antes e depois do clique). Passados 20 s sem o quadro terminar de carregar, aparece o aviso de erro e o botão volta (tentar de novo).
+
+### Por que NÃO o `iframe srcdoc` sem `allow-same-origin` (o desenho que se pensou primeiro)
+
+A ideia era montar, no clique, um `<iframe srcdoc sandbox="allow-scripts …">` com o `blockquote` e o script do serviço: o código de terceiros rodaria numa "origem opaca", sem acesso a nada nosso. O problema é o que acontece **dentro** do widget: o sandbox é **herdado por todos os quadros dentro dele**, então a página do X que o `widgets.js` cria também fica numa origem opaca (`null`). Há relato de quem testou no Chrome (repositório `maretol/maretol-base`, issue 1302 e PR 1324, setembro de 2026): com `widgets.js` num `srcdoc` sem `allow-same-origin`, o X **só mostra o blockquote, sem virar post**; com a `Tweet.html` direta e sem `allow-same-origin`, a tela fica **em branco**, porque a consulta a `cdn.syndication.twimg.com` sai com `Origin: null` e o CORS recusa. O relato é só do X; para Reddit e Instagram **não achei relato nenhum** (a internet daqui é bloqueada e eu não pude testar os serviços de verdade), mas a mesma herança vale para eles.
+
+O caminho escolhido dá o **mesmo isolamento** por outro meio: em vez de rodar o script do serviço dentro de uma janela nossa, **não carregamos script nenhum**; mostramos a página que o próprio serviço feita para ser incorporada, **na origem dele**. É o mesmo princípio do YouTube que já está no site. O `allow-same-origin` do sandbox aí vale **para o serviço** (a origem do endereço do iframe), não para o site: o código confere que a origem do endereço montado é a do serviço e **nunca** a da página (e nunca usa `srcdoc`, que é o que tornaria o `allow-same-origin` perigoso).
+
+| Serviço | Caminho | O que o iframe abre | Mensagem de altura |
+|---|---|---|---|
+| X | iframe direto para a página do próprio X (sem script nosso nem do X no site) | `https://platform.twitter.com/embed/Tweet.html?id=…&dnt=true&…` | `{"twttr.embed":{"method":"twttr.private.resize","params":[{"height":N}]}}` |
+| Reddit | idem | `https://embed.reddit.com/r/…/comments/…/?embed=true&theme=light` | `{"type":"resize.embed","data":N}` |
+| Instagram | idem | `https://www.instagram.com/(p|reel|tv)/…/embed/` (`captioned/` se o código trazia legenda) | `{"type":"MEASURE","details":{"height":N}}` |
+
+⚠ **O que eu não pude verificar** (sem internet aqui): que as três páginas de incorporação aceitam abrir assim, e os formatos das mensagens de altura (estão **de memória** dos widgets oficiais). Se algum formato estiver errado, o post aparece com a altura padrão e rolagem por dentro (não quebra). Se uma página de incorporação não abrir, o visitante vê o quadro em branco e o link para o original. É por isso que **você precisa testar no seu computador** (ver "Tente").
+
+### O "plano C" (um interruptor por serviço)
+
+Em `src/scripts/embeds/regras.ts`, cada serviço tem `comBotao: true`. Com `false`, o quadro daquele serviço fica **só com o link para o original** (sem aviso e sem botão): o post nunca carrega, e o site continua seguro. Serve se um serviço não funcionar no teste e você preferir o link a um quadro em branco.
+
+### O que sobra de risco
+
+- O código do X, do Reddit e do Instagram **continua rodando no navegador do visitante, quando ele clica**, e vê o IP e o que esses sites já veem de qualquer visitante (como no YouTube). Mas **sem acesso ao site**: não lê `localStorage`, cookies nem a página, e não pode mandar a página para outro lugar (sem `allow-top-navigation`). Abrir janela só por clique do visitante.
+- Se a página de incorporação de um serviço for adulterada, ela pode mandar mensagens à nossa página: elas só mexem na **altura** do quadro (limitada).
+- Os iframes do YouTube e do TikTok (de `{{embed:link}}` de vídeo) continuam carregando ao abrir a página, **sem clique** (são isolados pelo navegador, mas contatam o YouTube/TikTok). Fora do pedido; dá para pôr o mesmo clique depois, se quiser.
+
+### Como se prova que é igual (e que o que muda é só isso)
+
+- `tests/embeds.test.ts`: regras (endereço do post, endereço do quadro, mensagens, sandbox); o passo de build com HTML inventado (o que sai, o que fica, avisos, plano C); as duas exceções de paridade; **o site construído**: nenhum `<script src>` fora de `/_astro/` em nenhuma página, nenhum arquivo cita `widgets.js`/`embed.js`, 144 páginas com 184 quadros (Reddit 76, X 72, Instagram 36), um quadro por `blockquote`, e **os scripts que o Python tinha são tantos quanto os quadros do Astro, página a página**; cada post de `content/` vira um quadro com endereço válido; o código do navegador sem as palavras proibidas (`innerHTML`, `srcdoc`, `eval`, `createElement("script")`…); contraste do botão (≥ 4,5:1).
+- `tests/embeds-dom.test.ts` (navegador simulado, padrão dos comentários): o clique cria **um** iframe com o sandbox exato, **sem `srcdoc`**, de outra origem; mensagem de outra janela, de outra origem ou com formato errado é ignorada; tempo esgotado e tentar de novo; a alternância; texto com `<img onerror>` aparece como letras.
+- `tests/ajudantes/html.ts → semQuadrosDosPosts()` e `semScriptsDosPosts()`: a exceção de paridade. Do Astro sai **só** o atributo `data-embed-servico` e o `div.embed-gate` que é o último filho do mesmo `.embed`; do Python, **só** o `<script src>` dos quatro endereços (`platform.x.com`, `platform.twitter.com`, `embed.reddit.com`, `www.instagram.com`) **dentro de um `.embed`**. Em todo o resto, o `<main>` das notícias é igual ao do Python (6.620 testes anteriores seguem verdes).
+- No navegador de verdade: `python3 tools/embeds_playwright.py [--fotos <pasta>]` troca os três serviços por **serviços falsos** e prova: antes do clique, zero pedidos a eles; depois, só ao serviço do post; o iframe cresce; de dentro do widget falso, ler/escrever o `localStorage` da página, o documento do topo e o cookie dão `SecurityError`, e navegar o topo não funciona; mensagens falsas de outro iframe e da própria página não mexem na altura; alternância; sem JavaScript; teclado (Tab, foco visível, Enter) e capturas a 1100 e 390 px.
+
+### Tente
+
+1. **No seu computador (tem internet):** `pnpm dev`, abra `/pt/news/2024-02-23-avialuna-aeternogyrinians/` (Reddit), `/pt/news/2024-04-29-hygranocianos/` (X) e `/pt/news/2023-08-19-conheca-os-talassimbiontes/` (Reddit | Instagram), clique em **Mostrar post** e veja se o post aparece. Conte-me o que viu (aparece? a altura está boa? o post rola por dentro?).
+2. **Desligue um serviço de propósito:** em `src/scripts/embeds/regras.ts`, troque `comBotao: true` do X por `false`, rode `pnpm dev` e abra a notícia do X: sobra só o texto e o link. Desfaça.

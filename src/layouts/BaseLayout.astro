@@ -18,6 +18,8 @@ import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config"
 import { ATALHOS } from "../lib/corpos";
 import { finalizarMain } from "../lib/pagina";
 import { otimizarImagensDoHtml } from "../lib/imagensDoHtml";
+import { embedsComClique } from "../lib/embedsComClique";
+import EmbedsComClique from "../components/EmbedsComClique.astro";
 import { icones } from "../lib/imagens";
 
 interface Props {
@@ -85,7 +87,11 @@ for (const nome of ATALHOS) {
 }
 const { html: acabado, scripts } = finalizarMain(miolo, lang, atalhos);
 // T17: as imagens do <main> (dos componentes e do texto do autor) ganham as versões leves no srcset; o `src` não muda (src/lib/imagensDoHtml.ts).
-const main = await otimizarImagensDoHtml(acabado);
+// T17g (B27): os posts do X, do Reddit e do Instagram só carregam com um clique. O passo tira os <script> de terceiros do <main> e põe, em cada
+// post, o quadro "Mostrar post do X" (src/lib/embedsComClique.ts). Nenhuma página publicada leva script desses sites.
+const { html: comQuadros, relatorio: relatorioDosEmbeds } = embedsComClique(acabado, lang);
+for (const aviso of relatorioDosEmbeds.avisos) console.warn(`[embeds] ${Astro.url.pathname}: ${aviso}`);
+const main = await otimizarImagensDoHtml(comQuadros);
 ---
 
 <!doctype html>
@@ -126,6 +132,7 @@ const main = await otimizarImagensDoHtml(acabado);
       </main>
     </div>
     <Footer lang={lang} />
+    {relatorioDosEmbeds.quadros.length > 0 && <EmbedsComClique />}
     {/* O site.js (ordenação, carrossel, imagem ausente…) virou <script> dos componentes que o usam. O Astro os deixa dentro do miolo;
         finalizarMain() os tira de lá e eles voltam aqui, no fim da página, como o <script src="site.js"> do build.py. */}
     <Fragment set:html={scripts} />

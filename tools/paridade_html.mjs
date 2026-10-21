@@ -17,13 +17,17 @@
 // diz; o que sobrar aparece como diferença):
 //   T15   o par de <script src> antigo dos comentários (supabase-js do CDN + /comments.js) sai do Python;
 //   T17c  a <section data-story-order> ("estou lendo em ordem…") sai do Astro;
+//   T17g  o <script src> do X/Reddit/Instagram dentro de cada post sai do Python; o quadro "Mostrar post…" (div.embed-gate) e o
+//         atributo data-embed-servico saem do Astro (tests/ajudantes/html.ts → semScriptsDosPosts, semQuadrosDosPosts). A ferramenta
+//         confere, página a página, que o Python tinha tantos scripts quanto o Astro tem quadros, e que só as páginas com quadro
+//         levam o script empacotado dos quadros;
 //   T17   <link> de fontes (Google no Python; preload no Astro) saem; os ícones (1 no Python, 32+192 px no Astro) viram um só;
 //   T17   o fundo da tela de abertura: /intro/fundo.png (Python) × /intro/fundo_<hash>.jpeg (Astro, versão leve);
 //   T17   os 5 atributos das versões leves das <img> com srcset (régua de tests/ajudantes/html.ts);
 //   T06   o CSS: /style.css?v= (Python) × /_astro/*.css e <style> (Astro) saem dos dois lados; o /custom.css do autor fica e é conferido;
 //   T06+  os scripts DO SITE saem da árvore dos dois lados (site.js, os inline da abertura e do menu no Python; os da abertura e os
-//         <script type="module"> no Astro) e são conferidos à parte, como COMPORTAMENTOS (abaixo). Scripts de posts incorporados
-//         (X, Reddit, Instagram…) e o window.HC ficam na árvore e são comparados normalmente;
+//         <script type="module"> no Astro) e são conferidos à parte, como COMPORTAMENTOS (abaixo). Outros scripts de conteúdo e o
+//         window.HC ficam na árvore e são comparados normalmente (os de posts incorporados, só depois da regra T17g);
 //   —     as chaves do Supabase do window.HC viram marcadores (antes, confere que são iguais nos dois; nunca são impressas);
 //   —     data-astro-cid-* (marca de escopo do CSS do Astro) não conta (régua de tests/ajudantes/html.ts).
 // Comportamentos: para cada página, quais blocos do static/site.js AGIRIAM nela (o seletor de cada bloco acha algo na página) e
@@ -33,7 +37,7 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
-import { canonico, semBlocoDeOrdem, semScriptsAntigosDosComentarios } from "../tests/ajudantes/html.ts";
+import { canonico, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts } from "../tests/ajudantes/html.ts";
 
 // ───────────── argumentos ─────────────
 const args = process.argv.slice(2);
@@ -87,6 +91,7 @@ const SCRIPTS_DO_ASTRO = [
   ["7 posts alternados (.embed-alt)", (s) => s.modulo && /\.embed-alt/.test(s.texto)],
   ["T15 comentários (script empacotado)", (s) => s.modulo && /CaixaDeComentarios\.astro/.test(s.src)],
   ["T17c bloco de ordem", (s) => s.modulo && /hc-ordem-de-leitura/.test(s.texto)],
+  ["T17g posts incorporados com clique (script empacotado)", (s) => s.modulo && /EmbedsComClique\.astro/.test(s.src)],
 ];
 // O que a página do Python ativaria (blocos do site.js cujo seletor acha algo + os inline do shell()).
 function comportamentosDoPython(doc, scripts) {
@@ -132,6 +137,8 @@ function ehScriptDoSite(s, lado) {
 const CONTAGEM = {};
 const conta = (regra, url) => ((CONTAGEM[regra] ??= new Set()).add(url));
 const FALHAS = [];
+/** url → { python: scripts de post que o Python tinha, astro: quadros que o Astro tem } (T17g). */
+const POSTS = new Map();
 const falha = (url, o_que) => FALHAS.push(`${url}: ${o_que}`);
 
 const RE_HC = /<script>window\.HC=(\{[\s\S]*?\});<\/script>/g;
@@ -151,7 +158,16 @@ function normalizar(html, lado, url, existe) {
     if (s.sobrou) falha(url, "o Python tem supabase-js/comments.js fora do par de sempre");
     if (s.quantos) conta("T15: par de <script> antigo dos comentários (Python)", url);
     html = s.html;
+    const posts = semScriptsDosPosts(html);
+    if (posts.removidos.length) conta("T17g: <script src> de post incorporado (Python)", url);
+    POSTS.set(url, { ...(POSTS.get(url) ?? {}), python: posts.removidos.length });
+    html = posts.html;
   } else {
+    const q = semQuadrosDosPosts(html);
+    if (q.atributos) conta("T17g: quadro \"Mostrar post…\" e data-embed-servico (Astro)", url);
+    if (q.quadrosFora) falha(url, "quadro de post que não é o último filho do .embed");
+    POSTS.set(url, { ...(POSTS.get(url) ?? {}), astro: q.quadros });
+    html = q.html;
     const s = semBlocoDeOrdem(html);
     if (s.removidos.length) {
       conta("T17c: bloco \"estou lendo em ordem\" (Astro)", url);
@@ -300,13 +316,16 @@ for (const url of [...pp.keys()].filter((u) => pa.has(u)).sort()) {
   // comportamentos
   const cp = [...p.comportamentos].filter((c) => !c.startsWith("3 ")), ca = [...a.comportamentos];
   if (p.comportamentos.has("3 GIFs de .page-project (nunca age: T14)")) falha(url, "o bloco 3 do site.js (GIFs de .page-project) agiria aqui, e o Astro não o tem (T14 diz que nunca age)");
-  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)"]);
+  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17g posts incorporados com clique (script empacotado)"]);
   const faltam = cp.filter((c) => !a.comportamentos.has(c));
   const sobram = ca.filter((c) => !p.comportamentos.has(c) && !extrasDecididos.has(c));
   if (faltam.length) falha(url, `comportamento do Python sem script no Astro: ${faltam.join("; ")}`);
   if (sobram.length) falha(url, `script do Astro sem o elemento que o usa no Python: ${sobram.join("; ")}`);
   if (a.comportamentos.has("T15 comentários (script empacotado)") !== /class="hc-comments"/.test(ha)) falha(url, "script dos comentários × caixa de comentários");
   if (a.comportamentos.has("T17c bloco de ordem") !== (CONTAGEM['T17c: bloco "estou lendo em ordem" (Astro)']?.has(url) === true)) falha(url, "script do bloco de ordem × bloco de ordem");
+  const posts = POSTS.get(url) ?? {};
+  if ((posts.python ?? 0) !== (posts.astro ?? 0)) falha(url, `posts incorporados: o Python tinha ${posts.python ?? 0} script(s) de X/Reddit/Instagram, o Astro tem ${posts.astro ?? 0} quadro(s)`);
+  if (a.comportamentos.has("T17g posts incorporados com clique (script empacotado)") !== ((posts.astro ?? 0) > 0)) falha(url, "script dos quadros de post × quadros de post");
   const chave = `Python: ${[...p.comportamentos].sort().join(" | ")}\nAstro:  ${ca.sort().join(" | ")}`;
   (tabelaComportamentos.get(chave) ?? tabelaComportamentos.set(chave, []).get(chave)).push(url);
   if (p.canonico === a.canonico) resultado.iguaisDepoisDasRegras++;

@@ -257,6 +257,10 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 - Links aceitos: X/Twitter, Instagram (post ou reel), TikTok, YouTube (vídeo ou Short) e Reddit.
 - Para o "alt" (o leitor alterna entre dois ou mais posts, com botões ao lado): separe com `|` — `{{embed:link-do-X | link-do-Instagram | link-do-TikTok}}`. Os botões levam o ícone/nome de cada rede.
 - Os posts incorporados ficam **centralizados**.
+- **Reddit, X e Instagram só carregam com um clique (só no site novo, Astro).** Você continua escrevendo `{{embed:…}}` igual e **nada em `content/` muda**. O visitante vê uma caixa tracejada com o texto do post, o aviso "Este post é do X e só é carregado quando você clica.", o botão **Mostrar post do X** (em inglês, *Show X post*) e o link **Abrir o post original no X ↗**, sempre visível. Só depois do clique o post aparece. Motivo: quem comenta fica conectado, e o código dessas redes não pode rodar na mesma página sem o visitante pedir (item B27 do backlog). Sem JavaScript, ficam o texto e o link. Nas alternâncias (`A | B | C`), cada post só carrega quando o visitante clica nele. Vídeos do YouTube e do TikTok continuam como eram.
+- **Código de incorporação colado à mão** (`content/embeds/*.html`): o `<script>` que vem junto é **tirado** na hora de montar a página (o texto e o link do post ficam). O terminal avisa se achar um script de outra origem.
+- **Se um post não aparecer** depois do clique, o link para o original continua lá. Para um serviço inteiro virar só link (sem botão), troque `comBotao` para `false` em `src/scripts/embeds/regras.ts` e peça ajuda se precisar.
+- **Teste no seu computador antes da virada** (eu não tenho internet no sandbox e não pude ver os três serviços de verdade): `pnpm dev` e abra `/pt/news/2024-02-23-avialuna-aeternogyrinians/` (Reddit), `/pt/news/2024-04-29-hygranocianos/` (X) e `/pt/news/2023-08-19-conheca-os-talassimbiontes/` (Reddit | Instagram); clique em **Mostrar post** e me diga se o post aparece, se a altura está boa e se rola por dentro.
 
 ## 12. Comentários
 
