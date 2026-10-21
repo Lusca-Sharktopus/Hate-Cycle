@@ -83,6 +83,12 @@ jobs:
           done
           test -d dist/_astro || { echo "::error::falta dist/_astro/"; exit 1; }
           test ! -e dist/dev || { echo "::error::dist/dev/ existe (é coisa de prévia)"; exit 1; }
+          # Nenhum script de fora pode rodar no endereço do site (B27/T17g: a sessão dos comentários mora aqui).
+          # Posts do X/Reddit/Instagram só carregam com clique, numa moldura isolada; um <script src="https://…">
+          # colado no texto de uma notícia faria o deploy parar aqui, em vez de ir ao ar sem ninguém ver.
+          if grep -rliE "<script[^>]*[[:space:]]src=[\"']?(https?:)?//" dist --include='*.html' > /tmp/scripts-externos.txt; then
+            echo "::error::script de outro site no HTML publicado (ver lição 08, posts incorporados):"; cat /tmp/scripts-externos.txt; exit 1
+          fi
           echo "HTML no dist: $(find dist -name '*.html' | wc -l) · tamanho: $(du -sh dist | cut -f1)"
 
       # Empacota a pasta dist/ para o Pages. Roda também no pull request, para o "ensaio" cobrir o empacotamento;
