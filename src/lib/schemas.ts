@@ -102,6 +102,50 @@ const listaOrdemDeImagens = () =>
     });
   });
 
+/**
+ * order_art do work.json (T17h): a arte do bloco "estou lendo em ordem…" em CAMADAS animadas (ver src/lib/artesDaOrdem.ts e o
+ * guia do autor). `size` = [largura, altura] da tela de montagem; `layers` = as camadas, de trás para a frente, cada uma com a
+ * posição inicial e, em `hover`, só o que muda com o mouse por cima. Campo desconhecido, em qualquer nível, é erro.
+ */
+const numeroDaArte = (oQue: string) => z.number({ error: (i) => `${oQue} tem de ser um número, sem aspas, mas veio ${descrever(i.input)}.` });
+const estritoDaArte = <S extends z.ZodRawShape>(onde: string, campos: S) =>
+  z.strictObject(campos, {
+    error: (i) => {
+      const { code, keys } = i as { code: string; keys?: string[] };
+      return code === "unrecognized_keys"
+        ? `campo desconhecido (${(keys ?? []).map((k) => `"${k}"`).join(", ")}). Campos aceitos em ${onde}: ${Object.keys(campos).join(", ")}.`
+        : `tem de ser um objeto { ${Object.keys(campos).join(", ")} }, mas veio ${descrever(i.input)}.`;
+    },
+  });
+const camposQueMudam = () => ({
+  x: numeroDaArte("x (centro, em % da largura da tela)").optional(),
+  y: numeroDaArte("y (centro, em % da altura da tela)").optional(),
+  width: numeroDaArte("width (largura, em % da largura da tela)").positive({ error: "width tem de ser maior que zero." }).optional(),
+  rotate: numeroDaArte("rotate (graus; positivo gira para a direita)").optional(),
+  opacity: numeroDaArte("opacity (de 0 a 1)").min(0, { error: "opacity tem de ficar entre 0 e 1." }).max(1, { error: "opacity tem de ficar entre 0 e 1." }).optional(),
+});
+const arteEmCamadas = () =>
+  estritoDaArte("order_art", {
+    size: z
+      .tuple([numeroDaArte("size[0] (largura)").positive({ error: "size tem de ter números maiores que zero." }), numeroDaArte("size[1] (altura)").positive({ error: "size tem de ter números maiores que zero." })], {
+        error: (i) => `size tem de ser [largura, altura] da tela de montagem, em pixels (ex.: [2087, 1752]), mas veio ${descrever(i.input)}.`,
+      }),
+    layers: z
+      .array(
+        estritoDaArte("cada camada de order_art.layers", {
+          image: texto().refine((v) => v.trim() !== "", { error: "image está vazia: escreva o caminho dentro de static/ (ex.: ordem/Ellie Site Cronologia.png)." }),
+          ...camposQueMudam(),
+          x: numeroDaArte("x (centro, em % da largura da tela)"),
+          y: numeroDaArte("y (centro, em % da altura da tela)"),
+          width: numeroDaArte("width (largura, em % da largura da tela)").positive({ error: "width tem de ser maior que zero." }),
+          hover: estritoDaArte("hover", camposQueMudam()).optional(),
+        }),
+        { error: (i) => `layers tem de ser uma lista de camadas (de trás para a frente), mas veio ${descrever(i.input)}.` },
+      )
+      .min(1, { error: "layers precisa de pelo menos uma camada." })
+      .max(8, { error: "layers aceita no máximo 8 camadas." }),
+  });
+
 /** Lista de referências "seção/pasta" (related). */
 const referencias = (indice: Indice) =>
   listaDeTextos().superRefine((lista, ctx) => {
@@ -289,6 +333,8 @@ export function criarSchemas(indice: Indice) {
       draft: simNao().optional(),
       /** Imagens do bloco "estou lendo em ordem…" (T17c): [normal] ou [normal, com o mouse por cima], caminhos em static/. Sem elas, o bloco usa a capa. */
       order_images: listaOrdemDeImagens().optional(),
+      /** Arte do mesmo bloco em CAMADAS animadas (T17h): vale no lugar de `order_images` (se houver os dois, a arte em camadas ganha). Ver src/lib/artesDaOrdem.ts. */
+      order_art: arteEmCamadas().optional(),
       langs: z.array(idioma, { error: (i) => `tem de ser uma lista de idiomas (${langs.join(", ")}), mas veio ${descrever(i.input)}.` }).optional(),
       title: traduzivel().optional(),
       blurb: traduzivel().optional(),

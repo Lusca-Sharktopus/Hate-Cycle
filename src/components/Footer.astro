@@ -1,8 +1,10 @@
 ---
 // Rodapé: redes sociais, "© 2023 - ano by autor" e o link do feed RSS (o <footer> do shell() do build.py).
 // A barra lateral (SIDEBAR_ON do build.py) está desligada, então as redes ficam aqui.
+// O ícone do YouTube leva ao canal do idioma da página (inglês: @HateCycleEn; português: @HateCycleBR), definido em src/lib/canais.ts (T17h).
 import { assetUrl } from "../lib/assets";
-import { authorName, siteUrl, socialLinks, t, type Lang } from "../lib/config";
+import { redesDoRodape } from "../lib/canais";
+import { authorName, siteUrl, t, type Lang } from "../lib/config";
 
 interface Props {
   lang: Lang;
@@ -15,7 +17,7 @@ const ano = new Date().getFullYear(); // ano do build, como datetime.date.today(
 <footer class="site-footer">
   <div class="social">
     {
-      socialLinks.map((s) => (
+      redesDoRodape(lang).map((s) => (
         <a href={s.url} target="_blank" rel="noopener" title={s.name}><img src={assetUrl(s.icon)} alt={s.name} /></a>
       ))
     }

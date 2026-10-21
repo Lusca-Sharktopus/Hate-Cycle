@@ -24,5 +24,13 @@
     "chrono": 6
   },
   "reading_font": "times",
+  "order_art": {
+    "size": [2002, 2023],
+    "layers": [
+      { "image": "ordem/Thymorr Site Cronologia.png", "x": 62.18, "y": 44.52, "width": 61.66, "opacity": 0, "hover": { "x": 69.18, "opacity": 1 } },
+      { "image": "ordem/Harry Site Cronologia.png", "x": 32.19, "y": 70.19, "width": 50.3, "hover": { "x": 27.3, "y": 71.56, "width": 53.85, "rotate": -5.54 } },
+      { "image": "ordem/Olivia Site Cronologia.png", "x": 55.09, "y": 65.42, "width": 46.25, "hover": { "x": 55.48, "y": 63.54, "width": 48.9 } }
+    ]
+  },
   "media": "short-story"
 }

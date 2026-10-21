@@ -22,9 +22,13 @@
     "release": 3,
     "chrono": 5
   },
-  "order_images": [
-    "ordem/Luz e Sangue-ordem-1.png",
-    "ordem/Luz e Sangue-ordem-2.png"
-  ],
+  "order_art": {
+    "size": [2087, 1752],
+    "layers": [
+      { "image": "ordem/John Site Cronologia.png", "x": 20.53, "y": 69.74, "width": 18.86, "hover": { "x": 12.4, "y": 62.17, "width": 23.23, "rotate": -6.52 } },
+      { "image": "ordem/Oliver Site Cronologia.png", "x": 66.81, "y": 69.04, "width": 42.66, "hover": { "x": 73.92, "y": 65.24, "width": 47.78, "rotate": 7.19 } },
+      { "image": "ordem/Ellie Site Cronologia.png", "x": 43.18, "y": 57.73, "width": 49.23, "hover": { "x": 42.91, "y": 52.06, "width": 56.29 } }
+    ]
+  },
   "media": "live-ttrpg"
 }

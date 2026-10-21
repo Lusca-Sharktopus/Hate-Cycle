@@ -351,3 +351,36 @@ export function semScriptsDosPosts(html: string): SemScriptsDosPosts {
   }
   return { html: cortar(html, cortes), removidos };
 }
+
+// ───────────── T17h: a única diferença aceita no rodapé (o canal do YouTube por idioma) ─────────────
+//
+// Pedido do autor (21/10): as páginas em inglês levam ao canal @HateCycleEn e as em português ao @HateCycleBR. O Astro faz isso no rodapé
+// (src/lib/canais.ts → redesDoRodape); o build.py, congelado, e o config.json (do autor) continuam com o endereço antigo @HateCycle. Para
+// comparar o resto do rodapé, troca-se no HTML do ASTRO, e só nele, o `href` desta <a> exata (a do ícone do YouTube do rodapé):
+//   <a href="https://www.youtube.com/@HateCycleEn|BR" target="_blank" rel="noopener" title="YouTube"[ data-astro-cid-…]>  →  href="https://www.youtube.com/@HateCycle"
+// Só vale se o canal for o do idioma da página (`lang`: en → En, pt → BR); se não for (ou se a <a> não tiver exatamente esta forma), nada
+// é trocado e a comparação falha. Quem chama confere que saiu exatamente 1 por página (tests/canais.test.ts prova a regra).
+
+export interface CanalDoYoutubeComoNoPython {
+  html: string;
+  /** Quantas <a> foram trocadas (esperado: 1 por página). */
+  trocados: number;
+  /** Quantas <a> do YouTube do rodapé têm o canal do OUTRO idioma (esperado: 0). */
+  errados: number;
+}
+
+/** O HTML do Astro com o href do ícone do YouTube do rodapé como o do Python. `lang` desconhecido (404, raiz): aceita qualquer um dos dois. */
+export function canalDoYoutubeComoNoPython(html: string, lang?: "en" | "pt"): CanalDoYoutubeComoNoPython {
+  let trocados = 0;
+  let errados = 0;
+  const esperado = lang === "en" ? "En" : lang === "pt" ? "BR" : undefined;
+  const saida = html.replace(/(<a href=")https:\/\/www\.youtube\.com\/@HateCycle(En|BR)(" target="_blank" rel="noopener" title="YouTube"(?: data-astro-cid-[a-z0-9]+)?>)/g, (todo, antes: string, sufixo: string, depois: string) => {
+    if (esperado !== undefined && sufixo !== esperado) {
+      errados += 1;
+      return todo;
+    }
+    trocados += 1;
+    return `${antes}https://www.youtube.com/@HateCycle${depois}`;
+  });
+  return { html: saida, trocados, errados };
+}

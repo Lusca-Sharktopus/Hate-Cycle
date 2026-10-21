@@ -2268,7 +2268,7 @@
     "title": "Apoio",
     "summary": "Formas de apoiar o projeto."
    },
-   "body": "\n<div style=\"text-align:center\">\n<a href=\"https://catarse.com.br/hatecycle\" target=\"_blank\" rel=\"noopener\"><img src=\"@/support/catarse.png\" alt=\"Estamos no Catarse\"></a>\n</div>\n\nVocê pode ajudar este universo a crescer nos apoiando mensalmente no Catarse!! A partir de apenas 5 reais por mês você ajuda o mundo de Hᴀᴛᴇ Cʏᴄʟᴇ a continuar recebendo novas histórias na forma de quadrinhos, contos, RPGs ao Vivo e, no futuro, livros, jogos e séries de animação!\n\nVocê também pode apoiar diretamente o criador deste universo se inscrevendo no meu canal no YouTube. É completamente de graça e me ajuda tremendamente, visto que, na maior parte do tempo, eu tiro do meu próprio bolso para manter esse sonho vivo.\n\n<div style=\"text-align:center\">\n<!-- BANNER DO YOUTUBE (provisório): quando o arquivo \"banner yt.png\" chegar, coloque-o em static/support/ como banner-yt.png e troque o texto do link abaixo\n     por uma imagem igual à do Catarse lá em cima (tag img, alt \"Inscreva-se no canal no YouTube\", src na pasta support/). O link e o centralizado ficam como estão. -->\n<a href=\"https://www.youtube.com/@HateCycle\" target=\"_blank\" rel=\"noopener\">Inscreva-se no canal no YouTube</a>\n</div>\n\nSe prefere apenas um apoio pequeno, sem compromisso, faça uma doação pelo Ko-fi!\n\n{{embed:kofi-pt}}\n"
+   "body": "\n<div style=\"text-align:center\">\n<a href=\"https://catarse.com.br/hatecycle\" target=\"_blank\" rel=\"noopener\"><img src=\"@/support/catarse.png\" alt=\"Estamos no Catarse\"></a>\n</div>\n\nVocê pode ajudar este universo a crescer nos apoiando mensalmente no Catarse!! A partir de apenas 5 reais por mês você ajuda o mundo de Hᴀᴛᴇ Cʏᴄʟᴇ a continuar recebendo novas histórias na forma de quadrinhos, contos, RPGs ao Vivo e, no futuro, livros, jogos e séries de animação!\n\nVocê também pode apoiar diretamente o criador deste universo se inscrevendo no meu canal no YouTube. É completamente de graça e me ajuda tremendamente, visto que, na maior parte do tempo, eu tiro do meu próprio bolso para manter esse sonho vivo.\n\n<div style=\"text-align:center\">\n<!-- BANNER DO YOUTUBE (provisório): quando o arquivo \"banner yt.png\" chegar, coloque-o em static/support/ como banner-yt.png e troque o texto do link abaixo\n     por uma imagem igual à do Catarse lá em cima (tag img, alt \"Inscreva-se no canal no YouTube\", src na pasta support/). O link e o centralizado ficam como estão. -->\n<a href=\"https://www.youtube.com/@LuscaSharktopus\" target=\"_blank\" rel=\"noopener\">Inscreva-se no canal no YouTube</a>\n</div>\n\nSe prefere apenas um apoio pequeno, sem compromisso, faça uma doação pelo Ko-fi!\n\n{{embed:kofi-pt}}\n"
   },
   "universe/hidden-magic/en.md": {
    "fm": {
@@ -2403,6 +2403,48 @@
     "chrono": 6
    },
    "reading_font": "times",
+   "order_art": {
+    "size": [
+     2002,
+     2023
+    ],
+    "layers": [
+     {
+      "image": "ordem/Thymorr Site Cronologia.png",
+      "x": 62.18,
+      "y": 44.52,
+      "width": 61.66,
+      "opacity": 0,
+      "hover": {
+       "x": 69.18,
+       "opacity": 1
+      }
+     },
+     {
+      "image": "ordem/Harry Site Cronologia.png",
+      "x": 32.19,
+      "y": 70.19,
+      "width": 50.3,
+      "hover": {
+       "x": 27.3,
+       "y": 71.56,
+       "width": 53.85,
+       "rotate": -5.54
+      }
+     },
+     {
+      "image": "ordem/Olivia Site Cronologia.png",
+      "x": 55.09,
+      "y": 65.42,
+      "width": 46.25,
+      "hover": {
+       "x": 55.48,
+       "y": 63.54,
+       "width": 48.9
+      }
+     }
+    ]
+   },
    "media": "short-story"
   },
   "hdvr": {
@@ -2428,6 +2470,34 @@
    "order": {
     "release": 1,
     "chrono": false
+   },
+   "order_art": {
+    "size": [
+     627,
+     600
+    ],
+    "layers": [
+     {
+      "image": "ordem/Lucas Site Cronologia.png",
+      "x": 47.45,
+      "y": 51.05,
+      "width": 77.68,
+      "hover": {
+       "x": 42.67,
+       "width": 83.9
+      }
+     },
+     {
+      "image": "ordem/Wellersson Site Cronologia.png",
+      "x": 65.1,
+      "y": 60.64,
+      "width": 53.65,
+      "hover": {
+       "x": 69.88,
+       "width": 57.94
+      }
+     }
+    ]
    },
    "media": "misc"
   },
@@ -2455,10 +2525,49 @@
     "release": 3,
     "chrono": 5
    },
-   "order_images": [
-    "ordem/Luz e Sangue-ordem-1.png",
-    "ordem/Luz e Sangue-ordem-2.png"
-   ],
+   "order_art": {
+    "size": [
+     2087,
+     1752
+    ],
+    "layers": [
+     {
+      "image": "ordem/John Site Cronologia.png",
+      "x": 20.53,
+      "y": 69.74,
+      "width": 18.86,
+      "hover": {
+       "x": 12.4,
+       "y": 62.17,
+       "width": 23.23,
+       "rotate": -6.52
+      }
+     },
+     {
+      "image": "ordem/Oliver Site Cronologia.png",
+      "x": 66.81,
+      "y": 69.04,
+      "width": 42.66,
+      "hover": {
+       "x": 73.92,
+       "y": 65.24,
+       "width": 47.78,
+       "rotate": 7.19
+      }
+     },
+     {
+      "image": "ordem/Ellie Site Cronologia.png",
+      "x": 43.18,
+      "y": 57.73,
+      "width": 49.23,
+      "hover": {
+       "x": 42.91,
+       "y": 52.06,
+       "width": 56.29
+      }
+     }
+    ]
+   },
    "media": "live-ttrpg"
   },
   "roadside": {

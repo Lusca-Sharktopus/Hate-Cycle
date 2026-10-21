@@ -213,7 +213,7 @@ As notícias não ganharam lição própria porque quase tudo já existia: a not
 
 Para conferir tudo contra o site atual: `HC_DIST=dist pnpm vitest run paginas` (as 168 páginas de notícias) e `python3 tools/noticias_playwright.py --python 8791 --astro 8792` (busca, páginas e botões dos posts no navegador, passo a passo; leva uns 2 min e as instruções estão no topo do script).
 
-## "Estou lendo em ordem…" (T17c): quem vem antes e depois, e a obra inteira em rascunho
+## "Estou lendo em ordem…" (T17c e T17h): quem vem antes e depois, a obra em rascunho, o pulo do "Em breve" e as imagens em camadas
 
 Duas coisas novas que se apoiam uma na outra. A primeira é uma **regra de publicação**; a segunda, um **bloco novo no fim de cada capítulo**, que só existe no Astro (o `build.py` está congelado e não o tem).
 
@@ -226,17 +226,31 @@ Duas coisas novas que se apoiam uma na outra. A primeira é uma **regra de publi
 
 ### 2. O bloco "estou lendo em ordem"
 
+- **Nada de "Em breve" (T17h):** quem ainda não tem nada lançado **naquele modo** é pulado. "Lançado" é exatamente "o cartão da obra em Histórias tem botão de verdade" (`cartaoDaObra(...).botao.tipo === "link"`): no publicado, só as públicas com capítulo ou link externo; na prévia, também os rascunhos que têm capítulo. `ladoDaObra()` devolve `null` para as outras e `blocoDaOrdem()` anda para o lado (anterior ou seguinte) até achar a primeira lançada. A obra do capítulo em que o visitante está não é pulada, e "fora da ordem" (`chrono: false`) continua sendo decidido na lista inteira, antes de pular. Sumiram o texto "Em breve: …", o `emBreve` de `textosDaOrdem.ts` e a classe `so-soon`.
 - **Os dados são regras puras:** `src/lib/ordemDeLeitura.ts` (`blocoDaOrdem()`). Ele **reaproveita** `organizarCartoes()` (a ordenação da grade de Histórias) e `cartaoDaObra()` (o destino do botão do cartão): não há regra de ordem nova. Por isso o `"chrono": false`, os empates, o "sem número vai para o fim" e "só existe o que o site mostra naquele modo" valem aqui do mesmo jeito que em Histórias.
 - **O desenho:** `ProximaHistoria.astro` (a caixa) e `LadoDaOrdem.astro` (cada lado). O servidor desenha **as duas ordens** e esconde a que não é a padrão; o seletor vem `disabled`. Sem JavaScript o bloco já funciona na Cronológica; com JavaScript o seletor é ligado.
 - **O script** (`src/scripts/ordem/`): `regras.ts` (sem nenhum `import`: lembrar a escolha em `localStorage`, tudo dentro de `try/catch`), `bloco.ts` (só alterna `hidden`, o `value` do seletor e o texto do nome da ordem por `textContent`) e `index.ts`. Nada de `innerHTML` e nada que leia o `config.json`: `tests/ordem-dom.test.ts` olha o código e, num navegador simulado, o resultado.
 - **Os textos** moram em `src/lib/textosDaOrdem.ts` (não no `config.json`, que é seu). Os de inglês são proposta.
-- **As imagens:** `order_images` no `work.json` (lista de 1 ou 2 caminhos em `static/`); sem ela, a capa. Passam pelo caminho das imagens da T17 (perfil `ordemDeLeitura` em `src/lib/imagens.ts`: `srcset` WebP, `width`/`height`, carregamento preguiçoso).
+- **As imagens:** três jeitos, o primeiro que a obra tiver vale: `order_art` (camadas animadas, T17h, seção 3 abaixo), `order_images` (lista de 1 ou 2 caminhos em `static/`) ou a capa. Passam pelo caminho das imagens da T17 (perfis `ordemDeLeitura` e `camadaDaOrdem` em `src/lib/imagens.ts`: `srcset` WebP, `width`/`height`, carregamento preguiçoso).
 - **Prova da paridade:** o Python não tem o bloco, então `tests/ajudantes/html.ts → semBlocoDeOrdem()` tira do HTML do Astro **só** as `<section data-story-order>` antes de comparar com o Python. A exceção é estreita de propósito: `tests/ordem.test.ts` prova que, sem o bloco, o Leitor é idêntico ao de antes, que o que sai não tem comentários, scripts nem texto do autor, e `tests/paginas.test.ts` (grupo "T17c") confere nas páginas reais que há **exatamente um** bloco por capítulo, como filho direto do `<main>`, entre a caixa do capítulo e a dos comentários, e nenhum em outras páginas. Os IDs dos comentários não mudam.
 - **No navegador:** `python3 tools/ordem_playwright.py` (instruções no topo do script).
 
+### 3. As imagens em camadas animadas (T17h)
+
+O autor mandou, para *Luz & Sangue*, *Alô? Residência dos Di Vario* e *Pederneira*, um PNG por personagem e dois "compostos" (a arte antes do mouse e com o mouse por cima). A composição virou **dados no `work.json`** (`order_art`), não código:
+
+- **Por que no `work.json`:** é onde o autor já mexe para ligar uma obra a suas imagens (`order_images`). Uma arte nova = `static/ordem/` + um campo, sem tocar em `src/`. O schema (`arteEmCamadas()` em `src/lib/schemas.ts`) confere tudo no build, em português, e campo desconhecido é erro. `src/lib/artesDaOrdem.ts` (o modelo, bem comentado) traduz o campo para o que o componente desenha; o guia do autor tem a tabela dos campos.
+- **O modelo:** uma **tela de montagem** (`size`, só a proporção importa) e camadas **de trás para a frente**, cada uma com o **centro** (`x`, `y` em %), a `width` (em % da tela), `rotate` e `opacity`, mais um `hover` com só o que muda.
+- **Como o navegador anima (tudo CSS, nenhum JavaScript novo):** cada camada é um `<img class="so-layer">` com variáveis de CSS no `style` (`--x --y --w --r --o`, e `--hx --hy --hw --hr --ho` para o mouse). O CSS do `ProximaHistoria.astro` posiciona pelo centro (`left`/`top` + `translate: -50% -50%`) e, no `:hover`/`:focus-visible` do link, troca para `var(--hx, var(--x))` etc. **Uma transição só** (0,6 s, a mesma curva) para as cinco propriedades. A tela corta o que sair dela, por isso o estado do mouse tem de caber na tela. Com `prefers-reduced-motion` nada se mexe nem gira; só as camadas cuja opacidade muda (`.so-surge`: o Thymorr) aparecem de uma vez, já no lugar final.
+- **Como as posições foram tiradas:** com **casamento de pontos de imagem** (SIFT + RANSAC, em Python/OpenCV), camada por camada, contra o composto: o resultado é escala, giro e posição de cada personagem em cada estado (o erro típico é 1–2 px em 2000). Ordem de empilhamento: testada pelas 6 permutações contra o composto (ganha a de menor diferença). O Python/OpenCV não faz parte do site; foi só para medir. Diferenças contra as imagens do autor (1100 px): ver o relatório da T17h.
+- **O que foi decidido e o autor pode mudar:** o **Thymorr** só tem o estado final nas imagens (o inicial é invisível), então ele começa 7% da largura da tela mais para o centro (`x` 62,18 → 69,18); **Lucas e Wellersson** só têm o estado inicial (a referência), então o "afastar" (cada um 30 px da tela de 595, mais 8% de crescimento) é nosso; a tela de Alô? é a da referência com margens (+24 px à esquerda, +8 à direita, +20 em cima) para o estado do mouse caber.
+- **O John** (216 × 448 px) é ampliado 1,8× na tela de 2087 px do autor, mas ocupa só ~60 px na tela do visitante: nunca passa do tamanho real dele. As outras camadas (até 1461 px) ganham versões leves de 160 a 960 px.
+
 ### Tente (ordem)
 
-1. **Veja uma história nova entrar na fila.** Copie `content/works/roadside/` para `content/works/teste/`, troque o título e os números de `order` (ex.: `"release": 5.5, "chrono": 8`), rode `pnpm dev` e abra um capítulo de *Beira de Estrada* ou de *O Pêndulo*: o vizinho mudou sozinho. Apague a pasta `teste` depois.
+0. **Mexa numa animação.** Em `content/works/light-and-blood/work.json`, dentro de `"hover"` do John, troque `"rotate": -6.52` por `"rotate": -30` e rode `pnpm dev`: no fim de um capítulo da Pederneira, passe o mouse na arte de Luz & Sangue. Volte o número.
+
+1. **Veja uma história nova entrar na fila (e uma sem capítulo ser pulada).** Copie `content/works/firestriker/` (que tem um capítulo) para `content/works/teste/`, troque o título e os números de `order` (ex.: `"release": 2.5, "chrono": 6.5`), rode `pnpm dev` e abra o capítulo da *Pederneira*: a caixa mostra a nova. Agora apague a pasta `01/` de dentro de `teste/` e recarregue: ela some da caixa (nada de "Em breve"), mesmo continuando em Histórias como cartão cinza. Apague a pasta `teste` depois.
 2. **Quebre a ordem de propósito.** Em `src/lib/ordemDeLeitura.ts`, troque `decrescente: false` por `true` em `sequenciaDaOrdem()` e rode `pnpm vitest run ordem`: os testes do exemplo do PDF falham. Desfaça.
 
 ## Posts incorporados só com clique (T17g, B27): nenhum script de terceiros na sua página

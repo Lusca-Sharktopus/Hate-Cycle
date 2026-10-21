@@ -8,9 +8,15 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
   3. pelo teclado (Tab até o seletor, setas) a troca também acontece;
   4. sem JavaScript: o bloco aparece, na Cronológica, e o seletor fica desligado (as duas listas estão no HTML);
   5. localStorage que dá erro (janela privada): o bloco funciona do mesmo jeito, só não lembra;
-  6. mouse por cima: a 2ª imagem aparece e a arte cresce; com "reduzir movimento" a imagem troca mas não cresce;
-  7. no celular (390 px) a página não ganha rolagem horizontal;
-  8. com --previa: na prévia (rascunhos) a Beira de Estrada aparece depois da Pederneira na Cronológica.
+  6. arte em CAMADAS (T17h) com o mouse por cima, medida nas camadas de verdade (getComputedStyle):
+       Luz & Sangue: os três crescem, o Oliver e o John giram para lados opostos e se afastam da Ellie;
+       Pederneira: a Olivia e o Harry crescem, o Harry gira e se move, o Thymorr vai de 0 a 100% de opacidade e do centro para a direita;
+       Alô? Residência dos Di Vario: Lucas e Wellersson crescem e se afastam um do outro;
+     o mesmo vale com o foco do teclado (:focus-visible); uma transição só, igual para todas as camadas (mesma duração e curva);
+     com "reduzir movimento" nada se mexe nem gira (só o Thymorr aparece, de uma vez);
+  7. no celular (390 px) a página não ganha rolagem horizontal e a arte em camadas cabe na coluna;
+  8. nada de "Em breve" (T17h): em nenhuma ordem, nem na prévia; com --previa: Beira de Estrada e O Pêndulo (rascunhos sem capítulo)
+     são puladas, e a Pederneira não tem história depois dela na Cronológica.
 
 Como usar (servidores sob timeout; nunca pkill):
   pnpm build                      # site publicado em dist/
@@ -118,29 +124,106 @@ def roteiro(browser, porta, lang):
     conferir(visivel and not erros, "com o localStorage bloqueado o bloco funciona, sem erro na página")
     ctx.close()
 
-    # 6: mouse por cima (Luz & Sangue tem as duas imagens; é o lado anterior na Cronológica da Pederneira)
-    for reduzir in (False, True):
-        ctx = novo_contexto(browser, 1100, reduced_motion="reduce" if reduzir else "no-preference")
-        pg = ctx.new_page()
-        abrir(pg, porta, ped)
-        pg.evaluate("document.querySelectorAll('.so-img').forEach(i => { i.loading = 'eager' })")
-        antes = pg.evaluate("""() => { const a = document.querySelector('.so-order:not([hidden]) .so-side.prev'); return { o2: +getComputedStyle(a.querySelector('.so-img-2')).opacity, t: getComputedStyle(a.querySelector('.so-art')).transform }; }""")
-        pg.hover(".so-order:not([hidden]) .so-side.prev")
-        pg.wait_for_timeout(700)
-        depois = pg.evaluate("""() => { const a = document.querySelector('.so-order:not([hidden]) .so-side.prev'); return { o1: +getComputedStyle(a.querySelector('.so-img-1')).opacity, o2: +getComputedStyle(a.querySelector('.so-img-2')).opacity, t: getComputedStyle(a.querySelector('.so-art')).transform }; }""")
-        nome = "movimento reduzido" if reduzir else "movimento normal"
-        conferir(antes["o2"] == 0 and depois["o2"] == 1 and depois["o1"] == 0, f"{nome}: a 2ª imagem aparece e a 1ª some com o mouse por cima")
-        cresceu = depois["t"] not in ("none", antes["t"])
-        conferir(cresceu != reduzir, f"{nome}: a arte {'não cresce' if reduzir else 'cresce'} ({depois['t']})")
-        ctx.close()
+    # 6: arte em camadas, mouse por cima / teclado / movimento reduzido
+    camadas(browser, porta, lang)
 
     # 7: celular
     ctx = novo_contexto(browser, 390)
     pg = ctx.new_page()
     for caminho in (ped, lb):
         abrir(pg, porta, caminho)
-        e = pg.evaluate(ESTADO)
-        conferir(e["rolagem"] <= e["largura"], f"390 px {caminho}: sem rolagem horizontal ({e['rolagem']} <= {e['largura']})")
+        for ordem in ("chrono", "release"):
+            pg.select_option("[data-story-order] select", ordem)
+            e = pg.evaluate(ESTADO)
+            conferir(e["rolagem"] <= e["largura"], f"390 px {caminho} ({ordem}): sem rolagem horizontal ({e['rolagem']} <= {e['largura']})")
+            larguras = pg.evaluate("() => [...document.querySelectorAll('.so-order:not([hidden]) .so-art')].map(a => [a.getBoundingClientRect().left, a.getBoundingClientRect().right])")
+            conferir(all(l >= 0 and r <= 390 for l, r in larguras), f"390 px {caminho} ({ordem}): a arte cabe na tela ({[[round(l), round(r)] for l, r in larguras]})")
+    ctx.close()
+    # 8: nada de "Em breve"
+    ctx = novo_contexto(browser, 1100)
+    pg = ctx.new_page()
+    for caminho in (ped, lb):
+        abrir(pg, porta, caminho)
+        for ordem in ("chrono", "release"):
+            pg.select_option("[data-story-order] select", ordem)
+        conferir("Em breve" not in (pg.locator("[data-story-order]").text_content() or "") and "Coming soon" not in (pg.locator("[data-story-order]").text_content() or "") and pg.locator(".so-soon").count() == 0, f"{caminho}: nenhum \"Em breve\" no bloco")
+    ctx.close()
+
+
+LER_CAMADAS = """(seletor) => [...document.querySelectorAll(seletor + ' .so-layer')].map(i => {
+  const c = getComputedStyle(i);
+  return { arquivo: decodeURIComponent(i.getAttribute('src')).split('/').pop().replace(' Site Cronologia.png', ''),
+           left: parseFloat(c.left), top: parseFloat(c.top), w: parseFloat(c.width), rot: c.rotate === 'none' ? 0 : parseFloat(c.rotate), o: +c.opacity,
+           dur: c.transitionDuration, curva: c.transitionTimingFunction, prop: c.transitionProperty };
+})"""
+
+# onde está cada arte: (página, ordem do seletor, lado)
+ARTES = {
+    "luz-e-sangue": ("/{lang}/works/firestriker/01/", "chrono", "prev"),
+    "pederneira": ("/{lang}/works/light-and-blood/01/", "release", "prev"),
+    "di-vario": ("/{lang}/works/firestriker/01/", "release", "prev"),
+}
+
+
+def medir(pg, porta, lang, arte, reduzir=False, teclado=False):
+    """Camadas de uma arte antes e depois de mouse/teclado: (antes, depois)."""
+    caminho, ordem, lado = ARTES[arte]
+    abrir(pg, porta, caminho.format(lang=lang))
+    pg.evaluate("document.querySelectorAll('.so-layer').forEach(i => { i.loading = 'eager' })")
+    pg.select_option("[data-story-order] select", ordem)
+    seletor = f".so-order:not([hidden]) .so-side.{lado}"
+    pg.mouse.move(2, 2)
+    pg.wait_for_timeout(900)
+    antes = pg.evaluate(LER_CAMADAS, seletor)
+    if teclado:
+        for _ in range(40):
+            pg.keyboard.press("Tab")
+            if pg.evaluate("(s) => document.activeElement && document.activeElement.matches(s)", seletor):
+                break
+    else:
+        pg.hover(seletor)
+    pg.wait_for_timeout(900)
+    depois = pg.evaluate(LER_CAMADAS, seletor)
+    return {c["arquivo"]: c for c in antes}, {c["arquivo"]: c for c in depois}
+
+
+def camadas(browser, porta, lang):
+    for modo in ("mouse", "teclado"):
+        ctx = novo_contexto(browser, 1100)
+        pg = ctx.new_page()
+        tec = modo == "teclado"
+        print(f"  -- arte em camadas ({modo})")
+        a, d = medir(pg, porta, lang, "luz-e-sangue", teclado=tec)
+        conferir(list(a) == ["John", "Oliver", "Ellie"], f"Luz & Sangue: ordem das camadas, de trás para a frente ({list(a)})")
+        conferir(all(d[n]["w"] > a[n]["w"] * 1.05 for n in a), "Luz & Sangue: os três crescem: " + ", ".join(f"{n} {a[n]['w']:.0f}→{d[n]['w']:.0f}px" for n in a))
+        conferir(a["Oliver"]["rot"] == 0 and d["Oliver"]["rot"] > 3 and d["John"]["rot"] < -3, f"Luz & Sangue: Oliver gira para a direita ({d['Oliver']['rot']:.1f}°) e John para a esquerda ({d['John']['rot']:.1f}°)")
+        conferir(d["Oliver"]["left"] > a["Oliver"]["left"] + 5 and d["John"]["left"] < a["John"]["left"] - 5, "Luz & Sangue: Oliver e John se afastam da Ellie (um para cada lado)")
+        conferir(abs(d["Ellie"]["rot"]) < 0.01, "Luz & Sangue: a Ellie só cresce (não gira)")
+        a, d = medir(pg, porta, lang, "pederneira", teclado=tec)
+        conferir(list(a) == ["Thymorr", "Harry", "Olivia"], f"Pederneira: ordem das camadas ({list(a)})")
+        conferir(a["Thymorr"]["o"] == 0 and d["Thymorr"]["o"] == 1, f"Pederneira: o Thymorr vai de 0 a 100% de opacidade ({a['Thymorr']['o']} → {d['Thymorr']['o']})")
+        conferir(d["Thymorr"]["left"] > a["Thymorr"]["left"] + 5, f"Pederneira: o Thymorr se move para a direita ({a['Thymorr']['left']:.0f} → {d['Thymorr']['left']:.0f}px)")
+        conferir(d["Harry"]["w"] > a["Harry"]["w"] and d["Olivia"]["w"] > a["Olivia"]["w"], "Pederneira: Olivia e Harry crescem")
+        conferir(d["Harry"]["rot"] < -3 and abs(d["Harry"]["left"] - a["Harry"]["left"]) > 5 and abs(d["Olivia"]["rot"]) < 0.01, f"Pederneira: o Harry gira ({d['Harry']['rot']:.1f}°) e se move; a Olivia não gira")
+        a, d = medir(pg, porta, lang, "di-vario", teclado=tec)
+        conferir(list(a) == ["Lucas", "Wellersson"], f"Alô?: ordem das camadas ({list(a)})")
+        conferir(d["Lucas"]["left"] < a["Lucas"]["left"] - 5 and d["Wellersson"]["left"] > a["Wellersson"]["left"] + 5, "Alô?: Lucas e Wellersson se afastam um do outro")
+        conferir(d["Lucas"]["w"] > a["Lucas"]["w"] and d["Wellersson"]["w"] > a["Wellersson"]["w"], "Alô?: os dois crescem")
+        todas = [c for arte in ("luz-e-sangue", "pederneira", "di-vario") for c in medir(pg, porta, lang, arte, teclado=tec)[0].values()]
+        conferir(len({(c["dur"], c["curva"], c["prop"]) for c in todas}) == 1 and all(p in todas[0]["prop"] for p in ("left", "top", "width", "rotate", "opacity")), f"uma transição só para todas as camadas ({todas[0]['dur']}, {todas[0]['curva']})")
+        ctx.close()
+    # movimento reduzido: nada se mexe nem gira; só o Thymorr aparece, de uma vez, no lugar final
+    ctx = novo_contexto(browser, 1100, reduced_motion="reduce")
+    pg = ctx.new_page()
+    print("  -- arte em camadas (movimento reduzido)")
+    for arte in ("luz-e-sangue", "di-vario"):
+        a, d = medir(pg, porta, lang, arte)
+        parado = all(abs(d[n][k] - a[n][k]) < 0.01 for n in a for k in ("left", "top", "w", "rot", "o"))
+        conferir(parado, f"movimento reduzido, {arte}: nada muda (posição, tamanho, giro)")
+    a, d = medir(pg, porta, lang, "pederneira")
+    conferir(all(abs(d[n][k] - a[n][k]) < 0.01 for n in ("Harry", "Olivia") for k in ("left", "top", "w", "rot", "o")), "movimento reduzido, Pederneira: Olivia e Harry ficam parados")
+    conferir(a["Thymorr"]["o"] == 0 and d["Thymorr"]["o"] == 1 and d["Thymorr"]["dur"] in ("0s", "0.0s"), "movimento reduzido, Pederneira: o Thymorr aparece de uma vez (sem transição)")
+    conferir(d["Thymorr"]["left"] > a["Thymorr"]["left"], "movimento reduzido, Pederneira: o Thymorr já aparece no lugar final (à direita)")
     ctx.close()
 
 
@@ -149,8 +232,9 @@ def previa(browser, porta):
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
     abrir(pg, porta, "/pt/works/firestriker/01/")
-    texto = pg.locator('.so-order[data-ordem="chrono"] .so-side.next').text_content() or ""
-    conferir("Beira de Estrada" in texto, f"prévia: na Cronológica, depois da Pederneira vem a Beira de Estrada ({texto.strip()!r})")
+    conferir(pg.locator('.so-order[data-ordem="chrono"] .so-side.next').count() == 0, "prévia: na Cronológica, depois da Pederneira NÃO vem ninguém (Beira de Estrada e O Pêndulo, sem capítulo, são puladas)")
+    texto = pg.locator("[data-story-order]").text_content() or ""
+    conferir(all(x not in texto for x in ("Beira de Estrada", "Pêndulo", "Em breve")), "prévia: o bloco não fala de Beira de Estrada, de O Pêndulo nem de \"Em breve\"")
     ctx.close()
 
 

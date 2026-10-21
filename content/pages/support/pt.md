@@ -14,7 +14,7 @@ Você também pode apoiar diretamente o criador deste universo se inscrevendo no
 <div style="text-align:center">
 <!-- BANNER DO YOUTUBE (provisório): quando o arquivo "banner yt.png" chegar, coloque-o em static/support/ como banner-yt.png e troque o texto do link abaixo
      por uma imagem igual à do Catarse lá em cima (tag img, alt "Inscreva-se no canal no YouTube", src na pasta support/). O link e o centralizado ficam como estão. -->
-<a href="https://www.youtube.com/@HateCycle" target="_blank" rel="noopener">Inscreva-se no canal no YouTube</a>
+<a href="https://www.youtube.com/@LuscaSharktopus" target="_blank" rel="noopener">Inscreva-se no canal no YouTube</a>
 </div>
 
 Se prefere apenas um apoio pequeno, sem compromisso, faça uma doação pelo Ko-fi!

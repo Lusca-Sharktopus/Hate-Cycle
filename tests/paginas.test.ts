@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts, type PaginaLida } from "./ajudantes/html";
+import { canalDoYoutubeComoNoPython, canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -111,6 +111,17 @@ function paginasDoDist(pasta: string): Map<string, string> {
   return achadas;
 }
 
+/**
+ * T17h: o HTML do Astro com o href do ícone do YouTube do rodapé como o do Python (a única diferença aceita no rodapé). Exige EXATAMENTE 1
+ * troca por página e o canal do idioma da URL (/en/ → @HateCycleEn, /pt/ → @HateCycleBR); senão, é erro.
+ */
+function trocarCanalDoYoutube(url: string, html: string): string {
+  const lang = /^\/(en|pt)\//.exec(url)?.[1] as "en" | "pt" | undefined;
+  const r = canalDoYoutubeComoNoPython(html, lang);
+  if (r.trocados !== 1 || r.errados !== 0) throw new Error(`${url}: o rodapé devia ter 1 ícone do YouTube com o canal do idioma (trocou ${r.trocados}, de outro idioma ${r.errados})`);
+  return r.html;
+}
+
 /** O ano do rodapé é o do dia do build ("© 2023 - 2026"): troca por um marcador para o teste não quebrar em 1º de janeiro. */
 const semAno = (rodape: string) => rodape.replace(/(2023 - )\d{4}/, "$1<ano>");
 
@@ -168,7 +179,8 @@ for (const ref of refs) {
         const arquivo = paginasDoDist(dist).get(url);
         if (!arquivo) throw new Error(`o Astro não gerou ${url}`);
         // T17c: o bloco "estou lendo em ordem…" só existe no Astro (tests/ajudantes/html.ts → semBlocoDeOrdem; tests/ordem.test.ts prova que só ele sai)
-        let html = semQuadrosDosPosts(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html).html;
+        // T17h: o ícone do YouTube do rodapé leva ao canal do idioma (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython; tests/canais.test.ts)
+        let html = semQuadrosDosPosts(semBlocoDeOrdem(trocarCanalDoYoutube(url, readFileSync(arquivo, "utf8"))).html).html;
         if (ref.marcadores) {
           const r = comMarcadores(html, ref.marcadores);
           // sem expect(valor) aqui de propósito: em caso de erro, o vitest imprimiria a chave
@@ -375,7 +387,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
 
   test.each(Object.keys(c.paginas))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
     const py = lerPagina(semScriptsDosPosts(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html).html);
-    const astro = lerPagina(lerComMarcadores(join(outra(), url.slice(1), "index.html")));
+    const astro = lerPagina(trocarCanalDoYoutube(url, lerComMarcadores(join(outra(), url.slice(1), "index.html"))));
     expect(astro.cabeca.titulo).toBe(py.cabeca.titulo);
     expect(astro.cabeca.metas).toEqual(py.cabeca.metas);
     expect(astro.cabeca.links).toEqual(py.cabeca.links);
@@ -514,6 +526,8 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
       expect(scripts[0], `${url}: o script não leva nada do config.json`).not.toMatch(/supabase|window\.HC|anon/i);
       // os comentários continuam os mesmos: a sua própria caixa, uma vez (ID = o da página), e o bloco não tem nenhum
       expect(r.removidos[0], url).not.toMatch(/data-page|hc-comments|<script/);
+      // T17h: nada de "Em breve" no bloco (história sem nada lançado é pulada)
+      expect(r.removidos[0], `${url}: sem "Em breve"`).not.toMatch(/so-soon|Em breve|Coming soon/);
       // todas as imagens do bloco passam pelo caminho das imagens (T17): src original + srcset/sizes/width/height, carregamento preguiçoso
       for (const img of r.removidos[0]?.match(/<img\b[^>]*>/g) ?? []) {
         expect(img, `${url}: ${img}`).toMatch(/ srcset="[^"]+" /);
@@ -563,17 +577,81 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
     for (const a of alvos) expect(botoes.has(a), `o botão do cartão de Histórias leva a ${a}`).toBe(true);
   });
 
-  test("prévia (rascunhos): todo capítulo tem o bloco; Beira de Estrada aparece depois da Pederneira (cronológica), sem link (ainda sem capítulos)", () => {
+  test("site publicado: a arte em camadas (T17h) de Luz & Sangue, Pederneira e Alô? aparece, de trás para a frente, com as versões leves", () => {
+    const camadas = (bloco: string, ordem: "chrono" | "release", lado: "prev" | "next") => {
+      const div = new RegExp(`<div class="so-order" data-ordem="${ordem}"(?: hidden)?>([\\s\\S]*?)</div>(?=<div class="so-order"|</section>)`).exec(bloco)?.[1] ?? "";
+      const a = new RegExp(`<a class="so-side ${lado}[^"]*"[^>]*>([\\s\\S]*?)</a>`).exec(div)?.[1] ?? "";
+      return { tela: /<span class="so-art so-layers" style="--ar:([^"]+)">/.exec(a)?.[1] ?? null, imgs: [...a.matchAll(/<img class="so-layer[^"]*" src="\/ordem\/([^"/]+?)%20Site%20Cronologia\.png"/g)].map((m) => decodeURIComponent(m[1] ?? "")), tags: a.match(/<img\b[^>]*>/g) ?? [], sobImgs: (a.match(/so-img/g) ?? []).length };
+    };
+    const ped = blocoDe(dist, "/pt/works/firestriker/01/");
+    const lb = camadas(ped, "chrono", "prev"); // Luz & Sangue
+    expect(lb.tela).toBe("2087 / 1752");
+    expect(lb.imgs).toEqual(["John", "Oliver", "Ellie"]); // Ellie na frente
+    expect(lb.sobImgs).toBe(0);
+    const hd = camadas(ped, "release", "prev"); // Alô? Residência dos Di Vario
+    expect(hd.tela).toBe("627 / 600");
+    expect(hd.imgs).toEqual(["Lucas", "Wellersson"]);
+    const pd = camadas(blocoDe(dist, "/pt/works/light-and-blood/01/"), "release", "prev"); // Pederneira
+    expect(pd.tela).toBe("2002 / 2023");
+    expect(pd.imgs).toEqual(["Thymorr", "Harry", "Olivia"]);
+    expect(pd.tags[0]).toContain("so-surge"); // o Thymorr surge
+    expect(pd.tags[0]).toContain("--o:0");
+    // todas as camadas maiores que 240 px têm versões leves (WebP); o John (216 px) passa pelo mesmo caminho, só que sem versões maiores que ele
+    for (const tag of [...lb.tags, ...hd.tags, ...pd.tags]) expect(tag).toMatch(/ srcset="[^"]+\.webp[^"]*"/);
+  });
+
+  test("prévia (rascunhos): todo capítulo tem o bloco; Beira de Estrada e O Pêndulo, ainda sem capítulo, são PULADAS (nada de \"Em breve\", T17h)", () => {
     const dir = segundaConstrucao();
     const capitulos = verificarPaginas(dir);
     expect(capitulos.length).toBeGreaterThanOrEqual(6);
     const l = lados(blocoDe(dir, "/pt/works/firestriker/01/"));
     expect(l.chrono.prev?.texto).toBe("Assistir Luz & Sangue");
-    expect(l.chrono.next?.texto).toMatch(/^Em breve: Beira de Estrada$|^Ler Beira de Estrada$/);
-    expect(l.chrono.next?.texto).toBe("Em breve: Beira de Estrada"); // hoje a obra ainda não tem capítulos (T17d)
-    expect(l.chrono.next?.href).toBeNull();
-    expect(blocoDe(dir, "/en/works/firestriker/01/")).toContain("Coming soon: Roadside");
+    expect(l.chrono.next).toBeNull(); // depois da Pederneira vêm Beira de Estrada e O Pêndulo, sem capítulo: não aparecem
+    expect(l.release.next?.texto).toBe("Assistir Luz & Sangue");
+    for (const url of ["/pt/works/firestriker/01/", "/en/works/firestriker/01/", "/pt/works/light-and-blood/01/", "/en/works/light-and-blood/02/"]) {
+      expect(blocoDe(dir, url), url).not.toMatch(/Beira de Estrada|Roadside|P[eê]ndulo|Pendulum|Coming soon|Em breve/);
+    }
   }, 240_000);
+});
+
+// ───────────── T17h: o canal do YouTube por idioma ─────────────
+
+describe("T17h: o ícone do YouTube do rodapé leva ao canal do idioma em TODAS as páginas; o Apoio (PT) leva ao canal pessoal", () => {
+  const paginas = () => [...paginasDoDist(dist)].filter(([url]) => url !== "/404.html");
+  const rodapeDe = (html: string) => /<footer\b[\s\S]*?<\/footer>/.exec(html)?.[0] ?? "";
+  const doYoutube = (html: string) => [...rodapeDe(html).matchAll(/<a href="([^"]+)"[^>]*title="YouTube"/g)].map((m) => m[1]);
+
+  test("/en/… → @HateCycleEn e /pt/… → @HateCycleBR, uma vez por página, e nenhum link antigo (@HateCycle) sobra no site", () => {
+    let n = 0;
+    for (const [url, arquivo] of paginas()) {
+      const html = readFileSync(arquivo, "utf8");
+      const lang = /^\/(en|pt)\//.exec(url)?.[1];
+      if (!lang) continue; // a raiz (redireciona) e os redirects antigos não têm rodapé
+      expect(doYoutube(html), url).toEqual([lang === "en" ? "https://www.youtube.com/@HateCycleEn" : "https://www.youtube.com/@HateCycleBR"]);
+      expect(html, `${url}: link antigo do canal`).not.toMatch(/youtube\.com\/@HateCycle(?![A-Za-z])/);
+      n += 1;
+    }
+    expect(n).toBeGreaterThan(100);
+  });
+
+  test("a página Apoio em português leva ao canal pessoal do autor (e só ela fala dele)", () => {
+    const html = readFileSync(paginasDoDist(dist).get("/pt/support/") ?? "", "utf8");
+    expect(html).toContain('<a href="https://www.youtube.com/@LuscaSharktopus" target="_blank" rel="noopener">Inscreva-se no canal no YouTube</a>');
+    expect(html).not.toMatch(/youtube\.com\/@HateCycle(?![A-Za-z])/);
+  });
+
+  test("a exceção de paridade troca só o href do ícone do rodapé (outro canal, outro idioma ou outra forma de <a> não passam)", () => {
+    const icone = (canal: string) => `<a href="https://www.youtube.com/@HateCycle${canal}" target="_blank" rel="noopener" title="YouTube">`;
+    expect(canalDoYoutubeComoNoPython(icone("En"), "en")).toEqual({ html: icone(""), trocados: 1, errados: 0 });
+    expect(canalDoYoutubeComoNoPython(icone("BR"), "pt")).toEqual({ html: icone(""), trocados: 1, errados: 0 });
+    // como o Astro de fato escreve a tag (o atributo do estilo do componente vem depois do title)
+    const comCid = '<a href="https://www.youtube.com/@HateCycleEn" target="_blank" rel="noopener" title="YouTube" data-astro-cid-jo6i4kqk>';
+    expect(canalDoYoutubeComoNoPython(comCid, "en")).toEqual({ html: comCid.replace("@HateCycleEn", "@HateCycle"), trocados: 1, errados: 0 });
+    expect(canalDoYoutubeComoNoPython(icone("BR"), "en")).toEqual({ html: icone("BR"), trocados: 0, errados: 1 });
+    expect(canalDoYoutubeComoNoPython(icone("En"), "pt").errados).toBe(1);
+    const outros = '<a href="https://www.youtube.com/@HateCycleEn">x</a><a href="https://www.youtube.com/@ResidenciaDosDiVario" target="_blank" rel="noopener" title="YouTube">y</a><a href="https://www.youtube.com/@HateCycleEn" title="YouTube" target="_blank" rel="noopener">z</a>';
+    expect(canalDoYoutubeComoNoPython(outros, "en")).toEqual({ html: outros, trocados: 0, errados: 0 });
+  });
 });
 
 test("o dist/ existe", () => {

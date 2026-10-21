@@ -1,10 +1,13 @@
 ---
 // Um lado do bloco "estou lendo em ordem…" (T17c): a arte da história anterior ou da seguinte e, embaixo, "Assistir Luz & Sangue ←".
 // Só desenha: tudo vem decidido em `lado` (src/lib/ordemDeLeitura.ts → ladoDaObra). O link vai para o mesmo lugar do cartão da obra em
-// Histórias (obra externa abre em outra aba, como o cartão). Obra sem nada para abrir vira um bloco sem link ("Em breve: …").
+// Histórias (obra externa abre em outra aba, como o cartão). Uma história sem nada lançado nem chega aqui: é pulada (T17h).
 //
-// A arte é decorativa (alt vazio): o texto do link já diz o nome da história. Duas <img> empilhadas: a normal e a do mouse por cima
-// (a troca e o leve crescimento são do CSS do ProximaHistoria.astro). Sem arte própria, a capa da obra ocupa a mesma caixa.
+// A arte é decorativa (alt vazio): o texto do link já diz o nome da história. Três jeitos, conforme o work.json da obra:
+//   - CAMADAS (`order_art`, T17h): um <img> por personagem, empilhados numa tela de montagem; o CSS do ProximaHistoria.astro os anima
+//     no mouse por cima (src/lib/artesDaOrdem.ts explica o modelo);
+//   - duas imagens (`order_images`): a normal e a do mouse por cima, uma troca com a outra;
+//   - a capa da obra, quando não há arte própria.
 import { assetUrl } from "../lib/assets";
 import type { LadoDaOrdem } from "../lib/ordemDeLeitura";
 
@@ -15,9 +18,10 @@ interface Props {
 }
 
 const { lado, direcao } = Astro.props;
-const link = lado.destino.tipo === "link" ? lado.destino : null;
-const classes = `so-side ${direcao}${lado.arte?.ehCapa ? " is-cover" : ""}${link ? "" : " so-soon"}`;
+const link = lado.destino;
+const arte = lado.arte;
+const classes = `so-side ${direcao}${arte?.tipo === "imagens" && arte.ehCapa ? " is-cover" : ""}`;
 ---
 
 {/* Uma linha só por lado, "colado": o HTML sai exatamente como está escrito (compressHTML: false). */}
-{link ? <a class={classes} href={link.href} target={link.externo ? "_blank" : undefined} rel={link.externo ? "noopener noreferrer" : undefined}><span class="so-art">{lado.arte ? <img class="so-img so-img-1" src={assetUrl(lado.arte.principal)} alt="" loading="lazy" /> : null}{lado.arte?.hover ? <img class="so-img so-img-2" src={assetUrl(lado.arte.hover)} alt="" loading="lazy" /> : null}</span><span class="so-label">{lado.rotulo}<svg class="so-arrow" viewBox="0 0 120 14" aria-hidden="true"><path d={direcao === "prev" ? "M3 7H117M3 7l9-5.5M3 7l9 5.5" : "M117 7H3M117 7l-9-5.5M117 7l-9 5.5"} fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></a> : <div class={classes}><span class="so-art">{lado.arte ? <img class="so-img so-img-1" src={assetUrl(lado.arte.principal)} alt="" loading="lazy" /> : null}</span><span class="so-label">{lado.rotulo}</span></div>}
+<a class={classes} href={link.href} target={link.externo ? "_blank" : undefined} rel={link.externo ? "noopener noreferrer" : undefined}>{arte?.tipo === "camadas" ? <span class="so-art so-layers" style={`--ar:${arte.proporcao}`}>{arte.camadas.map((c) => <img class={c.surge ? "so-layer so-surge" : "so-layer"} src={assetUrl(c.imagem)} alt="" loading="lazy" style={c.estilo} />)}</span> : <span class="so-art">{arte ? <img class="so-img so-img-1" src={assetUrl(arte.principal)} alt="" loading="lazy" /> : null}{arte?.hover ? <img class="so-img so-img-2" src={assetUrl(arte.hover)} alt="" loading="lazy" /> : null}</span>}<span class="so-label">{lado.rotulo}<svg class="so-arrow" viewBox="0 0 120 14" aria-hidden="true"><path d={direcao === "prev" ? "M3 7H117M3 7l9-5.5M3 7l9 5.5" : "M117 7H3M117 7l-9-5.5M117 7l-9 5.5"} fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></a>

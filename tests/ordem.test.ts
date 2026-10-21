@@ -1,11 +1,13 @@
 // Prova do bloco "estou lendo/assistindo/jogando em ordem…" (T17c) do fim de cada capítulo: quem vem antes e quem vem depois, na ordem
-// cronológica e na de lançamento, só entre as histórias que existem no site NAQUELE modo (publicado × prévia com rascunhos).
+// cronológica e na de lançamento, só entre as histórias que existem no site NAQUELE modo (publicado × prévia com rascunhos) e que já têm
+// algo lançado (T17h: quem ainda é "Em breve" é PULADO, nunca aparece no bloco).
 //
 // O bloco só existe no Astro (o build.py não o tem), então não há referência do Python para ele: o que se prova aqui é
 //   1. as regras (src/lib/ordemDeLeitura.ts), em SITES INVENTADOS recriados numa pasta temporária e lidos pelo MESMO carregador e pelas
-//      MESMAS regras do site — o exemplo do PDF do autor (Pederneira em cronológica → anterior Luz & Sangue, seguinte Beira de Estrada,
-//      este só na prévia), uma história nova "entre" duas, as pontas, `chrono: false`, empates, "999", idioma, obra de rascunho,
-//      obra externa, obra sem nada para abrir, verbo por tipo, arte própria × capa;
+//      MESMAS regras do site — o exemplo do PDF do autor (Pederneira em cronológica → anterior Luz & Sangue; Beira de Estrada e O Pêndulo,
+//      rascunhos sem capítulo, são puladas e só entram quando ganham capítulo, e só na prévia), uma história nova "entre" duas, as pontas,
+//      `chrono: false`, empates, "999", idioma, obra de rascunho, obra externa, obra sem nada para abrir (pulada), verbo por tipo,
+//      arte própria (camadas, duas imagens) × capa;
 //   2. o mesmo lugar do cartão: o destino de cada lado é o botão do cartão da obra em Histórias (no conteúdo de verdade, nos dois modos);
 //   3. o componente (Container API): as duas ordens no HTML, a outra escondida, o seletor desligado sem JavaScript, textos e links;
 //   4. a exceção de paridade (tests/ajudantes/html.ts → semBlocoDeOrdem) tira SÓ o bloco: sem ele a página do Leitor é a mesma de antes.
@@ -22,6 +24,7 @@ import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { leiturasDaObra } from "../src/lib/leitura";
 import { cartaoDaObra } from "../src/lib/obras";
+import { arteEmCamadas, estiloDaCamada } from "../src/lib/artesDaOrdem";
 import { arteDaObra, blocoDaOrdem, ladoDaObra, ORDEM_PADRAO, ORDENS_DE_LEITURA, sequenciaDaOrdem, TEXTOS_DA_ORDEM, verboDaObra, type BlocoDaOrdem } from "../src/lib/ordemDeLeitura";
 import { finalizarMain } from "../src/lib/pagina";
 import { arquivosDoGlob } from "../src/lib/quadrinhos";
@@ -54,9 +57,10 @@ const cap = (obra: string, pasta = "01", fm = "date: 2026-01-01") => ({
 });
 
 /**
- * O site do PDF do autor, em miniatura (os mesmos números de ordem do work.json de verdade):
- *   lançamento: hdvr 1 (externa, fora da cronológica) · firestriker 2 · light-and-blood 3 · roadside 5 (rascunho) · pendulum 6 (rascunho, sem capítulo)
+ * O site do PDF do autor, em miniatura (os mesmos números de ordem e o mesmo estado do work.json de verdade):
+ *   lançamento: hdvr 1 (externa, fora da cronológica) · firestriker 2 · light-and-blood 3 · roadside 5 (rascunho, SEM capítulo) · pendulum 6 (rascunho, sem capítulo)
  *   cronológica: light-and-blood 5 · firestriker 6 · roadside 7 · pendulum 11
+ * `extra` acrescenta (ou troca) arquivos: `COM_BEIRA` dá um capítulo à Beira de Estrada; `COM_PENDULO`, ao Pêndulo.
  */
 function sitePdf(extra: Record<string, string> = {}): Record<string, string> {
   return {
@@ -67,11 +71,13 @@ function sitePdf(extra: Record<string, string> = {}): Record<string, string> {
     ...cap("light-and-blood", "01"),
     ...cap("light-and-blood", "02", "date: 2026-02-01"),
     "works/roadside/work.json": wj({ kind: "comic", oneshot: true, draft: true, title: { en: "Roadside", pt: "Beira de Estrada" }, order: { release: 5, chrono: 7 }, media: "webcomic", order_images: ["ordem/rs-1.png", "ordem/rs-2.png"] }),
-    ...cap("roadside"),
     "works/the-pendulum/work.json": wj({ kind: "film", oneshot: true, draft: true, title: { en: "The Pendulum", pt: "O Pêndulo" }, order: { release: 6, chrono: 11 }, media: "short-film", cover: "covers/pd.png" }),
     ...extra,
   };
 }
+
+const COM_BEIRA = cap("roadside");
+const COM_PENDULO = cap("the-pendulum");
 
 function ler(arquivos: Record<string, string>, comRascunhos: boolean) {
   const raiz = pastaTemporaria(arquivos);
@@ -104,31 +110,80 @@ describe("o exemplo do PDF do autor: Pederneira", () => {
     expect(vizinhos(bloco("firestriker", "pt"), "release")).toEqual({ anterior: "hdvr", proximo: "light-and-blood", fora: false });
   });
 
-  test("prévia com rascunhos: Beira de Estrada aparece depois da Pederneira (cronológica); O Pêndulo depois dela", () => {
-    const { bloco } = ler(sitePdf(), true);
-    expect(vizinhos(bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: "light-and-blood", proximo: "roadside", fora: false });
-    expect(vizinhos(bloco("roadside", "pt"), "chrono")).toEqual({ anterior: "firestriker", proximo: "the-pendulum", fora: false });
-    // lançamento: Pederneira (2) → Luz & Sangue (3); Luz & Sangue → Beira de Estrada (5) → O Pêndulo (6)
-    expect(vizinhos(bloco("light-and-blood", "pt"), "release")).toEqual({ anterior: "firestriker", proximo: "roadside", fora: false });
-    expect(vizinhos(bloco("roadside", "pt"), "release")).toEqual({ anterior: "light-and-blood", proximo: "the-pendulum", fora: false });
+  test("prévia com rascunhos: Beira de Estrada e O Pêndulo (rascunhos SEM capítulo) são puladas: nada de \"Em breve\" (T17h)", () => {
+    const { bloco, dados } = ler(sitePdf(), true);
+    // elas existem na prévia (aparecem como cartão "Em breve" em Histórias)…
+    expect(dados.pt.universo.map((o) => o.data._origem.slug)).toEqual(["hdvr", "firestriker", "light-and-blood", "roadside", "the-pendulum"]);
+    // …mas o bloco vai direto para a próxima já lançada (aqui, ninguém: Pederneira é a última da cronológica com algo para abrir)
+    expect(vizinhos(bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: "light-and-blood", proximo: null, fora: false });
+    expect(vizinhos(bloco("light-and-blood", "pt"), "release")).toEqual({ anterior: "firestriker", proximo: null, fora: false });
+    // e o que sai do bloco nunca é "Em breve": todo lado tem link
+    for (const slug of ["hdvr", "firestriker", "light-and-blood"]) {
+      for (const ordem of ["chrono", "release"] as const) {
+        for (const lado of [bloco(slug, "pt").listas[ordem].anterior, bloco(slug, "pt").listas[ordem].proximo]) {
+          if (lado) expect(lado.destino.tipo, `${slug} ${ordem}`).toBe("link");
+        }
+      }
+    }
+  });
+
+  test("quando a Beira de Estrada ganha um capítulo, entra na prévia (e só nela); O Pêndulo, sem capítulo, continua pulado", () => {
+    const pre = ler(sitePdf(COM_BEIRA), true);
+    expect(vizinhos(pre.bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: "light-and-blood", proximo: "roadside", fora: false });
+    expect(vizinhos(pre.bloco("roadside", "pt"), "chrono")).toEqual({ anterior: "firestriker", proximo: null, fora: false });
+    // lançamento: Luz & Sangue (3) → Beira de Estrada (5) → (O Pêndulo, pulado)
+    expect(vizinhos(pre.bloco("light-and-blood", "pt"), "release")).toEqual({ anterior: "firestriker", proximo: "roadside", fora: false });
+    expect(vizinhos(pre.bloco("roadside", "pt"), "release")).toEqual({ anterior: "light-and-blood", proximo: null, fora: false });
+    // no site publicado a Beira de Estrada (rascunho) continua não existindo
+    const pub = ler(sitePdf(COM_BEIRA), false);
+    expect(vizinhos(pub.bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: "light-and-blood", proximo: null, fora: false });
+  });
+
+  test("pula MAIS DE UMA história seguida, para os dois lados: só a primeira já lançada conta", () => {
+    // Beira de Estrada (7) sem capítulo entre Pederneira (6) e O Pêndulo (11), este já com capítulo
+    const pre = ler(sitePdf(COM_PENDULO), true);
+    expect(vizinhos(pre.bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: "light-and-blood", proximo: "the-pendulum", fora: false });
+    expect(vizinhos(pre.bloco("the-pendulum", "pt"), "chrono")).toEqual({ anterior: "firestriker", proximo: null, fora: false });
+    // lançamento: Luz & Sangue (3) → (Beira, pulada) → O Pêndulo (6)
+    expect(vizinhos(pre.bloco("light-and-blood", "pt"), "release")).toEqual({ anterior: "firestriker", proximo: "the-pendulum", fora: false });
+    expect(vizinhos(pre.bloco("the-pendulum", "pt"), "release")).toEqual({ anterior: "light-and-blood", proximo: null, fora: false });
+    // e a anterior também pula: duas sem capítulo logo antes da atual
+    const arquivos = {
+      "works/a/work.json": wj({ kind: "prose", title: "A", order: { release: 1, chrono: 1 } }),
+      ...cap("a"),
+      "works/b-breve/work.json": wj({ kind: "prose", title: "B", draft: true, order: { release: 2, chrono: 2 } }),
+      "works/c-breve/work.json": wj({ kind: "prose", title: "C", order: { release: 3, chrono: 3 } }), // pública, mas sem capítulo e sem link: "Em breve" em Histórias
+      "works/d/work.json": wj({ kind: "prose", title: "D", order: { release: 4, chrono: 4 } }),
+      ...cap("d"),
+    };
+    const r = ler(arquivos, true);
+    expect(vizinhos(r.bloco("d", "pt"), "chrono")).toEqual({ anterior: "a", proximo: null, fora: false });
+    expect(vizinhos(r.bloco("a", "pt"), "release")).toEqual({ anterior: null, proximo: "d", fora: false });
+  });
+
+  test("obra pública sem capítulo mas com link externo conta como lançada (HDVR); sem link e sem capítulo, não", () => {
+    const { bloco } = ler(sitePdf(), false);
+    expect(vizinhos(bloco("firestriker", "pt"), "release").anterior).toBe("hdvr");
+    const sem = ler({ ...sitePdf(), "works/promessa/work.json": wj({ kind: "prose", title: "Promessa", order: { release: 2.5, chrono: 5.5 } }) }, false);
+    expect(vizinhos(sem.bloco("firestriker", "pt"), "release")).toEqual({ anterior: "hdvr", proximo: "light-and-blood", fora: false });
+    expect(vizinhos(sem.bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: "light-and-blood", proximo: null, fora: false });
   });
 
   test("nas pontas: o lado de fora fica vazio (primeira da ordem sem anterior, última sem seguinte)", () => {
     const pub = ler(sitePdf(), false);
     expect(vizinhos(pub.bloco("light-and-blood", "pt"), "chrono").anterior).toBeNull(); // a primeira da cronológica publicada
     expect(vizinhos(pub.bloco("light-and-blood", "pt"), "release").proximo).toBeNull(); // a última do lançamento publicado
-    const pre = ler(sitePdf(), true);
-    expect(vizinhos(pre.bloco("roadside", "pt"), "chrono").proximo).toBe("the-pendulum");
+    const pre = ler(sitePdf(COM_BEIRA), true);
+    expect(vizinhos(pre.bloco("roadside", "pt"), "chrono").proximo).toBeNull(); // Beira é a última com algo lançado (O Pêndulo, sem capítulo, não conta)
     expect(vizinhos(pre.bloco("light-and-blood", "pt"), "chrono").anterior).toBeNull();
   });
 
   test("o título e o verbo de cada lado seguem o tipo da obra de DESTINO; o título de cima, o da obra ATUAL", () => {
-    const { bloco } = ler(sitePdf(), true);
+    const { bloco } = ler(sitePdf(COM_BEIRA), true);
     const ped = bloco("firestriker", "pt");
     expect(ped.titulo).toBe("estou lendo em ordem");
     expect(ped.listas.chrono.anterior?.rotulo).toBe("Assistir Light & Blood"); // Luz & Sangue é vídeo
-    // Beira de Estrada é rascunho SEM capítulo ainda… neste site inventado ela tem capítulo: "Ler"
-    expect(ped.listas.chrono.proximo?.rotulo).toBe("Ler Beira de Estrada");
+    expect(ped.listas.chrono.proximo?.rotulo).toBe("Ler Beira de Estrada"); // com um capítulo, a Beira de Estrada entra na prévia
     expect(bloco("light-and-blood", "pt").titulo).toBe("estou assistindo em ordem");
     expect(bloco("firestriker", "en").listas.chrono.proximo?.rotulo).toBe("Read Roadside");
     expect(bloco("firestriker", "en").titulo).toBe("I’m reading in");
@@ -143,7 +198,7 @@ describe("a história nova 'entre' duas: os vizinhos se ajustam sozinhos", () =>
     ...cap("golfinho"),
   });
   test("publicado na prévia: Beira de Estrada → Golfinho → O Pêndulo", () => {
-    const { bloco } = ler(sitePdf(golfinho(true)), true);
+    const { bloco } = ler(sitePdf({ ...golfinho(true), ...COM_BEIRA, ...COM_PENDULO }), true);
     expect(vizinhos(bloco("roadside", "pt"), "chrono").proximo).toBe("golfinho");
     expect(vizinhos(bloco("the-pendulum", "pt"), "chrono").anterior).toBe("golfinho");
     expect(vizinhos(bloco("golfinho", "pt"), "release")).toEqual({ anterior: "roadside", proximo: "the-pendulum", fora: false });
@@ -246,7 +301,7 @@ describe("as regras de ordem são as do seletor de Histórias", () => {
 });
 
 describe("o destino de cada lado é o do cartão da obra em Histórias", () => {
-  test("link externo (HDVR), capítulo de obra de capítulo único, página da obra e 'em breve'", () => {
+  test("link externo (HDVR), capítulo de obra de capítulo único, página da obra; obra sem nada para abrir não tem lado (é pulada)", () => {
     const { dados } = ler(sitePdf(), true);
     const lado = (slug: string, lang: Lang = "pt") => {
       const d = dados[lang];
@@ -254,12 +309,12 @@ describe("o destino de cada lado é o do cartão da obra em Histórias", () => {
       if (!o) throw new Error(slug);
       return ladoDaObra(o, lang, d.capitulosDe(o), true);
     };
-    expect(lado("hdvr").destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
-    expect(lado("firestriker").destino).toEqual({ tipo: "link", href: "/pt/works/firestriker/01/", externo: false }); // oneshot → o capítulo
-    expect(lado("light-and-blood").destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/", externo: false }); // seriada → a página da obra
-    expect(lado("the-pendulum").destino).toEqual({ tipo: "em-breve" });
-    expect(lado("the-pendulum").rotulo).toBe("Em breve: O Pêndulo");
-    expect(lado("the-pendulum", "en").rotulo).toBe("Coming soon: The Pendulum");
+    expect(lado("hdvr")?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
+    expect(lado("firestriker")?.destino).toEqual({ tipo: "link", href: "/pt/works/firestriker/01/", externo: false }); // oneshot → o capítulo
+    expect(lado("light-and-blood")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/", externo: false }); // seriada → a página da obra
+    // rascunho sem capítulo = o cartão cinza "Em breve": não vira lado do bloco, nem em português nem em inglês
+    expect(lado("the-pendulum")).toBeNull();
+    expect(lado("roadside", "en")).toBeNull();
   });
 
   test("para TODA obra do conteúdo de verdade, nos dois modos e idiomas: o destino é o botão do cartão", () => {
@@ -269,8 +324,9 @@ describe("o destino de cada lado é o do cartão da obra em Histórias", () => {
         const d = dados[lang];
         for (const o of d.universo) {
           const botao = cartaoDaObra(o, lang, d.capitulosDe(o), comRascunhos).botao;
-          const destino = ladoDaObra(o, lang, d.capitulosDe(o), comRascunhos).destino;
-          expect(destino, `${o.data._origem.slug} ${lang}`).toEqual(botao.tipo === "link" ? { tipo: "link", href: botao.href, externo: botao.externo } : { tipo: "em-breve" });
+          const lado = ladoDaObra(o, lang, d.capitulosDe(o), comRascunhos);
+          // cartão com botão = lado com o mesmo destino; cartão cinza "Em breve" = sem lado (a obra é pulada)
+          expect(lado?.destino, `${o.data._origem.slug} ${lang}`).toEqual(botao.tipo === "link" ? { tipo: "link", href: botao.href, externo: botao.externo } : undefined);
         }
       }
     }
@@ -300,14 +356,14 @@ describe("o verbo e a arte de cada obra", () => {
   test("arte própria (order_images) ou, sem ela, a capa — e sem capa, a logo; sem nada, null", () => {
     const { dados } = ler(sitePdf({ "works/so-logo/work.json": wj({ kind: "prose", title: "So Logo", logo: "logos/x.png", order: { release: 9 } }), "works/nada/work.json": wj({ kind: "prose", title: "Nada", order: { release: 10 } }) }), true);
     const arte = (slug: string) => arteDaObra(dados.pt.obras.find((x) => x.data._origem.slug === slug)!, "pt");
-    expect(arte("light-and-blood")).toEqual({ principal: "ordem/lb-1.png", hover: "ordem/lb-2.png", ehCapa: false });
-    expect(arte("firestriker")).toEqual({ principal: "covers/fs.png", hover: null, ehCapa: true });
-    expect(arte("so-logo")).toEqual({ principal: "logos/x.png", hover: null, ehCapa: true });
+    expect(arte("light-and-blood")).toEqual({ tipo: "imagens", principal: "ordem/lb-1.png", hover: "ordem/lb-2.png", ehCapa: false });
+    expect(arte("firestriker")).toEqual({ tipo: "imagens", principal: "covers/fs.png", hover: null, ehCapa: true });
+    expect(arte("so-logo")).toEqual({ tipo: "imagens", principal: "logos/x.png", hover: null, ehCapa: true });
     expect(arte("nada")).toBeNull();
   });
   test("order_images com uma imagem só: sem a de mouse por cima; com três: erro no build", () => {
     const um = ler(sitePdf({ "works/um/work.json": wj({ kind: "prose", title: "Um", order_images: ["ordem/um-1.png"] }) }), true);
-    expect(arteDaObra(um.dados.pt.obras.find((x) => x.data._origem.slug === "um")!, "pt")).toEqual({ principal: "ordem/um-1.png", hover: null, ehCapa: false });
+    expect(arteDaObra(um.dados.pt.obras.find((x) => x.data._origem.slug === "um")!, "pt")).toEqual({ tipo: "imagens", principal: "ordem/um-1.png", hover: null, ehCapa: false });
     expect(() => ler(sitePdf({ "works/tres/work.json": wj({ kind: "prose", title: "Tres", order_images: ["a.png", "b.png", "c.png"] }) }), true)).toThrow(/no máximo 2 imagens/);
   });
 });
@@ -343,11 +399,17 @@ describe("o componente ProximaHistoria", () => {
     expect(lancamento).toContain("so-side next");
   });
 
-  test("um lado sem nada para abrir (Em breve) não é link; obra fora da ordem mostra o aviso", async () => {
-    const pre = ler(sitePdf(), true);
-    const html = await container.renderToString(ProximaHistoria, { props: { bloco: pre.bloco("roadside", "pt") } });
-    expect(html).toContain('<div class="so-side next is-cover so-soon">');
-    expect(html).toContain("Em breve: O Pêndulo");
+  test("nada de \"Em breve\" (T17h): o bloco de todas as obras, nos dois idiomas e modos, só tem links; obra fora da ordem mostra o aviso", async () => {
+    for (const comRascunhos of [false, true]) {
+      const r = ler(sitePdf(), comRascunhos);
+      for (const lang of langs) {
+        for (const o of r.dados[lang].obras) {
+          const html = await container.renderToString(ProximaHistoria, { props: { bloco: r.bloco(o.data._origem.slug, lang) } });
+          expect(html, `${o.data._origem.slug} ${lang}`).not.toMatch(/so-soon|Em breve|Coming soon/);
+          expect(html.match(/<div class="so-side/g)).toBeNull(); // todo lado é um <a>
+        }
+      }
+    }
     const fora = ler({ "works/a-fora/work.json": wj({ kind: "prose", title: "A Fora", order: { release: 1, chrono: false } }), ...cap("a-fora") }, false);
     const html2 = await container.renderToString(ProximaHistoria, { props: { bloco: fora.bloco("a-fora", "pt") } });
     expect(html2).toContain('<p class="so-note">Esta história fica fora da ordem cronológica.</p>');
@@ -358,6 +420,72 @@ describe("o componente ProximaHistoria", () => {
     const html = await container.renderToString(ProximaHistoria, { props: { bloco: ataque.bloco("firestriker", "pt") } });
     expect(html).not.toContain("<img src=x");
     expect(html).toContain("&lt;img src=x");
+  });
+});
+
+// ───────────── a arte em camadas (T17h) ─────────────
+
+/** A composição de Pederneira (as camadas do work.json de verdade, em miniatura): o Thymorr surge atrás, a Olivia e o Harry crescem. */
+const ARTE_PEDERNEIRA = {
+  size: [2002, 2023],
+  layers: [
+    { image: "ordem/Thymorr Site Cronologia.png", x: 62.18, y: 44.52, width: 61.66, opacity: 0, hover: { x: 69.18, opacity: 1 } },
+    { image: "ordem/Harry Site Cronologia.png", x: 32.19, y: 70.19, width: 50.3, hover: { x: 27.3, y: 71.56, width: 53.85, rotate: -5.54 } },
+    { image: "ordem/Olivia Site Cronologia.png", x: 55.09, y: 65.42, width: 46.25, hover: { x: 55.48, y: 63.54, width: 48.9 } },
+  ],
+} as const;
+
+describe("a arte em camadas: do work.json para o que o componente desenha", () => {
+  test("proporção da tela, ordem (de trás para a frente) e variáveis de CSS de cada camada", () => {
+    const arte = arteEmCamadas(ARTE_PEDERNEIRA);
+    expect(arte.proporcao).toBe("2002 / 2023");
+    expect(arte.camadas.map((c) => c.imagem)).toEqual(["ordem/Thymorr Site Cronologia.png", "ordem/Harry Site Cronologia.png", "ordem/Olivia Site Cronologia.png"]);
+    expect(arte.camadas[0]?.estilo).toBe("--x:62.18%;--y:44.52%;--w:61.66%;--o:0;--hx:69.18%;--ho:1");
+    expect(arte.camadas[1]?.estilo).toBe("--x:32.19%;--y:70.19%;--w:50.3%;--hx:27.3%;--hy:71.56%;--hw:53.85%;--hr:-5.54deg");
+    expect(arte.camadas[2]?.estilo).toBe("--x:55.09%;--y:65.42%;--w:46.25%;--hx:55.48%;--hy:63.54%;--hw:48.9%");
+  });
+  test("só a camada cuja opacidade muda com o mouse 'surge' (é a única que aparece com movimento reduzido)", () => {
+    expect(arteEmCamadas(ARTE_PEDERNEIRA).camadas.map((c) => c.surge)).toEqual([true, false, false]);
+    // opacidade escrita no hover igual à de partida não é "surgir"; sem hover nenhum, a camada fica parada
+    const arte = arteEmCamadas({ size: [10, 10], layers: [{ image: "a.png", x: 1, y: 1, width: 1, hover: { opacity: 1 } }, { image: "b.png", x: 2, y: 2, width: 2 }, { image: "c.png", x: 3, y: 3, width: 3, opacity: 1, hover: { opacity: 0 } }] });
+    expect(arte.camadas.map((c) => c.surge)).toEqual([false, false, true]);
+    expect(arte.camadas[1]?.estilo).toBe("--x:2%;--y:2%;--w:2%");
+  });
+  test("números sem notação científica nem zeros à toa", () => {
+    expect(estiloDaCamada({ image: "a.png", x: 0.00001, y: 50, width: 12.3456789 })).toBe("--x:0%;--y:50%;--w:12.3457%");
+  });
+});
+
+describe("a arte em camadas no bloco", () => {
+  const comCamadas = (extra: Record<string, unknown> = {}) =>
+    sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_art: ARTE_PEDERNEIRA, ...extra }), ...cap("light-and-blood") });
+
+  test("`order_art` vale no lugar de `order_images` (se houver os dois, as camadas ganham)", () => {
+    const so = ler(comCamadas(), false);
+    const arte = arteDaObra(so.dados.pt.obras.find((x) => x.data._origem.slug === "light-and-blood")!, "pt");
+    expect(arte?.tipo).toBe("camadas");
+    const dois = ler(comCamadas({ order_images: ["ordem/lb-1.png", "ordem/lb-2.png"] }), false);
+    expect(arteDaObra(dois.dados.pt.obras.find((x) => x.data._origem.slug === "light-and-blood")!, "pt")?.tipo).toBe("camadas");
+  });
+
+  test("o componente desenha uma <img> por camada, de trás para a frente, na tela com a proporção da arte; sem 'so-img' (não é a troca de duas imagens)", async () => {
+    const { bloco } = ler(comCamadas(), false);
+    const html = await container.renderToString(ProximaHistoria, { props: { bloco: bloco("firestriker", "pt") } });
+    const cronologica = /<div class="so-order" data-ordem="chrono">([\s\S]*?)<\/div><div class="so-order"/.exec(html)?.[1] ?? "";
+    expect(cronologica).toContain('<span class="so-art so-layers" style="--ar:2002 / 2023">');
+    const imgs = [...cronologica.matchAll(/<img class="(so-layer[^"]*)" src="([^"]+)" alt="" loading="lazy" style="([^"]+)"/g)];
+    expect(imgs.map((m) => m[2])).toEqual(["/ordem/Thymorr%20Site%20Cronologia.png", "/ordem/Harry%20Site%20Cronologia.png", "/ordem/Olivia%20Site%20Cronologia.png"]);
+    expect(imgs.map((m) => m[1])).toEqual(["so-layer so-surge", "so-layer", "so-layer"]);
+    expect(imgs[1]?.[3]).toContain("--hr:-5.54deg");
+    expect(cronologica).not.toContain("so-img");
+    expect(cronologica).not.toContain("is-cover");
+  });
+
+  test("a arte em camadas não leva classes nem elementos fora dos que a exceção de paridade conhece", async () => {
+    const { bloco } = ler(comCamadas(), false);
+    const html = await container.renderToString(ProximaHistoria, { props: { bloco: bloco("firestriker", "pt") } });
+    const classes = new Set([...html.matchAll(/class="([^"]*)"/g)].flatMap((m) => (m[1] ?? "").split(/\s+/)));
+    for (const c of classes) expect(c, `classe fora do bloco: ${c}`).toMatch(/^(reader-box|paper|story-order|so-[a-z0-9-]+|prev|next|is-cover)$/);
   });
 });
 

@@ -168,16 +168,52 @@ O visitante escolhe **Lançamento**, **Cronológica** ou **Alfabética** e pode 
 
 No fim de cada capítulo (entre o texto e os comentários) há uma caixa com a frase **"estou lendo em ordem"** (ou "estou assistindo…" / "estou jogando…", conforme o tipo da história em que o visitante está) e um seletor **Cronológica / Lançamento**. À esquerda fica a história que vem **antes** nessa ordem, à direita a que vem **depois**; o botão diz "Ler …", "Assistir …" ou "Jogar …" conforme o tipo da história de **destino** e vai ao mesmo lugar do cartão dela em Histórias (obra de link externo, como *Alô? Residência dos Di Vario*, leva ao link externo). A primeira da ordem fica sem lado esquerdo e a última sem lado direito. O site lembra a ordem que o visitante escolheu (no navegador dele); na primeira visita vale a Cronológica.
 
-- **Quem entra:** só as histórias que existem no site naquele momento. No site publicado, as publicadas; na prévia, também as em rascunho. Quando você publica uma história nova, quem vinha antes e depois dela se ajusta sozinho (use os números de `order` do `work.json`, como já faz).
+- **Quem entra:** só as histórias que existem no site naquele momento **e que já têm algo lançado**. No site publicado, as publicadas; na prévia, também as de rascunho que já têm capítulo. Quando você publica uma história nova, quem vinha antes e depois dela se ajusta sozinho (use os números de `order` do `work.json`, como já faz).
 - **Quem não tem número** na ordem (ex.: `"chrono": false`) não entra nela; nessa ordem, a caixa avisa que a história fica fora dela.
-- **Uma história que já aparece no site mas ainda não tem nada para abrir** entra na sequência como "Em breve: Título", sem link.
-- **As imagens (um personagem de cada lado):** ponha os arquivos em `static/ordem/` e ligue-os à obra no `work.json`:
+- **Nada de "Em breve" (desde 21/10):** uma história que ainda não tem nada lançado (rascunho sem capítulo; obra sem capítulo e sem link externo, que em Histórias é o cartão cinza "Em breve") é **pulada**: a caixa vai direto para a próxima já lançada, para os dois lados. Hoje, por exemplo, depois de *Pederneira* na Cronológica não vem ninguém, porque *Beira de Estrada* e *O Pêndulo* ainda não têm capítulo. No dia em que a Beira de Estrada ganhar o primeiro capítulo (e na prévia enquanto ela for rascunho), ela entra sozinha.
+- **A arte de cada lado, de três jeitos** (vale o primeiro que a obra tiver no `work.json`):
+  1. **Camadas animadas (`order_art`)**: vários personagens empilhados que se mexem quando o mouse passa por cima (ou o link recebe o foco do teclado). Hoje: *Luz & Sangue*, *Alô? Residência dos Di Vario* e *Pederneira*. Veja o passo a passo logo abaixo.
+  2. **Duas imagens (`order_images`)**: a primeira é a normal; a segunda **aparece quando o mouse passa por cima**, com um leve crescimento (sem o crescimento para quem pediu menos movimento no aparelho). Pode ser só uma (então não troca). Hoje: *Beira de Estrada* (`"order_images": ["ordem/Beira de Estrada-ordem-1.png", "ordem/Beira de Estrada-ordem-2.png"]`).
+  3. **A capa da obra**, quando não há nada acima (e, sem capa, a logo). Hoje: *Ossos do Ofício* e *O Pêndulo*.
 
-  ```json
-  "order_images": ["ordem/Beira de Estrada-ordem-1.png", "ordem/Beira de Estrada-ordem-2.png"]
-  ```
+  As imagens não são espelhadas: o personagem olha para onde o desenho olha, de qualquer lado em que fique.
 
-  A primeira é a imagem normal; a segunda é a que **aparece quando o mouse passa por cima** (ou o link recebe o foco do teclado), com um leve crescimento (sem o crescimento para quem pediu menos movimento no aparelho). Pode ser só uma imagem (então não troca) ou nenhuma: sem `order_images` a caixa usa a **capa** da obra (e, sem capa, a logo). As imagens não são espelhadas: o personagem olha para onde o desenho olha, de qualquer lado em que fique. Hoje há imagens para *Luz & Sangue* e *Beira de Estrada*; *Luz e Sangue-ordem-1* e *-ordem-2* são idênticas, então lá só o crescimento aparece no mouse.
+#### Como montar a arte em camadas de uma obra nova (`order_art`)
+
+O que você faz do seu lado:
+
+1. **Uma tela de montagem.** No seu editor de imagens, monte os personagens como quer que apareçam **antes** do mouse e salve esse "composto" (ex.: `Luz e Sangue Site Cronologia.png`, 2087 × 1752). Salve outro como quer que fique **com o mouse por cima** (`… hover.png`), na **mesma tela**. Tudo o que o estado do mouse tiver de fora da tela é cortado, então o composto do mouse é que define o tamanho da tela (foi assim com Luz & Sangue e Pederneira).
+2. **Um PNG por personagem**, com fundo transparente (ex.: `Ellie Site Cronologia.png`), em `static/ordem/`, com o nome que você deu. Mande para mim também os dois compostos: com eles, eu **meço** a posição, o tamanho e o giro de cada personagem (foi assim que as três artes de hoje foram feitas) e escrevo os números no `work.json`.
+3. Diga o que acontece no mouse para o que não aparece nos compostos (ex.: "o Thymorr começa um pouco mais para o centro e some").
+
+O que fica escrito em `content/works/<obra>/work.json` (exemplo real, resumido, de *Pederneira*):
+
+```json
+"order_art": {
+  "size": [2002, 2023],
+  "layers": [
+    { "image": "ordem/Thymorr Site Cronologia.png", "x": 62.18, "y": 44.52, "width": 61.66, "opacity": 0, "hover": { "x": 69.18, "opacity": 1 } },
+    { "image": "ordem/Harry Site Cronologia.png", "x": 32.19, "y": 70.19, "width": 50.3, "hover": { "x": 27.3, "y": 71.56, "width": 53.85, "rotate": -5.54 } },
+    { "image": "ordem/Olivia Site Cronologia.png", "x": 55.09, "y": 65.42, "width": 46.25, "hover": { "x": 55.48, "y": 63.54, "width": 48.9 } }
+  ]
+}
+```
+
+| Campo | O que é |
+|---|---|
+| `size` | `[largura, altura]` da tela de montagem, em pixels. Só importa a **proporção** (a arte inteira se ajusta ao espaço da caixa). |
+| `layers` | As camadas **de trás para a frente**: a última fica na frente (Ellie na frente de John e Oliver; Olivia na frente do Harry; o Thymorr, atrás de todos). |
+| `image` | O PNG da camada, dentro de `static/` (ex.: `ordem/Ellie Site Cronologia.png`). |
+| `x`, `y` | O **centro** da camada, em % da largura (`x`) e da altura (`y`) da tela. |
+| `width` | A largura da camada, em % da largura da tela. A altura acompanha o desenho, sem deformar. |
+| `rotate` | Giro, em graus, em volta do centro (positivo = para a direita). Opcional. |
+| `opacity` | De 0 (invisível) a 1. Opcional (padrão 1). |
+| `hover` | **Só o que muda** com o mouse por cima (`x`, `y`, `width`, `rotate`, `opacity`); o que não aparece aqui fica como estava. Sem `hover`, a camada fica parada. |
+
+Como se comporta: **uma transição só** (0,6 s, suave, a mesma para todas as camadas) leva do começo ao estado do mouse, e volta quando o mouse sai; vale também para o teclado. Sem JavaScript a composição já aparece (é só CSS). Para quem pediu **menos movimento** no aparelho nada se mexe nem gira; só aparecem de uma vez as camadas cuja opacidade muda (o Thymorr, já no lugar final). No celular a composição encolhe junto com a coluna, sem rolagem para o lado. Se uma imagem do `order_art` não existir em `static/`, o build avisa. Se a obra tiver `order_art` **e** `order_images`, as camadas ganham. Os mesmos arquivos passam pelas versões leves (WebP) do site; o John, que é pequeno (216 × 448), não é ampliado além do tamanho real dele.
+
+Para **mudar** uma arte que já existe (afastar mais o Lucas do Wellersson, o Thymorr começar mais perto do centro…), mexa só nos números do `hover` (ou me peça).
+
 - **Textos da caixa:** estão em `src/lib/textosDaOrdem.ts` (não no `config.json`). Os em inglês são uma proposta, para você aprovar ou trocar.
 
 ### Filtro por tipo de mídia
@@ -274,6 +310,13 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 - *Stories* e *About* sempre aparecem; *News Feed* aparece quando há notícias publicadas; *Support* aparece quando existir a página `content/pages/support/` sem `draft: true`.
 - *Extras* agrupa Universo, Personagens e qualquer página com `menu: extras` no topo.
 - **Extras retirado por enquanto:** `config.json → "show_extras": false` (menu, páginas de Universo/Personagens e o botão da home). Para voltar, troque para `true`.
+
+### Redes sociais do rodapé e os canais do YouTube (desde 21/10)
+
+- O rodapé de todas as páginas mostra o ícone de cada rede (Instagram, YouTube, TikTok, X). Os endereços vêm do `config.json → socials`.
+- **O ícone do YouTube leva ao canal do idioma da página** (só no site novo, Astro): páginas em inglês → `https://www.youtube.com/@HateCycleEn`; páginas em português → `https://www.youtube.com/@HateCycleBR`. Esses dois endereços moram em **um lugar só**: `src/lib/canais.ts` (`CANAIS_DO_YOUTUBE`, uma linha por idioma). Para trocar um canal, troque a linha do idioma ali (ou me peça); o `config.json` não precisa mudar, e o endereço antigo dele (`@HateCycle`) deixa de aparecer no site novo.
+- Outro lugar do site que precise levar ao canal do Hᴀᴛᴇ Cʏᴄʟᴇ deve usar o mesmo mapa (`canalDoYoutube(lang)`), para as duas línguas ficarem sempre certas.
+- **Página Apoio (português):** o link "Inscreva-se no canal no YouTube" leva ao **seu canal pessoal**, `https://www.youtube.com/@LuscaSharktopus` (escrito direto em `content/pages/support/pt.md`; vale nos dois geradores). A página Apoio em inglês não tem link de YouTube.
 
 ## 14. Aparência: cores, fontes e seus ajustes
 

@@ -21,6 +21,8 @@
 //         atributo data-embed-servico saem do Astro (tests/ajudantes/html.ts → semScriptsDosPosts, semQuadrosDosPosts). A ferramenta
 //         confere, página a página, que o Python tinha tantos scripts quanto o Astro tem quadros, e que só as páginas com quadro
 //         levam o script empacotado dos quadros;
+//   T17h  o ícone do YouTube do rodapé leva ao canal do idioma no Astro (@HateCycleEn / @HateCycleBR; o Python tem @HateCycle): troca só o
+//         href dessa <a> (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython), exigindo 1 por página e o canal do idioma da URL;
 //   T17   <link> de fontes (Google no Python; preload no Astro) saem; os ícones (1 no Python, 32+192 px no Astro) viram um só;
 //   T17   o fundo da tela de abertura: /intro/fundo.png (Python) × /intro/fundo_<hash>.jpeg (Astro, versão leve);
 //   T17   os 5 atributos das versões leves das <img> com srcset (régua de tests/ajudantes/html.ts);
@@ -37,7 +39,7 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
-import { canonico, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts } from "../tests/ajudantes/html.ts";
+import { canalDoYoutubeComoNoPython, canonico, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts } from "../tests/ajudantes/html.ts";
 
 // ───────────── argumentos ─────────────
 const args = process.argv.slice(2);
@@ -175,6 +177,13 @@ function normalizar(html, lado, url, existe) {
       if (s.removidos.length !== 1 || !s.filhasDiretasDoMain.every(Boolean)) falha(url, "bloco de ordem: não é 1 filho direto do <main>");
     }
     html = s.html;
+    // T17h: o ícone do YouTube do rodapé leva ao canal do idioma (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython): troca só o href dessa <a>
+    const lang = /^\/(en|pt)\//.exec(url)?.[1];
+    const y = canalDoYoutubeComoNoPython(html, lang);
+    if (y.trocados) conta("T17h: canal do YouTube por idioma no rodapé (Astro)", url);
+    if (y.errados) falha(url, "o ícone do YouTube do rodapé leva ao canal do OUTRO idioma");
+    if (lang && y.trocados !== 1) falha(url, `o rodapé devia ter 1 ícone do YouTube com o canal do idioma (tem ${y.trocados})`);
+    html = y.html;
   }
   html = comMarcadores(html);
   const doc = parse(html);

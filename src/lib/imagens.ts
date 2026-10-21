@@ -60,6 +60,9 @@ export const PERFIS = {
   /** Bloco "estou lendo em ordem…" do fim do capítulo (T17c): a arte de cada lado, ~34% da folha (até ~340 px; 46% da tela no celular), com transparência.
    *  Também serve à capa usada no lugar da arte (obra sem `order_images`). */
   ordemDeLeitura: { nome: "ordem-de-leitura", larguras: [300, 600, 900], sizes: "(max-width: 700px) 46vw, 340px", qualidade: 85 },
+  /** Bloco "estou lendo em ordem…": uma CAMADA da arte animada (T17h; um personagem com fundo transparente). A tela de montagem ocupa o mesmo
+   *  espaço da arte de um lado (até ~340 px; 46% da tela no celular) e a camada, uma fração dela: as larguras vão até o tamanho da tela em tela 2x. */
+  camadaDaOrdem: { nome: "camada-da-ordem", larguras: [160, 320, 640, 960], sizes: "(max-width: 700px) 46vw, 340px", qualidade: 85 },
   /** Logo do título de um capítulo (as "title-image"): 159–370 px, com transparência. */
   tituloDeCapitulo: { nome: "titulo-de-capitulo", larguras: [380, 760], sizes: "380px", qualidade: 85 },
   /** Páginas de quadrinho no leitor: a largura do leitor, até 900 px. */

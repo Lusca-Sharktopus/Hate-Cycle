@@ -22,8 +22,6 @@ export interface TextosDaOrdem {
   ordem: Record<OrdemDeLeitura, string>;
   /** O verbo de cada lado, conforme o tipo da obra de DESTINO ("Assistir Luz & Sangue"). */
   verbo: Record<Verbo, string>;
-  /** Lado de uma obra que está no site mas ainda não tem nada para abrir (o cartão cinza "Em breve" de Histórias). `{titulo}` = nome da obra. */
-  emBreve: string;
   /** A obra atual existe no site, mas fora da ordem escolhida (`"chrono": false` no work.json: ex. Alô? Residência dos Di Vario na cronológica). */
   foraDaOrdem: Record<OrdemDeLeitura, string>;
 }
@@ -33,7 +31,6 @@ export const TEXTOS_DA_ORDEM: Readonly<Record<Lang, TextosDaOrdem>> = {
     titulo: { read: "estou lendo em ordem", watch: "estou assistindo em ordem", play: "estou jogando em ordem" },
     ordem: { chrono: "Cronológica", release: "Lançamento" },
     verbo: { read: "Ler", watch: "Assistir", play: "Jogar" },
-    emBreve: "Em breve: {titulo}",
     foraDaOrdem: {
       chrono: "Esta história fica fora da ordem cronológica.",
       release: "Esta história fica fora da ordem de lançamento.",
@@ -43,7 +40,6 @@ export const TEXTOS_DA_ORDEM: Readonly<Record<Lang, TextosDaOrdem>> = {
     titulo: { read: "I’m reading in", watch: "I’m watching in", play: "I’m playing in" },
     ordem: { chrono: "Chronological order", release: "Release order" },
     verbo: { read: "Read", watch: "Watch", play: "Play" },
-    emBreve: "Coming soon: {titulo}",
     foraDaOrdem: {
       chrono: "This story sits outside the chronological order.",
       release: "This story sits outside the release order.",

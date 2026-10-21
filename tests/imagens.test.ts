@@ -86,6 +86,8 @@ describe("perfilDoLugar: o lugar da imagem decide o perfil", () => {
     expect(perfilDoLugar(lugar("title-image"))).toBe(PERFIS.tituloDeCapitulo);
     expect(perfilDoLugar(lugar("so-img so-img-1"))).toBe(PERFIS.ordemDeLeitura); // T17c: arte do bloco "estou lendo em ordem"
     expect(perfilDoLugar(lugar("so-img so-img-2"))).toBe(PERFIS.ordemDeLeitura);
+    expect(perfilDoLugar(lugar("so-layer"))).toBe(PERFIS.camadaDaOrdem); // T17h: cada personagem da arte em camadas
+    expect(perfilDoLugar(lugar("so-layer so-surge"))).toBe(PERFIS.camadaDaOrdem);
     expect(perfilDoLugar(lugar("", "comic"))).toBe(PERFIS.paginaDeQuadrinho);
     expect(perfilDoLugar(lugar("", "lead"))).toBe(PERFIS.figuraDeNoticia);
   });

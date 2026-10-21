@@ -60,18 +60,28 @@ const nomeDaInicial = b.opcoes.find((o) => o.valor === b.ordemInicial)?.rotulo ?
     .so-label { display: flex; flex-direction: column; gap: .3rem; max-width: 100%; margin-top: .1rem; font-size: clamp(.95rem, 2.5vw, 1.8rem); font-weight: 500; line-height: 1.2; text-shadow: 1px 2px 3px #00000030; text-wrap: balance; }
     .so-side.next .so-label { align-items: flex-end; }
     .so-arrow { display: block; width: clamp(62px, 10vw, 125px); height: auto; filter: drop-shadow(1px 2px 2px #00000030); }
-    .so-side.so-soon { opacity: .75; }
+
+    /* Arte em CAMADAS (T17h, `order_art` do work.json): a tela de montagem tem a proporção da arte do autor (--ar) e cada personagem é um <img>
+       posicionado pelo CENTRO (--x, --y), com largura em % da tela (--w), giro (--r) e opacidade (--o). Com o mouse por cima (ou o foco do
+       teclado) valem --hx, --hy, --hw, --hr e --ho; o que a camada não define em "hover" fica como estava (var(--hx, var(--x))). UMA transição
+       só, a mesma para todas as camadas e para os dois sentidos (ir e voltar). A tela corta o que sair dela; o estado do mouse cabe nela. */
+    .so-art.so-layers { display: block; position: relative; aspect-ratio: var(--ar); }
+    .so-layer { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto; max-width: none; translate: -50% -50%; rotate: var(--r, 0deg); opacity: var(--o, 1); pointer-events: none;
+      transition-property: left, top, width, rotate, opacity; transition-duration: .6s; transition-timing-function: cubic-bezier(.2, .7, .2, 1); }
+    a.so-side:is(:hover, :focus-visible) .so-layer { left: var(--hx, var(--x)); top: var(--hy, var(--y)); width: var(--hw, var(--w)); rotate: var(--hr, var(--r, 0deg)); opacity: var(--ho, var(--o, 1)); }
 
     /* mouse por cima (e teclado): a arte troca da 1 para a 2 com um leve crescimento */
-    a.so-side:is(:hover, :focus-visible) .so-art { transform: scale(1.07); }
+    a.so-side:is(:hover, :focus-visible) .so-art:not(.so-layers) { transform: scale(1.07); }
     a.so-side:is(:hover, :focus-visible) .so-img-2 { opacity: 1; }
     a.so-side:is(:hover, :focus-visible) .so-img-1:not(:only-child) { opacity: 0; }
     a.so-side:is(:hover, :focus-visible) .so-label { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
     a.so-side:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-radius: 12px; }
-    /* movimento reduzido: a troca acontece, mas sem crescer e sem transição */
+    /* movimento reduzido: a troca acontece, mas sem crescer e sem transição. Nas camadas nada se mexe nem gira; só as que mudam de opacidade
+       (o Thymorr) aparecem, de uma vez, já no lugar final. */
     @media (prefers-reduced-motion: reduce) {
-      .so-art, .so-img { transition: none; }
+      .so-art, .so-img, .so-layer { transition: none; }
       a.so-side:is(:hover, :focus-visible) .so-art { transform: none; }
+      a.so-side:is(:hover, :focus-visible) .so-layer:not(.so-surge) { left: var(--x); top: var(--y); width: var(--w); rotate: var(--r, 0deg); opacity: var(--o, 1); }
     }
 
     .so-note { grid-column: 1 / -1; align-self: center; margin: 5rem 0 2rem; text-align: center; font-size: 1.05rem; }

@@ -3,7 +3,7 @@
 //
 // Funções puras, sem HTML: recebem as obras já carregadas e devolvem DADOS. Quem desenha é src/components/ProximaHistoria.astro.
 // Prova: tests/ordem.test.ts (sites inventados, incluindo o exemplo do PDF do autor: Pederneira em cronológica → anterior Luz & Sangue,
-// seguinte Beira de Estrada, este só na prévia).
+// seguinte = a próxima já lançada; Beira de Estrada e O Pêndulo, sem capítulo, são puladas).
 //
 // As REGRAS DE ORDEM não são novas: usam exatamente o `organizarCartoes()` do seletor de Histórias (src/lib/seletor.ts), com a mesma lista de
 // obras que a grade de Histórias mostra (`dados.universo`: listadas, do universo, em ordem de lançamento). Por isso:
@@ -13,8 +13,14 @@
 //   - o "999" (obra sem `order.release`) é o de separarObras(): o fim da lista.
 // E o que "existe no site naquele modo" é o que a grade de Histórias mostra naquele modo: no site publicado, só as publicadas; na prévia,
 // também as de rascunho (`draft: true` no work.json). Publicar uma história nova "entre" duas faz os vizinhos se ajustarem sozinhos.
+//
+// NADA DE "EM BREVE" (T17h, pedido do autor de 21/10): uma história que ainda não tem nada lançado NAQUELE MODO (rascunho sem capítulo,
+// obra sem capítulo e sem link externo: o cartão cinza "Em breve" de Histórias) é PULADA, e o bloco vai direto para a próxima já lançada.
+// "Lançada" = o cartão dela tem botão de verdade (cartaoDaObra → botao.tipo === "link"): no site publicado contam só as públicas com algo
+// para abrir; na prévia, as públicas e os rascunhos que têm capítulo. A obra do capítulo em que o visitante está não é pulada.
 import { ORDEM_PADRAO, ORDENS } from "../scripts/ordem/regras";
 import type { Lang } from "./config";
+import { arteEmCamadas, type ArteCrua, type ArteEmCamadas } from "./artesDaOrdem";
 import { cartaoDaObra, capaDaObra, logoDaObra, tituloDaObra, valoresDeOrdem, type CapitulosDaObra, type ObraComDados } from "./obras";
 import { organizarCartoes } from "./seletor";
 import { TEXTOS_DA_ORDEM, type OrdemDeLeitura, type Verbo } from "./textosDaOrdem";
@@ -25,9 +31,9 @@ export { TEXTOS_DA_ORDEM, type OrdemDeLeitura, type Verbo } from "./textosDaOrde
 export const ORDENS_DE_LEITURA: readonly OrdemDeLeitura[] = ORDENS;
 export { ORDEM_PADRAO };
 
-/** O que as regras leem de uma obra: o que as de src/lib/obras.ts leem, mais as imagens do bloco. */
+/** O que as regras leem de uma obra: o que as de src/lib/obras.ts leem, mais a arte do bloco (`order_art` ou `order_images`). */
 export interface ObraParaOrdem extends ObraComDados {
-  data: ObraComDados["data"] & { order_images?: readonly string[] | undefined };
+  data: ObraComDados["data"] & { order_images?: readonly string[] | undefined; order_art?: ArteCrua | undefined };
 }
 
 /** Midias cujo "consumo" é assistir (vídeo, filme, curta, animação, RPG ao vivo — que é vídeo). */
@@ -49,15 +55,29 @@ export interface LadoDaOrdem {
   slug: string;
   titulo: string;
   verbo: Verbo;
-  /** O texto do link, já com o verbo e o título: "Assistir Luz & Sangue". Obra sem nada para abrir: "Em breve: Beira de Estrada". */
+  /** O texto do link, já com o verbo e o título: "Assistir Luz & Sangue". */
   rotulo: string;
-  /** Para onde vai: o MESMO lugar do cartão da obra em Histórias (link externo, capítulo, página da obra) ou lugar nenhum ("Em breve"). */
-  destino: { tipo: "link"; href: string; externo: boolean } | { tipo: "em-breve" };
+  /** Para onde vai: o MESMO lugar do cartão da obra em Histórias (link externo, capítulo ou página da obra). */
+  destino: { tipo: "link"; href: string; externo: boolean };
   /**
-   * A arte do lado: as imagens `order_images` do work.json (a normal e, se houver, a do mouse por cima) ou, sem elas, a capa da obra
-   * (`ehCapa`: o CSS a encaixa na mesma caixa); sem capa, a logo; sem nada, null (a caixa fica vazia). Caminhos relativos a static/.
+   * A arte do lado, por ordem de preferência: a composição em CAMADAS do work.json (`order_art`, T17h), as imagens `order_images` (a normal e,
+   * se houver, a do mouse por cima) ou, sem nenhuma, a capa da obra (`ehCapa`: o CSS a encaixa na mesma caixa); sem capa, a logo; sem nada,
+   * null (a caixa fica vazia). Caminhos relativos a static/.
    */
-  arte: { principal: string; hover: string | null; ehCapa: boolean } | null;
+  arte: ArteDeImagens | ArteDeCamadas | null;
+}
+
+/** A arte de uma ou duas imagens (a normal e a do mouse por cima) ou da capa. */
+export interface ArteDeImagens {
+  tipo: "imagens";
+  principal: string;
+  hover: string | null;
+  ehCapa: boolean;
+}
+
+/** A arte em camadas animadas (ver src/lib/artesDaOrdem.ts). */
+export interface ArteDeCamadas extends ArteEmCamadas {
+  tipo: "camadas";
 }
 
 /** Os dois lados de UMA ordem. */
@@ -86,26 +106,29 @@ export interface BlocoDaOrdem {
 
 /** A arte de uma obra para o bloco: ver `LadoDaOrdem.arte`. */
 export function arteDaObra(obra: ObraParaOrdem, lang: Lang): LadoDaOrdem["arte"] {
+  if (obra.data.order_art) return { tipo: "camadas", ...arteEmCamadas(obra.data.order_art) };
   const proprias = (obra.data.order_images ?? []).filter((a) => a.trim() !== "");
   const principal = proprias[0];
-  if (principal) return { principal, hover: proprias[1] ?? null, ehCapa: false };
+  if (principal) return { tipo: "imagens", principal, hover: proprias[1] ?? null, ehCapa: false };
   const capa = capaDaObra(obra, lang) || logoDaObra(obra, lang);
-  return capa ? { principal: capa, hover: null, ehCapa: true } : null;
+  return capa ? { tipo: "imagens", principal: capa, hover: null, ehCapa: true } : null;
 }
 
-/** O lado de uma obra: título, verbo, destino (o do cartão dela) e arte. */
-export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean): LadoDaOrdem {
-  const textos = TEXTOS_DA_ORDEM[lang];
+/**
+ * O lado de uma obra: título, verbo, destino (o do cartão dela) e arte. `null` = a obra ainda não tem nada lançado naquele modo (o cartão
+ * dela é o cinza "Em breve"): ela não entra na ordem (ver o topo do arquivo).
+ */
+export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean): LadoDaOrdem | null {
+  const botao = cartaoDaObra(obra, lang, capitulos, comRascunhos).botao;
+  if (botao.tipo !== "link") return null;
   const titulo = tituloDaObra(obra, lang);
   const verbo = verboDaObra(obra);
-  const botao = cartaoDaObra(obra, lang, capitulos, comRascunhos).botao;
-  const destino: LadoDaOrdem["destino"] = botao.tipo === "link" ? { tipo: "link", href: botao.href, externo: botao.externo } : { tipo: "em-breve" };
   return {
     slug: obra.data._origem.slug,
     titulo,
     verbo,
-    rotulo: destino.tipo === "link" ? `${textos.verbo[verbo]} ${titulo}` : textos.emBreve.replace("{titulo}", titulo),
-    destino,
+    rotulo: `${TEXTOS_DA_ORDEM[lang].verbo[verbo]} ${titulo}`,
+    destino: { tipo: "link", href: botao.href, externo: botao.externo },
     arte: arteDaObra(obra, lang),
   };
 }
@@ -129,12 +152,20 @@ export function blocoDaOrdem<O extends ObraParaOrdem>(
 ): BlocoDaOrdem {
   const textos = TEXTOS_DA_ORDEM[lang];
   const verbo = verboDaObra(atual);
-  const lado = (o: O | undefined): LadoDaOrdem | null => (o ? ladoDaObra(o, lang, capitulosDe(o), comRascunhos) : null);
+  const lado = (o: O): LadoDaOrdem | null => ladoDaObra(o, lang, capitulosDe(o), comRascunhos);
   const lista = (ordem: OrdemDeLeitura): ListaDaOrdem => {
     const sequencia = sequenciaDaOrdem(universo, ordem, lang);
     const i = sequencia.findIndex((o) => o.data._origem.slug === atual.data._origem.slug);
     if (i < 0) return { anterior: null, proximo: null, foraDaOrdem: true };
-    return { anterior: lado(sequencia[i - 1]), proximo: lado(sequencia[i + 1]), foraDaOrdem: false };
+    // o vizinho é o primeiro, para cada lado, que já tem algo lançado: quem ainda é "Em breve" é pulado (nada de "Em breve" no bloco)
+    const primeiroLancado = (candidatas: O[]): LadoDaOrdem | null => {
+      for (const o of candidatas) {
+        const l = lado(o);
+        if (l) return l;
+      }
+      return null;
+    };
+    return { anterior: primeiroLancado(sequencia.slice(0, i).reverse()), proximo: primeiroLancado(sequencia.slice(i + 1)), foraDaOrdem: false };
   };
   return {
     lang,

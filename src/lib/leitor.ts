@@ -183,6 +183,13 @@ export function imagensQueFaltam(data: Record<string, unknown>, pastaStatic: str
   if (Array.isArray(arteDaOrdem)) {
     arteDaOrdem.forEach((a, n) => typeof a === "string" && citados.push([`order_images.${n}`, a]));
   }
+  const camadas = (data["order_art"] as { layers?: unknown } | undefined)?.layers; // work.json (T17h): a arte em camadas
+  if (Array.isArray(camadas)) {
+    camadas.forEach((c, n) => {
+      const imagem = (c as { image?: unknown } | null)?.image;
+      if (typeof imagem === "string") citados.push([`order_art.layers.${n}.image`, imagem]);
+    });
+  }
   const stickers = data["stickers"];
   if (Array.isArray(stickers)) {
     stickers.forEach((s, n) => typeof s === "string" && citados.push([`stickers.${n}`, (s.split("|")[0] ?? "").trim()]));
