@@ -44,7 +44,7 @@ Para o visitante **nada muda**. A raiz, os redirects e o RSS saem **byte a byte 
 - O `<article>` leva a classe `page-<pasta>` (`page-about`): é onde o CSS da Sobre (os GIFs do Apollo e do Anfíbio, a foto do autor) se agarra.
 - Os atalhos `{{stories}}`, `{{emissaries}}` e `{{other-stories}}` entram pelos *slots* `atalho-*` da lição 07.
 
-**O script de GIFs do `site.js`** (bloco 3) não foi portado: o seletor dele é `.page-project .prose`, e nenhuma página tem essa classe (a Sobre é `.page-about`). Ele nunca fez nada no site de hoje. O `site.js` continua sendo carregado como está.
+**O script de GIFs do `site.js`** (bloco 3) não foi portado: o seletor dele é `.page-project .prose` com `.apollo-gif`/`.anfibio-gif` dentro, e nenhuma página tem as duas coisas juntas (a Sobre, que tem os GIFs, é `.page-about`; Histórias é `.page-project`, mas sem GIFs). Ele nunca fez nada no site de hoje (conferido página a página na T18, `tools/paridade_html.mjs`). O `site.js` continua sendo carregado como está.
 
 ## 2. Endpoints: devolver texto, não uma página
 

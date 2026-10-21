@@ -190,5 +190,5 @@ python3 tools/seletor_playwright.py --python 8791 --astro 8792
 ## O que as próximas tarefas reaproveitam
 
 - **T12 (capítulos), T13 (notícias), T14 (Sobre, raiz, 404, RSS):** acrescentem o grupo em `GRUPOS` de `tools/paginas_ref.py`, rodem o script e estendam `tests/paginas.test.ts` com o novo conjunto de URLs; a comparação (`tests/ajudantes/html.ts`) e o `BaseLayout` com `finalizarMain()` já servem. O Sobre usa `SecaoEmissarios` e os slots `atalho-*`.
-- O script do bloco 3 do `site.js` (gifs de `.page-project .prose`) não precisou ser portado: o seletor `.page-project` não existe em nenhuma página (a Sobre é `.page-about`), então ele não faz nada. O `site.js` continua sendo carregado como está (lição 09).
+- O script do bloco 3 do `site.js` (gifs de `.page-project .prose`) não precisou ser portado: nenhuma página tem `.page-project .prose` **com** GIFs dentro (a Sobre, que tem os GIFs, é `.page-about`; Histórias é `.page-project`, mas sem GIFs), então ele não faz nada (conferido na T18). O `site.js` continua sendo carregado como está (lição 09).
 - Qualquer componente novo com `<script>`: `type="module"` já é tratado por `finalizarMain()`; escreva `<style is:global>` dentro de `@layer site` (o escopo do Astro, `data-astro-cid-*`, mudaria o HTML e o `custom.css` do autor perderia a briga de especificidade).

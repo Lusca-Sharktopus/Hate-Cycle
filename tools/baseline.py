@@ -188,7 +188,9 @@ def fotografar_arquivos(site: Path, b, contagem_build):
     gerados_nao_html = sorted(p.relative_to(site).as_posix() for p in site.rglob("*")
                               if p.is_file() and p.suffix != ".html" and p.relative_to(site).as_posix() not in estaticos)
     # CNAME e favicon etc. vêm de static/; os "gerados" são feeds (e qualquer outro arquivo que o build crie)
-    de_static_relevantes = sorted(x for x in estaticos if x in ("CNAME",))
+    # CNAME e as páginas do site antigo que vivem em static/ (ex.: produtos.html, night.html: copiadas como estão,
+    # pedido do autor em 20/10/2026) contam como URL: depois da virada têm de continuar respondendo.
+    de_static_relevantes = sorted(x for x in estaticos if x == "CNAME" or (x.endswith(".html") and "/" not in x))
     ids = sorted({i for v in comentarios.values() for i in v})
     # o mesmo ID nas duas línguas = conversa compartilhada; ids por página devem ser únicos
     duplicados = {u: sorted({i for i in v if v.count(i) > 1}) for u, v in comentarios.items() if len(set(v)) != len(v)}
@@ -202,7 +204,7 @@ def fotografar_arquivos(site: Path, b, contagem_build):
 
     escrever_json(OUT_DIR / "urls.json", {
         "_leia": "html = toda página HTML gerada (URL relativa ao site); redirects_site_antigo = páginas HTML que só redirecionam (também estão em html); "
-                 "outros_gerados = arquivos não-HTML que o build cria; outros_de_static_relevantes = arquivos de static/ que o site publica e contam como URL (CNAME).",
+                 "outros_gerados = arquivos não-HTML que o build cria; outros_de_static_relevantes = arquivos de static/ que o site publica e contam como URL (CNAME e as páginas .html do site antigo guardadas na raiz de static/).",
         "total_html": len(urls_html),
         "html": urls_html,
         "redirects_site_antigo": dict(sorted(redirects.items())),

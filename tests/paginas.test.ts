@@ -269,7 +269,10 @@ function enderecoDoHtml(arquivo: string): string {
 
 describe("a lista de endereços do dist/ é a da baseline (mais o sitemap)", () => {
   test("as 193 páginas HTML são exatamente as do site atual (nenhuma a mais, nenhuma a menos)", () => {
-    const html = arquivosDe(dist).filter((a) => a.endsWith(".html")).map(enderecoDoHtml).sort();
+    // As páginas .html que vêm prontas de static/ (as do site antigo: produtos.html, night.html…) não são páginas
+    // geradas: a baseline as lista em outros_de_static_relevantes (próximo teste), como faz o tools/baseline.py.
+    const deStatic = new Set(baselineUrls.outros_de_static_relevantes.filter((f) => f.endsWith(".html")).map((f) => f.slice(1)));
+    const html = arquivosDe(dist).filter((a) => a.endsWith(".html") && !deStatic.has(a)).map(enderecoDoHtml).sort();
     expect(html).toEqual([...baselineUrls.html].sort());
     expect(html).toHaveLength(193);
   });

@@ -89,6 +89,7 @@
     "emissaries/adolas.png": "56cd56093dd0cf57",
     "emissaries/kaisui.png": "b8cf0f49d4fee349",
     "emissaries/saf.png": "ab1bf0c8de5963a0",
+    "estrada.html": "835c8afbc8092d60",
     "intro/fundo.png": "ba84e7496446d2ea",
     "intro/logo.webm": "8de976c0378e17c9",
     "logos/EN/All in a Night's Work 1.png": "ef7becc67901a0f8",
@@ -224,6 +225,7 @@
     "news/what-are-those.png": "e0864f8f1ffded77",
     "news/white-mans-wendigo.png": "e5a116cb09f8b493",
     "news/wythawnr.png": "9a192b618c26135a",
+    "night.html": "d03eedc89bfd158c",
     "ordem/Beira de Estrada-ordem-1.png": "0f5aa7c2d47c5b44",
     "ordem/Beira de Estrada-ordem-2.png": "ea3a896c80324059",
     "ordem/Luz e Sangue-ordem-1.png": "75de3012350be3a5",
@@ -247,6 +249,8 @@
     "other images/ossos-memoria-2.png": "0ce82f010ca76748",
     "other images/ossos-memoria-3.png": "de31bc17134030e7",
     "other images/ossos-memoria-vito.png": "0d2e7fb8b5bf0ad5",
+    "produtos.html": "dd6ff91590c8ac32",
+    "roadside.html": "d03eedc89bfd158c",
     "sidebar/Adolas Podcast hover.png": "1cce49ebe25f6712",
     "sidebar/Adolas Podcast.png": "968204dc2f276761",
     "sidebar/Catarse.png": "a2a3544acf3536cb",
@@ -270,5 +274,5 @@
     "support/catarse.png": "dd7c35cd2cb8cec3",
     "support/patreon.png": "e6f78775733e123e"
   },
-  "total": 268
+  "total": 272
 }

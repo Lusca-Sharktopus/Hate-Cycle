@@ -1,5 +1,5 @@
 {
-  "_leia": "html = toda página HTML gerada (URL relativa ao site); redirects_site_antigo = páginas HTML que só redirecionam (também estão em html); outros_gerados = arquivos não-HTML que o build cria; outros_de_static_relevantes = arquivos de static/ que o site publica e contam como URL (CNAME).",
+  "_leia": "html = toda página HTML gerada (URL relativa ao site); redirects_site_antigo = páginas HTML que só redirecionam (também estão em html); outros_gerados = arquivos não-HTML que o build cria; outros_de_static_relevantes = arquivos de static/ que o site publica e contam como URL (CNAME e as páginas .html do site antigo guardadas na raiz de static/).",
   "html": [
     "/",
     "/404.html",
@@ -196,7 +196,11 @@
     "/pt/works/light-and-blood/02/"
   ],
   "outros_de_static_relevantes": [
-    "/CNAME"
+    "/CNAME",
+    "/estrada.html",
+    "/night.html",
+    "/produtos.html",
+    "/roadside.html"
   ],
   "outros_gerados": [
     "/en/feed.xml",
