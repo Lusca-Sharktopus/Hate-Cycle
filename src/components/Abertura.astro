@@ -16,6 +16,11 @@
 import { assetUrl } from "../lib/assets";
 import { introConfig } from "../lib/config";
 import { fundoLeve } from "../lib/imagens";
+import { videoDaAbertura } from "../lib/videoDaAbertura";
+// O vídeo (T17e): a versão 720p do vídeo do autor (src/assets/intro/, gerada por tools/gerar_video_da_abertura.py). O Astro a publica em
+// /_astro/ com carimbo no nome. Se o autor trocar o vídeo e o 720p não for refeito, vale o original (ver src/lib/videoDaAbertura.ts).
+import urlDoVideoLeve from "../assets/intro/logo-720p.webm?url";
+import fichaDoVideoLeve from "../assets/intro/logo-720p.json";
 
 interface Props {
   parte: "cabeca" | "corpo";
@@ -26,7 +31,7 @@ const ligada = introConfig.enabled;
 const minMs = Math.trunc(introConfig.min_ms ?? 4200);
 const maxMs = Math.trunc(introConfig.max_ms ?? 10000);
 const limite = maxMs + 3000; // a trava de segurança do script do <head>
-const video = assetUrl(introConfig.video ?? "");
+const video = ligada ? videoDaAbertura(introConfig.video ?? "", fichaDoVideoLeve, urlDoVideoLeve).url : "";
 // O degradê de fundo (T17): a versão leve em JPEG (15 KB) em vez do PNG de 287 KB; sem ela (arquivo sumiu), o original. Sem isso a abertura,
 // que é a primeira coisa pintada de quem chega, esperava 287 KB (nos celulares lentos, ~4 s).
 const fundoLeveUrl = introConfig.background ? await fundoLeve(introConfig.background) : null;

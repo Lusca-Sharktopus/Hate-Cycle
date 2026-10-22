@@ -30,6 +30,8 @@
 //         href dessa <a> (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython), exigindo 1 por página e o canal do idioma da URL;
 //   T17   <link> de fontes (Google no Python; preload no Astro) saem; os ícones (1 no Python, 32+192 px no Astro) viram um só;
 //   T17   o fundo da tela de abertura: /intro/fundo.png (Python) × /intro/fundo_<hash>.jpeg (Astro, versão leve);
+//   T17e  o vídeo da abertura: /intro/logo.webm (Python) × /_astro/logo-720p.<hash>.webm (Astro, o mesmo vídeo em 720p); os GIFs animados
+//         ganham `srcset` ("1x") e width/height como toda <img> com versão leve (régua dos 5 atributos, acima);
 //   T17   os 5 atributos das versões leves das <img> com srcset (régua de tests/ajudantes/html.ts);
 //   T06   o CSS: /style.css?v= (Python) × /_astro/*.css e <style> (Astro) saem dos dois lados; o /custom.css do autor fica e é conferido;
 //   T06+  os scripts DO SITE saem da árvore dos dois lados (site.js, os inline da abertura e do menu no Python; os da abertura e os
@@ -81,12 +83,15 @@ const temAncestral = (e, quando) => {
   return false;
 };
 
+// T17e: o Python põe o vídeo do autor (/intro/logo.webm); o Astro, a versão 720p do MESMO vídeo (/_astro/logo-720p.<hash>.webm; provas em
+// tests/video-da-abertura.test.ts). É o mesmo comportamento ("a abertura cria um <video> com a logo"), só com o arquivo mais leve.
+const VIDEO_DA_ABERTURA_NO_ASTRO = /const video = "\/_astro\/logo-720p\.[A-Za-z0-9_-]+\.webm"/;
 // ───────────── os scripts do site: o que cada um é ─────────────
 // Python: static/site.js (global, em toda página; cada bloco só age se o seu seletor achar algo) + 3 inline do shell().
 // Astro: os mesmos comportamentos, um script por componente (lição 07/08/10), reconhecidos por um pedaço do código.
 const SCRIPTS_DO_ASTRO = [
   ["abertura: classe intro no <html>", (s) => s.inline && /const limite = \d+;/.test(s.texto) && /hc-intro/.test(s.texto)],
-  ["abertura: vídeo da logo", (s) => s.inline && /const video = "\/intro\/logo\.webm"/.test(s.texto)],
+  ["abertura: vídeo da logo", (s) => s.inline && VIDEO_DA_ABERTURA_NO_ASTRO.test(s.texto)],
   ["abertura: fechar (bloco 5b do site.js)", (s) => s.modulo && /getElementById\(`intro`\)/.test(s.texto) && /dataset\.min/.test(s.texto)],
   ["menu suspenso (details.dd)", (s) => s.modulo && /details\.dd\[open\]/.test(s.texto)],
   ["1 seletor de Histórias (.sorter)", (s) => s.modulo && /\[`release`,`chrono`,`alpha`\]/.test(s.texto)],
@@ -137,7 +142,7 @@ function scriptsDe(doc) {
 function ehScriptDoSite(s, lado) {
   if (/window\.HC=/.test(s.texto)) return false;
   if (lado === "python") return /^\/site\.js\?v=[0-9a-f]+$/.test(s.src) || (s.inline && /hc-intro|details\.dd\[open\]|\/intro\/logo\.webm/.test(s.texto));
-  return (s.modulo && (s.src === "" || s.src.startsWith("/_astro/"))) || (s.inline && /hc-intro|\/intro\/logo\.webm/.test(s.texto));
+  return (s.modulo && (s.src === "" || s.src.startsWith("/_astro/"))) || (s.inline && (/hc-intro/.test(s.texto) || VIDEO_DA_ABERTURA_NO_ASTRO.test(s.texto)));
 }
 
 // ───────────── as regras, uma por decisão ─────────────

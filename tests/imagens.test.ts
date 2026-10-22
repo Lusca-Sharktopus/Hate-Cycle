@@ -20,10 +20,12 @@ import { fileURLToPath } from "node:url";
 import { parse, type DefaultTreeAdapterMap } from "parse5";
 import sharp from "sharp";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import { gerarWebpAnimado, lerAnimada, urlDaAnimada } from "../src/lib/animadas";
 import { BYTES_MINIMOS, largurasDaImagem, PERFIS } from "../src/lib/imagens";
 import { arquivoDoSrc, atributosNovos, perfilDoLugar } from "../src/lib/imagensDoHtml";
 import { GLIFOS } from "../src/lib/runas";
 import { gerarSilhueta, SILHUETAS } from "../src/lib/silhuetas";
+import { cabecalhoDoWebpAnimado } from "./ajudantes/webp";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 
@@ -239,7 +241,8 @@ describe("as imagens leves de TODAS as páginas são a mesma imagem, no arquivo 
   beforeAll(() => {
     for (const arquivo of htmlsDoDist()) {
       const doc = parse(readFileSync(join(dist, arquivo), "utf8"));
-      for (const img of varrer(doc, (e) => e.tagName === "img" && attr(e, "srcset") !== undefined)) {
+      // Os GIFs animados (T17e) têm versão própria (WebP animado, descritor "1x", sem perda): são provados em "T17e no site construído", abaixo.
+      for (const img of varrer(doc, (e) => e.tagName === "img" && attr(e, "srcset") !== undefined && !/\.gif$/i.test(attr(e, "src") ?? ""))) {
         achadas.push({ pagina: arquivo, src: attr(img, "src") ?? "", srcset: attr(img, "srcset") ?? "", width: attr(img, "width"), height: attr(img, "height") });
       }
     }
@@ -491,5 +494,91 @@ describe("fundo da abertura e ícone", () => {
       expect(Math.max(m.width ?? 0, m.height ?? 0)).toBe(lado);
     }
     expect(existsSync(join(dist, "logos", "favicon.png"))).toBe(true);
+  });
+});
+
+// ───────────────────────── T17e no site construído: o vídeo da abertura em 720p e os GIFs em WebP animado ─────────────────────────
+// O que cada coisa É (mesmos quadros, mesmos instantes, mesma transparência) está em tests/video-da-abertura.test.ts e tests/animadas.test.ts;
+// aqui se prova que o SITE de verdade usa essas versões, nos lugares certos, e que o arquivo do autor continua intacto e publicado.
+
+describe("T17e no site construído", () => {
+  const original = (arquivo: string) => readFileSync(join(RAIZ, "static", arquivo));
+
+  test("a abertura de toda página usa o vídeo 720p (em /_astro/, com carimbo no nome), que é o arquivo de src/assets/intro/", () => {
+    const leve = readFileSync(join(RAIZ, "src", "assets", "intro", "logo-720p.webm"));
+    const usados = new Set<string>();
+    let paginasComAbertura = 0;
+    for (const arquivo of htmlsDoDist()) {
+      const html = readFileSync(join(dist, arquivo), "utf8");
+      expect(html, `${arquivo} ainda aponta para o vídeo do autor`).not.toContain("/intro/logo.webm");
+      const m = /const video = "([^"]*)";/.exec(html);
+      if (!m) continue;
+      paginasComAbertura++;
+      expect(m[1], arquivo).toMatch(/^\/_astro\/logo-720p\.[A-Za-z0-9_-]+\.webm$/);
+      usados.add(m[1] ?? "");
+    }
+    expect(paginasComAbertura).toBeGreaterThan(150);
+    expect([...usados].length).toBe(1);
+    const [url] = [...usados];
+    expect(readFileSync(doDisco(url ?? "")).equals(leve)).toBe(true);
+    expect(arquivosDe(dist).filter((a) => a.endsWith(".webm") && a.startsWith("_astro/")).length).toBe(1);
+  });
+
+  test("o vídeo do autor continua publicado no endereço de sempre, byte a byte (o site só deixa de usá-lo)", () => {
+    expect(readFileSync(join(dist, "intro", "logo.webm")).equals(original("intro/logo.webm"))).toBe(true);
+  });
+
+  const gifsAnimadosDoAutor = ["other images/Apollo Site.gif", "other images/Anfíbio Site.gif", "other images/no-i-cant.gif"];
+
+  test("toda <img> de GIF animado, de todas as páginas, tem o WebP animado no srcset (1x), com o tamanho do GIF; o src continua sendo o GIF", async () => {
+    const vistas = new Map<string, number>(); // arquivo → em quantas páginas apareceu
+    const problemas: string[] = [];
+    for (const pagina of htmlsDoDist()) {
+      const doc = parse(readFileSync(join(dist, pagina), "utf8"));
+      for (const img of varrer(doc, (e) => e.tagName === "img" && /\.gif$/i.test(attr(e, "src") ?? ""))) {
+        const src = attr(img, "src") ?? "";
+        const arquivo = arquivoDoSrc(src) ?? "";
+        const info = await lerAnimada(arquivo);
+        if (!info) continue; // GIF de um quadro só: fica como está
+        vistas.set(arquivo, (vistas.get(arquivo) ?? 0) + 1);
+        const esperado = `${urlDaAnimada(info.nome)} 1x`;
+        if (attr(img, "srcset") !== esperado) problemas.push(`${pagina}: srcset "${attr(img, "srcset")}", esperado "${esperado}"`);
+        if (attr(img, "sizes") !== undefined) problemas.push(`${pagina}: sizes não vale com 1x`);
+        if (attr(img, "width") !== String(info.largura) || attr(img, "height") !== String(info.altura)) problemas.push(`${pagina}: ${attr(img, "width")}x${attr(img, "height")}`);
+        if (!existsSync(doDisco(src)) || !readFileSync(doDisco(src)).equals(original(arquivo))) problemas.push(`${pagina}: o GIF original não está publicado igual`);
+        const webp = doDisco(urlDaAnimada(info.nome));
+        if (!existsSync(webp)) problemas.push(`${pagina}: falta ${info.nome}`);
+        else {
+          const c = cabecalhoDoWebpAnimado(readFileSync(webp));
+          if (!c.animado || c.repeticoes !== 0 || c.atrasos.join() !== info.atrasos.join()) problemas.push(`${info.nome} não toca como o GIF`);
+        }
+      }
+    }
+    expect(problemas).toEqual([]);
+    // no site PUBLICADO (sem rascunhos) os dois GIFs da página Sobre aparecem em /pt/ e /en/; o de Ossos do Ofício só na prévia (é rascunho)
+    expect(vistas.get("other images/Apollo Site.gif")).toBe(2);
+    expect(vistas.get("other images/Anfíbio Site.gif")).toBe(2);
+  }, 120_000);
+
+  test("os três WebP animados estão publicados em /animadas/ (inclusive o de Ossos do Ofício, que só aparece na prévia) e nada mais fica lá", async () => {
+    const nomes = new Set<string>();
+    for (const g of gifsAnimadosDoAutor) {
+      const info = await lerAnimada(g);
+      expect(info, g).not.toBeNull();
+      nomes.add(info?.nome ?? "");
+      const publicado = readFileSync(join(dist, "animadas", info?.nome ?? ""));
+      const c = cabecalhoDoWebpAnimado(publicado);
+      expect(c.atrasos, g).toEqual(info?.atrasos);
+      expect(publicado.length, g).toBeLessThanOrEqual(original(g).length);
+    }
+    expect(new Set(arquivosDe(join(dist, "animadas")))).toEqual(nomes);
+  });
+
+  test("a versão leve dos GIFs é a MESMA que gerarWebpAnimado() faz (o endpoint não muda nada no caminho)", async () => {
+    for (const g of gifsAnimadosDoAutor) {
+      const info = await lerAnimada(g);
+      const feito = await gerarWebpAnimado(g);
+      expect(readFileSync(join(dist, "animadas", info?.nome ?? "")).equals(feito), g).toBe(true);
+    }
   });
 });

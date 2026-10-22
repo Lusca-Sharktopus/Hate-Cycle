@@ -54,6 +54,8 @@ SO_NO_ASTRO = [
     ("T17: ícone em 32 e 192 px (logos/favicon_<hash>.png)", re.compile(r"^logos/favicon_[A-Za-z0-9-]+\.png$")),
     ("T17: fundo da abertura em JPEG (intro/fundo_<hash>.jpeg)", re.compile(r"^intro/fundo_[A-Za-z0-9-]+\.jpeg$")),
     ("T17: silhuetas para o shape-outside (silhuetas/*.png)", re.compile(r"^silhuetas/[^/]+\.png$")),
+    ("T17e: vídeo da abertura em 720p (/_astro/logo-720p.<hash>.webm; o original continua em intro/logo.webm)", re.compile(r"^_astro/logo-720p\.[A-Za-z0-9_-]+\.webm$")),
+    ("T17e: GIFs animados em WebP animado sem perda (animadas/<nome>-<carimbo>.webp; o GIF continua publicado)", re.compile(r"^animadas/[a-z0-9-]+-[0-9a-f]{8}\.webp$")),
     ("T14: sitemap.xml", re.compile(r"^sitemap\.xml$")),
 ]
 

@@ -35,6 +35,7 @@ Atenção a uma coisa nessa tabela: o "antes" **não inclui as fontes do Google*
 8. **Silhuetas**: o truque do texto que contorna o Giuseppe, que baixava a imagem duas vezes.
 9. **Como provar que nada mudou** (testes + navegador).
 10. **O que ficou de fora** e por quê.
+11. **O vídeo da abertura em 720p e os GIFs em WebP animado** (T17e, 22/10/2026, as duas respostas do autor à B29).
 
 ## Abra lado a lado
 
@@ -72,7 +73,7 @@ O que decide os números de `sizes` de cada lugar é o CSS real da página. Eles
 
 O Astro tem componentes prontos (`<Image>`, `<Picture>`) que geram as versões de uma imagem importada no código. Aqui não serviam: as imagens estão em `static/` e dentro de **HTML que você escreve** (`content/**.md`), não em componentes. Então a T17 usa a função de baixo nível, `getImage()`, de dentro de `src/lib/imagens.ts`:
 
-1. `lerImagem(arquivo)` abre o arquivo com o **sharp** (a biblioteca de imagens que o Astro usa) e decide se vale a pena: só PNG/JPEG de 30 KB para cima, não animado. (Ícones pequenos, GIFs animados e imagens que já são menores que a menor versão ficam como estão.)
+1. `lerImagem(arquivo)` abre o arquivo com o **sharp** (a biblioteca de imagens que o Astro usa) e decide se vale a pena: só PNG/JPEG de 30 KB para cima, não animado. (Ícones pequenos e imagens que já são menores que a menor versão ficam como estão; o GIF animado tem caminho próprio, seção 11.)
 2. `otimizar(arquivo, perfil)` pede ao `getImage()` as versões em WebP nas larguras do perfil e devolve `srcset`, `sizes`, `width` e `height`.
 3. O Astro grava as versões **ao lado do original** (`/covers/PT/Capa Pederneira_Z1ReFlj.webp`) e guarda o resultado em cache (`node_modules/.astro/assets`): o segundo build não refaz nada. Se você trocar uma imagem por outra de mesmo nome, o carimbo (SHA-1 do conteúdo, no `?v=` interno) muda e as versões são refeitas sozinhas.
 
@@ -97,7 +98,7 @@ Regras que ela segue, sempre:
 - **Nunca amplia**: se o original é menor que a versão pedida, a última versão tem o tamanho do original.
 - **`width`/`height` só entram se não atrapalham**: se você já pôs `width`, `height` ou uma altura no `style`, a tag não ganha esses dois.
 - **Preguiçosas** (`loading="lazy"`) ganham também `decoding="async"`; a logo do topo e as capas da dobra não ganham `lazy` nem ganharam: são a primeira coisa da página.
-- **O que não se mexe**: ícones de 24 px dos botões de post incorporado, o divisor de cena, imagens com `srcset` seu, endereços de fora do site, GIFs animados, tudo abaixo de 30 KB.
+- **O que não se mexe**: ícones de 24 px dos botões de post incorporado, o divisor de cena, imagens com `srcset` seu, endereços de fora do site, tudo abaixo de 30 KB. (O GIF animado não passa pelos perfis: ganha um WebP animado sem perda, seção 11.)
 
 ## 6. Fontes do próprio site
 
@@ -130,7 +131,7 @@ O navegador escolhe, para cada símbolo, a **primeira** família da lista `font-
 
 ## 8. Silhuetas: o texto que contorna o desenho
 
-Quando o texto contorna o Giuseppe (e a foto do autor, e os dois GIFs da página Sobre), o CSS diz `shape-outside: url("…/Giuseppe.png")`: "contorne o desenho deste arquivo". O navegador baixa esse arquivo **inteiro** (1,6 MB o Giuseppe) só para ler a transparência, e, como o pedido do contorno é de outro tipo que o da `<img>`, ele baixa **de novo** o que a imagem já tinha (os dois GIFs apareciam duas vezes na rede).
+Quando o texto contorna o Giuseppe (e a foto do autor, e os dois GIFs da página Sobre), o CSS diz `shape-outside: url("…/Giuseppe.png")`: "contorne o desenho deste arquivo". O navegador baixa esse arquivo **inteiro** (1,6 MB o Giuseppe) só para ler a transparência, e, como o pedido do contorno é de outro tipo que o da `<img>`, ele baixa **de novo** o que a imagem já tinha (os dois GIFs apareciam duas vezes na rede; desde a T17e a `<img>` baixa o WebP animado deles e o contorno, só a silhueta).
 
 O contorno só depende de **onde há desenho** (qualquer pixel com alfa maior que zero, o limiar padrão). Então o build gera, de cada desenho, uma **silhueta**: mesmo tamanho, mesmo "onde há desenho", sem cores, em PNG de 2 a 8 KB (`/silhuetas/giuseppe.png`, gerada por `src/pages/silhuetas/[nome].png.ts`). O `shape-outside` aponta para ela; a `<img>` continua usando o desenho de verdade. Provas: o `pnpm test` compara pixel a pixel "tem desenho / não tem" de cada silhueta com o original (zero diferenças) e garante que o CSS não mexe no limiar (`shape-image-threshold`); no navegador, as linhas do texto ficam nas mesmas posições (`tools/layout_playwright.py`).
 
@@ -138,7 +139,7 @@ Se você acrescentar um desenho novo em que o texto deva dar a volta, a silhueta
 
 ## 9. Como provar que nada mudou
 
-1. **`pnpm test`** (6.539 testes; eram 6.475):
+1. **`pnpm test`** (6.919 testes na T17e; eram 6.539 na T17):
    - As páginas continuam iguais às do Python (`tests/paginas.test.ts`) com **exceções estreitas e documentadas** em `tests/ajudantes/html.ts`: numa `<img>` com `srcset`, os 5 atributos novos (`srcset`, `sizes`, `width`, `height`, `decoding`) não entram na comparação, mas todo o resto sim (`src`, `class`, `alt`, `loading`, `style`, a ordem); os `<link>` de fonte (os do Google no Python, os de preload no Astro) saem dos dois lados; os dois ícones contam como um.
    - **`tests/imagens.test.ts`** prova o que essas exceções escondem, para **todas as páginas** e **todas as versões** (397 imagens, 239 arquivos): o `src` ainda existe; cada versão existe, é WebP, tem a largura do `srcset`, nunca amplia o original, sai do arquivo do `src` e é **a mesma imagem** (o original encolhido ao tamanho dela, comparado em miniatura: diferença pequena e correlação alta; uma imagem trocada reprovaria); `width`/`height` são os do original. Também: nenhuma página nem CSS fala com o Google Fonts ou com o jsDelivr; todo `@font-face` aponta para um arquivo que existe; as duas fontes pré-carregadas estão declaradas; as runas têm fonte para todo símbolo; as silhuetas têm o mesmo contorno.
 2. **No navegador** (`tools/layout_playwright.py`): dois sites gerados — um com `HC_IMAGENS=originais` (sem nenhuma versão leve e com o `shape-outside` antigo) e o novo —, lado a lado em 1100 e 390 px, 9 páginas. A posição e o tamanho de **todos os elementos** são iguais (diferença máxima 0,25 px em 1100 px e 0,42 px em 390 px, só arredondamento do navegador), exceto uma logo de título de capítulo que fica 0,8 px mais estreita porque a versão WebP tem altura arredondada. A diferença de pixels fica em 0,05% a 1,5% da página, nas bordas de texto e de desenho (a qualidade do WebP). As capturas foram vistas uma a uma.
@@ -146,15 +147,65 @@ Se você acrescentar um desenho novo em que o texto deva dar a volta, a silhueta
 
 ## 10. O que ficou de fora
 
+> **Atualização (T17e):** o vídeo da abertura em 720p e os GIFs animados em WebP animado, que estavam aqui, foram feitos depois de você aprovar (20/10); estão na seção 11. O resto da tabela continua valendo.
+
 | O quê | Ganho estimado | Por que não agora |
 |---|---|---|
-| Vídeo da abertura (`intro/logo.webm`, 1,1 MB) em 720p | ~600 KB na primeira visita de cada pessoa | Mexe no arquivo que **você** fez, e na nitidez da logo em telas retina. Decisão sua. |
-| GIFs animados (Apollo, Anfíbio e o "NO… …I CAN'T…": ~0,4 MB cada) para WebP animado | ~0,5 MB na Sobre | O tempo e a repetição dos quadros precisam de conferência quadro a quadro. |
 | AVIF em vez de WebP | mais ~30–40% nas imagens | Build bem mais lento; o ganho absoluto é pequeno agora. |
 | `og:image` (a capa de 3,5 MB que aparece quando alguém cola o link no WhatsApp ou no Discord) | pouco para o visitante; ajuda a prévia do link | Mudar o endereço muda o `<meta>` (que a paridade com o site atual confere) e depende de você aprovar qual imagem. |
 | `static/Produtos` (54 MB, não usado por nenhuma página) | só o tamanho do que se publica | É seu, não se apaga. |
 | `fontes.css` partido por família (hoje 30 KB, 6,6 KB comprimido, bloqueia a pintura) | ~4 KB no primeiro desenho | O ganho é pequeno; a complexidade, não. |
 | `ossos-memoria-1` (tira de 918×5888 px, 968 KB na versão de 800 px) | ~300 KB nesse capítulo | Qualidade menor numa arte longa; precisa do seu olho. |
+
+## 11. O vídeo da abertura em 720p e os GIFs em WebP animado (T17e)
+
+Duas das sobras da seção 10, depois de você ter dito "pode sim" (vídeo) e "sinta-se à vontade" (GIFs). **Os seus arquivos continuam intactos em `static/`** e continuam publicados no mesmo endereço; o site só deixa de entregá-los ao visitante.
+
+### O resultado (medido: `tools/peso_playwright.py`, KB que viajam pela rede)
+
+| Página | Antes | Depois | Ganho |
+|---|---|---|---|
+| Home, **primeira visita** (com a abertura), computador | 1.370 | 764 | −606 |
+| Home, primeira visita, celular 2x | 1.430 | 825 | −605 |
+| Home, visita seguinte (sem abertura) | 241 | 241 | 0 |
+| Sobre, computador | 1.079 | 623 | −456 |
+| Sobre, celular 2x | 1.089 | 634 | −455 |
+| Capítulo de *Ossos do Ofício* (prévia), primeira visita, computador | 3.028 | 2.408 | −620 |
+| Capítulo de *Ossos do Ofício*, visita seguinte, computador | 1.900 | 1.884 | −16 |
+
+Arquivo a arquivo: `logo.webm` 1.117 KB → 511 KB (1920×1080 → 1280×720); `Apollo Site.gif` 384 KB → 291 KB; `Anfíbio Site.gif` 405 KB → 43 KB; `no-i-cant.gif` 53 KB → 38 KB.
+
+### O vídeo: um arquivo derivado, feito uma vez, fora do build
+
+O GitHub Actions **não tem ffmpeg e não precisa ter**: o vídeo leve é feito aqui, uma vez, por uma ferramenta de desenvolvimento (como o recorte das runas), e fica guardado no projeto.
+
+- `tools/gerar_video_da_abertura.py` lê `config.json → intro.video` (só lê), decodifica com o `libvpx-vp9` (o decodificador "nativo" do ffmpeg **joga fora o canal de transparência**; por isso o `-c:v libvpx-vp9` antes do `-i`), reduz a 1280×720 (lanczos) e grava VP9 com transparência (`yuva420p`), CRF 34, sem `alt-ref` (o VP9 com alfa exige), `-fps_mode passthrough` (cada quadro no mesmo instante do original). Saem dois arquivos em `src/assets/intro/`: `logo-720p.webm` e a **ficha** `logo-720p.json` (SHA-256 do original de onde saiu, SHA-256 do leve, tamanho, quadros, duração).
+- `src/components/Abertura.astro` importa o leve com `?url` (o Vite o publica em `/_astro/logo-720p.<carimbo>.webm`) e `src/lib/videoDaAbertura.ts` decide: **só usa o leve se o SHA-256 do `static/intro/logo.webm` de hoje for o da ficha**. Se você trocar o vídeo e ninguém refizer o leve, o site publica o **seu original** (nunca um vídeo velho) e o build avisa no terminal ("o vídeo da abertura mudou…"). O resto da abertura (`min_ms`, `max_ms`, `sessionStorage`, "reduzir movimento", `?intro`) é o mesmo código de antes.
+- `tests/video-da-abertura.test.ts` impede esquecimento: falha se a ficha não for a do vídeo de hoje, e prova, sem ffmpeg (leitor de contêiner em `tests/ajudantes/webm.ts`), que o leve tem **os mesmos 151 quadros nos mesmos instantes**, a mesma duração (5,038 s), o mesmo `ALPHA_MODE` e a mesma proporção. `tests/imagens.test.ts` ("T17e no site construído") prova que toda página aponta para o leve e que o original continua publicado byte a byte.
+- **Nitidez** (olhada, não só medida): contra o original reduzido a 1280 px, o PSNR sobre o fundo roxo é 39,4 dB no pior quadro e 50,1 dB em média (alfa: erro médio 0,3 em 255). Em tela comum (1100 px, o máximo que a abertura ocupa: `min(94vw, 1100px)`) os dois são indistinguíveis; em tela retina (2x) o desenho de **traço fino** do começo da animação fica um pouco mais macio (o original era ampliado 1,15x, o leve 1,7x), e o brilho e a logo cheia ficam iguais. Se um dia isso incomodar, o meio-termo é 1440×810 (~0,7 MB): mude `LARGURA, ALTURA` na ferramenta e rode de novo.
+- **Quando você trocar o vídeo:** veja o guia do autor, seção 16. Em resumo: troque o arquivo, rode `python3 tools/gerar_video_da_abertura.py` (precisa do ffmpeg com libvpx-vp9) ou peça à Claude, e `pnpm test`.
+
+### Os GIFs: WebP animado **sem perda**
+
+`src/lib/animadas.ts` + `src/pages/animadas/[nome].webp.ts` (o mesmo desenho das silhuetas: arquivos gerados no build, que não existem em `static/`). Por que **não** pelo `getImage()` do Astro, como o resto das imagens: ele só sabe fazer WebP **com perda**, e o WebP sem perda deste caso é ao mesmo tempo menor (Anfíbio, Ossos) e **igual ao pixel**. O caminho:
+
+- todo `.gif` de `static/` com 2 quadros ou mais vira `/animadas/<nome>-<carimbo>.webp` (carimbo = SHA-1 do GIF: trocou o GIF, o endereço muda e o navegador não guarda o velho); o `sharp` lê todos os quadros (`pages: -1`) e escreve `webp({ lossless: true, loop, delay })` com os atrasos e a repetição **lidos do GIF**. (Atraso de 10 ms ou menos toca como 100 ms no navegador com GIF; a conversão faz o mesmo.)
+- `imagensDoHtml.ts` acrescenta à `<img>` só `srcset="/animadas/….webp 1x"` e `width`/`height` (sem `sizes`, que não vale com `1x`: o tamanho natural fica igual ao do GIF). O `src` continua o GIF; `content/` não mudou; o `shape-outside` da Sobre continua usando as silhuetas (lê o primeiro quadro do GIF, que não mudou).
+- **O que o GIF do "NO… …I CAN'T…" é de fato:** lendo os bytes do arquivo, os quadros duram **2000 ms, 100 ms e 100 ms** (o "NO…" fica parado 2 s e depois vêm dois quadros rápidos), com repetição infinita. O WebP tem exatamente esses três tempos.
+- **As provas** (`tests/animadas.test.ts`): tamanho, número de quadros, **atraso de cada quadro lido do cabeçalho do WebP** (não pelo sharp), repetição infinita, e **cada pixel visível de cada quadro igual ao do GIF**, com transparência (zero diferenças; trocando para "com perda" o teste reprova). Em `tests/imagens.test.ts`: toda `<img>` de GIF animado de todas as páginas tem o `srcset` certo e o GIF original continua publicado. **No navegador** (`python3 tools/animadas_playwright.py --dist dist`): o Chromium grava a tela (screencast) tocando o GIF e o WebP, e os dois mostram os mesmos 8, 8 e 3 desenhos (SHA-1 dos quadros de tela **iguais**), na mesma ordem, repetindo (9 voltas em 9 s), com os mesmos tempos (±23 ms, o Apollo ±54 ms por folga do screencast). Em *Ossos do Ofício*, a captura do trecho a 1100 e a 390 px, GIF × WebP, tem **zero pixels diferentes** e a mesma caixa (534×212,9 e 188×74,9 px).
+- Peso: Anfíbio 405 → 43 KB e Ossos 53 → 38 KB. O **Apollo** (cheio de pontilhado) só cai de 384 para 291 KB sem perda. Com perda ele cairia para ~140 KB (qualidade 80) ou ~200 KB (90), mas deixaria de ser o mesmo desenho pixel a pixel; **não foi feito** (pergunta para você no BACKLOG, B29).
+- `HC_IMAGENS=originais` (o site de controle do teste de layout) também desliga o WebP animado.
+
+### Rode você mesmo
+
+```bash
+pnpm build
+ls -la dist/animadas dist/_astro/*.webm       # os três WebP e o vídeo 720p
+grep -o 'const video = "[^"]*"' dist/pt/index.html
+grep -o '<img[^>]*gif[^>]*>' dist/pt/about/index.html
+timeout 300 python3 tools/animadas_playwright.py --dist dist --porta 8797    # GIF × WebP no navegador
+python3 tools/gerar_video_da_abertura.py --conferir                           # a ficha ainda é a do vídeo de hoje?
+```
 
 ## Rode você mesmo
 

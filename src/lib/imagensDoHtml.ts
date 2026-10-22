@@ -10,10 +10,11 @@
 // a ordem dos atributos que já estavam lá. Os atributos novos entram no fim da tag. Para achar o <img> e o lugar exato dele no
 // texto sem reescrever o resto, usa-se o parse5 (o mesmo leitor de HTML que os testes usam), só para LER as posições.
 //
-// Casos em que a tag fica como está: já tem `srcset`; o `src` não é um arquivo PNG/JPEG de static/; o arquivo é leve ou animado
-// (ver lerImagem em imagens.ts); o <img> está dentro de <noscript> (o parse5 trata o conteúdo de <noscript> como texto: é o
+// Casos em que a tag fica como está: já tem `srcset`; o `src` não é um arquivo PNG/JPEG/GIF de static/; o arquivo PNG/JPEG é leve ou animado
+// (ver lerImagem em imagens.ts; o GIF ANIMADO é a exceção: ganha o WebP animado de src/lib/animadas.ts, T17e); o <img> está dentro de <noscript> (o parse5 trata o conteúdo de <noscript> como texto: é o
 // "sem JavaScript", que não precisa de pressa).
 import { parseFragment, type DefaultTreeAdapterMap } from "parse5";
+import { otimizarAnimada } from "./animadas";
 import { lerImagem, otimizar, PERFIS, type Perfil } from "./imagens";
 
 type No = DefaultTreeAdapterMap["node"];
@@ -97,7 +98,8 @@ export function atributosNovos(
   tag: { temWidthOuHeight: boolean; styleComHeight: boolean; temDecoding: boolean; preguicosa: boolean; temSizes?: boolean },
 ): string {
   // `sizes` já escrito na tag (T17i: cada camada da arte do bloco "em ordem" diz quanto ocupa) vale no lugar do `sizes` do perfil
-  let s = ` srcset="${escAttr(imagem.srcset)}"` + (tag.temSizes ? "" : ` sizes="${escAttr(imagem.sizes)}"`);
+  // (T17e) `sizes` vazio = o GIF animado: um descritor só, "1x"; com "1x" o `sizes` não existe.
+  let s = ` srcset="${escAttr(imagem.srcset)}"` + (tag.temSizes || imagem.sizes === "" ? "" : ` sizes="${escAttr(imagem.sizes)}"`);
   // width/height dão ao navegador a PROPORÇÃO antes de a imagem chegar (evita o pulo do texto). Só quando não atrapalham o desenho:
   // se o autor já pôs largura/altura, ou uma altura no style, a tag não é tocada nesses dois.
   if (!tag.temWidthOuHeight && !tag.styleComHeight) s += ` width="${imagem.width}" height="${imagem.height}"`;
@@ -168,6 +170,14 @@ export async function otimizarImagensDoHtml(html: string): Promise<string> {
   let saida = "";
   let pos = 0;
   for (const a of achados) {
+    // GIF animado (T17e): WebP animado sem perda, feito por src/lib/animadas.ts (o perfil do lugar não conta: é uma versão só, no tamanho do GIF)
+    if (/\.gif$/i.test(a.arquivo)) {
+      const animada = await otimizarAnimada(a.arquivo);
+      if (!animada) continue;
+      saida += html.slice(pos, a.em) + atributosNovos(animada, a.tag);
+      pos = a.em;
+      continue;
+    }
     // lerImagem() antes: se o arquivo não existe, é leve ou animado, a tag fica como está, sem chamar o getImage
     if (!(await lerImagem(a.arquivo))) continue;
     const imagem = await otimizar(a.arquivo, a.perfil);

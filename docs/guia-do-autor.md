@@ -371,7 +371,7 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 - `guardados/` guarda arquivos para uso futuro; essa pasta **não** é publicada.
 - Capas: `static/covers/EN/` e `static/covers/PT/`; logos das obras: `static/logos/`; imagens das notícias: `static/news/`.
 - **Capa nova:** coloque o arquivo em `static/covers/PT/` (ou `EN/`) com o nome que o `work.json` usa e **não precisa reduzir nem otimizar**: pode ser o PNG ou JPEG grande de sempre. No site novo o build gera sozinho as versões leves em WebP (a capa de 3,5 MB chega ao visitante com ~44 KB) e o navegador escolhe a do tamanho da tela. O arquivo original continua publicado e é o `src` da imagem. Vale para **qualquer** PNG ou JPEG de 30 KB para cima: logos, imagens de notícias, emissários, páginas de quadrinho.
-- **Imagem no meio do texto:** `![descrição](/other images/arquivo.png)` ou `<img src="/other images/arquivo.png" alt="descrição">` funcionam como sempre; o site acrescenta sozinho as versões leves (e `width`/`height`, para o texto não pular). Se você já puser `width`, `height` ou um `srcset` seu na tag, o site respeita o seu. **Não são otimizados:** GIFs animados (peso do arquivo mesmo), vídeos, imagens de outro endereço e arquivos abaixo de 30 KB.
+- **Imagem no meio do texto:** `![descrição](/other images/arquivo.png)` ou `<img src="/other images/arquivo.png" alt="descrição">` funcionam como sempre; o site acrescenta sozinho as versões leves (e `width`/`height`, para o texto não pular). Se você já puser `width`, `height` ou um `srcset` seu na tag, o site respeita o seu. **GIF animado** também ganha versão leve (WebP animado, sem perda: mesmos quadros, mesmos tempos, mesma repetição; o `src` continua o seu GIF). **Não são otimizados:** vídeos, imagens de outro endereço e arquivos abaixo de 30 KB.
 - **Trocar uma imagem:** salve por cima, com o mesmo nome; as versões leves são refeitas no próximo build (e na prévia) sozinhas.
 - **O que acompanha cada tipo:** pessoas com tela de celular recebem versões de ~280 a 560 px nas capas, de até 900 px nos capítulos e de até 1800 px nas tiras e páginas de quadrinho (para ficarem nítidas ao dar zoom).
 
@@ -383,7 +383,9 @@ Não repete nas páginas seguintes da mesma visita, e não aparece para quem ped
 
 - Ajustes em `config.json → "intro"`: `enabled` (liga/desliga), `min_ms` (tempo mínimo na tela, padrão 4200) e `max_ms` (limite máximo, padrão 10000).
 - Para rever no seu computador: abra `http://localhost:8000/?intro=1`.
-- A animação original (4K, 11 MB) foi convertida para 1080p mantendo a transparência: 1,1 MB. A original continua com você.
+- A animação original (4K, 11 MB) foi convertida para 1080p mantendo a transparência: 1,1 MB (`static/intro/logo.webm`). No site novo o visitante baixa uma versão **720p** dela (~0,5 MB, mesma duração, mesmos quadros, com a transparência), guardada em `src/assets/intro/`; o seu arquivo em `static/intro/` continua intacto e publicado.
+- **Trocar o vídeo da abertura:** salve o novo por cima de `static/intro/logo.webm` (WebM VP9 com transparência, como o atual). Até alguém refazer a versão 720p, o site mostra o **seu vídeo novo em tamanho original** (funciona, só pesa mais; o build avisa no terminal). Para refazer: `python3 tools/gerar_video_da_abertura.py` (precisa do ffmpeg com libvpx-vp9 instalado; ou peça à Claude), depois `pnpm test`. Se mudar o **nome** do arquivo, mude também `config.json → intro.video`.
+- **Trocar um GIF animado** (`static/other images/Apollo Site.gif`, `Anfíbio Site.gif`, `no-i-cant.gif`): salve por cima com o mesmo nome; o WebP animado é refeito sozinho no próximo build, com os tempos do GIF novo. Um GIF animado **novo** em um texto também ganha a versão sozinho. O teste `tests/animadas.test.ts` guarda a lista dos três GIFs e seus tempos; ao trocar um, peça à Claude para atualizar a lista.
 
 ## 17. Runas no fundo
 

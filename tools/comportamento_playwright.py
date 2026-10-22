@@ -8,7 +8,7 @@ pasta sem barra → redireciona para a barra). Rode sob `timeout`:
 (Os sites: veja o topo de tools/paridade_t18.py; `python3 tools/paridade_t18.py --gerar --pasta <dir>` deixa os seis prontos.)
 
 O que confere, nos dois sites, com o MESMO roteiro, e compara o resultado:
-  1. tela de abertura: na 1ª visita a classe `intro` entra no <html>, o vídeo /intro/logo.webm é criado, a tela some sozinha
+  1. tela de abertura: na 1ª visita a classe `intro` entra no <html>, o vídeo da logo é criado (/intro/logo.webm no Python; no Astro a versão 720p dele), a tela some sozinha
      (depois do tempo mínimo) e o sessionStorage guarda `hc-intro`; na 2ª página da visita ela não aparece; com "reduzir
      movimento" não aparece; com ?intro aparece de novo;
   2. carrossel da home (1100 e 390 px): o trilho e as duas setas são criados, cada clique na seta anda o mesmo tanto, as setas
@@ -26,7 +26,7 @@ O que confere, nos dois sites, com o MESMO roteiro, e compara o resultado:
 Erros de JavaScript na página contam como falha. Nada sai para a internet (tudo que não é o servidor local é bloqueado).
 Sai com 0 se tudo for igual e certo nos dois, 1 se não.
 """
-import argparse, functools, http.server, json, os, socketserver, sys, threading
+import argparse, functools, http.server, json, os, re, socketserver, sys, threading
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -99,6 +99,9 @@ def abertura(br, base, erros):
     pg.goto(base + "/pt/", wait_until="domcontentloaded")
     r["logo_no_inicio"] = pg.evaluate(ESTADO_ABERTURA)
     r["logo_no_inicio"]["video"] = (r["logo_no_inicio"]["video"] or "").replace(base, "")
+    # T17e: o Python usa o vídeo do autor (/intro/logo.webm) e o Astro a versão 720p dele (/_astro/logo-720p.<hash>.webm): é o mesmo vídeo
+    if re.fullmatch(r"/intro/logo\.webm|/_astro/logo-720p\.[A-Za-z0-9_-]+\.webm", r["logo_no_inicio"]["video"]):
+        r["logo_no_inicio"]["video"] = "/intro/logo.webm"
     # some sozinha: espera até 15 s pela classe sair
     t = pg.evaluate("""() => new Promise(ok => { const t0 = performance.now(); const f = () => {
         if (!document.documentElement.classList.contains('intro')) ok(Math.round((performance.now() - t0) / 500) * 500); else if (performance.now() - t0 > 15000) ok(-1); else setTimeout(f, 50); }; f(); })""")

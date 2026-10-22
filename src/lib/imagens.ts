@@ -12,7 +12,8 @@
 //      só no `srcset`. Por isso toda imagem do site aponta para o mesmo arquivo que o build.py usaria, e quem não entende
 //      `srcset` (leitores antigos, RSS) continua vendo a imagem de sempre.
 //   2. Só se otimiza o que compensa e o que não perde nada: PNG e JPEG que não são animados, maiores que ~30 KB e maiores que o
-//      menor tamanho do perfil. GIF (animados), SVG, WebP/AVIF que o autor já fez e ícones minúsculos ficam como estão.
+//      menor tamanho do perfil. SVG, WebP/AVIF que o autor já fez e ícones minúsculos ficam como estão. Os GIFs ANIMADOS não passam por aqui:
+//      têm caminho próprio (T17e, src/lib/animadas.ts), um WebP animado sem perda com os mesmos quadros e tempos.
 //
 // Este arquivo é lógica de build (roda no seu computador, nunca no navegador). A parte que só ESCOLHE (tamanhos, regras) é pura e
 // está provada em tests/imagens.test.ts; a parte que chama o getImage() só existe durante o build do Astro.
