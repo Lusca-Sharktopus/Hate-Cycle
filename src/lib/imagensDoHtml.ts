@@ -93,9 +93,10 @@ const escAttr = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 /** O que acrescentar ao fim de uma <img> que ganha as versões leves de `imagem`. */
 export function atributosNovos(
   imagem: { srcset: string; sizes: string; width: number; height: number },
-  tag: { temWidthOuHeight: boolean; styleComHeight: boolean; temDecoding: boolean; preguicosa: boolean },
+  tag: { temWidthOuHeight: boolean; styleComHeight: boolean; temDecoding: boolean; preguicosa: boolean; temSizes?: boolean },
 ): string {
-  let s = ` srcset="${escAttr(imagem.srcset)}" sizes="${escAttr(imagem.sizes)}"`;
+  // `sizes` já escrito na tag (T17i: cada camada da arte do bloco "em ordem" diz quanto ocupa) vale no lugar do `sizes` do perfil
+  let s = ` srcset="${escAttr(imagem.srcset)}"` + (tag.temSizes ? "" : ` sizes="${escAttr(imagem.sizes)}"`);
   // width/height dão ao navegador a PROPORÇÃO antes de a imagem chegar (evita o pulo do texto). Só quando não atrapalham o desenho:
   // se o autor já pôs largura/altura, ou uma altura no style, a tag não é tocada nesses dois.
   if (!tag.temWidthOuHeight && !tag.styleComHeight) s += ` width="${imagem.width}" height="${imagem.height}"`;
@@ -151,6 +152,7 @@ function avaliar(img: Elemento, html: string, ancestrais: ReadonlySet<string>): 
       styleComHeight: /height/i.test(style),
       temDecoding: atributo(img, "decoding") !== undefined,
       preguicosa: atributo(img, "loading") === "lazy",
+      temSizes: atributo(img, "sizes") !== undefined,
     },
   };
 }

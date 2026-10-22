@@ -18,10 +18,20 @@
 // obra sem capítulo e sem link externo: o cartão cinza "Em breve" de Histórias) é PULADA, e o bloco vai direto para a próxima já lançada.
 // "Lançada" = o cartão dela tem botão de verdade (cartaoDaObra → botao.tipo === "link"): no site publicado contam só as públicas com algo
 // para abrir; na prévia, as públicas e os rascunhos que têm capítulo. A obra do capítulo em que o visitante está não é pulada.
+//
+// PARA ONDE CADA LADO LEVA (T17i, pedido do autor de 21/10): quem vem DEPOIS leva ao PRIMEIRO capítulo dela (a pessoa vai começar a
+// história); quem vem ANTES, ao ÚLTIMO (a pessoa está voltando na ordem e chega ao fim da anterior). "Capítulos" = os listados daquela
+// obra naquele idioma e naquele modo (no publicado só os públicos; na prévia também os rascunhos), os mesmos que a lista da página da obra
+// mostra. Obra de um capítulo só: os dois lados levam a ele. Obra com link externo (vídeo, RPG ao vivo no YouTube…) continua levando ao
+// link, como o cartão dela em Histórias.
+//
+// O RÓTULO NUMA LINHA SÓ (T17i): o build mede cada rótulo na fonte de verdade (src/lib/largurasDoRotulo.ts, gerado da Lexend 500) e
+// escreve na caixa quantos "em" os dois rótulos lado a lado precisam (`emDosRotulos`); o CSS escolhe a letra que cabe na largura da caixa.
 import { ORDEM_PADRAO, ORDENS } from "../scripts/ordem/regras";
 import type { Lang } from "./config";
 import { arteEmCamadas, type ArteCrua, type ArteEmCamadas } from "./artesDaOrdem";
-import { cartaoDaObra, capaDaObra, logoDaObra, tituloDaObra, valoresDeOrdem, type CapitulosDaObra, type ObraComDados } from "./obras";
+import { LARGURA_MAXIMA, LARGURAS, UNIDADES_POR_EM } from "./largurasDoRotulo";
+import { cartaoDaObra, capaDaObra, logoDaObra, tituloDaObra, urlDoCapitulo, valoresDeOrdem, type CapitulosDaObra, type ObraComDados } from "./obras";
 import { organizarCartoes } from "./seletor";
 import { TEXTOS_DA_ORDEM, type OrdemDeLeitura, type Verbo } from "./textosDaOrdem";
 
@@ -57,8 +67,13 @@ export interface LadoDaOrdem {
   verbo: Verbo;
   /** O texto do link, já com o verbo e o título: "Assistir Luz & Sangue". */
   rotulo: string;
-  /** Para onde vai: o MESMO lugar do cartão da obra em Histórias (link externo, capítulo ou página da obra). */
+  /**
+   * Para onde vai (T17i): o link externo da obra, se ela tem (como o cartão em Histórias); senão, o PRIMEIRO capítulo (lado "seguinte")
+   * ou o ÚLTIMO (lado "anterior"), entre os listados naquele idioma e modo.
+   */
   destino: { tipo: "link"; href: string; externo: boolean };
+  /** A largura do rótulo, em "em" da fonte do rótulo (para o CSS escolher o tamanho que cabe numa linha). */
+  emDoRotulo: number;
   /**
    * A arte do lado, por ordem de preferência: a composição em CAMADAS do work.json (`order_art`, T17h), as imagens `order_images` (a normal e,
    * se houver, a do mouse por cima) ou, sem nenhuma, a capa da obra (`ehCapa`: o CSS a encaixa na mesma caixa); sem capa, a logo; sem nada,
@@ -102,6 +117,36 @@ export interface BlocoDaOrdem {
   listas: Record<OrdemDeLeitura, ListaDaOrdem>;
   /** Por ordem: o aviso de "fora da ordem" (só aparece quando `foraDaOrdem`). */
   avisosDeForaDaOrdem: Record<OrdemDeLeitura, string>;
+  /**
+   * Quantos "em" os rótulos de UMA linha da caixa precisam, na ordem que precisa de mais (os dois lados + o espaço entre eles). O CSS usa
+   * a mesma letra nas duas ordens (`--so-em`): trocar de ordem não muda o tamanho do texto nem o da caixa.
+   */
+  emDosRotulos: number;
+  /**
+   * No celular cada rótulo tem uma linha só dele (o de quem vem antes em cima, o de quem vem depois embaixo): quantos "em" o MAIOR rótulo
+   * da caixa precisa (+ uma folga), nas duas ordens (`--so-em-1`).
+   */
+  emDoMaiorRotulo: number;
+}
+
+/** O espaço mínimo entre os dois rótulos de uma linha, em "em". */
+export const ESPACO_ENTRE_ROTULOS_EM = 1.5;
+/** A folga do rótulo que tem a linha só para ele (celular), em "em". */
+export const FOLGA_DO_ROTULO_SOZINHO_EM = 0.3;
+/** Folga sobre a soma das larguras das letras (o kerning da fonte quase sempre aperta, mas o texto nunca pode sair maior que a conta). */
+const FOLGA_DA_MEDIDA = 1.03;
+
+/** A largura de um texto na fonte do rótulo (Lexend 500), em "em", com folga. Letra fora da tabela conta como a mais larga. */
+export function larguraDoRotulo(texto: string): number {
+  let unidades = 0;
+  for (const letra of texto) unidades += LARGURAS.get(letra.codePointAt(0) ?? 0) ?? LARGURA_MAXIMA;
+  return Number(((unidades / UNIDADES_POR_EM) * FOLGA_DA_MEDIDA).toFixed(3));
+}
+
+/** Os "em" de uma linha da caixa: os rótulos que existem + o espaço entre eles (sempre conta, mesmo com um lado só). */
+export function emDaLinha(lista: ListaDaOrdem): number {
+  const lados = [lista.anterior, lista.proximo].flatMap((l) => (l ? [l.emDoRotulo] : []));
+  return Number((lados.reduce((a, b) => a + b, 0) + ESPACO_ENTRE_ROTULOS_EM).toFixed(3));
 }
 
 /** A arte de uma obra para o bloco: ver `LadoDaOrdem.arte`. */
@@ -114,21 +159,29 @@ export function arteDaObra(obra: ObraParaOrdem, lang: Lang): LadoDaOrdem["arte"]
   return capa ? { tipo: "imagens", principal: capa, hover: null, ehCapa: true } : null;
 }
 
+/** De que lado da caixa a obra fica: "prev" = a que vem ANTES (à esquerda), "next" = a que vem DEPOIS (à direita). */
+export type LadoDaCaixa = "prev" | "next";
+
 /**
- * O lado de uma obra: título, verbo, destino (o do cartão dela) e arte. `null` = a obra ainda não tem nada lançado naquele modo (o cartão
- * dela é o cinza "Em breve"): ela não entra na ordem (ver o topo do arquivo).
+ * O lado de uma obra: título, verbo, destino e arte. `null` = a obra ainda não tem nada lançado naquele modo (o cartão dela é o cinza
+ * "Em breve"): ela não entra na ordem (ver o topo do arquivo). `lado` decide o capítulo: o último (anterior) ou o primeiro (seguinte).
  */
-export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean): LadoDaOrdem | null {
+export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean, lado: LadoDaCaixa): LadoDaOrdem | null {
   const botao = cartaoDaObra(obra, lang, capitulos, comRascunhos).botao;
   if (botao.tipo !== "link") return null;
+  // link externo: o mesmo do cartão; senão, o capítulo da ponta certa (o botão do cartão só existe se há capítulos listados)
+  const capitulo = lado === "prev" ? capitulos.listados.at(-1) : capitulos.listados[0];
+  const destino = botao.externo || !capitulo ? { tipo: "link" as const, href: botao.href, externo: botao.externo } : { tipo: "link" as const, href: urlDoCapitulo(capitulo), externo: false };
   const titulo = tituloDaObra(obra, lang);
   const verbo = verboDaObra(obra);
+  const rotulo = `${TEXTOS_DA_ORDEM[lang].verbo[verbo]} ${titulo}`;
   return {
     slug: obra.data._origem.slug,
     titulo,
     verbo,
-    rotulo: `${TEXTOS_DA_ORDEM[lang].verbo[verbo]} ${titulo}`,
-    destino: { tipo: "link", href: botao.href, externo: botao.externo },
+    rotulo,
+    destino,
+    emDoRotulo: larguraDoRotulo(rotulo),
     arte: arteDaObra(obra, lang),
   };
 }
@@ -152,28 +205,33 @@ export function blocoDaOrdem<O extends ObraParaOrdem>(
 ): BlocoDaOrdem {
   const textos = TEXTOS_DA_ORDEM[lang];
   const verbo = verboDaObra(atual);
-  const lado = (o: O): LadoDaOrdem | null => ladoDaObra(o, lang, capitulosDe(o), comRascunhos);
+  const lado = (o: O, qual: LadoDaCaixa): LadoDaOrdem | null => ladoDaObra(o, lang, capitulosDe(o), comRascunhos, qual);
   const lista = (ordem: OrdemDeLeitura): ListaDaOrdem => {
     const sequencia = sequenciaDaOrdem(universo, ordem, lang);
     const i = sequencia.findIndex((o) => o.data._origem.slug === atual.data._origem.slug);
     if (i < 0) return { anterior: null, proximo: null, foraDaOrdem: true };
     // o vizinho é o primeiro, para cada lado, que já tem algo lançado: quem ainda é "Em breve" é pulado (nada de "Em breve" no bloco)
-    const primeiroLancado = (candidatas: O[]): LadoDaOrdem | null => {
+    const primeiroLancado = (candidatas: O[], qual: LadoDaCaixa): LadoDaOrdem | null => {
       for (const o of candidatas) {
-        const l = lado(o);
+        const l = lado(o, qual);
         if (l) return l;
       }
       return null;
     };
-    return { anterior: primeiroLancado(sequencia.slice(0, i).reverse()), proximo: primeiroLancado(sequencia.slice(i + 1)), foraDaOrdem: false };
+    return { anterior: primeiroLancado(sequencia.slice(0, i).reverse(), "prev"), proximo: primeiroLancado(sequencia.slice(i + 1), "next"), foraDaOrdem: false };
   };
+  const listas = { chrono: lista("chrono"), release: lista("release") };
   return {
     lang,
     verbo,
     titulo: textos.titulo[verbo],
     ordemInicial: ORDEM_PADRAO,
     opcoes: ORDENS_DE_LEITURA.map((valor) => ({ valor, rotulo: textos.ordem[valor] })),
-    listas: { chrono: lista("chrono"), release: lista("release") },
+    listas,
     avisosDeForaDaOrdem: { chrono: textos.foraDaOrdem.chrono, release: textos.foraDaOrdem.release },
+    emDosRotulos: Math.max(...ORDENS_DE_LEITURA.map((o) => emDaLinha(listas[o]))),
+    emDoMaiorRotulo: Number(
+      (Math.max(0, ...ORDENS_DE_LEITURA.flatMap((o) => [listas[o].anterior, listas[o].proximo]).flatMap((l) => (l ? [l.emDoRotulo] : []))) + FOLGA_DO_ROTULO_SOZINHO_EM).toFixed(3),
+    ),
   };
 }

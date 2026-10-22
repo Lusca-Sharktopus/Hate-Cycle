@@ -2375,6 +2375,50 @@
     "pt": "covers/PT/Capa Ossos do Ofício.png"
    },
    "reading_font": "times",
+   "order_art": {
+    "size": [
+     3311,
+     1884
+    ],
+    "layers": [
+     {
+      "image": "ordem/Giuseppe Asas Site Cronologia.png",
+      "x": 50.79,
+      "y": 50.5,
+      "width": 87.2,
+      "opacity": 0,
+      "hover": {
+       "x": 52.39,
+       "y": 43.27,
+       "width": 103.98,
+       "opacity": 1
+      }
+     },
+     {
+      "image": "ordem/Giuseppe Site Cronologia.png",
+      "x": 42.5,
+      "y": 70.99,
+      "width": 25.01,
+      "hover": {
+       "y": 67.7,
+       "width": 29.82
+      }
+     },
+     {
+      "image": "ordem/Giuseppe Olhos Site Cronologia.png",
+      "x": 42.22,
+      "y": 69.69,
+      "width": 24.43,
+      "opacity": 0,
+      "hover": {
+       "x": 42.16,
+       "y": 66.15,
+       "width": 29.13,
+       "opacity": 1
+      }
+     }
+    ]
+   },
    "media": "short-story"
   },
   "firestriker": {
@@ -2587,10 +2631,52 @@
     "release": 5,
     "chrono": 7
    },
-   "order_images": [
-    "ordem/Beira de Estrada-ordem-1.png",
-    "ordem/Beira de Estrada-ordem-2.png"
-   ],
+   "order_art": {
+    "size": [
+     1950,
+     2143
+    ],
+    "layers": [
+     {
+      "image": "ordem/Jean Site Cronologia.png",
+      "x": 70.69,
+      "y": 54.7,
+      "width": 39.95,
+      "hover": {
+       "x": 75.75,
+       "y": 50.56,
+       "width": 45.28,
+       "rotate": 4.05
+      }
+     },
+     {
+      "image": "ordem/Cezar e Iris Site Cronologia.png",
+      "x": 36.51,
+      "y": 58.78,
+      "width": 51.18,
+      "hover": {
+       "x": 31.45,
+       "y": 55.03,
+       "width": 58.01,
+       "rotate": -5.69
+      }
+     },
+     {
+      "image": "ordem/Iris Olhos Site Cronologia.png",
+      "x": 36.51,
+      "y": 58.78,
+      "width": 51.18,
+      "opacity": 0,
+      "hover": {
+       "x": 31.45,
+       "y": 55.03,
+       "width": 58.01,
+       "rotate": -5.69,
+       "opacity": 1
+      }
+     }
+    ]
+   },
    "cover": {
     "en": "covers/EN/Cover Roadside.png",
     "pt": "covers/PT/Capa Beira de Estrada.png"

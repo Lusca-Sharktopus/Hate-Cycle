@@ -26,5 +26,13 @@
     "pt": "covers/PT/Capa Ossos do Ofício.png"
   },
   "reading_font": "times",
+  "order_art": {
+    "size": [3311, 1884],
+    "layers": [
+      { "image": "ordem/Giuseppe Asas Site Cronologia.png", "x": 50.79, "y": 50.5, "width": 87.2, "opacity": 0, "hover": { "x": 52.39, "y": 43.27, "width": 103.98, "opacity": 1 } },
+      { "image": "ordem/Giuseppe Site Cronologia.png", "x": 42.5, "y": 70.99, "width": 25.01, "hover": { "y": 67.7, "width": 29.82 } },
+      { "image": "ordem/Giuseppe Olhos Site Cronologia.png", "x": 42.22, "y": 69.69, "width": 24.43, "opacity": 0, "hover": { "x": 42.16, "y": 66.15, "width": 29.13, "opacity": 1 } }
+    ]
+  },
   "media": "short-story"
 }

@@ -136,6 +136,9 @@ describe("atributosNovos: o que entra no fim da tag", () => {
   test("aspas dentro do valor são escapadas", () => {
     expect(atributosNovos({ ...imagem, sizes: 'a"b' }, tag)).toContain('sizes="a&quot;b"');
   });
+  test("T17i: a tag que já diz quanto ocupa (as camadas do bloco \"em ordem\") fica com o próprio sizes; só ganha o srcset e o resto", () => {
+    expect(atributosNovos(imagem, { ...tag, temSizes: true })).toBe(' srcset="/a_x.webp 480w, /a_y.webp 800w" width="1600" height="900"');
+  });
 });
 
 // ───────────────────────── parte 2: o site construído ─────────────────────────

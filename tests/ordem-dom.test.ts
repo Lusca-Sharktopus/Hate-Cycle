@@ -195,3 +195,42 @@ describe("o código do navegador", () => {
     expect(codigo("bloco.ts")).toMatch(/nome\.textContent\s*=/);
   });
 });
+
+// ───────────── T17i: os links e os lugares guardados no DOM ─────────────
+// O bloco como o servidor o entrega desde a T17i (o mesmo HTML do ProximaHistoria.astro, em miniatura; o HTML de verdade, desenhado pelo
+// componente, passa pelo mesmo teste num DOM simulado no fim de tests/ordem.test.ts): ao trocar de ordem, os links à vista levam ao ÚLTIMO
+// capítulo da anterior e ao PRIMEIRO da seguinte; o lado que não existe é um lugar guardado, sem link, invisível para leitores de tela.
+const BLOCO_T17I = `<section class="reader-box paper story-order" data-story-order data-ordem="chrono" style="--so-em:40;--so-em-1:20">
+<div class="so-top"><p class="so-title" id="t">estou lendo em ordem</p><div class="so-pick"><span class="so-valor" aria-hidden="true">Cronológica</span><select class="so-select" aria-labelledby="t" disabled><option value="chrono" selected>Cronológica</option><option value="release">Lançamento</option></select></div></div>
+<div class="so-order" data-ordem="chrono"><a class="so-side prev" href="/pt/works/light-and-blood/02/"><span class="so-art"></span><span class="so-label">Assistir Luz &amp; Sangue</span></a><span class="so-lugar next" aria-hidden="true"><span class="so-art"></span><span class="so-label">&nbsp;</span></span></div>
+<div class="so-order" data-ordem="release" hidden><a class="so-side prev" href="https://www.youtube.com/@ResidenciaDosDiVario" target="_blank" rel="noopener noreferrer"><span class="so-art"></span><span class="so-label">Assistir Alô?</span></a><a class="so-side next" href="/pt/works/light-and-blood/01/"><span class="so-art"></span><span class="so-label">Assistir Luz &amp; Sangue</span></a></div></section>`;
+
+/** Os links que o visitante vê (das listas sem `hidden`): "prev /…", "next /…". */
+function linksVisiveis(bloco: Element): string[] {
+  return [...bloco.querySelectorAll<HTMLElement>(".so-order")]
+    .filter((l) => !l.hidden)
+    .flatMap((l) => [...l.querySelectorAll<HTMLAnchorElement>("a.so-side")].map((a) => `${a.classList.contains("prev") ? "prev" : "next"} ${a.getAttribute("href")}`));
+}
+
+describe("T17i: trocar de ordem mostra os links certos; o lado que falta é um lugar guardado", () => {
+  test("Cronológica → o último capítulo da anterior; Lançamento → o link externo e o primeiro capítulo da seguinte; e de volta", () => {
+    document.body.innerHTML = BLOCO_T17I; // (só o teste monta HTML fixo; o código do site não)
+    const bloco = document.querySelector<HTMLElement>("[data-story-order]")!;
+    const seletor = bloco.querySelector<HTMLSelectElement>("select")!;
+    const trocar = (v: string) => {
+      seletor.value = v;
+      seletor.dispatchEvent(new Event("change", { bubbles: true }));
+    };
+    iniciarBloco(bloco, new Falso());
+    expect(linksVisiveis(bloco)).toEqual(["prev /pt/works/light-and-blood/02/"]);
+    trocar("release");
+    expect(linksVisiveis(bloco)).toEqual(["prev https://www.youtube.com/@ResidenciaDosDiVario", "next /pt/works/light-and-blood/01/"]);
+    trocar("chrono");
+    expect(linksVisiveis(bloco)).toEqual(["prev /pt/works/light-and-blood/02/"]);
+    // o script não mexe nos números da caixa nem nos lugares guardados
+    expect(bloco.getAttribute("style")).toBe("--so-em:40;--so-em-1:20");
+    const lugar = bloco.querySelector<HTMLElement>(".so-lugar.next")!;
+    expect(lugar.getAttribute("aria-hidden")).toBe("true");
+    expect(lugar.querySelector("a, [tabindex], img")).toBeNull();
+  });
+});

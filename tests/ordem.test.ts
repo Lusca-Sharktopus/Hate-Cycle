@@ -12,11 +12,13 @@
 //   3. o componente (Container API): as duas ordens no HTML, a outra escondida, o seletor desligado sem JavaScript, textos e links;
 //   4. a exceção de paridade (tests/ajudantes/html.ts → semBlocoDeOrdem) tira SÓ o bloco: sem ele a página do Leitor é a mesma de antes.
 // O script do navegador está em tests/ordem-dom.test.ts; as páginas reais construídas, no fim de tests/paginas.test.ts.
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { Window } from "happy-dom";
 import { afterAll, describe, expect, test } from "vitest";
 import Leitor from "../src/components/Leitor.astro";
 import ProximaHistoria from "../src/components/ProximaHistoria.astro";
@@ -24,10 +26,12 @@ import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { leiturasDaObra } from "../src/lib/leitura";
 import { cartaoDaObra } from "../src/lib/obras";
-import { arteEmCamadas, estiloDaCamada } from "../src/lib/artesDaOrdem";
-import { arteDaObra, blocoDaOrdem, ladoDaObra, ORDEM_PADRAO, ORDENS_DE_LEITURA, sequenciaDaOrdem, TEXTOS_DA_ORDEM, verboDaObra, type BlocoDaOrdem } from "../src/lib/ordemDeLeitura";
+import { arteEmCamadas, estiloDaCamada, PROPORCAO_DA_MOLDURA, sizesDaCamada } from "../src/lib/artesDaOrdem";
+import { CARIMBOS_DA_FONTE, LARGURA_MAXIMA } from "../src/lib/largurasDoRotulo";
+import { arteDaObra, blocoDaOrdem, emDaLinha, ESPACO_ENTRE_ROTULOS_EM, ladoDaObra, larguraDoRotulo, ORDEM_PADRAO, ORDENS_DE_LEITURA, sequenciaDaOrdem, TEXTOS_DA_ORDEM, verboDaObra, type BlocoDaOrdem } from "../src/lib/ordemDeLeitura";
 import { finalizarMain } from "../src/lib/pagina";
 import { arquivosDoGlob } from "../src/lib/quadrinhos";
+import { iniciarBloco } from "../src/scripts/ordem/bloco";
 import { carregarConteudo } from "./ajudantes/conteudo";
 import { canonicoDoMiolo, semBlocoDeOrdem } from "./ajudantes/html";
 
@@ -300,33 +304,77 @@ describe("as regras de ordem são as do seletor de Histórias", () => {
   });
 });
 
-describe("o destino de cada lado é o do cartão da obra em Histórias", () => {
-  test("link externo (HDVR), capítulo de obra de capítulo único, página da obra; obra sem nada para abrir não tem lado (é pulada)", () => {
-    const { dados } = ler(sitePdf(), true);
-    const lado = (slug: string, lang: Lang = "pt") => {
-      const d = dados[lang];
-      const o = d.obras.find((x) => x.data._origem.slug === slug);
-      if (!o) throw new Error(slug);
-      return ladoDaObra(o, lang, d.capitulosDe(o), true);
-    };
-    expect(lado("hdvr")?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
-    expect(lado("firestriker")?.destino).toEqual({ tipo: "link", href: "/pt/works/firestriker/01/", externo: false }); // oneshot → o capítulo
-    expect(lado("light-and-blood")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/", externo: false }); // seriada → a página da obra
+describe("o destino de cada lado (T17i): o ÚLTIMO capítulo da anterior, o PRIMEIRO da seguinte; link externo continua o do cartão", () => {
+  const ladoEm = (dados: ReturnType<typeof ler>["dados"], comRascunhos: boolean) => (slug: string, qual: "prev" | "next", lang: Lang = "pt") => {
+    const d = dados[lang];
+    const o = d.obras.find((x) => x.data._origem.slug === slug);
+    if (!o) throw new Error(slug);
+    return ladoDaObra(o, lang, d.capitulosDe(o), comRascunhos, qual);
+  };
+
+  test("link externo (Alô?) nos dois lados; obra de um capítulo só (Pederneira): os dois lados levam a ele; obra de dois (Luz & Sangue): 02 antes, 01 depois", () => {
+    const lado = ladoEm(ler(sitePdf(), true).dados, true);
+    for (const qual of ["prev", "next"] as const) {
+      expect(lado("hdvr", qual)?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
+      expect(lado("firestriker", qual)?.destino).toEqual({ tipo: "link", href: "/pt/works/firestriker/01/", externo: false });
+      expect(lado("firestriker", qual, "en")?.destino).toEqual({ tipo: "link", href: "/en/works/firestriker/01/", externo: false });
+    }
+    expect(lado("light-and-blood", "prev")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/02/", externo: false }); // voltando na ordem: o fim
+    expect(lado("light-and-blood", "next")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/01/", externo: false }); // seguindo: o começo
+    expect(lado("light-and-blood", "prev", "en")?.destino.href).toBe("/en/works/light-and-blood/02/");
     // rascunho sem capítulo = o cartão cinza "Em breve": não vira lado do bloco, nem em português nem em inglês
-    expect(lado("the-pendulum")).toBeNull();
-    expect(lado("roadside", "en")).toBeNull();
+    expect(lado("the-pendulum", "next")).toBeNull();
+    expect(lado("roadside", "prev", "en")).toBeNull();
   });
 
-  test("para TODA obra do conteúdo de verdade, nos dois modos e idiomas: o destino é o botão do cartão", () => {
+  test("no bloco, nas DUAS ordens e nos dois idiomas: quem vem antes leva ao último capítulo, quem vem depois ao primeiro", () => {
+    const { bloco } = ler(sitePdf(), false);
+    for (const lang of langs) {
+      // cronológica: Luz & Sangue (antes da Pederneira) → o último; lançamento: Luz & Sangue (depois da Pederneira) → o primeiro
+      expect(bloco("firestriker", lang).listas.chrono.anterior?.destino.href).toBe(`/${lang}/works/light-and-blood/02/`);
+      expect(bloco("firestriker", lang).listas.release.proximo?.destino.href).toBe(`/${lang}/works/light-and-blood/01/`);
+      // e no capítulo de Luz & Sangue, a Pederneira (de um capítulo só) leva ao único capítulo, dos dois lados
+      expect(bloco("light-and-blood", lang).listas.chrono.proximo?.destino.href).toBe(`/${lang}/works/firestriker/01/`);
+      expect(bloco("light-and-blood", lang).listas.release.anterior?.destino.href).toBe(`/${lang}/works/firestriker/01/`);
+      // Alô? (sem capítulo, link externo) continua no link, em outra aba
+      expect(bloco("firestriker", lang).listas.release.anterior?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
+    }
+  });
+
+  test("publicado × prévia: capítulo em rascunho só conta na prévia; capítulo `unlisted` não conta; capítulo só num idioma conta só nele", () => {
+    const extra = {
+      ...cap("light-and-blood", "03", "date: 2026-03-01\ndraft: true"), // rascunho: o último só na prévia
+      "works/light-and-blood/00-oculto/pt.md": "---\ndate: 2025-12-01\nunlisted: true\n---\n\nOculto.\n", // fora das listas: nunca é o primeiro
+      "works/light-and-blood/04/pt.md": "---\ndate: 2026-04-01\n---\n\nSó em português.\n", // só em português: o último em pt
+    };
+    const pub = ler(sitePdf(extra), false).bloco;
+    const pre = ler(sitePdf(extra), true).bloco;
+    expect(pub("firestriker", "pt").listas.chrono.anterior?.destino.href).toBe("/pt/works/light-and-blood/04/");
+    expect(pub("firestriker", "en").listas.chrono.anterior?.destino.href).toBe("/en/works/light-and-blood/02/");
+    expect(pre("firestriker", "en").listas.chrono.anterior?.destino.href).toBe("/en/works/light-and-blood/03/");
+    expect(pre("firestriker", "pt").listas.chrono.anterior?.destino.href).toBe("/pt/works/light-and-blood/04/");
+    for (const b of [pub, pre]) for (const lang of langs) expect(b("firestriker", lang).listas.release.proximo?.destino.href).toBe(`/${lang}/works/light-and-blood/01/`);
+  });
+
+  test("obra com link externo E capítulos: o link externo ganha (como o cartão de Histórias)", () => {
+    const { bloco } = ler(sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", external: "https://example.com/lb", order: { release: 3, chrono: 5 }, media: "live-ttrpg" }) }), false);
+    expect(bloco("firestriker", "pt").listas.chrono.anterior?.destino).toEqual({ tipo: "link", href: "https://example.com/lb", externo: true });
+    expect(bloco("firestriker", "pt").listas.release.proximo?.destino).toEqual({ tipo: "link", href: "https://example.com/lb", externo: true });
+  });
+
+  test("para TODA obra do conteúdo de verdade, nos dois modos e idiomas: externo = o botão do cartão; senão, o último/o primeiro capítulo listado", () => {
     for (const comRascunhos of [false, true]) {
       const { dados } = ler(Object.fromEntries(realContent()), comRascunhos);
+      const lado = ladoEm(dados, comRascunhos);
       for (const lang of langs) {
         const d = dados[lang];
         for (const o of d.universo) {
+          const slug = o.data._origem.slug;
           const botao = cartaoDaObra(o, lang, d.capitulosDe(o), comRascunhos).botao;
-          const lado = ladoDaObra(o, lang, d.capitulosDe(o), comRascunhos);
-          // cartão com botão = lado com o mesmo destino; cartão cinza "Em breve" = sem lado (a obra é pulada)
-          expect(lado?.destino, `${o.data._origem.slug} ${lang}`).toEqual(botao.tipo === "link" ? { tipo: "link", href: botao.href, externo: botao.externo } : undefined);
+          const listados = d.capitulosDe(o).listados.map((c) => `/${lang}/works/${slug}/${c.data._origem.capitulo}/`);
+          const esperado = (qual: "prev" | "next") =>
+            botao.tipo !== "link" ? undefined : botao.externo ? { tipo: "link", href: botao.href, externo: true } : { tipo: "link", href: qual === "prev" ? listados.at(-1) : listados[0], externo: false };
+          for (const qual of ["prev", "next"] as const) expect(lado(slug, qual, lang)?.destino, `${slug} ${lang} ${qual}`).toEqual(esperado(qual));
         }
       }
     }
@@ -386,7 +434,7 @@ describe("o componente ProximaHistoria", () => {
     expect(html).toContain(">estou lendo em ordem</p>");
     // cronológica: só o anterior (Light & Blood), com link para a página da obra e arte própria (as duas imagens, alt vazio)
     const cronologica = /<div class="so-order" data-ordem="chrono">([\s\S]*?)<\/div><div class="so-order"/.exec(html)?.[1] ?? "";
-    expect(cronologica).toContain('<a class="so-side prev" href="/pt/works/light-and-blood/">');
+    expect(cronologica).toContain('<a class="so-side prev" href="/pt/works/light-and-blood/02/">'); // T17i: o último capítulo
     expect(cronologica).not.toContain("so-side next");
     expect(cronologica).toContain('src="/ordem/lb-1.png"');
     expect(cronologica).toContain('src="/ordem/lb-2.png"');
@@ -472,7 +520,7 @@ describe("a arte em camadas no bloco", () => {
     const { bloco } = ler(comCamadas(), false);
     const html = await container.renderToString(ProximaHistoria, { props: { bloco: bloco("firestriker", "pt") } });
     const cronologica = /<div class="so-order" data-ordem="chrono">([\s\S]*?)<\/div><div class="so-order"/.exec(html)?.[1] ?? "";
-    expect(cronologica).toContain('<span class="so-art so-layers" style="--ar:2002 / 2023">');
+    expect(cronologica).toContain('<span class="so-art so-layers"><span class="so-stage so-tem-surge" style="--ar:2002 / 2023;--razao:0.9896">');
     const imgs = [...cronologica.matchAll(/<img class="(so-layer[^"]*)" src="([^"]+)" alt="" loading="lazy" style="([^"]+)"/g)];
     expect(imgs.map((m) => m[2])).toEqual(["/ordem/Thymorr%20Site%20Cronologia.png", "/ordem/Harry%20Site%20Cronologia.png", "/ordem/Olivia%20Site%20Cronologia.png"]);
     expect(imgs.map((m) => m[1])).toEqual(["so-layer so-surge", "so-layer", "so-layer"]);
@@ -527,6 +575,188 @@ describe("a exceção de paridade tira só o bloco (semBlocoDeOrdem)", () => {
     // outra <section> (ou um elemento que não é section) com o mesmo atributo NÃO sai
     expect(semBlocoDeOrdem('<main><div data-story-order>a</div><section class="x">b</section></main>').removidos).toEqual([]);
   });
+});
+
+// ───────────── T17i: Ossos do Ofício e Beira de Estrada em camadas; a moldura fixa; o rótulo numa linha ─────────────
+
+describe("T17i: as artes novas (content de verdade), validadas pelo schema", () => {
+  const { dados } = ler(Object.fromEntries(realContent()), true);
+  const crua = (slug: string) => dados.pt.obras.find((o) => o.data._origem.slug === slug)?.data.order_art;
+  const camada = (slug: string, nome: string) => crua(slug)?.layers.find((l) => l.image === `ordem/${nome} Site Cronologia.png`);
+
+  test("Ossos do Ofício: asas atrás, Giuseppe, olhos na frente; asas e olhos vão de 0 a 1 de opacidade; os três crescem", () => {
+    const a = crua("all-in-a-nights-work");
+    expect(a?.layers.map((l) => l.image)).toEqual(["ordem/Giuseppe Asas Site Cronologia.png", "ordem/Giuseppe Site Cronologia.png", "ordem/Giuseppe Olhos Site Cronologia.png"]);
+    for (const l of a?.layers ?? []) expect(l.hover?.width ?? 0, l.image).toBeGreaterThan(l.width);
+    expect([camada("all-in-a-nights-work", "Giuseppe Asas"), camada("all-in-a-nights-work", "Giuseppe Olhos")].map((l) => [l?.opacity, l?.hover?.opacity])).toEqual([[0, 1], [0, 1]]);
+    const arte = arteEmCamadas(a!);
+    expect(arte.camadas.map((c) => c.surge)).toEqual([true, false, true]);
+    expect(arte.temSurge).toBe(true);
+  });
+
+  test("Ossos do Ofício: os olhos acompanham EXATAMENTE o Giuseppe (mesmo crescimento; o canto de cima à esquerda dos dois PNGs coincide)", () => {
+    // os dois PNGs saíram da mesma tela do autor com o mesmo canto (medido: deslocamento 0, 0): Giuseppe 828 × 1231, olhos 809 × 1182
+    const [W, H] = crua("all-in-a-nights-work")!.size;
+    const g = camada("all-in-a-nights-work", "Giuseppe")!;
+    const o = camada("all-in-a-nights-work", "Giuseppe Olhos")!;
+    const canto = (x: number, y: number, w: number, nat: [number, number]) => {
+      const lpx = (w / 100) * W;
+      return [(x / 100) * W - lpx / 2, (y / 100) * H - (lpx * nat[1]) / nat[0] / 2, lpx / nat[0]];
+    };
+    for (const estado of ["inicio", "mouse"] as const) {
+      const pegar = (l: typeof g) => (estado === "inicio" ? [l.x, l.y, l.width] : [l.hover?.x ?? l.x, l.hover?.y ?? l.y, l.hover?.width ?? l.width]) as [number, number, number];
+      const cg = canto(...pegar(g), [828, 1231]);
+      const co = canto(...pegar(o), [809, 1182]);
+      expect(Math.abs(cg[0]! - co[0]!), `x do canto (${estado})`).toBeLessThan(2); // px da tela de 3311
+      expect(Math.abs(cg[1]! - co[1]!), `y do canto (${estado})`).toBeLessThan(2);
+      expect(Math.abs(cg[2]! / co[2]! - 1), `escala (${estado})`).toBeLessThan(0.002);
+    }
+  });
+
+  test("Beira de Estrada: Jean atrás, Cezar e Iris na frente, os olhos da Iris por cima com EXATAMENTE a posição, a largura e o giro de Cezar e Iris", () => {
+    const a = crua("roadside");
+    expect(a?.layers.map((l) => l.image)).toEqual(["ordem/Jean Site Cronologia.png", "ordem/Cezar e Iris Site Cronologia.png", "ordem/Iris Olhos Site Cronologia.png"]);
+    const ci = camada("roadside", "Cezar e Iris")!;
+    const olhos = camada("roadside", "Iris Olhos")!;
+    expect({ x: olhos.x, y: olhos.y, width: olhos.width, rotate: olhos.rotate }).toEqual({ x: ci.x, y: ci.y, width: ci.width, rotate: ci.rotate });
+    const { opacity: o1, ...semOpacidade } = olhos.hover ?? {};
+    expect(semOpacidade).toEqual(ci.hover);
+    expect([olhos.opacity, o1]).toEqual([0, 1]);
+    // crescem, inclinam e se afastam (como Lucas e Wellersson): Jean para a direita, Cezar e Iris para a esquerda
+    const jean = camada("roadside", "Jean")!;
+    expect(jean.hover!.width!).toBeGreaterThan(jean.width);
+    expect(ci.hover!.width!).toBeGreaterThan(ci.width);
+    expect(jean.hover!.x!).toBeGreaterThan(jean.x);
+    expect(ci.hover!.x!).toBeLessThan(ci.x);
+    expect(jean.hover!.rotate!).toBeGreaterThan(3);
+    expect(ci.hover!.rotate!).toBeLessThan(-3);
+    // Beira de Estrada não usa mais as duas imagens antigas
+    expect(dados.pt.obras.find((o) => o.data._origem.slug === "roadside")?.data.order_images).toBeUndefined();
+  });
+
+  test("todo arquivo de imagem de todo order_art existe em static/ (e as duas imagens antigas da Beira de Estrada foram apagadas)", () => {
+    for (const o of dados.pt.obras) for (const l of o.data.order_art?.layers ?? []) expect(existsSync(join(RAIZ, "static", l.image)), l.image).toBe(true);
+    expect(existsSync(join(RAIZ, "static/ordem/Beira de Estrada-ordem-1.png"))).toBe(false);
+    expect(existsSync(join(RAIZ, "static/ordem/Beira de Estrada-ordem-2.png"))).toBe(false);
+  });
+
+  test("o schema recusa um campo errado numa camada (ex.: \"opacty\") e opacidade fora de 0–1, com mensagem em português", () => {
+    const comArte = (camadaErrada: Record<string, unknown>) =>
+      sitePdf({ "works/roadside/work.json": wj({ kind: "comic", oneshot: true, title: "Roadside", order: { release: 5, chrono: 7 }, order_art: { size: [1950, 2143], layers: [camadaErrada] } }) });
+    expect(() => ler(comArte({ image: "ordem/Jean Site Cronologia.png", x: 1, y: 1, width: 1, opacty: 0 }), true)).toThrow(/campo desconhecido \(\\?"opacty\\?"\)\. Campos aceitos em cada camada de order_art\.layers/);
+    expect(() => ler(comArte({ image: "ordem/Jean Site Cronologia.png", x: 1, y: 1, width: 1, hover: { opacity: 2 } }), true)).toThrow(/opacity tem de ficar entre 0 e 1/);
+  });
+});
+
+describe("T17i: a moldura de proporção fixa e o tamanho que cada camada ocupa (sizes)", () => {
+  test("a proporção da moldura é a mesma no código e no CSS (aspect-ratio de .so-art)", () => {
+    const css = readFileSync(join(RAIZ, "src/components/ProximaHistoria.astro"), "utf8");
+    expect(PROPORCAO_DA_MOLDURA).toBe(1);
+    expect(css).toMatch(/\.so-art \{[^}]*aspect-ratio: 1 \/ 1;/);
+    // a tela de montagem se encaixa na moldura: largura toda (tela larga) ou altura toda (tela alta)
+    expect(css).toMatch(/\.so-stage \{[^}]*width: min\(100cqw, calc\(100cqh \* var\(--razao\)\)\)/);
+  });
+  test("sizes de uma camada: a fração da moldura no maior dos dois estados (tela alta ocupa menos largura)", () => {
+    expect(sizesDaCamada({ image: "a.png", x: 50, y: 50, width: 25, hover: { width: 30 } }, 2)).toBe("(max-width: 700px) 13.8vw, 102px");
+    expect(sizesDaCamada({ image: "a.png", x: 50, y: 50, width: 50 }, 0.5)).toBe("(max-width: 700px) 11.5vw, 85px");
+    const arte = arteEmCamadas({ size: [3311, 1884], layers: [{ image: "a.png", x: 1, y: 1, width: 87.2, opacity: 0, hover: { width: 103.98, opacity: 1 } }] });
+    expect(arte.razao).toBe(1.7574);
+    expect(arte.camadas[0]?.sizes).toBe("(max-width: 700px) 47.8vw, 354px");
+  });
+  test("o componente põe a tela dentro da moldura, com a classe so-tem-surge só quando alguma camada surge, e o sizes em cada <img>", async () => {
+    const lb = (art: unknown) => sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_art: art }), ...cap("light-and-blood") });
+    const so = { size: [10, 10], layers: [{ image: "a.png", x: 50, y: 50, width: 50, hover: { x: 40 } }] };
+    const html = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb(so), false).bloco("firestriker", "pt") } });
+    expect(html).toContain('<span class="so-art so-layers"><span class="so-stage" style="--ar:10 / 10;--razao:1">');
+    expect(html).toContain('style="--x:50%;--y:50%;--w:50%;--hx:40%" sizes="(max-width: 700px) 23vw, 170px"');
+  });
+});
+
+describe("T17i: o rótulo numa linha só (a largura medida na fonte)", () => {
+  test("a tabela de larguras saiu dos arquivos da fonte que estão no node_modules (senão: python3 tools/gerar_larguras_do_rotulo.py)", () => {
+    for (const [arquivo, carimbo] of Object.entries(CARIMBOS_DA_FONTE)) {
+      const bytes = readFileSync(join(RAIZ, "node_modules/@fontsource-variable/lexend/files", arquivo));
+      expect(createHash("sha256").update(bytes).digest("hex"), arquivo).toBe(carimbo);
+    }
+  });
+  test("larguraDoRotulo: soma das letras (com folga); letra fora da tabela conta como a mais larga; texto maior = mais largo", () => {
+    expect(larguraDoRotulo("")).toBe(0);
+    const ler1 = larguraDoRotulo("Ler Pederneira");
+    expect(larguraDoRotulo("Ler Pederneira!")).toBeGreaterThan(ler1);
+    expect(larguraDoRotulo("\u{1F600}")).toBe(Number(((LARGURA_MAXIMA / 1000) * 1.03).toFixed(3)));
+    // "W" é mais largo que "i" na Lexend
+    expect(larguraDoRotulo("W")).toBeGreaterThan(larguraDoRotulo("i"));
+  });
+  test("a caixa leva os 'em' da linha que precisa de mais nas DUAS ordens (a letra não muda ao trocar) e os do maior rótulo (celular)", () => {
+    const b = ler(sitePdf(), false).bloco("firestriker", "pt");
+    const alo = b.listas.release.anterior!.emDoRotulo;
+    const lb = b.listas.release.proximo!.emDoRotulo;
+    expect(b.listas.release.anterior?.rotulo).toBe("Assistir Alô? Residência dos Di Vario");
+    expect(b.emDosRotulos).toBeCloseTo(alo + lb + ESPACO_ENTRE_ROTULOS_EM, 3); // o lançamento (dois lados) precisa de mais que a cronológica (um)
+    expect(b.emDosRotulos).toBeGreaterThan(emDaLinha(b.listas.chrono));
+    expect(b.emDoMaiorRotulo).toBeCloseTo(alo + 0.3, 3);
+  });
+  test("o componente escreve os dois números na caixa e guarda o lugar do lado que não existe (so-lugar, invisível para leitores de tela)", async () => {
+    const b = ler(sitePdf(), false).bloco("firestriker", "pt");
+    const html = await container.renderToString(ProximaHistoria, { props: { bloco: b } });
+    expect(html).toContain(`style="--so-em:${b.emDosRotulos};--so-em-1:${b.emDoMaiorRotulo}"`);
+    const cronologica = /<div class="so-order" data-ordem="chrono">([\s\S]*?)<\/div><div class="so-order"/.exec(html)?.[1] ?? "";
+    // cronológica: a Pederneira é a última (publicado) → o lado de lá é um lugar guardado, sem link, sem texto e sem imagem
+    expect(cronologica).toContain('<span class="so-lugar next" aria-hidden="true"><span class="so-art"></span><span class="so-label">&nbsp;<svg class="so-arrow" viewBox="0 0 120 14"></svg></span></span>');
+    // as duas ordens têm sempre os dois lugares (lado de verdade ou lugar guardado)
+    for (const div of html.split('<div class="so-order"').slice(1)) expect((div.match(/class="so-(side|lugar) (prev|next)/g) ?? []).length).toBe(2);
+  });
+  test("o CSS: rótulo sem quebra, letra = a menor entre o máximo e a que cabe; altura da linha fixa (a do máximo)", () => {
+    const css = readFileSync(join(RAIZ, "src/components/ProximaHistoria.astro"), "utf8");
+    const regra = /\.so-label \{([^}]*)\}/.exec(css)?.[1] ?? "";
+    expect(regra).toContain("white-space: nowrap");
+    expect(regra).toContain("font-size: min(var(--so-cap), calc(100cqi / var(--so-em, 30)))");
+    expect(regra).toContain("line-height: calc(var(--so-cap) * 1.2)");
+    expect(css).toContain("font-size: min(var(--so-cap), calc(100cqi / var(--so-em-1, 20)))");
+  });
+  test("capítulo de quadrinho: o bloco continua sendo a folha de papel (a regra da folha escura do Leitor pegava a primeira <section>)", () => {
+    const leitor = readFileSync(join(RAIZ, "src/components/Leitor.astro"), "utf8");
+    expect(leitor).toContain(".reader-comic .reader-box:first-of-type { background: var(--night)"); // a regra que pegava o bloco
+    const css = readFileSync(join(RAIZ, "src/components/ProximaHistoria.astro"), "utf8");
+    expect(css).toMatch(/\.reader-comic \.reader-box\.paper\.story-order \{ background: var\(--paper\), var\(--sheet\); background-color: var\(--sheet\); color: var\(--green\); padding: clamp\(1\.4rem, 5vw, 3\.5rem\); \}/);
+    // a margem é a mesma de .reader-box (as outras caixas do leitor)
+    expect(leitor).toContain(".reader-box { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem);");
+  });
+});
+
+// ───────────── T17i: o HTML de verdade, num DOM simulado ─────────────
+// O bloco desenhado pelo ProximaHistoria.astro para o site do PDF do autor em miniatura (com um capítulo em rascunho), ligado pelo MESMO
+// script do navegador (src/scripts/ordem/bloco.ts) num documento do happy-dom: ao trocar de ordem, os links à vista levam ao ÚLTIMO
+// capítulo da anterior e ao PRIMEIRO da seguinte (externo continua externo), no publicado e na prévia, nos dois idiomas; as duas ordens
+// têm a mesma estrutura (dois lugares, cada um com moldura e rótulo). O resto do script está em tests/ordem-dom.test.ts.
+describe("T17i: no HTML de verdade, trocar de ordem leva aos capítulos certos e as duas ordens têm a mesma estrutura", () => {
+  const site = sitePdf(cap("light-and-blood", "03", "date: 2026-03-01\ndraft: true"));
+  for (const [comRascunhos, ultimo] of [[false, "02"], [true, "03"]] as const) {
+    for (const lang of langs) {
+      test(`${comRascunhos ? "prévia" : "publicado"}, ${lang}: Cronológica → Luz & Sangue ${ultimo} (o último); Lançamento → Alô? (externo) e Luz & Sangue 01 (o primeiro)`, async () => {
+        const html = await container.renderToString(ProximaHistoria, { props: { bloco: ler(site, comRascunhos).bloco("firestriker", lang) } });
+        const janela = new Window();
+        janela.document.body.innerHTML = html;
+        const bloco = janela.document.querySelector("[data-story-order]") as unknown as HTMLElement;
+        const memoria = new Map<string, string>();
+        iniciarBloco(bloco, { getItem: (c) => memoria.get(c) ?? null, setItem: (c, v) => void memoria.set(c, v) });
+        const visiveis = () =>
+          [...bloco.querySelectorAll<HTMLElement>(".so-order")].filter((l) => !l.hidden).flatMap((l) => [...l.querySelectorAll<HTMLAnchorElement>("a.so-side")].map((a) => `${a.classList.contains("prev") ? "prev" : "next"} ${a.getAttribute("href")}`));
+        expect(visiveis()).toEqual([`prev /${lang}/works/light-and-blood/${ultimo}/`]);
+        const seletor = bloco.querySelector<HTMLSelectElement>("select")!;
+        seletor.value = "release";
+        seletor.dispatchEvent(new janela.Event("change", { bubbles: true }) as unknown as Event);
+        expect(visiveis()).toEqual(["prev https://www.youtube.com/@ResidenciaDosDiVario", `next /${lang}/works/light-and-blood/01/`]);
+        const lugar = bloco.querySelector<HTMLElement>('.so-order[data-ordem="chrono"] .so-lugar.next')!;
+        expect(lugar.getAttribute("aria-hidden")).toBe("true");
+        expect(lugar.querySelector("a, [tabindex], img")).toBeNull();
+        for (const l of bloco.querySelectorAll(".so-order")) {
+          expect([...l.children].filter((c) => c.matches(".so-side, .so-lugar")).map((c) => [c.querySelectorAll(".so-art").length, c.querySelectorAll(".so-label").length])).toEqual([[1, 1], [1, 1]]);
+        }
+        await janela.happyDOM.close();
+      });
+    }
+  }
 });
 
 /** O content/ de verdade, como { caminho relativo → texto } (só o que o carregador lê: work.json e .md). */

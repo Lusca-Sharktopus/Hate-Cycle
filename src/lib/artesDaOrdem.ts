@@ -19,8 +19,16 @@
 // Uma transição só (suave, a mesma para todas as camadas) leva do estado inicial ao do mouse; ao tirar o mouse ela volta.
 //
 // Como o navegador recebe: cada camada é uma <img> com variáveis de CSS (`--x`, `--hx`…) no atributo `style`; quem anima é o CSS do
-// ProximaHistoria.astro. Sem JavaScript a composição já aparece (é CSS). Com "reduzir movimento" nada se mexe; só aparecem de vez as
-// camadas cuja opacidade muda (ex.: o Thymorr).
+// ProximaHistoria.astro. Sem JavaScript a composição já aparece (é CSS).
+//
+// A MOLDURA (T17i, pedido do autor de 21/10: a caixa não pode mudar de tamanho ao trocar de ordem): toda arte do bloco, de qualquer obra,
+// fica numa moldura de proporção FIXA (`PROPORCAO_DA_MOLDURA`, a mesma do CSS). A tela de montagem se encaixa dentro dela inteira, sem
+// deformar e sem cortar (como `object-fit: contain`), encostada embaixo (no rótulo) e centrada na largura: tela larga (Ossos do Ofício,
+// com as asas) ocupa a largura toda; tela alta (Beira de Estrada) ocupa a altura toda.
+//
+// "Reduzir movimento" (o aparelho do visitante pede menos animação): nada anima. Se a arte tem uma camada que SURGE (a opacidade muda:
+// o Thymorr, as asas e os olhos do Giuseppe, os olhos da Iris), a arte troca DE UMA VEZ para o desenho do mouse por cima (o desenho final
+// do autor, com tudo no lugar: os olhos em cima do rosto); se só se mexe (Luz & Sangue, Alô?), fica parada.
 
 /** O que pode mudar no mouse por cima (todos opcionais). */
 export interface MudancasDaCamada {
@@ -53,16 +61,37 @@ export interface CamadaDaArte {
   imagem: string;
   /** O atributo `style` da <img>: as variáveis de CSS de posição, tamanho, giro e opacidade (iniciais e do mouse por cima). */
   estilo: string;
-  /** A opacidade muda no mouse por cima (a camada "surge" ou some): com movimento reduzido, ela ainda aparece, no lugar final. */
+  /** A opacidade muda no mouse por cima (a camada "surge" ou some). */
   surge: boolean;
+  /** O atributo `sizes` da <img>: quanto ela ocupa na tela, no maior dos dois estados (o navegador escolhe a versão leve certa; T17). */
+  sizes: string;
 }
 
 /** A arte pronta para desenhar. */
 export interface ArteEmCamadas {
   /** A proporção da tela de montagem, no formato do CSS `aspect-ratio` ("2087 / 1752"). */
   proporcao: string;
+  /** A mesma proporção como número (largura ÷ altura), para o CSS encaixar a tela na moldura. */
+  razao: number;
+  /** Alguma camada surge (com movimento reduzido, a arte troca de uma vez para o desenho final). */
+  temSurge: boolean;
   /** De trás para a frente. */
   camadas: CamadaDaArte[];
+}
+
+/** A proporção (largura ÷ altura) da moldura de TODA arte do bloco. É a do `aspect-ratio` de `.so-art` em ProximaHistoria.astro. */
+export const PROPORCAO_DA_MOLDURA = 1;
+
+/** Quanto a moldura ocupa na tela (a mesma conta do perfil `camadaDaOrdem` de src/lib/imagens.ts): ~46% da tela no celular, até ~340 px. */
+const MOLDURA_NO_CELULAR_VW = 46;
+const MOLDURA_NA_TELA_LARGA_PX = 340;
+
+/** O `sizes` de uma camada: a fração da moldura que ela ocupa no seu maior tamanho. */
+export function sizesDaCamada(c: CamadaCrua, razao: number): string {
+  const daTela = Math.max(c.width, c.hover?.width ?? c.width) / 100; // fração da largura da tela de montagem
+  const telaNaMoldura = Math.min(1, razao / PROPORCAO_DA_MOLDURA); // a tela alta não usa a largura toda da moldura
+  const f = daTela * telaNaMoldura;
+  return `(max-width: 700px) ${numeroCss(Number((MOLDURA_NO_CELULAR_VW * f).toFixed(1)))}vw, ${Math.max(1, Math.round(MOLDURA_NA_TELA_LARGA_PX * f))}px`;
 }
 
 /** Um número para dentro do CSS: sem notação científica e sem zeros à toa. */
@@ -88,12 +117,17 @@ export function estiloDaCamada(c: CamadaCrua): string {
 
 /** Do `order_art` do work.json para o que o componente desenha. */
 export function arteEmCamadas(crua: ArteCrua): ArteEmCamadas {
+  const razao = crua.size[0] / crua.size[1];
+  const camadas = crua.layers.map((c) => ({
+    imagem: c.image,
+    estilo: estiloDaCamada(c),
+    surge: c.hover?.opacity !== undefined && c.hover.opacity !== (c.opacity ?? 1),
+    sizes: sizesDaCamada(c, razao),
+  }));
   return {
     proporcao: `${numeroCss(crua.size[0])} / ${numeroCss(crua.size[1])}`,
-    camadas: crua.layers.map((c) => ({
-      imagem: c.image,
-      estilo: estiloDaCamada(c),
-      surge: c.hover?.opacity !== undefined && c.hover.opacity !== (c.opacity ?? 1),
-    })),
+    razao: Number(razao.toFixed(4)),
+    temSurge: camadas.some((c) => c.surge),
+    camadas,
   };
 }
