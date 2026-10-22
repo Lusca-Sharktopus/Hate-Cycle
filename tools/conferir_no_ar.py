@@ -2,7 +2,7 @@
 """Conferência do site no ar (T20): para cada endereço-chave, confere o status, o título e um pedaço de texto esperado.
 
 Só biblioteca padrão do Python (3.12+). NÃO faz parte do `pnpm test`: é uma ferramenta para rodar na hora da virada
-(sábado) e depois de qualquer publicação, contra o site de verdade ou contra um servidor local.
+(segunda, 26/10) e depois de qualquer publicação, contra o site de verdade ou contra um servidor local.
 
 Uso:
     python3 tools/conferir_no_ar.py https://hatecycle.com              # o site no ar

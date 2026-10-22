@@ -18,7 +18,7 @@ Esta lição é diferente das outras: quase não tem código do site. O arquivo 
 ## Abra lado a lado
 
 1. `.github/workflows/deploy.yml` (o workflow).
-2. `docs/virada.md` (o roteiro do autor: sexta à noite, sábado, voltar atrás, dia a dia).
+2. `docs/virada.md` (o roteiro do autor: domingo à noite, segunda, voltar atrás, dia a dia; a virada foi remarcada de sábado 24/10 para segunda 26/10).
 3. `tools/conferir_no_ar.py` (a conferência dos endereços-chave).
 4. `package.json` (`packageManager`, `engines`) e `.nvmrc` (de onde o workflow tira as versões do pnpm e do Node).
 5. `astro.config.mjs` (`site`, `outDir`, `publicDir`) e `static/CNAME` (o arquivo com `hatecycle.com`, que o Astro copia para `dist/CNAME`; confira com `cat dist/CNAME`).

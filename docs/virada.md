@@ -1,14 +1,16 @@
-# A virada: sábado 24/10/2026, 12:00 (Brasília)
+# A virada: segunda-feira 26/10/2026, 12:00 (Brasília)
 
-Neste dia o site novo (feito com Astro) entra no ar em **hatecycle.com**, no lugar do site antigo. Este roteiro diz o que você faz na **sexta à noite**, o que acontece no **sábado**, como **voltar atrás em poucos minutos** se algo der errado e como fica o **dia a dia** depois.
+> Remarcada pelo autor em 21/10/2026 (antes: sábado 24/10), "para termos mais tempo".
+
+Neste dia o site novo (feito com Astro) entra no ar em **hatecycle.com**, no lugar do site antigo. Este roteiro diz o que você faz no **domingo à noite**, o que acontece na **segunda**, como **voltar atrás em poucos minutos** se algo der errado e como fica o **dia a dia** depois.
 
 Você não precisa saber programar para nada disto. Tudo que você faz é clicar em telas do GitHub e do Supabase.
 
 ## O que muda, em uma frase
 
-Hoje o site no ar é uma pasta de arquivos prontos, publicada pelo GitHub como está. A partir de sábado, **o GitHub constrói o site sozinho** (uma "linha de montagem" chamada GitHub Actions, descrita no arquivo `.github/workflows/deploy.yml`) toda vez que alguém envia uma mudança para a branch `main`, e publica o resultado.
+Hoje o site no ar é uma pasta de arquivos prontos, publicada pelo GitHub como está. A partir de segunda, **o GitHub constrói o site sozinho** (uma "linha de montagem" chamada GitHub Actions, descrita no arquivo `.github/workflows/deploy.yml`) toda vez que alguém envia uma mudança para a branch `main`, e publica o resultado.
 
-## 1. Sexta à noite (23/10): o que você faz
+## 1. Domingo à noite (25/10): o que você faz
 
 Reserve uns 15 minutos. O endereço do repositório é `github.com/Lusca-Sharktopus/Hate-Cycle`. Você precisa estar logado no GitHub com a sua conta.
 
@@ -30,7 +32,7 @@ Por que isto importa: com a publicação automática, o arquivo `CNAME` que est�
 
 ### 1.3. Abrir hatecycle.com e ver o site antigo
 
-Abra **https://hatecycle.com** (de preferência numa janela anônima). Tem de aparecer o **site antigo**, como hoje. Ele continua no ar até sábado ao meio-dia.
+Abra **https://hatecycle.com** (de preferência numa janela anônima). Tem de aparecer o **site antigo**, como hoje. Ele continua no ar até segunda ao meio-dia.
 
 > **Se o site tiver caído** (página de erro do GitHub, "404", ou nada): volte em Settings → Pages, ponha **Source = Deploy from a branch**, **Branch = `main`** e **/ (root)**, clique em **Save**, e **me avise**. Em uns 2 minutos o site antigo volta.
 
@@ -51,9 +53,9 @@ O site antigo usa o Disqus nas páginas `firestriker.html`, `pederneira.html` e 
 ### 1.6. O que eu já deixei pronto
 
 - A **cópia de segurança do site antigo** já existe no GitHub: é a branch **`site-antigo`**. Ela é o seu "botão de voltar" (ver a seção 3). Não apague.
-- O **pull request nº 1** (que traz o site novo) mostra se a "linha de montagem" funciona: antes de sábado ele tem de aparecer com **"All checks have passed"** (tudo verde). Não clique em "Merge" você mesmo: o merge é feito por mim, no horário combinado.
+- O **pull request nº 1** (que traz o site novo) mostra se a "linha de montagem" funciona: antes de segunda ele tem de aparecer com **"All checks have passed"** (tudo verde). Não clique em "Merge" você mesmo: o merge é feito por mim, no horário combinado.
 
-## 2. Sábado ao meio-dia: o que acontece
+## 2. Segunda ao meio-dia: o que acontece
 
 | Hora (Brasília) | O que acontece | Você precisa fazer algo? |
 |---|---|---|
@@ -73,7 +75,7 @@ Se o site novo estiver quebrado, ou você simplesmente não gostar, é só pôr 
 3. Aparecem dois campos novos: em **Branch**, escolha **`site-antigo`**; ao lado, escolha **/ (root)**.
 4. Clique em **Save**.
 
-O que você vai ver: na aba **Actions**, uma tarefa chamada "pages build and deployment" que fica amarela por **1 a 3 minutos** e depois verde (a tela de Pages também mostra o endereço do site). Em **Custom domain** continua `hatecycle.com` (confira). Mais até **10 minutos** de cache, como no sábado.
+O que você vai ver: na aba **Actions**, uma tarefa chamada "pages build and deployment" que fica amarela por **1 a 3 minutos** e depois verde (a tela de Pages também mostra o endereço do site). Em **Custom domain** continua `hatecycle.com` (confira). Mais até **10 minutos** de cache, como na virada.
 
 Os comentários do Supabase **não se perdem**: continuam guardados; o site antigo só não os mostra.
 
