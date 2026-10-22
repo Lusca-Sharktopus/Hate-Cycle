@@ -105,7 +105,8 @@ const listaOrdemDeImagens = () =>
 /**
  * order_art do work.json (T17h): a arte do bloco "estou lendo em ordem…" em CAMADAS animadas (ver src/lib/artesDaOrdem.ts e o
  * guia do autor). `size` = [largura, altura] da tela de montagem; `layers` = as camadas, de trás para a frente, cada uma com a
- * posição inicial e, em `hover`, só o que muda com o mouse por cima. Campo desconhecido, em qualquer nível, é erro.
+ * posição inicial e, em `hover`, só o que muda com o mouse por cima; `bleed` (T17l) = as camadas podem sair da moldura até a borda da
+ * caixa. Campo desconhecido, em qualquer nível, é erro.
  */
 const numeroDaArte = (oQue: string) => z.number({ error: (i) => `${oQue} tem de ser um número, sem aspas, mas veio ${descrever(i.input)}.` });
 const estritoDaArte = <S extends z.ZodRawShape>(onde: string, campos: S) =>
@@ -144,6 +145,7 @@ const arteEmCamadas = () =>
       )
       .min(1, { error: "layers precisa de pelo menos uma camada." })
       .max(8, { error: "layers aceita no máximo 8 camadas." }),
+    bleed: z.boolean({ error: (i) => `bleed tem de ser true ou false, sem aspas (true = as camadas podem sair da moldura até a borda da caixa), mas veio ${descrever(i.input)}.` }).optional(),
   });
 
 /**

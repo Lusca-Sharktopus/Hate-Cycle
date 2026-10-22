@@ -1,7 +1,8 @@
 ---
 // O bloco "estou lendo em ordem…" (T17c) que fecha todo capítulo: uma caixa de papel entre a do capítulo e a dos comentários, com a história
-// que vem ANTES (à esquerda) e a que vem DEPOIS (à direita) na ordem que o visitante escolheu (Cronológica ou Lançamento). Só no Astro: o
-// build.py não tem este bloco (tests/ajudantes/html.ts ignora exatamente esta <section>; lição 08-leitor.md).
+// que vem ANTES (à esquerda) e a que vem DEPOIS (à direita) na ordem que o visitante escolheu (Cronológica ou Lançamento). Desde a T17l
+// (pedido do autor de 22/10, mudança 7) também na PÁGINA DA OBRA, logo depois da lista de capítulos (a "história atual" é a da página).
+// Só no Astro: o build.py não tem este bloco (tests/ajudantes/html.ts ignora exatamente esta <section>; lição 08-leitor.md).
 //
 // Só desenha: tudo vem decidido em `bloco` (src/lib/ordemDeLeitura.ts), nas DUAS ordens. O servidor desenha as duas listas (a padrão
 // visível, a outra com `hidden`) e o seletor desabilitado; o <script> (src/scripts/ordem/) só alterna qual lista aparece e lembra a escolha
@@ -41,7 +42,15 @@ const DIRECOES = ["prev", "next"] as const;
     /* O bloco "estou lendo em ordem…" (T17c). Mesmo papel das outras caixas do leitor (.reader-box.paper); medidas tiradas do desenho do
        autor (proxima historia.png): a arte encosta nas bordas, a frase e o seletor ficam no centro, em cima, e o nome da história e a seta
        ficam embaixo de cada lado. Cores e fonte são os tokens do site. */
-    .story-order { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); padding: .4rem clamp(.5rem, 1.6vw, 1.1rem) clamp(.9rem, 2vw, 1.3rem); overflow: hidden; color: var(--green); font-family: var(--font-text);
+    /* (T17l) a caixa de papel do Leitor (.reader-box e .reader-box.paper de Leitor.astro, os MESMOS valores, inclusive a margem de dentro):
+       na página da obra o CSS do Leitor não vem, e o bloco tem de ser a mesma caixa que nos capítulos. Medido: nos capítulos, a margem que
+       valia era SEMPRE a da .reader-box (clamp(1.4rem, 5vw, 3.5rem)); o `padding` que este arquivo dava a .story-order (e o `padding-top`
+       do celular) perdia para ela e foi tirado. */
+    .reader-box.story-order { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; background: var(--paper), var(--sheet); background-color: var(--sheet); }
+    /* (T17l) na página da obra a caixa vem logo depois da lista de capítulos (section.block), dentro da folha da página: ocupa a largura
+       da lista (o conteúdo da folha), em vez de 2rem a menos */
+    .block + .reader-box.story-order { width: 100%; }
+    .story-order { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; color: var(--green); font-family: var(--font-text);
       /* o tamanho MÁXIMO do rótulo "Ler [obra]" (T17i: um pouco menor que antes, que era clamp(.95rem, 2.5vw, 1.8rem)) */
       --so-cap: clamp(.85rem, 2.2vw, 1.6rem); }
     .so-top { position: absolute; top: clamp(.5rem, 1.6vw, 1rem); left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; width: max-content; max-width: 60%; text-align: center; pointer-events: none; }
@@ -74,9 +83,6 @@ const DIRECOES = ["prev", "next"] as const;
     .so-art { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); width: 89%; aspect-ratio: 1 / 1; min-height: 0; overflow: clip; transform-origin: 50% 92%; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
     .so-img { grid-area: 1 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transition: opacity .4s ease; }
     .so-img-2 { opacity: 0; }
-    .so-side.is-cover .so-img { border-radius: 8px; object-fit: contain; }
-    .so-side.is-cover.prev .so-img { object-position: 0 100%; }
-    .so-side.is-cover.next .so-img { object-position: 100% 100%; }
     /* o rótulo "Ler/Assistir/Jogar [obra]" (T17i): SEMPRE numa linha só. A letra é a menor entre o máximo (--so-cap) e a que faz os
        rótulos da linha (os dois lados + o espaço entre eles = --so-em, medido no build na fonte de verdade) caberem na largura da caixa;
        a altura da linha é fixa (a do tamanho máximo), então letra menor não muda a altura da caixa. O rótulo pode passar por baixo do
@@ -96,6 +102,14 @@ const DIRECOES = ["prev", "next"] as const;
     .so-layer { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto; max-width: none; translate: -50% -50%; rotate: var(--r, 0deg); opacity: var(--o, 1); pointer-events: none;
       transition-property: left, top, width, rotate, opacity; transition-duration: .6s; transition-timing-function: cubic-bezier(.2, .7, .2, 1); }
     a.so-side:is(:hover, :focus-visible) .so-layer { left: var(--hx, var(--x)); top: var(--hy, var(--y)); width: var(--hw, var(--w)); rotate: var(--hr, var(--r, 0deg)); opacity: var(--ho, var(--o, 1)); }
+    /* (T17l) `"bleed": true` no order_art (as asas do Giuseppe, "print giuseppe 3.png"): a moldura e a tela deixam de cortar, e as camadas
+       saem dela até a borda da caixa, que serve de "máscara de camada" (.story-order tem overflow: hidden e o canto arredondado). Ficam por
+       trás da frase de cima (.so-top, z-index 2) e não pegam clique (.so-layer tem pointer-events: none): o seletor e a outra história
+       continuam clicáveis. Nada disso ocupa lugar (as camadas são absolutas): a caixa não muda de tamanho. Só fora do celular: até 700 px
+       a caixa é estreita e as duas artes ficam lado a lado, e a moldura volta a cortar (a camada não cobre a outra história). */
+    @media (min-width: 701px) {
+      .so-art.so-sangra, .so-art.so-sangra > .so-stage { overflow: visible; }
+    }
 
     /* mouse por cima (e teclado): a arte troca da 1 para a 2 com um leve crescimento */
     a.so-side:is(:hover, :focus-visible) .so-art:not(.so-layers) { transform: scale(1.07); }
@@ -120,7 +134,6 @@ const DIRECOES = ["prev", "next"] as const;
        Cada lado ocupa as três linhas da grade (subgrid), então os dois <a> continuam lado a lado e do mesmo tamanho; a letra é a que faz o
        MAIOR rótulo da caixa caber na largura toda (--so-em-1). */
     @media (max-width: 700px) {
-      .story-order { padding-top: .9rem; }
       .so-top { position: static; transform: none; width: auto; max-width: none; margin-bottom: .3rem; }
       .so-title { white-space: normal; }
       .so-top, .so-order { grid-column: 1; }

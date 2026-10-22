@@ -19,11 +19,20 @@
 // "Lançada" = o cartão dela tem botão de verdade (cartaoDaObra → botao.tipo === "link"): no site publicado contam só as públicas com algo
 // para abrir; na prévia, as públicas e os rascunhos que têm capítulo. A obra do capítulo em que o visitante está não é pulada.
 //
-// PARA ONDE CADA LADO LEVA (T17i, pedido do autor de 21/10): quem vem DEPOIS leva ao PRIMEIRO capítulo dela (a pessoa vai começar a
-// história); quem vem ANTES, ao ÚLTIMO (a pessoa está voltando na ordem e chega ao fim da anterior). "Capítulos" = os listados daquela
-// obra naquele idioma e naquele modo (no publicado só os públicos; na prévia também os rascunhos), os mesmos que a lista da página da obra
-// mostra. Obra de um capítulo só: os dois lados levam a ele. Obra com link externo (vídeo, RPG ao vivo no YouTube…) continua levando ao
-// link, como o cartão dela em Histórias.
+// SÓ ENTRA QUEM TEM ARTE PARA A CAIXA (T17l, pedido do autor de 22/10, mudança 12: "Pule qualquer história que eu não tenha enviado
+// imagens para a caixa de cronologia"): uma obra sem `order_art` e sem `order_images` no work.json também é PULADA, como o "Em breve" (a
+// capa deixou de ser o "plano B"). Hoje isso tira O Pêndulo e Cat-Crow-Thing do bloco.
+//
+// PARA ONDE CADA LADO LEVA (T17l, pedido do autor de 22/10, mudança 7, que desfaz a regra da T17i do primeiro/último capítulo): obra com
+// MAIS DE UM capítulo listado (naquele idioma e modo: no publicado só os públicos; na prévia também os rascunhos; `unlisted` não conta)
+// leva à PÁGINA DA OBRA, a lista de capítulos; obra de um capítulo só leva a ele. Os dois lados (antes e depois) levam ao mesmo lugar.
+// Obra com link externo (vídeo, RPG ao vivo no YouTube…) continua levando ao link, como o cartão dela em Histórias.
+//
+// EM OUTRO IDIOMA (T17l, mudança 11: "Permita que a Caixa de Cronologia leve à Ossos do Ofício mesmo quando em português, levando para a
+// página em inglês mesmo"): regra geral — se a obra não tem nada lançado no idioma da página (nenhum capítulo, nenhum link externo), mas
+// tem em outro idioma do site, ela entra no bloco com o rótulo no idioma da página ("Ler Ossos do Ofício") e o link para o capítulo (ou a
+// página da obra) do outro idioma, marcado com `hreflang` (o idioma de destino). Hoje: Ossos do Ofício, que só tem capítulo em inglês.
+// Vale só para quem a página daquele idioma mostra (obra com `langs` sem o idioma da página nem entra na ordem).
 //
 // O RÓTULO NUMA LINHA SÓ (T17i): o build mede cada rótulo na fonte de verdade (src/lib/largurasDoRotulo.ts, gerado da Lexend 500) e
 // escreve na caixa quantos "em" os dois rótulos lado a lado precisam (`emDosRotulos`); o CSS escolhe a letra que cabe na largura da caixa.
@@ -31,8 +40,9 @@ import { ORDEM_PADRAO, ORDENS } from "../scripts/ordem/regras";
 import type { Lang } from "./config";
 import { arteEmCamadas, type ArteCrua, type ArteEmCamadas } from "./artesDaOrdem";
 import { LARGURA_MAXIMA, LARGURAS, UNIDADES_POR_EM } from "./largurasDoRotulo";
-import { cartaoDaObra, capaDaObra, logoDaObra, tituloDaObra, urlDoCapitulo, valoresDeOrdem, type CapitulosDaObra, type ObraComDados } from "./obras";
+import { cartaoDaObra, tituloDaObra, urlDaObra, urlDoCapitulo, valoresDeOrdem, type CapitulosDaObra, type ObraComDados } from "./obras";
 import { organizarCartoes } from "./seletor";
+import { obraTemPagina } from "./visibilidade";
 import { TEXTOS_DA_ORDEM, type OrdemDeLeitura, type Verbo } from "./textosDaOrdem";
 
 export { TEXTOS_DA_ORDEM, type OrdemDeLeitura, type Verbo } from "./textosDaOrdem";
@@ -68,26 +78,25 @@ export interface LadoDaOrdem {
   /** O texto do link, já com o verbo e o título: "Assistir Luz & Sangue". */
   rotulo: string;
   /**
-   * Para onde vai (T17i): o link externo da obra, se ela tem (como o cartão em Histórias); senão, o PRIMEIRO capítulo (lado "seguinte")
-   * ou o ÚLTIMO (lado "anterior"), entre os listados naquele idioma e modo.
+   * Para onde vai (T17l): o link externo da obra, se ela tem (como o cartão em Histórias); senão, a página da obra (a lista de capítulos)
+   * quando ela tem mais de um capítulo listado naquele idioma e modo, ou o capítulo, quando tem um só. `idioma` = o idioma da página de
+   * destino quando ela NÃO é o da página atual (a obra só tem capítulo em outro idioma; vira `hreflang` no link); null = o mesmo idioma.
    */
-  destino: { tipo: "link"; href: string; externo: boolean };
+  destino: { tipo: "link"; href: string; externo: boolean; idioma: Lang | null };
   /** A largura do rótulo, em "em" da fonte do rótulo (para o CSS escolher o tamanho que cabe numa linha). */
   emDoRotulo: number;
   /**
-   * A arte do lado, por ordem de preferência: a composição em CAMADAS do work.json (`order_art`, T17h), as imagens `order_images` (a normal e,
-   * se houver, a do mouse por cima) ou, sem nenhuma, a capa da obra (`ehCapa`: o CSS a encaixa na mesma caixa); sem capa, a logo; sem nada,
-   * null (a caixa fica vazia). Caminhos relativos a static/.
+   * A arte do lado, por ordem de preferência: a composição em CAMADAS do work.json (`order_art`, T17h) ou as imagens `order_images` (a
+   * normal e, se houver, a do mouse por cima). Obra sem nenhuma das duas não chega a virar lado (T17l: é pulada). Caminhos relativos a static/.
    */
-  arte: ArteDeImagens | ArteDeCamadas | null;
+  arte: ArteDeImagens | ArteDeCamadas;
 }
 
-/** A arte de uma ou duas imagens (a normal e a do mouse por cima) ou da capa. */
+/** A arte de uma ou duas imagens (a normal e a do mouse por cima). */
 export interface ArteDeImagens {
   tipo: "imagens";
   principal: string;
   hover: string | null;
-  ehCapa: boolean;
 }
 
 /** A arte em camadas animadas (ver src/lib/artesDaOrdem.ts). */
@@ -149,29 +158,56 @@ export function emDaLinha(lista: ListaDaOrdem): number {
   return Number((lados.reduce((a, b) => a + b, 0) + ESPACO_ENTRE_ROTULOS_EM).toFixed(3));
 }
 
-/** A arte de uma obra para o bloco: ver `LadoDaOrdem.arte`. */
-export function arteDaObra(obra: ObraParaOrdem, lang: Lang): LadoDaOrdem["arte"] {
+/** A arte de uma obra para o bloco (ver `LadoDaOrdem.arte`); null = a obra não tem arte própria para a caixa (T17l: ela é pulada). */
+export function arteDaObra(obra: ObraParaOrdem): LadoDaOrdem["arte"] | null {
   if (obra.data.order_art) return { tipo: "camadas", ...arteEmCamadas(obra.data.order_art) };
   const proprias = (obra.data.order_images ?? []).filter((a) => a.trim() !== "");
   const principal = proprias[0];
-  if (principal) return { tipo: "imagens", principal, hover: proprias[1] ?? null, ehCapa: false };
-  const capa = capaDaObra(obra, lang) || logoDaObra(obra, lang);
-  return capa ? { tipo: "imagens", principal: capa, hover: null, ehCapa: true } : null;
+  return principal ? { tipo: "imagens", principal, hover: proprias[1] ?? null } : null;
 }
 
-/** De que lado da caixa a obra fica: "prev" = a que vem ANTES (à esquerda), "next" = a que vem DEPOIS (à direita). */
-export type LadoDaCaixa = "prev" | "next";
+/** Os capítulos da obra em OUTRO idioma do site (para a regra do "em outro idioma"; ver o topo do arquivo). */
+export interface CapitulosEmOutroIdioma {
+  lang: Lang;
+  capitulos: CapitulosDaObra;
+}
 
 /**
- * O lado de uma obra: título, verbo, destino e arte. `null` = a obra ainda não tem nada lançado naquele modo (o cartão dela é o cinza
- * "Em breve"): ela não entra na ordem (ver o topo do arquivo). `lado` decide o capítulo: o último (anterior) ou o primeiro (seguinte).
+ * Para onde o lado de uma obra leva NUM idioma, ou null se ali ela não tem nada lançado (o cartão cinza "Em breve"). Link externo: o do
+ * cartão. Senão: mais de um capítulo listado e a obra tem página própria → a página da obra (a lista de capítulos); senão, o (primeiro)
+ * capítulo — obra de capítulo único (`oneshot`) com mais de um capítulo não tem página, e vai ao primeiro, como o cartão.
  */
-export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean, lado: LadoDaCaixa): LadoDaOrdem | null {
+export function destinoNoIdioma(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean): { href: string; externo: boolean } | null {
   const botao = cartaoDaObra(obra, lang, capitulos, comRascunhos).botao;
   if (botao.tipo !== "link") return null;
-  // link externo: o mesmo do cartão; senão, o capítulo da ponta certa (o botão do cartão só existe se há capítulos listados)
-  const capitulo = lado === "prev" ? capitulos.listados.at(-1) : capitulos.listados[0];
-  const destino = botao.externo || !capitulo ? { tipo: "link" as const, href: botao.href, externo: botao.externo } : { tipo: "link" as const, href: urlDoCapitulo(capitulo), externo: false };
+  if (botao.externo) return { href: botao.href, externo: true };
+  const n = capitulos.listados.length;
+  const primeiro = capitulos.listados[0];
+  if (n > 1 && obraTemPagina(obra, n, lang)) return { href: urlDaObra(obra, lang), externo: false };
+  return { href: primeiro ? urlDoCapitulo(primeiro) : botao.href, externo: false };
+}
+
+/**
+ * O lado de uma obra: título, verbo, destino e arte. `null` = a obra não entra na ordem (ver o topo do arquivo): ainda não tem nada
+ * lançado naquele modo, nem no idioma da página nem em outro (`outrosIdiomas`), ou não tem arte própria para a caixa.
+ */
+export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean, outrosIdiomas: readonly CapitulosEmOutroIdioma[] = []): LadoDaOrdem | null {
+  const arte = arteDaObra(obra);
+  if (!arte) return null;
+  let destino: LadoDaOrdem["destino"] | null = null;
+  const aqui = destinoNoIdioma(obra, lang, capitulos, comRascunhos);
+  if (aqui) destino = { tipo: "link", ...aqui, idioma: null };
+  else {
+    for (const outro of outrosIdiomas) {
+      if (outro.lang === lang) continue;
+      const la = destinoNoIdioma(obra, outro.lang, outro.capitulos, comRascunhos);
+      if (la) {
+        destino = { tipo: "link", ...la, idioma: outro.lang };
+        break;
+      }
+    }
+  }
+  if (!destino) return null;
   const titulo = tituloDaObra(obra, lang);
   const verbo = verboDaObra(obra);
   const rotulo = `${TEXTOS_DA_ORDEM[lang].verbo[verbo]} ${titulo}`;
@@ -182,7 +218,7 @@ export function ladoDaObra(obra: ObraParaOrdem, lang: Lang, capitulos: Capitulos
     rotulo,
     destino,
     emDoRotulo: larguraDoRotulo(rotulo),
-    arte: arteDaObra(obra, lang),
+    arte,
   };
 }
 
@@ -195,30 +231,39 @@ export function sequenciaDaOrdem<O extends ObraParaOrdem>(universo: readonly O[]
   return organizarCartoes(cartoes, { modo: ordem, decrescente: false, midia: "", busca: "", lang }).visiveis.map((c) => c.obra);
 }
 
-/** O bloco do fim de um capítulo da obra `atual`. `capitulosDe(obra)` = os capítulos (listados e ocultos) da obra naquele idioma. */
+/**
+ * O bloco do fim de um capítulo (e da página da obra, T17l) da obra `atual`. `capitulosDe(obra)` = os capítulos (listados e ocultos) da
+ * obra naquele idioma; `capitulosEmOutrosIdiomas(obra)` = os dos outros idiomas do site (para a obra que só tem capítulo em outro idioma).
+ */
 export function blocoDaOrdem<O extends ObraParaOrdem>(
   atual: O,
   lang: Lang,
   universo: readonly O[],
   capitulosDe: (obra: O) => CapitulosDaObra,
   comRascunhos: boolean,
+  capitulosEmOutrosIdiomas: (obra: O) => readonly CapitulosEmOutroIdioma[] = () => [],
 ): BlocoDaOrdem {
   const textos = TEXTOS_DA_ORDEM[lang];
   const verbo = verboDaObra(atual);
-  const lado = (o: O, qual: LadoDaCaixa): LadoDaOrdem | null => ladoDaObra(o, lang, capitulosDe(o), comRascunhos, qual);
+  const memoria = new Map<string, LadoDaOrdem | null>();
+  const lado = (o: O): LadoDaOrdem | null => {
+    const slug = o.data._origem.slug;
+    if (!memoria.has(slug)) memoria.set(slug, ladoDaObra(o, lang, capitulosDe(o), comRascunhos, capitulosEmOutrosIdiomas(o)));
+    return memoria.get(slug) ?? null;
+  };
   const lista = (ordem: OrdemDeLeitura): ListaDaOrdem => {
     const sequencia = sequenciaDaOrdem(universo, ordem, lang);
     const i = sequencia.findIndex((o) => o.data._origem.slug === atual.data._origem.slug);
     if (i < 0) return { anterior: null, proximo: null, foraDaOrdem: true };
-    // o vizinho é o primeiro, para cada lado, que já tem algo lançado: quem ainda é "Em breve" é pulado (nada de "Em breve" no bloco)
-    const primeiroLancado = (candidatas: O[], qual: LadoDaCaixa): LadoDaOrdem | null => {
+    // o vizinho é o primeiro, para cada lado, que já tem algo lançado e arte para a caixa: quem ainda é "Em breve" ou não tem arte é pulado
+    const primeiroLancado = (candidatas: O[]): LadoDaOrdem | null => {
       for (const o of candidatas) {
-        const l = lado(o, qual);
+        const l = lado(o);
         if (l) return l;
       }
       return null;
     };
-    return { anterior: primeiroLancado(sequencia.slice(0, i).reverse(), "prev"), proximo: primeiroLancado(sequencia.slice(i + 1), "next"), foraDaOrdem: false };
+    return { anterior: primeiroLancado(sequencia.slice(0, i).reverse()), proximo: primeiroLancado(sequencia.slice(i + 1)), foraDaOrdem: false };
   };
   const listas = { chrono: lista("chrono"), release: lista("release") };
   return {

@@ -6555,7 +6555,15 @@
     "universe/hidden-magic/pt.md": "A magia escondida",
     "works/all-in-a-nights-work/01/en.md": "All in a Night's Work",
     "works/firestriker/01/en.md": "Firestriker",
-    "works/firestriker/01/pt.md": "Pederneira"
+    "works/firestriker/01/pt.md": "Pederneira",
+    "works/light-and-blood/01/en.md": "Luke 10:3",
+    "works/light-and-blood/01/pt.md": "Lucas 10:3",
+    "works/light-and-blood/02/en.md": "1 Corinthians 2:15",
+    "works/light-and-blood/02/pt.md": "1 Coríntios 2:15",
+    "works/roadside/01/en.md": "The Little Girl with Red Eyes",
+    "works/roadside/01/pt.md": "A Garotinha dos Olhos Vermelhos",
+    "works/roadside/02/en.md": "Finding a safe place",
+    "works/roadside/02/pt.md": "Procurando um lugar seguro"
    }
   },
   "excerpt_real": {
@@ -7785,7 +7793,7 @@
       {
        "date": "2026-08-18",
        "url": "/en/works/light-and-blood/02/",
-       "title": "Light & Blood — Episode 2",
+       "title": "Light & Blood — 1 Corinthians 2:15",
        "kind": "tag_chapter_ep",
        "text": "It took a while, but the second episode of Light & Blood is finally out! check it out now on the TV Palavra Viva YouTube channel…",
        "image": "covers/EN/Cover Light & Blood.png",
@@ -7803,7 +7811,7 @@
       {
        "date": "2026-06-06",
        "url": "/en/works/light-and-blood/01/",
-       "title": "Light & Blood — Episode 1",
+       "title": "Light & Blood — Luke 10:3",
        "kind": "tag_chapter_ep",
        "text": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…",
        "image": "covers/EN/Cover Light & Blood.png",
@@ -8535,7 +8543,7 @@
        "imagem": "/covers/EN/Cover%20Light%20%26%20Blood.png",
        "rotulo": "New episode",
        "data": "Aug 18, 2026",
-       "titulo": "Light & Blood — Episode 2",
+       "titulo": "Light & Blood — 1 Corinthians 2:15",
        "texto": "It took a while, but the second episode of Light & Blood is finally out! check it out now on the TV Palavra Viva YouTube channel…"
       },
       {
@@ -8551,7 +8559,7 @@
        "imagem": "/covers/EN/Cover%20Light%20%26%20Blood.png",
        "rotulo": "New episode",
        "data": "Jun 6, 2026",
-       "titulo": "Light & Blood — Episode 1",
+       "titulo": "Light & Blood — Luke 10:3",
        "texto": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…"
       }
      ],
@@ -8650,8 +8658,7 @@
      "emissarios": [
       "saf",
       "kaisui",
-      "joao-revan",
-      "tutti"
+      "joao-revan"
      ],
      "emissarios_cartoes": {
       "saf": {
@@ -8692,20 +8699,6 @@
          "chave": "instagram",
          "rotulo": "Instagram",
          "url": "https://www.instagram.com/jrevan.aex/"
-        }
-       ],
-       "mostra_texto": false
-      },
-      "tutti": {
-       "titulo": "Tutti",
-       "papel": "Marketing & Social Media",
-       "foto": "/emissaries/Tutti.jpg",
-       "inicial": null,
-       "redes": [
-        {
-         "chave": "instagram",
-         "rotulo": "Instagram",
-         "url": "https://www.instagram.com/tuttioni/"
         }
        ],
        "mostra_texto": false
@@ -8849,7 +8842,7 @@
       {
        "date": "2026-08-18",
        "url": "/pt/works/light-and-blood/02/",
-       "title": "Luz & Sangue — Episódio 2",
+       "title": "Luz & Sangue — 1 Coríntios 2:15",
        "kind": "tag_chapter_ep",
        "text": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…",
        "image": "covers/PT/Capa Luz & Sangue.png",
@@ -8867,7 +8860,7 @@
       {
        "date": "2026-06-06",
        "url": "/pt/works/light-and-blood/01/",
-       "title": "Luz & Sangue — Episódio 1",
+       "title": "Luz & Sangue — Lucas 10:3",
        "kind": "tag_chapter_ep",
        "text": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…",
        "image": "covers/PT/Capa Luz & Sangue.png",
@@ -9599,7 +9592,7 @@
        "imagem": "/covers/PT/Capa%20Luz%20%26%20Sangue.png",
        "rotulo": "Novo episódio",
        "data": "18 de ago. de 2026",
-       "titulo": "Luz & Sangue — Episódio 2",
+       "titulo": "Luz & Sangue — 1 Coríntios 2:15",
        "texto": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…"
       },
       {
@@ -9615,7 +9608,7 @@
        "imagem": "/covers/PT/Capa%20Luz%20%26%20Sangue.png",
        "rotulo": "Novo episódio",
        "data": "6 de jun. de 2026",
-       "titulo": "Luz & Sangue — Episódio 1",
+       "titulo": "Luz & Sangue — Lucas 10:3",
        "texto": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…"
       }
      ],
@@ -9714,8 +9707,7 @@
      "emissarios": [
       "saf",
       "kaisui",
-      "joao-revan",
-      "tutti"
+      "joao-revan"
      ],
      "emissarios_cartoes": {
       "saf": {
@@ -9756,20 +9748,6 @@
          "chave": "instagram",
          "rotulo": "Instagram",
          "url": "https://www.instagram.com/jrevan.aex/"
-        }
-       ],
-       "mostra_texto": false
-      },
-      "tutti": {
-       "titulo": "Tutti",
-       "papel": "Marketing e Social Media",
-       "foto": "/emissaries/Tutti.jpg",
-       "inicial": null,
-       "redes": [
-        {
-         "chave": "instagram",
-         "rotulo": "Instagram",
-         "url": "https://www.instagram.com/tuttioni/"
         }
        ],
        "mostra_texto": false
@@ -9852,13 +9830,13 @@
        {
         "url": "/en/works/light-and-blood/01/",
         "numero": "1",
-        "titulo": "Episode 1",
+        "titulo": "Luke 10:3",
         "data": "Jun 6, 2026"
        },
        {
         "url": "/en/works/light-and-blood/02/",
         "numero": "2",
-        "titulo": "Episode 2",
+        "titulo": "1 Corinthians 2:15",
         "data": "Aug 18, 2026"
        }
       ]
@@ -9866,7 +9844,7 @@
     },
     "/en/works/light-and-blood/01/": {
      "lang": "en",
-     "titulo": "Light & Blood — Episode 1",
+     "titulo": "Light & Blood — Luke 10:3",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/EN/Cover Light & Blood.png",
@@ -9876,7 +9854,7 @@
       "pt": "/pt/works/light-and-blood/01/"
      },
      "capitulo": {
-      "h1": "Episode 1",
+      "h1": "Luke 10:3",
       "data": {
        "iso": "2026-06-06",
        "texto": "Jun 6, 2026"
@@ -9886,7 +9864,7 @@
       "anterior": null,
       "proximo": {
        "url": "/en/works/light-and-blood/02/",
-       "titulo": "Episode 2"
+       "titulo": "1 Corinthians 2:15"
       },
       "voltar": {
        "url": "/en/works/light-and-blood/",
@@ -9896,7 +9874,7 @@
     },
     "/en/works/light-and-blood/02/": {
      "lang": "en",
-     "titulo": "Light & Blood — Episode 2",
+     "titulo": "Light & Blood — 1 Corinthians 2:15",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/EN/Cover Light & Blood.png",
@@ -9906,7 +9884,7 @@
       "pt": "/pt/works/light-and-blood/02/"
      },
      "capitulo": {
-      "h1": "Episode 2",
+      "h1": "1 Corinthians 2:15",
       "data": {
        "iso": "2026-08-18",
        "texto": "Aug 18, 2026"
@@ -9915,7 +9893,7 @@
       "formato": "video",
       "anterior": {
        "url": "/en/works/light-and-blood/01/",
-       "titulo": "Episode 1"
+       "titulo": "Luke 10:3"
       },
       "proximo": null,
       "voltar": {
@@ -13865,13 +13843,13 @@
        {
         "url": "/pt/works/light-and-blood/01/",
         "numero": "1",
-        "titulo": "Episódio 1",
+        "titulo": "Lucas 10:3",
         "data": "6 de jun. de 2026"
        },
        {
         "url": "/pt/works/light-and-blood/02/",
         "numero": "2",
-        "titulo": "Episódio 2",
+        "titulo": "1 Coríntios 2:15",
         "data": "18 de ago. de 2026"
        }
       ]
@@ -13879,7 +13857,7 @@
     },
     "/pt/works/light-and-blood/01/": {
      "lang": "pt",
-     "titulo": "Luz & Sangue — Episódio 1",
+     "titulo": "Luz & Sangue — Lucas 10:3",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/PT/Capa Luz & Sangue.png",
@@ -13889,7 +13867,7 @@
       "pt": "/pt/works/light-and-blood/01/"
      },
      "capitulo": {
-      "h1": "Episódio 1",
+      "h1": "Lucas 10:3",
       "data": {
        "iso": "2026-06-06",
        "texto": "6 de jun. de 2026"
@@ -13899,7 +13877,7 @@
       "anterior": null,
       "proximo": {
        "url": "/pt/works/light-and-blood/02/",
-       "titulo": "Episódio 2"
+       "titulo": "1 Coríntios 2:15"
       },
       "voltar": {
        "url": "/pt/works/light-and-blood/",
@@ -13909,7 +13887,7 @@
     },
     "/pt/works/light-and-blood/02/": {
      "lang": "pt",
-     "titulo": "Luz & Sangue — Episódio 2",
+     "titulo": "Luz & Sangue — 1 Coríntios 2:15",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/PT/Capa Luz & Sangue.png",
@@ -13919,7 +13897,7 @@
       "pt": "/pt/works/light-and-blood/02/"
      },
      "capitulo": {
-      "h1": "Episódio 2",
+      "h1": "1 Coríntios 2:15",
       "data": {
        "iso": "2026-08-18",
        "texto": "18 de ago. de 2026"
@@ -13928,7 +13906,7 @@
       "formato": "video",
       "anterior": {
        "url": "/pt/works/light-and-blood/01/",
-       "titulo": "Episódio 1"
+       "titulo": "Lucas 10:3"
       },
       "proximo": null,
       "voltar": {
@@ -17815,7 +17793,7 @@
       "descricao": ""
      },
      {
-      "titulo": "Light & Blood — Episode 2",
+      "titulo": "Light & Blood — 1 Corinthians 2:15",
       "link": "https://hatecycle.com/en/works/light-and-blood/02/",
       "data": "Tue, 18 Aug 2026 00:00:00 +0000",
       "descricao": "It took a while, but the second episode of Light & Blood is finally out! check it out now on the TV Palavra Viva YouTube channel…"
@@ -17827,7 +17805,7 @@
       "descricao": "This is רוח הקודש, the Pet Raven of John Magnus, a character by @joaotmzl in our Christian RPG, Light & Blood, a collaboration…"
      },
      {
-      "titulo": "Light & Blood — Episode 1",
+      "titulo": "Light & Blood — Luke 10:3",
       "link": "https://hatecycle.com/en/works/light-and-blood/01/",
       "data": "Sat, 06 Jun 2026 00:00:00 +0000",
       "descricao": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…"
@@ -17997,7 +17975,7 @@
       "descricao": ""
      },
      {
-      "titulo": "Luz & Sangue — Episódio 2",
+      "titulo": "Luz & Sangue — 1 Coríntios 2:15",
       "link": "https://hatecycle.com/pt/works/light-and-blood/02/",
       "data": "Tue, 18 Aug 2026 00:00:00 +0000",
       "descricao": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…"
@@ -18009,7 +17987,7 @@
       "descricao": "Este é רוח הקודש, o Corvo de Estimação de John Magnus, personagem do @joaotmzl no nosso RPG Cristão, Luz & Sangue, uma…"
      },
      {
-      "titulo": "Luz & Sangue — Episódio 1",
+      "titulo": "Luz & Sangue — Lucas 10:3",
       "link": "https://hatecycle.com/pt/works/light-and-blood/01/",
       "data": "Sat, 06 Jun 2026 00:00:00 +0000",
       "descricao": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…"
@@ -18230,7 +18208,7 @@
       "cat-crow-thing": {
        "titulo": "Cat-Crow-Thing",
        "titulo_dado": "Cat-Crow-Thing",
-       "resumo": "",
+       "resumo": "Shizuku has been tormented by nightmares and turns to the best psionic she knows for help. Fly through this runner/shooter, dodging obstacles, shooting enemies and piecing together the clues to uncover the cause of this cat-crow-thing’s bad dreams.",
        "imagem": "/covers/PT/Capa%20Cat-Crow-Thing.png",
        "botao": {
         "tipo": "link",
@@ -18411,7 +18389,7 @@
       {
        "date": "2026-08-18",
        "url": "/en/works/light-and-blood/02/",
-       "title": "Light & Blood — Episode 2",
+       "title": "Light & Blood — 1 Corinthians 2:15",
        "kind": "tag_chapter_ep",
        "text": "It took a while, but the second episode of Light & Blood is finally out! check it out now on the TV Palavra Viva YouTube channel…",
        "image": "covers/EN/Cover Light & Blood.png",
@@ -18429,7 +18407,7 @@
       {
        "date": "2026-06-06",
        "url": "/en/works/light-and-blood/01/",
-       "title": "Light & Blood — Episode 1",
+       "title": "Light & Blood — Luke 10:3",
        "kind": "tag_chapter_ep",
        "text": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…",
        "image": "covers/EN/Cover Light & Blood.png",
@@ -19161,7 +19139,7 @@
        "imagem": "/covers/EN/Cover%20Light%20%26%20Blood.png",
        "rotulo": "New episode",
        "data": "Aug 18, 2026",
-       "titulo": "Light & Blood — Episode 2",
+       "titulo": "Light & Blood — 1 Corinthians 2:15",
        "texto": "It took a while, but the second episode of Light & Blood is finally out! check it out now on the TV Palavra Viva YouTube channel…"
       },
       {
@@ -19177,7 +19155,7 @@
        "imagem": "/covers/EN/Cover%20Light%20%26%20Blood.png",
        "rotulo": "New episode",
        "data": "Jun 6, 2026",
-       "titulo": "Light & Blood — Episode 1",
+       "titulo": "Light & Blood — Luke 10:3",
        "texto": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…"
       }
      ],
@@ -19411,7 +19389,7 @@
       "cat-crow-thing": {
        "titulo": "Cat-Crow-Thing",
        "titulo_dado": "Cat-Crow-Thing",
-       "resumo": "",
+       "resumo": "Shizuku tem sido atormentada por pesadelos e pede ajuda ao melhor psiônico que ela conhece. Voe por este runner/shooter, desviando de obstáculos, atirando em inimigos e juntando as peças para descobrir a causa dos sonhos ruins dessa coisa-gato-corvo.",
        "imagem": "/covers/PT/Capa%20Cat-Crow-Thing.png",
        "botao": {
         "tipo": "link",
@@ -19592,7 +19570,7 @@
       {
        "date": "2026-08-18",
        "url": "/pt/works/light-and-blood/02/",
-       "title": "Luz & Sangue — Episódio 2",
+       "title": "Luz & Sangue — 1 Coríntios 2:15",
        "kind": "tag_chapter_ep",
        "text": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…",
        "image": "covers/PT/Capa Luz & Sangue.png",
@@ -19610,7 +19588,7 @@
       {
        "date": "2026-06-06",
        "url": "/pt/works/light-and-blood/01/",
-       "title": "Luz & Sangue — Episódio 1",
+       "title": "Luz & Sangue — Lucas 10:3",
        "kind": "tag_chapter_ep",
        "text": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…",
        "image": "covers/PT/Capa Luz & Sangue.png",
@@ -20342,7 +20320,7 @@
        "imagem": "/covers/PT/Capa%20Luz%20%26%20Sangue.png",
        "rotulo": "Novo episódio",
        "data": "18 de ago. de 2026",
-       "titulo": "Luz & Sangue — Episódio 2",
+       "titulo": "Luz & Sangue — 1 Coríntios 2:15",
        "texto": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…"
       },
       {
@@ -20358,7 +20336,7 @@
        "imagem": "/covers/PT/Capa%20Luz%20%26%20Sangue.png",
        "rotulo": "Novo episódio",
        "data": "6 de jun. de 2026",
-       "titulo": "Luz & Sangue — Episódio 1",
+       "titulo": "Luz & Sangue — Lucas 10:3",
        "texto": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…"
       }
      ],
@@ -20661,13 +20639,13 @@
        {
         "url": "/en/works/light-and-blood/01/",
         "numero": "1",
-        "titulo": "Episode 1",
+        "titulo": "Luke 10:3",
         "data": "Jun 6, 2026"
        },
        {
         "url": "/en/works/light-and-blood/02/",
         "numero": "2",
-        "titulo": "Episode 2",
+        "titulo": "1 Corinthians 2:15",
         "data": "Aug 18, 2026"
        }
       ]
@@ -20675,7 +20653,7 @@
     },
     "/en/works/light-and-blood/01/": {
      "lang": "en",
-     "titulo": "Light & Blood — Episode 1",
+     "titulo": "Light & Blood — Luke 10:3",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/EN/Cover Light & Blood.png",
@@ -20685,7 +20663,7 @@
       "pt": "/pt/works/light-and-blood/01/"
      },
      "capitulo": {
-      "h1": "Episode 1",
+      "h1": "Luke 10:3",
       "data": {
        "iso": "2026-06-06",
        "texto": "Jun 6, 2026"
@@ -20695,7 +20673,7 @@
       "anterior": null,
       "proximo": {
        "url": "/en/works/light-and-blood/02/",
-       "titulo": "Episode 2"
+       "titulo": "1 Corinthians 2:15"
       },
       "voltar": {
        "url": "/en/works/light-and-blood/",
@@ -20705,7 +20683,7 @@
     },
     "/en/works/light-and-blood/02/": {
      "lang": "en",
-     "titulo": "Light & Blood — Episode 2",
+     "titulo": "Light & Blood — 1 Corinthians 2:15",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/EN/Cover Light & Blood.png",
@@ -20715,7 +20693,7 @@
       "pt": "/pt/works/light-and-blood/02/"
      },
      "capitulo": {
-      "h1": "Episode 2",
+      "h1": "1 Corinthians 2:15",
       "data": {
        "iso": "2026-08-18",
        "texto": "Aug 18, 2026"
@@ -20724,7 +20702,7 @@
       "formato": "video",
       "anterior": {
        "url": "/en/works/light-and-blood/01/",
-       "titulo": "Episode 1"
+       "titulo": "Luke 10:3"
       },
       "proximo": null,
       "voltar": {
@@ -20761,13 +20739,13 @@
        {
         "url": "/en/works/roadside/01/",
         "numero": "1",
-        "titulo": "Chapter 1",
+        "titulo": "The Little Girl with Red Eyes",
         "data": ""
        },
        {
         "url": "/en/works/roadside/02/",
         "numero": "2",
-        "titulo": "Chapter 2",
+        "titulo": "Finding a safe place",
         "data": ""
        }
       ]
@@ -20775,7 +20753,7 @@
     },
     "/en/works/roadside/01/": {
      "lang": "en",
-     "titulo": "Roadside — Chapter 1",
+     "titulo": "Roadside — The Little Girl with Red Eyes",
      "cls": "reader reader-comic",
      "desc": "",
      "imagem": "covers/EN/Cover Roadside.png",
@@ -20785,14 +20763,14 @@
       "pt": "/pt/works/roadside/01/"
      },
      "capitulo": {
-      "h1": "Chapter 1",
+      "h1": "The Little Girl with Red Eyes",
       "data": null,
       "comentarios": "works/roadside/01",
       "formato": "comic",
       "anterior": null,
       "proximo": {
        "url": "/en/works/roadside/02/",
-       "titulo": "Chapter 2"
+       "titulo": "Finding a safe place"
       },
       "voltar": {
        "url": "/en/works/roadside/",
@@ -20802,7 +20780,7 @@
     },
     "/en/works/roadside/02/": {
      "lang": "en",
-     "titulo": "Roadside — Chapter 2",
+     "titulo": "Roadside — Finding a safe place",
      "cls": "reader reader-comic",
      "desc": "",
      "imagem": "covers/EN/Cover Roadside.png",
@@ -20812,13 +20790,13 @@
       "pt": "/pt/works/roadside/02/"
      },
      "capitulo": {
-      "h1": "Chapter 2",
+      "h1": "Finding a safe place",
       "data": null,
       "comentarios": "works/roadside/02",
       "formato": "comic",
       "anterior": {
        "url": "/en/works/roadside/01/",
-       "titulo": "Chapter 1"
+       "titulo": "The Little Girl with Red Eyes"
       },
       "proximo": null,
       "voltar": {
@@ -24810,13 +24788,13 @@
        {
         "url": "/pt/works/light-and-blood/01/",
         "numero": "1",
-        "titulo": "Episódio 1",
+        "titulo": "Lucas 10:3",
         "data": "6 de jun. de 2026"
        },
        {
         "url": "/pt/works/light-and-blood/02/",
         "numero": "2",
-        "titulo": "Episódio 2",
+        "titulo": "1 Coríntios 2:15",
         "data": "18 de ago. de 2026"
        }
       ]
@@ -24824,7 +24802,7 @@
     },
     "/pt/works/light-and-blood/01/": {
      "lang": "pt",
-     "titulo": "Luz & Sangue — Episódio 1",
+     "titulo": "Luz & Sangue — Lucas 10:3",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/PT/Capa Luz & Sangue.png",
@@ -24834,7 +24812,7 @@
       "pt": "/pt/works/light-and-blood/01/"
      },
      "capitulo": {
-      "h1": "Episódio 1",
+      "h1": "Lucas 10:3",
       "data": {
        "iso": "2026-06-06",
        "texto": "6 de jun. de 2026"
@@ -24844,7 +24822,7 @@
       "anterior": null,
       "proximo": {
        "url": "/pt/works/light-and-blood/02/",
-       "titulo": "Episódio 2"
+       "titulo": "1 Coríntios 2:15"
       },
       "voltar": {
        "url": "/pt/works/light-and-blood/",
@@ -24854,7 +24832,7 @@
     },
     "/pt/works/light-and-blood/02/": {
      "lang": "pt",
-     "titulo": "Luz & Sangue — Episódio 2",
+     "titulo": "Luz & Sangue — 1 Coríntios 2:15",
      "cls": "reader reader-video",
      "desc": "",
      "imagem": "covers/PT/Capa Luz & Sangue.png",
@@ -24864,7 +24842,7 @@
       "pt": "/pt/works/light-and-blood/02/"
      },
      "capitulo": {
-      "h1": "Episódio 2",
+      "h1": "1 Coríntios 2:15",
       "data": {
        "iso": "2026-08-18",
        "texto": "18 de ago. de 2026"
@@ -24873,7 +24851,7 @@
       "formato": "video",
       "anterior": {
        "url": "/pt/works/light-and-blood/01/",
-       "titulo": "Episódio 1"
+       "titulo": "Lucas 10:3"
       },
       "proximo": null,
       "voltar": {
@@ -24910,13 +24888,13 @@
        {
         "url": "/pt/works/roadside/01/",
         "numero": "1",
-        "titulo": "Capítulo 1",
+        "titulo": "A Garotinha dos Olhos Vermelhos",
         "data": ""
        },
        {
         "url": "/pt/works/roadside/02/",
         "numero": "2",
-        "titulo": "Capítulo 2",
+        "titulo": "Procurando um lugar seguro",
         "data": ""
        }
       ]
@@ -24924,7 +24902,7 @@
     },
     "/pt/works/roadside/01/": {
      "lang": "pt",
-     "titulo": "Beira de Estrada — Capítulo 1",
+     "titulo": "Beira de Estrada — A Garotinha dos Olhos Vermelhos",
      "cls": "reader reader-comic",
      "desc": "",
      "imagem": "covers/PT/Capa Beira de Estrada.png",
@@ -24934,14 +24912,14 @@
       "pt": "/pt/works/roadside/01/"
      },
      "capitulo": {
-      "h1": "Capítulo 1",
+      "h1": "A Garotinha dos Olhos Vermelhos",
       "data": null,
       "comentarios": "works/roadside/01",
       "formato": "comic",
       "anterior": null,
       "proximo": {
        "url": "/pt/works/roadside/02/",
-       "titulo": "Capítulo 2"
+       "titulo": "Procurando um lugar seguro"
       },
       "voltar": {
        "url": "/pt/works/roadside/",
@@ -24951,7 +24929,7 @@
     },
     "/pt/works/roadside/02/": {
      "lang": "pt",
-     "titulo": "Beira de Estrada — Capítulo 2",
+     "titulo": "Beira de Estrada — Procurando um lugar seguro",
      "cls": "reader reader-comic",
      "desc": "",
      "imagem": "covers/PT/Capa Beira de Estrada.png",
@@ -24961,13 +24939,13 @@
       "pt": "/pt/works/roadside/02/"
      },
      "capitulo": {
-      "h1": "Capítulo 2",
+      "h1": "Procurando um lugar seguro",
       "data": null,
       "comentarios": "works/roadside/02",
       "formato": "comic",
       "anterior": {
        "url": "/pt/works/roadside/01/",
-       "titulo": "Capítulo 1"
+       "titulo": "A Garotinha dos Olhos Vermelhos"
       },
       "proximo": null,
       "voltar": {
@@ -28875,7 +28853,7 @@
       "descricao": ""
      },
      {
-      "titulo": "Light & Blood — Episode 2",
+      "titulo": "Light & Blood — 1 Corinthians 2:15",
       "link": "https://hatecycle.com/en/works/light-and-blood/02/",
       "data": "Tue, 18 Aug 2026 00:00:00 +0000",
       "descricao": "It took a while, but the second episode of Light & Blood is finally out! check it out now on the TV Palavra Viva YouTube channel…"
@@ -28887,7 +28865,7 @@
       "descricao": "This is רוח הקודש, the Pet Raven of John Magnus, a character by @joaotmzl in our Christian RPG, Light & Blood, a collaboration…"
      },
      {
-      "titulo": "Light & Blood — Episode 1",
+      "titulo": "Light & Blood — Luke 10:3",
       "link": "https://hatecycle.com/en/works/light-and-blood/01/",
       "data": "Sat, 06 Jun 2026 00:00:00 +0000",
       "descricao": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…"
@@ -29057,7 +29035,7 @@
       "descricao": ""
      },
      {
-      "titulo": "Luz & Sangue — Episódio 2",
+      "titulo": "Luz & Sangue — 1 Coríntios 2:15",
       "link": "https://hatecycle.com/pt/works/light-and-blood/02/",
       "data": "Tue, 18 Aug 2026 00:00:00 +0000",
       "descricao": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…"
@@ -29069,7 +29047,7 @@
       "descricao": "Este é רוח הקודש, o Corvo de Estimação de John Magnus, personagem do @joaotmzl no nosso RPG Cristão, Luz & Sangue, uma…"
      },
      {
-      "titulo": "Luz & Sangue — Episódio 1",
+      "titulo": "Luz & Sangue — Lucas 10:3",
       "link": "https://hatecycle.com/pt/works/light-and-blood/01/",
       "data": "Sat, 06 Jun 2026 00:00:00 +0000",
       "descricao": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…"

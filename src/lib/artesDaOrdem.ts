@@ -16,6 +16,12 @@
 //   opacity = de 0 (invisível) a 1. Opcional, padrão 1.
 //   hover   = só o que MUDA com o mouse por cima (ou o foco do teclado): x, y, width, rotate e/ou opacity. O que não está em `hover`
 //             fica como estava. Sem `hover`, a camada não se mexe.
+//   bleed   = (opcional, T17l) true deixa as camadas SAÍREM da moldura da arte até a borda da caixa do bloco, que serve de "máscara de
+//             camada" (corta no canto arredondado), por trás da frase de cima ("estou lendo em ordem" + o seletor). Pedido do autor para as
+//             asas do Giuseppe ("print giuseppe 3.png"). Sem ele (o padrão), o que sair da moldura é cortado. No celular (até 700 px) a
+//             caixa é estreita e as duas artes ficam lado a lado: ali a moldura volta a cortar (a camada não cobre a outra história).
+//             Com `bleed`, use `size` QUADRADO (ex.: [1000, 1000]): a tela fica do tamanho da moldura, e x, y e width passam a valer em %
+//             da moldura (podem passar de 0–100 para sair dela).
 // Uma transição só (suave, a mesma para todas as camadas) leva do estado inicial ao do mouse; ao tirar o mouse ela volta.
 //
 // Como o navegador recebe: cada camada é uma <img> com variáveis de CSS (`--x`, `--hx`…) no atributo `style`; quem anima é o CSS do
@@ -53,6 +59,7 @@ export interface CamadaCrua extends MudancasDaCamada {
 export interface ArteCrua {
   size: readonly [number, number];
   layers: readonly CamadaCrua[];
+  bleed?: boolean | undefined;
 }
 
 /** Uma camada pronta para desenhar. */
@@ -75,6 +82,8 @@ export interface ArteEmCamadas {
   razao: number;
   /** Alguma camada surge (com movimento reduzido, a arte troca de uma vez para o desenho final). */
   temSurge: boolean;
+  /** As camadas podem sair da moldura até a borda da caixa (`bleed: true`, T17l; no celular a moldura volta a cortar). */
+  sangra: boolean;
   /** De trás para a frente. */
   camadas: CamadaDaArte[];
 }
@@ -128,6 +137,7 @@ export function arteEmCamadas(crua: ArteCrua): ArteEmCamadas {
     proporcao: `${numeroCss(crua.size[0])} / ${numeroCss(crua.size[1])}`,
     razao: Number(razao.toFixed(4)),
     temSurge: camadas.some((c) => c.surge),
+    sangra: crua.bleed === true,
     camadas,
   };
 }

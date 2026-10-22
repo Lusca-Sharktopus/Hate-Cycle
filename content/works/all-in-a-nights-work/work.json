@@ -27,11 +27,12 @@
   },
   "reading_font": "times",
   "order_art": {
-    "size": [3311, 1884],
+    "size": [1000, 1000],
+    "bleed": true,
     "layers": [
-      { "image": "ordem/Giuseppe Asas Site Cronologia.png", "x": 50.79, "y": 50.5, "width": 87.2, "opacity": 0, "hover": { "x": 52.39, "y": 43.27, "width": 103.98, "opacity": 1 } },
-      { "image": "ordem/Giuseppe Site Cronologia.png", "x": 42.5, "y": 70.99, "width": 25.01, "hover": { "y": 67.7, "width": 29.82 } },
-      { "image": "ordem/Giuseppe Olhos Site Cronologia.png", "x": 42.22, "y": 69.69, "width": 24.43, "opacity": 0, "hover": { "x": 42.16, "y": 66.15, "width": 29.13, "opacity": 1 } }
+      { "image": "ordem/Giuseppe Asas Site Cronologia.png", "x": 77.82, "y": 4.99, "width": 265.36, "opacity": 0, "hover": { "x": 79.86, "y": 0.21, "width": 281.99, "opacity": 1 } },
+      { "image": "ordem/Giuseppe Site Cronologia.png", "x": 42.22, "y": 61.38, "width": 51.51, "hover": { "x": 42.04, "y": 60.14, "width": 54.74 } },
+      { "image": "ordem/Giuseppe Olhos Site Cronologia.png", "x": 41.63, "y": 59.86, "width": 50.33, "opacity": 0, "hover": { "x": 41.41, "y": 58.52, "width": 53.48, "opacity": 1 } }
     ]
   },
   "media": "short-story"

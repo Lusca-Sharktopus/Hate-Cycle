@@ -20,9 +20,12 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      então ela vem depois da Pederneira na Cronológica e a arte dela, item 13, é medida na própria prévia; o --beira ficou opcional). Antes:
      Beira de Estrada e O Pêndulo (rascunhos sem capítulo)
      são puladas, e a Pederneira não tem história depois dela na Cronológica;
-  9. (T17i) o link de cada lado: o ÚLTIMO capítulo da história anterior e o PRIMEIRO da seguinte (o externo continua externo), em todo capítulo;
- 10. (T17i) a CAIXA DO MESMO TAMANHO: em TODO capítulo do site (e da prévia), a 1100, 390 e 320 px, getBoundingClientRect da caixa na
-     Cronológica, no Lançamento e com o mouse em cada lado: largura e altura iguais; as molduras das artes, iguais entre si e entre as obras;
+  9. (T17l, era T17i) o link de cada lado: a PÁGINA DA OBRA (lista de capítulos) quando ela tem mais de um capítulo naquele idioma, o
+     capítulo quando tem um só (o externo continua externo, em outra aba); obra que só tem capítulo em outro idioma (Ossos do Ofício em
+     português) leva à página daquele idioma, com hreflang; em todo capítulo E em toda página de obra (o bloco também mora lá, T17l);
+ 10. (T17i) a CAIXA DO MESMO TAMANHO: em TODO capítulo e página de obra do site (e da prévia), a 1100, 390 e 320 px, getBoundingClientRect
+     da caixa na Cronológica, no Lançamento e com o mouse em cada lado: largura e altura iguais; as molduras das artes, iguais entre si e
+     entre as obras (por tipo de página: a caixa da página da obra mora dentro da folha, mais estreita);
  11. (T17i) o rótulo "Ler/Assistir/Jogar [obra]" numa linha só, dentro da caixa e sem encostar no outro rótulo, em todo capítulo e largura;
  12. (T17i, com --previa) Ossos do Ofício: asas atrás, Giuseppe, olhos na frente; as três crescem juntas, asas e olhos de 0 a 1 de
      opacidade, os olhos colados no Giuseppe (mesmo canto, mesma escala) no começo, no fim e no MEIO da transição; teclado; movimento
@@ -31,6 +34,10 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      tamanho e o giro de Cezar e Iris (começo, meio e fim); crescem, inclinam e se afastam; os olhos de 0 a 1; teclado; movimento reduzido.
      A Beira de Estrada ainda não tem capítulo (é pulada no bloco), então ela só aparece numa CÓPIA do projeto com um capítulo inventado
      (receita abaixo; nunca no projeto).
+ 14. (T17l, com --previa) as ASAS do Giuseppe (`"bleed": true`): com o mouse (e com o foco do teclado) saem da moldura da arte, ficam POR
+     TRÁS da frase de cima (ordem de pintura medida com elementsFromPoint) e são cortadas pela caixa (overflow hidden, canto arredondado);
+     não pegam clique: o seletor de ordem e a outra história continuam sendo o que está embaixo do ponteiro (elementFromPoint); a 390 px a
+     moldura volta a cortar; O Pêndulo e Cat-Crow-Thing (sem arte para a caixa) não aparecem em bloco nenhum; o bloco da página da obra.
 
 Como usar (servidores sob timeout; nunca pkill):
   pnpm build                      # site publicado em dist/
@@ -182,8 +189,8 @@ ARTES = {
     "luz-e-sangue": ("/{lang}/works/firestriker/01/", "chrono", "prev"),
     "pederneira": ("/{lang}/works/light-and-blood/01/", "release", "prev"),
     "di-vario": ("/{lang}/works/firestriker/01/", "release", "prev"),
-    # T17i (rascunhos): Ossos do Ofício só tem capítulo em inglês; a Beira de Estrada só aparece na cópia com capítulo inventado (--beira)
-    "ossos": ("/en/works/light-and-blood/01/", "chrono", "prev"),
+    # T17i (rascunhos): Ossos do Ofício só tem capítulo em inglês (desde a T17l aparece também em português, com o link para o inglês)
+    "ossos": ("/{lang}/works/light-and-blood/01/", "chrono", "prev"),
     "beira": ("/{lang}/works/firestriker/01/", "chrono", "next"),
 }
 
@@ -321,10 +328,11 @@ def artes_novas(browser, porta, arte, lang):
 
 
 ENDERECOS_DOS_CAPITULOS = re.compile(r'href="(/(?:en|pt)/works/[^/"]+/[^/"]+/)"')
+EH_PAGINA_DA_OBRA = re.compile(r"^/(en|pt)/works/[^/]+/$")
 
 
 def capitulos_do_site(porta):
-    """Todos os capítulos que o site mostra: dos cartões de Histórias e das páginas das obras (os dois idiomas)."""
+    """Todas as páginas com o bloco: os capítulos (dos cartões de Histórias e das páginas das obras) e, desde a T17l, as páginas das obras."""
     def pegar(caminho):
         try:
             with urllib.request.urlopen(f"http://localhost:{porta}{caminho}", timeout=10) as r:
@@ -336,6 +344,7 @@ def capitulos_do_site(porta):
         html = pegar(f"/{lang}/works/")
         obras = set(re.findall(r'href="(/' + lang + r'/works/[^/"]+/)"', html))
         achados |= set(ENDERECOS_DOS_CAPITULOS.findall(html))
+        achados |= obras
         for o in obras:
             achados |= set(ENDERECOS_DOS_CAPITULOS.findall(pegar(o)))
     return sorted(u for u in achados if pegar(u).find("data-story-order") >= 0)
@@ -385,11 +394,12 @@ def tamanho_da_caixa(browser, porta, nome):
             conferir(len(tamanhos) == 1, f"{largura} px {url}: a caixa tem o MESMO tamanho nas duas ordens e com o mouse ({sorted(tamanhos)}; {len(medidas)} medidas)")
             # (T17d) só com o mouse fora: a arte de imagem/capa (O Pêndulo, Cat-Crow-Thing) cresce 7% com o mouse por cima (o "crescimento leve"
             # da T17c, `transform: scale(1.07)`), e o getBoundingClientRect mede a moldura já crescida; a CAIXA não muda (conferido acima)
+            tipo = "página da obra" if EH_PAGINA_DA_OBRA.match(url) else "capítulo"
             for _, estado, m in medidas:
                 if estado != "parado":
                     continue
                 for mo in m["molduras"]:
-                    molduras_do_site.setdefault(largura, set()).add(tuple(mo))
+                    molduras_do_site.setdefault((largura, tipo), set()).add(tuple(mo))
             letras = {r["letra"] for _, _, m in medidas for r in m["rotulos"]}
             conferir(len(letras) <= 1, f"{largura} px {url}: a mesma letra nos rótulos das duas ordens ({sorted(letras)})")
             for ordem, estado, m in medidas:
@@ -401,28 +411,32 @@ def tamanho_da_caixa(browser, porta, nome):
                 if estado == "parado":
                     conferir(ok, f"{largura} px {url} ({ordem}): rótulo(s) numa linha só, dentro da caixa, sem encostar ({[(r['texto'], r['linhas'], round(r['letra'], 1)) for r in rs]})")
         ctx.close()
-    for largura, ms in sorted(molduras_do_site.items()):
-        conferir(len(ms) == 1, f"{largura} px: todas as molduras de arte, de todas as obras, do mesmo tamanho ({sorted(ms)})")
-        conferir(all(abs(w - h) < 0.6 for w, h in ms), f"{largura} px: a moldura é quadrada (PROPORCAO_DA_MOLDURA = 1)")
+    for (largura, tipo), ms in sorted(molduras_do_site.items()):
+        conferir(len(ms) == 1, f"{largura} px ({tipo}): todas as molduras de arte, de todas as obras, do mesmo tamanho ({sorted(ms)})")
+        conferir(all(abs(w - h) < 0.6 for w, h in ms), f"{largura} px ({tipo}): a moldura é quadrada (PROPORCAO_DA_MOLDURA = 1)")
 
 
 def links(browser, porta, nome):
-    """T17i: o lado anterior leva ao ÚLTIMO capítulo da história; o seguinte, ao PRIMEIRO (link externo continua externo, em outra aba)."""
+    """T17l: obra com mais de um capítulo naquele idioma → a página da obra (a lista); com um só → o capítulo; externo continua externo,
+    em outra aba; destino em outro idioma (a obra não tem capítulo no idioma da página) → hreflang com o idioma de destino."""
     print(f"\n== links do bloco ({nome}, porta {porta})")
     todos = capitulos_do_site(porta)
+    capitulos = [u for u in todos if not EH_PAGINA_DA_OBRA.match(u)]
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
     for url in todos:
         abrir(pg, porta, url)
-        lados = pg.evaluate("() => [...document.querySelectorAll('[data-story-order] a.so-side')].map(a => [a.closest('.so-order').dataset.ordem, a.classList.contains('prev') ? 'prev' : 'next', a.getAttribute('href'), a.target])")
-        for ordem, lado, href, alvo in lados:
+        lados = pg.evaluate("() => [...document.querySelectorAll('[data-story-order] a.so-side')].map(a => [a.closest('.so-order').dataset.ordem, a.classList.contains('prev') ? 'prev' : 'next', a.getAttribute('href'), a.target, a.getAttribute('hreflang')])")
+        idioma_da_pagina = url.split("/")[1]
+        for ordem, lado, href, alvo, hreflang in lados:
             if href.startswith("http"):
                 conferir(alvo == "_blank", f"{url} {ordem} {lado}: externo, em outra aba ({href})")
                 continue
-            obra = href.rstrip("/").rsplit("/", 1)[0] + "/"
-            da_obra = sorted(u for u in todos if u.startswith(obra))
-            esperado = (da_obra[-1] if lado == "prev" else da_obra[0]) if da_obra else None
-            conferir(href == esperado, f"{url} {ordem} {lado}: {href} = {'o último' if lado == 'prev' else 'o primeiro'} capítulo da obra ({esperado})")
+            idioma, obra = href.split("/")[1], href.split("/")[3]
+            da_obra = sorted(u for u in capitulos if u.startswith(f"/{idioma}/works/{obra}/"))
+            esperado = f"/{idioma}/works/{obra}/" if len(da_obra) > 1 else (da_obra[0] if da_obra else None)
+            conferir(href == esperado, f"{url} {ordem} {lado}: {href} = {'a página da obra (' + str(len(da_obra)) + ' capítulos)' if len(da_obra) > 1 else 'o único capítulo'} ({esperado})")
+            conferir(hreflang == (idioma if idioma != idioma_da_pagina else None), f"{url} {ordem} {lado}: hreflang {hreflang!r} (destino em {idioma})")
     ctx.close()
 
 
@@ -431,12 +445,105 @@ def previa(browser, porta):
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
     abrir(pg, porta, "/pt/works/firestriker/01/")
-    # T17d: a Beira de Estrada ganhou capítulos (provisórios): na prévia ela vem depois da Pederneira, levando ao 1º capítulo
+    # T17d/T17l: a Beira de Estrada (dois capítulos provisórios) vem depois da Pederneira, levando à lista de capítulos dela
     seguinte = pg.locator('.so-order[data-ordem="chrono"] a.so-side.next')
-    conferir(seguinte.count() == 1 and seguinte.get_attribute("href") == "/pt/works/roadside/01/", "prévia (T17d): na Cronológica, depois da Pederneira vem a Beira de Estrada (1º capítulo)")
+    conferir(seguinte.count() == 1 and seguinte.get_attribute("href") == "/pt/works/roadside/", "prévia: na Cronológica, depois da Pederneira vem a Beira de Estrada (a página da obra)")
     texto = pg.locator("[data-story-order]").text_content() or ""
     conferir("Em breve" not in texto, "prévia: o bloco não fala de \"Em breve\"")
+    # T17l: Ossos do Ofício em português (capítulo só em inglês) leva ao capítulo em inglês, com hreflang
+    abrir(pg, porta, "/pt/works/light-and-blood/01/")
+    ossos = pg.locator('.so-order[data-ordem="chrono"] a.so-side.prev')
+    conferir(ossos.get_attribute("href") == "/en/works/all-in-a-nights-work/01/" and ossos.get_attribute("hreflang") == "en" and "Ler Ossos do Ofício" in (ossos.text_content() or ""), "prévia, /pt/: \"Ler Ossos do Ofício\" leva ao capítulo em inglês (hreflang=\"en\")")
+    # T17l: o bloco também na página da obra, logo depois da lista de capítulos
+    for url in ("/pt/works/roadside/", "/en/works/light-and-blood/"):
+        abrir(pg, porta, url)
+        depois_da_lista = pg.evaluate("() => { const b = document.querySelector('[data-story-order]'); const p = b && b.previousElementSibling; return !!(p && p.querySelector('ol.chapter-list')); }")
+        conferir(depois_da_lista, f"prévia, {url}: o bloco vem logo depois da lista de capítulos")
+    # T17l: O Pêndulo e Cat-Crow-Thing (sem order_art nem order_images) não aparecem em bloco nenhum
+    for url in capitulos_do_site(porta):
+        abrir(pg, porta, url)
+        hrefs = pg.evaluate("() => [...document.querySelectorAll('[data-story-order] a.so-side')].map(a => a.getAttribute('href'))")
+        conferir(not any(("the-pendulum" in h or "cat-crow-thing" in h) for h in hrefs), f"prévia, {url}: sem O Pêndulo nem Cat-Crow-Thing no bloco")
     ctx.close()
+
+
+LER_ASAS = """() => {
+  const caixa = document.querySelector('[data-story-order]');
+  const lista = caixa.querySelector('.so-order:not([hidden])');
+  const ossos = [...lista.querySelectorAll('a.so-side')].find(a => a.getAttribute('href').includes('all-in-a-nights-work'));
+  const outro = [...lista.querySelectorAll('a.so-side')].find(a => a !== ossos);
+  const asas = ossos.querySelector('img[src*="Asas"]');
+  const moldura = ossos.querySelector('.so-art');
+  const r = (e) => { const q = e.getBoundingClientRect(); return { esq: q.left, dir: q.right, cima: q.top, baixo: q.bottom }; };
+  const cx = caixa.getBoundingClientRect();
+  const sel = caixa.querySelector('.so-select').getBoundingClientRect();
+  const noSeletor = document.elementFromPoint(sel.left + sel.width / 2, sel.top + sel.height / 2);
+  let noOutro = null;
+  if (outro) { const q = outro.querySelector('.so-art').getBoundingClientRect(); const e = document.elementFromPoint(q.left + q.width / 2, q.top + q.height * 0.8); noOutro = !!(e && outro.contains(e)); }
+  // a ordem de PINTURA no ponto do título que fica em cima das asas: liga o clique das asas só para perguntar (elementsFromPoint ignora
+  // quem tem pointer-events: none) e desliga em seguida
+  const valor = caixa.querySelector('.so-valor').getBoundingClientRect();
+  const ponto = [valor.right - 4, valor.top + valor.height / 2];
+  asas.style.pointerEvents = 'auto';
+  const pilha = document.elementsFromPoint(...ponto);
+  asas.style.pointerEvents = '';
+  const iAsas = pilha.indexOf(asas), iTexto = pilha.findIndex(e => e.closest && e.closest('.so-top'));
+  const cs = getComputedStyle(caixa);
+  return { asas: r(asas), moldura: r(moldura), caixa: { esq: cx.left, dir: cx.right, cima: cx.top, baixo: cx.bottom }, opacidade: +getComputedStyle(asas).opacity,
+           corteDaMoldura: getComputedStyle(moldura).overflow, corteDaCaixa: cs.overflow, canto: parseFloat(cs.borderTopRightRadius),
+           seletor: noSeletor && noSeletor.classList.contains('so-select'), outro: noOutro, asasNoPonto: iAsas, textoNoPonto: iTexto,
+           asasPegamClique: getComputedStyle(asas).pointerEvents };
+}"""
+
+
+def asas(browser, porta):
+    """T17l: as asas do Giuseppe saem da moldura, ficam por trás da frase de cima, são cortadas pela caixa e não pegam clique."""
+    print(f"\n== as asas do Giuseppe (prévia, porta {porta})")
+    # Ossos do Ofício do lado da direita (Luz & Sangue, Lançamento) e do lado da esquerda (Beira de Estrada, Lançamento)
+    for lang in ("en", "pt"):
+        for url, lado in ((f"/{lang}/works/light-and-blood/01/", "next"), (f"/{lang}/works/roadside/01/", "prev")):
+            for modo in ("mouse", "teclado"):
+                ctx = novo_contexto(browser, 1100)
+                pg = ctx.new_page()
+                abrir(pg, porta, url)
+                pg.evaluate("document.querySelectorAll('.so-layer').forEach(i => { i.loading = 'eager' })")
+                pg.select_option("[data-story-order] select", "release")
+                pg.mouse.move(1, 1)
+                pg.wait_for_timeout(700)
+                antes = pg.evaluate(LER_ASAS)
+                caixa_antes = pg.evaluate("() => { const r = document.querySelector('[data-story-order]').getBoundingClientRect(); return [r.width, r.height]; }")
+                alvo = f".so-order:not([hidden]) a.so-side.{lado}"
+                if modo == "teclado":
+                    for _ in range(40):
+                        pg.keyboard.press("Tab")
+                        if pg.evaluate("(s) => document.activeElement && document.activeElement.matches(s)", alvo):
+                            break
+                else:
+                    pg.hover(alvo)
+                pg.wait_for_timeout(900)
+                d = pg.evaluate(LER_ASAS)
+                caixa_depois = pg.evaluate("() => { const r = document.querySelector('[data-story-order]').getBoundingClientRect(); return [r.width, r.height]; }")
+                tag = f"{url} ({lado}, {modo})"
+                conferir(antes["opacidade"] == 0 and d["opacidade"] == 1, f"{tag}: as asas surgem (opacidade {antes['opacidade']} → {d['opacidade']})")
+                conferir(d["corteDaMoldura"] == "visible" and d["asas"]["cima"] < d["moldura"]["cima"] - 50 and (d["asas"]["esq"] < d["moldura"]["esq"] - 50 or d["asas"]["dir"] > d["moldura"]["dir"] + 50), f"{tag}: as asas saem da moldura ({round(d['asas']['esq'])}–{round(d['asas']['dir'])} × {round(d['asas']['cima'])} contra a moldura {round(d['moldura']['esq'])}–{round(d['moldura']['dir'])} × {round(d['moldura']['cima'])})")
+                conferir(d["corteDaCaixa"] == "hidden" and d["canto"] > 10 and (d["asas"]["cima"] < d["caixa"]["cima"] or d["asas"]["dir"] > d["caixa"]["dir"] or d["asas"]["esq"] < d["caixa"]["esq"]), f"{tag}: a caixa corta as asas (overflow {d['corteDaCaixa']}, canto {d['canto']} px; as asas passam da borda)")
+                conferir(d["asasNoPonto"] >= 0 and 0 <= d["textoNoPonto"] < d["asasNoPonto"], f"{tag}: as asas ficam POR TRÁS da frase de cima (pintura: texto {d['textoNoPonto']}, asas {d['asasNoPonto']})")
+                conferir(d["asasPegamClique"] == "none" and d["seletor"], f"{tag}: o seletor de ordem continua clicável (as asas não pegam clique)")
+                conferir(d["outro"] is not False, f"{tag}: a outra história continua clicável por cima/embaixo das asas")
+                conferir(caixa_antes == caixa_depois, f"{tag}: a caixa não muda de tamanho com as asas ({caixa_antes} → {caixa_depois})")
+                ctx.close()
+    # celular: a moldura volta a cortar (a caixa é estreita e as duas artes ficam lado a lado)
+    for largura in (390, 320):
+        ctx = novo_contexto(browser, largura)
+        pg = ctx.new_page()
+        abrir(pg, porta, "/en/works/light-and-blood/01/")
+        pg.select_option("[data-story-order] select", "release")
+        pg.hover(".so-order:not([hidden]) a.so-side.next")
+        pg.wait_for_timeout(900)
+        d = pg.evaluate(LER_ASAS)
+        rol = pg.evaluate("() => [document.documentElement.scrollWidth, innerWidth]")
+        conferir(d["corteDaMoldura"] in ("clip", "hidden") and rol[0] <= rol[1], f"{largura} px: a moldura das asas volta a cortar ({d['corteDaMoldura']}) e não há rolagem para o lado")
+        ctx.close()
 
 
 def main() -> int:
@@ -453,8 +560,10 @@ def main() -> int:
         tamanho_da_caixa(browser, a.astro, "publicado")
         if a.previa:
             previa(browser, a.previa)
-            print("\n== Ossos do Ofício (prévia, em inglês)")
-            artes_novas(browser, a.previa, "ossos", "en")
+            for lang in ("en", "pt"):  # T17l: em português, com o link para o inglês
+                print(f"\n== Ossos do Ofício (prévia, {lang})")
+                artes_novas(browser, a.previa, "ossos", lang)
+            asas(browser, a.previa)
             for lang in ("pt", "en"):  # T17d: a Beira de Estrada tem capítulos na prévia de verdade (o --beira ficou opcional)
                 print(f"\n== Beira de Estrada ({lang}, prévia)")
                 artes_novas(browser, a.previa, "beira", lang)

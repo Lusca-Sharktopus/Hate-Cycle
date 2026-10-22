@@ -66,6 +66,16 @@ const c = l.conteudo;
     .comic img { display: block; width: 100%; max-width: 860px; }
     .author-note { margin: 1.5rem auto 0; padding: 1rem 1.2rem; background: #ffffff12; border-radius: 10px; }
     .reader-comic .pager .mid, .reader-comic .pager .pg { color: var(--mint); }
+    /* (T17l, pedido do autor de 22/10, mudança 9: "Na leitura de Beira de Estrada, deixe a página com o fundo usual no lugar deste roxo")
+       o quadrinho lido PÁGINA A PÁGINA (com `page_runes`: a caixa que tem o .folheador) fica na folha de papel de sempre, com o texto, o
+       título, a logo (sem inverter) e o pager das caixas de papel. A margem continua a do quadrinho (a página ocupa a largura). O quadrinho
+       de rolagem (sem `page_runes`) continua no roxo-noite, como no Python. Só CSS (:has): o HTML é o mesmo. */
+    .reader-comic .reader-box:first-of-type:has(> .folheador) { background: var(--paper), var(--sheet); background-color: var(--sheet); color: var(--ink); }
+    .reader-comic .reader-box:has(> .folheador) .chapter-title { color: var(--green); }
+    .reader-comic .reader-box:has(> .folheador) .title-image { filter: none; }
+    .reader-comic .reader-box:has(> .folheador) .pager .pg { color: inherit; }
+    .reader-comic .reader-box:has(> .folheador) .pager .mid { color: var(--teal); }
+    .reader-comic .reader-box:has(> .folheador) .author-note { background: #0000000d; }
 
     @media (max-width: 700px) {
       .story p { text-align: left; }

@@ -205,7 +205,8 @@ function normalizar(html, lado, url, existe) {
     const s = semBlocoDeOrdem(html);
     if (s.removidos.length) {
       conta("T17c: bloco \"estou lendo em ordem\" (Astro)", url);
-      if (!/^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url)) falha(url, "bloco de ordem fora de um capítulo");
+      // T17l: também na página da obra (/pt/works/<obra>/, logo depois da lista de capítulos)
+      if (!/^\/(en|pt)\/works\/[^/]+\/([^/]+\/)?$/.test(url)) falha(url, "bloco de ordem fora de um capítulo e de uma página de obra");
       if (s.removidos.length !== 1 || !s.filhasDiretasDoMain.every(Boolean)) falha(url, "bloco de ordem: não é 1 filho direto do <main>");
     }
     html = s.html;

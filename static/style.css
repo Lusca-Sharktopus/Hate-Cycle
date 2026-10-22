@@ -175,8 +175,13 @@ time { color: var(--muted); font-size: .85rem; }
 
 /* página "Sobre": personagens e fotos flutuando com o texto contornando o desenho */
 .page-about h2, .page-project h2 { clear: both; }
+/* página "Sobre" (T17l, pedido do autor de 22/10): o título que vem logo depois do texto ("Sobre o autor", depois do fim de "Sobre o projeto") fica à mesma distância do texto que "Outros Emissários" (só a margem do parágrafo, 1rem) */
+.page-about .prose > p + h2 { margin-top: 0; }
 /* página "Apoio": o texto e as imagens ocupam a coluna inteira (o .prose de 70ch ficava encostado à esquerda e o conteúdo parecia descentralizado) */
 .page-support .prose { max-width: none; }
+/* página "Apoio" (T17l, pedido do autor de 22/10, "print 2.png"): o banner do canal do YouTube sobe até o cabo do tridente "invadir" um pouco a faixa do texto de cima (8,5% da largura da coluna = ~65 px a 760 px); o texto fica POR CIMA (z-index), para continuar legível e clicável */
+.page-support .prose > p { position: relative; z-index: 1; }
+.page-support .yt-banner { margin-top: -8.5%; }
 .apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
 .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("other images/Apollo Site.gif"); }
 .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("other images/Anfíbio Site.gif"); }

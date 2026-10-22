@@ -69,6 +69,12 @@ const [anterior, proxima] = setas.map(({ direcao, seta }) => ({
     .fl-runa:hover, .fl-runa:focus-visible { opacity: .85; }
     .fl-runa:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
     .fl-runa[aria-current="page"] { opacity: 1; color: var(--cyan); text-shadow: 0 0 .3em currentColor, 0 0 .8em currentColor; transform: scale(1.15); }
+    /* (T17l) a caixa do leitor página a página agora é a folha de PAPEL (Leitor.astro): no papel claro, o menta apagado e o ciano quase
+       somem. As apagadas viram o verde dos títulos (ainda apagadas) e a da página atual, o petróleo (--teal) com o MESMO brilho ciano em
+       volta: continua sendo a que brilha, e legível. */
+    .reader-box:has(> .folheador) .fl-runa { color: var(--green); opacity: .45; }
+    .reader-box:has(> .folheador) .fl-runa:hover, .reader-box:has(> .folheador) .fl-runa:focus-visible { opacity: .9; }
+    .reader-box:has(> .folheador) .fl-runa[aria-current="page"] { opacity: 1; color: var(--teal); text-shadow: 0 0 .25em var(--cyan), 0 0 .7em var(--cyan); }
 
     @media (max-width: 700px) {
       /* no celular, como o vídeo: a página na largura toda e as setas embaixo, uma em cada canto */

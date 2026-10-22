@@ -8,13 +8,17 @@ O que confere:
      link direto para #p5; o aviso para leitor de tela ("Página 5 de 8"); Tab nas runas com o nome "Página N de 8" e Enter;
      na 8ª página do 01 a seta leva à 1ª do 02; na 1ª do 02, à 8ª do 01; na 8ª do 02 (o capítulo mais recente) a seta some e → não faz
      nada; a página vizinha já baixada (loading="eager" e a imagem carregada); as fontes das runas (do próprio site) carregadas;
+  1b. (T17l) o FUNDO: a caixa do leitor página a página é a folha de papel (não o roxo-noite do quadrinho), com o título verde, a logo
+     sem inverter e o pager nas cores do papel; as runas legíveis no papel: a da página atual em petróleo (--teal) com brilho, contraste
+     de pelo menos 3:1 contra a folha; as apagadas no verde dos títulos; as setas (botões verdes) com contraste;
   2. sem JavaScript: as 8 páginas uma embaixo da outra, sem setas nem runas;
   3. 390 e 320 px: nada de rolagem horizontal, a página cabe na largura, as 8 runas numa linha, as setas embaixo;
   4. Cat-Crow-Thing (pt e en): a janela 16:9 vazia com "Demo em breve", o botão com a logo À ESQUERDA do texto do autor, sem link (não é
      <a>, não pega foco no Tab) e "Link em breve" ao lado; nenhum <iframe> na página do jogo;
   5. O Pêndulo: o <iframe> do YouTube com o vídeo provisório (o sandbox não alcança o YouTube: o quadro aparece vazio/cinza);
-  6. o bloco "em ordem" na prévia: Pederneira → Beira de Estrada (1º capítulo); Beira ← Pederneira / → O Pêndulo; O Pêndulo ← Beira
-     (ÚLTIMO capítulo) / → Cat-Crow-Thing; Cat-Crow-Thing "estou jogando em ordem"; o verbo de cada lado (Ler/Assistir/Jogar);
+  6. o bloco "em ordem" na prévia (regras da T17l): Pederneira → Beira de Estrada (a lista de capítulos); Beira ← Pederneira (cronológica)
+     e ← Ossos do Ofício (lançamento; em português leva ao capítulo em inglês), sem ninguém depois (O Pêndulo e Cat-Crow-Thing, sem arte para
+     a caixa, são pulados); O Pêndulo e Cat-Crow-Thing ← Beira; Cat-Crow-Thing "estou jogando em ordem"; o verbo de cada lado;
   7. com --astro (o site PUBLICADO): nenhuma das três obras existe (404 nos endereços, nada em Histórias nem na home).
 Com --fotos <pasta>: grava as capturas (1100 e 390 px; 320 px do leitor) para OLHAR (ferramenta Read no PNG).
 
@@ -91,6 +95,25 @@ def esperar(pg):
     pg.wait_for_timeout(200)
 
 
+FUNDO = """() => {
+  const caixa = document.querySelector('[data-folheador]').closest('.reader-box');
+  const c = (e) => getComputedStyle(e);
+  const rgb = (t) => (t.match(/[\\d.]+/g) || []).slice(0, 3).map(Number);
+  const lum = ([r, g, b]) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+  const contraste = (a, b) => { const [x, y] = [lum(rgb(a)), lum(rgb(b))].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const folha = c(caixa).backgroundColor;
+  const atual = caixa.querySelector('.fl-runa[aria-current="page"]'), outra = caixa.querySelector('.fl-runa:not([aria-current])');
+  const titulo = caixa.querySelector('.chapter-title, h1'), logo = caixa.querySelector('.title-image');
+  const seta = caixa.querySelector('.fl-seta.next');
+  const mid = caixa.querySelector('.pager .mid');
+  return { folha, imagemDeFundo: c(caixa).backgroundImage !== 'none', titulo: c(titulo).color, logo: logo ? c(logo).filter : null,
+           runaAtual: c(atual).color, brilho: c(atual).textShadow, contrasteDaAtual: contraste(c(atual).color, folha),
+           runaApagada: c(outra).color, opacApagada: +c(outra).opacity, contrasteDaApagada: contraste(c(outra).color, folha),
+           seta: c(seta).backgroundColor, contrasteDaSeta: contraste(c(seta).backgroundColor, folha),
+           mid: mid ? c(mid).color : null, contrasteDoMid: mid ? contraste(c(mid).color, folha) : null };
+}"""
+
+
 def leitor(browser, porta, lang, fotos):
     pt = lang == "pt"
     c1, c2 = f"/{lang}/works/roadside/01/", f"/{lang}/works/roadside/02/"
@@ -98,6 +121,13 @@ def leitor(browser, porta, lang, fotos):
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
     abrir(pg, porta, c1, "[data-folheador]")
+    f = pg.evaluate(FUNDO)
+    conferir(f["folha"] == "rgb(236, 236, 236)" and f["imagemDeFundo"], f"T17l: a caixa do leitor é a folha de papel ({f['folha']}, textura: {f['imagemDeFundo']}), não o roxo-noite rgb(39, 27, 57)")
+    conferir(f["titulo"] == "rgb(19, 92, 72)" and f["logo"] in (None, "none"), f"T17l: título verde ({f['titulo']}) e logo sem inverter ({f['logo']})")
+    conferir(f["runaAtual"] == "rgb(37, 115, 122)" and f["brilho"] != "none" and f["contrasteDaAtual"] >= 3, f"T17l: a runa atual em petróleo, com brilho, contraste {f['contrasteDaAtual']:.1f}:1 com a folha")
+    conferir(f["runaApagada"] == "rgb(19, 92, 72)" and f["opacApagada"] < 0.6 and f["contrasteDaApagada"] >= 3, f"T17l: as runas apagadas no verde dos títulos (opacidade {f['opacApagada']}; a cor tem {f['contrasteDaApagada']:.1f}:1)")
+    conferir(f["contrasteDaSeta"] >= 3, f"T17l: as setas (botões {f['seta']}) com contraste {f['contrasteDaSeta']:.1f}:1")
+    conferir(f["mid"] is None or f["contrasteDoMid"] >= 3, f"T17l: o \"Todos os capítulos\" do pager legível ({f['mid']}, {f['contrasteDoMid'] and round(f['contrasteDoMid'], 1)}:1)")
     e = pg.evaluate(ESTADO)
     conferir(e["vis"] == [1] and e["atual"] == [1], f"abre na página 1, só ela visível, runa 1 brilhando ({e['vis']}, {e['atual']})")
     conferir(e["brilhoAtual"] != "none" and e["brilhoOutra"] == "none" and float(e["opacAtual"]) == 1 and float(e["opacOutra"]) < 0.6, f"a runa atual brilha (text-shadow), as outras apagadas (opacidade {e['opacOutra']})")
@@ -270,13 +300,14 @@ def bloco(browser, porta, fotos):
     print("\n== bloco \"estou lendo em ordem\" com as obras novas (prévia, pt)")
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
+    # T17l: obra de vários capítulos → a lista de capítulos; O Pêndulo e Cat-Crow-Thing (sem arte) pulados; Ossos em português → inglês
     casos = {
-        "/pt/works/firestriker/01/": {"chrono": [["/pt/works/light-and-blood/02/", "Assistir Luz & Sangue"], ["/pt/works/roadside/01/", "Ler Beira de Estrada"]]},
-        "/pt/works/roadside/01/": {"titulo": "estou lendo em ordem", "chrono": [["/pt/works/firestriker/01/", "Ler Pederneira"], ["/pt/works/the-pendulum/01/", "Assistir O Pêndulo"]],
-                                   "release": [["/pt/works/light-and-blood/02/", "Assistir Luz & Sangue"], ["/pt/works/the-pendulum/01/", "Assistir O Pêndulo"]]},
-        "/pt/works/the-pendulum/01/": {"titulo": "estou assistindo em ordem", "chrono": [["/pt/works/roadside/02/", "Ler Beira de Estrada"], ["/pt/works/cat-crow-thing/01/", "Jogar Cat-Crow-Thing"]],
-                                       "release": [["/pt/works/roadside/02/", "Ler Beira de Estrada"], ["/pt/works/cat-crow-thing/01/", "Jogar Cat-Crow-Thing"]]},
-        "/pt/works/cat-crow-thing/01/": {"titulo": "estou jogando em ordem", "chrono": [["/pt/works/the-pendulum/01/", "Assistir O Pêndulo"], None], "release": [["/pt/works/the-pendulum/01/", "Assistir O Pêndulo"], None]},
+        "/pt/works/firestriker/01/": {"chrono": [["/pt/works/light-and-blood/", "Assistir Luz & Sangue"], ["/pt/works/roadside/", "Ler Beira de Estrada"]]},
+        "/pt/works/roadside/01/": {"titulo": "estou lendo em ordem", "chrono": [["/pt/works/firestriker/01/", "Ler Pederneira"], None],
+                                   "release": [["/en/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"], None]},
+        "/pt/works/the-pendulum/01/": {"titulo": "estou assistindo em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None],
+                                       "release": [["/pt/works/roadside/", "Ler Beira de Estrada"], None]},
+        "/pt/works/cat-crow-thing/01/": {"titulo": "estou jogando em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None], "release": [["/pt/works/roadside/", "Ler Beira de Estrada"], None]},
     }
     for url, esperado in casos.items():
         abrir(pg, porta, url, "[data-story-order]")
@@ -287,7 +318,7 @@ def bloco(browser, porta, fotos):
     fundo = pg.evaluate("getComputedStyle(document.querySelector('[data-story-order]')).backgroundColor")
     conferir(fundo != "rgb(39, 27, 57)", f"no capítulo de quadrinho o bloco continua papel (T17i), não roxo-noite ({fundo})")
     foto(pg, fotos, "ordem-beira-1100.png", "[data-story-order]")
-    pg.hover("[data-story-order] .so-order:not([hidden]) a.so-side.next")
+    pg.hover("[data-story-order] .so-order:not([hidden]) a.so-side.prev")  # T17l: depois da Beira não vem ninguém (O Pêndulo e Cat-Crow-Thing, sem arte)
     pg.wait_for_timeout(800)
     foto(pg, fotos, "ordem-beira-1100-mouse.png", "[data-story-order]")
     ctx.close()

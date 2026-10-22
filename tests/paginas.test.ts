@@ -507,8 +507,11 @@ describe("T15: o script dos comentários só nas páginas com comentários, sem 
 
 // ───────────── T17c: o bloco "estou lendo em ordem…" no fim dos capítulos ─────────────
 
-describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a caixa do capítulo e a dos comentários", () => {
+describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página de obra (e só neles)", () => {
   const ehCapitulo = (url: string) => /^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url);
+  /** A página de uma obra com lista de capítulos (/pt/works/light-and-blood/): desde a T17l também tem o bloco, logo depois da lista. */
+  const ehPaginaDeObra = (url: string) => /^\/(en|pt)\/works\/[^/]+\/$/.test(url);
+  const temBloco = (url: string) => ehCapitulo(url) || ehPaginaDeObra(url);
   const RE_SCRIPT_DA_ORDEM = /<script type="module">(?:(?!<\/script>)[\s\S])*\[data-story-order\](?:(?!<\/script>)[\s\S])*<\/script>/g;
   /** Os dois lados de cada ordem de um bloco: { chrono: { prev: href|null, next: href|null }, release: … } e o que cada lado diz. */
   function lados(bloco: string) {
@@ -528,16 +531,21 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
       const html = readFileSync(arquivo, "utf8");
       const r = semBlocoDeOrdem(html);
       const scripts = html.match(RE_SCRIPT_DA_ORDEM) ?? [];
-      if (!ehCapitulo(url)) {
-        expect(r.removidos, `${url}: bloco fora de capítulo`).toEqual([]);
-        expect(scripts, `${url}: script da ordem fora de capítulo`).toEqual([]);
+      if (!temBloco(url)) {
+        expect(r.removidos, `${url}: bloco fora de capítulo e de página de obra`).toEqual([]);
+        expect(scripts, `${url}: script da ordem fora de capítulo e de página de obra`).toEqual([]);
         continue;
       }
       capitulos.push(url);
       expect(r.removidos, `${url}: exatamente 1 bloco`).toHaveLength(1);
       expect(r.filhasDiretasDoMain, `${url}: o bloco é filho direto do <main>`).toEqual([true]);
-      // entre a caixa do capítulo e a caixa (fina) dos comentários
-      expect(html, url).toMatch(/<\/div>\s*<section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<div class="reader-box paper slim">/);
+      if (ehCapitulo(url)) {
+        // entre a caixa do capítulo e a caixa (fina) dos comentários
+        expect(html, url).toMatch(/<\/div>\s*<section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<div class="reader-box paper slim">/);
+      } else {
+        // T17l: logo depois da lista de capítulos, e é a última coisa do <main>
+        expect(html, url).toMatch(/<ol class="chapter-list">[\s\S]*?<\/ol><\/section>\s*<section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<\/main>/);
+      }
       expect(scripts, `${url}: o script do bloco, uma vez`).toHaveLength(1);
       expect(html.indexOf(scripts[0] ?? ""), `${url}: o script vai depois do </main>`).toBeGreaterThan(html.indexOf("</main>"));
       expect(scripts[0], `${url}: o script não leva nada do config.json`).not.toMatch(/supabase|window\.HC|anon/i);
@@ -559,20 +567,26 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
   }
   const blocoDe = (pasta: string, url: string) => semBlocoDeOrdem(readFileSync(paginasDoDist(pasta).get(url) ?? "", "utf8")).removidos[0] ?? "";
 
-  test("site publicado: todo capítulo tem o bloco (1), nenhuma outra página tem", () => {
+  test("site publicado: todo capítulo e a página de Luz & Sangue têm o bloco (1), nenhuma outra página tem", () => {
     const capitulos = verificarPaginas(dist);
-    expect(capitulos).toEqual(["/en/works/firestriker/01/", "/en/works/light-and-blood/01/", "/en/works/light-and-blood/02/", "/pt/works/firestriker/01/", "/pt/works/light-and-blood/01/", "/pt/works/light-and-blood/02/"]);
+    expect(capitulos).toEqual(["/en/works/firestriker/01/", "/en/works/light-and-blood/", "/en/works/light-and-blood/01/", "/en/works/light-and-blood/02/", "/pt/works/firestriker/01/", "/pt/works/light-and-blood/", "/pt/works/light-and-blood/01/", "/pt/works/light-and-blood/02/"]);
+    // na página da obra a "história atual" é a da página: Luz & Sangue (estou ASSISTINDO), antes dela a Pederneira no lançamento
+    const obra = lados(blocoDe(dist, "/pt/works/light-and-blood/"));
+    expect(blocoDe(dist, "/pt/works/light-and-blood/")).toContain("estou assistindo em ordem");
+    expect(obra.release.prev).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
+    expect(obra.chrono.next).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
+    expect(lados(blocoDe(dist, "/pt/works/light-and-blood/"))).toEqual(lados(blocoDe(dist, "/pt/works/light-and-blood/01/")));
   });
 
   test("site publicado, Pederneira (PDF do autor): cronológica → antes Luz & Sangue, depois NINGUÉM; lançamento → antes Alô?, depois Luz & Sangue", () => {
     const l = lados(blocoDe(dist, "/pt/works/firestriker/01/"));
-    // T17i: quem vem antes leva ao ÚLTIMO capítulo; quem vem depois, ao PRIMEIRO
-    expect(l.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/02/", texto: "Assistir Luz & Sangue", externo: false });
+    // T17l: Luz & Sangue tem dois episódios → a página da obra (a lista), dos dois lados
+    expect(l.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
     expect(l.chrono.next).toBeNull();
     expect(l.release.prev?.externo).toBe(true);
     expect(l.release.prev?.href).toMatch(/^https:\/\//);
     expect(l.release.prev?.texto).toMatch(/^Assistir /);
-    expect(l.release.next).toEqual({ href: "/pt/works/light-and-blood/01/", texto: "Assistir Luz & Sangue", externo: false });
+    expect(l.release.next).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
     expect(blocoDe(dist, "/pt/works/firestriker/01/")).toContain("estou lendo em ordem");
     expect(blocoDe(dist, "/pt/works/light-and-blood/02/")).toContain("estou assistindo em ordem");
   });
@@ -583,12 +597,12 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
     }
   });
 
-  test("site publicado, em TODO capítulo (T17i): link externo = o do cartão de Histórias; senão, um capítulo que existe — o último da obra antes, o primeiro depois", () => {
+  test("site publicado, em TODO capítulo e página de obra (T17l): link externo = o do cartão de Histórias; senão, a página da obra (2+ capítulos) ou o capítulo (1)", () => {
     const paginas = paginasDoDist(dist);
     for (const lang of ["pt", "en"] as const) {
       const historias = readFileSync(paginas.get(`/${lang}/works/`) ?? "", "utf8");
       const botoes = new Set([...historias.matchAll(/<a class="button" href="([^"]+)"/g)].map((m) => m[1]));
-      for (const url of [...paginas.keys()].filter((u) => ehCapitulo(u) && u.startsWith(`/${lang}/`))) {
+      for (const url of [...paginas.keys()].filter((u) => temBloco(u) && u.startsWith(`/${lang}/`))) {
         const l = lados(blocoDe(dist, url));
         for (const o of ["chrono", "release"] as const) {
           for (const qual of ["prev", "next"] as const) {
@@ -598,19 +612,17 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
               expect(botoes.has(lado.href), `${url} ${o} ${qual}: o externo é o do cartão`).toBe(true);
               continue;
             }
-            const m = /^\/(en|pt)\/works\/([^/]+)\/([^/]+)\/$/.exec(lado.href);
-            expect(m, `${url} ${o} ${qual}: ${lado.href} é um capítulo`).not.toBeNull();
             expect(paginas.has(lado.href), `${lado.href} existe no site`).toBe(true);
-            // os capítulos da obra, na ordem da página dela (ou o único, numa obra de capítulo só)
-            const daObra = [...paginas.keys()].filter((u) => u.startsWith(`/${lang}/works/${m?.[2]}/`) && ehCapitulo(u)).sort();
-            expect(lado.href, `${url} ${o} ${qual}`).toBe(qual === "prev" ? daObra.at(-1) : daObra[0]);
+            const obra = /^\/(en|pt)\/works\/([^/]+)\//.exec(lado.href)?.[2] ?? "";
+            const capitulosDaObra = [...paginas.keys()].filter((u) => u.startsWith(`/${lang}/works/${obra}/`) && ehCapitulo(u)).sort();
+            // a página da obra quando ela tem mais de um capítulo; o capítulo quando tem um só (os dois lados levam ao mesmo lugar)
+            expect(lado.href, `${url} ${o} ${qual}`).toBe(capitulosDaObra.length > 1 ? `/${lang}/works/${obra}/` : capitulosDaObra[0]);
           }
         }
       }
     }
-    // os casos do PDF: Pederneira na cronológica → Luz & Sangue 02; no lançamento → Luz & Sangue 01; no capítulo de Luz & Sangue, a Pederneira (um capítulo só)
-    expect(lados(blocoDe(dist, "/en/works/firestriker/01/")).chrono.prev?.href).toBe("/en/works/light-and-blood/02/");
-    expect(lados(blocoDe(dist, "/en/works/firestriker/01/")).release.next?.href).toBe("/en/works/light-and-blood/01/");
+    expect(lados(blocoDe(dist, "/en/works/firestriker/01/")).chrono.prev?.href).toBe("/en/works/light-and-blood/");
+    expect(lados(blocoDe(dist, "/en/works/firestriker/01/")).release.next?.href).toBe("/en/works/light-and-blood/");
     expect(lados(blocoDe(dist, "/pt/works/light-and-blood/02/")).chrono.next?.href).toBe("/pt/works/firestriker/01/");
     expect(lados(blocoDe(dist, "/pt/works/light-and-blood/01/")).release.prev?.href).toBe("/pt/works/firestriker/01/");
   });
@@ -638,58 +650,61 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
     for (const tag of [...lb.tags, ...hd.tags, ...pd.tags]) expect(tag).toMatch(/ srcset="[^"]+\.webp[^"]*"/);
   });
 
-  test("prévia (rascunhos, T17d): Beira de Estrada, O Pêndulo e Cat-Crow-Thing, agora com capítulo, entram na fila; o verbo é o de cada obra", () => {
+  test("prévia (rascunhos, T17d/T17l): Beira de Estrada entra na fila; O Pêndulo e Cat-Crow-Thing, sem arte para a caixa, são pulados; Ossos em português leva ao inglês", () => {
     const dir = segundaConstrucao();
     const capitulos = verificarPaginas(dir);
-    for (const c of ["/pt/works/roadside/01/", "/pt/works/roadside/02/", "/en/works/roadside/01/", "/pt/works/the-pendulum/01/", "/en/works/the-pendulum/01/", "/pt/works/cat-crow-thing/01/", "/en/works/cat-crow-thing/01/"]) expect(capitulos, c).toContain(c);
-    // Pederneira (cronológica 6): antes Luz & Sangue (o último episódio), depois Beira de Estrada (7: o PRIMEIRO capítulo, T17i)
+    for (const c of ["/pt/works/roadside/", "/pt/works/roadside/01/", "/pt/works/roadside/02/", "/en/works/roadside/01/", "/pt/works/the-pendulum/01/", "/en/works/the-pendulum/01/", "/pt/works/cat-crow-thing/01/", "/en/works/cat-crow-thing/01/"]) expect(capitulos, c).toContain(c);
+    // Pederneira (cronológica 6): antes Luz & Sangue, depois Beira de Estrada (7); as duas com dois capítulos → a página da obra (T17l)
     const ped = lados(blocoDe(dir, "/pt/works/firestriker/01/"));
-    expect(ped.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/02/", texto: "Assistir Luz & Sangue", externo: false });
-    expect(ped.chrono.next).toEqual({ href: "/pt/works/roadside/01/", texto: "Ler Beira de Estrada", externo: false });
+    expect(ped.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
+    expect(ped.chrono.next).toEqual({ href: "/pt/works/roadside/", texto: "Ler Beira de Estrada", externo: false });
     expect(ped.release.next?.texto).toBe("Assistir Luz & Sangue");
-    // Beira de Estrada (quadrinho: "estou lendo"): cronológica Pederneira ← → O Pêndulo (11); lançamento (5): Luz & Sangue (Ossos não tem capítulo em português) ← → O Pêndulo (6)
-    for (const c of ["01", "02"]) {
-      const bloco = blocoDe(dir, `/pt/works/roadside/${c}/`);
-      expect(bloco).toContain("estou lendo em ordem");
+    // Beira de Estrada (quadrinho: "estou lendo"), nos capítulos e na página da obra: cronológica Pederneira ← → (O Pêndulo e Cat-Crow-Thing,
+    // sem arte, pulados) ninguém; lançamento (5): Ossos do Ofício (4; em português leva ao capítulo em inglês, T17l) ← → ninguém
+    for (const url of ["/pt/works/roadside/01/", "/pt/works/roadside/02/", "/pt/works/roadside/"]) {
+      const bloco = blocoDe(dir, url);
+      expect(bloco, url).toContain("estou lendo em ordem");
       const l = lados(bloco);
-      expect(l.chrono.prev).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
-      expect(l.chrono.next).toEqual({ href: "/pt/works/the-pendulum/01/", texto: "Assistir O Pêndulo", externo: false });
-      expect(l.release.prev).toEqual({ href: "/pt/works/light-and-blood/02/", texto: "Assistir Luz & Sangue", externo: false });
-      expect(l.release.next).toEqual({ href: "/pt/works/the-pendulum/01/", texto: "Assistir O Pêndulo", externo: false });
+      expect(l.chrono.prev, url).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
+      expect(l.chrono.next, url).toBeNull();
+      expect(l.release.prev, url).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
+      expect(l.release.next, url).toBeNull();
+      expect(bloco, url).toContain('<a class="so-side prev" href="/en/works/all-in-a-nights-work/01/" hreflang="en">');
     }
-    // em inglês, no lançamento, Ossos do Ofício (4, capítulo só em inglês) vem antes da Beira
     expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.prev).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
-    // O Pêndulo (vídeo: "estou assistindo"): antes a Beira de Estrada (o ÚLTIMO capítulo), depois Cat-Crow-Thing (12 / 7)
+    expect(blocoDe(dir, "/en/works/roadside/01/")).not.toContain("hreflang");
+    // O Pêndulo (vídeo: "estou assistindo") e Cat-Crow-Thing (jogo: "estou jogando") ainda TÊM o bloco; antes deles, a Beira de Estrada
     const pen = blocoDe(dir, "/pt/works/the-pendulum/01/");
     expect(pen).toContain("estou assistindo em ordem");
-    for (const o of ["chrono", "release"] as const) {
-      expect(lados(pen)[o].prev).toEqual({ href: "/pt/works/roadside/02/", texto: "Ler Beira de Estrada", externo: false });
-      expect(lados(pen)[o].next).toEqual({ href: "/pt/works/cat-crow-thing/01/", texto: "Jogar Cat-Crow-Thing", externo: false });
-    }
-    // Cat-Crow-Thing (jogo: "estou jogando"): o último nas duas ordens
     for (const lang of ["pt", "en"] as const) {
       const cct = blocoDe(dir, `/${lang}/works/cat-crow-thing/01/`);
       expect(cct).toContain(lang === "pt" ? "estou jogando em ordem" : "I’m playing in");
-      for (const o of ["chrono", "release"] as const) {
-        expect(lados(cct)[o].prev?.href).toBe(`/${lang}/works/the-pendulum/01/`);
-        expect(lados(cct)[o].next).toBeNull();
+      for (const bloco of [cct, blocoDe(dir, `/${lang}/works/the-pendulum/01/`)]) {
+        for (const o of ["chrono", "release"] as const) {
+          expect(lados(bloco)[o].prev?.href).toBe(`/${lang}/works/roadside/`);
+          expect(lados(bloco)[o].next).toBeNull();
+        }
       }
     }
-    for (const url of capitulos) expect(blocoDe(dir, url), url).not.toMatch(/Coming soon|Em breve/);
-    // T17i: Ossos do Ofício (rascunho; capítulo só em inglês) aparece na prévia em inglês, com a arte em camadas: asas, Giuseppe, olhos
-    const en = blocoDe(dir, "/en/works/light-and-blood/01/");
-    const ossos = /<a class="so-side prev[^"]*" href="\/en\/works\/all-in-a-nights-work\/01\/">([\s\S]*?)<\/a>/.exec(en)?.[1] ?? "";
-    expect([...ossos.matchAll(/<img class="(so-layer[^"]*)" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => `${decodeURIComponent(m[2] ?? "")}:${m[1]}`)).toEqual(["Giuseppe Asas:so-layer so-surge", "Giuseppe:so-layer", "Giuseppe Olhos:so-layer so-surge"]);
-    expect(ossos).toContain('<span class="so-stage so-tem-surge" style="--ar:3311 / 1884;--razao:1.7574">');
-    expect(blocoDe(dir, "/pt/works/light-and-blood/01/"), "em português Ossos não tem capítulo: é pulada").not.toMatch(/Ossos|all-in-a-nights-work/);
-    // T17i: a arte em camadas da Beira de Estrada (Jean, Cezar e Iris, os olhos da Iris) aparece agora que ela tem capítulo
-    const beira = /<a class="so-side next[^"]*" href="\/pt\/works\/roadside\/01\/">([\s\S]*?)<\/a>/.exec(blocoDe(dir, "/pt/works/firestriker/01/"))?.[1] ?? "";
+    // em NENHUM bloco da prévia aparecem O Pêndulo ou Cat-Crow-Thing (sem order_art nem order_images), nem "Em breve"
+    for (const url of capitulos) {
+      expect(blocoDe(dir, url), url).not.toMatch(/Coming soon|Em breve/);
+      for (const o of ["chrono", "release"] as const) for (const q of ["prev", "next"] as const) expect(lados(blocoDe(dir, url))[o][q]?.href ?? "", url).not.toMatch(/the-pendulum|cat-crow-thing/);
+    }
+    // Ossos do Ofício (rascunho; capítulo só em inglês) com a arte em camadas: asas, Giuseppe, olhos; tela quadrada; as asas saem da moldura (T17l)
+    for (const url of ["/en/works/light-and-blood/01/", "/pt/works/light-and-blood/01/"]) {
+      const ossos = /<a class="so-side prev[^"]*" href="\/en\/works\/all-in-a-nights-work\/01\/"[^>]*>([\s\S]*?)<\/a>/.exec(blocoDe(dir, url))?.[1] ?? "";
+      expect([...ossos.matchAll(/<img class="(so-layer[^"]*)" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => `${decodeURIComponent(m[2] ?? "")}:${m[1]}`), url).toEqual(["Giuseppe Asas:so-layer so-surge", "Giuseppe:so-layer", "Giuseppe Olhos:so-layer so-surge"]);
+      expect(ossos, url).toContain('<span class="so-art so-layers so-sangra"><span class="so-stage so-tem-surge" style="--ar:1000 / 1000;--razao:1">');
+    }
+    // a arte em camadas da Beira de Estrada (Jean, Cezar e Iris, os olhos da Iris)
+    const beira = /<a class="so-side next[^"]*" href="\/pt\/works\/roadside\/">([\s\S]*?)<\/a>/.exec(blocoDe(dir, "/pt/works/firestriker/01/"))?.[1] ?? "";
     expect([...beira.matchAll(/<img class="so-layer[^"]*" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => decodeURIComponent(m[1] ?? ""))).toEqual(["Jean", "Cezar e Iris", "Iris Olhos"]);
   }, 240_000);
 
-  test("T17i: em todo capítulo (publicado e prévia), as duas ordens têm os dois lugares (lado ou lugar guardado) e a caixa leva os números do rótulo", () => {
+  test("T17i: em todo capítulo e página de obra (publicado e prévia), as duas ordens têm os dois lugares (lado ou lugar guardado) e a caixa leva os números do rótulo", () => {
     for (const pasta of [dist, segundaConstrucao()]) {
-      for (const url of [...paginasDoDist(pasta).keys()].filter(ehCapitulo)) {
+      for (const url of [...paginasDoDist(pasta).keys()].filter(temBloco)) {
         const bloco = blocoDe(pasta, url);
         expect(bloco, url).toMatch(/^<section class="reader-box paper story-order" data-story-order data-ordem="chrono" aria-labelledby="story-order-title" style="--so-em:[\d.]+;--so-em-1:[\d.]+">/);
         for (const div of bloco.split('<div class="so-order"').slice(1)) expect((div.match(/class="so-(side|lugar) (prev|next)/g) ?? []).length, url).toBe(2);
@@ -719,8 +734,9 @@ describe("T17d: as três obras novas só existem na prévia; o leitor página a 
     for (const lang of ["pt", "en"] as const) {
       const obra = readFileSync(join(dir, lang, "works", "roadside", "index.html"), "utf8");
       expect([...obra.matchAll(/<li><a href="(\/[a-z]{2}\/works\/roadside\/\d+\/)"><span class="n">(\d+)<\/span><span class="t">([^<]+)<\/span>/g)].map((m) => `${m[1]} ${m[2]} ${m[3]}`)).toEqual([
-        `/${lang}/works/roadside/01/ 1 ${lang === "pt" ? "Capítulo" : "Chapter"} 1`,
-        `/${lang}/works/roadside/02/ 2 ${lang === "pt" ? "Capítulo" : "Chapter"} 2`,
+        // T17l: os títulos que o autor mandou (22/10)
+        `/${lang}/works/roadside/01/ 1 ${lang === "pt" ? "A Garotinha dos Olhos Vermelhos" : "The Little Girl with Red Eyes"}`,
+        `/${lang}/works/roadside/02/ 2 ${lang === "pt" ? "Procurando um lugar seguro" : "Finding a safe place"}`,
       ]);
       const historias = readFileSync(join(dir, lang, "works", "index.html"), "utf8");
       for (const href of [`/${lang}/works/roadside/`, `/${lang}/works/the-pendulum/01/`, `/${lang}/works/cat-crow-thing/01/`]) expect(historias, href).toContain(`<a class="button" href="${href}"`);

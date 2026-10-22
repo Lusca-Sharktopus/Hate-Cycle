@@ -7,8 +7,9 @@
 //      MESMAS regras do site — o exemplo do PDF do autor (Pederneira em cronológica → anterior Luz & Sangue; Beira de Estrada e O Pêndulo,
 //      rascunhos sem capítulo, são puladas e só entram quando ganham capítulo, e só na prévia), uma história nova "entre" duas, as pontas,
 //      `chrono: false`, empates, "999", idioma, obra de rascunho, obra externa, obra sem nada para abrir (pulada), verbo por tipo,
-//      arte própria (camadas, duas imagens) × capa;
-//   2. o mesmo lugar do cartão: o destino de cada lado é o botão do cartão da obra em Histórias (no conteúdo de verdade, nos dois modos);
+//      arte própria (camadas, duas imagens); obra SEM arte para a caixa (pulada, T17l); obra só com capítulo em outro idioma (T17l);
+//   2. o destino de cada lado (T17l): o link externo do cartão; a página da obra (lista de capítulos) com mais de um capítulo; o capítulo,
+//      com um só (no conteúdo de verdade, nos dois modos);
 //   3. o componente (Container API): as duas ordens no HTML, a outra escondida, o seletor desligado sem JavaScript, textos e links;
 //   4. a exceção de paridade (tests/ajudantes/html.ts → semBlocoDeOrdem) tira SÓ o bloco: sem ele a página do Leitor é a mesma de antes.
 // O script do navegador está em tests/ordem-dom.test.ts; as páginas reais construídas, no fim de tests/paginas.test.ts.
@@ -54,21 +55,29 @@ function pastaTemporaria(arquivos: Record<string, string>): string {
   return raiz;
 }
 
-const wj = (o: Record<string, unknown>) => JSON.stringify(o, null, 2) + "\n";
+/**
+ * Um work.json. Desde a T17l só entra no bloco quem tem arte para a caixa (`order_art` ou `order_images`): para os testes de ordem não
+ * dependerem disso, toda obra inventada ganha `order_images: ["ordem/teste.png"]`, a não ser que já tenha arte ou peça `semArte: true`.
+ */
+const wj = (o: Record<string, unknown>) => {
+  const { semArte, ...resto } = o;
+  const comArte = semArte === true || "order_art" in resto || "order_images" in resto ? resto : { ...resto, order_images: ["ordem/teste.png"] };
+  return JSON.stringify(comArte, null, 2) + "\n";
+};
 const cap = (obra: string, pasta = "01", fm = "date: 2026-01-01") => ({
   [`works/${obra}/${pasta}/en.md`]: `---\n${fm}\n---\n\nText.\n`,
   [`works/${obra}/${pasta}/pt.md`]: `---\n${fm}\n---\n\nTexto.\n`,
 });
 
 /**
- * O site do PDF do autor, em miniatura (os mesmos números de ordem e o mesmo estado do work.json de verdade):
+ * O site do PDF do autor, em miniatura (os mesmos números de ordem e o mesmo estado do work.json de verdade; todas com arte para a caixa):
  *   lançamento: hdvr 1 (externa, fora da cronológica) · firestriker 2 · light-and-blood 3 · roadside 5 (rascunho, SEM capítulo) · pendulum 6 (rascunho, sem capítulo)
  *   cronológica: light-and-blood 5 · firestriker 6 · roadside 7 · pendulum 11
  * `extra` acrescenta (ou troca) arquivos: `COM_BEIRA` dá um capítulo à Beira de Estrada; `COM_PENDULO`, ao Pêndulo.
  */
 function sitePdf(extra: Record<string, string> = {}): Record<string, string> {
   return {
-    "works/hdvr/work.json": wj({ kind: "video", title: { en: "Hello? Di Vario Residency", pt: "Alô? Residência dos Di Vario" }, external: "https://www.youtube.com/@ResidenciaDosDiVario", order: { release: 1, chrono: false }, media: "misc", cover: "covers/hdvr.png" }),
+    "works/hdvr/work.json": wj({ kind: "video", title: { en: "Hello? Di Vario Residency", pt: "Alô? Residência dos Di Vario" }, external: "https://www.youtube.com/@ResidenciaDosDiVario", order: { release: 1, chrono: false }, media: "misc", cover: "covers/hdvr.png", order_images: ["ordem/hdvr.png"] }),
     "works/firestriker/work.json": wj({ kind: "prose", oneshot: true, title: { en: "Firestriker", pt: "Pederneira" }, order: { release: 2, chrono: 6 }, media: "short-story", cover: "covers/fs.png" }),
     ...cap("firestriker"),
     "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_images: ["ordem/lb-1.png", "ordem/lb-2.png"] }),
@@ -88,12 +97,13 @@ function ler(arquivos: Record<string, string>, comRascunhos: boolean) {
   const entradas = carregarConteudo(raiz, { comRascunhos, mostrarExtras: false });
   const montar = (l: Lang) => dadosDoIdioma(entradas, l, { comRascunhos, mostrarExtras: false, emissariosEscondidos: [], todosOsIdiomas: langs });
   const dados = Object.fromEntries(langs.map((l) => [l, montar(l)])) as Record<Lang, ReturnType<typeof montar>>;
-  /** O bloco do fim dos capítulos da obra `slug`. */
+  /** O bloco do fim dos capítulos da obra `slug` (com os capítulos dos outros idiomas, como a rota faz: T17l). */
   const bloco = (slug: string, lang: Lang): BlocoDaOrdem => {
     const d = dados[lang];
     const obra = d.obras.find((o) => o.data._origem.slug === slug);
     if (!obra) throw new Error(`a obra ${slug} não está no site (${comRascunhos ? "prévia" : "publicado"})`);
-    return blocoDaOrdem(obra, lang, d.universo, d.capitulosDe, comRascunhos);
+    const outros = (o: (typeof d.obras)[number]) => langs.filter((l) => l !== lang).map((l) => ({ lang: l, capitulos: dados[l].capitulosDe(o) }));
+    return blocoDaOrdem(obra, lang, d.universo, d.capitulosDe, comRascunhos, outros);
   };
   return { entradas, dados, bloco };
 }
@@ -304,65 +314,66 @@ describe("as regras de ordem são as do seletor de Histórias", () => {
   });
 });
 
-describe("o destino de cada lado (T17i): o ÚLTIMO capítulo da anterior, o PRIMEIRO da seguinte; link externo continua o do cartão", () => {
-  const ladoEm = (dados: ReturnType<typeof ler>["dados"], comRascunhos: boolean) => (slug: string, qual: "prev" | "next", lang: Lang = "pt") => {
+describe("o destino de cada lado (T17l): a página da obra com mais de um capítulo; o capítulo com um só; link externo continua o do cartão", () => {
+  const ladoEm = (dados: ReturnType<typeof ler>["dados"], comRascunhos: boolean) => (slug: string, lang: Lang = "pt") => {
     const d = dados[lang];
     const o = d.obras.find((x) => x.data._origem.slug === slug);
     if (!o) throw new Error(slug);
-    return ladoDaObra(o, lang, d.capitulosDe(o), comRascunhos, qual);
+    return ladoDaObra(o, lang, d.capitulosDe(o), comRascunhos);
   };
 
-  test("link externo (Alô?) nos dois lados; obra de um capítulo só (Pederneira): os dois lados levam a ele; obra de dois (Luz & Sangue): 02 antes, 01 depois", () => {
+  test("link externo (Alô?); obra de um capítulo só (Pederneira): o capítulo; obra de dois (Luz & Sangue): a página da obra (a lista de capítulos)", () => {
     const lado = ladoEm(ler(sitePdf(), true).dados, true);
-    for (const qual of ["prev", "next"] as const) {
-      expect(lado("hdvr", qual)?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
-      expect(lado("firestriker", qual)?.destino).toEqual({ tipo: "link", href: "/pt/works/firestriker/01/", externo: false });
-      expect(lado("firestriker", qual, "en")?.destino).toEqual({ tipo: "link", href: "/en/works/firestriker/01/", externo: false });
-    }
-    expect(lado("light-and-blood", "prev")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/02/", externo: false }); // voltando na ordem: o fim
-    expect(lado("light-and-blood", "next")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/01/", externo: false }); // seguindo: o começo
-    expect(lado("light-and-blood", "prev", "en")?.destino.href).toBe("/en/works/light-and-blood/02/");
+    expect(lado("hdvr")?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true, idioma: null });
+    expect(lado("firestriker")?.destino).toEqual({ tipo: "link", href: "/pt/works/firestriker/01/", externo: false, idioma: null });
+    expect(lado("firestriker", "en")?.destino).toEqual({ tipo: "link", href: "/en/works/firestriker/01/", externo: false, idioma: null });
+    expect(lado("light-and-blood")?.destino).toEqual({ tipo: "link", href: "/pt/works/light-and-blood/", externo: false, idioma: null });
+    expect(lado("light-and-blood", "en")?.destino.href).toBe("/en/works/light-and-blood/");
     // rascunho sem capítulo = o cartão cinza "Em breve": não vira lado do bloco, nem em português nem em inglês
-    expect(lado("the-pendulum", "next")).toBeNull();
-    expect(lado("roadside", "prev", "en")).toBeNull();
+    expect(lado("the-pendulum")).toBeNull();
+    expect(lado("roadside", "en")).toBeNull();
   });
 
-  test("no bloco, nas DUAS ordens e nos dois idiomas: quem vem antes leva ao último capítulo, quem vem depois ao primeiro", () => {
+  test("no bloco, nas DUAS ordens e nos dois idiomas: antes e depois levam ao MESMO lugar (a regra do primeiro/último capítulo da T17i saiu)", () => {
     const { bloco } = ler(sitePdf(), false);
     for (const lang of langs) {
-      // cronológica: Luz & Sangue (antes da Pederneira) → o último; lançamento: Luz & Sangue (depois da Pederneira) → o primeiro
-      expect(bloco("firestriker", lang).listas.chrono.anterior?.destino.href).toBe(`/${lang}/works/light-and-blood/02/`);
-      expect(bloco("firestriker", lang).listas.release.proximo?.destino.href).toBe(`/${lang}/works/light-and-blood/01/`);
-      // e no capítulo de Luz & Sangue, a Pederneira (de um capítulo só) leva ao único capítulo, dos dois lados
+      expect(bloco("firestriker", lang).listas.chrono.anterior?.destino.href).toBe(`/${lang}/works/light-and-blood/`);
+      expect(bloco("firestriker", lang).listas.release.proximo?.destino.href).toBe(`/${lang}/works/light-and-blood/`);
+      // no capítulo de Luz & Sangue, a Pederneira (de um capítulo só) leva ao único capítulo, dos dois lados
       expect(bloco("light-and-blood", lang).listas.chrono.proximo?.destino.href).toBe(`/${lang}/works/firestriker/01/`);
       expect(bloco("light-and-blood", lang).listas.release.anterior?.destino.href).toBe(`/${lang}/works/firestriker/01/`);
       // Alô? (sem capítulo, link externo) continua no link, em outra aba
-      expect(bloco("firestriker", lang).listas.release.anterior?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true });
+      expect(bloco("firestriker", lang).listas.release.anterior?.destino).toEqual({ tipo: "link", href: "https://www.youtube.com/@ResidenciaDosDiVario", externo: true, idioma: null });
     }
   });
 
-  test("publicado × prévia: capítulo em rascunho só conta na prévia; capítulo `unlisted` não conta; capítulo só num idioma conta só nele", () => {
-    const extra = {
-      ...cap("light-and-blood", "03", "date: 2026-03-01\ndraft: true"), // rascunho: o último só na prévia
-      "works/light-and-blood/00-oculto/pt.md": "---\ndate: 2025-12-01\nunlisted: true\n---\n\nOculto.\n", // fora das listas: nunca é o primeiro
-      "works/light-and-blood/04/pt.md": "---\ndate: 2026-04-01\n---\n\nSó em português.\n", // só em português: o último em pt
+  test("quantos capítulos contam: publicado × prévia (rascunho só na prévia), `unlisted` não conta, capítulo só num idioma conta só nele", () => {
+    // Luz & Sangue com UM capítulo público em inglês e, na prévia, um segundo (rascunho): em inglês, o capítulo no publicado e a lista na prévia
+    const umSo = {
+      "works/light-and-blood/02/en.md": "---\ndate: 2026-02-01\ndraft: true\n---\n\nRascunho.\n",
+      "works/light-and-blood/00-oculto/en.md": "---\ndate: 2025-12-01\nunlisted: true\n---\n\nOculto.\n", // fora das listas: não conta
     };
-    const pub = ler(sitePdf(extra), false).bloco;
-    const pre = ler(sitePdf(extra), true).bloco;
-    expect(pub("firestriker", "pt").listas.chrono.anterior?.destino.href).toBe("/pt/works/light-and-blood/04/");
-    expect(pub("firestriker", "en").listas.chrono.anterior?.destino.href).toBe("/en/works/light-and-blood/02/");
-    expect(pre("firestriker", "en").listas.chrono.anterior?.destino.href).toBe("/en/works/light-and-blood/03/");
-    expect(pre("firestriker", "pt").listas.chrono.anterior?.destino.href).toBe("/pt/works/light-and-blood/04/");
-    for (const b of [pub, pre]) for (const lang of langs) expect(b("firestriker", lang).listas.release.proximo?.destino.href).toBe(`/${lang}/works/light-and-blood/01/`);
+    const pub = ler(sitePdf(umSo), false).bloco;
+    const pre = ler(sitePdf(umSo), true).bloco;
+    expect(pub("firestriker", "en").listas.chrono.anterior?.destino.href).toBe("/en/works/light-and-blood/01/");
+    expect(pre("firestriker", "en").listas.chrono.anterior?.destino.href).toBe("/en/works/light-and-blood/");
+    // em português os dois capítulos são públicos: a lista nos dois modos
+    expect(pub("firestriker", "pt").listas.chrono.anterior?.destino.href).toBe("/pt/works/light-and-blood/");
+    expect(pre("firestriker", "pt").listas.chrono.anterior?.destino.href).toBe("/pt/works/light-and-blood/");
+  });
+
+  test("obra de capítulo único (`oneshot`) com dois capítulos não tem página da obra: vai ao primeiro capítulo, como o cartão", () => {
+    const { bloco } = ler(sitePdf({ ...cap("firestriker", "02", "date: 2026-03-01") }), false);
+    expect(bloco("light-and-blood", "pt").listas.chrono.proximo?.destino.href).toBe("/pt/works/firestriker/01/");
   });
 
   test("obra com link externo E capítulos: o link externo ganha (como o cartão de Histórias)", () => {
     const { bloco } = ler(sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", external: "https://example.com/lb", order: { release: 3, chrono: 5 }, media: "live-ttrpg" }) }), false);
-    expect(bloco("firestriker", "pt").listas.chrono.anterior?.destino).toEqual({ tipo: "link", href: "https://example.com/lb", externo: true });
-    expect(bloco("firestriker", "pt").listas.release.proximo?.destino).toEqual({ tipo: "link", href: "https://example.com/lb", externo: true });
+    expect(bloco("firestriker", "pt").listas.chrono.anterior?.destino).toEqual({ tipo: "link", href: "https://example.com/lb", externo: true, idioma: null });
+    expect(bloco("firestriker", "pt").listas.release.proximo?.destino).toEqual({ tipo: "link", href: "https://example.com/lb", externo: true, idioma: null });
   });
 
-  test("para TODA obra do conteúdo de verdade, nos dois modos e idiomas: externo = o botão do cartão; senão, o último/o primeiro capítulo listado", () => {
+  test("para TODA obra com arte do conteúdo de verdade, nos dois modos e idiomas: externo = o botão do cartão; senão, a página da obra (2+ capítulos) ou o capítulo", () => {
     for (const comRascunhos of [false, true]) {
       const { dados } = ler(Object.fromEntries(realContent()), comRascunhos);
       const lado = ladoEm(dados, comRascunhos);
@@ -372,12 +383,104 @@ describe("o destino de cada lado (T17i): o ÚLTIMO capítulo da anterior, o PRIM
           const slug = o.data._origem.slug;
           const botao = cartaoDaObra(o, lang, d.capitulosDe(o), comRascunhos).botao;
           const listados = d.capitulosDe(o).listados.map((c) => `/${lang}/works/${slug}/${c.data._origem.capitulo}/`);
-          const esperado = (qual: "prev" | "next") =>
-            botao.tipo !== "link" ? undefined : botao.externo ? { tipo: "link", href: botao.href, externo: true } : { tipo: "link", href: qual === "prev" ? listados.at(-1) : listados[0], externo: false };
-          for (const qual of ["prev", "next"] as const) expect(lado(slug, qual, lang)?.destino, `${slug} ${lang} ${qual}`).toEqual(esperado(qual));
+          const temArte = Boolean(o.data.order_art || o.data.order_images?.length);
+          const esperado =
+            !temArte || botao.tipo !== "link"
+              ? undefined
+              : botao.externo
+                ? { tipo: "link", href: botao.href, externo: true, idioma: null }
+                : { tipo: "link", href: listados.length > 1 && !o.data.oneshot ? `/${lang}/works/${slug}/` : listados[0], externo: false, idioma: null };
+          expect(lado(slug, lang)?.destino, `${slug} ${lang}`).toEqual(esperado);
         }
       }
     }
+  });
+});
+
+describe("T17l: quem não tem arte para a caixa é pulado; obra só com capítulo em outro idioma entra com o link para ele", () => {
+  test("obra SEM order_art e SEM order_images é pulada (a capa não é mais o plano B), mesmo com capítulo e publicada; o bloco vai à próxima com arte", () => {
+    const site = sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", cover: "covers/lb.png", semArte: true }) });
+    const { bloco } = ler(site, false);
+    // cronológica: Luz & Sangue (5, sem arte) → Pederneira (6): ninguém antes; lançamento: Alô? → Pederneira → (Luz & Sangue, pulada) → ninguém
+    expect(vizinhos(bloco("firestriker", "pt"), "chrono")).toEqual({ anterior: null, proximo: null, fora: false });
+    expect(vizinhos(bloco("firestriker", "pt"), "release")).toEqual({ anterior: "hdvr", proximo: null, fora: false });
+    // a própria obra sem arte continua tendo o bloco no fim dos capítulos dela (só não aparece como vizinha)
+    expect(vizinhos(bloco("light-and-blood", "pt"), "release")).toEqual({ anterior: "firestriker", proximo: null, fora: false });
+    // com order_images (uma imagem que seja) ela volta
+    const com = ler(sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_images: ["ordem/lb.png"] }) }), false);
+    expect(vizinhos(com.bloco("firestriker", "pt"), "chrono").anterior).toBe("light-and-blood");
+  });
+
+  test("conteúdo de verdade (prévia): O Pêndulo e Cat-Crow-Thing, sem arte, nunca aparecem como vizinhas; as que têm arte aparecem", () => {
+    const r = ler(Object.fromEntries(realContent()), true);
+    const vistas = new Set<string>();
+    for (const lang of langs) {
+      for (const o of r.dados[lang].obras) {
+        const b = r.bloco(o.data._origem.slug, lang);
+        for (const ordem of ORDENS_DE_LEITURA) for (const l of [b.listas[ordem].anterior, b.listas[ordem].proximo]) if (l) vistas.add(l.slug);
+      }
+    }
+    expect(vistas.has("the-pendulum")).toBe(false);
+    expect(vistas.has("cat-crow-thing")).toBe(false);
+    for (const slug of ["hdvr", "firestriker", "light-and-blood", "all-in-a-nights-work", "roadside"]) expect(vistas.has(slug), slug).toBe(true);
+  });
+
+  /** Ossos do Ofício em miniatura: só tem capítulo em inglês (como o de verdade). Entre Luz & Sangue (5) e Pederneira (6) na cronológica. */
+  const comOssos = (extra: Record<string, string> = {}) =>
+    sitePdf({
+      "works/ossos/work.json": wj({ kind: "prose", oneshot: true, title: { en: "All in a Night's Work", pt: "Ossos do Ofício" }, order: { release: 4, chrono: 5.5 }, media: "short-story" }),
+      "works/ossos/01/en.md": "---\ndate: 2026-01-01\n---\n\nText.\n",
+      ...extra,
+    });
+
+  test("numa página em português, a obra que só tem capítulo em INGLÊS entra com o rótulo em português e o link para a página em inglês (hreflang en)", () => {
+    const { bloco } = ler(comOssos(), false);
+    const pt = bloco("firestriker", "pt").listas.chrono.anterior;
+    expect(pt?.slug).toBe("ossos");
+    expect(pt?.rotulo).toBe("Ler Ossos do Ofício");
+    expect(pt?.destino).toEqual({ tipo: "link", href: "/en/works/ossos/01/", externo: false, idioma: "en" });
+    // em inglês é o caso normal (mesmo idioma)
+    expect(bloco("firestriker", "en").listas.chrono.anterior?.destino).toEqual({ tipo: "link", href: "/en/works/ossos/01/", externo: false, idioma: null });
+    // e quem vem depois de Luz & Sangue em português também é ela
+    expect(bloco("light-and-blood", "pt").listas.chrono.proximo?.slug).toBe("ossos");
+  });
+
+  test("em outro idioma vale a mesma regra de destino: dois capítulos em inglês = a página da obra em inglês", () => {
+    const { bloco } = ler(comOssos({ "works/ossos/work.json": wj({ kind: "prose", title: { en: "All in a Night's Work", pt: "Ossos do Ofício" }, order: { release: 4, chrono: 5.5 } }), "works/ossos/02/en.md": "---\ndate: 2026-02-01\n---\n\nText 2.\n" }), false);
+    expect(bloco("firestriker", "pt").listas.chrono.anterior?.destino).toEqual({ tipo: "link", href: "/en/works/ossos/", externo: false, idioma: "en" });
+  });
+
+  test("sem capítulo em idioma nenhum: continua pulada; obra com `langs: [\"en\"]` nem entra na ordem em português", () => {
+    const sem = ler(sitePdf({ "works/ossos/work.json": wj({ kind: "prose", title: { en: "AINW", pt: "Ossos" }, order: { release: 4, chrono: 5.5 } }) }), false);
+    expect(vizinhos(sem.bloco("firestriker", "pt"), "chrono").anterior).toBe("light-and-blood");
+    const soEn = ler(comOssos({ "works/ossos/work.json": wj({ kind: "prose", oneshot: true, langs: ["en"], title: "AINW", order: { release: 4, chrono: 5.5 } }) }), false);
+    expect(vizinhos(soEn.bloco("firestriker", "pt"), "chrono").anterior).toBe("light-and-blood");
+    expect(vizinhos(soEn.bloco("firestriker", "en"), "chrono").anterior).toBe("ossos");
+  });
+
+  test("o componente marca o link com hreflang (só quando o destino é de outro idioma)", async () => {
+    const { bloco } = ler(comOssos(), false);
+    const pt = await container.renderToString(ProximaHistoria, { props: { bloco: bloco("firestriker", "pt") } });
+    expect(pt).toContain('<a class="so-side prev" href="/en/works/ossos/01/" hreflang="en">');
+    const en = await container.renderToString(ProximaHistoria, { props: { bloco: bloco("firestriker", "en") } });
+    expect(en).toContain('<a class="so-side prev" href="/en/works/ossos/01/">');
+    expect(en).not.toContain("hreflang");
+  });
+
+  test("conteúdo de verdade (prévia): Ossos do Ofício nas páginas em português leva ao capítulo em inglês", () => {
+    const r = ler(Object.fromEntries(realContent()), true);
+    const pt = r.dados.pt;
+    // Luz & Sangue: na cronológica Ossos do Ofício (4) vem antes; no lançamento, depois
+    const obra = pt.obras.find((o) => o.data._origem.slug === "light-and-blood")!;
+    const outros = (o: (typeof pt.obras)[number]) => [{ lang: "en" as const, capitulos: r.dados.en.capitulosDe(r.dados.en.obras.find((x) => x.data._origem.slug === o.data._origem.slug)!) }];
+    const b = blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros);
+    for (const ossos of [b.listas.chrono.anterior, b.listas.release.proximo]) {
+      expect(ossos?.slug).toBe("all-in-a-nights-work");
+      expect(ossos?.rotulo).toBe("Ler Ossos do Ofício");
+      expect(ossos?.destino).toEqual({ tipo: "link", href: "/en/works/all-in-a-nights-work/01/", externo: false, idioma: "en" });
+    }
+    // sem a informação dos outros idiomas (o padrão), ela é pulada em português, como antes
+    expect(blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true).listas.chrono.anterior).toBeNull();
   });
 });
 
@@ -401,17 +504,16 @@ describe("o verbo e a arte de cada obra", () => {
     expect(TEXTOS_DA_ORDEM.pt.verbo).toEqual({ read: "Ler", watch: "Assistir", play: "Jogar" });
     expect(Object.keys(TEXTOS_DA_ORDEM.en.titulo)).toEqual(Object.keys(TEXTOS_DA_ORDEM.pt.titulo));
   });
-  test("arte própria (order_images) ou, sem ela, a capa — e sem capa, a logo; sem nada, null", () => {
-    const { dados } = ler(sitePdf({ "works/so-logo/work.json": wj({ kind: "prose", title: "So Logo", logo: "logos/x.png", order: { release: 9 } }), "works/nada/work.json": wj({ kind: "prose", title: "Nada", order: { release: 10 } }) }), true);
-    const arte = (slug: string) => arteDaObra(dados.pt.obras.find((x) => x.data._origem.slug === slug)!, "pt");
-    expect(arte("light-and-blood")).toEqual({ tipo: "imagens", principal: "ordem/lb-1.png", hover: "ordem/lb-2.png", ehCapa: false });
-    expect(arte("firestriker")).toEqual({ tipo: "imagens", principal: "covers/fs.png", hover: null, ehCapa: true });
-    expect(arte("so-logo")).toEqual({ tipo: "imagens", principal: "logos/x.png", hover: null, ehCapa: true });
-    expect(arte("nada")).toBeNull();
+  test("arte própria (order_images); sem ela, nada (T17l: nem a capa, nem a logo — a obra é pulada)", () => {
+    const { dados } = ler(sitePdf({ "works/so-logo/work.json": wj({ kind: "prose", title: "So Logo", logo: "logos/x.png", order: { release: 9 }, semArte: true }), "works/so-capa/work.json": wj({ kind: "prose", title: "So Capa", cover: "covers/x.png", order: { release: 10 }, semArte: true }) }), true);
+    const arte = (slug: string) => arteDaObra(dados.pt.obras.find((x) => x.data._origem.slug === slug)!);
+    expect(arte("light-and-blood")).toEqual({ tipo: "imagens", principal: "ordem/lb-1.png", hover: "ordem/lb-2.png" });
+    expect(arte("so-logo")).toBeNull();
+    expect(arte("so-capa")).toBeNull();
   });
   test("order_images com uma imagem só: sem a de mouse por cima; com três: erro no build", () => {
     const um = ler(sitePdf({ "works/um/work.json": wj({ kind: "prose", title: "Um", order_images: ["ordem/um-1.png"] }) }), true);
-    expect(arteDaObra(um.dados.pt.obras.find((x) => x.data._origem.slug === "um")!, "pt")).toEqual({ tipo: "imagens", principal: "ordem/um-1.png", hover: null, ehCapa: false });
+    expect(arteDaObra(um.dados.pt.obras.find((x) => x.data._origem.slug === "um")!)).toEqual({ tipo: "imagens", principal: "ordem/um-1.png", hover: null });
     expect(() => ler(sitePdf({ "works/tres/work.json": wj({ kind: "prose", title: "Tres", order_images: ["a.png", "b.png", "c.png"] }) }), true)).toThrow(/no máximo 2 imagens/);
   });
 });
@@ -434,17 +536,18 @@ describe("o componente ProximaHistoria", () => {
     expect(html).toContain(">estou lendo em ordem</p>");
     // cronológica: só o anterior (Light & Blood), com link para a página da obra e arte própria (as duas imagens, alt vazio)
     const cronologica = /<div class="so-order" data-ordem="chrono">([\s\S]*?)<\/div><div class="so-order"/.exec(html)?.[1] ?? "";
-    expect(cronologica).toContain('<a class="so-side prev" href="/pt/works/light-and-blood/02/">'); // T17i: o último capítulo
+    expect(cronologica).toContain('<a class="so-side prev" href="/pt/works/light-and-blood/">'); // T17l: dois capítulos = a lista de capítulos
     expect(cronologica).not.toContain("so-side next");
     expect(cronologica).toContain('src="/ordem/lb-1.png"');
     expect(cronologica).toContain('src="/ordem/lb-2.png"');
     expect(cronologica.match(/ alt=""/g)).toHaveLength(2);
     expect(cronologica).toContain("Assistir Light &amp; Blood");
-    // lançamento: Alô? (link externo, em outra aba; arte = capa) e Light & Blood
+    // lançamento: Alô? (link externo, em outra aba; arte própria) e Light & Blood
     const lancamento = /<div class="so-order" data-ordem="release" hidden>([\s\S]*?)<\/div><\/section>/.exec(html)?.[1] ?? "";
-    expect(lancamento).toContain('href="https://www.youtube.com/@ResidenciaDosDiVario" target="_blank" rel="noopener noreferrer"');
-    expect(lancamento).toContain("so-side prev is-cover");
+    expect(lancamento).toContain('<a class="so-side prev" href="https://www.youtube.com/@ResidenciaDosDiVario" target="_blank" rel="noopener noreferrer">');
+    expect(lancamento).toContain('src="/ordem/hdvr.png"');
     expect(lancamento).toContain("so-side next");
+    expect(html).not.toContain("is-cover"); // T17l: a capa não é mais arte do bloco
   });
 
   test("nada de \"Em breve\" (T17h): o bloco de todas as obras, nos dois idiomas e modos, só tem links; obra fora da ordem mostra o aviso", async () => {
@@ -510,10 +613,10 @@ describe("a arte em camadas no bloco", () => {
 
   test("`order_art` vale no lugar de `order_images` (se houver os dois, as camadas ganham)", () => {
     const so = ler(comCamadas(), false);
-    const arte = arteDaObra(so.dados.pt.obras.find((x) => x.data._origem.slug === "light-and-blood")!, "pt");
+    const arte = arteDaObra(so.dados.pt.obras.find((x) => x.data._origem.slug === "light-and-blood")!);
     expect(arte?.tipo).toBe("camadas");
     const dois = ler(comCamadas({ order_images: ["ordem/lb-1.png", "ordem/lb-2.png"] }), false);
-    expect(arteDaObra(dois.dados.pt.obras.find((x) => x.data._origem.slug === "light-and-blood")!, "pt")?.tipo).toBe("camadas");
+    expect(arteDaObra(dois.dados.pt.obras.find((x) => x.data._origem.slug === "light-and-blood")!)?.tipo).toBe("camadas");
   });
 
   test("o componente desenha uma <img> por camada, de trás para a frente, na tela com a proporção da arte; sem 'so-img' (não é a troca de duas imagens)", async () => {
@@ -533,7 +636,7 @@ describe("a arte em camadas no bloco", () => {
     const { bloco } = ler(comCamadas(), false);
     const html = await container.renderToString(ProximaHistoria, { props: { bloco: bloco("firestriker", "pt") } });
     const classes = new Set([...html.matchAll(/class="([^"]*)"/g)].flatMap((m) => (m[1] ?? "").split(/\s+/)));
-    for (const c of classes) expect(c, `classe fora do bloco: ${c}`).toMatch(/^(reader-box|paper|story-order|so-[a-z0-9-]+|prev|next|is-cover)$/);
+    for (const c of classes) expect(c, `classe fora do bloco: ${c}`).toMatch(/^(reader-box|paper|story-order|so-[a-z0-9-]+|prev|next)$/);
   });
 });
 
@@ -564,7 +667,7 @@ describe("a exceção de paridade tira só o bloco (semBlocoDeOrdem)", () => {
     expect(removido).not.toMatch(/data-page|hc-comments|<script|reader-box paper slim|video-wrapper|<iframe|class="pager"/);
     // e só tem classes e elementos do bloco
     const classes = new Set([...removido.matchAll(/class="([^"]*)"/g)].flatMap((m) => (m[1] ?? "").split(/\s+/)));
-    for (const c of classes) expect(c, `classe fora do bloco: ${c}`).toMatch(/^(reader-box|paper|story-order|so-[a-z0-9-]+|prev|next|is-cover)$/);
+    for (const c of classes) expect(c, `classe fora do bloco: ${c}`).toMatch(/^(reader-box|paper|story-order|so-[a-z0-9-]+|prev|next)$/);
   });
 
   test("sem bloco, nada é removido; com dois, saem os dois (a exceção não esconde um bloco repetido por engano: o teste das páginas exige exatamente 1)", () => {
@@ -724,16 +827,72 @@ describe("T17i: o rótulo numa linha só (a largura medida na fonte)", () => {
   });
 });
 
+// ───────────── T17l: as asas do Giuseppe saem da moldura ("bleed"); o leitor página a página no papel ─────────────
+
+describe("T17l: `bleed` (as camadas saem da moldura até a borda da caixa) e o Giuseppe do tamanho dos prints do autor", () => {
+  test("o schema aceita `bleed: true/false` e recusa outra coisa, com mensagem em português", () => {
+    const lb = (art: unknown) => sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_art: art }), ...cap("light-and-blood") });
+    const arte = { size: [1000, 1000], layers: [{ image: "a.png", x: 50, y: 50, width: 50 }] };
+    expect(() => ler(lb({ ...arte, bleed: true }), false)).not.toThrow();
+    expect(() => ler(lb({ ...arte, bleed: false }), false)).not.toThrow();
+    expect(() => ler(lb({ ...arte, bleed: "sim" }), false)).toThrow(/bleed tem de ser true ou false/);
+  });
+
+  test("arteEmCamadas: `sangra` só com bleed: true; o componente põe so-sangra na moldura (e só nela)", async () => {
+    const base = { size: [1000, 1000] as const, layers: [{ image: "a.png", x: 50, y: 50, width: 50 }] };
+    expect(arteEmCamadas(base).sangra).toBe(false);
+    expect(arteEmCamadas({ ...base, bleed: true }).sangra).toBe(true);
+    const lb = (art: unknown) => sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_art: art }), ...cap("light-and-blood") });
+    const com = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb({ ...base, bleed: true }), false).bloco("firestriker", "pt") } });
+    expect(com).toContain('<span class="so-art so-layers so-sangra"><span class="so-stage"');
+    const sem = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb(base), false).bloco("firestriker", "pt") } });
+    expect(sem).not.toContain("so-sangra");
+  });
+
+  test("o CSS: com so-sangra a moldura e a tela não cortam, só fora do celular; a caixa corta (overflow hidden); as camadas não pegam clique; a frase fica na frente", () => {
+    const css = readFileSync(join(RAIZ, "src/components/ProximaHistoria.astro"), "utf8");
+    expect(css).toMatch(/@media \(min-width: 701px\) \{\s*\.so-art\.so-sangra, \.so-art\.so-sangra > \.so-stage \{ overflow: visible; \}\s*\}/);
+    expect(css).toMatch(/\.story-order \{[^}]*overflow: hidden;/);
+    expect(css).toMatch(/\.so-layer \{[^}]*pointer-events: none;/);
+    expect(css).toMatch(/\.so-top \{[^}]*z-index: 2;[^}]*pointer-events: none;/);
+    // a caixa de papel é a mesma dos capítulos também na página da obra (onde o CSS do Leitor não vem)
+    expect(css).toContain(".reader-box.story-order { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; background: var(--paper), var(--sheet); background-color: var(--sheet); }");
+  });
+
+  test("Ossos do Ofício (content de verdade): tela quadrada (= a moldura), bleed, e o Giuseppe medido nos prints do autor (51,5% da moldura antes, 54,7% com o mouse)", () => {
+    const { dados } = ler(Object.fromEntries(realContent()), true);
+    const a = dados.pt.obras.find((o) => o.data._origem.slug === "all-in-a-nights-work")?.data.order_art;
+    expect(a?.size).toEqual([1000, 1000]);
+    expect(a?.bleed).toBe(true);
+    const g = a?.layers.find((l) => l.image === "ordem/Giuseppe Site Cronologia.png");
+    expect(g?.width).toBeCloseTo(51.51, 1);
+    expect(g?.hover?.width).toBeCloseTo(54.74, 1);
+    // as asas: a mesma escala do Giuseppe (a tela do autor), presas a ele (crescem juntas): largura das asas ÷ largura do Giuseppe = 4268 ÷ 828
+    const asas = a?.layers.find((l) => l.image === "ordem/Giuseppe Asas Site Cronologia.png");
+    expect((asas?.width ?? 0) / (g?.width ?? 1)).toBeCloseTo(4268 / 828, 1);
+    expect((asas?.hover?.width ?? 0) / (g?.hover?.width ?? 1)).toBeCloseTo(4268 / 828, 1);
+  });
+
+  test("leitor página a página (page_runes): a caixa do quadrinho fica no papel; o quadrinho de rolagem continua roxo-noite", () => {
+    const leitor = readFileSync(join(RAIZ, "src/components/Leitor.astro"), "utf8");
+    expect(leitor).toContain(".reader-comic .reader-box:first-of-type { background: var(--night)");
+    expect(leitor).toContain(".reader-comic .reader-box:first-of-type:has(> .folheador) { background: var(--paper), var(--sheet); background-color: var(--sheet); color: var(--ink); }");
+    expect(leitor).toContain(".reader-comic .reader-box:has(> .folheador) .title-image { filter: none; }");
+    const folheador = readFileSync(join(RAIZ, "src/components/Folheador.astro"), "utf8");
+    expect(folheador).toContain('.reader-box:has(> .folheador) .fl-runa[aria-current="page"] { opacity: 1; color: var(--teal);');
+  });
+});
+
 // ───────────── T17i: o HTML de verdade, num DOM simulado ─────────────
 // O bloco desenhado pelo ProximaHistoria.astro para o site do PDF do autor em miniatura (com um capítulo em rascunho), ligado pelo MESMO
-// script do navegador (src/scripts/ordem/bloco.ts) num documento do happy-dom: ao trocar de ordem, os links à vista levam ao ÚLTIMO
-// capítulo da anterior e ao PRIMEIRO da seguinte (externo continua externo), no publicado e na prévia, nos dois idiomas; as duas ordens
-// têm a mesma estrutura (dois lugares, cada um com moldura e rótulo). O resto do script está em tests/ordem-dom.test.ts.
-describe("T17i: no HTML de verdade, trocar de ordem leva aos capítulos certos e as duas ordens têm a mesma estrutura", () => {
+// script do navegador (src/scripts/ordem/bloco.ts) num documento do happy-dom: ao trocar de ordem, os links à vista levam à página da
+// obra de vários capítulos (T17l; externo continua externo), no publicado e na prévia, nos dois idiomas; as duas ordens têm a mesma
+// estrutura (dois lugares, cada um com moldura e rótulo). O resto do script está em tests/ordem-dom.test.ts.
+describe("T17i/T17l: no HTML de verdade, trocar de ordem leva aos lugares certos e as duas ordens têm a mesma estrutura", () => {
   const site = sitePdf(cap("light-and-blood", "03", "date: 2026-03-01\ndraft: true"));
-  for (const [comRascunhos, ultimo] of [[false, "02"], [true, "03"]] as const) {
+  for (const comRascunhos of [false, true] as const) {
     for (const lang of langs) {
-      test(`${comRascunhos ? "prévia" : "publicado"}, ${lang}: Cronológica → Luz & Sangue ${ultimo} (o último); Lançamento → Alô? (externo) e Luz & Sangue 01 (o primeiro)`, async () => {
+      test(`${comRascunhos ? "prévia" : "publicado"}, ${lang}: Cronológica → Luz & Sangue (a lista de capítulos); Lançamento → Alô? (externo) e Luz & Sangue (a lista)`, async () => {
         const html = await container.renderToString(ProximaHistoria, { props: { bloco: ler(site, comRascunhos).bloco("firestriker", lang) } });
         const janela = new Window();
         janela.document.body.innerHTML = html;
@@ -742,11 +901,11 @@ describe("T17i: no HTML de verdade, trocar de ordem leva aos capítulos certos e
         iniciarBloco(bloco, { getItem: (c) => memoria.get(c) ?? null, setItem: (c, v) => void memoria.set(c, v) });
         const visiveis = () =>
           [...bloco.querySelectorAll<HTMLElement>(".so-order")].filter((l) => !l.hidden).flatMap((l) => [...l.querySelectorAll<HTMLAnchorElement>("a.so-side")].map((a) => `${a.classList.contains("prev") ? "prev" : "next"} ${a.getAttribute("href")}`));
-        expect(visiveis()).toEqual([`prev /${lang}/works/light-and-blood/${ultimo}/`]);
+        expect(visiveis()).toEqual([`prev /${lang}/works/light-and-blood/`]);
         const seletor = bloco.querySelector<HTMLSelectElement>("select")!;
         seletor.value = "release";
         seletor.dispatchEvent(new janela.Event("change", { bubbles: true }) as unknown as Event);
-        expect(visiveis()).toEqual(["prev https://www.youtube.com/@ResidenciaDosDiVario", `next /${lang}/works/light-and-blood/01/`]);
+        expect(visiveis()).toEqual(["prev https://www.youtube.com/@ResidenciaDosDiVario", `next /${lang}/works/light-and-blood/`]);
         const lugar = bloco.querySelector<HTMLElement>('.so-order[data-ordem="chrono"] .so-lugar.next')!;
         expect(lugar.getAttribute("aria-hidden")).toBe("true");
         expect(lugar.querySelector("a, [tabindex], img")).toBeNull();

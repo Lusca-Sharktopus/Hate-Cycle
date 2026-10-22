@@ -59,7 +59,7 @@ export const PERFIS = {
   /** Figurinhas (stickers) da notícia colagem: 149–284 px, com transparência. */
   figurinha: { nome: "figurinha", larguras: [300, 600], sizes: "300px", qualidade: 85 },
   /** Bloco "estou lendo em ordem…" do fim do capítulo (T17c): a arte de cada lado, ~34% da folha (até ~340 px; 46% da tela no celular), com transparência.
-   *  Também serve à capa usada no lugar da arte (obra sem `order_images`). */
+   *  (Até a T17l também servia à capa usada no lugar da arte; desde a T17l a obra sem arte é pulada.) */
   ordemDeLeitura: { nome: "ordem-de-leitura", larguras: [300, 600, 900], sizes: "(max-width: 700px) 46vw, 340px", qualidade: 85 },
   /** Bloco "estou lendo em ordem…": uma CAMADA da arte animada (T17h; um personagem com fundo transparente). A tela de montagem ocupa o mesmo
    *  espaço da arte de um lado (até ~340 px; 46% da tela no celular) e a camada, uma fração dela: as larguras vão até o tamanho da tela em tela 2x. */

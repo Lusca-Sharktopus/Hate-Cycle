@@ -160,6 +160,7 @@
   },
   "emissaries/tutti/en.md": {
    "fm": {
+    "draft": true,
     "title": "Tutti",
     "role": "Marketing & Social Media",
     "image": "emissaries/Tutti.jpg",
@@ -170,6 +171,7 @@
   },
   "emissaries/tutti/pt.md": {
    "fm": {
+    "draft": true,
     "title": "Tutti",
     "role": "Marketing e Social Media",
     "image": "emissaries/Tutti.jpg",
@@ -2268,7 +2270,7 @@
     "title": "Apoio",
     "summary": "Formas de apoiar o projeto."
    },
-   "body": "\n<div style=\"text-align:center\">\n<a href=\"https://catarse.com.br/hatecycle\" target=\"_blank\" rel=\"noopener\"><img src=\"@/support/catarse.png\" alt=\"Estamos no Catarse\"></a>\n</div>\n\nVocê pode ajudar este universo a crescer nos apoiando mensalmente no Catarse!! A partir de apenas 5 reais por mês você ajuda o mundo de Hᴀᴛᴇ Cʏᴄʟᴇ a continuar recebendo novas histórias na forma de quadrinhos, contos, RPGs ao Vivo e, no futuro, livros, jogos e séries de animação!\n\nVocê também pode apoiar diretamente o criador deste universo se inscrevendo no meu canal no YouTube. É completamente de graça e me ajuda tremendamente, visto que, na maior parte do tempo, eu tiro do meu próprio bolso para manter esse sonho vivo.\n\n<div style=\"text-align:center\">\n<a href=\"https://www.youtube.com/@LuscaSharktopus\" target=\"_blank\" rel=\"noopener\"><img src=\"@/support/banner.png\" alt=\"Inscreva-se no canal Lusca Sharktopus no YouTube\"></a>\n</div>\n\nSe prefere apenas um apoio pequeno, sem compromisso, faça uma doação pelo Ko-fi!\n\n{{embed:kofi-pt}}\n"
+   "body": "\n<div style=\"text-align:center\">\n<a href=\"https://catarse.com.br/hatecycle\" target=\"_blank\" rel=\"noopener\"><img src=\"@/support/catarse.png\" alt=\"Estamos no Catarse\"></a>\n</div>\n\nVocê pode ajudar este universo a crescer nos apoiando mensalmente no Catarse!! A partir de apenas 5 reais por mês você ajuda o mundo de Hᴀᴛᴇ Cʏᴄʟᴇ a continuar recebendo novas histórias na forma de quadrinhos, contos, RPGs ao Vivo e, no futuro, livros, jogos e séries de animação!\n\nVocê também pode apoiar diretamente o criador deste universo se inscrevendo no meu canal no YouTube. É completamente de graça e me ajuda tremendamente, visto que, na maior parte do tempo, eu tiro do meu próprio bolso para manter esse sonho vivo.\n\n<div class=\"yt-banner\" style=\"text-align:center\">\n<a href=\"https://www.youtube.com/@LuscaSharktopus\" target=\"_blank\" rel=\"noopener\"><img src=\"@/support/banner.png\" alt=\"Inscreva-se no canal Lusca Sharktopus no YouTube\"></a>\n</div>\n\nSe prefere apenas um apoio pequeno, sem compromisso, faça uma doação pelo Ko-fi!\n\n{{embed:kofi-pt}}\n"
   },
   "universe/hidden-magic/en.md": {
    "fm": {
@@ -2323,6 +2325,7 @@
   },
   "works/light-and-blood/01/en.md": {
    "fm": {
+    "title": "Luke 10:3",
     "date": "2026-06-06",
     "youtube": "J2j6xoIz0LE",
     "summary": ""
@@ -2331,6 +2334,7 @@
   },
   "works/light-and-blood/01/pt.md": {
    "fm": {
+    "title": "Lucas 10:3",
     "date": "2026-06-06",
     "youtube": "J2j6xoIz0LE",
     "summary": ""
@@ -2339,6 +2343,7 @@
   },
   "works/light-and-blood/02/en.md": {
    "fm": {
+    "title": "1 Corinthians 2:15",
     "date": "2026-08-18",
     "youtube": "KhPqeiFCpyk",
     "summary": ""
@@ -2347,6 +2352,7 @@
   },
   "works/light-and-blood/02/pt.md": {
    "fm": {
+    "title": "1 Coríntios 2:15",
     "date": "2026-08-18",
     "youtube": "KhPqeiFCpyk",
     "summary": ""
@@ -2355,24 +2361,28 @@
   },
   "works/roadside/01/en.md": {
    "fm": {
+    "title": "The Little Girl with Red Eyes",
     "pages_glob": "comics/provisorio/*.png"
    },
    "body": ""
   },
   "works/roadside/01/pt.md": {
    "fm": {
+    "title": "A Garotinha dos Olhos Vermelhos",
     "pages_glob": "comics/provisorio/*.png"
    },
    "body": ""
   },
   "works/roadside/02/en.md": {
    "fm": {
+    "title": "Finding a safe place",
     "pages_glob": "comics/provisorio/*.png"
    },
    "body": ""
   },
   "works/roadside/02/pt.md": {
    "fm": {
+    "title": "Procurando um lugar seguro",
     "pages_glob": "comics/provisorio/*.png"
    },
    "body": ""
@@ -2421,43 +2431,45 @@
    "reading_font": "times",
    "order_art": {
     "size": [
-     3311,
-     1884
+     1000,
+     1000
     ],
+    "bleed": true,
     "layers": [
      {
       "image": "ordem/Giuseppe Asas Site Cronologia.png",
-      "x": 50.79,
-      "y": 50.5,
-      "width": 87.2,
+      "x": 77.82,
+      "y": 4.99,
+      "width": 265.36,
       "opacity": 0,
       "hover": {
-       "x": 52.39,
-       "y": 43.27,
-       "width": 103.98,
+       "x": 79.86,
+       "y": 0.21,
+       "width": 281.99,
        "opacity": 1
       }
      },
      {
       "image": "ordem/Giuseppe Site Cronologia.png",
-      "x": 42.5,
-      "y": 70.99,
-      "width": 25.01,
+      "x": 42.22,
+      "y": 61.38,
+      "width": 51.51,
       "hover": {
-       "y": 67.7,
-       "width": 29.82
+       "x": 42.04,
+       "y": 60.14,
+       "width": 54.74
       }
      },
      {
       "image": "ordem/Giuseppe Olhos Site Cronologia.png",
-      "x": 42.22,
-      "y": 69.69,
-      "width": 24.43,
+      "x": 41.63,
+      "y": 59.86,
+      "width": 50.33,
       "opacity": 0,
       "hover": {
-       "x": 42.16,
-       "y": 66.15,
-       "width": 29.13,
+       "x": 41.41,
+       "y": 58.52,
+       "width": 53.48,
        "opacity": 1
       }
      }
@@ -2473,9 +2485,17 @@
     "en": "Cat-Crow-Thing",
     "pt": "Cat-Crow-Thing"
    },
+   "blurb": {
+    "en": "Shizuku has been tormented by nightmares and turns to the best psionic she knows for help. Fly through this runner/shooter, dodging obstacles, shooting enemies and piecing together the clues to uncover the cause of this cat-crow-thing’s bad dreams.",
+    "pt": "Shizuku tem sido atormentada por pesadelos e pede ajuda ao melhor psiônico que ela conhece. Voe por este runner/shooter, desviando de obstáculos, atirando em inimigos e juntando as peças para descobrir a causa dos sonhos ruins dessa coisa-gato-corvo."
+   },
    "cover": {
     "en": "covers/PT/Capa Cat-Crow-Thing.png",
     "pt": "covers/PT/Capa Cat-Crow-Thing.png"
+   },
+   "logo": {
+    "en": "logos/PT/Cat-Crow-Thing 2.png",
+    "pt": "logos/PT/Cat-Crow-Thing 2.png"
    },
    "cta": {
     "en": "Play here",
@@ -3409,14 +3429,12 @@
      "en": [
       "joao-revan",
       "kaisui",
-      "saf",
-      "tutti"
+      "saf"
      ],
      "pt": [
       "joao-revan",
       "kaisui",
-      "saf",
-      "tutti"
+      "saf"
      ]
     }
    },
@@ -3424,14 +3442,12 @@
     "en": [
      "joao-revan",
      "kaisui",
-     "saf",
-     "tutti"
+     "saf"
     ],
     "pt": [
      "joao-revan",
      "kaisui",
-     "saf",
-     "tutti"
+     "saf"
     ]
    },
    "obras": [
@@ -3698,7 +3714,6 @@
     "en:emissaries/joao-revan",
     "en:emissaries/kaisui",
     "en:emissaries/saf",
-    "en:emissaries/tutti",
     "en:news/2023-08-18-orcs",
     "en:news/2023-08-19-conheca-os-talassimbiontes",
     "en:news/2023-08-20-kartekta",
@@ -3791,7 +3806,6 @@
     "pt:emissaries/joao-revan",
     "pt:emissaries/kaisui",
     "pt:emissaries/saf",
-    "pt:emissaries/tutti",
     "pt:news/2023-08-18-orcs",
     "pt:news/2023-08-19-conheca-os-talassimbiontes",
     "pt:news/2023-08-20-kartekta",

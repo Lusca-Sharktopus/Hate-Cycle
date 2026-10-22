@@ -1,15 +1,18 @@
 ---
-// A página de uma obra com vários capítulos: /pt/works/light-and-blood/ (hoje, só Luz & Sangue).
+// A página de uma obra com vários capítulos: /pt/works/light-and-blood/ (hoje, Luz & Sangue e, na prévia, Beira de Estrada).
 // Obras de capítulo único (oneshot), com link para fora ou sem capítulos NÃO têm esta página: o botão do cartão já
 // leva direto ao destino. Quem decide é paginaDaObra() (src/lib/capitulos.ts), que devolve null nesses casos;
 // getStaticPaths() só cria uma página para quem não é null.
-// Lição: docs/aprendendo-astro/07-paginas.md.
+// Desde a T17l (pedido do autor de 22/10, mudança 7), logo depois da lista de capítulos vem o bloco "estou lendo em ordem…", o mesmo do
+// fim dos capítulos (src/lib/ordemDeLeitura.ts → blocoDaOrdem; a "história atual" é a da página).
+// Lição: docs/aprendendo-astro/07-paginas.md e 08-leitor.md.
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import ConteudoDaObra from "../../../../components/ConteudoDaObra.astro";
 import { alternativasDaObra } from "../../../../lib/alternativas";
 import { paginaDaObra, type PaginaDaObra } from "../../../../lib/capitulos";
 import { langs, type Lang } from "../../../../lib/config";
-import { dadosDoIdioma } from "../../../../lib/conteudo";
+import { COM_RASCUNHOS, dadosDoIdioma } from "../../../../lib/conteudo";
+import { blocoDaOrdem, type BlocoDaOrdem } from "../../../../lib/ordemDeLeitura";
 
 export async function getStaticPaths() {
   // os capítulos listados de cada obra nos DOIS idiomas: servem para o seletor de idioma (a mesma obra no outro idioma)
@@ -23,16 +26,18 @@ export async function getStaticPaths() {
       const pagina = paginaDaObra(obra, lang, dados.capitulosDe(obra));
       if (!pagina) continue;
       const listados = Object.fromEntries(langs.map((l) => [l, dadosDe[l].capitulosDe(obra).listados])) as Record<Lang, unknown[]>;
-      saidas.push({ params: { lang, obra: slug }, props: { pagina, alternates: alternativasDaObra(slug, listados) } });
+      const outrosIdiomas = (o: typeof obra) => langs.filter((l) => l !== lang).map((l) => ({ lang: l, capitulos: dadosDe[l].capitulosDe(o) }));
+      const ordem = blocoDaOrdem(obra, lang, dados.universo, dados.capitulosDe, COM_RASCUNHOS, outrosIdiomas);
+      saidas.push({ params: { lang, obra: slug }, props: { pagina, alternates: alternativasDaObra(slug, listados), ordem } });
     }
   }
   return saidas;
 }
 
 const lang = Astro.params.lang as Lang;
-const { pagina, alternates } = Astro.props as { pagina: PaginaDaObra; alternates: Partial<Record<Lang, string>> };
+const { pagina, alternates, ordem } = Astro.props as { pagina: PaginaDaObra; alternates: Partial<Record<Lang, string>>; ordem: BlocoDaOrdem };
 ---
 
 <BaseLayout lang={lang} title={pagina.titulo} description={pagina.descricao} image={pagina.capa} alternates={alternates}>
-  <ConteudoDaObra pagina={pagina} />
+  <ConteudoDaObra pagina={pagina} ordem={ordem} />
 </BaseLayout>

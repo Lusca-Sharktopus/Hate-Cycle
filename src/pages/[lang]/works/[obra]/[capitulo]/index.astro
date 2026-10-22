@@ -23,12 +23,14 @@ export async function getStaticPaths() {
     glob: (padrao: string) => arquivosDoGlob(pastaStatic, padrao),
     comentarios: (lang: Lang, id: string | null) => comentariosDaPagina(lang, id, COM_RASCUNHOS),
   };
+  const outrosIdiomas = (lang: Lang) => (o: (typeof dadosDe)[Lang]["obras"][number]) => langs.filter((l) => l !== lang).map((l) => ({ lang: l, capitulos: dadosDe[l].capitulosDe(o) }));
   const saidas = [];
   for (const lang of langs) {
     for (const obra of dadosDe[lang].obras) {
       const capitulos = Object.fromEntries(langs.map((l) => [l, dadosDe[l].capitulosDe(obra)])) as Record<Lang, ReturnType<(typeof dadosDe)[Lang]["capitulosDe"]>>;
       // o bloco "estou lendo em ordem…" (T17c) é o mesmo para todos os capítulos da obra: quem vem antes e depois dela, nas duas ordens
-      const ordem = blocoDaOrdem(obra, lang, dadosDe[lang].universo, dadosDe[lang].capitulosDe, COM_RASCUNHOS);
+      // (os capítulos dos outros idiomas: para a obra que só tem capítulo em outro idioma, T17l)
+      const ordem = blocoDaOrdem(obra, lang, dadosDe[lang].universo, dadosDe[lang].capitulosDe, COM_RASCUNHOS, outrosIdiomas(lang));
       for (const leitura of leiturasDaObra(obra, lang, capitulos, ferramentas)) {
         saidas.push({ params: { lang, obra: obra.data._origem.slug, capitulo: leitura.pasta }, props: { leitura, ordem } });
       }

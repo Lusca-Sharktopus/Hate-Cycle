@@ -35,8 +35,15 @@ const { pagina: p } = Astro.props;
        nenhuma página tem essa classe + gifs juntos hoje (a Sobre é `page-about`; Histórias é `page-project` mas sem gifs):
        no site atual ele não faz nada na Sobre, então não foi portado (ver docs/aprendendo-astro/09-endpoints.md). */
     .page-about h2, .page-project h2 { clear: both; }
+    /* Copiado de static/style.css (T17l, pedido do autor de 22/10): na Sobre, o título que vem logo depois do texto ("Sobre o autor") fica
+       à mesma distância do texto que "Outros Emissários" (só a margem do parágrafo, 1rem). */
+    .page-about .prose > p + h2 { margin-top: 0; }
     /* Copiado de static/style.css: página "Apoio": o texto e as imagens ocupam a coluna inteira (o .prose de 70ch ficava encostado à esquerda). */
     .page-support .prose { max-width: none; }
+    /* Copiado de static/style.css (T17l, pedido do autor de 22/10, "print 2.png"): o banner do canal sobe até o cabo do tridente invadir um
+       pouco a faixa do texto de cima (8,5% da largura da coluna); o texto fica por cima, legível e clicável. */
+    .page-support .prose > p { position: relative; z-index: 1; }
+    .page-support .yt-banner { margin-top: -8.5%; }
     .apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
     .apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("/silhuetas/apollo.png"); }
     .anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("/silhuetas/anfibio.png"); }

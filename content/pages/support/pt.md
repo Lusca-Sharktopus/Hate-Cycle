@@ -11,7 +11,7 @@ Você pode ajudar este universo a crescer nos apoiando mensalmente no Catarse!! 
 
 Você também pode apoiar diretamente o criador deste universo se inscrevendo no meu canal no YouTube. É completamente de graça e me ajuda tremendamente, visto que, na maior parte do tempo, eu tiro do meu próprio bolso para manter esse sonho vivo.
 
-<div style="text-align:center">
+<div class="yt-banner" style="text-align:center">
 <a href="https://www.youtube.com/@LuscaSharktopus" target="_blank" rel="noopener"><img src="@/support/banner.png" alt="Inscreva-se no canal Lusca Sharktopus no YouTube"></a>
 </div>
 
