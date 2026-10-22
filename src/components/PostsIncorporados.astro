@@ -1,0 +1,10 @@
+---
+// Posts incorporados do X, do Reddit e do Instagram EM MOLDURA ISOLADA (T17j, B27): só o script do navegador. Não há CSS nem HTML
+// aqui: o HTML é o <blockquote> do autor (o build só tira o <script> do serviço, em src/lib/postsIncorporados.ts) e a moldura que o
+// script cria leva os mesmos atributos e estilos que o script oficial do serviço criaria. O BaseLayout só põe este componente na
+// página que tem pelo menos um post. Lição: docs/aprendendo-astro/08-leitor.md (seção "Posts incorporados em moldura isolada").
+---
+
+<script>
+  import "../scripts/embeds/index";
+</script>

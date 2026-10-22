@@ -1,0 +1,123 @@
+# Publicação do site Hᴀᴛᴇ Cʏᴄʟᴇ no GitHub Pages (T20).
+# Lição linha a linha: docs/aprendendo-astro/12-virada.md · roteiro do autor: docs/virada.md
+#
+#   pull request para a main  -> só CONSTRÓI (o PR mostra "verde" ou "vermelho"; nada vai ao ar)
+#   push na main              -> constrói e PUBLICA em hatecycle.com
+#   "Run workflow" (manual)   -> o mesmo, só a partir da main
+#
+# De propósito NÃO roda `pnpm test` nem Python (ver "Por que sem testes" na lição 12 e C4 da T19): os testes de
+# "foto do conteúdo" falham a cada notícia ou capítulo novo até alguém refazer as referências com Python. O site
+# não pode ficar sem publicar por causa disso. Os testes continuam sendo rodados à mão (`pnpm test`).
+
+name: Site
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permissão mínima de todo o fluxo: ler o código. O trabalho de publicar pede mais, só nele (abaixo).
+permissions:
+  contents: read
+
+# Um pull request novo cancela a construção velha do mesmo pull request. Um push na main NUNCA cancela outro
+# (poderia interromper uma publicação no meio): espera a vez.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  construir:
+    name: Construir o site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # O pnpm vem ANTES do Node: o cache do setup-node precisa achar o pnpm. A versão do pnpm é a do
+      # `packageManager` do package.json (10.28.0); nada de `version:` aqui para não haver duas verdades.
+      - name: Instalar o pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          run_install: false
+
+      # A versão do Node é a do arquivo .nvmrc (hoje 22). O cache guarda os pacotes baixados entre execuções.
+      - name: Instalar o Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Nenhuma variável de rascunho/prévia pode chegar ao site publicado: com NODE_ENV=development o Astro mostraria
+      # rascunhos; HC_SHOW_EXTRAS liga Universo e Personagens; HC_IMAGENS desliga as imagens leves; HC_OUT_DIR muda a pasta de saída.
+      # Hoje nenhuma está definida; este passo falha se alguém um dia definir uma (neste arquivo ou nas configurações do repositório).
+      - name: Conferir que não há variáveis de prévia
+        run: |
+          for v in NODE_ENV HC_SHOW_EXTRAS HC_IMAGENS HC_OUT_DIR; do
+            if [ -n "${!v}" ]; then
+              echo "::error::A variável $v está definida (valor: ${!v}). Ela existe só para prévia/teste e não pode chegar ao site publicado."
+              exit 1
+            fi
+          done
+
+      - name: Instalar os pacotes
+        run: pnpm install --frozen-lockfile
+
+      - name: Verificar tipos (astro check)
+        run: pnpm check
+
+      - name: Construir o site (pnpm build)
+        run: pnpm build
+
+      # Rede de segurança barata: não publicar um site vazio ou com cara de prévia. Não conta páginas (o número muda a cada notícia).
+      - name: Conferir o resultado
+        run: |
+          test "$(cat dist/CNAME)" = "hatecycle.com" || { echo "::error::dist/CNAME não é hatecycle.com"; exit 1; }
+          for f in index.html 404.html pt/index.html en/index.html pt/feed.xml en/feed.xml sitemap.xml; do
+            test -s "dist/$f" || { echo "::error::falta dist/$f"; exit 1; }
+          done
+          test -d dist/_astro || { echo "::error::falta dist/_astro/"; exit 1; }
+          test ! -e dist/dev || { echo "::error::dist/dev/ existe (é coisa de prévia)"; exit 1; }
+          # Nenhum script de fora pode rodar no endereço do site (B27, T17g/T17j: a sessão dos comentários mora aqui).
+          # Os posts do X/Reddit/Instagram aparecem sozinhos, mas numa moldura isolada (iframe no endereço do serviço), sem o
+          # script deles na página; um <script src="https://…"> colado no texto de uma notícia faria o deploy parar aqui,
+          # em vez de ir ao ar sem ninguém ver.
+          if grep -rliE "<script[^>]*[[:space:]]src=[\"']?(https?:)?//" dist --include='*.html' > /tmp/scripts-externos.txt; then
+            echo "::error::script de outro site no HTML publicado (ver lição 08, posts incorporados):"; cat /tmp/scripts-externos.txt; exit 1
+          fi
+          echo "HTML no dist: $(find dist -name '*.html' | wc -l) · tamanho: $(du -sh dist | cut -f1)"
+
+      # Empacota a pasta dist/ para o Pages. Roda também no pull request, para o "ensaio" cobrir o empacotamento;
+      # só o trabalho "publicar" (abaixo) coloca esse pacote no ar.
+      - name: Empacotar para o Pages
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  publicar:
+    name: Publicar no GitHub Pages
+    needs: construir
+    # Nunca em pull request, e só a partir da main (um "Run workflow" numa outra branch constrói mas não publica).
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Só este trabalho pode escrever no Pages. `id-token` serve para o GitHub confirmar que a publicação vem desta main.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    # Uma publicação por vez, e uma que já começou nunca é cortada no meio (por isso `false`).
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - name: Publicar
+        id: pages
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

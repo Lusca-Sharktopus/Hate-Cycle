@@ -1,0 +1,18 @@
+---
+title: Day 2 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it
+date: 2025-12-02
+thumb: news/dia-2-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-dia-2}}
+
+The flying giraffe (Gigapteropus rubrocephalus) is a megabat native to Oceania and Southeast Asia, and it is the largest bat species that has ever existed.
+
+Flying giraffes can reach up to 5 m in height and weigh over 100 kg. Even so, they are still able to fly, although they are not as agile or fast in flight as their smaller relatives. Their wingspan can reach 10 m and, thanks to the strength of their arm muscles, G. rubrocephalus is able to lift its own body to take off.
+
+Ecologically, flying giraffes are similar to true giraffes, feeding on leaves, fruits and flowers, usually high in the trees. However, they show unique and often unpredictable migratory patterns. They rarely fly when they are not migrating or fleeing from predators, preferring to walk across open fields in large groups of 15 to 30 individuals.
+
+The name Gigapteropus refers to the genus Pteropus, which includes the flying foxes, to which the Greek suffix γίγας, meaning “giant” or “great”, was added. The epithet rubrocephalus, in turn, derives from the Latin rubrus, meaning “red”, and the Greek κεφαλή (kephalḗ), meaning “head”, in reference to the red-orange coloration of their heads, as well as the stripes on their backs.

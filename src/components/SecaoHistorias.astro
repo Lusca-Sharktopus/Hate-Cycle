@@ -1,0 +1,21 @@
+---
+// A seção "Histórias do universo": título, subtítulo, seletor e a grade de cartões. É o atalho {{stories}}
+// (SHORT["stories"] do build.py); a página Histórias a usa, e qualquer texto com {{stories}} também pode.
+import type { Lang } from "../lib/config";
+import { t } from "../lib/config";
+import type { CartaoDaObra, DadosDoSeletor } from "../lib/obras";
+import SeletorDeHistorias from "./SeletorDeHistorias.astro";
+import WorkCard from "./WorkCard.astro";
+
+interface Props {
+  lang: Lang;
+  /** Os cartões, já na ordem de lançamento (a de quem chega do HTML; o seletor reordena no navegador). */
+  cartoes: CartaoDaObra[];
+  seletor: DadosDoSeletor;
+}
+
+const { lang, cartoes, seletor } = Astro.props;
+const ID_DA_GRADE = "hate-grid";
+---
+
+<section class="stories-block"><h2>{t(lang, "hate_stories")}</h2><div class="stories-head"><p class="sub">{t(lang, "hate_stories_sub")}</p><SeletorDeHistorias lang={lang} dados={seletor} idDaGrade={ID_DA_GRADE} /></div><div class="works grid" id={ID_DA_GRADE}>{cartoes.map((c) => <WorkCard cartao={c} />)}</div><p class="no-results" hidden>{t(lang, "search_none")}</p></section>

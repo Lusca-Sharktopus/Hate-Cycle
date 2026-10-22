@@ -1,0 +1,11 @@
+---
+// A RAIZ do site (`/`): não tem conteúdo; leva o visitante ao idioma dele (/en/ ou /pt/). Gerada em dist/index.html.
+// O HTML vem pronto de src/lib/raiz.ts, idêntico ao do build.py, e sai como RESPOSTA (Response): assim o Astro não coloca
+// <head>, estilos nem nada seu em volta. Lição: docs/aprendendo-astro/09-endpoints.md.
+import { langName, langs, siteName } from "../lib/config";
+import { paginaDaRaiz } from "../lib/raiz";
+
+return new Response(paginaDaRaiz(siteName, langs.map((chave) => ({ chave, nome: langName(chave) }))), {
+  headers: { "Content-Type": "text/html; charset=utf-8" },
+});
+---

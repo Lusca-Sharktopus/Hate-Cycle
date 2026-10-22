@@ -1,0 +1,39 @@
+{
+  "kind": "prose",
+  "universe": true,
+  "oneshot": true,
+  "listed": true,
+  "draft": true,
+  "title": {
+    "en": "All in a Night's Work",
+    "pt": "Ossos do Ofício"
+  },
+  "blurb": {
+    "en": "Giuseppe di Vario deals with the hardships of working as an exorcist.",
+    "pt": "Giuseppe di Vario lida com as dificuldades de trabalhar como um exorcista."
+  },
+  "logo": {
+    "en": "logos/EN/All in a Night's Work 2.png",
+    "pt": "logos/PT/Ossos do Ofício 2.png"
+  },
+  "divider": "other images/AIANW Scene Divider.png",
+  "order": {
+    "release": 4,
+    "chrono": 4
+  },
+  "cover": {
+    "en": "covers/EN/Cover All in a Night's Work.png",
+    "pt": "covers/PT/Capa Ossos do Ofício.png"
+  },
+  "reading_font": "times",
+  "order_art": {
+    "size": [1000, 1000],
+    "bleed": true,
+    "layers": [
+      { "image": "ordem/Giuseppe Asas Site Cronologia.png", "x": 77.82, "y": 4.99, "width": 265.36, "opacity": 0, "hover": { "x": 79.86, "y": 0.21, "width": 281.99, "opacity": 1 } },
+      { "image": "ordem/Giuseppe Site Cronologia.png", "x": 42.22, "y": 61.38, "width": 51.51, "hover": { "x": 42.04, "y": 60.14, "width": 54.74 } },
+      { "image": "ordem/Giuseppe Olhos Site Cronologia.png", "x": 41.63, "y": 59.86, "width": 50.33, "opacity": 0, "hover": { "x": 41.41, "y": 58.52, "width": 53.48, "opacity": 1 } }
+    ]
+  },
+  "media": "short-story"
+}

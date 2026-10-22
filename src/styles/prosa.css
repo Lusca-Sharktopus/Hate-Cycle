@@ -1,0 +1,113 @@
+/* O TEXTO DO AUTOR (T12): tudo o que estiliza o que vem de content/ dentro de .prose — figuras, citações, divisor de cena,
+   vídeos e posts incorporados, a ficha de feitiço, e os efeitos das histórias (Giuseppe contornado pelo texto, a carta que
+   vira, as tiras do quadrinho, a cena 1 de Ossos do Ofício com o SONHO em PT Serif #111012).
+   Copiado de static/style.css com os MESMOS valores e na MESMA ordem relativa (de cima para baixo no arquivo original).
+   Importado pelo leitor de capítulos (src/components/Leitor.astro); as notícias (T13) reaproveitam o mesmo arquivo.
+
+   ⚠ Trocas de fonte, cor e tamanho aqui são NARRATIVAS (CLAUDE.md, "Tipografia é narrativa"): nada se "simplifica".
+   Caminhos de imagem começam com "/" (este CSS é empacotado em /_astro/; no style.css eram relativos à raiz). */
+
+@layer site {
+  /* ── texto corrido ── (as três primeiras regras de .prose estão em global.css) */
+  .prose figure { margin: 1.5rem 0; }
+  .prose figure img { border-radius: var(--radius); max-width: min(100%, 26rem); }
+  .prose blockquote { margin: 1.2rem 0; padding-left: 1rem; border-left: 4px solid var(--mint); color: var(--muted); }
+  .draft-banner { background: #fff3cd; color: #6b4e00; padding: .5rem 1rem; border-radius: 8px; font-size: .9rem; }
+
+  /* divisor de cena: a imagem do `divider` da obra (ou uma linha, se a obra não tem) */
+  .scene-divider { display: block; width: 100%; margin: 2rem 0; border: 0; }
+  hr.scene-divider { border-top: 1px solid #0004; width: 40%; margin: 2rem auto; }
+
+  .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
+  .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  /* cartinha que vira (Ossos do Ofício); o clique/tecla vem de src/components/CartaQueVira.astro */
+  /* T17k: 300 × 450 px, mas nunca mais larga que a coluna (a 320 px a carta passava da tela): max-width + proporção 2:3 no lugar da altura fixa */
+  .flip-card { width: 300px; max-width: 100%; aspect-ratio: 2 / 3; perspective: 1000px; margin: 1.5rem auto; }
+  .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform .8s; transform-style: preserve-3d; }
+  .flip-card { cursor: pointer; }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-card-front, .flip-card-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 4px 12px #0000005e; }
+  .flip-card-back { transform: rotateY(180deg); }
+  .flip-card img { width: 100%; height: 100%; }
+
+  /* ── Ossos do Ofício: Giuseppe com o texto contornando o desenho ── */
+  .jusep { float: left; width: 15rem; max-width: 40%; height: auto; margin: 0 1rem .5rem 0; shape-margin: 1rem; shape-outside: url("/silhuetas/giuseppe.png"); }
+
+  /* ── vídeos verticais (Shorts) ── */
+  .short-embed { position: relative; width: min(100%, 340px); aspect-ratio: 9 / 16; margin: 1rem 0; border-radius: 14px; overflow: hidden; background: #000; }
+  .short-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  /* posts incorporados ({{embed:…}}) */
+  .embed { margin: 1.2rem auto; max-width: 560px; overflow-x: auto; display: flex; justify-content: center; }
+  .embed > * { margin-left: auto !important; margin-right: auto !important; }
+  .embed iframe, .embed .twitter-tweet, .embed .reddit-embed-bq { max-width: 100%; }
+
+  /* transcrições fonéticas (IPA) em Arial: Lexend/Oswald não têm esses símbolos */
+  .ipa { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-variant-caps: normal; letter-spacing: 0; }
+
+  /* ── Ritual (ficha de feitiço) — igual ao Livro de Regras ── */
+  .spellcard { max-width: 330px; margin: 1.4rem 0; background: #fff; color: #000; font-size: .88rem; line-height: 1.45; box-shadow: 0 2px 10px #0003; text-align: left; }
+  .spellcard .sc-head { display: flex; justify-content: space-between; align-items: center; background: #135c48; color: #fff; padding: .35rem .7rem; font-family: var(--font-head); font-weight: 700; font-size: 1.25rem; }
+  .spellcard .sc-sub { font-family: "Vollkorn SC", serif; font-weight: 400; color: #5e5e5e; text-align: right; padding: .35rem .7rem 0; font-size: 1rem; letter-spacing: .02em; }
+  .spellcard .sc-grid { display: flex; justify-content: space-between; gap: .6rem; padding: .5rem .7rem 0; }
+  .spellcard .sc-right { text-align: right; }
+  .spellcard b { font-weight: 700; color: #135c48; }
+  .spellcard .sc-line { margin: .5rem .7rem 0; }
+  .spellcard .sc-body { margin: .6rem .7rem 0; text-align: justify; }
+  .spellcard .sc-body:last-child { padding-bottom: .8rem; }
+  .spellcard .sc-body b { color: #000; }
+  .spellcard .sc-body b.sc-cond { color: #3fa76d; font-style: italic; }
+  .spellcard .sc-wand { font-family: "Noto Emoji", sans-serif; font-weight: 600; color: #135c48; }
+
+  /* ── Posts incorporados centralizados + botão para alternar entre dois (ou mais) posts ──
+     (o clique vem de src/components/PostsAlternados.astro) */
+  .prose .short-embed, .prose .video-wrapper { margin-left: auto; margin-right: auto; }
+  .embed-alt { display: flex; justify-content: center; align-items: flex-start; gap: .9rem; margin: 1.2rem auto; }
+  .embed-panels { flex: 0 1 560px; min-width: 0; }
+  .embed-panel { display: none; }
+  .embed-panel.is-on { display: block; }
+  .embed-alt .embed { margin: 0 auto; }
+  .embed-switch { display: flex; flex-direction: column; gap: .5rem; position: sticky; top: 1rem; }
+  .embed-btn { display: flex; align-items: center; gap: .45rem; border: 2px solid var(--green); background: #fff; color: var(--green); border-radius: 999px; padding: .3rem .7rem .3rem .4rem; font: 600 .85rem var(--font-text); cursor: pointer; }
+  .embed-btn img { width: 24px; height: 24px; object-fit: contain; background: var(--green); border-radius: 6px; padding: 2px; box-sizing: border-box; }
+  .embed-btn:not(:has(img)) { padding-left: .8rem; }
+  .embed-btn.is-on { background: var(--green); color: #fff; }
+  .embed-btn.is-on img { background: transparent; }
+  .embed-btn:hover:not(.is-on) { background: #e6f3ee; }
+  @media (max-width: 760px) { .embed-alt { flex-direction: column; align-items: center; } .embed-panels { flex-basis: auto; width: 100%; } .embed-switch { flex-direction: row; position: static; order: -1; } }
+  /* T17k: a 320 px os três botões (Instagram, TikTok, YouTube) não cabiam numa linha e ficavam cortados: descem para a linha de baixo */
+  @media (max-width: 389px) { .embed-switch { flex-wrap: wrap; justify-content: center; } }
+
+  .prose figure.wide img { max-width: 100%; width: 100%; height: auto; }
+
+  /* posts incorporados: rótulos dos botões sem hifenização */
+  .embed-btn { white-space: nowrap; hyphens: none; -webkit-hyphens: none; }
+  .embed-open { margin: .2rem 0 0; text-align: center; font-size: .8rem; }
+  .embed-open a { color: var(--muted); }
+
+  /* tiras do quadrinho dentro da prosa: 710 px de largura, centralizadas; em telas estreitas vão de borda a borda */
+  .strip { --pad: clamp(1.4rem, 5vw, 3.5rem); width: min(710px, calc(100% + 2 * var(--pad))); max-width: none; margin: 1.5rem 0 1.5rem 50%; transform: translateX(-50%); }
+  .prose .strip img, .strip img { display: block; width: 100%; height: auto; max-width: none !important; margin: 0; border-radius: 0; }
+  .strip .strip-row { display: flex; align-items: flex-start; }   /* a arte fica colada nas fatias de cima e de baixo; só o texto centraliza */
+  .strip .strip-row img { width: 45.2%; flex: none; }
+  .strip .strip-row p { align-self: center; margin: 0; padding: .4rem 4% .4rem 3%; text-align: left; font-size: 1em; line-height: inherit; hyphens: none; }
+  .lead-in { font-size: 1.8rem; line-height: 1.3; margin: 1.2rem 0 .4rem; }
+
+  /* ── Ossos do Ofício · cena 1 (fiel ao PDF): Times 11pt, PT Serif 10pt (#111012), Road Rage 19pt; 1pt = .0982rem ──
+     .ps = o SONHO: PT Serif em #111012, uma fonte QUASE igual numa cor QUASE certa. Narrativo: não mexer. */
+  .story .s1 { margin: 0; text-align: justify; color: #000; line-height: 1.7; hyphens: none; }
+  .story .s1.ps, .story .s1 .ps { font-family: "PT Serif", Georgia, serif; font-size: .909em; color: #111012; }
+  .story .s1.indent { text-indent: 3.5rem; }
+  .story .s1.rr { font-family: "Road Rage", "Times New Roman", serif; font-size: 1.727em; line-height: 1.25; text-align: center; margin: .6rem 0 .5rem; color: #000; }
+  .story .s1.mid { text-align: center; padding: 0 .6rem; }
+  .story .s1.gap { margin-bottom: 1.2rem; }
+  .story .s1.dashes { white-space: nowrap; overflow: hidden; text-align: center; margin-bottom: 1.2rem; }
+  .story .s1 .zalgo { font-family: "Times New Roman", Times, serif; }
+  .story .s1 .sc { font-family: "Times New Roman", Times, serif; }
+  .s1 i { font-style: italic; }
+  .s1-gif { text-align: center; margin: .6rem 0 .4rem; }
+  .prose .s1-gif img, .s1-gif img { width: 60%; max-width: none !important; height: auto; margin: 0 auto; display: block; }
+  .s1-art { margin: 1rem 0 1.5rem; }
+  .prose .s1-art img, .s1-art img { width: 100%; max-width: none !important; height: auto; display: block; margin: 0; }
+}

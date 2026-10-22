@@ -1,0 +1,97 @@
+/* Fontes das RUNAS do fundo, servidas pelo próprio site (T17). GERADO por tools/gerar_fontes_das_runas.py — não edite à mão.
+   Cada recorte tem só os glifos de runa do site (src/lib/runas.ts → RUNES), tirados das fontes Noto (@fontsource, versão fixa);
+   a primeira família da lista `font-family` de `.runes i` (Runas.astro) que tem o glifo é a que o desenha, como no Google Fonts.
+   Os nomes das famílias são os do Google Fonts, para o `font-family` das runas não mudar. Fora de @layer: é só @font-face. */
+
+/* Noto Sans: И П Т */
+@font-face { font-family: "Noto Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-cyrillic.woff2") format("woff2"); unicode-range: U+418,U+41F,U+422; }
+
+/* Noto Sans: Ѧ ҂ */
+@font-face { font-family: "Noto Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-cyrillic-ext.woff2") format("woff2"); unicode-range: U+466,U+482; }
+
+/* Noto Sans: Γ Κ Λ Σ Υ */
+@font-face { font-family: "Noto Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-greek.woff2") format("woff2"); unicode-range: U+393,U+39A-39B,U+3A3,U+3A5; }
+
+/* Noto Sans: F */
+@font-face { font-family: "Noto Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-latin.woff2") format("woff2"); unicode-range: U+46; }
+
+/* Noto Sans: Ł */
+@font-face { font-family: "Noto Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-latin-ext.woff2") format("woff2"); unicode-range: U+141; }
+
+/* Noto Sans Runic: ᚣ ᚩ ᚫ ᚬ ᚱ ᚳ ᚷ ᚸ ᚹ ᚻ ᛁ ᛃ ᛄ ᛇ ᛋ ᛏ ᛒ ᛖ ᛗ ᛚ ᛝ ᛞ ᛟ ᛠ ᛡ ᛤ ᛥ ᛮ */
+@font-face { font-family: "Noto Sans Runic"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-runic-runic.woff2") format("woff2"); unicode-range: U+16A3,U+16A9,U+16AB-16AC,U+16B1,U+16B3,U+16B7-16B9,U+16BB,U+16C1,U+16C3-16C4,U+16C7,U+16CB,U+16CF,U+16D2,U+16D6-16D7,U+16DA,U+16DD-16E1,U+16E4-16E5,U+16EE; }
+
+/* Noto Sans Symbols: ⌗ ⎍ ⏃ ♐ ⚴ ⚼ ⛩ ✝ ✡ 🜁 🜂 🜃 🜄 🜍 🜙 🜲 🝂 🝃 🝘 🝧 */
+@font-face { font-family: "Noto Sans Symbols"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-symbols-symbols.woff2") format("woff2"); unicode-range: U+2317,U+238D,U+23C3,U+2650,U+26B4,U+26BC,U+26E9,U+271D,U+2721,U+1F701-1F704,U+1F70D,U+1F719,U+1F732,U+1F742-1F743,U+1F758,U+1F767; }
+
+/* Noto Sans Symbols 2: ⌤ ⌥ ◇ ◫ ⛉ ⬡ */
+@font-face { font-family: "Noto Sans Symbols 2"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-symbols-2-symbols.woff2") format("woff2"); unicode-range: U+2324-2325,U+25C7,U+25EB,U+26C9,U+2B21; }
+
+/* Noto Sans Math: ‡ √ ⊥ ⊹ ⋉ ⋋ ⧖ ⧮ ⧰ */
+@font-face { font-family: "Noto Sans Math"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-math-latin.woff2") format("woff2"); unicode-range: U+2021,U+221A,U+22A5,U+22B9,U+22C9,U+22CB,U+29D6,U+29EE,U+29F0; }
+
+/* Noto Sans Cherokee: ꮤ */
+@font-face { font-family: "Noto Sans Cherokee"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-cherokee-cherokee.woff2") format("woff2"); unicode-range: U+ABA4; }
+
+/* Noto Sans Yi: ꑭ ꓀ */
+@font-face { font-family: "Noto Sans Yi"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-yi-yi.woff2") format("woff2"); unicode-range: U+A46D,U+A4C0; }
+
+/* Noto Sans Phoenician: 𐤉 𐤎 */
+@font-face { font-family: "Noto Sans Phoenician"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-phoenician-phoenician.woff2") format("woff2"); unicode-range: U+10909,U+1090E; }
+
+/* Noto Sans Glagolitic: Ⰱ Ⱍ Ⱝ */
+@font-face { font-family: "Noto Sans Glagolitic"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-glagolitic-glagolitic.woff2") format("woff2"); unicode-range: U+2C01,U+2C1D,U+2C2D; }
+
+/* Noto Sans Tifinagh: ⵅ */
+@font-face { font-family: "Noto Sans Tifinagh"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-tifinagh-tifinagh.woff2") format("woff2"); unicode-range: U+2D45; }
+
+/* Noto Sans Balinese: ᭻ */
+@font-face { font-family: "Noto Sans Balinese"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-balinese-balinese.woff2") format("woff2"); unicode-range: U+1B7B; }
+
+/* Noto Sans Canadian Aboriginal: ᔨ ᗐ */
+@font-face { font-family: "Noto Sans Canadian Aboriginal"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-canadian-aboriginal-canadian-aboriginal.woff2") format("woff2"); unicode-range: U+1528,U+15D0; }
+
+/* Noto Sans Old Turkic: 𐰔 𐰤 𐰭 𐱃 */
+@font-face { font-family: "Noto Sans Old Turkic"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-old-turkic-old-turkic.woff2") format("woff2"); unicode-range: U+10C14,U+10C24,U+10C2D,U+10C43; }
+
+/* Noto Sans Old Italic: 𐌄 𐌇 𐌌 𐌎 𐌙 */
+@font-face { font-family: "Noto Sans Old Italic"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-old-italic-old-italic.woff2") format("woff2"); unicode-range: U+10304,U+10307,U+1030C,U+1030E,U+10319; }
+
+/* Noto Sans Lycian: 𐊙 */
+@font-face { font-family: "Noto Sans Lycian"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-lycian-lycian.woff2") format("woff2"); unicode-range: U+10299; }
+
+/* Noto Sans Linear A: 𐘇 𐙎 */
+@font-face { font-family: "Noto Sans Linear A"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-linear-a-linear-a.woff2") format("woff2"); unicode-range: U+10607,U+1064E; }
+
+/* Noto Sans Old South Arabian: 𐩹 */
+@font-face { font-family: "Noto Sans Old South Arabian"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-old-south-arabian-old-south-arabian.woff2") format("woff2"); unicode-range: U+10A79; }
+
+/* Noto Sans Warang Citi: 𑢶 */
+@font-face { font-family: "Noto Sans Warang Citi"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-warang-citi-warang-citi.woff2") format("woff2"); unicode-range: U+118B6; }
+
+/* Noto Sans Brahmi: 𑀒 */
+@font-face { font-family: "Noto Sans Brahmi"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-brahmi-brahmi.woff2") format("woff2"); unicode-range: U+11012; }
+
+/* Noto Music: 𝆦 𝈒 */
+@font-face { font-family: "Noto Music"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-music-music.woff2") format("woff2"); unicode-range: U+1D1A6,U+1D212; }
+
+/* Noto Sans KR: 土 */
+@font-face { font-family: "Noto Sans KR"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-kr-101.woff2") format("woff2"); unicode-range: U+571F; }
+
+/* Noto Sans KR: エ */
+@font-face { font-family: "Noto Sans KR"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-kr-104.woff2") format("woff2"); unicode-range: U+30A8; }
+
+/* Noto Sans KR: 山 */
+@font-face { font-family: "Noto Sans KR"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-kr-105.woff2") format("woff2"); unicode-range: U+5C71; }
+
+/* Noto Sans KR: 모 */
+@font-face { font-family: "Noto Sans KR"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-kr-118.woff2") format("woff2"); unicode-range: U+BAA8; }
+
+/* Noto Sans KR: 弓 */
+@font-face { font-family: "Noto Sans KR"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-kr-86.woff2") format("woff2"); unicode-range: U+5F13; }
+
+/* Noto Sans KR: ⼒ */
+@font-face { font-family: "Noto Sans KR"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-kr-96.woff2") format("woff2"); unicode-range: U+2F12; }
+
+/* Noto Sans JP: 虫 */
+@font-face { font-family: "Noto Sans JP"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fontes/runas/noto-sans-jp-92.woff2") format("woff2"); unicode-range: U+866B; }

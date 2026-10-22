@@ -1,0 +1,29 @@
+---
+// A caixa de comentários de verdade (T15): o MESMO HTML do comments() do build.py — <section class="hc-comments"
+// data-page="…"><h2>…</h2><div class="c-app"></div></section> e o <script>window.HC=…</script> —, mais o script dos
+// comentários EMPACOTADO pelo Astro (src/scripts/comentarios/), no lugar do supabase-js do jsDelivr e do /comments.js.
+//
+// Os dois <script> são diferentes de propósito:
+//   - o do window.HC é "is:inline": o Astro o deixa exatamente como está, no lugar (é a configuração DESTA página: idioma,
+//     textos e as chaves, que só src/lib/comentarios.ts lê do config.json);
+//   - o outro é processado: o Astro junta src/scripts/comentarios/index.ts com o @supabase/supabase-js instalado (versão
+//     fixa no package.json) num arquivo /_astro/CaixaDeComentarios…js, carregado como módulo (depois de a página inteira
+//     ser lida, então o window.HC já existe). Ele aparece UMA vez por página, e só nas páginas que desenham este componente.
+//     O acabamento do layout (src/lib/pagina.ts, finalizarMain) o leva para o fim da página, fora do <main>.
+interface Props {
+  /** O ID da conversa (data-page): works/<obra>/<capítulo> ou news/<slug>, IGUAL nos dois idiomas. */
+  idDaPagina: string;
+  /** "Comentários" / "Comments". */
+  titulo: string;
+  /** O texto do <script> que cria window.HC (src/lib/comentarios.ts). */
+  configuracao: string;
+}
+
+const { idDaPagina, titulo, configuracao } = Astro.props;
+---
+
+<section class="hc-comments" data-page={idDaPagina}><h2>{titulo}</h2><div class="c-app"></div></section><script is:inline set:html={configuracao}></script>
+
+<script>
+  import "../scripts/comentarios/index";
+</script>

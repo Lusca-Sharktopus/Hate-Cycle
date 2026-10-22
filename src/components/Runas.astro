@@ -1,0 +1,36 @@
+---
+// Runas do fundo ("impressão rúnica"): o rune_imprint() do build.py.
+// O sorteio (posições, tamanhos, giros, brilho) é feito em src/lib/runas.ts, NO BUILD, com a semente
+// da página: a mesma página tem sempre o mesmo arranjo, idêntico ao do site atual (provado em `pnpm test`).
+// O navegador só recebe o HTML pronto; nenhuma linha de JavaScript vai para a página por causa das runas.
+import "../styles/fontes-das-runas.css"; // os glifos das runas (T17): recortes das fontes Noto servidos pelo próprio site, não mais pelo Google Fonts
+import { estiloDaRuna, sortearRunas } from "../lib/runas";
+
+interface Props {
+  /** Semente do sorteio: o endereço da página, como no build.py (ex.: "/pt/", "/en/works/firestriker/01/"). */
+  seed: string;
+}
+
+const runas = sortearRunas(Astro.props.seed);
+---
+
+<div class="runes" aria-hidden="true">{runas.map((r) => <i style={estiloDaRuna(r)}>{r.glifo}</i>)}</div>
+
+<style is:global>
+  /* Global (e não com escopo) de propósito: com escopo, o Astro poria um atributo data-astro-cid-… em cada <i>
+     e o HTML deixaria de ser idêntico ao do site atual. As classes são as mesmas do static/style.css. */
+  @layer site {
+    /* ── Impressão rúnica no fundo (cada página tem a sua) ── */
+    .runes { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .runes i {
+      position: absolute; left: var(--lx); top: var(--ly); font-style: normal; line-height: 1; color: var(--cyan); opacity: var(--lo, .1);
+      font-family: "Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans KR","Noto Sans JP",sans-serif;
+      font-size: calc(var(--s, 5) * 1vmin + 14px); transform: translate(-50%, -50%) rotate(var(--r, 0deg));
+      text-shadow: 0 0 .35em currentColor; animation: rune-glow var(--d, 12s) ease-in-out infinite alternate;
+    }
+    @keyframes rune-glow { from { opacity: var(--lo, .1); } to { opacity: var(--hi, .4); } }
+    /* tela mais alta que larga (celular em pé): usa a segunda posição sorteada */
+    @media (max-aspect-ratio: 1/1) { .runes i { left: var(--px); top: var(--py); } }
+    @media (prefers-reduced-motion: reduce) { .runes i { animation: none; opacity: calc((var(--lo, .1) + var(--hi, .4)) / 2); } }
+  }
+</style>

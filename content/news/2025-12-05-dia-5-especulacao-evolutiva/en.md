@@ -1,0 +1,20 @@
+---
+title: Day 5 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it
+date: 2025-12-05
+thumb: news/dia-5-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-5}}
+
+The buriquipira (Pteryteles amphibius) is a new-world monkey native to South America, found in Brazil, East Colombia and Venezuela. They’re a semi-aquatic species of monkey and display a number of adaptations towards a swimming lifestyle.
+
+Among adaptations for hydrodynamics are their fur, which is shorter and closer to the body, as well as fat reserves that, not only help the monkeys retain some heat in the water, but also give them a more rotund body plan. They also have a pair of ears so small they look like warts. For active swimming, the P. amphibious has developed webbed digits and a flat tail that both help the animal gain propulsion in the water.
+
+Despite that, Buriquipiras live quite a big chunk of their lives on top of trees, where they're (mostly) safe from predators.
+
+Their diet consists mostly of small aquatic animals, such as fish, but also fruit, insects and, during the rare times when they're on the ground, even grasses.
+
+The name Buriquipira, pronounced as /bu.ɾi.ki.ˈpi.ɾa/, comes from Old Tupi mbyryki, which usually refers to monkeys of the genus Brachyteles, who are close relatives of P. amphibius, and pirá, which means “fish”. The scientific names is formed by the greek πτερόν, that means “wing” or, in that case, “fin”, τέλειος, that means “end” or, in that case, limb, and ἀμφίβιος, that means “double life”.

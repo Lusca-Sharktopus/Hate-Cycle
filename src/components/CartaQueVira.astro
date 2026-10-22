@@ -1,0 +1,22 @@
+---
+// A carta que vira (Ossos do Ofício): o bloco 4 do static/site.js. O texto do autor traz o HTML da carta
+// (<div class="flip-card">…); este componente só traz o comportamento: clicar (ou Enter/Espaço, pelo teclado) vira a
+// carta, e clicar de novo desvira. O Leitor só põe este componente na página quando o texto tem uma carta
+// (src/lib/leitura.ts → temCartaQueVira), então as outras páginas não levam JavaScript nenhum por causa dela.
+---
+
+<script>
+  document.querySelectorAll<HTMLElement>(".flip-card").forEach((carta) => {
+    carta.setAttribute("tabindex", "0");
+    carta.setAttribute("role", "button");
+    carta.setAttribute("aria-pressed", "false");
+    const virar = () => carta.setAttribute("aria-pressed", String(carta.classList.toggle("flipped")));
+    carta.addEventListener("click", virar);
+    carta.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        virar();
+      }
+    });
+  });
+</script>

@@ -1,0 +1,33 @@
+{
+  "kind": "video",
+  "universe": true,
+  "title": {
+    "en": "Hello? Di Vario Residency",
+    "pt": "Alô? Residência dos Di Vario"
+  },
+  "blurb": {
+    "en": "The di Vario family is many things. \"Normal\" is not one of them!",
+    "pt": "A família Di Vario é muitas coisas. \"Normal\" não é uma delas!"
+  },
+  "cover": {
+    "en": "covers/EN/Cover HDVR.png",
+    "pt": "covers/PT/Capa HDVR.png"
+  },
+  "external": "https://www.youtube.com/@ResidenciaDosDiVario",
+  "cta": {
+    "en": "Watch on YouTube",
+    "pt": "Assista no YouTube"
+  },
+  "order": {
+    "release": 1,
+    "chrono": false
+  },
+  "order_art": {
+    "size": [627, 600],
+    "layers": [
+      { "image": "ordem/Lucas Site Cronologia.png", "x": 47.45, "y": 51.05, "width": 77.68, "hover": { "x": 42.67, "width": 83.9 } },
+      { "image": "ordem/Wellersson Site Cronologia.png", "x": 65.1, "y": 60.64, "width": 53.65, "hover": { "x": 69.88, "width": 57.94 } }
+    ]
+  },
+  "media": "misc"
+}

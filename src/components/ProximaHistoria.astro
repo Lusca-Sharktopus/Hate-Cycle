@@ -1,0 +1,152 @@
+---
+// O bloco "estou lendo em ordem…" (T17c) que fecha todo capítulo: uma caixa de papel entre a do capítulo e a dos comentários, com a história
+// que vem ANTES (à esquerda) e a que vem DEPOIS (à direita) na ordem que o visitante escolheu (Cronológica ou Lançamento). Desde a T17l
+// (pedido do autor de 22/10, mudança 7) também na PÁGINA DA OBRA, logo depois da lista de capítulos (a "história atual" é a da página).
+// Só no Astro: o build.py não tem este bloco (tests/ajudantes/html.ts ignora exatamente esta <section>; lição 08-leitor.md).
+//
+// Só desenha: tudo vem decidido em `bloco` (src/lib/ordemDeLeitura.ts), nas DUAS ordens. O servidor desenha as duas listas (a padrão
+// visível, a outra com `hidden`) e o seletor desabilitado; o <script> (src/scripts/ordem/) só alterna qual lista aparece e lembra a escolha
+// no navegador. Sem JavaScript o bloco aparece na ordem padrão, com os links funcionando.
+//
+// O seletor é um <select> de verdade, transparente, por cima do texto "Cronológica ▼": a pessoa clica/toca/usa o teclado no controle
+// nativo (acessível, no celular abre o seletor do aparelho) e vê o texto do desenho do autor. O rótulo dele é a frase de cima.
+//
+// O MESMO TAMANHO NAS DUAS ORDENS (T17i, pedido do autor de 21/10): a caixa não pode crescer nem encolher ao trocar de ordem, em
+// capítulo nenhum. Por construção: (1) a arte de todo lado mora numa moldura de proporção fixa (a tela de cada obra se encaixa dentro);
+// (2) o rótulo é uma linha só, com altura de linha fixa, e a letra é a mesma nas duas ordens (`--so-em`, a ordem que precisa de mais
+// espaço manda); (3) lado vazio (a primeira ou a última da ordem) guarda o lugar com um "lado fantasma" invisível (`so-lugar`), do mesmo
+// tamanho. Provado no navegador por tools/ordem_playwright.py (getBoundingClientRect antes e depois de trocar, em todo capítulo).
+import { ORDENS } from "../scripts/ordem/regras";
+import type { BlocoDaOrdem } from "../lib/ordemDeLeitura";
+import LadoDaOrdem from "./LadoDaOrdem.astro";
+
+interface Props {
+  bloco: BlocoDaOrdem;
+}
+
+const { bloco: b } = Astro.props;
+const ID_DO_TITULO = "story-order-title";
+const nomeDaInicial = b.opcoes.find((o) => o.valor === b.ordemInicial)?.rotulo ?? "";
+const DIRECOES = ["prev", "next"] as const;
+---
+
+{/* Atenção às quebras de linha: o HTML sai exatamente como está escrito (compressHTML: false). */}
+<section class="reader-box paper story-order" data-story-order data-ordem={b.ordemInicial} aria-labelledby={ID_DO_TITULO} style={`--so-em:${b.emDosRotulos};--so-em-1:${b.emDoMaiorRotulo}`}><div class="so-top"><p class="so-title" id={ID_DO_TITULO}>{b.titulo}</p><div class="so-pick"><span class="so-valor" aria-hidden="true">{nomeDaInicial}</span><select class="so-select" aria-labelledby={ID_DO_TITULO} disabled>{b.opcoes.map((o) => <option value={o.valor} selected={o.valor === b.ordemInicial}>{o.rotulo}</option>)}</select></div></div>{ORDENS.map((ordem) => <div class="so-order" data-ordem={ordem} hidden={ordem !== b.ordemInicial}>{DIRECOES.map((direcao) => { const lado = direcao === "prev" ? b.listas[ordem].anterior : b.listas[ordem].proximo; return lado ? <LadoDaOrdem lado={lado} direcao={direcao} /> : <span class={`so-lugar ${direcao}`} aria-hidden="true"><span class="so-art"></span><span class="so-label">&nbsp;<svg class="so-arrow" viewBox="0 0 120 14"></svg></span></span>; })}{b.listas[ordem].foraDaOrdem && <p class="so-note">{b.avisosDeForaDaOrdem[ordem]}</p>}</div>)}</section>
+
+<script>
+  import "../scripts/ordem/index";
+</script>
+
+<style is:global>
+  @layer site {
+    /* O bloco "estou lendo em ordem…" (T17c). Mesmo papel das outras caixas do leitor (.reader-box.paper); medidas tiradas do desenho do
+       autor (proxima historia.png): a arte encosta nas bordas, a frase e o seletor ficam no centro, em cima, e o nome da história e a seta
+       ficam embaixo de cada lado. Cores e fonte são os tokens do site. */
+    /* (T17l) a caixa de papel do Leitor (.reader-box e .reader-box.paper de Leitor.astro, os MESMOS valores, inclusive a margem de dentro):
+       na página da obra o CSS do Leitor não vem, e o bloco tem de ser a mesma caixa que nos capítulos. Medido: nos capítulos, a margem que
+       valia era SEMPRE a da .reader-box (clamp(1.4rem, 5vw, 3.5rem)); o `padding` que este arquivo dava a .story-order (e o `padding-top`
+       do celular) perdia para ela e foi tirado. */
+    .reader-box.story-order { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; background: var(--paper), var(--sheet); background-color: var(--sheet); }
+    /* (T17l) na página da obra a caixa vem logo depois da lista de capítulos (section.block), dentro da folha da página: ocupa a largura
+       da lista (o conteúdo da folha), em vez de 2rem a menos */
+    .block + .reader-box.story-order { width: 100%; }
+    .story-order { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; color: var(--green); font-family: var(--font-text);
+      /* o tamanho MÁXIMO do rótulo "Ler [obra]" (T17i: um pouco menor que antes, que era clamp(.95rem, 2.5vw, 1.8rem)) */
+      --so-cap: clamp(.85rem, 2.2vw, 1.6rem); }
+    .so-top { position: absolute; top: clamp(.5rem, 1.6vw, 1rem); left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; width: max-content; max-width: 60%; text-align: center; pointer-events: none; }
+    .so-title { margin: 0; white-space: nowrap; font-size: clamp(.95rem, 2.5vw, 1.8rem); font-weight: 400; line-height: 1.15; text-shadow: 1px 2px 3px #00000030; }
+    .so-pick { position: relative; display: inline-flex; margin-top: .15rem; pointer-events: auto; }
+    .so-valor { font-size: clamp(1.25rem, 3.2vw, 2.3rem); font-weight: 500; line-height: 1.15; text-shadow: 1px 2px 3px #00000030; white-space: nowrap; }
+    .so-valor::after { content: ""; display: inline-block; margin-left: .4em; border-left: .3em solid transparent; border-right: .3em solid transparent; border-top: .5em solid currentColor; vertical-align: .08em; }
+    .so-select { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; font: inherit; cursor: pointer; appearance: none; }
+    .so-select:disabled { cursor: default; }
+    .so-pick:has(.so-select:focus-visible) { outline: 3px solid var(--teal); outline-offset: 4px; border-radius: 8px; }
+
+    /* (T17i) capítulo de QUADRINHO: a regra `.reader-comic .reader-box:first-of-type` do Leitor (a folha escura das páginas) pegava este
+       bloco, que é a primeira <section> da página: ele ficava roxo-noite, com o rótulo verde quase invisível e outra margem (e a caixa de
+       outro tamanho que nos capítulos de prosa e vídeo). Aqui ele volta a ser a folha de papel de sempre, com a margem das outras caixas
+       (`:first-of-type` conta como uma classe: este seletor tem quatro, para ganhar daquele, que tem três). */
+    .reader-comic .reader-box.paper.story-order { background: var(--paper), var(--sheet); background-color: var(--sheet); color: var(--green); padding: clamp(1.4rem, 5vw, 3.5rem); }
+
+    /* cada ordem é um "container" (container-type): o rótulo mede a letra pela largura dela (100cqi) */
+    .so-order { position: relative; grid-column: 1; grid-row: 1; display: grid; grid-template-columns: minmax(0, 38%) minmax(0, 1fr) minmax(0, 38%); align-items: end; container-type: inline-size; }
+    .so-order[hidden] { display: none; }
+    .so-side.prev, .so-lugar.prev { grid-column: 1; }
+    .so-side.next, .so-lugar.next { grid-column: 3; }
+    .so-side, .so-lugar { display: flex; flex-direction: column; min-width: 0; color: var(--green); text-decoration: none; }
+    .so-side.prev, .so-lugar.prev { align-items: flex-start; text-align: left; }
+    .so-side.next, .so-lugar.next { align-items: flex-end; text-align: right; }
+    /* o "lado fantasma" (T17i): guarda o lugar do lado que não existe (a primeira ou a última da ordem), com o mesmo tamanho; invisível */
+    .so-lugar { visibility: hidden; }
+    /* a MOLDURA da arte (T17i): a MESMA proporção para todas as obras (PROPORCAO_DA_MOLDURA em src/lib/artesDaOrdem.ts), para a caixa não
+       mudar de tamanho entre as obras nem ao trocar de ordem. A arte se encaixa dentro dela, inteira, encostada embaixo. */
+    .so-art { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); width: 89%; aspect-ratio: 1 / 1; min-height: 0; overflow: clip; transform-origin: 50% 92%; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+    .so-img { grid-area: 1 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transition: opacity .4s ease; }
+    .so-img-2 { opacity: 0; }
+    /* o rótulo "Ler/Assistir/Jogar [obra]" (T17i): SEMPRE numa linha só. A letra é a menor entre o máximo (--so-cap) e a que faz os
+       rótulos da linha (os dois lados + o espaço entre eles = --so-em, medido no build na fonte de verdade) caberem na largura da caixa;
+       a altura da linha é fixa (a do tamanho máximo), então letra menor não muda a altura da caixa. O rótulo pode passar por baixo do
+       meio da caixa (largura do próprio texto), nunca por cima do outro rótulo: a conta já reserva o espaço dos dois. */
+    .so-label { display: flex; flex-direction: column; gap: .3rem; width: max-content; margin-top: .1rem; font-size: min(var(--so-cap), calc(100cqi / var(--so-em, 30))); font-weight: 500; line-height: calc(var(--so-cap) * 1.2); white-space: nowrap; text-shadow: 1px 2px 3px #00000030; }
+    .so-side.next .so-label { align-items: flex-end; }
+    .so-arrow { display: block; width: clamp(62px, 10vw, 125px); height: auto; filter: drop-shadow(1px 2px 2px #00000030); }
+
+    /* Arte em CAMADAS (T17h, `order_art` do work.json): a tela de montagem tem a proporção da arte do autor (--ar) e cada personagem é um <img>
+       posicionado pelo CENTRO (--x, --y), com largura em % da tela (--w), giro (--r) e opacidade (--o). Com o mouse por cima (ou o foco do
+       teclado) valem --hx, --hy, --hw, --hr e --ho; o que a camada não define em "hover" fica como estava (var(--hx, var(--x))). UMA transição
+       só, a mesma para todas as camadas e para os dois sentidos (ir e voltar). A tela corta o que sair dela; o estado do mouse cabe nela. */
+    /* (T17i) a moldura continua com a proporção fixa; a tela de montagem (.so-stage, proporção da arte) se encaixa dentro dela como um
+       `object-fit: contain`: a maior possível sem sair da moldura, embaixo e no centro. A moldura é um container de tamanho (cqw/cqh). */
+    .so-art.so-layers { display: block; position: relative; container-type: size; }
+    .so-stage { position: absolute; bottom: 0; left: 50%; translate: -50% 0; width: min(100cqw, calc(100cqh * var(--razao))); aspect-ratio: var(--ar); overflow: clip; }
+    .so-layer { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto; max-width: none; translate: -50% -50%; rotate: var(--r, 0deg); opacity: var(--o, 1); pointer-events: none;
+      transition-property: left, top, width, rotate, opacity; transition-duration: .6s; transition-timing-function: cubic-bezier(.2, .7, .2, 1); }
+    a.so-side:is(:hover, :focus-visible) .so-layer { left: var(--hx, var(--x)); top: var(--hy, var(--y)); width: var(--hw, var(--w)); rotate: var(--hr, var(--r, 0deg)); opacity: var(--ho, var(--o, 1)); }
+    /* (T17l) `"bleed": true` no order_art (as asas do Giuseppe, "print giuseppe 3.png"): a moldura e a tela deixam de cortar, e as camadas
+       saem dela até a borda da caixa, que serve de "máscara de camada" (.story-order tem overflow: hidden e o canto arredondado). Ficam por
+       trás da frase de cima (.so-top, z-index 2) e não pegam clique (.so-layer tem pointer-events: none): o seletor e a outra história
+       continuam clicáveis. Nada disso ocupa lugar (as camadas são absolutas): a caixa não muda de tamanho. Só fora do celular: até 700 px
+       a caixa é estreita e as duas artes ficam lado a lado, e a moldura volta a cortar (a camada não cobre a outra história). */
+    @media (min-width: 701px) {
+      .so-art.so-sangra, .so-art.so-sangra > .so-stage { overflow: visible; }
+    }
+
+    /* mouse por cima (e teclado): a arte troca da 1 para a 2 com um leve crescimento */
+    a.so-side:is(:hover, :focus-visible) .so-art:not(.so-layers) { transform: scale(1.07); }
+    a.so-side:is(:hover, :focus-visible) .so-img-2 { opacity: 1; }
+    a.so-side:is(:hover, :focus-visible) .so-img-1:not(:only-child) { opacity: 0; }
+    a.so-side:is(:hover, :focus-visible) .so-label { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
+    a.so-side:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-radius: 12px; }
+    /* movimento reduzido: nada anima. A troca de imagens acontece sem crescer e sem transição. Nas camadas (T17i): a arte em que algo SURGE
+       (o Thymorr; as asas e os olhos do Giuseppe; os olhos da Iris) troca de uma vez para o desenho final do autor, com tudo no lugar (os
+       olhos ficam em cima do rosto); a arte que só se mexe (Luz & Sangue, Alô?) fica parada. */
+    @media (prefers-reduced-motion: reduce) {
+      .so-art, .so-img, .so-layer { transition: none; }
+      a.so-side:is(:hover, :focus-visible) .so-art { transform: none; }
+      a.so-side:is(:hover, :focus-visible) .so-stage:not(.so-tem-surge) .so-layer { left: var(--x); top: var(--y); width: var(--w); rotate: var(--r, 0deg); opacity: var(--o, 1); }
+    }
+
+    /* "fora da ordem": o aviso fica no meio da caixa, por cima dos lados fantasmas (que guardam o tamanho) */
+    .so-note { grid-column: 1 / -1; grid-row: 1; align-self: center; z-index: 1; margin: 0; text-align: center; font-size: 1.05rem; }
+
+    /* celular: a frase e o seletor vão para cima, no fluxo, e as duas artes dividem a largura. Os rótulos (T17i) ganham uma linha cada,
+       com a largura toda da caixa: o de quem vem antes logo abaixo das artes, à esquerda; o de quem vem depois na linha de baixo, à direita.
+       Cada lado ocupa as três linhas da grade (subgrid), então os dois <a> continuam lado a lado e do mesmo tamanho; a letra é a que faz o
+       MAIOR rótulo da caixa caber na largura toda (--so-em-1). */
+    @media (max-width: 700px) {
+      .so-top { position: static; transform: none; width: auto; max-width: none; margin-bottom: .3rem; }
+      .so-title { white-space: normal; }
+      .so-top, .so-order { grid-column: 1; }
+      .so-top { grid-row: 1; }
+      .so-order { grid-row: 2; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto; column-gap: .3rem; }
+      .so-side.prev, .so-lugar.prev { grid-column: 1; }
+      .so-side.next, .so-lugar.next { grid-column: 2; }
+      .so-side, .so-lugar { grid-row: 1 / span 3; display: grid; grid-template-rows: subgrid; grid-template-columns: minmax(0, 1fr); }
+      .so-art { grid-row: 1; width: 100%; }
+      .so-label { font-size: min(var(--so-cap), calc(100cqi / var(--so-em-1, 20))); }
+      .so-side.prev .so-label, .so-lugar.prev .so-label { grid-row: 2; justify-self: start; }
+      .so-side.next .so-label, .so-lugar.next .so-label { grid-row: 3; justify-self: end; align-items: flex-end; }
+      .so-note { grid-row: 1 / -1; }
+    }
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+// A página Histórias: /en/works/ e /pt/works/. O miolo é o texto da página (ConteudoDeHistorias) com o atalho {{stories}},
+// e o componente SecaoHistorias entra no slot "atalho-stories" do layout, que o encaixa no lugar do marcador.
+// Lição: docs/aprendendo-astro/07-paginas.md.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ConteudoDeHistorias from "../../../components/ConteudoDeHistorias.astro";
+import SecaoHistorias from "../../../components/SecaoHistorias.astro";
+import { emissariosMostramTextos, langs, t, type Lang } from "../../../lib/config";
+import { COM_RASCUNHOS, dadosDoIdioma } from "../../../lib/conteudo";
+import { dadosDosAtalhos } from "../../../lib/paginas";
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const dados = await dadosDoIdioma(lang);
+const { historias } = dadosDosAtalhos(dados, COM_RASCUNHOS, emissariosMostramTextos);
+const alternates = Object.fromEntries(langs.map((l) => [l, `/${l}/works/`]));
+---
+
+<BaseLayout lang={lang} title={t(lang, "works")} alternates={alternates}>
+  <ConteudoDeHistorias lang={lang} />
+  <SecaoHistorias slot="atalho-stories" lang={lang} cartoes={historias.cartoes} seletor={historias.seletor} />
+</BaseLayout>

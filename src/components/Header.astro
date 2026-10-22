@@ -1,0 +1,121 @@
+---
+// Cabeçalho do site: logo, menu e seletor de idioma (o <header> do shell() do build.py).
+import { assetUrl } from "../lib/assets";
+import { otimizar, PERFIS } from "../lib/imagens";
+import { langName, htmlLang, langs, logoFile, siteName, t, type Lang } from "../lib/config";
+import { menuDoIdioma, type Menu, type MenuLink } from "../lib/nav";
+
+interface Props {
+  lang: Lang;
+  /** Endereço desta mesma página em cada idioma. Onde não existe, o seletor leva à home do idioma. */
+  alternates?: Partial<Record<Lang, string>>;
+  /** Endereço da página atual (marca o item do menu com aria-current). Padrão: o endereço real da página. */
+  current?: string;
+  /** Só "Histórias" + o seletor de idioma (a página 404 do build.py passa todas as bandeiras do menu como falsas). */
+  menuMinimo?: boolean;
+}
+
+const { lang, alternates = {}, current = Astro.url.pathname, menuMinimo = false } = Astro.props;
+
+// Itens do menu na mesma ordem do shell(): Histórias sempre; depois Sobre, Notícias, Extras e Apoio se existirem.
+const menu: Menu = menuMinimo ? { about: false, news: false, support: false, extras: [] } : await menuDoIdioma(lang);
+const links: MenuLink[] = [{ href: `/${lang}/works/`, label: t(lang, "works") }];
+if (menu.about) links.push({ href: `/${lang}/about/`, label: t(lang, "about") });
+if (menu.news) links.push({ href: `/${lang}/news/`, label: t(lang, "news") });
+const support: MenuLink | undefined = menu.support ? { href: `/${lang}/support/`, label: t(lang, "support") } : undefined;
+
+// A logo: o `src` continua sendo o arquivo original (logos/Hate Cycle Glow.png, 2,3 MB); as versões leves em WebP vão no `srcset`
+// (T17, src/lib/imagens.ts). Sem `loading="lazy"`: é a primeira coisa da página. width/height = proporção do original (evita pulo).
+const logo = await otimizar(logoFile, PERFIS.logo);
+
+// Os outros idiomas para o seletor: link para a mesma página no outro idioma, ou para a home dele.
+const outros = langs
+  .filter((l) => l !== lang)
+  .map((l) => ({ lang: l, href: alternates[l] ?? `/${l}/`, htmlLang: htmlLang(l), nome: langName(l) }));
+---
+
+<header class="site-header">
+  <a class="brand" href={`/${lang}/`}><img src={assetUrl(logoFile)} srcset={logo?.srcset} sizes={logo?.sizes} width={logo?.width} height={logo?.height} alt={siteName} /></a>
+  <nav class="main-nav" aria-label="Main">{links.map((l) => <a href={l.href} aria-current={current === l.href ? "page" : undefined}>{l.label}</a>)}{
+      menu.extras.length > 0 && (
+        <details class="dd" data-current={menu.extras.some((x) => x.href === current) ? "" : undefined}>
+          <summary>{t(lang, "extras")}</summary>
+          <div class="dd-menu">
+            {menu.extras.map((x) => <a href={x.href} aria-current={current === x.href ? "page" : undefined}>{x.label}</a>)}
+          </div>
+        </details>
+      )
+    }{support && <a href={support.href} aria-current={current === support.href ? "page" : undefined}>{support.label}</a>}{
+      outros.length > 0 && (
+        <details class="dd lang-dd">
+          <summary>{langName(lang)}</summary>
+          <div class="dd-menu">
+            {outros.map((o) => <a href={o.href} hreflang={o.lang} lang={o.htmlLang}>{o.nome}</a>)}
+          </div>
+        </details>
+      )
+    }
+  </nav>
+</header>
+
+<style>
+  @layer site {
+    /* Copiado de static/style.css (seção "cabeçalho"), mesmos valores; cores e larguras vêm de tokens.css.
+       Estes estilos valem SÓ para este componente (o Astro acrescenta uma marca única a cada seletor). */
+    .site-header {
+      display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem;
+      max-width: var(--w-header); margin: 0 auto; padding: clamp(1rem, 3vw, 2.2rem) clamp(1rem, 4vw, 2.5rem) clamp(1.2rem, 3vw, 2rem);
+      position: relative; z-index: 5; /* acima do conteúdo: o menu suspenso não pode ser coberto */
+    }
+    .brand img { display: block; width: var(--logo-w); height: auto; }
+    .main-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem clamp(.9rem, 2vw, 1.6rem); margin-left: auto; padding-bottom: .4rem; }
+    .main-nav > a, .dd > summary {
+      color: var(--on-brand); text-decoration: none; font-weight: 700; font-size: clamp(1rem, 1.7vw, 1.3rem); cursor: pointer; list-style: none;
+      padding: .2rem 0; border-bottom: 2px solid transparent; text-shadow: var(--shadow-text);
+    }
+    .main-nav a:hover, .dd > summary:hover { color: var(--on-brand); text-shadow: 0 0 16px var(--cyan), 0 0 4px var(--cyan); transition: text-shadow .3s; }
+    .main-nav > a[aria-current], .dd[data-current] > summary { border-bottom-color: var(--on-brand); }
+    .dd { position: relative; }
+    .dd > summary::-webkit-details-marker { display: none; }
+    .dd > summary::after { content: " ▾"; font-size: .8em; }
+    .dd[open] > summary::after { content: " ▴"; }
+    .dd-menu {
+      position: absolute; right: 0; top: calc(100% + .5rem); min-width: 10rem; z-index: 10; display: flex; flex-direction: column;
+      background: var(--night); border-radius: 12px; padding: .4rem; box-shadow: var(--shadow-menu);
+    }
+    /* se o menu aberto sairia da tela pela direita, o <script> daqui põe .dd-flip e ele abre alinhado à direita do botão (B32, T17k; o site.js faz o mesmo no Python) */
+    .dd.dd-flip .dd-menu { left: auto; right: 0; }
+    .dd-menu a { color: #e9fff8; text-decoration: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 500; }
+    .dd-menu a:hover, .dd-menu a[aria-current] { background: #ffffff1c; color: var(--on-brand); }
+
+    @media (max-width: 700px) {
+      .site-header { align-items: flex-start; }
+      .main-nav { margin-left: 0; }
+      .dd-menu { right: auto; left: 0; }
+    }
+  }
+</style>
+
+<script>
+  // Fecha o menu suspenso (Extras / idioma) quando o visitante clica fora dele.
+  // É o mesmo <script> que o shell() do build.py escrevia no fim de toda página.
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll<HTMLDetailsElement>("details.dd[open]").forEach((d) => {
+      if (!d.contains(e.target as Node | null)) d.removeAttribute("open");
+    });
+  });
+
+  // B32 (T17k): se, ao abrir, o menu sair da tela pela direita (celular, página 404), ele abre alinhado à direita do botão (.dd-flip).
+  // O evento "toggle" não sobe até o document: só a captura o pega. Mesma regra do bloco 7 do static/site.js.
+  document.addEventListener(
+    "toggle",
+    (e) => {
+      const d = e.target;
+      if (!(d instanceof HTMLDetailsElement) || !d.matches("details.dd")) return;
+      d.classList.remove("dd-flip");
+      const menu = d.open ? d.querySelector(".dd-menu") : null;
+      if (menu && menu.getBoundingClientRect().right > document.documentElement.clientWidth) d.classList.add("dd-flip");
+    },
+    true,
+  );
+</script>

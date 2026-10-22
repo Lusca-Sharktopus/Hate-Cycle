@@ -1,0 +1,140 @@
+---
+// Moldura de toda página (o shell() do build.py): <head> completo, cabeçalho, conteúdo e rodapé.
+// Esta parte, entre as linhas ---, roda só no build (no seu computador), nunca no navegador.
+import "../styles/fontes.css";
+import "../styles/tokens.css";
+import "../styles/global.css";
+// Fontes principais que quase toda página usa (texto = Lexend, títulos = Oswald), só o recorte "latin" (letras do português e do inglês).
+// O `?url` entrega o endereço final do arquivo (com o carimbo do Vite no nome), o mesmo que o fontes.css usa: o navegador começa a
+// baixar já no <head>, sem esperar o CSS. As outras fontes (e os outros alfabetos) só são baixadas se a página usar.
+import lexendLatin from "@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2?url";
+import oswaldLatin from "@fontsource-variable/oswald/files/oswald-latin-wght-normal.woff2?url";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Runas from "../components/Runas.astro";
+import Abertura from "../components/Abertura.astro";
+import { assetUrl, assetVersioned } from "../lib/assets";
+import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config";
+import { ATALHOS } from "../lib/corpos";
+import { finalizarMain } from "../lib/pagina";
+import { otimizarImagensDoHtml } from "../lib/imagensDoHtml";
+import { tirarScriptsDosPosts } from "../lib/postsIncorporados";
+import PostsIncorporados from "../components/PostsIncorporados.astro";
+import { icones } from "../lib/imagens";
+
+interface Props {
+  lang: Lang;
+  /** Título da página. Sem título (ou igual ao nome do site), a aba mostra só o nome do site. */
+  title?: string;
+  /** Descrição para buscadores e redes sociais. Padrão: a frase de apresentação do site (ui.hero_sub). */
+  description?: string;
+  /** Imagem de pré-visualização (og:image), relativa a static/ (ex.: "covers/x.png"). */
+  image?: string;
+  /** Endereço desta mesma página em cada idioma (vira <link hreflang> e o seletor de idioma).
+   *  `null` = "esta página não existe (ou não é anunciada) naquele idioma", inclusive no próprio: é o caso do capítulo
+   *  `unlisted` (T12), que no build.py recebe alt_c com o próprio idioma valendo None e por isso fica sem nenhum hreflang. */
+  alternates?: Partial<Record<Lang, string | null>>;
+  /** Página fora dos buscadores (capítulos "unlisted"). */
+  noindex?: boolean;
+  /** Classes do <body> (ex.: "reader" no leitor de capítulos: a página não ganha a "folha" de papel). */
+  bodyClass?: string;
+  /** Semente das runas do fundo: o endereço da página, como o page() do build.py passa (ex.: "/pt/").
+   *  Sem semente, usa o endereço desta página. Exceção: a 404 do build.py usa o título, "404" (src/pages/404.astro passa seed="404"). */
+  seed?: string;
+  /** Menu só com "Histórias" e o seletor de idioma, sem Sobre/Notícias/Extras/Apoio: é como o build.py monta a página 404. */
+  menuMinimo?: boolean;
+}
+
+const { lang, title, description, image, alternates = {}, noindex = false, bodyClass = "", seed, menuMinimo = false } = Astro.props;
+
+const pagina = Astro.url.pathname; // ex.: "/pt/"
+const semente = seed ?? pagina;
+
+// Mesma regra do shell(): ttl = site if title == site else f"{title} | {site}"
+const fullTitle = !title || title === siteName ? siteName : `${title} | ${siteName}`;
+const desc = description || t(lang, "hero_sub");
+
+// og:image precisa ser um endereço completo. Aqui a base é o `site` do astro.config.mjs (https://hatecycle.com).
+// DIFERENÇA INTENCIONAL do shell(): lá o resultado era site_url + asset(image), e como BASE (config.json → base_url)
+// está como endereço completo, saía "https://hatecycle.comhttps://…" (bug B1). Aqui não existe `base`, então não duplica.
+const site = Astro.site ?? new URL(siteUrl);
+const ogImage = image ? (/^https?:/.test(image) ? image : new URL(assetUrl(image), site).href) : undefined;
+
+// Um hreflang por idioma. O próprio idioma da página entra, a não ser que `alternates` diga outra coisa para ele
+// (o page() do build.py faz alt.setdefault(lang, url): só preenche se a chave não existe; ver `alternates` acima).
+const todos: Partial<Record<Lang, string | null>> = { [lang]: pagina, ...alternates };
+const hreflangs = langs.flatMap((l) => {
+  const href = todos[l];
+  return href ? [{ lang: l, href }] : [];
+});
+const paraOSeletor = Object.fromEntries(hreflangs.map((h) => [h.lang, h.href])) as Partial<Record<Lang, string>>;
+
+// Ícone da aba: o logos/favicon.png do autor tem 1,7 MB (3508 px) e o navegador o baixaria inteiro para desenhar 16 px. As versões de
+// 32 e 192 px saem do mesmo arquivo (T17); se o arquivo mudar de nome ou sumir, o link volta a apontar para o original.
+const iconesDoSite = await icones("logos/favicon.png", [32, 192]);
+
+const isReader = bodyClass.includes("reader"); // no leitor, o <main> não ganha a "folha" de papel
+
+// O MIOLO da página como TEXTO (T11). O shell() do build.py recebe o <main> como texto e faz o acabamento sobre ele
+// (src/lib/pagina.ts: atalhos, versalete UMA vez, data-prev/data-next). Aqui o Astro faz o mesmo: Astro.slots.render()
+// executa os componentes do miolo e devolve o HTML pronto; depois passa pelo mesmo acabamento.
+// Atalhos ({{stories}} etc.): a página que os usa entrega o componente de cada um num slot com nome "atalho-<nome>"
+// (ex.: <SecaoHistorias slot="atalho-stories" />); aqui o HTML de cada slot é trocado no lugar do marcador do texto.
+const miolo = await Astro.slots.render("default");
+const atalhos: Partial<Record<(typeof ATALHOS)[number], string>> = {};
+for (const nome of ATALHOS) {
+  if (Astro.slots.has(`atalho-${nome}`)) atalhos[nome] = await Astro.slots.render(`atalho-${nome}`);
+}
+const { html: acabado, scripts } = finalizarMain(miolo, lang, atalhos);
+// T17: as imagens do <main> (dos componentes e do texto do autor) ganham as versões leves no srcset; o `src` não muda (src/lib/imagensDoHtml.ts).
+// T17g/T17j (B27): nenhuma página publicada leva script do X, do Reddit ou do Instagram. O passo tira esses <script> do <main> e deixa o
+// <blockquote> do autor como está (src/lib/postsIncorporados.ts); no navegador, o PostsIncorporados troca cada post pela moldura isolada.
+const { html: semScriptsDeTerceiros, relatorio: relatorioDosPosts } = tirarScriptsDosPosts(acabado);
+for (const aviso of relatorioDosPosts.avisos) console.warn(`[embeds] ${Astro.url.pathname}: ${aviso}`);
+const main = await otimizarImagensDoHtml(semScriptsDeTerceiros);
+---
+
+<!doctype html>
+<html lang={htmlLang(lang)}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="description" content={desc} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <Abertura parte="cabeca" />
+    {
+      iconesDoSite.length > 0
+        ? iconesDoSite.map((i) => <link rel="icon" href={i.href} type="image/png" sizes={`${i.lado}x${i.lado}`} />)
+        : <link rel="icon" href="/logos/favicon.png" type="image/png" />
+    }
+    <!-- Fontes: servidas pelo próprio site (T17; src/styles/fontes.css). Antes vinham do Google Fonts (e as runas do fundo pediam
+         recortes de glifos a ele); agora nenhuma página fala com outro domínio. Só as duas fontes de toda página são pré-carregadas. -->
+    <link rel="preload" href={lexendLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={oswaldLatin} as="font" type="font/woff2" crossorigin />
+    <!-- Os estilos da moldura (tokens.css, global.css e os dos componentes) o Astro empacota sozinho em /_astro/. -->
+    <!-- custom.css é o arquivo pessoal do autor (static/custom.css): vem DEPOIS, para ganhar dos demais. Pode não existir. -->
+    <link rel="stylesheet" href={assetVersioned("custom.css")} />
+    {hreflangs.map((h) => <link rel="alternate" hreflang={h.lang} href={h.href} />)}
+    {siteUrl && <link rel="alternate" type="application/rss+xml" href={`/${lang}/feed.xml`} />}
+  </head>
+  <body class={bodyClass}>
+    <Runas seed={semente} />
+    <Abertura parte="corpo" />
+    <a class="skip" href="#main">Skip to content</a>
+    <Header lang={lang} alternates={paraOSeletor} menuMinimo={menuMinimo} />
+    <div class="layout">
+      <main id="main" class={isReader ? undefined : "sheet"}>
+        <Fragment set:html={main} />
+      </main>
+    </div>
+    <Footer lang={lang} />
+    {relatorioDosPosts.posts.length > 0 && <PostsIncorporados />}
+    {/* O site.js (ordenação, carrossel, imagem ausente…) virou <script> dos componentes que o usam. O Astro os deixa dentro do miolo;
+        finalizarMain() os tira de lá e eles voltam aqui, no fim da página, como o <script src="site.js"> do build.py. */}
+    <Fragment set:html={scripts} />
+  </body>
+</html>

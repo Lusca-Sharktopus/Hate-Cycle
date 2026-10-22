@@ -1,0 +1,25 @@
+---
+// A lista de Personagens: /en/characters/ e /pt/characters/. SÓ EXISTE com `show_extras: true` (hoje false). Lição: docs/aprendendo-astro/09-endpoints.md.
+// É o bloco "PERSONAGENS" do build() do build.py (~898–903).
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ListaDePersonagens from "../../../components/ListaDePersonagens.astro";
+import { langs, type Lang } from "../../../lib/config";
+import { dadosDeTodosOsIdiomas } from "../../../lib/conteudo";
+import { listaDePersonagens, type ListaDePersonagens as Lista } from "../../../lib/paginasDeExtras";
+
+export async function getStaticPaths() {
+  const dadosDe = await dadosDeTodosOsIdiomas();
+  const quantos = Object.fromEntries(langs.map((l) => [l, dadosDe[l].personagens.length])) as Record<Lang, number>;
+  return langs.flatMap((lang) => {
+    const lista = listaDePersonagens(dadosDe[lang].personagens, lang, quantos);
+    return lista ? [{ params: { lang }, props: { lista } }] : [];
+  });
+}
+
+const lang = Astro.params.lang as Lang;
+const { lista } = Astro.props as { lista: Lista };
+---
+
+<BaseLayout lang={lang} title={lista.tituloDaPagina} alternates={lista.alternativas}>
+  <ListaDePersonagens lista={lista} />
+</BaseLayout>
