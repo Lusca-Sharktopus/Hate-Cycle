@@ -3,6 +3,7 @@
 // O miolo do <main> do build.py (linhas ~833–847). Só desenha: tudo vem decidido em `pagina` (src/lib/artigos.ts →
 // paginaDaListaDeNoticias). O HTML já traz TODAS as notícias, da 11ª em diante escondidas; é o <script> daqui que mostra
 // a página certa, filtra pela busca e monta os botões (o bloco 6 do static/site.js).
+// T17j: o resumo cortado termina num degradê (`news-fade`) e o link vira "…leia mais" (as reticências entram aqui, não no config.json).
 //
 // ⚠ Escrito "colado" de propósito: espaço entre dois elementos em linha aparece na tela, e o teste compara a estrutura com a
 // do site atual. Não quebre as linhas longas do HTML abaixo.
@@ -17,7 +18,7 @@ const { pagina: p } = Astro.props;
 const semScript = "<style>.news-item[hidden]{display:block}</style>";
 ---
 
-<div class="wrap block news-wrap"><h1>{p.titulo}</h1><div class="news-tools"><input type="search" class="news-search" placeholder={p.busca.placeholder} aria-label={p.busca.placeholder} autocomplete="off" /></div><div class="news-list">{p.linhas.map((n) => <article class="news-item" hidden={n.escondidaNoInicio} data-search={n.busca}><time>{n.data}</time><h2>{n.titulo}</h2><div class="news-body">{n.miniatura && <a class="news-thumb" href={n.url} tabindex="-1" aria-hidden="true"><img src={assetUrl(n.miniatura)} alt="" loading="lazy" /></a>}<div class="news-text">{n.tags.length > 0 && <div class="chips">{n.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}<p>{n.resumo} <a class="more" href={n.url}>{p.rotuloDoLink}</a></p></div></div></article>)}</div><p class="news-none" hidden>{p.busca.semResultados}</p><nav class="pagination" aria-label={p.paginacao.rotulo} data-prev={p.paginacao.anterior} data-next={p.paginacao.proximo} data-per={p.paginacao.porPagina}></nav><noscript set:html={semScript}></noscript></div>
+<div class="wrap block news-wrap"><h1>{p.titulo}</h1><div class="news-tools"><input type="search" class="news-search" placeholder={p.busca.placeholder} aria-label={p.busca.placeholder} autocomplete="off" /></div><div class="news-list">{p.linhas.map((n) => <article class="news-item" hidden={n.escondidaNoInicio} data-search={n.busca}><time>{n.data}</time><h2>{n.titulo}</h2><div class="news-body">{n.miniatura && <a class="news-thumb" href={n.url} tabindex="-1" aria-hidden="true"><img src={assetUrl(n.miniatura)} alt="" loading="lazy" /></a>}<div class="news-text">{n.tags.length > 0 && <div class="chips">{n.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}{n.corte ? <p>{n.corte.inicio}<span class="news-fade">{n.corte.fim}</span> <a class="more" href={n.url}>…{p.rotuloDoLink}</a></p> : <p>{n.resumo} <a class="more" href={n.url}>{p.rotuloDoLink}</a></p>}</div></div></article>)}</div><p class="news-none" hidden>{p.busca.semResultados}</p><nav class="pagination" aria-label={p.paginacao.rotulo} data-prev={p.paginacao.anterior} data-next={p.paginacao.proximo} data-per={p.paginacao.porPagina}></nav><noscript set:html={semScript}></noscript></div>
 
 <style is:global>
   @layer site {
@@ -40,6 +41,15 @@ const semScript = "<style>.news-item[hidden]{display:block}</style>";
     .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; }
     .news-text p { margin: 0; max-width: 62ch; font-size: 1.05rem; line-height: 1.45; }
     .news-text .more { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+    /* T17j (pedido do autor, 21/10/2026, "print gradient.png"): quando o resumo foi cortado, as últimas palavras somem num degradê no lugar
+       das reticências, e o "…" vai para o começo do link ("…leia mais"). O degradê vai da cor do texto ao TRANSPARENTE: assim ele some
+       no fundo que estiver atrás (a textura de papel da folha), sem depender de uma cor. É só visual: as letras continuam no texto (leitor
+       de tela, busca, copiar). Navegador sem background-clip: text, ou modo de alto contraste: o fim aparece normal. */
+    .news-fade { white-space: nowrap; }
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      .news-fade { background-image: linear-gradient(to right, var(--ink) 10%, transparent 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    }
+    @media (forced-colors: active) { .news-fade { background-image: none; color: CanvasText; -webkit-text-fill-color: CanvasText; } }
     .news-none { text-align: center; color: var(--muted); padding: 2rem 0; }
     .pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .4rem; margin: 1.8rem 0 .4rem; }
     .pagination a, .pagination span { min-width: 2.6rem; height: 2.6rem; padding: 0 .8rem; display: inline-flex; align-items: center; justify-content: center; border-radius: .4rem; font-weight: 600; text-decoration: none; color: var(--green); }

@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canalDoYoutubeComoNoPython, canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, semBlocoDeOrdem, semQuadrosDosPosts, semScriptsAntigosDosComentarios, semScriptsDosPosts, type PaginaLida } from "./ajudantes/html";
+import { canalDoYoutubeComoNoPython, canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -149,6 +149,17 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
   return { html: saida, quantos, conferem };
 }
 
+// ───────────── as diferenças decididas da T17j (cada uma provada no seu teste) ─────────────
+
+/** O HTML do Python com o que o Astro decidiu diferente: sem os scripts dos posts (T17g) e só 4 histórias na home (T17j). */
+function pythonComoNoAstro(html: string): string {
+  return soQuatroHistoriasNaHome(semScriptsDosPosts(html).html).html;
+}
+/** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j). */
+function astroComoNoPython(html: string): string {
+  return resumoCortadoComoNoPython(homeComoNoPython(html).html).html;
+}
+
 // ───────────── página a página, grupo a grupo ─────────────
 
 for (const ref of refs) {
@@ -174,13 +185,15 @@ for (const ref of refs) {
         // T15: a única diferença aceita — o Python carrega o supabase-js do CDN e o /comments.js; o Astro, o script empacotado
         const doPython = semScriptsAntigosDosComentarios(ref.paginas[url] ?? "");
         if (doPython.sobrou) throw new Error(`${url}: o Python tem supabase-js/comments.js fora do lugar de sempre (depois do window.HC)`);
-        // T17g: o Python tem o <script src> do X/Reddit/Instagram dentro de cada post; o Astro, o quadro "Mostrar post…" (tests/embeds.test.ts)
-        py = lerPagina(semScriptsDosPosts(doPython.html).html);
+        // T17g/T17j: o Python tem o <script src> do X/Reddit/Instagram dentro de cada post; o Astro, nenhum (tests/embeds.test.ts)
+        // T17j: a home do Python tem até 5 histórias; a do Astro, até 4 (tests/home.test.ts)
+        py = lerPagina(pythonComoNoAstro(doPython.html));
         const arquivo = paginasDoDist(dist).get(url);
         if (!arquivo) throw new Error(`o Astro não gerou ${url}`);
         // T17c: o bloco "estou lendo em ordem…" só existe no Astro (tests/ajudantes/html.ts → semBlocoDeOrdem; tests/ordem.test.ts prova que só ele sai)
         // T17h: o ícone do YouTube do rodapé leva ao canal do idioma (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython; tests/canais.test.ts)
-        let html = semQuadrosDosPosts(semBlocoDeOrdem(trocarCanalDoYoutube(url, readFileSync(arquivo, "utf8"))).html).html;
+        // T17j: o trilho e o link "Ver todas as histórias" da home e o degradê do resumo cortado das Notícias (tests/home.test.ts, tests/noticias.test.ts)
+        let html = astroComoNoPython(semBlocoDeOrdem(trocarCanalDoYoutube(url, readFileSync(arquivo, "utf8"))).html);
         if (ref.marcadores) {
           const r = comMarcadores(html, ref.marcadores);
           // sem expect(valor) aqui de propósito: em caso de erro, o vitest imprimiria a chave
@@ -372,7 +385,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
   const outra = () => segundaConstrucao();
   /** As chaves do Supabase do autor viram os marcadores da referência (antes, confere que são as do config.json). */
   const lerComMarcadores = (arquivo: string): string => {
-    const r = comMarcadores(semQuadrosDosPosts(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html).html, { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
+    const r = comMarcadores(astroComoNoPython(semBlocoDeOrdem(readFileSync(arquivo, "utf8")).html), { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" });
     if (!r.conferem) throw new Error(`${arquivo}: a URL ou a chave do window.HC não são as do config.json`);
     return r.html;
   };
@@ -386,7 +399,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
   }, 240_000);
 
   test.each(Object.keys(c.paginas))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
-    const py = lerPagina(semScriptsDosPosts(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html).html);
+    const py = lerPagina(pythonComoNoAstro(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html));
     const astro = lerPagina(trocarCanalDoYoutube(url, lerComMarcadores(join(outra(), url.slice(1), "index.html"))));
     expect(astro.cabeca.titulo).toBe(py.cabeca.titulo);
     expect(astro.cabeca.metas).toEqual(py.cabeca.metas);
@@ -414,7 +427,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
       if (!py) continue;
       const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
       if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
-      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(semScriptsDosPosts(semScriptsAntigosDosComentarios(py.main).html).html)) diferentes.push(`${url} (<main>)`);
+      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(pythonComoNoAstro(semScriptsAntigosDosComentarios(py.main).html))) diferentes.push(`${url} (<main>)`);
     }
     expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);
   }, 240_000);
@@ -636,7 +649,8 @@ describe("T17h: o ícone do YouTube do rodapé leva ao canal do idioma em TODAS 
 
   test("a página Apoio em português leva ao canal pessoal do autor (e só ela fala dele)", () => {
     const html = readFileSync(paginasDoDist(dist).get("/pt/support/") ?? "", "utf8");
-    expect(html).toContain('<a href="https://www.youtube.com/@LuscaSharktopus" target="_blank" rel="noopener">Inscreva-se no canal no YouTube</a>');
+    // desde 22/10 o link é o banner do canal (static/support/banner.png), como o do Catarse
+    expect(html).toMatch(/<a href="https:\/\/www\.youtube\.com\/@LuscaSharktopus" target="_blank" rel="noopener"><img src="\/support\/banner\.png" alt="Inscreva-se no canal Lusca Sharktopus no YouTube"[^>]*><\/a>/);
     expect(html).not.toMatch(/youtube\.com\/@HateCycle(?![A-Za-z])/);
   });
 

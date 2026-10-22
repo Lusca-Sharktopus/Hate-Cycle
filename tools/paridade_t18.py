@@ -24,8 +24,9 @@ O que confere, em cada par:
   4. Com a régua da baseline (tools/baseline.py → Lido): título, descrição, lang, canonical, hreflang, og:*, RSS, meta refresh e o
      TEXTO visível de cada página; IDs de comentários (data-page) de cada página. No publicado, cada lado é comparado com
      baseline/ (o Python de hoje tem de bater com a foto — senão a foto está velha); nas prévias, Astro × Python.
-     O texto do bloco "estou lendo em ordem…" (T17c) e o dos quadros "Mostrar post…" (T17g), que só existem no Astro, saem antes de ler
-     (as mesmas regras de tests/ajudantes/html.ts).
+     O texto do bloco "estou lendo em ordem…" (T17c) e o do link "Ver todas as histórias" da home (T17j), que só existem no Astro,
+     saem antes de ler; o resumo cortado da lista de Notícias volta à forma do Python, e a home do Python fica com os 4 primeiros
+     cartões, como a do Astro (T17j; as mesmas regras de tests/ajudantes/html.ts).
 Sai com 0 se tudo bater (ou só sobrar o que foi decidido), 1 se houver diferença. Só biblioteca padrão + Node (para o passo 3).
 """
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, tempfile
@@ -106,17 +107,33 @@ def sem_bloco_de_ordem(html: str) -> tuple[str, int]:
     return html, n
 
 
-# T17g: o quadro "Mostrar post…" só existe no Astro (o gate não tem <div> dentro: tem aviso, botão, link e status).
-RE_QUADRO_DE_POST = re.compile(r'<div class="embed-gate"[^>]*>.*?</div>', re.S)
+# T17j: o que a home e a lista de Notícias do Astro mostram de diferente, decidido (as mesmas regras de tests/ajudantes/html.ts →
+# homeComoNoPython, soQuatroHistoriasNaHome, resumoCortadoComoNoPython; aqui só para a leitura do TEXTO).
+RE_LINK_DA_HOME = re.compile(r'<a class="rail-btn rail-next rail-more"[^>]*>.*?</a>', re.S)
+RE_RESUMO_CORTADO = re.compile(r'<span class="news-fade">([^<]*)</span> (<a class="more" href="[^"]*">)…')
+RE_CARTAO = re.compile(r'<article class="work-card[ "].*?</article>', re.S)
 
 
-def sem_quadros_dos_posts(html: str) -> tuple[str, int]:
-    """Tira cada <div class="embed-gate">…</div> (T17g). Mesma regra de semQuadrosDosPosts() (aqui só para a leitura do TEXTO)."""
-    return RE_QUADRO_DE_POST.subn("", html)
+def astro_como_no_python(html: str) -> tuple[str, int]:
+    """Tira o link "Ver todas as histórias" da home e desfaz o degradê do resumo cortado (T17j). Devolve o HTML e quantas trocas."""
+    html, a = RE_LINK_DA_HOME.subn("", html)
+    html, b = RE_RESUMO_CORTADO.subn(r"\1… \2", html)
+    return html, a + b
+
+
+def python_como_no_astro(html: str) -> tuple[str, int]:
+    """Na home (a página com o carrossel data-more-url), só os 4 primeiros cartões (T17j)."""
+    if 'data-more-url="' not in html:
+        return html, 0
+    cartoes = list(RE_CARTAO.finditer(html, html.index('data-more-url="')))
+    for m in reversed(cartoes[4:]):
+        html = html[: m.start()] + html[m.end():]
+    return html, max(0, len(cartoes) - 4)
 
 
 def ler_site(pasta: Path, tirar_ordem: bool):
-    paginas, comentarios, textos, ordem, quadros = {}, {}, {}, 0, 0
+    """`tirar_ordem` = é o site do Astro (tira o que só ele tem); senão, o do Python (só a regra da home com 4 histórias)."""
+    paginas, comentarios, textos, ordem, trocas = {}, {}, {}, 0, 0
     for f in sorted(pasta.rglob("*.html")):
         rel = f.relative_to(pasta).as_posix()
         if rel.startswith("dev/") or (STATIC / rel).is_file():
@@ -126,8 +143,11 @@ def ler_site(pasta: Path, tirar_ordem: bool):
         if tirar_ordem:
             html, n = sem_bloco_de_ordem(html)
             ordem += n
-            html, q = sem_quadros_dos_posts(html)
-            quadros += q
+            html, q = astro_como_no_python(html)
+            trocas += q
+        else:
+            html, q = python_como_no_astro(html)
+            trocas += q
         L = BL.ler(html)
         paginas[url] = {"title": L.title, "description": L.description, "lang": L.lang, "canonical": L.canonical,
                         "hreflang": dict(sorted(L.hreflang.items())), "og": dict(sorted(L.og.items())),
@@ -135,7 +155,7 @@ def ler_site(pasta: Path, tirar_ordem: bool):
         if L.data_pages:
             comentarios[url] = L.data_pages
         textos[url] = L.texto()
-    return {"paginas": paginas, "comentarios": comentarios, "textos": textos, "blocos_de_ordem": ordem, "quadros_de_posts": quadros}
+    return {"paginas": paginas, "comentarios": comentarios, "textos": textos, "blocos_de_ordem": ordem, "trocas_t17j": trocas}
 
 
 def baseline():
@@ -283,7 +303,7 @@ def comparar_par(R: Relatorio, modo: str, py: Path, astro: Path, BLD):
     # 4. régua da baseline
     lp, la = ler_site(py, False), ler_site(astro, True)
     dados["blocos_de_ordem_tirados"] = la["blocos_de_ordem"]
-    dados["quadros_de_posts_tirados"] = la["quadros_de_posts"]
+    dados["trocas_t17j"] = {"astro": la["trocas_t17j"], "python": lp["trocas_t17j"]}
     dados["ids"] = {"astro_paginas": len(la["comentarios"]), "astro_ids_unicos": len({i for v in la["comentarios"].values() for i in v}),
                     "python_paginas": len(lp["comentarios"]), "python_ids_unicos": len({i for v in lp["comentarios"].values() for i in v})}
     comparar_leituras(R, nome, lp, la, "Python", "Astro")

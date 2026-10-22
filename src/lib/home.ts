@@ -3,6 +3,12 @@
 // De onde vem no build.py: a chamada para a página Sobre, no fim da home (linhas ~749 e ~760).
 import type { Lang } from "./config";
 
+/**
+ * T17j (pedido do autor, 21/10/2026): a home mostra no máximo 4 histórias (as 4 primeiras de destaquesDaHome(), que continua escolhendo
+ * 5 como o build.py) e, no lugar de rolar até o fim, a seta da direita é o link "Ver todas as histórias" (src/components/Carrossel.astro).
+ */
+export const HISTORIAS_NA_HOME = 4;
+
 /** A página "project" (content/pages/project) publicada no idioma, com o que a home usa dela. */
 export interface PaginaParaChamada {
   data: { title?: string | undefined; summary?: string | undefined; _origem: { slug: string; lang: Lang } };

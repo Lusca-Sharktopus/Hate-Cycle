@@ -61,6 +61,38 @@ export function resumoDaNoticia(resumoEscrito: string | undefined, corpo: string
   return resumoEscrito || resumoAutomatico(corpo);
 }
 
+/**
+ * T17j (pedido do autor, 21/10/2026): o resumo da lista de Notícias foi CORTADO? Só o resumo automático é cortado (o `summary:` do autor
+ * é mostrado inteiro). Cortado = o resumo automático não é o texto inteiro (é ele que termina no "…" que o excerpt() acrescenta).
+ */
+export function resumoFoiCortado(resumoEscrito: string | undefined, corpo: string): boolean {
+  return !resumoEscrito && resumoAutomatico(corpo) !== textoPuro(corpo);
+}
+
+/** Quantos caracteres, no mínimo, somem no degradê do fim de um resumo cortado (a última palavra, e a anterior se ela for curta). */
+export const CARACTERES_DO_DEGRADE = 8;
+
+/**
+ * Um resumo cortado ("… frase até aqui…") em duas partes: o começo, que aparece normal, e o fim (as últimas palavras, com pelo menos
+ * CARACTERES_DO_DEGRADE letras), que some num degradê. Sem o "…" do fim: as reticências passam a fazer parte do "…leia mais".
+ * Juntas, as duas partes são o resumo inteiro menos o "…" (nenhuma letra some do texto: o degradê é só visual).
+ */
+export function partesDoResumoCortado(resumo: string): { inicio: string; fim: string } {
+  const texto = resumo.endsWith("…") ? resumo.slice(0, -1) : resumo;
+  let corte = texto.length;
+  while (corte > 0) {
+    const espaco = texto.lastIndexOf(" ", corte - 1);
+    if (espaco <= 0) {
+      corte = 0;
+      break;
+    }
+    corte = espaco + 1;
+    if (Array.from(texto.slice(corte)).length >= CARACTERES_DO_DEGRADE) break;
+    corte = espaco;
+  }
+  return { inicio: texto.slice(0, corte), fim: texto.slice(corte) };
+}
+
 /** Quantos caracteres do texto da notícia entram na busca da lista (o `[:1500]` do build.py). */
 export const CARACTERES_DA_BUSCA = 1500;
 

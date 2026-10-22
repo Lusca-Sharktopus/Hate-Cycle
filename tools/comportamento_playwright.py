@@ -12,7 +12,10 @@ O que confere, nos dois sites, com o MESMO roteiro, e compara o resultado:
      (depois do tempo mínimo) e o sessionStorage guarda `hc-intro`; na 2ª página da visita ela não aparece; com "reduzir
      movimento" não aparece; com ?intro aparece de novo;
   2. carrossel da home (1100 e 390 px): o trilho e as duas setas são criados, cada clique na seta anda o mesmo tanto, as setas
-     somem/aparecem nas pontas do mesmo jeito; teclado (Tab até a seta + Enter);
+     somem/aparecem nas pontas do mesmo jeito; teclado (Tab até a seta + Enter). DESDE A T17j (pedido do autor, 21/10/2026) a home do
+     Astro é diferente de propósito (até 4 histórias; a seta da direita é o link "Ver todas as histórias", com o rótulo no mouse/foco;
+     no celular o link fica abaixo, sempre à vista): o roteiro roda nos dois lados e o resultado vai para o --json, mas NÃO é comparado;
+     quem prova a home nova é tools/home_playwright.py;
   3. carta que vira (Ossos do Ofício 01, só na prévia: a obra está em rascunho): tabindex/role/aria-pressed, clique, Enter e espaço;
   4. links de idioma: em várias páginas, o menu de idioma abre, o link leva à mesma página no outro idioma (que existe) e clicar
      fora fecha o menu;
@@ -132,6 +135,9 @@ def carrossel(br, base, largura, erros):
     pg.goto(base + "/pt/", wait_until="load")
     pg.wait_for_timeout(400)
     fotos = [("inicial", pg.evaluate(ESTADO_CARROSSEL))]
+    if pg.query_selector(".rail-home"):  # T17j: a home nova do Astro (não comparada aqui; tools/home_playwright.py)
+        ctx.close()
+        return fotos, True
     if not fotos[0][1]:
         ctx.close()
         return fotos, False
@@ -317,6 +323,9 @@ def main():
                 tudo[lado][f"idioma e cabeçalho {w}"] = idioma(br, base[lado], w, erros[lado])
             tudo[lado]["404, site antigo e raiz"] = enderecos(br, base[lado], erros[lado])
         for teste in tudo["python"]:
+            if teste.startswith("carrossel "):  # T17j: diferença decidida (ver o topo); tools/home_playwright.py prova a home nova
+                OKS.append(f"{teste}: não comparado (T17j, home nova; ver tools/home_playwright.py)")
+                continue
             comparar(teste, tudo["python"][teste][0], tudo["astro"][teste][0], tudo["python"][teste][1], tudo["astro"][teste][1])
         if "previa-python" in base:
             cp = carta(br, base["previa-python"], erros["previa-python"])

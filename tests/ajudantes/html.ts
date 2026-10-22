@@ -260,67 +260,32 @@ export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
   return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main") };
 }
 
-// ───────────── T17g: a única diferença aceita nos posts incorporados (B27) ─────────────
+// ───────────── T17g/T17j: a única diferença aceita nos posts incorporados (B27) ─────────────
 //
 // No site Python, cada post do X, do Reddit e do Instagram traz o <script src> do serviço logo depois do <blockquote>, dentro do
-// <div class="embed">. O Astro não tem nenhum desses scripts: o build os tira e põe, no fim do mesmo <div class="embed">, o quadro
-// "Mostrar post do …" (`<div class="embed-gate">`) e o atributo `data-embed-servico` no <div class="embed"> (src/lib/embedsComClique.ts).
-// Para comparar o resto do <main> com o do Python:
-//   - do HTML do ASTRO sai SÓ: o atributo data-embed-servico (de um div.embed) e o div.embed-gate que é FILHO DIRETO desse mesmo
-//     div.embed e o último filho dele. Qualquer outro div.embed-gate (fora de um quadro ligado, ou em outro lugar) fica e aparece como diferença;
+// <div class="embed">. O Astro não tem nenhum desses scripts: o build os tira (src/lib/postsIncorporados.ts) e NÃO acrescenta nada (a
+// moldura isolada é criada no navegador, por src/scripts/embeds/). Para comparar o <main>, só o Python muda:
 //   - do HTML do PYTHON sai SÓ: <script> com src de um dos domínios dos três serviços (DOMINIOS_DOS_SCRIPTS_DOS_POSTS), DENTRO de um
 //     div.embed. Script de outro domínio, ou fora do .embed, fica.
 // tests/embeds.test.ts prova que nada além disso sai (inclusive casos negativos) e que, em toda página, o número de scripts tirados
-// do Python é igual ao de quadros tirados do Astro.
+// do Python é igual ao de posts que o Astro tem.
 
 /** Os domínios dos scripts oficiais dos três serviços (X, Reddit, Instagram). */
 export const DOMINIOS_DOS_SCRIPTS_DOS_POSTS: ReadonlySet<string> = new Set(["platform.x.com", "platform.twitter.com", "embed.reddit.com", "www.instagram.com"]);
-const SERVICOS_DOS_POSTS = new Set(["x", "reddit", "instagram"]);
 const temClasse = (e: Elemento, c: string) => (attr(e, "class") ?? "").split(ESPACO).includes(c);
 
 function arvoreComPosicoes(html: string) {
   return /<html[\s>]/i.test(html) ? parse(html, { sourceCodeLocationInfo: true }) : parseFragment(html, { sourceCodeLocationInfo: true });
 }
-function cortar(html: string, cortes: { de: number; ate: number }[]): string {
+function cortar(html: string, cortes: { de: number; ate: number; texto?: string }[]): string {
   let saida = "";
   let pos = 0;
   for (const c of [...cortes].sort((a, b) => a.de - b.de)) {
     if (c.de < pos) throw new Error("cortes que se sobrepõem");
-    saida += html.slice(pos, c.de);
+    saida += html.slice(pos, c.de) + (c.texto ?? "");
     pos = c.ate;
   }
   return saida + html.slice(pos);
-}
-
-export interface SemQuadrosDosPosts {
-  html: string;
-  /** Quantos quadros (div.embed-gate) e atributos data-embed-servico saíram. */
-  quadros: number;
-  atributos: number;
-  /** Algum quadro que saiu NÃO era o último filho direto de um div.embed com data-embed-servico? (não deveria) */
-  quadrosFora: number;
-}
-/** O HTML do Astro (página inteira ou pedaço) sem o quadro "Mostrar post…" e sem o atributo que o acompanha. */
-export function semQuadrosDosPosts(html: string): SemQuadrosDosPosts {
-  const cortes: { de: number; ate: number }[] = [];
-  let quadros = 0;
-  let atributos = 0;
-  const embeds = varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && temClasse(e, "embed") && SERVICOS_DOS_POSTS.has(attr(e, "data-embed-servico") ?? ""));
-  for (const embed of embeds) {
-    const a = embed.sourceCodeLocation?.attrs?.["data-embed-servico"];
-    if (!a) throw new Error("não achei onde o atributo data-embed-servico fica");
-    cortes.push({ de: html[a.startOffset - 1] === " " ? a.startOffset - 1 : a.startOffset, ate: a.endOffset });
-    atributos++;
-    const filhos = filhosDe(embed).filter(ehElemento);
-    const ultimo = filhos.at(-1);
-    if (ultimo && ultimo.tagName === "div" && temClasse(ultimo, "embed-gate")) {
-      const loc = ultimo.sourceCodeLocation;
-      if (!loc) throw new Error("não achei onde o quadro começa e termina");
-      cortes.push({ de: loc.startOffset, ate: loc.endOffset });
-      quadros++;
-    }
-  }
-  return { html: cortar(html, cortes), quadros, atributos, quadrosFora: atributos - quadros };
 }
 
 export interface SemScriptsDosPosts {
@@ -383,4 +348,82 @@ export function canalDoYoutubeComoNoPython(html: string, lang?: "en" | "pt"): Ca
     return `${antes}https://www.youtube.com/@HateCycle${depois}`;
   });
   return { html: saida, trocados, errados };
+}
+
+// ───────────── T17j: o resumo cortado das Notícias (degradê) ─────────────
+//
+// Pedido do autor (21/10): na lista de Notícias, quando o resumo automático foi cortado, as últimas palavras somem num degradê e o "…"
+// passa para o link. O Astro desenha `<p>começo<span class="news-fade">fim</span> <a class="more" href="…">…leia mais</a></p>`; o Python,
+// `<p>começo fim… <a class="more" href="…">leia mais</a></p>`. Para comparar, no HTML do ASTRO, e só nele, cada trecho com EXATAMENTE
+// esta forma (o span sem atributos além da classe, sem tags dentro, seguido de um espaço e do link "more" que começa com "…") volta a
+// ser o do Python. Qualquer outra forma fica e aparece como diferença. tests/noticias.test.ts prova a regra (casos negativos).
+
+export interface ResumoCortadoComoNoPython {
+  html: string;
+  /** Quantos resumos foram desfeitos. */
+  trocados: number;
+}
+const RE_RESUMO_CORTADO = /<span class="news-fade">([^<]*)<\/span> (<a class="more" href="[^"]*">)…/g;
+/** O HTML do Astro com cada resumo cortado escrito como no Python. */
+export function resumoCortadoComoNoPython(html: string): ResumoCortadoComoNoPython {
+  let trocados = 0;
+  const saida = html.replace(RE_RESUMO_CORTADO, (_t, fim: string, link: string) => {
+    trocados += 1;
+    return `${fim}… ${link}`;
+  });
+  return { html: saida, trocados };
+}
+
+// ───────────── T17j: a home com 4 histórias e a seta que é o link "Ver todas as histórias" ─────────────
+//
+// Pedido do autor (21/10): a home mostra no máximo 4 histórias, e a seta da direita é um link de verdade (src/components/Carrossel.astro).
+// O Astro desenha `<div class="rail rail-home"><div class="works" data-more-url…>cartões</div><a class="rail-btn rail-next rail-more" …>…</a></div>`;
+// o Python, só `<div class="works" data-more-url…>cartões</div>` (o trilho e as setas nasciam no navegador), com até 5 cartões.
+//   - do HTML do ASTRO sai SÓ: o <div class="rail rail-home"> (a tag de abertura e a de fechamento; o que está dentro fica) e o
+//     <a class="rail-btn rail-next rail-more"> que é o ÚLTIMO filho dele, quando o primeiro filho é um div.works com data-more-url;
+//   - do HTML do PYTHON sai SÓ: os div.work-card depois do 4º, dentro de um div.works com data-more-url.
+// tests/home.test.ts prova as duas regras (inclusive casos negativos).
+
+export interface HomeComoNoPython {
+  html: string;
+  /** Quantos trilhos (div.rail-home) foram desfeitos. */
+  trilhos: number;
+}
+/** O HTML do Astro sem o trilho e o link da home. */
+export function homeComoNoPython(html: string): HomeComoNoPython {
+  const cortes: { de: number; ate: number }[] = [];
+  let trilhos = 0;
+  for (const rail of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && attr(e, "class") === "rail rail-home")) {
+    const filhos = filhosDe(rail);
+    const primeiro = filhos[0];
+    const ultimo = filhos.at(-1);
+    if (filhos.length !== 2 || !primeiro || !ultimo || !ehElemento(primeiro) || !ehElemento(ultimo)) continue;
+    if (primeiro.tagName !== "div" || !temClasse(primeiro, "works") || attr(primeiro, "data-more-url") === undefined) continue;
+    if (ultimo.tagName !== "a" || attr(ultimo, "class") !== "rail-btn rail-next rail-more" || attr(ultimo, "href") !== attr(primeiro, "data-more-url")) continue;
+    const r = rail.sourceCodeLocation;
+    const u = ultimo.sourceCodeLocation;
+    if (!r?.startTag || !r.endTag || !u) throw new Error("não achei onde o trilho da home começa e termina");
+    cortes.push({ de: r.startTag.startOffset, ate: r.startTag.endOffset }, { de: u.startOffset, ate: u.endOffset }, { de: r.endTag.startOffset, ate: r.endTag.endOffset });
+    trilhos++;
+  }
+  return { html: cortar(html, cortes), trilhos };
+}
+
+export interface SoQuatroHistoriasNaHome {
+  html: string;
+  /** Quantos cartões saíram (os do 5º em diante). */
+  tirados: number;
+}
+/** O HTML do Python só com os 4 primeiros cartões do carrossel da home. */
+export function soQuatroHistoriasNaHome(html: string, quantas = 4): SoQuatroHistoriasNaHome {
+  const cortes: { de: number; ate: number }[] = [];
+  for (const works of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && temClasse(e, "works") && attr(e, "data-more-url") !== undefined)) {
+    const cartoes = filhosDe(works).filter((f): f is Elemento => ehElemento(f) && temClasse(f, "work-card"));
+    for (const c of cartoes.slice(quantas)) {
+      const loc = c.sourceCodeLocation;
+      if (!loc) throw new Error("não achei onde o cartão começa e termina");
+      cortes.push({ de: loc.startOffset, ate: loc.endOffset });
+    }
+  }
+  return { html: cortar(html, cortes), tirados: cortes.length };
 }

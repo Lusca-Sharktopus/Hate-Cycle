@@ -109,7 +109,7 @@ O site **não tem JavaScript no navegador** além do que é necessário. No Astr
 | Componente | Para quê |
 |---|---|
 | `SeletorDeHistorias` | busca, filtro de tipo, ordem e sentido (o bloco 1 do `site.js`) |
-| `Carrossel` | setas e a "borda esmaecida" do carrossel da home (o bloco 2 do `site.js`) |
+| `Carrossel` | setas e a "borda esmaecida" do carrossel da home (o bloco 2 do `site.js`). Desde a T17j (pedido do autor): até 4 histórias, e a seta da direita é um `<a href>` desenhado no servidor ("Ver todas as histórias" no mouse/foco; no celular, sempre à vista abaixo); o `<script>` só cria as setas de **rolar**, quando há para onde rolar |
 | `WorkCard` e `CardEmissario` | se a imagem falhar ao carregar, mostram o fundo reserva |
 
 **O seletor é o caso instrutivo.** A decisão "quais cartões aparecem e em que ordem" é a função pura `organizarCartoes()`, que na T10 morava em `obras.ts` e era provada por teste. Mas `obras.ts` importa o `config.json`, e **o `config.json` não pode ir para o navegador** (tem as chaves do Supabase). Solução: a função foi movida para `src/lib/seletor.ts`, um arquivo **sem nenhum import de valores** (só um `import type`), que roda tanto no teste quanto no navegador:

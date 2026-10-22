@@ -26,7 +26,8 @@ import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { barraDePaginas, combinaComBusca, ITENS_POR_PAGINA, itensDaPagina, normalizarBusca, paginaPedida, paginaValida, palavrasDaBusca, totalDePaginas } from "../src/lib/paginacao";
 import { finalizarMain } from "../src/lib/pagina";
-import { canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, semScriptsAntigosDosComentarios } from "./ajudantes/html";
+import { canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, resumoCortadoComoNoPython, semScriptsAntigosDosComentarios } from "./ajudantes/html";
+import { CARACTERES_DO_DEGRADE, partesDoResumoCortado, resumoAutomatico, resumoFoiCortado, textoDeBuscaDaNoticia, textoPuro } from "../src/lib/resumos";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -112,7 +113,8 @@ for (const amb of ref.ambientes) {
       if (!py) throw new Error(`o Python não gerou ${url}`);
       expect({ titulo: pagina.titulo, alt: pagina.alternativas, cls: "", desc: "", imagem: "", noindex: false }, url).toEqual(py.shell);
       const pronto = finalizarMain(await container.renderToString(ListaDeNoticias, { props: { pagina } }), pagina.lang);
-      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(py.main));
+      // T17j: o resumo cortado termina num degradê e o "…" vai para o link; desfeito só isso (resumoCortadoComoNoPython, provada abaixo)
+      expect(canonicoDoMiolo(resumoCortadoComoNoPython(pronto.html).html), url).toBe(canonicoDoMiolo(py.main));
       // a lista sempre leva o JavaScript da busca e das páginas
       expect(pronto.scripts, `${url}: script da lista`).not.toBe("");
       comparadas++;
@@ -220,5 +222,73 @@ describe("peças soltas", () => {
     expect(rotulos(5, 9)).toEqual(["‹", "1", "…", "3", "4", "[5]", "6", "7", "…", "9", "›"]);
     expect(rotulos(9, 9)).toEqual(["‹", "1", "…", "7", "8", "[9]"]);
     expect(rotulos(2, 4)).toEqual(["‹", "1", "[2]", "3", "4", "›"]);
+  });
+});
+
+// ───────────── T17j: o degradê no fim do resumo cortado (pedido do autor, 21/10/2026, "print gradient.png") ─────────────
+
+describe("T17j: resumo cortado → degradê no fim e \"…leia mais\"", () => {
+  const LONGO = "Olivia Purinna tem absoluta certeza de que dragões existem, e ela vai provar isso não importa o quão desastrosa a jornada dela seja, custe o que custar.";
+  test("cortado = só o resumo automático que não coube; o `summary:` do autor e o texto curto não são cortados", () => {
+    expect(resumoFoiCortado(undefined, LONGO)).toBe(true);
+    expect(resumoFoiCortado("", LONGO)).toBe(true);
+    expect(resumoFoiCortado("Resumo do autor, mesmo que termine assim…", LONGO)).toBe(false);
+    expect(resumoFoiCortado(undefined, "Curto.")).toBe(false);
+    expect(resumoFoiCortado(undefined, "")).toBe(false);
+  });
+  test("as duas partes são o resumo sem o \"…\" (nenhuma letra some); o fim são as últimas palavras, com pelo menos CARACTERES_DO_DEGRADE letras", () => {
+    const r = resumoAutomatico(LONGO);
+    expect(r.endsWith("…")).toBe(true);
+    const { inicio, fim } = partesDoResumoCortado(r);
+    expect(inicio + fim).toBe(r.slice(0, -1));
+    expect(Array.from(fim).length).toBeGreaterThanOrEqual(CARACTERES_DO_DEGRADE);
+    expect(inicio.endsWith(" ")).toBe(true);
+    expect(fim.startsWith(" ")).toBe(false);
+    expect(partesDoResumoCortado("uma palavra comprida demais…")).toEqual({ inicio: "uma palavra ", fim: "comprida demais" });
+    expect(partesDoResumoCortado("a b c de…")).toEqual({ inicio: "", fim: "a b c de" });
+    expect(partesDoResumoCortado("semespaconenhumcomprido…")).toEqual({ inicio: "", fim: "semespaconenhumcomprido" });
+  });
+  test("a busca não perde palavras: o data-search continua sendo o texto inteiro (não depende do corte)", () => {
+    const busca = textoDeBuscaDaNoticia("pt", { titulo: "T", tags: [], data: "2026-01-01", corpo: LONGO });
+    expect(busca).toContain(textoPuro(LONGO));
+    expect(busca).toContain("custe o que custar");
+  });
+  test("a exceção de paridade desfaz SÓ a forma exata do Astro", () => {
+    const astro = '<p>começo da frase <span class="news-fade">fim dela</span> <a class="more" href="/pt/news/x/">…leia mais</a></p>';
+    expect(resumoCortadoComoNoPython(astro)).toEqual({ html: '<p>começo da frase fim dela… <a class="more" href="/pt/news/x/">leia mais</a></p>', trocados: 1 });
+    for (const outro of [
+      '<p>texto <a class="more" href="/pt/news/x/">leia mais</a></p>', // sem corte: fica
+      '<p>a <span class="news-fade">b<b>c</b></span> <a class="more" href="/x/">…leia mais</a></p>', // tag dentro do span
+      '<p>a <span class="news-fade" id="z">b</span> <a class="more" href="/x/">…leia mais</a></p>', // outro atributo
+      '<p>a <span class="news-fade">b</span><a class="more" href="/x/">…leia mais</a></p>', // sem o espaço
+      '<p>a <span class="news-fade">b</span> <a class="more" href="/x/">leia mais</a></p>', // link sem "…"
+      '<p>a <span class="news-fade">b</span> <a class="outra" href="/x/">…leia mais</a></p>', // outro link
+    ]) {
+      expect(resumoCortadoComoNoPython(outro), outro).toEqual({ html: outro, trocados: 0 });
+    }
+  });
+  test("o componente: cortado → span.news-fade + \"…\" no link; não cortado → como antes", async () => {
+    const pagina = {
+      lang: "pt" as Lang,
+      url: "/pt/news/",
+      titulo: "Notícias",
+      alternativas: {},
+      busca: { placeholder: "Buscar", semResultados: "Nada" },
+      paginacao: { rotulo: "Páginas", anterior: "Anterior", proximo: "Próxima", porPagina: 10 },
+      rotuloDoLink: "leia mais",
+      linhas: [
+        { url: "/pt/news/a/", titulo: "A", data: "1", miniatura: undefined, tags: [], resumo: "começo da frase fim dela…", corte: { inicio: "começo da frase ", fim: "fim dela" }, busca: "A começo da frase fim dela e mais", escondidaNoInicio: false },
+        { url: "/pt/news/b/", titulo: "B", data: "2", miniatura: undefined, tags: [], resumo: "Resumo do autor…", corte: null, busca: "B", escondidaNoInicio: false },
+      ],
+    };
+    const html = await container.renderToString(ListaDeNoticias, { props: { pagina: pagina as never } });
+    expect(html).toContain('<p>começo da frase <span class="news-fade">fim dela</span> <a class="more" href="/pt/news/a/">…leia mais</a></p>');
+    expect(html).toContain('<p>Resumo do autor… <a class="more" href="/pt/news/b/">leia mais</a></p>');
+    expect(html).toContain('data-search="A começo da frase fim dela e mais"');
+  });
+  test("o CSS: degradê da cor do texto ao transparente (some no papel), só com background-clip: text, e desligado no alto contraste", () => {
+    const css = readFileSync(new URL("../src/components/ListaDeNoticias.astro", import.meta.url), "utf8");
+    expect(css).toMatch(/@supports \(\(-webkit-background-clip: text\) or \(background-clip: text\)\) \{\s*\.news-fade \{ background-image: linear-gradient\(to right, var\(--ink\) [^,]*, transparent 100%\)/);
+    expect(css).toMatch(/@media \(forced-colors: active\) \{ \.news-fade \{ background-image: none;/);
   });
 });

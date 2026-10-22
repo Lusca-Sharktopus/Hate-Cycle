@@ -236,7 +236,7 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 
 ## 7. Home
 
-- **Carrossel da home:** mostra no máximo 5 histórias, sempre as atualizadas mais recentemente (data do último capítulo/episódio, ou `"updated": "AAAA-MM-DD"` no `work.json`). No fim, a seta vira o botão "Ver todas as histórias".
+- **Carrossel da home:** mostra no máximo **4** histórias (pedido seu de 21/10/2026, só no site novo, Astro; o site antigo mostrava 5), sempre as atualizadas mais recentemente (data do último capítulo/episódio, ou `"updated": "AAAA-MM-DD"` no `work.json`). No computador cabem as 4 lado a lado, sem rolar, e a seta da direita **é** o link para Histórias: ao passar o mouse (ou chegar nela com Tab) aparece "Ver todas as histórias", e o clique leva direto. No celular e no tablet (até 1000 px de largura) os cartões rolam para o lado e o botão "Ver todas as histórias" fica sempre visível logo abaixo. Mudar o número: `HISTORIAS_NA_HOME` em `src/lib/home.ts`.
 - **Últimas Atualizações:** se um episódio novo e a notícia sobre ele saíram em até 3 dias, aparece só um cartão (o do episódio, com o texto da notícia).
 
 ## 8. Páginas Histórias e Sobre
@@ -269,6 +269,7 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 ### Como a lista aparece
 
 - Visual igual ao mockup: data, título grande, miniatura quadrada à esquerda, etiquetas e resumo com "leia mais".
+- **Resumo cortado (só no site novo, Astro; pedido seu de 21/10/2026):** sem `summary:`, o resumo são as primeiras ~130 letras do texto; quando ele é cortado, as últimas palavras somem num degradê e o link vira "…leia mais". Com `summary:` escrito por você, o resumo aparece inteiro e o link fica "leia mais", como antes. (Em "Últimas atualizações", na home, o resumo cortado continua com "…", como antes.)
 - O título não é link (use a miniatura ou "leia mais").
 - **10 por página**, com números de página no fim (1 2 3 … Próxima), como numa pesquisa do Google.
 - Caixa de busca no topo que procura em todas as notícias (título, etiquetas, data e texto), sem diferenciar maiúsculas nem acentos.
@@ -293,10 +294,10 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 - Links aceitos: X/Twitter, Instagram (post ou reel), TikTok, YouTube (vídeo ou Short) e Reddit.
 - Para o "alt" (o leitor alterna entre dois ou mais posts, com botões ao lado): separe com `|` — `{{embed:link-do-X | link-do-Instagram | link-do-TikTok}}`. Os botões levam o ícone/nome de cada rede.
 - Os posts incorporados ficam **centralizados**.
-- **Reddit, X e Instagram só carregam com um clique (só no site novo, Astro).** Você continua escrevendo `{{embed:…}}` igual e **nada em `content/` muda**. O visitante vê uma caixa tracejada com o texto do post, o aviso "Este post é do X e só é carregado quando você clica.", o botão **Mostrar post do X** (em inglês, *Show X post*) e o link **Abrir o post original no X ↗**, sempre visível. Só depois do clique o post aparece. Motivo: quem comenta fica conectado, e o código dessas redes não pode rodar na mesma página sem o visitante pedir (item B27 do backlog). Sem JavaScript, ficam o texto e o link. Nas alternâncias (`A | B | C`), cada post só carrega quando o visitante clica nele. Vídeos do YouTube e do TikTok continuam como eram.
-- **Código de incorporação colado à mão** (`content/embeds/*.html`): o `<script>` que vem junto é **tirado** na hora de montar a página (o texto e o link do post ficam). O terminal avisa se achar um script de outra origem.
-- **Se um post não aparecer** depois do clique, o link para o original continua lá. Para um serviço inteiro virar só link (sem botão), troque `comBotao` para `false` em `src/scripts/embeds/regras.ts` e peça ajuda se precisar.
-- **Teste no seu computador antes da virada** (eu não tenho internet no sandbox e não pude ver os três serviços de verdade): `pnpm dev` e abra `/pt/news/2024-02-23-avialuna-aeternogyrinians/` (Reddit), `/pt/news/2024-04-29-hygranocianos/` (X) e `/pt/news/2023-08-19-conheca-os-talassimbiontes/` (Reddit | Instagram); clique em **Mostrar post** e me diga se o post aparece, se a altura está boa e se rola por dentro.
+- **Reddit, X e Instagram aparecem sozinhos, como antes, numa moldura isolada (só no site novo, Astro).** Você continua escrevendo `{{embed:…}}` igual e **nada em `content/` muda**. O visitante vê o post do mesmo tamanho e jeito de antes, sem clicar em nada; a diferença é por dentro: o programa da rede social roda dentro de uma moldura, no endereço dela, e não consegue ler a sessão de quem comenta (item B27 do backlog; explicação na lição 08 de Astro). Sem JavaScript, fica o texto do código, como antes. Nas alternâncias (`A | B | C`), cada post aparece quando o painel dele é aberto. Vídeos do YouTube e do TikTok continuam como eram.
+- **Código de incorporação colado à mão** (`content/embeds/*.html`): o `<script>` que vem junto é **tirado** na hora de montar a página (o texto e o link do post ficam, e a moldura é criada no navegador). O terminal avisa se achar um script de outra origem.
+- **Se a rede social estiver fora do ar ou bloqueada** (por exemplo, um bloqueador de anúncios), depois de 30 s volta o texto do código com o link, como no site antigo quando o script não carregava.
+- **Teste no seu computador antes da virada** (eu não tenho internet no sandbox e não pude ver os três serviços de verdade): `pnpm dev` e abra `/pt/news/2024-04-29-hygranocianos/` (X), `/pt/news/2024-02-23-avialuna-aeternogyrinians/` (Reddit) e `/pt/news/2025-04-14-speedpaint-pederneira/` (Instagram); compare com o site no ar (tamanho, cantos, sombra, vídeo, tela cheia, links abrindo em outra aba) e me diga se viu alguma diferença.
 
 ## 12. Comentários
 

@@ -10,7 +10,7 @@
 //   barraDePaginas e cia   → static/site.js, bloco 6 (10 por página, números com "…"): src/lib/paginacao.ts
 import type { Lang } from "./config";
 import { formatarData } from "./datas";
-import { resumoDaNoticia, textoDeBuscaDaNoticia } from "./resumos";
+import { partesDoResumoCortado, resumoDaNoticia, resumoFoiCortado, textoDeBuscaDaNoticia } from "./resumos";
 import { compararComoPython } from "./ordem";
 import { ITENS_POR_PAGINA } from "./paginacao";
 
@@ -63,6 +63,11 @@ export interface LinhaDaListaDeNoticias {
   tags: string[];
   /** `summary:` do autor ou o resumo automático do texto. */
   resumo: string;
+  /**
+   * T17j: o resumo automático foi cortado? Então a lista mostra o fim dele num degradê e o "…" passa para o link ("…leia mais"):
+   * `inicio` + `fim` = o resumo sem o "…". null = resumo inteiro (o `summary:` do autor, ou texto curto), mostrado como antes.
+   */
+  corte: { inicio: string; fim: string } | null;
   /** O que a busca da lista enxerga (título + etiquetas + data + início do texto). */
   busca: string;
   /** Já nasce escondida no HTML (a partir da 11ª); o JavaScript mostra a página certa. */
@@ -81,6 +86,7 @@ export function linhasDaListaDeNoticias(noticias: readonly NoticiaComDados[], la
       miniatura: n.data.thumb || n.data.image || undefined,
       tags,
       resumo: resumoDaNoticia(n.data.summary, corpo),
+      corte: resumoFoiCortado(n.data.summary, corpo) ? partesDoResumoCortado(resumoDaNoticia(n.data.summary, corpo)) : null,
       busca: textoDeBuscaDaNoticia(lang, { titulo: tituloDaNoticia(n), tags, data: n.data.date, corpo }),
       escondidaNoInicio: k >= NOTICIAS_POR_PAGINA,
     };

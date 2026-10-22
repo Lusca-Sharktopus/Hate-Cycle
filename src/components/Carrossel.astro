@@ -1,16 +1,25 @@
 ---
-// O carrossel de histórias da home: uma fileira de cartões que rola para os lados, com setas, e que no fim leva à página
-// Histórias. O HTML é o <div class="works" data-more-url …> da home do build.py; as setas são criadas pelo <script> abaixo
-// (o bloco 2 do static/site.js, agora em TypeScript).
+// O carrossel de histórias da home: no máximo 4 cartões (HISTORIAS_NA_HOME, src/lib/home.ts) e, à direita, a seta que É o link
+// "Ver todas as histórias" para a página Histórias (T17j, pedido do autor de 21/10/2026). Antes (bloco 2 do static/site.js) a seta rolava
+// os cartões e só no fim virava o link; agora o rótulo aparece ao passar o mouse ou ao chegar pelo teclado (Tab) e o clique leva direto a
+// Histórias. Como é um <a href> de verdade, desenhado aqui no servidor, funciona sem JavaScript.
 //
-// Os atributos data-prev / data-next (o texto das setas) NÃO estão aqui: o acabamento do <main> (src/lib/pagina.ts) os
+// - Tela larga (mais de 1000 px, onde 4 cartões cabem com pelo menos ~180 px cada; antes eram 210): espaço para 4 cartões lado a lado, sem rolar; a seta fica numa faixa própria à direita (não cobre
+//   cartão) e, no mouse/foco, cresce para a esquerda mostrando o rótulo.
+// - Tela estreita (até 1000 px: celular e tablet): 4 cartões não cabem; eles rolam para o lado (dedo, ou as setas de rolar que o
+//   <script> cria quando há para onde rolar) e o link "Ver todas as histórias" fica SEMPRE visível, com o rótulo, logo abaixo (não há
+//   mouse para revelar). Isso também resolve o B31 (o encaixe que parava antes do fim e a seta que não virava link no celular).
+//
+// O HTML dos cartões é o <div class="works" data-more-url …> da home do build.py (os data-more-* ficam, para o HTML seguir igual);
+// a moldura <div class="rail"> e o link são só do Astro (exceção de paridade: tests/ajudantes/html.ts → homeComoNoPython).
+// Os atributos data-prev / data-next (o texto das setas de rolar) NÃO estão aqui: o acabamento do <main> (src/lib/pagina.ts) os
 // acrescenta a class="works", como o shell() do build.py faz com toda página.
 import type { CartaoDaObra } from "../lib/obras";
 import WorkCard from "./WorkCard.astro";
 
 interface Props {
   cartoes: CartaoDaObra[];
-  /** Para onde a seta do fim do carrossel leva (a página Histórias) e o texto dela. */
+  /** Para onde a seta leva (a página Histórias) e o texto dela. */
   maisUrl: string;
   maisRotulo: string;
 }
@@ -18,41 +27,30 @@ interface Props {
 const { cartoes, maisUrl, maisRotulo } = Astro.props;
 ---
 
-<div class="works" data-more-url={maisUrl} data-more-label={maisRotulo}>{cartoes.map((c) => <WorkCard cartao={c} />)}</div>
+<div class="rail rail-home"><div class="works" data-more-url={maisUrl} data-more-label={maisRotulo}>{cartoes.map((c) => <WorkCard cartao={c} />)}</div><a class="rail-btn rail-next rail-more" href={maisUrl} aria-label={maisRotulo}><span class="rail-label">{maisRotulo}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.5v15l11.5-7.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></a></div>
 
 <script>
-  // Setas + esmaecer a borda quando há mais cartões para o lado (bloco 2 do static/site.js).
+  // Setas de ROLAR (só aparecem quando há para onde rolar: na home, só na tela estreita) + esmaecer a borda quando há mais cartões para o
+  // lado. O que sobrou do bloco 2 do static/site.js; o link "Ver todas as histórias" já vem pronto do servidor e não depende daqui.
   const SETA_DIREITA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.5v15l11.5-7.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
   const SETA_ESQUERDA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4.5v15L4.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 
-  document.querySelectorAll<HTMLElement>(".works:not(.grid)").forEach((cartoes) => {
-    const trilho = document.createElement("div");
-    trilho.className = "rail";
-    cartoes.parentNode?.insertBefore(trilho, cartoes);
-    trilho.appendChild(cartoes);
+  document.querySelectorAll<HTMLElement>(".rail > .works:not(.grid)").forEach((cartoes) => {
+    const trilho = cartoes.parentElement as HTMLElement;
+    const link = trilho.querySelector(".rail-more");
 
     function criarBotao(direcao: "prev" | "next"): HTMLButtonElement {
       const botao = document.createElement("button");
       botao.type = "button";
-      botao.className = `rail-btn rail-${direcao}`;
+      botao.className = `rail-btn rail-${direcao} rail-rolar`;
       botao.innerHTML = direcao === "prev" ? SETA_ESQUERDA : SETA_DIREITA;
       botao.setAttribute("aria-label", cartoes.dataset[direcao] || direcao);
-      if (direcao === "next" && cartoes.dataset["moreUrl"]) {
-        const rotulo = document.createElement("span");
-        rotulo.className = "rail-label";
-        rotulo.textContent = cartoes.dataset["moreLabel"] ?? "";
-        botao.insertBefore(rotulo, botao.firstChild);
-      }
       botao.addEventListener("click", () => {
-        if (botao.classList.contains("is-link")) {
-          location.href = cartoes.dataset["moreUrl"] ?? "";
-          return;
-        } // fim do carrossel: vai para a página de Histórias
         const cartao = cartoes.querySelector<HTMLElement>(".work-card:not([hidden])");
         const passo = (cartao ? cartao.offsetWidth : 240) + 22;
         cartoes.scrollBy({ left: direcao === "next" ? passo : -passo, behavior: "smooth" });
       });
-      trilho.appendChild(botao);
+      trilho.insertBefore(botao, link);
       return botao;
     }
     const anterior = criarBotao("prev");
@@ -63,12 +61,7 @@ const { cartoes, maisUrl, maisRotulo } = Astro.props;
       const esquerda = cartoes.scrollLeft > 4;
       const direita = cartoes.scrollLeft < max - 4;
       anterior.style.display = esquerda ? "" : "none";
-      if (cartoes.dataset["moreUrl"]) {
-        // carrossel com "ver todas": a seta fica sempre, e no fim vira link
-        proximo.style.display = "";
-        proximo.classList.toggle("is-link", !direita);
-        proximo.setAttribute("aria-label", !direita ? (cartoes.dataset["moreLabel"] ?? "") : (cartoes.dataset["next"] || "next"));
-      } else proximo.style.display = direita ? "" : "none";
+      proximo.style.display = direita ? "" : "none";
       cartoes.style.setProperty("--fl", esquerda ? "90px" : "0px");
       cartoes.style.setProperty("--fr", direita ? "90px" : "0px");
     }
@@ -96,5 +89,23 @@ const { cartoes, maisUrl, maisRotulo } = Astro.props;
     .rail-btn.is-link { width: auto; border-radius: 40px; padding: 0 1.1rem 0 1.3rem; gap: .6rem; grid-auto-flow: column; }
     .rail-btn.is-link .rail-label { display: inline; }
     @media (max-width: 600px) { .works[data-more-url] { padding-right: 150px; } .rail-btn.is-link .rail-label { display: none; } .rail-btn.is-link { width: 58px; padding: 0; } }
+
+    /* T17j: a home com 4 histórias e a seta que é o link "Ver todas as histórias" (o .is-link de antes, agora no mouse e no foco). */
+    .rail-home > .works { padding-right: 84px; }   /* a faixa da seta: 58 px + as margens; nenhum cartão fica embaixo dela */
+    .rail-home .work-card { flex: 0 0 calc((100% - 3 * 1.4rem) / 4); min-width: 0; }   /* espaço para 4, mesmo quando há menos */
+    .rail-more { color: #eafff8; text-decoration: none; }
+    .rail-more:hover, .rail-more:focus-visible { width: auto; border-radius: 40px; padding: 0 1.1rem 0 1.3rem; gap: .6rem; grid-auto-flow: column; color: #eafff8; }
+    .rail-more:hover .rail-label, .rail-more:focus-visible .rail-label { display: inline; }
+    .rail-more:focus-visible { outline: 3px solid var(--night); outline-offset: 3px; box-shadow: 0 0 14px var(--cyan); }
+    .rail-home .rail-rolar.rail-next { display: none; }   /* na tela larga não há o que rolar: a seta da direita é só o link */
+    @media (max-width: 1000px) {
+      .rail-home > .works { padding-right: .4rem; }
+      .rail-home .work-card { flex: 0 0 clamp(210px, 25%, 310px); }
+      .rail-home .rail-rolar.rail-next { display: grid; }
+      .rail-more { position: static; width: fit-content; height: 48px; margin: .1rem 0 0 auto; border-radius: 40px; padding: 0 1rem 0 1.2rem; gap: .5rem; grid-auto-flow: column; transform: none; }
+      .rail-more:hover { transform: none; }
+      .rail-more .rail-label { display: inline; }
+      .rail-more svg { width: 24px; height: 24px; }
+    }
   }
 </style>

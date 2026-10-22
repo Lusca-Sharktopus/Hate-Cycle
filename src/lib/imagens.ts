@@ -41,7 +41,7 @@ export interface Perfil {
 export const PERFIS = {
   /** Logo do cabeçalho: --logo-w = clamp(130px, 17vw, 230px) (tokens.css). */
   logo: { nome: "logo", larguras: [260, 520, 780], sizes: "clamp(130px, 17vw, 230px)", qualidade: 85 },
-  /** Capas no carrossel da home: sempre 180 px. */
+  /** Capas no carrossel da home: 180 px no celular e no tablet; 150–200 px na tela larga, com os 4 lado a lado (T17j). */
   capaDoCarrossel: { nome: "capa-do-carrossel", larguras: [200, 360, 540], sizes: "180px", qualidade: 82 },
   /** Capas na grade de Histórias: 193 px (1100), 224 (1500), 258 (700), 289 (390). */
   capaDaGrade: { nome: "capa-da-grade", larguras: [240, 400, 600], sizes: "(max-width: 700px) 290px, 230px", qualidade: 82 },

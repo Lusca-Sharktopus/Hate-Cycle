@@ -26,7 +26,7 @@ import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { finalizarMain, separarScripts } from "../src/lib/pagina";
 import { dadosDaHome, dadosDosAtalhos } from "../src/lib/paginas";
-import { canonicoDoMiolo } from "./ajudantes/html";
+import { canonicoDoMiolo, homeComoNoPython, soQuatroHistoriasNaHome } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Ambiente {
@@ -103,7 +103,8 @@ for (const amb of ref.ambientes) {
       test(`${lang}: home — o <main> inteiro, depois do acabamento do layout`, async () => {
         const url = `/${lang}/`;
         const miolo = await desenhar(ConteudoDaHome, { lang, dados: dadosDaHome(dados, amb.rascunhos) });
-        igual(finalizarMain(miolo, lang).html, amb.mains[url] ?? "", url);
+        // T17j: o trilho e o link "Ver todas as histórias" só do Astro, e no máximo 4 histórias (tests/ajudantes/html.ts, tests/home.test.ts)
+        igual(homeComoNoPython(finalizarMain(miolo, lang).html).html, soQuatroHistoriasNaHome(amb.mains[url] ?? "").html, url);
       });
 
       test(`${lang}: Histórias — o <main> inteiro, com {{stories}} trocado pelo componente`, async () => {

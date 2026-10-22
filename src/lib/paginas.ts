@@ -9,6 +9,7 @@ import { ATUALIZACOES_NA_HOME, rotuloDaAtualizacao, type Atualizacao } from "./a
 import { formatarData } from "./datas";
 import { cartaoDoEmissario, type CartaoDoEmissario, type EmissarioComDados } from "./emissarios";
 import { aplicarAtalhos } from "./corpos";
+import { HISTORIAS_NA_HOME } from "./home";
 import { cartaoDaObra, dadosDoSeletor, type CapitulosDaObra, type CartaoDaObra, type DadosDoSeletor, type ObraComDados } from "./obras";
 
 /** O que as funções daqui leem de `dadosDoIdioma()` (os campos de que precisam; o resultado completo serve). */
@@ -61,7 +62,7 @@ export function dadosDaHome<O extends ObraComDados, E extends EmissarioComDados 
       titulo: a.titulo,
       texto: a.texto,
     })),
-    destaques: dados.destaques.map((o) => cartaoDaObra(o, lang, dados.capitulosDe(o), comRascunhos)),
+    destaques: dados.destaques.slice(0, HISTORIAS_NA_HOME).map((o) => cartaoDaObra(o, lang, dados.capitulosDe(o), comRascunhos)),
     temUniverso: dados.universoExtra.length > 0,
     sobre: dados.sobre,
   };

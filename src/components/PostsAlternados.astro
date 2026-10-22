@@ -6,9 +6,9 @@
 ---
 
 <script>
-  // T17g (B27): os posts de redes sociais só carregam com o clique no botão "Mostrar post" de cada um (src/scripts/embeds/). Trocar de
-  // post aqui NÃO manda mais nenhum script de terceiros desenhar de novo (twttr.widgets.load, instgrm.Embeds.process,
-  // tiktokEmbedLoad): esses scripts nem estão mais na página, e o que o visitante não clicou não deve carregar.
+  // T17j (B27): antes, trocar de painel mandava o script de cada rede desenhar de novo (twttr.widgets.load, instgrm.Embeds.process,
+  // tiktokEmbedLoad). Esses scripts não estão mais na página: quem desenha é src/scripts/embeds/, que cria a moldura isolada de cada
+  // post só quando o painel dele aparece (um ResizeObserver percebe a troca), então o post já nasce do tamanho certo. Aqui sobra só a troca.
   document.querySelectorAll(".embed-alt").forEach((caixa) => {
     const botoes = caixa.querySelectorAll(".embed-btn");
     const paineis = caixa.querySelectorAll(".embed-panel");
