@@ -184,8 +184,11 @@ hcSafe(function () {
   var items = Array.prototype.slice.call(list.querySelectorAll('.news-item'));
   var input = document.querySelector('.news-search'), pag = document.querySelector('.pagination'), none = document.querySelector('.news-none');
   var per = parseInt(pag.dataset.per, 10) || 10;
-  var page = parseInt(new URLSearchParams(location.search).get('p'), 10) || 1;
-  function norm(t) { return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  var pedida = new URLSearchParams(location.search).get('p');
+  var page = /^[0-9]+$/.test(pedida || '') ? parseInt(pedida, 10) || 1 : 1;   // só dígitos valem ("2x" ou "abc" = página 1)
+  // versalete Unicode (Hᴀᴛᴇ Cʏᴄʟᴇ) vira letra comum, para "hate" e "cycle" acharem o título
+  var SC = {}; 'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡʏᴢ'.split('').forEach(function (c, i) { SC[c] = 'abcdefghijklmnopqrstuvwyz'.charAt(i); });
+  function norm(t) { return (t || '').toLowerCase().replace(/[ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡʏᴢ]/g, function (c) { return SC[c]; }).normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
   items.forEach(function (it) { it._t = norm(it.dataset.search); });
   function filtered() {
     var q = norm(input ? input.value : '').split(/\s+/).filter(Boolean);
@@ -241,3 +244,15 @@ hcSafe(function () {
     });
   });
 })();
+
+
+/* 7) Menu suspenso (Extras / idioma): se, ao abrir, ele sair da tela pela direita (celular, página 404), abre alinhado à direita do botão (.dd-flip) */
+hcSafe(function () {
+  document.addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (!d || !d.matches || !d.matches('details.dd')) return;
+    d.classList.remove('dd-flip');
+    var menu = d.open && d.querySelector('.dd-menu');
+    if (menu && menu.getBoundingClientRect().right > document.documentElement.clientWidth) d.classList.add('dd-flip');
+  }, true);   // o evento "toggle" não sobe até o document: só a captura o pega
+});

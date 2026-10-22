@@ -31,5 +31,19 @@ const { paginador: p } = Astro.props;
     .pager .mid { flex-direction: row; padding: .35rem .9rem; border: 1px solid currentColor; border-radius: 99px; color: var(--teal); }
     /* pedido do autor (16/10/2026): o botão do meio nunca é espremido pelos títulos das laterais */
     .pager .mid { flex: none; white-space: nowrap; }
+    /* B36 (T17k): em tela estreita a barra não cabia numa linha ("Todos os capítulos" + "Próximo", em português, passam da tela a 320 px e a página ganhava
+       rolagem lateral). Até 389 px (e, quando há os DOIS vizinhos, até 560 px) o botão do meio vai inteiro para a primeira linha e os vizinhos descem para a
+       de baixo, como as notícias já faziam até 560 px. De 390 px para cima, com um vizinho só, nada mudou. */
+    @media (max-width: 389px) {
+      .pager { flex-wrap: wrap; justify-content: center; }
+      .pager .pg { max-width: 100%; }
+      .pager .mid { order: -1; width: 100%; text-align: center; }
+      .pager > span:empty { display: none; }
+    }
+    @media (max-width: 560px) {
+      .pager:has(> .prev):has(> .next) { flex-wrap: wrap; justify-content: center; }
+      .pager:has(> .prev):has(> .next) .pg { max-width: 100%; }
+      .pager:has(> .prev):has(> .next) .mid { order: -1; width: 100%; text-align: center; }
+    }
   }
 </style>

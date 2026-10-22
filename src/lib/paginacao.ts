@@ -9,7 +9,7 @@
 //   normalizarBusca  → norm()                         (minúsculas, sem acentos)
 //   palavrasDaBusca  → o `q` de filtered()            (a busca é "todas as palavras aparecem")
 //   combinaComBusca  → o `every` de filtered()
-//   paginaPedida     → `parseInt(?p=…) || 1`
+//   paginaPedida     → `?p=` só com dígitos, senão 1 (T17k)
 //   paginaValida     → o clamp do começo de render()
 //   barraDePaginas   → o laço de render() que monta os botões
 //   itensDaPagina    → o slice de render()
@@ -17,9 +17,18 @@
 /** Quantos itens aparecem por página da lista (o `data-per` do HTML; o site.js usa 10 se faltar). */
 export const ITENS_POR_PAGINA = 10;
 
-/** norm() do site.js: minúsculas e sem acentos ("Residência" → "residencia"). */
+/** As letras do versalete Unicode (Hᴀᴛᴇ Cʏᴄʟᴇ) e as letras comuns que elas representam (a mesma tabela `SC` do build.py). */
+const VERSALETE = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡʏᴢ";
+const LETRAS_COMUNS = "abcdefghijklmnopqrstuvwyz";
+const DO_VERSALETE = new Map([...VERSALETE].map((c, i) => [c, LETRAS_COMUNS.charAt(i)]));
+
+/**
+ * norm() do site.js: minúsculas, sem acentos ("Residência" → "residencia") e com o versalete Unicode trocado pela letra comum
+ * ("Hᴀᴛᴇ Cʏᴄʟᴇ" → "hate cycle"; B22, corrigido na T17k nos dois geradores).
+ */
 export function normalizarBusca(texto: string | undefined): string {
-  return (texto || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  // o versalete vem ANTES do NFD: o "ǫ" (q) se decomporia em "o" + cedilha e viraria "o"
+  return (texto || "").toLowerCase().replace(/[ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡʏᴢ]/g, (c) => DO_VERSALETE.get(c) ?? c).normalize("NFD").replace(/[̀-ͯ]/g, "");
 }
 
 /** As palavras da busca: normalizadas, separadas por espaços, sem vazios. Busca vazia = nenhuma palavra = tudo combina. */
@@ -32,9 +41,14 @@ export function combinaComBusca(textoNormalizado: string, palavras: readonly str
   return palavras.every((p) => textoNormalizado.indexOf(p) > -1);
 }
 
-/** O número da página que o endereço pede (`?p=3`): parseInt(…, 10) || 1, como no site.js (pode vir fora dos limites). */
+/**
+ * O número da página que o endereço pede (`?p=3`). Só dígitos valem; qualquer outra coisa (`2x`, `abc`, `-3`, vazio) = página 1
+ * (B22, T17k; antes `2x` valia 2 por causa do parseInt). Um número que passa da última página continua sendo corrigido depois
+ * por paginaValida (vira a última), como sempre.
+ */
 export function paginaPedida(busca: string): number {
-  return parseInt(new URLSearchParams(busca).get("p") ?? "", 10) || 1;
+  const pedido = new URLSearchParams(busca).get("p") ?? "";
+  return /^[0-9]+$/.test(pedido) ? parseInt(pedido, 10) || 1 : 1;
 }
 
 /** Quantas páginas tem uma lista (sempre pelo menos 1). */

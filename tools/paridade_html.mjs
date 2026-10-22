@@ -18,7 +18,8 @@
 //   T15   o par de <script src> antigo dos comentários (supabase-js do CDN + /comments.js) sai do Python;
 //   T17c  a <section data-story-order> ("estou lendo em ordem…") sai do Astro;
 //   T17d  o leitor página a página dos quadrinhos (div.folheador) vira o <div class="comic"> de dentro e a janela do jogo (div.jogo) sai do Astro
-//         (tests/ajudantes/html.ts → folheadorComoNoPython, semJanelaDoJogo);
+//         (tests/ajudantes/html.ts → folheadorComoNoPython, semJanelaDoJogo); o script embutido do leitor (reconhecido por `data-folheador`
+//         + `fl-runa`) é um comportamento só do Astro, e a ferramenta exige que ele vá exatamente nas páginas que têm o leitor (T17k);
 //   T17g/T17j  o <script src> do X/Reddit/Instagram dentro de cada post sai do Python (tests/ajudantes/html.ts → semScriptsDosPosts);
 //         o Astro não acrescenta nada (a moldura isolada nasce no navegador). A ferramenta confere, página a página, que o Python tinha
 //         tantos scripts quanto o Astro tem posts (blockquotes dos três serviços), e que só as páginas com post levam o script empacotado
@@ -104,6 +105,9 @@ const SCRIPTS_DO_ASTRO = [
   ["T15 comentários (script empacotado)", (s) => s.modulo && /CaixaDeComentarios\.astro/.test(s.src)],
   ["T17c bloco de ordem", (s) => s.modulo && /hc-ordem-de-leitura/.test(s.texto)],
   ["T17j posts incorporados em moldura (script empacotado)", (s) => s.modulo && /PostsIncorporados\.astro/.test(s.src)],
+  // T17d (só no Astro, só na prévia): o script do leitor página a página vem EMBUTIDO na página (não tem src); o que o reconhece é o que ele
+  // procura (`[data-folheador]`) e os `.fl-runa` que ele marca (src/scripts/folheador/). O Python não tem o leitor (desenha as páginas empilhadas).
+  ["T17d leitor página a página (script)", (s) => s.modulo && /data-folheador/.test(s.texto) && /fl-runa/.test(s.texto)],
 ];
 // O que a página do Python ativaria (blocos do site.js cujo seletor acha algo + os inline do shell()).
 function comportamentosDoPython(doc, scripts) {
@@ -353,13 +357,15 @@ for (const url of [...pp.keys()].filter((u) => pa.has(u)).sort()) {
   // comportamentos
   const cp = [...p.comportamentos].filter((c) => !c.startsWith("3 ")), ca = [...a.comportamentos];
   if (p.comportamentos.has("3 GIFs de .page-project (nunca age: T14)")) falha(url, "o bloco 3 do site.js (GIFs de .page-project) agiria aqui, e o Astro não o tem (T14 diz que nunca age)");
-  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17j posts incorporados em moldura (script empacotado)"]);
+  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17j posts incorporados em moldura (script empacotado)", "T17d leitor página a página (script)"]);
   const faltam = cp.filter((c) => !a.comportamentos.has(c));
   const sobram = ca.filter((c) => !p.comportamentos.has(c) && !extrasDecididos.has(c));
   if (faltam.length) falha(url, `comportamento do Python sem script no Astro: ${faltam.join("; ")}`);
   if (sobram.length) falha(url, `script do Astro sem o elemento que o usa no Python: ${sobram.join("; ")}`);
   if (a.comportamentos.has("T15 comentários (script empacotado)") !== /class="hc-comments"/.test(ha)) falha(url, "script dos comentários × caixa de comentários");
   if (a.comportamentos.has("T17c bloco de ordem") !== (CONTAGEM['T17c: bloco "estou lendo em ordem" (Astro)']?.has(url) === true)) falha(url, "script do bloco de ordem × bloco de ordem");
+  // T17d: o script do leitor página a página só vai nas páginas que têm o leitor (o que a regra folheadorComoNoPython acabou de trocar)
+  if (a.comportamentos.has("T17d leitor página a página (script)") !== (CONTAGEM["T17d: leitor página a página dos quadrinhos (Astro)"]?.has(url) === true)) falha(url, "script do leitor página a página × leitor página a página");
   const posts = POSTS.get(url) ?? {};
   if ((posts.python ?? 0) !== (posts.astro ?? 0)) falha(url, `posts incorporados: o Python tinha ${posts.python ?? 0} script(s) de X/Reddit/Instagram, o Astro tem ${posts.astro ?? 0} post(s)`);
   if (a.comportamentos.has("T17j posts incorporados em moldura (script empacotado)") !== ((posts.astro ?? 0) > 0)) falha(url, "script dos posts × posts");

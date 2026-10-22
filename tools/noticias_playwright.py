@@ -10,7 +10,7 @@ src/components/ListaDeNoticias.astro) e compara, depois de cada passo:
   - até onde a página rolou depois de um clique na barra (scrollIntoView).
 O roteiro cobre: clicar em cada número, em "próximo ›" e "‹ anterior", ir até a última página (os "…"), buscas reais
 (título, pedaço, acento e caixa diferentes, duas palavras, espaços sobrando, etiqueta, data, "nenhum resultado", letras de
-versalete), busca depois de estar na página 3 (volta à 1), apagar a busca, abrir o endereço já com ?p= (3, 99, 0, abc, -2),
+versalete), busca depois de estar na página 3 (volta à 1), apagar a busca, abrir o endereço já com ?p= (3, 99, 0, abc, -2, 2x),
 recarregar numa página e a lista com JavaScript DESLIGADO (o <noscript> mostra todas as notícias).
 Depois testa os posts alternados: em TODA notícia que tem .embed-alt (a lista é descoberta no site Python e conferida no
 Astro) clica em cada botão de cada caixa, e também aperta Enter no botão focado, e compara o estado (is-on, aria-pressed).
@@ -20,6 +20,9 @@ Como usar (cada servidor sob timeout; nunca pkill):
   timeout 600 python3 -m http.server 8791 -d <pasta do site Python> &
   pnpm build && timeout 600 python3 -m http.server 8792 -d dist &
   python3 tools/noticias_playwright.py --python 8791 --astro 8792
+
+T17k (B22): além de comparar os dois sites, confere o ABSOLUTO nos dois: 'hate', 'Hate', 'HATE', 'Hate Cycle', 'hate cyc' e 'cycle' acham os títulos
+com Hᴀᴛᴇ Cʏᴄʟᴇ (e tudo o que 'Hᴀᴛᴇ' já achava), e ?p=2x, abc, -2, 0 e vazio mostram a página 1.
 
 Sai com código 0 se tudo for idêntico, 1 se houver qualquer diferença (e imprime qual).
 Só a biblioteca Playwright do Python (já instalada no sandbox; não rode `playwright install`). Só localhost: qualquer outro
@@ -114,7 +117,7 @@ def passos_da_lista(pg, estado0):
     # buscas com palavras REAIS do site: título, pedaço, acento e caixa diferentes
     titulos = estado0["titulos"]
     buscas = ["luz", "LUZ E SANGUE", "pederneira", "  pederneira   ", "cafeina", "cafeína", "residencia", "RESIDÊNCIA", "dragao", "dragões",
-              "nova obra", "2024", "orcs", "hate", "Hᴀᴛᴇ", "qqqqq", "a", "e", "o"]
+              "nova obra", "2024", "orcs", "hate", "Hate", "HATE", "cycle", "Hate Cycle", "hate cyc", "Hᴀᴛᴇ", "qqqqq", "a", "e", "o"]
     for t in titulos[:6]:
         buscas += [t.upper(), t[:4]]
     for q in buscas:
@@ -228,6 +231,28 @@ def main():
                 problemas.append(f"{caminho}: o roteiro nunca chegou a 'nenhuma notícia'")
             if not any(any(b["classe"] == "pg-gap" for b in f.get("barra", [])) for _, f in fotos_py if isinstance(f.get("barra"), list)):
                 problemas.append(f"{caminho}: o roteiro nunca viu as reticências '…' da barra")
+            # T17k (B22): conferências ABSOLUTAS (não só "os dois sites iguais"), nos dois sites
+            for lado, fotos in (("Python", fotos_py), ("Astro", fotos_as)):
+                por_nome = dict(fotos)
+                ver = lambda nome: por_nome[nome]["visiveis"]
+                versalete = ver("busca 'Hᴀᴛᴇ'")
+                if not versalete:
+                    problemas.append(f"{caminho} ({lado}): a busca 'Hᴀᴛᴇ' não achou nada (o roteiro precisa de títulos com Hᴀᴛᴇ Cʏᴄʟᴇ)")
+                for q in ("hate", "Hate", "HATE", "Hate Cycle", "hate cyc"):
+                    achou = ver(f"busca {q!r}")
+                    if not set(versalete) <= set(achou):
+                        problemas.append(f"{caminho} ({lado}): a busca {q!r} não achou tudo o que 'Hᴀᴛᴇ' acha ({len(achou)} × {len(versalete)})")
+                    if q != "hate" and ver("busca 'hate'") != achou and q in ("Hate", "HATE"):
+                        problemas.append(f"{caminho} ({lado}): a busca {q!r} acha coisas diferentes de 'hate'")
+                if not ver("busca 'cycle'"):
+                    problemas.append(f"{caminho} ({lado}): a busca 'cycle' não achou nada")
+                inicial = por_nome["inicial"]
+                for ruim in ("?p=2x", "?p=abc", "?p=-2", "?p=0", "?p=", "?outro=1"):
+                    f = por_nome[f"abre {ruim}"]
+                    if f["visiveis"] != inicial["visiveis"] or f["search"] != "" or [b["texto"] for b in f["barra"] if b["atual"]] != ["1"]:
+                        problemas.append(f"{caminho} ({lado}): {ruim} devia mostrar a página 1 (e deixar o endereço sem ?p=)")
+                if por_nome["abre ?p=3"]["visiveis"] == inicial["visiveis"]:
+                    problemas.append(f"{caminho} ({lado}): ?p=3 devia mostrar outra página")
             for (nome, fp), (_, fa) in zip(fotos_py, fotos_as):
                 passos_lista += 1
                 if a.detalhes:

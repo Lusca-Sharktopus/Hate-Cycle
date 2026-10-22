@@ -83,6 +83,8 @@ const outros = langs
       position: absolute; right: 0; top: calc(100% + .5rem); min-width: 10rem; z-index: 10; display: flex; flex-direction: column;
       background: var(--night); border-radius: 12px; padding: .4rem; box-shadow: var(--shadow-menu);
     }
+    /* se o menu aberto sairia da tela pela direita, o <script> daqui põe .dd-flip e ele abre alinhado à direita do botão (B32, T17k; o site.js faz o mesmo no Python) */
+    .dd.dd-flip .dd-menu { left: auto; right: 0; }
     .dd-menu a { color: #e9fff8; text-decoration: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 500; }
     .dd-menu a:hover, .dd-menu a[aria-current] { background: #ffffff1c; color: var(--on-brand); }
 
@@ -102,4 +104,18 @@ const outros = langs
       if (!d.contains(e.target as Node | null)) d.removeAttribute("open");
     });
   });
+
+  // B32 (T17k): se, ao abrir, o menu sair da tela pela direita (celular, página 404), ele abre alinhado à direita do botão (.dd-flip).
+  // O evento "toggle" não sobe até o document: só a captura o pega. Mesma regra do bloco 7 do static/site.js.
+  document.addEventListener(
+    "toggle",
+    (e) => {
+      const d = e.target;
+      if (!(d instanceof HTMLDetailsElement) || !d.matches("details.dd")) return;
+      d.classList.remove("dd-flip");
+      const menu = d.open ? d.querySelector(".dd-menu") : null;
+      if (menu && menu.getBoundingClientRect().right > document.documentElement.clientWidth) d.classList.add("dd-flip");
+    },
+    true,
+  );
 </script>

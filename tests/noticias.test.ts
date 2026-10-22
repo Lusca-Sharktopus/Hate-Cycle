@@ -197,8 +197,14 @@ describe("peças soltas", () => {
     expect(combinaComBusca(texto, palavrasDaBusca("luz sangue"))).toBe(true);
     expect(combinaComBusca(texto, palavrasDaBusca("LUZ falta"))).toBe(false);
     expect(combinaComBusca(texto, palavrasDaBusca(""))).toBe(true);
-    // letras de versalete (Hᴀᴛᴇ) não são "a" para a busca: no site atual, "hate" não acha o que está escrito em versalete
-    expect(combinaComBusca(normalizarBusca("Hᴀᴛᴇ Cʏᴄʟᴇ"), palavrasDaBusca("hate"))).toBe(false);
+    // T17k (B22): o versalete Unicode (Hᴀᴛᴇ Cʏᴄʟᴇ) vale como letra comum na busca ("hate", "Hate", "HATE", "cycle"), sem perder o resto
+    const titulo = normalizarBusca("Novidades do Hᴀᴛᴇ Cʏᴄʟᴇ: Ação");
+    expect(titulo).toBe("novidades do hate cycle: acao");
+    for (const consulta of ["hate", "Hate", "HATE", "cycle", "CYCLE", "hate cycle", "hᴀᴛᴇ", "acao", "ação"]) expect(combinaComBusca(titulo, palavrasDaBusca(consulta)), consulta).toBe(true);
+    expect(combinaComBusca(titulo, palavrasDaBusca("hate zzz"))).toBe(false);
+    // o alfabeto todo: cada letra de versalete vira a sua letra comum (o "ǫ" do q não pode virar "o" pela decomposição)
+    expect(normalizarBusca("ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡʏᴢ")).toBe("abcdefghijklmnopqrstuvwyz");
+    expect(normalizarBusca("ǫᴜᴀʀᴛᴢ Quartz")).toBe("quartz quartz");
   });
 
   test("páginas: ?p= fora dos limites, texto ou zero; 10 por página; a barra com '…'", () => {
@@ -207,8 +213,10 @@ describe("peças soltas", () => {
     expect(paginaPedida("")).toBe(1);
     expect(paginaPedida("?p=abc")).toBe(1);
     expect(paginaPedida("?p=0")).toBe(1);
-    expect(paginaPedida("?p=2x")).toBe(2); // parseInt
-    expect(paginaPedida("?p=-3")).toBe(-3); // corrigido depois por paginaValida
+    // T17k (B22): só dígitos valem; o resto é página 1 (antes "2x" valia 2 por causa do parseInt)
+    for (const estranho of ["?p=2x", "?p=x2", "?p=2.5", "?p=1e3", "?p=0x5", "?p=+2", "?p= 2", "?p=2 ", "?p=-3", "?p=", "?outro=1", "?p=%32%78"]) expect(paginaPedida(estranho), estranho).toBe(1);
+    expect(paginaPedida("?p=007")).toBe(7);
+    expect(paginaPedida("?p=99")).toBe(99); // fora do intervalo: corrigido depois por paginaValida (vira a última)
     expect(paginaValida(-3, 83)).toBe(1);
     expect(paginaValida(99, 83)).toBe(9);
     expect(totalDePaginas(83)).toBe(9);

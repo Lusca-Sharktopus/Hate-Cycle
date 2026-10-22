@@ -20,7 +20,7 @@ O script gera o site atual (sem `base_url`, sem rascunhos) numa pasta temporári
 | `comentarios.json` | `ids_unicos` (86, em 172 páginas; eram 87 antes de Ossos do Ofício virar rascunho na T17b) e `por_pagina`: os `data-page` de cada página. |
 | `paginas.json` | Por URL: `title`, `description`, `lang`, `canonical`, `hreflang`, `og:*`, links alternativos (RSS) e `meta_refresh`. |
 | `feeds.json` | Itens (título, link, data) dos dois `feed.xml`. |
-| `estaticos.json` | Os 268 arquivos de `static/` com um hash curto (provam que imagens e scripts chegam iguais). `custom.css` fica de fora (é pessoal do autor). |
+| `estaticos.json` | Os 293 arquivos de `static/` com um hash curto (provam que imagens e scripts chegam iguais). `custom.css` fica de fora (é pessoal do autor). |
 | `texto/*.txt` | Texto visível de cada página, um arquivo por URL (`/pt/news/x/` vira `pt__news__x.txt`; a raiz é `_raiz.txt`). |
 | `screens/` | PNGs `desktop/` (1100 px) e `mobile/` (390 px) das páginas-chave. **Fora do git** (~77 MB); regere com o script. |
 

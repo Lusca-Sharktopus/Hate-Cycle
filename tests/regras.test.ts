@@ -46,6 +46,7 @@ import {
   type CartaoParaOrdenar,
   type ModoDeOrdem,
 } from "../src/lib/obras";
+import { normalizarBusca, paginaPedida } from "../src/lib/paginacao";
 import { barraDePaginas, itensDaPagina, linhasDaListaDeNoticias, NOTICIAS_POR_PAGINA, paginaValida, paginasDasNoticias, totalDePaginas } from "../src/lib/noticias";
 import { resumoAutomatico, textoPuro } from "../src/lib/resumos";
 import { criarSchemas, MIDIAS } from "../src/lib/schemas";
@@ -670,7 +671,7 @@ interface ElementoDeMentira {
 }
 
 /** Executa o bloco 6 do site.js (notícias: 10 por página + busca) e devolve as páginas escolhidas e a barra de páginas montada. */
-function paginarComSiteJs(buscas: readonly string[], busca: string, paginaPedida: number): { visiveis: number[]; barra: string[]; nenhuma: boolean } {
+function paginarComSiteJs(buscas: readonly string[], busca: string, paginaPedida: number | string): { visiveis: number[]; barra: string[]; nenhuma: boolean } {
   const codigo = blocoDoSiteJs("/* 6) Notícias: 10 por página", "/* Alternar entre posts incorporados");
   const itens = buscas.map((b) => ({ dataset: { search: b }, hidden: false }));
   let barra: ElementoDeMentira[] = [];
@@ -706,12 +707,12 @@ describe("paginação das notícias: barraDePaginas()/itensDaPagina() = bloco 6 
   /** A barra como o site.js a escreve (o que fica escrito em cada botão). */
   const rotulos = (atual: number, total: number) =>
     barraDePaginas(atual, total).map((i) => (i.tipo === "anterior" ? "‹ ANT" : i.tipo === "proximo" ? "PROX ›" : i.tipo === "reticencias" ? "…" : `${i.pagina}${i.atual ? "*" : ""}`));
-  const norm = (t: string) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const norm = normalizarBusca; // a mesma regra do site.js (com o versalete Unicode, T17k)
 
   test("de 0 a 120 notícias, várias páginas pedidas (inclusive fora do limite) e buscas", () => {
-    const buscas = Array.from({ length: 120 }, (_, i) => `Notícia número ${i} ${i % 3 === 0 ? "Dragão" : "Outra coisa"} ${i % 7 === 0 ? "Ação" : ""}`);
+    const buscas = Array.from({ length: 120 }, (_, i) => `Notícia número ${i} ${i % 3 === 0 ? "Dragão" : "Outra coisa"} ${i % 7 === 0 ? "Ação" : ""} ${i % 5 === 0 ? "Hᴀᴛᴇ Cʏᴄʟᴇ" : ""}`);
     for (const total of [0, 1, 9, 10, 11, 20, 21, 55, 56, 100, 119, 120]) {
-      for (const busca of ["", "dragao", "acao", "número 1", "zzz"]) {
+      for (const busca of ["", "dragao", "acao", "número 1", "zzz", "hate", "HATE cycle", "cycle ação"]) {
         for (const pedida of [1, 2, 3, 4, 6, 12, 0, -3, 999]) {
           const feitas = buscas.slice(0, total);
           const filtradas = feitas.map((b, i) => ({ b, i })).filter(({ b }) => norm(busca).split(/\s+/).filter(Boolean).every((p) => norm(b).includes(p)));
@@ -725,5 +726,15 @@ describe("paginação das notícias: barraDePaginas()/itensDaPagina() = bloco 6 
         }
       }
     }
+  });
+
+  test("?p= estranho (T17k): o site.js e paginaPedida() concordam, e valor que não é só dígitos = página 1", () => {
+    const buscas = Array.from({ length: 35 }, (_, i) => `Notícia ${i}`);
+    for (const pedido of ["2x", "x2", "2.5", "1e3", "+2", "abc", "", "-3", "0", "007", "3", "99"]) {
+      const pagina = paginaValida(paginaPedida(`?p=${pedido}`), buscas.length);
+      const esperado = itensDaPagina(buscas.map((_, i) => i), pagina);
+      expect(paginarComSiteJs(buscas, "", pedido).visiveis, pedido).toEqual(esperado);
+    }
+    expect(paginarComSiteJs(buscas, "", "2x").visiveis).toEqual(paginarComSiteJs(buscas, "", 1).visiveis);
   });
 });

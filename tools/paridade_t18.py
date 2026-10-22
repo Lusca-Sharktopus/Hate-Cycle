@@ -25,7 +25,7 @@ O que confere, em cada par:
      TEXTO visível de cada página; IDs de comentários (data-page) de cada página. No publicado, cada lado é comparado com
      baseline/ (o Python de hoje tem de bater com a foto — senão a foto está velha); nas prévias, Astro × Python.
      O texto do bloco "estou lendo em ordem…" (T17c) e o do link "Ver todas as histórias" da home (T17j), que só existem no Astro,
-     saem antes de ler; o resumo cortado da lista de Notícias volta à forma do Python, e a home do Python fica com os 4 primeiros
+     saem antes de ler; o leitor página a página dos quadrinhos vira as páginas empilhadas e a janela do jogo sai (T17d/T17k); o resumo cortado da lista de Notícias volta à forma do Python, e a home do Python fica com os 4 primeiros
      cartões, como a do Astro (T17j; as mesmas regras de tests/ajudantes/html.ts).
 Sai com 0 se tudo bater (ou só sobrar o que foi decidido), 1 se houver diferença. Só biblioteca padrão + Node (para o passo 3).
 """
@@ -116,11 +116,57 @@ RE_RESUMO_CORTADO = re.compile(r'<span class="news-fade">([^<]*)</span> (<a clas
 RE_CARTAO = re.compile(r'<article class="work-card[ "].*?</article>', re.S)
 
 
+# T17d (só no Astro, só na prévia): o leitor página a página dos quadrinhos vira o <div class="comic"> que ele tem dentro, e a janela da demo
+# + botão da Steam do Cat-Crow-Thing saem — as mesmas duas exceções de tests/ajudantes/html.ts (folheadorComoNoPython, semJanelaDoJogo), aqui só
+# para a leitura do TEXTO. A forma exata de cada uma (e os casos negativos) é conferida em tools/paridade_html.mjs e tests/folheador.test.ts.
+RE_ABRE_FOLHEADOR = re.compile(r'<div class="folheador" data-folheador[^>]*>')
+RE_ABRE_JOGO = re.compile(r'(?<=<hr class="thin">)<div class="jogo" data-jogo[^>]*>')
+RE_DIV = re.compile(r"<div[\s>]|</div\s*>")
+
+
+def fim_do_div(html: str, inicio: int) -> int:
+    """Posição logo depois do </div> que fecha o <div> aberto em `inicio` (conta os <div> de dentro)."""
+    prof = 0
+    for t in RE_DIV.finditer(html, inicio):
+        prof += 1 if t.group(0).startswith("<div") else -1
+        if prof == 0:
+            return t.end()
+    raise SystemExit("<div> sem </div> (T17d): o HTML do Astro está mal formado")
+
+
+def folheador_como_no_python(html: str) -> tuple[str, int]:
+    """Cada <div class="folheador" data-folheador> vira o <div class="comic"> de dentro. Devolve o HTML e quantos leitores viraram."""
+    n, pos = 0, 0
+    while (m := RE_ABRE_FOLHEADOR.search(html, pos)):
+        fim = fim_do_div(html, m.start())
+        c = html.find('<div class="comic">', m.end(), fim)
+        if c == -1:  # forma inesperada: fica como está e vira diferença
+            pos = m.end()
+            continue
+        comic = html[c:fim_do_div(html, c)]
+        html = html[: m.start()] + comic + html[fim:]
+        pos = m.start() + len(comic)
+        n += 1
+    return html, n
+
+
+def sem_janela_do_jogo(html: str) -> tuple[str, int]:
+    """Tira a janela da demo e o botão da Steam (<div class="jogo" data-jogo> logo depois do <hr class="thin">). Devolve o HTML e quantas saíram."""
+    n = 0
+    while (m := RE_ABRE_JOGO.search(html)):
+        html = html[: m.start()] + html[fim_do_div(html, m.start()):]
+        n += 1
+    return html, n
+
+
 def astro_como_no_python(html: str) -> tuple[str, int]:
-    """Tira o link "Ver todas as histórias" da home e desfaz o degradê do resumo cortado (T17j). Devolve o HTML e quantas trocas."""
+    """Tira o link "Ver todas as histórias" da home, desfaz o degradê do resumo cortado (T17j), troca o leitor página a página pelas páginas
+    empilhadas e tira a janela do jogo (T17d). Devolve o HTML e quantas trocas."""
     html, a = RE_LINK_DA_HOME.subn("", html)
     html, b = RE_RESUMO_CORTADO.subn(r"\1… \2", html)
-    return html, a + b
+    html, c = folheador_como_no_python(html)
+    html, d = sem_janela_do_jogo(html)
+    return html, a + b + c + d
 
 
 def python_como_no_astro(html: str) -> tuple[str, int]:

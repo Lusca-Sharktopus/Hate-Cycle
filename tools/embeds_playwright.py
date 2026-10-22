@@ -10,7 +10,7 @@ MESMAS mensagens que o serviço de verdade manda (formatos vistos com os serviç
   Instagram  LOADING, MEASURE com a altura e MOUNTED com estilos "hostis" (que não podem ser aplicados).
 Tudo o mais fora de localhost é bloqueado e registrado.
 
-O que o roteiro prova, numa notícia com X, uma com Reddit e a do Instagram (e a alternância .embed-alt), em /pt/ e /en/, a 1100 e 390 px:
+O que o roteiro prova, numa notícia com X, uma com Reddit e a do Instagram (e a alternância .embed-alt), em /pt/ e /en/, a 1100, 390 e 320 px (320: T17k, B22 — a página não rola para o lado):
   1. SEM CLIQUE: a moldura aparece sozinha; nenhum <script src> de outro site na página; nenhum widgets.js/embed.js pedido; os pedidos de
      terceiros vão só ao serviço do post.
   2. A moldura tem os MESMOS atributos, estilos e estrutura que o script oficial cria (X: div.twitter-tweet.twitter-tweet-rendered no
@@ -375,7 +375,7 @@ def principal():
         browser = p.chromium.launch()
         try:
             for lang in ("pt", "en"):
-                for largura in (1100, 390):
+                for largura in (1100, 390, 320):
                     for servico in ("reddit", "x", "instagram"):
                         roteiro_um_post(browser, porta, servico, lang, largura, args.fotos)
                     roteiro_alternancia(browser, porta, lang, largura, args.fotos)

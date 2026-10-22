@@ -30,7 +30,8 @@ a:hover { color: var(--green); }
 .skip:focus { left: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-h1, h2, h3, .chapter-title { font-family: var(--font-head); font-weight: 600; line-height: 1.1; color: var(--green); margin: 0 0 .5em; text-shadow: 0 3px 4px #0000002e; }
+/* B22 (T17k): palavra mais larga que a tela (ex.: "importantes/interessantes" num título de notícia, no celular) quebra em vez de empurrar a página para o lado */
+h1, h2, h3, .chapter-title { font-family: var(--font-head); font-weight: 600; line-height: 1.1; color: var(--green); margin: 0 0 .5em; text-shadow: 0 3px 4px #0000002e; overflow-wrap: break-word; }
 h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); }
 h2 { font-size: clamp(2rem, 5vw, 3.4rem); margin-top: 1.1em; }
 h3 { font-size: 1.3rem; text-shadow: none; }
@@ -56,6 +57,8 @@ h3 { font-size: 1.3rem; text-shadow: none; }
 .dd[open] > summary::after { content: " ▴"; }
 .dd-menu { position: absolute; right: 0; top: calc(100% + .5rem); min-width: 10rem; z-index: 10; display: flex; flex-direction: column;
   background: var(--night); border-radius: 12px; padding: .4rem; box-shadow: 0 10px 28px #0006; }
+/* se o menu aberto sairia da tela pela direita, o site.js põe .dd-flip e ele abre alinhado à direita do botão (B32, T17k) */
+.dd.dd-flip .dd-menu { left: auto; right: 0; }
 .dd-menu a { color: #e9fff8; text-decoration: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 500; }
 .dd-menu a:hover, .dd-menu a[aria-current] { background: #ffffff1c; color: #fff; }
 
@@ -213,12 +216,27 @@ hr.scene-divider { border-top: 1px solid #0004; width: 40%; margin: 2rem auto; }
 /* pedido do autor (16/10/2026): o botão do meio nunca é espremido pelos títulos das laterais (que o build.py já corta em 40 caracteres) */
 .pager .mid { flex: none; white-space: nowrap; }
 .reader-comic .pager .mid, .reader-comic .pager .pg { color: var(--mint); }
+/* B36 (T17k): em tela estreita a barra não cabia numa linha ("Todos os capítulos" + "Próximo", em português, passam da tela a 320 px e a página ganhava
+   rolagem lateral). Até 389 px (e, quando há os DOIS vizinhos, até 560 px) o botão do meio vai inteiro para a primeira linha e os vizinhos descem para a
+   de baixo, como as notícias já faziam até 560 px. De 390 px para cima, com um vizinho só, nada mudou. */
+@media (max-width: 389px) {
+  .pager { flex-wrap: wrap; justify-content: center; }
+  .pager .pg { max-width: 100%; }
+  .pager .mid { order: -1; width: 100%; text-align: center; }
+  .pager > span:empty { display: none; }
+}
+@media (max-width: 560px) {
+  .pager:has(> .prev):has(> .next) { flex-wrap: wrap; justify-content: center; }
+  .pager:has(> .prev):has(> .next) .pg { max-width: 100%; }
+  .pager:has(> .prev):has(> .next) .mid { order: -1; width: 100%; text-align: center; }
+}
 
 .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
 .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 /* cartinha que vira (Ossos do Ofício) */
-.flip-card { width: 300px; height: 450px; perspective: 1000px; margin: 1.5rem auto; }
+/* T17k: 300 × 450 px, mas nunca mais larga que a coluna (a 320 px a carta passava da tela): max-width + proporção 2:3 no lugar da altura fixa */
+.flip-card { width: 300px; max-width: 100%; aspect-ratio: 2 / 3; perspective: 1000px; margin: 1.5rem auto; }
 .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform .8s; transform-style: preserve-3d; }
 .flip-card { cursor: pointer; }
 .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
@@ -433,6 +451,8 @@ html.intro-out .intro-screen { opacity: 0; pointer-events: none; }
 .embed-btn.is-on img { background: transparent; }
 .embed-btn:hover:not(.is-on) { background: #e6f3ee; }
 @media (max-width: 760px) { .embed-alt { flex-direction: column; align-items: center; } .embed-panels { flex-basis: auto; width: 100%; } .embed-switch { flex-direction: row; position: static; order: -1; } }
+/* T17k: a 320 px os três botões (Instagram, TikTok, YouTube) não cabiam numa linha e ficavam cortados: descem para a linha de baixo */
+@media (max-width: 389px) { .embed-switch { flex-wrap: wrap; justify-content: center; } }
 
 .prose figure.wide img { max-width: 100%; width: 100%; height: auto; }
 
