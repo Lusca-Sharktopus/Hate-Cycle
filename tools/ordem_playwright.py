@@ -16,7 +16,9 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      com "reduzir movimento" nada anima: a arte que só se mexe fica parada (Luz & Sangue, Alô?) e a que tem algo surgindo troca de uma
      vez para o desenho final (Pederneira: Olivia e Harry no lugar do mouse e o Thymorr à direita) (T17i);
   7. no celular (390 px) a página não ganha rolagem horizontal e a arte em camadas cabe na coluna;
-  8. nada de "Em breve" (T17h): em nenhuma ordem, nem na prévia; com --previa: Beira de Estrada e O Pêndulo (rascunhos sem capítulo)
+  8. nada de "Em breve" (T17h): em nenhuma ordem, nem na prévia; com --previa (desde a T17d a Beira de Estrada tem capítulos provisórios,
+     então ela vem depois da Pederneira na Cronológica e a arte dela, item 13, é medida na própria prévia; o --beira ficou opcional). Antes:
+     Beira de Estrada e O Pêndulo (rascunhos sem capítulo)
      são puladas, e a Pederneira não tem história depois dela na Cronológica;
   9. (T17i) o link de cada lado: o ÚLTIMO capítulo da história anterior e o PRIMEIRO da seguinte (o externo continua externo), em todo capítulo;
  10. (T17i) a CAIXA DO MESMO TAMANHO: em TODO capítulo do site (e da prévia), a 1100, 390 e 320 px, getBoundingClientRect da caixa na
@@ -381,7 +383,11 @@ def tamanho_da_caixa(browser, porta, nome):
                         pg.wait_for_timeout(700)
             tamanhos = {(round(m["w"], 1), round(m["h"], 1)) for _, _, m in medidas}
             conferir(len(tamanhos) == 1, f"{largura} px {url}: a caixa tem o MESMO tamanho nas duas ordens e com o mouse ({sorted(tamanhos)}; {len(medidas)} medidas)")
-            for _, _, m in medidas:
+            # (T17d) só com o mouse fora: a arte de imagem/capa (O Pêndulo, Cat-Crow-Thing) cresce 7% com o mouse por cima (o "crescimento leve"
+            # da T17c, `transform: scale(1.07)`), e o getBoundingClientRect mede a moldura já crescida; a CAIXA não muda (conferido acima)
+            for _, estado, m in medidas:
+                if estado != "parado":
+                    continue
                 for mo in m["molduras"]:
                     molduras_do_site.setdefault(largura, set()).add(tuple(mo))
             letras = {r["letra"] for _, _, m in medidas for r in m["rotulos"]}
@@ -425,9 +431,11 @@ def previa(browser, porta):
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
     abrir(pg, porta, "/pt/works/firestriker/01/")
-    conferir(pg.locator('.so-order[data-ordem="chrono"] .so-side.next').count() == 0, "prévia: na Cronológica, depois da Pederneira NÃO vem ninguém (Beira de Estrada e O Pêndulo, sem capítulo, são puladas)")
+    # T17d: a Beira de Estrada ganhou capítulos (provisórios): na prévia ela vem depois da Pederneira, levando ao 1º capítulo
+    seguinte = pg.locator('.so-order[data-ordem="chrono"] a.so-side.next')
+    conferir(seguinte.count() == 1 and seguinte.get_attribute("href") == "/pt/works/roadside/01/", "prévia (T17d): na Cronológica, depois da Pederneira vem a Beira de Estrada (1º capítulo)")
     texto = pg.locator("[data-story-order]").text_content() or ""
-    conferir(all(x not in texto for x in ("Beira de Estrada", "Pêndulo", "Em breve")), "prévia: o bloco não fala de Beira de Estrada, de O Pêndulo nem de \"Em breve\"")
+    conferir("Em breve" not in texto, "prévia: o bloco não fala de \"Em breve\"")
     ctx.close()
 
 
@@ -447,6 +455,9 @@ def main() -> int:
             previa(browser, a.previa)
             print("\n== Ossos do Ofício (prévia, em inglês)")
             artes_novas(browser, a.previa, "ossos", "en")
+            for lang in ("pt", "en"):  # T17d: a Beira de Estrada tem capítulos na prévia de verdade (o --beira ficou opcional)
+                print(f"\n== Beira de Estrada ({lang}, prévia)")
+                artes_novas(browser, a.previa, "beira", lang)
             links(browser, a.previa, "prévia")
             tamanho_da_caixa(browser, a.previa, "prévia")
         if a.beira:

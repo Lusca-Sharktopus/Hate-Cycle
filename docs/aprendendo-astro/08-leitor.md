@@ -275,6 +275,49 @@ Pedidos do PDF de 21/10 (mudanças 4, 5, 7, 8 e 9). As duas obras são rascunho:
 1. **Veja uma história nova entrar na fila (e uma sem capítulo ser pulada).** Copie `content/works/firestriker/` (que tem um capítulo) para `content/works/teste/`, troque o título e os números de `order` (ex.: `"release": 2.5, "chrono": 6.5`), rode `pnpm dev` e abra o capítulo da *Pederneira*: a caixa mostra a nova. Agora apague a pasta `01/` de dentro de `teste/` e recarregue: ela some da caixa (nada de "Em breve"), mesmo continuando em Histórias como cartão cinza. Apague a pasta `teste` depois.
 2. **Quebre a ordem de propósito.** Em `src/lib/ordemDeLeitura.ts`, troque `decrescente: false` por `true` em `sequenciaDaOrdem()` e rode `pnpm vitest run ordem`: os testes do exemplo do PDF falham. Desfaça.
 
+## Leitor página a página dos quadrinhos (T17d): as runas da Beira de Estrada
+
+Pedido do autor (20/10, mudança 4), só no Astro e, por enquanto, só na prévia (as três obras são rascunho). Junto vieram a página do *Cat-Crow-Thing* (janela da demo e botão da Steam) e o vídeo provisório de *O Pêndulo*.
+
+### O que o visitante vê
+
+- **Uma página por vez**, que cabe inteira na tela (altura da janela menos um respiro; nunca maior que o arquivo), com uma seta redonda de cada lado (as mesmas do vídeo de Luz & Sangue) e, embaixo, **as Oito Runas d'A Força**: ᚣ 弓 ♐︎ ᚸ エ ꑭ ⼒ Ⱝ. A da página atual brilha (ciano, com o brilho das runas do fundo); as outras ficam apagadas e acendem com o mouse ou o foco. Clicar numa runa vai direto àquela página.
+- **As setas:** a da direita vai à próxima página; na 8ª, à 1ª do próximo capítulo; na 8ª do capítulo mais recente, **some**. A da esquerda faz o mesmo ao contrário (na 1ª, vai à **8ª** do anterior; no primeiro capítulo, some). "Capítulos" = os listados daquele idioma e modo (na prévia os rascunhos contam; capítulo `unlisted` não tem vizinhos), os mesmos do pager.
+- **O endereço:** a página mora só no **fragmento** (`/pt/works/roadside/01/#p5`). O endereço do capítulo e o ID dos comentários (`works/roadside/01`, igual nos dois idiomas) não mudam. Mandar o link com `#p5` abre na página 5; o "voltar" do navegador volta uma página.
+- **Teclado e leitor de tela:** ← e → fazem o mesmo que as setas (só com o leitor na tela e fora de campo de texto: quem digita um comentário não vira a página); Tab passa pelas runas, cada uma com o nome "Página 3 de 8"; ao trocar de página, um aviso escondido (`aria-live`) fala "Página 3 de 8".
+- **Sem JavaScript**, as 8 páginas aparecem uma embaixo da outra, sem setas nem runas: exatamente o leitor de quadrinhos de antes (e o do Python).
+
+### Como funciona (e por que assim)
+
+1. **Liga-se por um campo**, não pelo nome da pasta: `"page_runes"` no `work.json` (o schema confere a lista; `src/lib/folheador.ts` confere que **todo capítulo tem uma página por runa**, senão o build pára dizendo qual capítulo). Outra obra pode ter outras runas, ou nenhuma (o leitor de sempre).
+2. **O servidor desenha tudo** (`Folheador.astro`): o mesmo `<div class="comic">` com as mesmas `<img>` do leitor de quadrinhos, dentro de um palco com as duas setas, e a fileira de runas, já no estado da **página 1**. Antes de o script rodar, o CSS só mostra a 1ª página (para a tela não pular de 8 páginas para 1); o `<noscript>` traz a regra que mostra todas quando não há JavaScript.
+3. **O script** (`src/scripts/folheador/`, empacotado só nas páginas com o leitor) lê o `#pN`, esconde as outras páginas com `hidden`, marca a runa (`aria-current="page"`, que o CSS faz brilhar) e troca `href`/`title`/`aria-label` das setas. As regras (`regras.ts`) são **as mesmas** que o servidor usou para a página 1, e não importam nada (vão para o navegador). Ninguém monta HTML: só atributos e o texto do aviso.
+4. **Clicar numa runa ou numa seta é um link de verdade** (`href="#p3"` ou o endereço do outro capítulo): o navegador muda o fragmento e guarda no histórico; o script só escuta o `hashchange`. Por isso voltar/avançar e link direto funcionam sem código especial. Fragmento que não é de página (a volta do login traz `#access_token=…`) é ignorado.
+5. **Sem espera:** a página atual e as vizinhas ganham `loading="eager"` (a escondida baixa já, na versão leve certa do `srcset` da T17).
+6. **As runas** usam as fontes do fundo de runas (`src/styles/fontes-das-runas.css`, servidas pelo próprio site desde a T17; as oito já estavam no catálogo desde a T17f). O ♐ ganha o seletor de texto (U+FE0E) para não virar emoji colorido.
+
+### A página de jogo e O Pêndulo
+
+- **Cat-Crow-Thing:** `"game": {"demo": "", "steam": ""}` no `work.json`. `JanelaDoJogo.astro` (dados em `src/lib/jogo.ts`) põe, logo depois da linha fina sob o título, uma janela 16:9 escura com "Demo em breve" e o botão com a logo da Steam à esquerda. **Sem link** o botão é um `<span>` apagado, `aria-disabled`, sem mãozinha, com "Link em breve" ao lado (decisão: um botão que não leva a lugar nenhum mas parece clicável pareceria quebrado; apagado e com o aviso, fica claro que ainda vem). Com `steam` preenchido, vira um `<a>` para a Steam em outra aba; com `demo`, a janela mostra a demo num `<iframe>` com `sandbox` (o jogo roda no endereço dele e não alcança a sessão de quem comenta). O texto do capítulo aparece embaixo do botão.
+- **O Pêndulo:** um capítulo `01` com `youtube:` (o vídeo do episódio 1 de Luz & Sangue, provisório): a página é a de vídeo de sempre.
+
+### Paridade
+
+O Python (congelado) desenha a Beira como o leitor de quadrinhos de sempre e o Cat-Crow-Thing como um capítulo de texto vazio. Duas exceções estreitas em `tests/ajudantes/html.ts`, só no HTML do Astro: `folheadorComoNoPython()` troca o `div.folheador` **de forma exata** pelo `div.comic` de dentro, e `semJanelaDoJogo()` tira o `div.jogo` que vem logo depois do `hr.thin`. `tests/folheador.test.ts` prova que, sem elas, o capítulo sai idêntico ao leitor de sempre, e que qualquer outra forma (um filho a mais, texto no aviso, outra classe) não é tirada.
+
+### Rode você mesmo
+
+```bash
+NODE_ENV=development HC_OUT_DIR=/tmp/previa pnpm build   # a prévia, com as três obras
+pnpm vitest run folheador                                # regras, sites inventados, o script num navegador simulado
+python3 tools/folheador_playwright.py --previa 8792      # no navegador (servidor da prévia na porta 8792, sob timeout)
+```
+
+### Tente
+
+1. **Quebre a contagem de propósito.** Em `content/works/roadside/work.json`, apague a última runa de `page_runes` e rode `pnpm build`: ele pára, e a mensagem diz que o capítulo tem 8 páginas e a lista, 7 (no `pnpm dev`, a mesma mensagem aparece ao abrir o capítulo). Volte a runa.
+2. **Mude uma runa.** Troque `"⼒"` por `"ᛟ"` e abra `/pt/works/roadside/01/#p7` no `pnpm dev`: a 7ª runa mudou (e brilha, porque você abriu direto na página 7). Volte.
+
 ## Posts incorporados em moldura isolada (T17g → T17j, B27): o post aparece sozinho, como antes, sem o programa da rede social na sua página
 
 ### O problema, em uma frase

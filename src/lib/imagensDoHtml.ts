@@ -53,6 +53,7 @@ export function perfilDoLugar(lugar: Lugar): Perfil | null {
   if (p.has("so-img")) return PERFIS.ordemDeLeitura;
   if (p.has("so-layer")) return PERFIS.camadaDaOrdem;
   if (p.has("title-image")) return PERFIS.tituloDeCapitulo;
+  if (p.has("steam-logo")) return PERFIS.logoDaSteam;
   if (a.has("comic")) return PERFIS.paginaDeQuadrinho;
   if (a.has("lead")) return PERFIS.figuraDeNoticia;
   // ── o que o autor escreve nos textos (content/**) ──

@@ -7259,6 +7259,10 @@
      "All in a Night's Work",
      "/en/works/all-in-a-nights-work/01/"
     ],
+    "works/cat-crow-thing": [
+     "Cat-Crow-Thing",
+     "/en/works/cat-crow-thing/01/"
+    ],
     "works/firestriker": [
      "Firestriker",
      "/en/works/firestriker/01/"
@@ -7270,6 +7274,14 @@
     "works/light-and-blood": [
      "Light & Blood",
      "/en/works/light-and-blood/"
+    ],
+    "works/roadside": [
+     "Roadside",
+     "/en/works/roadside/"
+    ],
+    "works/the-pendulum": [
+     "The Pendulum",
+     "/en/works/the-pendulum/01/"
     ]
    },
    "pt": {
@@ -7637,6 +7649,10 @@
      "Apoio",
      "/pt/support/"
     ],
+    "works/cat-crow-thing": [
+     "Cat-Crow-Thing",
+     "/pt/works/cat-crow-thing/01/"
+    ],
     "works/firestriker": [
      "Pederneira",
      "/pt/works/firestriker/01/"
@@ -7648,6 +7664,14 @@
     "works/light-and-blood": [
      "Luz & Sangue",
      "/pt/works/light-and-blood/"
+    ],
+    "works/roadside": [
+     "Beira de Estrada",
+     "/pt/works/roadside/"
+    ],
+    "works/the-pendulum": [
+     "O Pêndulo",
+     "/pt/works/the-pendulum/01/"
     ]
    }
   }
@@ -9602,6 +9626,26 @@
    },
    "previa": null
   },
+  "works/cat-crow-thing/01/en.md": {
+   "lang": "en",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/cat-crow-thing/01/pt.md": {
+   "lang": "pt",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
   "works/firestriker/01/en.md": {
    "lang": "en",
    "divisor": "other images/Firestriker Scene Divider.png",
@@ -9656,6 +9700,66 @@
    "lang": "pt",
    "divisor": null,
    "sha1": "adc83b19e793491b1c6ea0fd8b46cd9f32e592fc",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/roadside/01/en.md": {
+   "lang": "en",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/roadside/01/pt.md": {
+   "lang": "pt",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/roadside/02/en.md": {
+   "lang": "en",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/roadside/02/pt.md": {
+   "lang": "pt",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/the-pendulum/01/en.md": {
+   "lang": "en",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+   "build": {
+    "html": "",
+    "versalete": ""
+   },
+   "previa": null
+  },
+  "works/the-pendulum/01/pt.md": {
+   "lang": "pt",
+   "divisor": null,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
    "build": {
     "html": "",
     "versalete": ""

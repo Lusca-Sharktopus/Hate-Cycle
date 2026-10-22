@@ -146,6 +146,37 @@ const arteEmCamadas = () =>
       .max(8, { error: "layers aceita no máximo 8 camadas." }),
   });
 
+/**
+ * page_runes do work.json (T17d): liga o LEITOR PÁGINA A PÁGINA dos quadrinhos (só no Astro). Uma runa por página do capítulo, na ordem
+ * (Beira de Estrada: as Oito Runas d'A Força). Cada item é um símbolo (pode levar o seletor de texto U+FE0E, como "♐︎"), sem espaços.
+ * Que cada capítulo tenha exatamente esse número de páginas é conferido no build (src/lib/folheador.ts).
+ */
+const runasDasPaginas = () =>
+  z
+    .array(texto(), { error: (i) => `tem de ser uma lista de runas, uma por página (ex.: ["ᚣ", "弓", "♐︎"]), mas veio ${descrever(i.input)}.` })
+    .min(1, { error: "page_runes precisa de pelo menos uma runa (uma por página do capítulo)." })
+    .max(60, { error: "page_runes aceita no máximo 60 runas." })
+    .superRefine((lista, ctx) => {
+      lista.forEach((runa, n) => {
+        if (runa.trim() === "" || /\s/.test(runa)) ctx.addIssue({ code: "custom", path: [n], input: runa, message: `a runa ${n + 1} (${descrever(runa)}) tem de ser um símbolo só, sem espaços.` });
+      });
+    });
+
+/** Endereço https:// (ou vazio = "ainda não tem"). */
+const enderecoHttps = (oQue: string) =>
+  texto().refine((v) => v === "" || /^https:\/\/[^\s"'<>]+$/.test(v), { error: (i) => `${oQue} tem de ser um endereço completo que começa com https:// (ou "" enquanto não existe), mas veio ${descrever(i.input)}.` });
+
+/**
+ * game do work.json (T17d): a página de um JOGO (só no Astro): a janela da demo e o botão "Wishlist on Steam". `demo` = o endereço da
+ * demo para jogar no navegador (itch.io, por exemplo); `steam` = a página do jogo na Steam. Vazio = ainda não existe (a janela fica
+ * escura, com "Demo em breve"; o botão aparece sem link, com "Link em breve"). Ver src/lib/jogo.ts.
+ */
+const paginaDeJogo = () =>
+  estritoDaArte("game", {
+    demo: enderecoHttps("demo (o endereço da demo do jogo)").optional(),
+    steam: enderecoHttps("steam (a página do jogo na Steam)").optional(),
+  });
+
 /** Lista de referências "seção/pasta" (related). */
 const referencias = (indice: Indice) =>
   listaDeTextos().superRefine((lista, ctx) => {
@@ -335,6 +366,10 @@ export function criarSchemas(indice: Indice) {
       order_images: listaOrdemDeImagens().optional(),
       /** Arte do mesmo bloco em CAMADAS animadas (T17h): vale no lugar de `order_images` (se houver os dois, a arte em camadas ganha). Ver src/lib/artesDaOrdem.ts. */
       order_art: arteEmCamadas().optional(),
+      /** Leitor página a página dos quadrinhos (T17d, só no Astro): uma runa por página, na ordem. Ver src/lib/folheador.ts. */
+      page_runes: runasDasPaginas().optional(),
+      /** Página de jogo (T17d, só no Astro): janela da demo e botão da Steam. Ver src/lib/jogo.ts. */
+      game: paginaDeJogo().optional(),
       langs: z.array(idioma, { error: (i) => `tem de ser uma lista de idiomas (${langs.join(", ")}), mas veio ${descrever(i.input)}.` }).optional(),
       title: traduzivel().optional(),
       blurb: traduzivel().optional(),

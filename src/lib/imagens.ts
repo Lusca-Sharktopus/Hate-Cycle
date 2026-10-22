@@ -67,6 +67,8 @@ export const PERFIS = {
   tituloDeCapitulo: { nome: "titulo-de-capitulo", larguras: [380, 760], sizes: "380px", qualidade: 85 },
   /** Páginas de quadrinho no leitor: a largura do leitor, até 900 px. */
   paginaDeQuadrinho: { nome: "pagina-de-quadrinho", larguras: [480, 900, 1400, 1800], sizes: "(max-width: 900px) 100vw, 900px", qualidade: 86 },
+  /** A logo da Steam no botão da página de jogo (T17d): 32 px. */
+  logoDaSteam: { nome: "logo-da-steam", larguras: [64, 96], sizes: "32px", qualidade: 85 },
   /** Texto do autor: a figura que contorna o texto (Giuseppe em Ossos do Ofício), 240 px. */
   contornada: { nome: "contornada", larguras: [240, 480], sizes: "240px", qualidade: 85 },
   /** Texto do autor: a ilustração grande de uma cena (Ossos do Ofício), ~890 px. */

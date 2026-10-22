@@ -6748,12 +6748,20 @@
    "universe/hidden-magic/en.md": "Example page — edit or delete. Dragons, goblins, mages and deities hide from humanity out of fear of capture and containment.",
    "universe/hidden-magic/pt.md": "Página de exemplo — edite ou apague. Dragões, goblins, magos e divindades se escondem da humanidade por medo de captura e…",
    "works/all-in-a-nights-work/01/en.md": "The sunny morning after a full night of rain had a distinct aroma; the Sun rays phased through the leaves of the trees; the…",
+   "works/cat-crow-thing/01/en.md": "",
+   "works/cat-crow-thing/01/pt.md": "",
    "works/firestriker/01/en.md": "“We’re lost!”, shouted Harry, my young assistant. Tiredness, frustration and what I can only interpret as a moan caused by…",
    "works/firestriker/01/pt.md": "“Estamos perdidos!”, exclamou Harry, meu jovem assistente. Cansaço, frustração e o que eu só posso interpretar como um gemido…",
    "works/light-and-blood/01/en.md": "",
    "works/light-and-blood/01/pt.md": "",
    "works/light-and-blood/02/en.md": "",
-   "works/light-and-blood/02/pt.md": ""
+   "works/light-and-blood/02/pt.md": "",
+   "works/roadside/01/en.md": "",
+   "works/roadside/01/pt.md": "",
+   "works/roadside/02/en.md": "",
+   "works/roadside/02/pt.md": "",
+   "works/the-pendulum/01/en.md": "",
+   "works/the-pendulum/01/pt.md": ""
   },
   "plain_real": {
    "characters/harry/en.md": {
@@ -7512,6 +7520,14 @@
     "sha1": "e2f470cdaf7a728f2cdae749ab9d2a440ceacfab",
     "tamanho": 1818
    },
+   "works/cat-crow-thing/01/en.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/cat-crow-thing/01/pt.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
    "works/firestriker/01/en.md": {
     "sha1": "154597c56e57e68e6ee3befff5068c304e49a2cd",
     "tamanho": 21780
@@ -7533,6 +7549,30 @@
     "tamanho": 0
    },
    "works/light-and-blood/02/pt.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/roadside/01/en.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/roadside/01/pt.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/roadside/02/en.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/roadside/02/pt.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/the-pendulum/01/en.md": {
+    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "tamanho": 0
+   },
+   "works/the-pendulum/01/pt.md": {
     "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
     "tamanho": 0
    }
@@ -18144,6 +18184,7 @@
     "en": {
      "listadas": [
       "all-in-a-nights-work",
+      "cat-crow-thing",
       "firestriker",
       "hdvr",
       "light-and-blood",
@@ -18156,15 +18197,16 @@
       "light-and-blood",
       "all-in-a-nights-work",
       "roadside",
-      "the-pendulum"
+      "the-pendulum",
+      "cat-crow-thing"
      ],
      "outras": [],
      "destaques": [
       "light-and-blood",
       "firestriker",
-      "all-in-a-nights-work",
-      "hdvr",
-      "the-pendulum"
+      "cat-crow-thing",
+      "the-pendulum",
+      "roadside"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -18184,6 +18226,24 @@
         "release": "4"
        },
        "midia": "short-story"
+      },
+      "cat-crow-thing": {
+       "titulo": "Cat-Crow-Thing",
+       "titulo_dado": "Cat-Crow-Thing",
+       "resumo": "",
+       "imagem": "/covers/PT/Capa%20Cat-Crow-Thing.png",
+       "botao": {
+        "tipo": "link",
+        "href": "/en/works/cat-crow-thing/01/",
+        "externo": false,
+        "rotulo": "Play here"
+       },
+       "previa": null,
+       "ordem": {
+        "chrono": "12",
+        "release": "7"
+       },
+       "midia": "videogame"
       },
       "firestriker": {
        "titulo": "Firestriker",
@@ -18245,8 +18305,10 @@
        "resumo": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
        "imagem": "/covers/EN/Cover%20Roadside.png",
        "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Soon"
+        "tipo": "link",
+        "href": "/en/works/roadside/",
+        "externo": false,
+        "rotulo": "Read here"
        },
        "previa": null,
        "ordem": {
@@ -18261,8 +18323,10 @@
        "resumo": "Retired superhero Lucas di Vario helps his friend with their problem with time loops.",
        "imagem": "/covers/EN/Cover%20Pendulum.png",
        "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Soon"
+        "tipo": "link",
+        "href": "/en/works/the-pendulum/01/",
+        "externo": false,
+        "rotulo": "Watch here"
        },
        "previa": null,
        "ordem": {
@@ -18326,6 +18390,10 @@
         {
          "valor": "short-film",
          "rotulo": "Short Film"
+        },
+        {
+         "valor": "videogame",
+         "rotulo": "Videogame"
         }
        ]
       }
@@ -19299,6 +19367,7 @@
     "pt": {
      "listadas": [
       "all-in-a-nights-work",
+      "cat-crow-thing",
       "firestriker",
       "hdvr",
       "light-and-blood",
@@ -19311,13 +19380,14 @@
       "light-and-blood",
       "all-in-a-nights-work",
       "roadside",
-      "the-pendulum"
+      "the-pendulum",
+      "cat-crow-thing"
      ],
      "outras": [],
      "destaques": [
       "light-and-blood",
       "firestriker",
-      "hdvr",
+      "cat-crow-thing",
       "the-pendulum",
       "roadside"
      ],
@@ -19337,6 +19407,24 @@
         "release": "4"
        },
        "midia": "short-story"
+      },
+      "cat-crow-thing": {
+       "titulo": "Cat-Crow-Thing",
+       "titulo_dado": "Cat-Crow-Thing",
+       "resumo": "",
+       "imagem": "/covers/PT/Capa%20Cat-Crow-Thing.png",
+       "botao": {
+        "tipo": "link",
+        "href": "/pt/works/cat-crow-thing/01/",
+        "externo": false,
+        "rotulo": "Jogue aqui"
+       },
+       "previa": null,
+       "ordem": {
+        "chrono": "12",
+        "release": "7"
+       },
+       "midia": "videogame"
       },
       "firestriker": {
        "titulo": "Pederneira",
@@ -19398,8 +19486,10 @@
        "resumo": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre.",
        "imagem": "/covers/PT/Capa%20Beira%20de%20Estrada.png",
        "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Em breve"
+        "tipo": "link",
+        "href": "/pt/works/roadside/",
+        "externo": false,
+        "rotulo": "Leia aqui"
        },
        "previa": null,
        "ordem": {
@@ -19414,8 +19504,10 @@
        "resumo": "O super-herói aposentado Lucas di Vario ajuda seu amigo com seu problema com loops temporais.",
        "imagem": "/covers/PT/Capa%20Pendulo.png",
        "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Em breve"
+        "tipo": "link",
+        "href": "/pt/works/the-pendulum/01/",
+        "externo": false,
+        "rotulo": "Assista aqui"
        },
        "previa": null,
        "ordem": {
@@ -19479,6 +19571,10 @@
         {
          "valor": "short-film",
          "rotulo": "Curta-metragem"
+        },
+        {
+         "valor": "videogame",
+         "rotulo": "Videogame"
         }
        ]
       }
@@ -20495,6 +20591,27 @@
       "voltar": null
      }
     },
+    "/en/works/cat-crow-thing/01/": {
+     "lang": "en",
+     "titulo": "Cat-Crow-Thing",
+     "cls": "reader reader-prose",
+     "desc": "",
+     "imagem": "covers/PT/Capa Cat-Crow-Thing.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/cat-crow-thing/01/",
+      "pt": "/pt/works/cat-crow-thing/01/"
+     },
+     "capitulo": {
+      "h1": "Cat-Crow-Thing",
+      "data": null,
+      "comentarios": "works/cat-crow-thing/01",
+      "formato": "prose",
+      "anterior": null,
+      "proximo": null,
+      "voltar": null
+     }
+    },
     "/en/works/firestriker/01/": {
      "lang": "en",
      "titulo": "Firestriker",
@@ -20614,6 +20731,121 @@
        "url": "/en/works/light-and-blood/",
        "rotulo": "All episodes"
       }
+     }
+    },
+    "/en/works/roadside/": {
+     "lang": "en",
+     "titulo": "Roadside",
+     "cls": "",
+     "desc": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
+     "imagem": "covers/EN/Cover Roadside.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/roadside/",
+      "pt": "/pt/works/roadside/"
+     },
+     "obra": {
+      "capa": "/covers/EN/Cover%20Roadside.png",
+      "titulo": "Roadside",
+      "resumo": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
+      "primeiro": {
+       "url": "/en/works/roadside/01/",
+       "rotulo": "Start from the beginning"
+      },
+      "ultimo": {
+       "url": "/en/works/roadside/02/",
+       "rotulo": "Latest chapter"
+      },
+      "titulo_da_lista": "Chapters",
+      "capitulos": [
+       {
+        "url": "/en/works/roadside/01/",
+        "numero": "1",
+        "titulo": "Chapter 1",
+        "data": ""
+       },
+       {
+        "url": "/en/works/roadside/02/",
+        "numero": "2",
+        "titulo": "Chapter 2",
+        "data": ""
+       }
+      ]
+     }
+    },
+    "/en/works/roadside/01/": {
+     "lang": "en",
+     "titulo": "Roadside — Chapter 1",
+     "cls": "reader reader-comic",
+     "desc": "",
+     "imagem": "covers/EN/Cover Roadside.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/roadside/01/",
+      "pt": "/pt/works/roadside/01/"
+     },
+     "capitulo": {
+      "h1": "Chapter 1",
+      "data": null,
+      "comentarios": "works/roadside/01",
+      "formato": "comic",
+      "anterior": null,
+      "proximo": {
+       "url": "/en/works/roadside/02/",
+       "titulo": "Chapter 2"
+      },
+      "voltar": {
+       "url": "/en/works/roadside/",
+       "rotulo": "All chapters"
+      }
+     }
+    },
+    "/en/works/roadside/02/": {
+     "lang": "en",
+     "titulo": "Roadside — Chapter 2",
+     "cls": "reader reader-comic",
+     "desc": "",
+     "imagem": "covers/EN/Cover Roadside.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/roadside/02/",
+      "pt": "/pt/works/roadside/02/"
+     },
+     "capitulo": {
+      "h1": "Chapter 2",
+      "data": null,
+      "comentarios": "works/roadside/02",
+      "formato": "comic",
+      "anterior": {
+       "url": "/en/works/roadside/01/",
+       "titulo": "Chapter 1"
+      },
+      "proximo": null,
+      "voltar": {
+       "url": "/en/works/roadside/",
+       "rotulo": "All chapters"
+      }
+     }
+    },
+    "/en/works/the-pendulum/01/": {
+     "lang": "en",
+     "titulo": "The Pendulum",
+     "cls": "reader reader-video",
+     "desc": "",
+     "imagem": "covers/EN/Cover Pendulum.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/the-pendulum/01/",
+      "pt": "/pt/works/the-pendulum/01/"
+     },
+     "capitulo": {
+      "h1": "The Pendulum",
+      "data": null,
+      "comentarios": "works/the-pendulum/01",
+      "formato": "video",
+      "anterior": null,
+      "proximo": null,
+      "voltar": null
      }
     },
     "/en/news/": {
@@ -24508,6 +24740,27 @@
       "pt": "/pt/works/"
      }
     },
+    "/pt/works/cat-crow-thing/01/": {
+     "lang": "pt",
+     "titulo": "Cat-Crow-Thing",
+     "cls": "reader reader-prose",
+     "desc": "",
+     "imagem": "covers/PT/Capa Cat-Crow-Thing.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/cat-crow-thing/01/",
+      "pt": "/pt/works/cat-crow-thing/01/"
+     },
+     "capitulo": {
+      "h1": "Cat-Crow-Thing",
+      "data": null,
+      "comentarios": "works/cat-crow-thing/01",
+      "formato": "prose",
+      "anterior": null,
+      "proximo": null,
+      "voltar": null
+     }
+    },
     "/pt/works/firestriker/01/": {
      "lang": "pt",
      "titulo": "Pederneira",
@@ -24627,6 +24880,121 @@
        "url": "/pt/works/light-and-blood/",
        "rotulo": "Todos os episódios"
       }
+     }
+    },
+    "/pt/works/roadside/": {
+     "lang": "pt",
+     "titulo": "Beira de Estrada",
+     "cls": "",
+     "desc": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre.",
+     "imagem": "covers/PT/Capa Beira de Estrada.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/roadside/",
+      "pt": "/pt/works/roadside/"
+     },
+     "obra": {
+      "capa": "/covers/PT/Capa%20Beira%20de%20Estrada.png",
+      "titulo": "Beira de Estrada",
+      "resumo": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre.",
+      "primeiro": {
+       "url": "/pt/works/roadside/01/",
+       "rotulo": "Começar do início"
+      },
+      "ultimo": {
+       "url": "/pt/works/roadside/02/",
+       "rotulo": "Último capítulo"
+      },
+      "titulo_da_lista": "Capítulos",
+      "capitulos": [
+       {
+        "url": "/pt/works/roadside/01/",
+        "numero": "1",
+        "titulo": "Capítulo 1",
+        "data": ""
+       },
+       {
+        "url": "/pt/works/roadside/02/",
+        "numero": "2",
+        "titulo": "Capítulo 2",
+        "data": ""
+       }
+      ]
+     }
+    },
+    "/pt/works/roadside/01/": {
+     "lang": "pt",
+     "titulo": "Beira de Estrada — Capítulo 1",
+     "cls": "reader reader-comic",
+     "desc": "",
+     "imagem": "covers/PT/Capa Beira de Estrada.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/roadside/01/",
+      "pt": "/pt/works/roadside/01/"
+     },
+     "capitulo": {
+      "h1": "Capítulo 1",
+      "data": null,
+      "comentarios": "works/roadside/01",
+      "formato": "comic",
+      "anterior": null,
+      "proximo": {
+       "url": "/pt/works/roadside/02/",
+       "titulo": "Capítulo 2"
+      },
+      "voltar": {
+       "url": "/pt/works/roadside/",
+       "rotulo": "Todos os capítulos"
+      }
+     }
+    },
+    "/pt/works/roadside/02/": {
+     "lang": "pt",
+     "titulo": "Beira de Estrada — Capítulo 2",
+     "cls": "reader reader-comic",
+     "desc": "",
+     "imagem": "covers/PT/Capa Beira de Estrada.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/roadside/02/",
+      "pt": "/pt/works/roadside/02/"
+     },
+     "capitulo": {
+      "h1": "Capítulo 2",
+      "data": null,
+      "comentarios": "works/roadside/02",
+      "formato": "comic",
+      "anterior": {
+       "url": "/pt/works/roadside/01/",
+       "titulo": "Capítulo 1"
+      },
+      "proximo": null,
+      "voltar": {
+       "url": "/pt/works/roadside/",
+       "rotulo": "Todos os capítulos"
+      }
+     }
+    },
+    "/pt/works/the-pendulum/01/": {
+     "lang": "pt",
+     "titulo": "O Pêndulo",
+     "cls": "reader reader-video",
+     "desc": "",
+     "imagem": "covers/PT/Capa Pendulo.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/the-pendulum/01/",
+      "pt": "/pt/works/the-pendulum/01/"
+     },
+     "capitulo": {
+      "h1": "O Pêndulo",
+      "data": null,
+      "comentarios": "works/the-pendulum/01",
+      "formato": "video",
+      "anterior": null,
+      "proximo": null,
+      "voltar": null
      }
     },
     "/pt/news/": {

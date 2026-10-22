@@ -26,7 +26,7 @@ import { versaleteEntreTags } from "../src/lib/markdown";
 import { compararNatural } from "../src/lib/ordem";
 import { finalizarMain, protegerAtributos, separarScripts, textoDoAutor, versaleteNoMain } from "../src/lib/pagina";
 import { arquivosDoGlob, globNaPasta } from "../src/lib/quadrinhos";
-import { canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, semScriptsAntigosDosComentarios } from "./ajudantes/html";
+import { canonicoDoMiolo, folheadorComoNoPython, RE_SCRIPT_DOS_COMENTARIOS, semJanelaDoJogo, semScriptsAntigosDosComentarios } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -124,11 +124,20 @@ for (const amb of ref.ambientes) {
       const semAntigos = semScriptsAntigosDosComentarios(py.main);
       const temCaixa = leitura.comentarios?.tipo === "caixa";
       expect({ pares: semAntigos.quantos, sobrou: semAntigos.sobrou }, url).toEqual({ pares: temCaixa ? 1 : 0, sobrou: false });
-      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(semAntigos.html));
+      // T17d: o leitor página a página (obra com page_runes) e a janela do jogo (obra com game) só existem no Astro (tests/folheador.test.ts)
+      const comoNoPython = folheadorComoNoPython(pronto.html);
+      const semJogo = semJanelaDoJogo(comoNoPython.html);
+      expect({ trocados: comoNoPython.trocados, recusados: comoNoPython.recusados, janelas: semJogo.removidos.length, foraDoLugar: semJogo.foraDoLugar }, url).toEqual({
+        trocados: leitura.conteudo.formato === "comic" && leitura.conteudo.folheador ? 1 : 0,
+        recusados: 0,
+        janelas: leitura.conteudo.formato === "prose" && leitura.conteudo.jogo ? 1 : 0,
+        foraDoLugar: 0,
+      });
+      expect(canonicoDoMiolo(semJogo.html), url).toBe(canonicoDoMiolo(semAntigos.html));
       // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
       const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
       expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);
-      expect(pronto.scripts.replace(RE_SCRIPT_DOS_COMENTARIOS, "") !== "", `${url}: scripts de componente`).toBe(leitura.temCartaQueVira || leitura.temPostsAlternados);
+      expect(pronto.scripts.replace(RE_SCRIPT_DOS_COMENTARIOS, "") !== "", `${url}: scripts de componente`).toBe(leitura.temCartaQueVira || leitura.temPostsAlternados || (leitura.conteudo.formato === "comic" && leitura.conteudo.folheador !== null));
       comparados++;
     });
   });

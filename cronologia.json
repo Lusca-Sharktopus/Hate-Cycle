@@ -88,7 +88,8 @@
       "pt": "Cat-Crow-Thing",
       "chrono": 12,
       "media": "videogame",
-      "no_site": false
+      "no_site": true,
+      "pasta": "cat-crow-thing"
     }
   ]
 }

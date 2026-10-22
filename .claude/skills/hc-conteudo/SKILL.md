@@ -33,13 +33,13 @@ description: Criar, editar, esconder ou mostrar conteúdo do site Hᴀᴛᴇ Cʏ
 Notícias com design: `backdrop_top`/`backdrop_bottom`; colagem: `stickers` (linhas `arquivo | l3 t2 w26 a-4`) + `overlay`.
 Emissário: `title`, `role`, `image` (quadrada, em `static/emissaries/`), `order`, redes (`instagram`, `tiktok`, `youtube`, `x`, `bluesky`, `website`, `email`).
 
-**`work.json`**: `kind` (`prose` | `comic` | `video`), `universe` (true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias"), `oneshot`, `title`/`blurb`/`cover`/`logo` com `{"en","pt"}`, `divider` (imagem do `---`), `order: {"release": n, "chrono": n}`, `reading_font: "times"`, `media`, `listed` (false tira das listas, mas a página existe), `draft` (true = obra inteira em rascunho, só na prévia), `order_art` (a arte do bloco "estou lendo em ordem" em camadas animadas: `size` e `layers` com `x`, `y`, `width`, `rotate`, `opacity` e `hover`; passo a passo no guia do autor) ou `order_images` (1 ou 2 imagens; sem nenhuma das duas vale a capa), `langs`, `external` (link para fora), `updated`.
+**`work.json`**: `kind` (`prose` | `comic` | `video`), `universe` (true = Histórias Hᴀᴛᴇ Cʏᴄʟᴇ; false = "Outras histórias"), `oneshot`, `title`/`blurb`/`cover`/`logo` com `{"en","pt"}`, `divider` (imagem do `---`), `order: {"release": n, "chrono": n}`, `reading_font: "times"`, `media`, `listed` (false tira das listas, mas a página existe), `draft` (true = obra inteira em rascunho, só na prévia), `order_art` (a arte do bloco "estou lendo em ordem" em camadas animadas: `size` e `layers` com `x`, `y`, `width`, `rotate`, `opacity` e `hover`; passo a passo no guia do autor) ou `order_images` (1 ou 2 imagens; sem nenhuma das duas vale a capa), `langs`, `external` (link para fora), `updated`; só no Astro (T17d): `page_runes` (quadrinho página a página, uma runa por página) e `game` (`{"demo": "https://…", "steam": "https://…"}`: janela da demo e botão da Steam; vazio = "em breve"). Passo a passo no guia do autor, seção 4.
 
 **`media`** (filtro da página Histórias; rótulos em `MEDIA_LABELS` no `build.py`): `short-story`, `webcomic`, `live-ttrpg`, `short-film`, `animated-show`, `videogame`, `misc` (PT "Miscelânea", EN "Miscellaneous").
 
 ## Mostrar / esconder
 
-- Obra inteira: `"draft": true` no `work.json` (ex.: Ossos do Ofício, Beira de Estrada, O Pêndulo); publicar = apagar a linha.
+- Obra inteira: `"draft": true` no `work.json` (ex.: Ossos do Ofício, Beira de Estrada, O Pêndulo, Cat-Crow-Thing); publicar = apagar a linha.
 - Capítulo/notícia: `draft: true` (só prévia) ou `unlisted: true` (capítulo acessível por link).
 - Emissário: `draft: true` nos dois `.md` ou `config.json → "emissaries": {"hide": ["slug"]}`.
 - "Extras" (Universo, Personagens): `config.json → "show_extras"`.

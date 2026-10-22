@@ -1,0 +1,26 @@
+{
+  "draft": true,
+  "universe": true,
+  "oneshot": true,
+  "title": {
+    "en": "Cat-Crow-Thing",
+    "pt": "Cat-Crow-Thing"
+  },
+  "cover": {
+    "en": "covers/PT/Capa Cat-Crow-Thing.png",
+    "pt": "covers/PT/Capa Cat-Crow-Thing.png"
+  },
+  "cta": {
+    "en": "Play here",
+    "pt": "Jogue aqui"
+  },
+  "order": {
+    "release": 7,
+    "chrono": 12
+  },
+  "game": {
+    "demo": "",
+    "steam": ""
+  },
+  "media": "videogame"
+}

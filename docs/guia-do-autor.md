@@ -127,6 +127,39 @@ A imagem com `class="jusep"` (Giuseppe) flutua à esquerda e o texto acompanha o
 
 > **No site novo (Astro):** o texto acompanha o contorno pela *silhueta* do desenho (`/silhuetas/giuseppe.png`, gerada sozinha no build a partir do desenho em `static/other images/`; o contorno é o mesmo, só não baixa o arquivo grande de novo). Se você trocar o desenho do Giuseppe, da foto do autor ou dos GIFs da página Sobre por outro de **mesmo nome**, a silhueta é refeita sozinha. Para um desenho **novo** em que o texto deva dar a volta, peça: é uma linha em `src/lib/silhuetas.ts`.
 
+### Quadrinho página a página, com as runas embaixo (Beira de Estrada; só no site novo)
+
+Desde 22/10 (T17d), um quadrinho pode ser lido **uma página por vez**: a página no meio, uma seta redonda de cada lado e, embaixo, uma runa por página (na *Beira de Estrada*, as Oito Runas d'A Força: ᚣ 弓 ♐︎ ᚸ エ ꑭ ⼒ Ⱝ). A runa da página em que o visitante está brilha; clicar numa runa vai direto àquela página. A seta da direita vai à próxima página e, na última, à primeira do próximo capítulo; na última página do capítulo mais recente ela some. A da esquerda faz o mesmo ao contrário (na 1ª página, vai à **última** do capítulo anterior). Também funcionam as setas ← → do teclado, o Tab nas runas e o "voltar" do navegador.
+
+- **Como ligar:** no `work.json` da obra, `"page_runes": ["ᚣ", "弓", "♐︎", "ᚸ", "エ", "ꑭ", "⼒", "Ⱝ"]` (uma runa por página, na ordem; a obra tem de ser `"kind": "comic"`). Todo capítulo tem de ter **exatamente** esse número de páginas: se um capítulo tiver 7 ou 9, o site **não é gerado** e a mensagem diz qual capítulo e quantas páginas ele tem (assim um capítulo pela metade nunca vai ao ar sem ninguém ver).
+- **O endereço não muda:** o capítulo continua em `/pt/works/roadside/01/` e os comentários continuam os mesmos (a conversa `works/roadside/01`, igual nos dois idiomas). A página dentro do capítulo vai no fim do endereço: `/pt/works/roadside/01/#p5` abre direto na página 5 (bom para mandar link).
+- **Sem JavaScript** (ou no site antigo, em Python), as páginas aparecem uma embaixo da outra, como antes.
+- **Hoje (provisório):** os capítulos 01 e 02 usam as 8 imagens "pagina placeholder 1…8.png" que você mandou em 20/10, guardadas **uma vez** em `static/comics/provisorio/` (os dois capítulos apontam para lá com `pages_glob: comics/provisorio/*.png`). Os capítulos não têm título nem data (aparecem como "Capítulo 1" e "Capítulo 2").
+- **Trocar pelas páginas de verdade:** ponha as 8 páginas de cada capítulo numa pasta própria, por exemplo `static/comics/beira/01/` (`1.png` … `8.png`; a ordem é numérica) e `static/comics/beira/02/`, e troque a linha `pages_glob:` de `content/works/roadside/01/pt.md` **e** `en.md` para `pages_glob: comics/beira/01/*.png` (e o mesmo no 02). Se quiser, acrescente `date: AAAA-MM-DD` e `title:`. Depois apague a pasta `static/comics/provisorio/` (a linha `# PROVISÓRIO …` no topo dos arquivos também pode sair). Páginas com texto em português e em inglês? Use pastas diferentes por idioma (ex.: `comics/beira/pt/01/*.png` no `pt.md`).
+- **Os textos para leitor de tela** ("Página 3 de 8", "Próxima página", "Capítulo anterior: Capítulo 1") ficam em `src/lib/textosDoFolheador.ts`, não no `config.json`. Lição: [08, seção "Leitor página a página"](aprendendo-astro/08-leitor.md#leitor-página-a-página-dos-quadrinhos-t17d-as-runas-da-beira-de-estrada).
+
+### Página de um jogo: a janela da demo e o botão da Steam (Cat-Crow-Thing; só no site novo)
+
+A página do *Cat-Crow-Thing* (`content/works/cat-crow-thing/`, em rascunho) mostra, logo abaixo do título, uma **janela de tela de jogo** (16:9) e, embaixo dela, o botão com a logo da Steam à esquerda e "Wishlist on Steam" (inglês) / "Adicione à Wishlist" (português). Isso vem do campo `game` do `work.json`:
+
+```json
+"game": {
+  "demo": "",
+  "steam": ""
+}
+```
+
+- **Hoje, os dois vazios:** a janela fica escura, com "Demo em breve" no meio (nada de outro site é carregado), e o botão aparece **apagado e sem link**, com "Link em breve" ao lado: não leva a lugar nenhum e não parece quebrado.
+- **Quando a página da Steam existir:** ponha o endereço completo, `"steam": "https://store.steampowered.com/app/…"`. O botão vira um link (abre em outra aba) e o "Link em breve" some.
+- **Quando a demo existir:** se ela estiver num site que deixa jogar dentro de outra página (itch.io, por exemplo), ponha o endereço da demo em `"demo": "https://…"`: ela aparece dentro da janela, isolada (o jogo roda no endereço dele e não alcança a sessão de quem comenta). Se a demo for um arquivo seu (um jogo exportado para navegador), me mande e eu vejo o melhor jeito de pôr no site.
+- O endereço tem de começar com `https://` (senão o site não é gerado, e a mensagem explica).
+- **Texto embaixo do botão:** o que você escrever depois do `---` em `content/works/cat-crow-thing/01/pt.md` e `en.md` aparece embaixo do botão. Hoje está vazio (você ainda não mandou a apresentação do jogo; o cartão em Histórias também está sem texto, falta o `blurb` no `work.json`).
+- O botão do cartão em Histórias diz "Jogue aqui" / "Play here" (`cta` no `work.json`; proposta, troque se quiser). Os textos "Demo em breve" e "Link em breve" ficam em `src/lib/textosDoJogo.ts`.
+
+### O Pêndulo (vídeo provisório)
+
+*O Pêndulo* (rascunho) tem agora a página dele, um vídeo do YouTube como os episódios de *Luz & Sangue*. **Provisoriamente** é o vídeo do episódio 1 de *Luz & Sangue* (`J2j6xoIz0LE`). Para pôr o filme: troque o `youtube:` em `content/works/the-pendulum/01/pt.md` e `en.md` pelo ID do vídeo de verdade (o que vem depois de `v=` no link) e apague a linha `# PROVISÓRIO …`.
+
 ### Carta que vira
 
 Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + Enter).
@@ -136,7 +169,7 @@ Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + E
 | Quero… | Como |
 |---|---|
 | Esconder um capítulo/notícia/página (rascunho) | `draft: true` no topo do arquivo. Aparece só na prévia (`python build.py serve`). |
-| Guardar uma obra inteira como rascunho (ainda não publicada) | `"draft": true` no `work.json` (hoje: *Ossos do Ofício*, *Beira de Estrada* e *O Pêndulo*). No site publicado a obra **não existe**: some do carrossel, de Histórias, da home, de "Últimas atualizações", dos capítulos, do mapa do site e do RSS. Na prévia (`python build.py serve` ou `pnpm dev`) ela aparece como as outras. **Para publicar, apague a linha `"draft": true`.** |
+| Guardar uma obra inteira como rascunho (ainda não publicada) | `"draft": true` no `work.json` (hoje: *Ossos do Ofício*, *Beira de Estrada*, *O Pêndulo* e *Cat-Crow-Thing*). No site publicado a obra **não existe**: some do carrossel, de Histórias, da home, de "Últimas atualizações", dos capítulos, do mapa do site e do RSS. Na prévia (`python build.py serve` ou `pnpm dev`) ela aparece como as outras. **Para publicar, apague a linha `"draft": true`.** |
 | Tirar uma obra só das listas, sem guardá-la | `"listed": false` no `work.json`. A obra não aparece em Histórias, mas as páginas dela continuam existindo e acessíveis por link. (Para "guardar para depois", use `draft`.) |
 | Página pronta, mas fora das listas | `unlisted: true` no topo do capítulo (ver abaixo). |
 | Tirar comentários de uma página | `comments: false` no topo do arquivo. |

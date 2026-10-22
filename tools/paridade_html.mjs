@@ -17,6 +17,8 @@
 // diz; o que sobrar aparece como diferença):
 //   T15   o par de <script src> antigo dos comentários (supabase-js do CDN + /comments.js) sai do Python;
 //   T17c  a <section data-story-order> ("estou lendo em ordem…") sai do Astro;
+//   T17d  o leitor página a página dos quadrinhos (div.folheador) vira o <div class="comic"> de dentro e a janela do jogo (div.jogo) sai do Astro
+//         (tests/ajudantes/html.ts → folheadorComoNoPython, semJanelaDoJogo);
 //   T17g/T17j  o <script src> do X/Reddit/Instagram dentro de cada post sai do Python (tests/ajudantes/html.ts → semScriptsDosPosts);
 //         o Astro não acrescenta nada (a moldura isolada nasce no navegador). A ferramenta confere, página a página, que o Python tinha
 //         tantos scripts quanto o Astro tem posts (blockquotes dos três serviços), e que só as páginas com post levam o script empacotado
@@ -42,7 +44,7 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
-import { canalDoYoutubeComoNoPython, canonico, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
+import { canalDoYoutubeComoNoPython, canonico, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
 
 // ───────────── argumentos ─────────────
 const args = process.argv.slice(2);
@@ -182,6 +184,15 @@ function normalizar(html, lado, url, existe) {
     if (r.trocados) conta("T17j: resumo cortado com degradê na lista de Notícias (Astro)", url);
     if (r.trocados && !/^\/(en|pt)\/news\/$/.test(url)) falha(url, "resumo com degradê fora da lista de Notícias");
     html = r.html;
+    // T17d: o leitor página a página dos quadrinhos vira o <div class="comic"> de dentro; a janela do jogo sai (tests/folheador.test.ts)
+    const fo = folheadorComoNoPython(html);
+    if (fo.trocados) conta("T17d: leitor página a página dos quadrinhos (Astro)", url);
+    if (fo.recusados) falha(url, "leitor página a página com forma inesperada");
+    html = fo.html;
+    const jo = semJanelaDoJogo(html);
+    if (jo.removidos.length) conta("T17d: janela da demo e botão da Steam (Astro)", url);
+    if (jo.foraDoLugar) falha(url, "janela do jogo fora do lugar");
+    html = jo.html;
     const s = semBlocoDeOrdem(html);
     if (s.removidos.length) {
       conta("T17c: bloco \"estou lendo em ordem\" (Astro)", url);

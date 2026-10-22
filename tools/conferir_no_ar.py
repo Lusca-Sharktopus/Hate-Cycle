@@ -38,7 +38,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 # Obras em rascunho (content/works/<pasta>/work.json com "draft": true): não existem no site publicado.
-RASCUNHOS = ["all-in-a-nights-work", "roadside", "the-pendulum"]
+RASCUNHOS = ["all-in-a-nights-work", "roadside", "the-pendulum", "cat-crow-thing"]
 
 MARCA = "Hᴀᴛᴇ Cʏᴄʟᴇ"  # versalete Unicode: o nome da marca nos <title>
 
@@ -105,6 +105,9 @@ def conferencias() -> list[Conferencia]:
         for lang in ("pt", "en"):
             c.append(Conferencia(f"/{lang}/works/{obra}/", status=404, textos=["404"], nome=f"rascunho fora do ar: {lang}/{obra}"))
     c.append(Conferencia("/en/works/all-in-a-nights-work/01/", status=404, textos=["404"], nome="rascunho fora do ar: capítulo de Ossos"))
+    # T17d: os capítulos provisórios das três obras novas (Beira de Estrada, O Pêndulo, Cat-Crow-Thing) também não podem estar no ar
+    for caminho in ("/pt/works/roadside/01/", "/en/works/roadside/02/", "/pt/works/the-pendulum/01/", "/en/works/cat-crow-thing/01/"):
+        c.append(Conferencia(caminho, status=404, textos=["404"], nome=f"rascunho fora do ar: {caminho}"))
     # Coisas que só existem na prévia ou no repositório e nunca podem ser servidas
     for p in ("/config.json", "/dev/markdown/", "/package.json", "/build.py"):
         c.append(Conferencia(p, status=404, textos=["404"], nome=f"não existe no site: {p}"))

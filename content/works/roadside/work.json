@@ -2,7 +2,8 @@
   "draft": true,
   "kind": "comic",
   "universe": true,
-  "oneshot": true,
+  "oneshot": false,
+  "page_runes": ["ᚣ", "弓", "♐︎", "ᚸ", "エ", "ꑭ", "⼒", "Ⱝ"],
   "title": {
     "en": "Roadside",
     "pt": "Beira de Estrada"

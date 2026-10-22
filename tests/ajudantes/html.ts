@@ -427,3 +427,84 @@ export function soQuatroHistoriasNaHome(html: string, quantas = 4): SoQuatroHist
   }
   return { html: cortar(html, cortes), tirados: cortes.length };
 }
+
+// ───────────── T17d: o leitor página a página dos quadrinhos e a página de jogo (só no Astro) ─────────────
+//
+// Pedidos do autor de 20/10 (MUDANÇA 4), só no Astro (o build.py está congelado e desenha o quadrinho com as páginas uma embaixo da outra,
+// e a página de jogo como um capítulo de texto vazio). Duas exceções, cada uma de UMA forma exata, no HTML do ASTRO:
+//   - folheadorComoNoPython(): cada <div class="folheador" data-folheador> cuja forma é EXATAMENTE a do Folheador.astro —
+//       div.fl-palco [ a.fl-seta.prev, div.comic, a.fl-seta.next ], nav.fl-runas, p[data-fl-status], noscript —
+//     vira o <div class="comic"> de dentro (que fica como está: as mesmas <img> do Python). Outra forma fica e aparece como diferença.
+//   - semJanelaDoJogo(): sai o <div class="jogo" data-jogo> que é filho de um div.reader-box e vem logo depois do <hr class="thin">.
+// tests/folheador.test.ts prova as duas regras (inclusive casos negativos).
+
+export interface FolheadorComoNoPython {
+  html: string;
+  /** Quantos leitores página a página viraram o <div class="comic"> de dentro. */
+  trocados: number;
+  /** Quantos div.folheador têm outra forma (ficaram como estavam). */
+  recusados: number;
+}
+/** Os filhos que são elementos; null se houver texto solto (que não é só espaço) entre eles. */
+function filhosElementos(e: Elemento | undefined): Elemento[] | null {
+  if (!e) return null;
+  const filhos = filhosDe(e);
+  if (filhos.some((f) => ehTexto(f) && f.value.trim() !== "")) return null;
+  return filhos.filter(ehElemento);
+}
+const classeExata = (e: Elemento | undefined, tag: string, ...classes: string[]) => !!e && e.tagName === tag && classes.every((c) => temClasse(e, c));
+/** O HTML do Astro com cada leitor página a página trocado pelo <div class="comic"> que ele tem dentro (como o Python desenha). */
+export function folheadorComoNoPython(html: string): FolheadorComoNoPython {
+  const cortes: { de: number; ate: number; texto: string }[] = [];
+  let recusados = 0;
+  for (const f of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && attr(e, "data-folheador") !== undefined)) {
+    const filhos = filhosElementos(f) ?? [];
+    const [palco, runas, aviso, noscript] = filhos;
+    const doPalco = filhosElementos(palco) ?? [];
+    const [prev, comic, next] = doPalco;
+    const formaCerta =
+      attr(f, "class") === "folheador" && filhos.length === 4 &&
+      classeExata(palco, "div", "fl-palco") && attr(palco as Elemento, "class") === "fl-palco" && doPalco.length === 3 &&
+      classeExata(prev, "a", "fl-seta", "prev") && classeExata(next, "a", "fl-seta", "next") &&
+      comic?.tagName === "div" && attr(comic, "class") === "comic" &&
+      classeExata(runas, "nav", "fl-runas") && (filhosElementos(runas) ?? [undefined]).every((r) => classeExata(r, "a", "fl-runa")) &&
+      aviso?.tagName === "p" && attr(aviso, "data-fl-status") !== undefined && filhosDe(aviso).length === 0 &&
+      noscript?.tagName === "noscript";
+    const loc = f.sourceCodeLocation;
+    const locComic = comic?.sourceCodeLocation;
+    if (!formaCerta || !loc || !locComic) {
+      recusados++;
+      continue;
+    }
+    cortes.push({ de: loc.startOffset, ate: loc.endOffset, texto: html.slice(locComic.startOffset, locComic.endOffset) });
+  }
+  return { html: cortar(html, cortes), trocados: cortes.length, recusados };
+}
+
+export interface SemJanelaDoJogo {
+  html: string;
+  /** O HTML de cada janela que saiu. */
+  removidos: string[];
+  /** Quantos div.jogo[data-jogo] estavam em outro lugar (ficaram). */
+  foraDoLugar: number;
+}
+/** O HTML do Astro sem a janela da demo e o botão da Steam (o <div class="jogo" data-jogo> logo depois do hr.thin de um div.reader-box). */
+export function semJanelaDoJogo(html: string): SemJanelaDoJogo {
+  const cortes: { de: number; ate: number }[] = [];
+  const removidos: string[] = [];
+  let foraDoLugar = 0;
+  for (const j of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && attr(e, "data-jogo") !== undefined)) {
+    const pai = j.parentNode as Elemento | null;
+    const irmaos = pai ? filhosDe(pai).filter(ehElemento) : [];
+    const antes = irmaos[irmaos.indexOf(j) - 1];
+    const loc = j.sourceCodeLocation;
+    const noLugar = attr(j, "class") === "jogo" && !!pai && pai.tagName === "div" && temClasse(pai, "reader-box") && classeExata(antes, "hr", "thin");
+    if (!noLugar || !loc) {
+      foraDoLugar++;
+      continue;
+    }
+    cortes.push({ de: loc.startOffset, ate: loc.endOffset });
+    removidos.push(html.slice(loc.startOffset, loc.endOffset));
+  }
+  return { html: cortar(html, cortes), removidos, foraDoLugar };
+}

@@ -15,12 +15,20 @@ import type { SecaoDeComentarios } from "./comentarios";
 import { langs, t, type Lang } from "./config";
 import { pyStrip } from "./frontmatter";
 import { logoDaObra, tituloDaObra, urlDaObra, type ObraComDados } from "./obras";
+import { folheadorDoCapitulo, type Folheador } from "./folheador";
+import { janelaDoJogo, type JanelaDoJogo } from "./jogo";
 import { paginasDoQuadrinho } from "./quadrinhos";
 import { cortarTitulo } from "./titulos";
 
 /** Uma obra, com o que o leitor lê do work.json além do que as regras da T10 já leem. */
 export interface ObraParaLer extends ObraComDados {
-  data: ObraComDados["data"] & { reading_font?: string | undefined };
+  data: ObraComDados["data"] & {
+    reading_font?: string | undefined;
+    /** T17d: o leitor página a página dos quadrinhos (uma runa por página). Ver src/lib/folheador.ts. */
+    page_runes?: readonly string[] | undefined;
+    /** T17d: a página de jogo (janela da demo e botão da Steam). Ver src/lib/jogo.ts. */
+    game?: { demo?: string | undefined; steam?: string | undefined } | undefined;
+  };
 }
 
 /** Um capítulo, com o texto e o que só o leitor usa (páginas de quadrinho). */
@@ -78,11 +86,11 @@ export interface CabecalhoDoCapitulo {
 
 export type ConteudoDoCapitulo =
   /** Texto: a "folha" com o título, uma linha fina, o texto (fonte de leitura da obra) e o pager. */
-  | { formato: "prose"; fonteTimes: boolean; nota: string; paginador: Paginador | null }
+  | { formato: "prose"; fonteTimes: boolean; nota: string; paginador: Paginador | null; jogo: JanelaDoJogo | null }
   /** Vídeo do YouTube (com setas ao lado quando há episódio anterior/próximo), a nota do autor e o "voltar". */
   | { formato: "video"; youtube: string; tituloDoVideo: string; lados: { anterior: BotaoLateral | null; proximo: BotaoLateral | null } | null; nota: string; paginador: Paginador | null }
   /** Quadrinho: as páginas (imagens) entre dois pagers, e a nota do autor. */
-  | { formato: "comic"; paginas: { arquivo: string; alt: string }[]; nota: string; paginador: Paginador | null };
+  | { formato: "comic"; paginas: { arquivo: string; alt: string }[]; nota: string; paginador: Paginador | null; folheador: Folheador | null };
 
 /** Tudo de uma página de capítulo. */
 export interface LeituraDoCapitulo {
@@ -178,6 +186,7 @@ export function conteudoDoCapitulo(obra: ObraParaLer, lang: Lang, c: CapituloPar
       paginas: arquivos.map((arquivo, i) => ({ arquivo, alt: `${p.titulo} ${i + 1}` })),
       nota,
       paginador: paginador(lang, p.anterior, p.proximo, p.voltar),
+      folheador: null, // o leitor página a página (T17d) precisa dos capítulos vizinhos: leiturasDaObra() o acrescenta
     };
   }
   if (p.formato === "video") {
@@ -192,7 +201,7 @@ export function conteudoDoCapitulo(obra: ObraParaLer, lang: Lang, c: CapituloPar
       paginador: paginador(lang, null, null, p.voltar),
     };
   }
-  return { formato: "prose", fonteTimes: obra.data.reading_font === "times", nota, paginador: paginador(lang, p.anterior, p.proximo, p.voltar) };
+  return { formato: "prose", fonteTimes: obra.data.reading_font === "times", nota, paginador: paginador(lang, p.anterior, p.proximo, p.voltar), jogo: janelaDoJogo(obra.data.game, tituloDaObra(obra, lang), lang) };
 }
 
 /**
@@ -208,9 +217,28 @@ export function leiturasDaObra<C extends CapituloParaLer>(
   const doIdioma = capitulosPorIdioma[lang];
   const capitulos = [...doIdioma.listados, ...doIdioma.ocultos];
   const listadosPorIdioma = Object.fromEntries(langs.map((l) => [l, capitulosPorIdioma[l].listados])) as Record<Lang, readonly C[]>;
-  return paginasDosCapitulos(obra, lang, doIdioma).map((p, i) => {
+  const paginas = paginasDosCapitulos(obra, lang, doIdioma);
+  // T17d: os campos que só valem num formato param o build com uma explicação, em vez de não fazer nada em silêncio
+  const slug = obra.data._origem.slug;
+  if (obra.data.page_runes && paginas.some((p) => p.formato !== "comic")) throw new Error(`content/works/${slug}/work.json: page_runes (o leitor página a página) só vale para quadrinho ("kind": "comic").`);
+  if (obra.data.game && paginas.some((p) => p.formato !== "prose")) throw new Error(`content/works/${slug}/work.json: game (a janela da demo e o botão da Steam) não vale para quadrinho nem vídeo: tire o "kind" ou o youtube: do capítulo.`);
+  const quantasPaginas = (c: C) => paginasDoQuadrinho(c.data.pages, c.data.pages_glob, ferramentas.glob).length;
+  return paginas.map((p, i) => {
     const c = capitulos[i] as C; // paginasDosCapitulos devolve uma página por capítulo, na mesma ordem (listados, depois ocultos)
     const nota = notaDoCapitulo(c);
+    const conteudo = conteudoDoCapitulo(obra, lang, c, p, ferramentas.glob);
+    if (conteudo.formato === "comic" && obra.data.page_runes) {
+      // os vizinhos são os do pager (p.anterior/p.proximo: só entre os listados, nunca num `unlisted`); o anterior leva à ÚLTIMA página dele
+      const anterior = p.anterior ? doIdioma.listados[i - 1] : undefined;
+      conteudo.folheador = folheadorDoCapitulo(
+        lang,
+        obra.data.page_runes,
+        conteudo.paginas.length,
+        p.anterior && anterior ? { ...p.anterior, paginas: quantasPaginas(anterior) } : null,
+        p.proximo ? { ...p.proximo, paginas: 0 } : null,
+        p.url,
+      );
+    }
     return {
       lang,
       url: p.url,
@@ -223,7 +251,7 @@ export function leiturasDaObra<C extends CapituloParaLer>(
       classeDoCorpo: `reader reader-${tipoDaObra(obra)}`,
       avisoDeRascunho: c.data.draft === true ? t(lang, "draft") : null,
       cabecalho: cabecalhoDoCapitulo(obra, lang, p),
-      conteudo: conteudoDoCapitulo(obra, lang, c, p, ferramentas.glob),
+      conteudo,
       comentarios: ferramentas.comentarios(lang, p.idDosComentarios),
       temCartaQueVira: usaClasse(nota, "flip-card"),
       temPostsAlternados: usaClasse(nota, "embed-alt"),

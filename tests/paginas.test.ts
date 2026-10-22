@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canalDoYoutubeComoNoPython, canonicoDoMiolo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { canalDoYoutubeComoNoPython, canonicoDoMiolo, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -155,9 +155,13 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
 function pythonComoNoAstro(html: string): string {
   return soQuatroHistoriasNaHome(semScriptsDosPosts(html).html).html;
 }
-/** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j). */
+/** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j); o leitor página a página
+ *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
 function astroComoNoPython(html: string): string {
-  return resumoCortadoComoNoPython(homeComoNoPython(html).html).html;
+  const f = folheadorComoNoPython(html);
+  const j = semJanelaDoJogo(f.html);
+  if (f.recusados !== 0 || j.foraDoLugar !== 0) throw new Error(`T17d: leitor página a página ou janela do jogo com forma inesperada (${f.recusados} leitor(es), ${j.foraDoLugar} janela(s))`);
+  return resumoCortadoComoNoPython(homeComoNoPython(j.html).html).html;
 }
 
 // ───────────── página a página, grupo a grupo ─────────────
@@ -634,23 +638,53 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
     for (const tag of [...lb.tags, ...hd.tags, ...pd.tags]) expect(tag).toMatch(/ srcset="[^"]+\.webp[^"]*"/);
   });
 
-  test("prévia (rascunhos): todo capítulo tem o bloco; Beira de Estrada e O Pêndulo, ainda sem capítulo, são PULADAS (nada de \"Em breve\", T17h)", () => {
+  test("prévia (rascunhos, T17d): Beira de Estrada, O Pêndulo e Cat-Crow-Thing, agora com capítulo, entram na fila; o verbo é o de cada obra", () => {
     const dir = segundaConstrucao();
     const capitulos = verificarPaginas(dir);
-    expect(capitulos.length).toBeGreaterThanOrEqual(6);
-    const l = lados(blocoDe(dir, "/pt/works/firestriker/01/"));
-    expect(l.chrono.prev?.texto).toBe("Assistir Luz & Sangue");
-    expect(l.chrono.next).toBeNull(); // depois da Pederneira vêm Beira de Estrada e O Pêndulo, sem capítulo: não aparecem
-    expect(l.release.next?.texto).toBe("Assistir Luz & Sangue");
-    for (const url of ["/pt/works/firestriker/01/", "/en/works/firestriker/01/", "/pt/works/light-and-blood/01/", "/en/works/light-and-blood/02/"]) {
-      expect(blocoDe(dir, url), url).not.toMatch(/Beira de Estrada|Roadside|P[eê]ndulo|Pendulum|Coming soon|Em breve/);
+    for (const c of ["/pt/works/roadside/01/", "/pt/works/roadside/02/", "/en/works/roadside/01/", "/pt/works/the-pendulum/01/", "/en/works/the-pendulum/01/", "/pt/works/cat-crow-thing/01/", "/en/works/cat-crow-thing/01/"]) expect(capitulos, c).toContain(c);
+    // Pederneira (cronológica 6): antes Luz & Sangue (o último episódio), depois Beira de Estrada (7: o PRIMEIRO capítulo, T17i)
+    const ped = lados(blocoDe(dir, "/pt/works/firestriker/01/"));
+    expect(ped.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/02/", texto: "Assistir Luz & Sangue", externo: false });
+    expect(ped.chrono.next).toEqual({ href: "/pt/works/roadside/01/", texto: "Ler Beira de Estrada", externo: false });
+    expect(ped.release.next?.texto).toBe("Assistir Luz & Sangue");
+    // Beira de Estrada (quadrinho: "estou lendo"): cronológica Pederneira ← → O Pêndulo (11); lançamento (5): Luz & Sangue (Ossos não tem capítulo em português) ← → O Pêndulo (6)
+    for (const c of ["01", "02"]) {
+      const bloco = blocoDe(dir, `/pt/works/roadside/${c}/`);
+      expect(bloco).toContain("estou lendo em ordem");
+      const l = lados(bloco);
+      expect(l.chrono.prev).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
+      expect(l.chrono.next).toEqual({ href: "/pt/works/the-pendulum/01/", texto: "Assistir O Pêndulo", externo: false });
+      expect(l.release.prev).toEqual({ href: "/pt/works/light-and-blood/02/", texto: "Assistir Luz & Sangue", externo: false });
+      expect(l.release.next).toEqual({ href: "/pt/works/the-pendulum/01/", texto: "Assistir O Pêndulo", externo: false });
     }
+    // em inglês, no lançamento, Ossos do Ofício (4, capítulo só em inglês) vem antes da Beira
+    expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.prev).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
+    // O Pêndulo (vídeo: "estou assistindo"): antes a Beira de Estrada (o ÚLTIMO capítulo), depois Cat-Crow-Thing (12 / 7)
+    const pen = blocoDe(dir, "/pt/works/the-pendulum/01/");
+    expect(pen).toContain("estou assistindo em ordem");
+    for (const o of ["chrono", "release"] as const) {
+      expect(lados(pen)[o].prev).toEqual({ href: "/pt/works/roadside/02/", texto: "Ler Beira de Estrada", externo: false });
+      expect(lados(pen)[o].next).toEqual({ href: "/pt/works/cat-crow-thing/01/", texto: "Jogar Cat-Crow-Thing", externo: false });
+    }
+    // Cat-Crow-Thing (jogo: "estou jogando"): o último nas duas ordens
+    for (const lang of ["pt", "en"] as const) {
+      const cct = blocoDe(dir, `/${lang}/works/cat-crow-thing/01/`);
+      expect(cct).toContain(lang === "pt" ? "estou jogando em ordem" : "I’m playing in");
+      for (const o of ["chrono", "release"] as const) {
+        expect(lados(cct)[o].prev?.href).toBe(`/${lang}/works/the-pendulum/01/`);
+        expect(lados(cct)[o].next).toBeNull();
+      }
+    }
+    for (const url of capitulos) expect(blocoDe(dir, url), url).not.toMatch(/Coming soon|Em breve/);
     // T17i: Ossos do Ofício (rascunho; capítulo só em inglês) aparece na prévia em inglês, com a arte em camadas: asas, Giuseppe, olhos
     const en = blocoDe(dir, "/en/works/light-and-blood/01/");
     const ossos = /<a class="so-side prev[^"]*" href="\/en\/works\/all-in-a-nights-work\/01\/">([\s\S]*?)<\/a>/.exec(en)?.[1] ?? "";
     expect([...ossos.matchAll(/<img class="(so-layer[^"]*)" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => `${decodeURIComponent(m[2] ?? "")}:${m[1]}`)).toEqual(["Giuseppe Asas:so-layer so-surge", "Giuseppe:so-layer", "Giuseppe Olhos:so-layer so-surge"]);
     expect(ossos).toContain('<span class="so-stage so-tem-surge" style="--ar:3311 / 1884;--razao:1.7574">');
     expect(blocoDe(dir, "/pt/works/light-and-blood/01/"), "em português Ossos não tem capítulo: é pulada").not.toMatch(/Ossos|all-in-a-nights-work/);
+    // T17i: a arte em camadas da Beira de Estrada (Jean, Cezar e Iris, os olhos da Iris) aparece agora que ela tem capítulo
+    const beira = /<a class="so-side next[^"]*" href="\/pt\/works\/roadside\/01\/">([\s\S]*?)<\/a>/.exec(blocoDe(dir, "/pt/works/firestriker/01/"))?.[1] ?? "";
+    expect([...beira.matchAll(/<img class="so-layer[^"]*" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => decodeURIComponent(m[1] ?? ""))).toEqual(["Jean", "Cezar e Iris", "Iris Olhos"]);
   }, 240_000);
 
   test("T17i: em todo capítulo (publicado e prévia), as duas ordens têm os dois lugares (lado ou lugar guardado) e a caixa leva os números do rótulo", () => {
@@ -662,6 +696,83 @@ describe("T17c: o bloco de ordem no fim de TODO capítulo (e só nele), entre a 
         // toda <img> de camada leva o próprio sizes (a fração da moldura que ocupa) antes das versões leves
         for (const img of bloco.match(/<img class="so-layer[^>]*>/g) ?? []) expect(img, url).toMatch(/ sizes="\(max-width: 700px\) [\d.]+vw, \d+px" srcset="/);
       }
+    }
+  }, 240_000);
+});
+
+// ───────────── T17d: Beira de Estrada (leitor página a página), O Pêndulo (vídeo provisório) e Cat-Crow-Thing (página de jogo) ─────────────
+
+describe("T17d: as três obras novas só existem na prévia; o leitor página a página, o vídeo e a página de jogo no site de verdade", () => {
+  const NOVAS = /works\/(roadside|the-pendulum|cat-crow-thing)\b|Cat-Crow-Thing|comics\/provisorio|logo%20steam|data-folheador|data-jogo|fl-runa/;
+
+  test("site publicado: nada delas em NENHUM arquivo (páginas, Histórias, home, sitemap, feeds); nenhum <script src> de fora", () => {
+    for (const arquivo of arquivosDe(dist).filter((a) => /\.(html|xml)$/.test(a))) {
+      const texto = readFileSync(join(dist, arquivo), "utf8");
+      expect(NOVAS.test(texto), arquivo).toBe(false);
+      expect(texto, arquivo).not.toMatch(/<script\b[^>]*\bsrc="(https?:)?\/\//);
+    }
+    expect(arquivosDe(dist).filter((a) => a.endsWith(".html"))).toHaveLength(197); // as 193 de baseline/urls.json + as 4 páginas antigas de static/ (B35)
+  });
+
+  test("prévia: a página da Beira de Estrada lista os dois capítulos (como Luz & Sangue); os cartões levam a ela, ao Pêndulo e ao jogo", () => {
+    const dir = segundaConstrucao();
+    for (const lang of ["pt", "en"] as const) {
+      const obra = readFileSync(join(dir, lang, "works", "roadside", "index.html"), "utf8");
+      expect([...obra.matchAll(/<li><a href="(\/[a-z]{2}\/works\/roadside\/\d+\/)"><span class="n">(\d+)<\/span><span class="t">([^<]+)<\/span>/g)].map((m) => `${m[1]} ${m[2]} ${m[3]}`)).toEqual([
+        `/${lang}/works/roadside/01/ 1 ${lang === "pt" ? "Capítulo" : "Chapter"} 1`,
+        `/${lang}/works/roadside/02/ 2 ${lang === "pt" ? "Capítulo" : "Chapter"} 2`,
+      ]);
+      const historias = readFileSync(join(dir, lang, "works", "index.html"), "utf8");
+      for (const href of [`/${lang}/works/roadside/`, `/${lang}/works/the-pendulum/01/`, `/${lang}/works/cat-crow-thing/01/`]) expect(historias, href).toContain(`<a class="button" href="${href}"`);
+      expect(historias).toContain(lang === "pt" ? ">Jogue aqui</a>" : ">Play here</a>");
+    }
+  }, 240_000);
+
+  test("prévia: cada capítulo da Beira de Estrada tem o leitor página a página com as Oito Runas d'A Força, e o ID dos comentários de sempre", () => {
+    const dir = segundaConstrucao();
+    for (const lang of ["pt", "en"] as const) {
+      for (const cap of ["01", "02"]) {
+        const url = `/${lang}/works/roadside/${cap}/`;
+        const html = readFileSync(join(dir, url.slice(1), "index.html"), "utf8");
+        expect(html.match(/<div class="folheador" data-folheador data-total="8">/g), url).toHaveLength(1);
+        const runas = [...html.matchAll(/<a class="fl-runa" href="#p(\d)"[^>]*?( aria-current="page")?><span aria-hidden="true">([^<]+)<\/span><\/a>/g)];
+        expect(runas.map((m) => m[3]).join(" "), url).toBe("ᚣ 弓 ♐︎ ᚸ エ ꑭ ⼒ Ⱝ");
+        expect(runas.map((m) => !!m[2]), url).toEqual([true, false, false, false, false, false, false, false]);
+        // as 8 páginas provisórias, na ordem, com as versões leves (T17) nas que pesam mais de 30 KB
+        const imgs = [...(/<div class="comic">([\s\S]*?)<\/div>/.exec(html)?.[1] ?? "").matchAll(/<img src="\/comics\/provisorio\/pagina%20placeholder%20(\d)\.png"/g)].map((m) => m[1]);
+        expect(imgs, url).toEqual(["1", "2", "3", "4", "5", "6", "7", "8"]);
+        expect(idsDeComentarios(html), url).toEqual([`works/roadside/${cap}`]);
+        // as setas no estado da página 1: no 01, a da esquerda some (primeiro capítulo); no 02, leva à 8ª do 01; a da direita vai à página 2
+        expect(html, url).toContain(`<a class="side-btn next fl-seta" href="#p2"`);
+        if (cap === "01") expect(html, url).toContain('<a class="side-btn prev fl-seta ghost" aria-hidden="true"');
+        else expect(html, url).toContain(`<a class="side-btn prev fl-seta" href="/${lang}/works/roadside/01/#p8"`);
+        expect(html, url).toContain(cap === "01" ? `data-capitulo="/${lang}/works/roadside/02/#p1"` : `data-rotulo-pagina="${lang === "pt" ? "Próxima página" : "Next page"}">`);
+        expect(html.match(/<script type="module">(?:(?!<\/script>)[\s\S])*\[data-folheador\](?:(?!<\/script>)[\s\S])*<\/script>/g), `${url}: o script do leitor, uma vez`).toHaveLength(1);
+      }
+    }
+  }, 240_000);
+
+  test("prévia: o leitor página a página (HTML e script) e a janela do jogo só nas páginas delas", () => {
+    const dir = segundaConstrucao();
+    for (const [url, arquivo] of paginasDoDist(dir)) {
+      const html = readFileSync(arquivo, "utf8");
+      expect(/data-folheador/.test(html), url).toBe(/^\/(en|pt)\/works\/roadside\/\d+\/$/.test(url));
+      expect(/data-jogo/.test(html), url).toBe(/^\/(en|pt)\/works\/cat-crow-thing\/01\/$/.test(url));
+    }
+  }, 240_000);
+
+  test("prévia: O Pêndulo mostra o vídeo provisório (iframe do YouTube, como Luz & Sangue); Cat-Crow-Thing, a janela da demo e o botão da Steam", () => {
+    const dir = segundaConstrucao();
+    for (const lang of ["pt", "en"] as const) {
+      const pen = readFileSync(join(dir, lang, "works", "the-pendulum", "01", "index.html"), "utf8");
+      expect(pen).toContain(`<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/J2j6xoIz0LE" allowfullscreen title="${lang === "pt" ? "O Pêndulo" : "The Pendulum"}"></iframe></div>`);
+      expect(idsDeComentarios(pen)).toEqual(["works/the-pendulum/01"]);
+      const cct = readFileSync(join(dir, lang, "works", "cat-crow-thing", "01", "index.html"), "utf8");
+      expect(cct.match(/<div class="jogo" data-jogo>/g)).toHaveLength(1);
+      expect(cct).toContain('<div class="jogo-tela vazia" role="img"');
+      expect(cct).not.toMatch(/<div class="jogo"[^]*?<iframe/);
+      expect(cct).toMatch(new RegExp(`<span class="steam-btn sem-link" role="link" aria-disabled="true" aria-describedby="jogo-link-em-breve"><img class="steam-logo" src="/social/logo%20steam.png" alt=""[^>]*><span>${lang === "pt" ? "Adicione à Wishlist" : "Wishlist on Steam"}</span></span>`));
+      expect(idsDeComentarios(cct)).toEqual(["works/cat-crow-thing/01"]);
     }
   }, 240_000);
 });
