@@ -8,7 +8,7 @@ Precisa só do Python (nada para instalar além dele).
 
 > **Migração:** o site está sendo migrado para Astro (ver `docs/ARQUITETURA.md` e `docs/BACKLOG.md`). Até a virada, tudo neste guia continua valendo. O jeito de escrever (pastas, `en.md`/`pt.md`, campos no topo dos arquivos) não muda.
 >
-> **Publicação depois da virada (sábado 24/10/2026):** você não sobe mais nenhuma pasta `public/`. O GitHub constrói e publica o site sozinho sempre que uma mudança entra na `main`. Veja a seção [Publicar o site](#publicar-o-site-depois-da-virada) logo abaixo e o roteiro completo em `docs/virada.md`.
+> **Publicação depois da virada (sem data marcada: "lançaremos quando estiver tudo pronto", sua decisão de 27/10/2026):** você não sobe mais nenhuma pasta `public/`. O GitHub constrói e publica o site sozinho sempre que uma mudança entra na `main`. Veja a seção [Publicar o site](#publicar-o-site-depois-da-virada) logo abaixo e o roteiro completo em `docs/virada.md`.
 
 ## Sumário
 
@@ -65,7 +65,7 @@ Depois de editar: `python build.py serve` para ver (com rascunhos) e `python bui
 
 ### Publicar o site (depois da virada)
 
-A partir de sábado 24/10/2026, **publicar = enviar a mudança para a branch `main` do GitHub**. O GitHub então liga uma "linha de montagem" (aba **Actions** do repositório), que confere o código, constrói o site e o coloca em hatecycle.com, tudo sozinho, em **2 a 5 minutos** (mais até 10 minutos de cache, em que algumas pessoas ainda veem a versão anterior).
+Depois da virada (sem data marcada), **publicar = enviar a mudança para a branch `main` do GitHub**. O GitHub então liga uma "linha de montagem" (aba **Actions** do repositório), que confere o código, constrói o site e o coloca em hatecycle.com, tudo sozinho, em **2 a 5 minutos** (mais até 10 minutos de cache, em que algumas pessoas ainda veem a versão anterior).
 
 Há dois caminhos:
 
@@ -119,7 +119,7 @@ Em `work.json`, `"reading_font": "times"` (usado em *Ossos do Ofício*: Times Ne
 
 ### Tipografia que conta a história (Ossos do Ofício)
 
-Na cena 1 de *Ossos do Ofício*, o texto em Times New Roman muda para **PT Serif na cor #111012** quando Giuseppe adormece ("He closes his eyes"): tudo até "Giuseppe opened his eyes" é um sonho, numa fonte *quase* igual e numa cor *quase* certa. A cena também usa a fonte **Road Rage** e o GIF "NO… …I CAN’T…". Para transpor uma cena de um PDF com essa fidelidade, mande o PDF e peça "atualize a cena de acordo com o arquivo".
+Na cena 1 de *Ossos do Ofício*, o texto em Times New Roman muda para **PT Serif na cor #111012** quando Giuseppe adormece ("He closes his eyes"): tudo até "Giuseppe opened his eyes" é um sonho, numa fonte *quase* igual e numa cor *quase* certa. A cena também usa a fonte **Road Rage** e o GIF "NO… …I CAN’T…" (na versão em português, desde 27/10, o seu GIF "NÃO… …EU NÃO POSSO…"). Para transpor uma cena de um PDF com essa fidelidade, mande o PDF e peça "atualize a cena de acordo com o arquivo".
 
 ### Texto em volta de uma imagem
 
@@ -179,7 +179,7 @@ Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + E
 
 - Uma história **publicada** (sem `draft`) mas sem nenhum capítulo ainda aparece no carrossel com o botão cinza "Em breve" (sem link). Quem está com `"draft": true` não aparece, nem como "Em breve", no site publicado; só na prévia.
 - As capas e textos dos cards "em breve" estão em `work.json` (`cover`, `blurb`). Enquanto a capa não existir, o card mostra um bloco liso.
-- **História que só existe no outro idioma (desde 22/10, seu "por agora sim"; só no site novo):** se ela não tem capítulo neste idioma mas tem no outro, o cartão não fica "Em breve": o botão ("Leia aqui") leva à versão do outro idioma. Hoje só *Ossos do Ofício* em português (rascunho: só na prévia), que leva ao capítulo em inglês. Quando você publicar o capítulo em português, o botão passa a levar a ele sozinho.
+- **História que só existe no outro idioma (desde 22/10, seu "por agora sim"; só no site novo):** se ela não tem capítulo neste idioma mas tem no outro, o cartão não fica "Em breve": o botão ("Leia aqui") leva à versão do outro idioma. Hoje nenhuma: *Ossos do Ofício*, a única, ganhou o capítulo em português em 27/10 (ver abaixo), e o cartão em português passou a levar a ele sozinho.
 
 ### Página de leitura oculta (`unlisted`)
 
@@ -187,7 +187,11 @@ Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + E
 
 ### Ossos do Ofício (hoje em rascunho)
 
-*Ossos do Ofício* está com `"draft": true` no `work.json` e `draft: true` no `en.md` da cena 1. Só a prévia a mostra. Para publicar: apague o `"draft": true` do `work.json` **e** o `draft: true` do capítulo (e ponha `date: AAAA-MM-DD`, se quiser que apareça em "Últimas atualizações"). Quando só uma das duas linhas é apagada, a obra aparece em Histórias com o botão cinza "Em breve".
+*Ossos do Ofício* está com `"draft": true` no `work.json` e `draft: true` no `en.md` **e** no `pt.md` da cena 1. Só a prévia a mostra. Para publicar: apague o `"draft": true` do `work.json` **e** o `draft: true` dos dois capítulos (e ponha `date: AAAA-MM-DD`, se quiser que apareça em "Últimas atualizações"). Quando só o do `work.json` é apagado, a obra aparece em Histórias com o botão cinza "Em breve". Se quiser publicar só uma das línguas, apague o `draft: true` só daquele capítulo.
+
+**A versão em português (desde 27/10, seu pedido):** `content/works/all-in-a-nights-work/01/pt.md` tem **exatamente o mesmo texto** do `en.md` (em inglês, com todas as trocas de fonte e cor), mudando só o título (`Ossos do Ofício`) e duas imagens: o GIF vira o seu `static/other images/nao-eu-nao-posso.gif` ("NÃO… …EU NÃO POSSO…"; o nome do arquivo que você mandou chegou com os acentos estragados pelo zip) e o segmento em quadrinho vira a versão em português. O endereço é `/pt/works/all-in-a-nights-work/01/` e os comentários são a **mesma conversa** do inglês (`works/all-in-a-nights-work/01`). Quando você traduzir o texto, é só trocar o texto do `pt.md` (as imagens já estão certas).
+
+**O segmento em quadrinho, em três fatias:** a página mostra a tira em três pedaços porque, no meio dela, o parágrafo "And as he stood up…" fica ao lado do quadrinho pequeno (a área vazia à direita dele, na sua imagem). Por isso a sua imagem inteira (918 × 7928) foi cortada, sem perda, nos mesmos lugares de sempre: `ossos-memoria-1.png` (o alto, 918 × 5888), `ossos-memoria-2.png` (o quadrinho pequeno, 415 × 256, igual nas duas línguas) e `ossos-memoria-3.png` (o fim, 918 × 1784); a versão em português usa `ossos-memoria-1-pt.png`, a mesma `-2` e `ossos-memoria-3-pt.png`. **Para trocar a tira**, me mande a imagem inteira de novo (com a mesma área vazia para o texto) que eu corto do mesmo jeito.
 
 ## 6. Página Histórias e carrosséis
 
@@ -205,7 +209,7 @@ No fim de cada capítulo (entre o texto e os comentários) e, desde 22/10, tamb�
 
 **Para onde cada lado leva (desde 22/10, seu pedido "Mude de volta…"):** história com **mais de um capítulo** → a **lista de capítulos** dela (a página da obra); história com **um capítulo só** → o capítulo. Os dois lados levam ao mesmo lugar (a regra de 21/10, "último capítulo da anterior, primeiro da seguinte", saiu). Contam só os capítulos que existem ali (no site publicado, os publicados; na prévia, também os rascunhos). Obra de link externo, como *Alô? Residência dos Di Vario*, continua levando ao link externo, em outra aba.
 
-**História que só existe em outro idioma (desde 22/10, seu pedido sobre *Ossos do Ofício*):** numa página em português, uma história que não tem capítulo em português mas tem em inglês entra na caixa com o botão em português ("Ler Ossos do Ofício") e leva à página **em inglês** (o link vai marcado com o idioma de destino, para leitores de tela e buscadores). Vale para qualquer história e para o contrário (página em inglês, história só em português). Hoje só *Ossos do Ofício* (rascunho: só na prévia). A caixa tem **o mesmo tamanho** nas duas ordens e em todos os capítulos: toda arte fica num quadrado do mesmo tamanho (a arte se encaixa dentro, inteira, encostada embaixo) e o lado vazio guarda o lugar. A primeira da ordem fica sem lado esquerdo e a última sem lado direito. O site lembra a ordem que o visitante escolheu (no navegador dele); na primeira visita vale a Cronológica.
+**História que só existe em outro idioma (desde 22/10, seu pedido sobre *Ossos do Ofício*):** numa página em português, uma história que não tem capítulo em português mas tem em inglês entra na caixa com o botão em português ("Ler Ossos do Ofício") e leva à página **em inglês** (o link vai marcado com o idioma de destino, para leitores de tela e buscadores). Vale para qualquer história e para o contrário (página em inglês, história só em português). Hoje nenhuma: desde 27/10 *Ossos do Ofício* tem o capítulo em português, e a caixa das páginas em português leva a ele. A caixa tem **o mesmo tamanho** nas duas ordens e em todos os capítulos: toda arte fica num quadrado do mesmo tamanho (a arte se encaixa dentro, inteira, encostada embaixo) e o lado vazio guarda o lugar. A primeira da ordem fica sem lado esquerdo e a última sem lado direito. O site lembra a ordem que o visitante escolheu (no navegador dele); na primeira visita vale a Cronológica.
 
 - **Quem entra:** só as histórias que existem no site naquele momento, **que já têm algo lançado** e **que têm arte para a caixa** (`order_art` ou `order_images` no `work.json`; desde 22/10, seu pedido "Pule qualquer história que eu não tenha enviado imagens": a capa deixou de servir de plano B). No site publicado, as publicadas; na prévia, também as de rascunho que já têm capítulo. Hoje ficam de fora, por não terem arte, *O Pêndulo* e *Cat-Crow-Thing* (as duas ainda são rascunho); quando você mandar as imagens delas, elas entram sozinhas. Quando você publica uma história nova, quem vinha antes e depois dela se ajusta sozinho (use os números de `order` do `work.json`, como já faz).
 - **Quem não tem número** na ordem (ex.: `"chrono": false`) não entra nela; nessa ordem, a caixa avisa que a história fica fora dela.
@@ -301,6 +305,21 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 
 ## 10. Notícias
 
+### O nome da seção: "Blog" (desde 27/10, seu pedido; só no site novo)
+
+No site novo a seção de notícias se chama **Blog**, e as notícias, **posts**. Mudou só o que o visitante lê; os endereços (`/pt/news/…`, `/en/news/…`), as pastas em `content/news/`, os comentários de cada post e o jeito de escrever **não mudaram**. Você continua criando um post do mesmo jeito (`python build.py new news nome-do-post`, pasta em `content/news/`).
+
+| Onde aparece | Português (antes → agora) | Inglês (antes → agora) |
+|---|---|---|
+| Menu, aba do navegador e título da lista | Notícias → **Blog** | News Feed → **Blog** |
+| Caixa de busca da lista | Buscar notícias… → **Buscar no blog…** | Search news… → **Search the blog…** |
+| Busca sem resultado | Nenhuma notícia encontrada. → **Nenhum post encontrado.** | No news found. → **No posts found.** |
+| Botão do meio no fim de cada post | Todas as notícias → **Todos os posts** | All news → **All posts** |
+| Etiqueta do cartão em "Últimas atualizações" (home) | Notícia → **Post do blog** | News → **Blog post** |
+
+- **Onde ficam esses textos:** em `src/lib/textosDoBlog.ts` (uma linha por texto, nas duas línguas), e **não** no `config.json`: o `config.json` é seu e eu não o edito. Ele continua com os textos antigos (`news`, `tag_news`, `all_news`, `news_search_ph`, `news_none` em `ui`), que o site antigo (Python) ainda usa até a virada. No site novo, o `textosDoBlog.ts` passa por cima deles: **mudar essas cinco chaves no `config.json` não muda o site novo**. Para trocar um texto, mude a linha no `textosDoBlog.ts` (ou me peça).
+- O RSS não mudou (o nome do feed é o nome do site, e o "Feed RSS" do rodapé não fala em notícias).
+
 ### Escrever e publicar
 
 - `python build.py new news nome-do-post` cria `content/news/AAAA-MM-DD-nome-do-post/` com `en.md` e `pt.md`.
@@ -350,7 +369,7 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 
 ## 13. Menu e Extras
 
-- *Stories* e *About* sempre aparecem; *News Feed* aparece quando há notícias publicadas; *Support* aparece quando existir a página `content/pages/support/` sem `draft: true`.
+- *Stories* e *About* sempre aparecem; *Blog* (no site antigo, *News Feed* / *Notícias*; ver [Notícias](#10-notícias)) aparece quando há notícias publicadas; *Support* aparece quando existir a página `content/pages/support/` sem `draft: true`.
 - *Extras* agrupa Universo, Personagens e qualquer página com `menu: extras` no topo.
 - **Extras retirado por enquanto:** `config.json → "show_extras": false` (menu, páginas de Universo/Personagens e o botão da home). Para voltar, troque para `true`.
 
@@ -379,6 +398,7 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 - A pasta `static/Produtos` ainda não é usada por nenhuma página.
 - `guardados/` guarda arquivos para uso futuro; essa pasta **não** é publicada.
 - Capas: `static/covers/EN/` e `static/covers/PT/`; logos das obras: `static/logos/`; imagens das notícias: `static/news/`.
+- **Alô? Residência dos Di Vario (27/10):** a capa nova, com "Residence", substituiu as duas (`covers/EN/Cover HDVR.png` e `covers/PT/Capa HDVR.png` continuam sendo o mesmo arquivo até a capa em português chegar). As três logos novas estão em `static/logos/EN/Hello Di Vario Residence 1.png`, `2` e `3`, ainda sem uso: a obra é um link para o YouTube e não tem página no site, que é onde as outras obras mostram a logo.
 - **Capa nova:** coloque o arquivo em `static/covers/PT/` (ou `EN/`) com o nome que o `work.json` usa e **não precisa reduzir nem otimizar**: pode ser o PNG ou JPEG grande de sempre. No site novo o build gera sozinho as versões leves em WebP (a capa de 3,5 MB chega ao visitante com ~44 KB) e o navegador escolhe a do tamanho da tela. O arquivo original continua publicado e é o `src` da imagem. Vale para **qualquer** PNG ou JPEG de 30 KB para cima: logos, imagens de notícias, emissários, páginas de quadrinho.
 - **Imagem no meio do texto:** `![descrição](/other images/arquivo.png)` ou `<img src="/other images/arquivo.png" alt="descrição">` funcionam como sempre; o site acrescenta sozinho as versões leves (e `width`/`height`, para o texto não pular). Se você já puser `width`, `height` ou um `srcset` seu na tag, o site respeita o seu. **GIF animado** também ganha versão leve (WebP animado, sem perda: mesmos quadros, mesmos tempos, mesma repetição; o `src` continua o seu GIF). **Não são otimizados:** vídeos, imagens de outro endereço e arquivos abaixo de 30 KB.
 - **Trocar uma imagem:** salve por cima, com o mesmo nome; as versões leves são refeitas no próximo build (e na prévia) sozinhas.
@@ -394,7 +414,7 @@ Não repete nas páginas seguintes da mesma visita, e não aparece para quem ped
 - Para rever no seu computador: abra `http://localhost:8000/?intro=1`.
 - A animação original (4K, 11 MB) foi convertida para 1080p mantendo a transparência: 1,1 MB (`static/intro/logo.webm`). No site novo o visitante baixa uma versão **720p** dela (~0,5 MB, mesma duração, mesmos quadros, com a transparência), guardada em `src/assets/intro/`; o seu arquivo em `static/intro/` continua intacto e publicado.
 - **Trocar o vídeo da abertura:** salve o novo por cima de `static/intro/logo.webm` (WebM VP9 com transparência, como o atual). Até alguém refazer a versão 720p, o site mostra o **seu vídeo novo em tamanho original** (funciona, só pesa mais; o build avisa no terminal). Para refazer: `python3 tools/gerar_video_da_abertura.py` (precisa do ffmpeg com libvpx-vp9 instalado; ou peça à Claude), depois `pnpm test`. Se mudar o **nome** do arquivo, mude também `config.json → intro.video`.
-- **Trocar um GIF animado** (`static/other images/Apollo Site.gif`, `Anfíbio Site.gif`, `no-i-cant.gif`): salve por cima com o mesmo nome; o WebP animado é refeito sozinho no próximo build, com os tempos do GIF novo. Um GIF animado **novo** em um texto também ganha a versão sozinho. O teste `tests/animadas.test.ts` guarda a lista dos três GIFs e seus tempos; ao trocar um, peça à Claude para atualizar a lista.
+- **Trocar um GIF animado** (`static/other images/Apollo Site.gif`, `Anfíbio Site.gif`, `no-i-cant.gif`, `nao-eu-nao-posso.gif`): salve por cima com o mesmo nome; o WebP animado é refeito sozinho no próximo build, com os tempos do GIF novo. Um GIF animado **novo** em um texto também ganha a versão sozinho. O teste `tests/animadas.test.ts` guarda a lista dos quatro GIFs e seus tempos; ao trocar um, peça à Claude para atualizar a lista.
 
 ## 17. Runas no fundo
 

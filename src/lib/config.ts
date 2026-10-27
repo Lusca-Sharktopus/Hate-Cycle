@@ -5,6 +5,7 @@
 // do Supabase em `comments`, além de `email`…) não é importado aqui (`base_url` só entra para saber o domínio, em `dominiosDoSite`). NUNCA importe nem exporte `comments` neste arquivo: desde a T12, o ÚNICO arquivo que lê
 // `comments` é src/lib/comentarios.ts (que monta a caixa de comentários igual à do build.py).
 import { site_name, site_url, base_url, logo, author, show_extras, socials, languages, intro, ui, emissaries, redirects } from "../../config.json";
+import { ehChaveDoBlog, TEXTOS_DO_BLOG } from "./textosDoBlog";
 
 /** Os idiomas do site. Têm de ser os mesmos de config.json → languages (os valores de `[lang]` em src/pages/ vêm daí). */
 export type Lang = "en" | "pt";
@@ -243,8 +244,16 @@ export function langName(lang: Lang): string {
 }
 
 /** Textos da interface (config.json → ui), como a função T(lang, chave) do build.py.
- *  A chave é conferida pelo `pnpm check`: t("pt", "chave_errada") não compila. */
+ *  A chave é conferida pelo `pnpm check`: t("pt", "chave_errada") não compila.
+ *  T17n: as chaves que chamam a seção de "Notícias"/"News" vêm de src/lib/textosDoBlog.ts ("Blog"), por cima do config.json
+ *  (que é do autor e continua com os textos antigos, que o build.py usa). */
 export function t(lang: Lang, key: UiKey): string {
+  if (ehChaveDoBlog(key)) return TEXTOS_DO_BLOG[lang][key];
+  return config.ui[lang][key];
+}
+
+/** O texto de config.json → ui SEM a troca do blog (o que o build.py mostra). Só para os testes e as exceções de paridade. */
+export function tDoConfig(lang: Lang, key: UiKey): string {
   return config.ui[lang][key];
 }
 

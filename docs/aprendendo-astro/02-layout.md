@@ -291,6 +291,8 @@ export function t(lang: Lang, key: UiKey): string {
 }
 ```
 
+> **Desde a T17n (27/10/2026):** `t()` tem uma linha a mais. As cinco chaves que chamam a seção de notícias (`news`, `tag_news`, `all_news`, `news_search_ph`, `news_none`) vêm de `src/lib/textosDoBlog.ts` ("Blog", "Post do blog"…), por cima do `config.json`, que é do autor e continua com os textos antigos para o `build.py`. Detalhes: lição 08, seção "Ossos do Ofício em português e 'Blog'…".
+
 A diferença é a que a lição 01 anunciou, agora completa. O `T()` do Python aceita **qualquer** texto como chave e, se não achar, cai para o inglês e, se ainda não achar, **mostra o próprio nome da chave na tela**. O `t()` do Astro só aceita as chaves que existem: `UiKey` é a lista de todas as chaves de texto simples de `ui` (`home`, `news`, `works`… `all_stories`), declaradas em `interface UiText`. Teste o que acontece com um erro de digitação:
 
 ```ts

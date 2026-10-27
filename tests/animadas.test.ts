@@ -1,6 +1,6 @@
 // Provas da T17e, parte 2: os GIFs animados do autor viram WebP animado SEM PERDA e tocam exatamente igual.
 //
-// O que é provado, para TODO GIF animado de static/ (hoje três: Apollo e Anfíbio da página Sobre, "NO… …I CAN'T…" de Ossos do Ofício):
+// O que é provado, para TODO GIF animado de static/ (hoje quatro: Apollo e Anfíbio da página Sobre, "NO… …I CAN'T…" de Ossos do Ofício e a versão em português, "NÃO… …EU NÃO POSSO…"):
 //   - o WebP tem o mesmo tamanho, o mesmo número de quadros, a MESMA duração em cada quadro (lida do cabeçalho do arquivo, byte a byte,
 //     não pelo sharp) e a mesma repetição (para sempre, como o GIF);
 //   - cada quadro, decodificado, é IGUAL ao do GIF (sem perda: cor e transparência de cada pixel visível, quadro a quadro);
@@ -24,6 +24,8 @@ const DO_AUTOR: Record<string, { largura: number; altura: number; atrasos: numbe
   "other images/Apollo Site.gif": { largura: 395, altura: 560, atrasos: [120, 130, 120, 130, 120, 130, 120, 130] },
   "other images/Anfíbio Site.gif": { largura: 509, altura: 560, atrasos: [120, 130, 120, 130, 120, 130, 120, 130] },
   "other images/no-i-cant.gif": { largura: 943, altura: 376, atrasos: [2000, 100, 100] },
+  // T17n: a versão em português que o autor fez ("NÃO… …EU NÃO POSSO…", para /pt/works/all-in-a-nights-work/01/), com os mesmos tempos
+  "other images/nao-eu-nao-posso.gif": { largura: 943, altura: 376, atrasos: [2000, 100, 100] },
 };
 
 describe("regras puras", () => {

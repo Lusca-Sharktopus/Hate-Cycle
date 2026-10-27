@@ -300,11 +300,11 @@ def bloco(browser, porta, fotos):
     print("\n== bloco \"estou lendo em ordem\" com as obras novas (prévia, pt)")
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
-    # T17l: obra de vários capítulos → a lista de capítulos; O Pêndulo e Cat-Crow-Thing (sem arte) pulados; Ossos em português → inglês
+    # T17l: obra de vários capítulos → a lista de capítulos; O Pêndulo e Cat-Crow-Thing (sem arte) pulados; Ossos em português → o capítulo em português (T17n)
     casos = {
         "/pt/works/firestriker/01/": {"chrono": [["/pt/works/light-and-blood/", "Assistir Luz & Sangue"], ["/pt/works/roadside/", "Ler Beira de Estrada"]]},
         "/pt/works/roadside/01/": {"titulo": "estou lendo em ordem", "chrono": [["/pt/works/firestriker/01/", "Ler Pederneira"], None],
-                                   "release": [["/en/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"], None]},
+                                   "release": [["/pt/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"], None]},
         "/pt/works/the-pendulum/01/": {"titulo": "estou assistindo em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None],
                                        "release": [["/pt/works/roadside/", "Ler Beira de Estrada"], None]},
         "/pt/works/cat-crow-thing/01/": {"titulo": "estou jogando em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None], "release": [["/pt/works/roadside/", "Ler Beira de Estrada"], None]},

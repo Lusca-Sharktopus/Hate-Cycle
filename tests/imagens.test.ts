@@ -528,7 +528,8 @@ describe("T17e no site construído", () => {
     expect(readFileSync(join(dist, "intro", "logo.webm")).equals(original("intro/logo.webm"))).toBe(true);
   });
 
-  const gifsAnimadosDoAutor = ["other images/Apollo Site.gif", "other images/Anfíbio Site.gif", "other images/no-i-cant.gif"];
+  // T17n: + o "NÃO… …EU NÃO POSSO…" da versão em português de Ossos do Ofício (também só na prévia)
+  const gifsAnimadosDoAutor = ["other images/Apollo Site.gif", "other images/Anfíbio Site.gif", "other images/no-i-cant.gif", "other images/nao-eu-nao-posso.gif"];
 
   test("toda <img> de GIF animado, de todas as páginas, tem o WebP animado no srcset (1x), com o tamanho do GIF; o src continua sendo o GIF", async () => {
     const vistas = new Map<string, number>(); // arquivo → em quantas páginas apareceu
@@ -555,12 +556,12 @@ describe("T17e no site construído", () => {
       }
     }
     expect(problemas).toEqual([]);
-    // no site PUBLICADO (sem rascunhos) os dois GIFs da página Sobre aparecem em /pt/ e /en/; o de Ossos do Ofício só na prévia (é rascunho)
+    // no site PUBLICADO (sem rascunhos) os dois GIFs da página Sobre aparecem em /pt/ e /en/; os dois de Ossos do Ofício (EN e PT) só na prévia (é rascunho)
     expect(vistas.get("other images/Apollo Site.gif")).toBe(2);
     expect(vistas.get("other images/Anfíbio Site.gif")).toBe(2);
   }, 120_000);
 
-  test("os três WebP animados estão publicados em /animadas/ (inclusive o de Ossos do Ofício, que só aparece na prévia) e nada mais fica lá", async () => {
+  test("os quatro WebP animados estão publicados em /animadas/ (inclusive os dois de Ossos do Ofício, que só aparecem na prévia) e nada mais fica lá", async () => {
     const nomes = new Set<string>();
     for (const g of gifsAnimadosDoAutor) {
       const info = await lerAnimada(g);

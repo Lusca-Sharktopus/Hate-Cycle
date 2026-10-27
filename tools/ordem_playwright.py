@@ -21,8 +21,8 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      Beira de Estrada e O Pêndulo (rascunhos sem capítulo)
      são puladas, e a Pederneira não tem história depois dela na Cronológica;
   9. (T17l, era T17i) o link de cada lado: a PÁGINA DA OBRA (lista de capítulos) quando ela tem mais de um capítulo naquele idioma, o
-     capítulo quando tem um só (o externo continua externo, em outra aba); obra que só tem capítulo em outro idioma (Ossos do Ofício em
-     português) leva à página daquele idioma, com hreflang; em todo capítulo E em toda página de obra (o bloco também mora lá, T17l);
+     capítulo quando tem um só (o externo continua externo, em outra aba); obra que só tem capítulo em outro idioma (era Ossos do Ofício em
+     português até a T17n) leva à página daquele idioma, com hreflang; em todo capítulo E em toda página de obra (o bloco também mora lá, T17l);
  10. (T17i) a CAIXA DO MESMO TAMANHO: em TODO capítulo e página de obra do site (e da prévia), a 1100, 390 e 320 px, getBoundingClientRect
      da caixa na Cronológica, no Lançamento e com o mouse em cada lado: largura e altura iguais; as molduras das artes, iguais entre si e
      entre as obras (por tipo de página: a caixa da página da obra mora dentro da folha, mais estreita);
@@ -452,10 +452,10 @@ def previa(browser, porta):
     conferir(seguinte.count() == 1 and seguinte.get_attribute("href") == "/pt/works/roadside/", "prévia: na Cronológica, depois da Pederneira vem a Beira de Estrada (a página da obra)")
     texto = pg.locator("[data-story-order]").text_content() or ""
     conferir("Em breve" not in texto, "prévia: o bloco não fala de \"Em breve\"")
-    # T17l: Ossos do Ofício em português (capítulo só em inglês) leva ao capítulo em inglês, com hreflang
+    # T17n: Ossos do Ofício ganhou o capítulo em português; nas páginas em português leva a ele, sem hreflang (até a T17m, ao inglês)
     abrir(pg, porta, "/pt/works/light-and-blood/01/")
     ossos = pg.locator('.so-order[data-ordem="chrono"] a.so-side.prev')
-    conferir(ossos.get_attribute("href") == "/en/works/all-in-a-nights-work/01/" and ossos.get_attribute("hreflang") == "en" and "Ler Ossos do Ofício" in (ossos.text_content() or ""), "prévia, /pt/: \"Ler Ossos do Ofício\" leva ao capítulo em inglês (hreflang=\"en\")")
+    conferir(ossos.get_attribute("href") == "/pt/works/all-in-a-nights-work/01/" and ossos.get_attribute("hreflang") is None and "Ler Ossos do Ofício" in (ossos.text_content() or ""), "prévia, /pt/: \"Ler Ossos do Ofício\" leva ao capítulo em português (sem hreflang)")
     # T17l: o bloco também na página da obra, logo depois da lista de capítulos
     for url in ("/pt/works/roadside/", "/en/works/light-and-blood/"):
         abrir(pg, porta, url)

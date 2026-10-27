@@ -6554,6 +6554,7 @@
     "universe/hidden-magic/en.md": "Hidden magic",
     "universe/hidden-magic/pt.md": "A magia escondida",
     "works/all-in-a-nights-work/01/en.md": "All in a Night's Work",
+    "works/all-in-a-nights-work/01/pt.md": "Ossos do Ofício",
     "works/firestriker/01/en.md": "Firestriker",
     "works/firestriker/01/pt.md": "Pederneira",
     "works/light-and-blood/01/en.md": "Luke 10:3",
@@ -6756,6 +6757,7 @@
    "universe/hidden-magic/en.md": "Example page — edit or delete. Dragons, goblins, mages and deities hide from humanity out of fear of capture and containment.",
    "universe/hidden-magic/pt.md": "Página de exemplo — edite ou apague. Dragões, goblins, magos e divindades se escondem da humanidade por medo de captura e…",
    "works/all-in-a-nights-work/01/en.md": "The sunny morning after a full night of rain had a distinct aroma; the Sun rays phased through the leaves of the trees; the…",
+   "works/all-in-a-nights-work/01/pt.md": "The sunny morning after a full night of rain had a distinct aroma; the Sun rays phased through the leaves of the trees; the…",
    "works/cat-crow-thing/01/en.md": "",
    "works/cat-crow-thing/01/pt.md": "",
    "works/firestriker/01/en.md": "“We’re lost!”, shouted Harry, my young assistant. Tiredness, frustration and what I can only interpret as a moan caused by…",
@@ -7525,6 +7527,10 @@
     "tamanho": 132
    },
    "works/all-in-a-nights-work/01/en.md": {
+    "sha1": "e2f470cdaf7a728f2cdae749ab9d2a440ceacfab",
+    "tamanho": 1818
+   },
+   "works/all-in-a-nights-work/01/pt.md": {
     "sha1": "e2f470cdaf7a728f2cdae749ab9d2a440ceacfab",
     "tamanho": 1818
    },
@@ -19376,8 +19382,10 @@
        "resumo": "Giuseppe di Vario lida com as dificuldades de trabalhar como um exorcista.",
        "imagem": "/covers/PT/Capa%20Ossos%20do%20Of%C3%ADcio.png",
        "botao": {
-        "tipo": "em-breve",
-        "rotulo": "Em breve"
+        "tipo": "link",
+        "href": "/pt/works/all-in-a-nights-work/01/",
+        "externo": false,
+        "rotulo": "Leia aqui"
        },
        "previa": null,
        "ordem": {
@@ -20557,7 +20565,8 @@
      "imagem": "covers/EN/Cover All in a Night's Work.png",
      "noindex": false,
      "alt": {
-      "en": "/en/works/all-in-a-nights-work/01/"
+      "en": "/en/works/all-in-a-nights-work/01/",
+      "pt": "/pt/works/all-in-a-nights-work/01/"
      },
      "capitulo": {
       "h1": "All in a Night's Work",
@@ -24716,6 +24725,27 @@
      "alt": {
       "en": "/en/works/",
       "pt": "/pt/works/"
+     }
+    },
+    "/pt/works/all-in-a-nights-work/01/": {
+     "lang": "pt",
+     "titulo": "Ossos do Ofício",
+     "cls": "reader reader-prose",
+     "desc": "",
+     "imagem": "covers/PT/Capa Ossos do Ofício.png",
+     "noindex": false,
+     "alt": {
+      "en": "/en/works/all-in-a-nights-work/01/",
+      "pt": "/pt/works/all-in-a-nights-work/01/"
+     },
+     "capitulo": {
+      "h1": "Ossos do Ofício",
+      "data": null,
+      "comentarios": "works/all-in-a-nights-work/01",
+      "formato": "prose",
+      "anterior": null,
+      "proximo": null,
+      "voltar": null
      }
     },
     "/pt/works/cat-crow-thing/01/": {

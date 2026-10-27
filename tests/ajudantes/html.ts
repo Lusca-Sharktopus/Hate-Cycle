@@ -498,3 +498,63 @@ export function cartaoEmOutroIdiomaComoNoPython(html: string, emBreve: string): 
   }
   return { html: cortar(html, cortes), trocados: cortes.length };
 }
+
+// ───────────── T17n: "Feed de Notícias" → "Blog" (só no Astro) ─────────────
+//
+// Pedido do autor (27/10): a seção de notícias passa a se chamar "Blog" e as notícias, "posts" — só no que o visitante lê (src/lib/textosDoBlog.ts,
+// por cima do config.json → ui, que é do autor e continua com os textos antigos, os que o build.py usa). Exceção de NOVE formas exatas, no HTML
+// do ASTRO, cada uma trocando SÓ o texto novo pelo do config.json (o resto da tag tem de ser exatamente o de sempre):
+//   titulo     <title>Blog | …            og:title   <meta property="og:title" content="Blog | …
+//   menu       <a href="/xx/news/"[ aria-current="page"][ data-astro-cid-…]>Blog</a>
+//   h1         <div class="wrap block news-wrap"><h1>Blog</h1>
+//   busca      <input type="search" class="news-search" placeholder="Buscar no blog…" aria-label="Buscar no blog…"
+//   nenhum     <p class="news-none" hidden>Nenhum post encontrado.</p>
+//   paginacao  <nav class="pagination" aria-label="Blog"
+//   todos      <a class="mid" href="/xx/news/">Todos os posts</a>          (o botão do meio no fim de cada post)
+//   etiqueta   <span class="tag">Post do blog</span><time>                  (o cartão de "Últimas atualizações" da home)
+// Os textos vêm de quem chama (`astro` = TEXTOS_DO_BLOG[lang], `python` = config.json → ui[lang]), para este arquivo não ler o config.json.
+// O mesmo texto em outro lugar (no texto de um post, numa etiqueta do autor, num <h1> que não é o da lista) fica e aparece como diferença.
+// tests/blog.test.ts prova a regra (inclusive casos negativos).
+
+export type FormaDoBlog = "titulo" | "og:title" | "menu" | "h1" | "busca" | "nenhum" | "paginacao" | "todos" | "etiqueta";
+export interface TextosDoBlogNaParidade {
+  news: string;
+  tag_news: string;
+  all_news: string;
+  news_search_ph: string;
+  news_none: string;
+}
+export interface BlogComoNoPython {
+  html: string;
+  /** Quantas trocas de cada forma. */
+  trocas: Record<FormaDoBlog, number>;
+}
+const escaparComoOAstro = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+const comoRegExp = (t: string) => escaparComoOAstro(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** O HTML do Astro com os textos do blog (T17n) escritos como os do config.json (os do Python), só nas nove formas exatas. */
+export function blogComoNoPython(html: string, astro: TextosDoBlogNaParidade, python: TextosDoBlogNaParidade): BlogComoNoPython {
+  const a = (k: keyof TextosDoBlogNaParidade) => comoRegExp(astro[k]);
+  const p = (k: keyof TextosDoBlogNaParidade) => escaparComoOAstro(python[k]);
+  // cada forma: a expressão (os grupos são o que fica em volta do texto) e o que entra no lugar, montado com os grupos
+  const formas: [FormaDoBlog, RegExp, (g: string[]) => string][] = [
+    ["titulo", new RegExp(`(<title>)${a("news")}( \\| )`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["og:title", new RegExp(`(<meta property="og:title" content=")${a("news")}( \\| )`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["menu", new RegExp(`(<a href="/(?:en|pt)/news/"(?: aria-current="page")?(?: data-astro-cid-[a-z0-9]+)?>)${a("news")}(</a>)`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["h1", new RegExp(`(<div class="wrap block news-wrap"><h1>)${a("news")}(</h1>)`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["busca", new RegExp(`(<input type="search" class="news-search" placeholder=")${a("news_search_ph")}(" aria-label=")${a("news_search_ph")}(")`, "g"), (g) => `${g[1]}${p("news_search_ph")}${g[2]}${p("news_search_ph")}${g[3]}`],
+    ["nenhum", new RegExp(`(<p class="news-none" hidden>)${a("news_none")}(</p>)`, "g"), (g) => `${g[1]}${p("news_none")}${g[2]}`],
+    ["paginacao", new RegExp(`(<nav class="pagination" aria-label=")${a("news")}(")`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["todos", new RegExp(`(<a class="mid" href="/(?:en|pt)/news/">)${a("all_news")}(</a>)`, "g"), (g) => `${g[1]}${p("all_news")}${g[2]}`],
+    ["etiqueta", new RegExp(`(<span class="tag">)${a("tag_news")}(</span><time>)`, "g"), (g) => `${g[1]}${p("tag_news")}${g[2]}`],
+  ];
+  const trocas = Object.fromEntries(formas.map(([f]) => [f, 0])) as Record<FormaDoBlog, number>;
+  let saida = html;
+  for (const [forma, re, montar] of formas) {
+    saida = saida.replace(re, (...m: unknown[]) => {
+      trocas[forma] += 1;
+      return montar(m.slice(0, 4).map((x) => (typeof x === "string" ? x : "")));
+    });
+  }
+  return { html: saida, trocas };
+}

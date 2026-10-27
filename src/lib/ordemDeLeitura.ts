@@ -31,7 +31,7 @@
 // EM OUTRO IDIOMA (T17l, mudança 11: "Permita que a Caixa de Cronologia leve à Ossos do Ofício mesmo quando em português, levando para a
 // página em inglês mesmo"): regra geral — se a obra não tem nada lançado no idioma da página (nenhum capítulo, nenhum link externo), mas
 // tem em outro idioma do site, ela entra no bloco com o rótulo no idioma da página ("Ler Ossos do Ofício") e o link para o capítulo (ou a
-// página da obra) do outro idioma, marcado com `hreflang` (o idioma de destino). Hoje: Ossos do Ofício, que só tem capítulo em inglês.
+// página da obra) do outro idioma, marcado com `hreflang` (o idioma de destino). Hoje: nenhuma (Ossos do Ofício, a única, ganhou o capítulo em português na T17n).
 // Vale só para quem a página daquele idioma mostra (obra com `langs` sem o idioma da página nem entra na ordem).
 //
 // O RÓTULO NUMA LINHA SÓ (T17i): o build mede cada rótulo na fonte de verdade (src/lib/largurasDoRotulo.ts, gerado da Lexend 500) e

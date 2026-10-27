@@ -1,6 +1,6 @@
 // T17m (pedido do autor de 22/10, "por agora sim"): o cartão de Histórias (e da home) da obra que NÃO tem nada no idioma da página, mas
 // tem capítulo no outro idioma do site, deixa de ser o "Em breve" apagado e leva ao outro idioma, com `hreflang` — a mesma regra do bloco
-// "estou lendo em ordem" (T17l). Hoje: Ossos do Ofício em português (rascunho: só na prévia).
+// "estou lendo em ordem" (T17l). Hoje: nenhuma obra (Ossos do Ofício em português, a única, ganhou o capítulo em português na T17n).
 //
 // O que se prova aqui:
 //   1. a regra (src/lib/obras.ts → cartaoDaObra com `outrosIdiomas`), num SITE INVENTADO lido pelo mesmo carregador e pelas mesmas regras:
@@ -9,7 +9,7 @@
 //      quando o botão já leva ao outro idioma; sem `outrosIdiomas`, nada muda (o bloco "em ordem" chama assim);
 //   2. as páginas (src/lib/paginas.ts → dadosDosAtalhos/dadosDaHome) passam os outros idiomas, e o WorkCard põe `hreflang` no <a>;
 //   3. a exceção de paridade (tests/ajudantes/html.ts → cartaoEmOutroIdiomaComoNoPython) troca SÓ esse botão pelo "Em breve" do Python,
-//      com casos negativos; e, no conteúdo de verdade, o cartão de Ossos em português (prévia) leva a /en/works/all-in-a-nights-work/01/.
+//      com casos negativos; e, no conteúdo de verdade, o cartão de Ossos em português (prévia) leva, desde a T17n, a /pt/works/all-in-a-nights-work/01/.
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -43,7 +43,7 @@ const wj = (o: Record<string, unknown>) => JSON.stringify({ kind: "prose", unive
 const md = (fm = "date: 2026-01-01") => `---\n${fm}\n---\n\nTexto.\n`;
 
 const SITE: Record<string, string> = {
-  // conto só em inglês (Ossos do Ofício de hoje, mas publicado)
+  // conto só em inglês (como era o Ossos do Ofício até a T17n, mas publicado)
   "works/conto/work.json": wj({ oneshot: true, title: { en: "Tale", pt: "Conto" }, order: { release: 1, chrono: 1 } }),
   "works/conto/01/en.md": md(),
   // série de dois capítulos só em inglês → a página da obra
@@ -141,13 +141,13 @@ describe("T17m: a exceção de paridade cartaoEmOutroIdiomaComoNoPython (o Pytho
   });
 });
 
-describe("T17m: no conteúdo de verdade (prévia), o cartão de Ossos do Ofício em português leva ao capítulo em inglês", () => {
-  test("Histórias em português: Ossos do Ofício → /en/works/all-in-a-nights-work/01/, hreflang en; no publicado, Ossos não existe", () => {
+describe("T17n: no conteúdo de verdade (prévia), o cartão de Ossos do Ofício em português leva ao capítulo em PORTUGUÊS (até a T17m, ao inglês)", () => {
+  test("Histórias em português: Ossos do Ofício → /pt/works/all-in-a-nights-work/01/, sem hreflang; no publicado, Ossos não existe", () => {
     const entradas = (comRascunhos: boolean) => carregarConteudo(join(RAIZ, "content"), { comRascunhos, mostrarExtras: false });
     for (const comRascunhos of [true, false]) {
       const d = dadosDoIdioma(entradas(comRascunhos), "pt", { comRascunhos, mostrarExtras: false, emissariosEscondidos: [], todosOsIdiomas: langs });
       const ossos = dadosDosAtalhos(d, comRascunhos, false).historias.cartoes.find((c) => c.slug === "all-in-a-nights-work");
-      if (comRascunhos) expect(ossos?.botao).toEqual({ tipo: "link", href: "/en/works/all-in-a-nights-work/01/", externo: false, rotulo: t("pt", "read"), idioma: "en" });
+      if (comRascunhos) expect(ossos?.botao).toEqual({ tipo: "link", href: "/pt/works/all-in-a-nights-work/01/", externo: false, rotulo: t("pt", "read") });
       else expect(ossos).toBeUndefined();
     }
   });

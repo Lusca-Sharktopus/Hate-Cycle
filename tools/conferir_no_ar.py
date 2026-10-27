@@ -142,7 +142,8 @@ def conferencias() -> list[Conferencia]:
                     titulo=titulo_esperado(titulo_da_obra("light-and-blood", "pt"), titulo_do_md("works/light-and-blood/02/pt.md")),
                     textos=['data-page="works/light-and-blood/02"'], nome="Luz & Sangue 02 (pt)"),
         # Notícia, Sobre, Apoio
-        Conferencia("/pt/news/", tipo=html_, titulo=f"Notícias | {MARCA}", nome="lista de notícias"),
+        # (T17n) a seção se chama "Blog" no site novo (src/lib/textosDoBlog.ts; o config.json continua com "Notícias", que só o Python usa)
+        Conferencia("/pt/news/", tipo=html_, titulo=f"Blog | {MARCA}", nome="lista do blog"),
         Conferencia("/pt/news/2025-04-18-saiu-pederneira/", tipo=html_,
                     titulo=titulo_esperado(titulo_do_md("news/2025-04-18-saiu-pederneira/pt.md")),
                     textos=['data-page="news/2025-04-18-saiu-pederneira"'], nome="notícia (Saiu Pederneira)"),

@@ -425,7 +425,7 @@ describe("T17l: quem não tem arte para a caixa é pulado; obra só com capítul
     for (const slug of ["hdvr", "firestriker", "light-and-blood", "all-in-a-nights-work", "roadside"]) expect(vistas.has(slug), slug).toBe(true);
   });
 
-  /** Ossos do Ofício em miniatura: só tem capítulo em inglês (como o de verdade). Entre Luz & Sangue (5) e Pederneira (6) na cronológica. */
+  /** Ossos do Ofício em miniatura: só tem capítulo em inglês (como o de verdade até a T17n). Entre Luz & Sangue (5) e Pederneira (6) na cronológica. */
   const comOssos = (extra: Record<string, string> = {}) =>
     sitePdf({
       "works/ossos/work.json": wj({ kind: "prose", oneshot: true, title: { en: "All in a Night's Work", pt: "Ossos do Ofício" }, order: { release: 4, chrono: 5.5 }, media: "short-story" }),
@@ -467,20 +467,20 @@ describe("T17l: quem não tem arte para a caixa é pulado; obra só com capítul
     expect(en).not.toContain("hreflang");
   });
 
-  test("conteúdo de verdade (prévia): Ossos do Ofício nas páginas em português leva ao capítulo em inglês", () => {
+  test("conteúdo de verdade (prévia): Ossos do Ofício nas páginas em português leva ao capítulo em PORTUGUÊS (T17n; até a T17m, ao inglês)", () => {
     const r = ler(Object.fromEntries(realContent()), true);
     const pt = r.dados.pt;
     // Luz & Sangue: na cronológica Ossos do Ofício (4) vem antes; no lançamento, depois
     const obra = pt.obras.find((o) => o.data._origem.slug === "light-and-blood")!;
     const outros = (o: (typeof pt.obras)[number]) => [{ lang: "en" as const, capitulos: r.dados.en.capitulosDe(r.dados.en.obras.find((x) => x.data._origem.slug === o.data._origem.slug)!) }];
-    const b = blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros);
-    for (const ossos of [b.listas.chrono.anterior, b.listas.release.proximo]) {
-      expect(ossos?.slug).toBe("all-in-a-nights-work");
-      expect(ossos?.rotulo).toBe("Ler Ossos do Ofício");
-      expect(ossos?.destino).toEqual({ tipo: "link", href: "/en/works/all-in-a-nights-work/01/", externo: false, idioma: "en" });
+    // com ou sem a informação dos outros idiomas, o mesmo destino: o capítulo em português, sem hreflang (a regra do "outro idioma" não vale mais para Ossos)
+    for (const b of [blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros), blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true)]) {
+      for (const ossos of [b.listas.chrono.anterior, b.listas.release.proximo]) {
+        expect(ossos?.slug).toBe("all-in-a-nights-work");
+        expect(ossos?.rotulo).toBe("Ler Ossos do Ofício");
+        expect(ossos?.destino).toEqual({ tipo: "link", href: "/pt/works/all-in-a-nights-work/01/", externo: false, idioma: null });
+      }
     }
-    // sem a informação dos outros idiomas (o padrão), ela é pulada em português, como antes
-    expect(blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true).listas.chrono.anterior).toBeNull();
   });
 });
 

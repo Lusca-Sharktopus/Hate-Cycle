@@ -22,11 +22,12 @@ import OutrasHistorias from "../src/components/OutrasHistorias.astro";
 import SecaoEmissarios from "../src/components/SecaoEmissarios.astro";
 import SecaoHistorias from "../src/components/SecaoHistorias.astro";
 import { paginaDaObra } from "../src/lib/capitulos";
-import { langs, t, type Lang } from "../src/lib/config";
+import { langs, t, tDoConfig, type Lang } from "../src/lib/config";
+import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { finalizarMain, separarScripts } from "../src/lib/pagina";
 import { dadosDaHome, dadosDosAtalhos } from "../src/lib/paginas";
-import { canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, homeComoNoPython, soQuatroHistoriasNaHome } from "./ajudantes/html";
+import { blogComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, homeComoNoPython, soQuatroHistoriasNaHome } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Ambiente {
@@ -89,8 +90,11 @@ for (const amb of ref.ambientes) {
       const atalhos = dadosDosAtalhos(dados, amb.rascunhos, cfg.emissaries_show_texts);
 
       // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá; no Python, "Em breve" (tests/obras-em-outro-idioma.test.ts)
+      // T17n: a etiqueta "Post do blog"/"Blog post" dos cartões de "Últimas atualizações" volta ao texto do config.json (tests/blog.test.ts)
+      const doConfig = Object.fromEntries(CHAVES_DO_BLOG.map((k) => [k, tDoConfig(lang, k)])) as Record<(typeof CHAVES_DO_BLOG)[number], string>;
       const igual = (atual: string, esperado: string, quem: string) => {
-        expect(canonicoDoMiolo(cartaoEmOutroIdiomaComoNoPython(atual, t(lang, "soon")).html), quem).toBe(canonicoDoMiolo(esperado));
+        const semBlog = blogComoNoPython(atual, TEXTOS_DO_BLOG[lang], doConfig).html;
+        expect(canonicoDoMiolo(cartaoEmOutroIdiomaComoNoPython(semBlog, t(lang, "soon")).html), quem).toBe(canonicoDoMiolo(esperado));
         comparados++;
       };
 

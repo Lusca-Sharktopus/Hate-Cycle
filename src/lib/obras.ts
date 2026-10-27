@@ -162,7 +162,7 @@ export interface CartaoDaObra {
  * card_work(): os dados do cartão de uma obra. `comRascunhos` = prévia (o `DRAFTS` do build.py).
  * `outrosIdiomas` (T17m, pedido do autor de 22/10, "por agora sim"; só no Astro): a obra que não tem nada no idioma da página, mas tem
  * em outro idioma do site, ganha o botão de verdade (texto no idioma da página) que leva ao outro idioma — a mesma regra do bloco
- * "em ordem" (src/lib/ordemDeLeitura.ts, T17l). Hoje: Ossos do Ofício em português (rascunho: só na prévia). Sem o argumento, nada muda
+ * "em ordem" (src/lib/ordemDeLeitura.ts, T17l). Hoje: nenhuma (era Ossos do Ofício em português até a T17n, que trouxe o capítulo em português). Sem o argumento, nada muda
  * (o `destinoNoIdioma()` do bloco chama assim). O build.py não tem a regra: tests/ajudantes/html.ts → cartaoEmOutroIdiomaComoNoPython().
  */
 export function cartaoDaObra(obra: ObraComDados, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean, outrosIdiomas: readonly CapitulosEmOutroIdioma[] = []): CartaoDaObra {

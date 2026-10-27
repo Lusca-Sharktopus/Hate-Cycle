@@ -27,7 +27,8 @@ O que confere, em cada par:
      O texto do bloco "estou lendo em ordem…" (T17c) e o do link "Ver todas as histórias" da home (T17j), que só existem no Astro,
      saem antes de ler; o leitor página a página dos quadrinhos vira as páginas empilhadas e a janela do jogo sai (T17d/T17k); o resumo cortado da lista de Notícias volta à forma do Python, e a home do Python fica com os 4 primeiros
      cartões, como a do Astro (T17j; as mesmas regras de tests/ajudantes/html.ts); o botão do cartão que leva ao outro idioma (Ossos do
-     Ofício em português, na prévia) volta ao "Em breve" do Python (T17m). Os posts incorporados não têm regra nenhuma: desde a T17m o
+     Ofício em português, na prévia, até a T17n) volta ao "Em breve" do Python (T17m); os textos do blog ("Blog", T17n) voltam aos do
+     config.json. Os posts incorporados não têm regra nenhuma: desde a T17m o
      HTML deles (com os scripts oficiais) é igual nos dois.
 Sai com 0 se tudo bater (ou só sobrar o que foi decidido), 1 se houver diferença. Só biblioteca padrão + Node (para o passo 3).
 """
@@ -167,17 +168,54 @@ RE_BOTAO_EM_OUTRO_IDIOMA = re.compile(r'(?<=</p>)<a class="button" href="[^"]*" 
 EM_BREVE = {l: v["soon"] for l, v in json.loads((RAIZ / "config.json").read_text(encoding="utf-8"))["ui"].items()}
 
 
+# T17n: "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts, só no Astro; o config.json continua com os textos antigos, que o
+# build.py usa). A mesma regra de tests/ajudantes/html.ts → blogComoNoPython (nove lugares exatos), aqui só para a leitura do TEXTO/metadados.
+def textos_do_blog() -> dict:
+    """Os textos de src/lib/textosDoBlog.ts (TEXTOS_DO_BLOG), por idioma: {"en": {"news": "Blog", …}, "pt": {…}}."""
+    ts = (RAIZ / "src/lib/textosDoBlog.ts").read_text(encoding="utf-8")
+    corpo = ts[ts.index("export const TEXTOS_DO_BLOG"):]
+    blocos = dict(re.findall(r"\b(en|pt): \{([^}]*)\}", corpo))
+    return {l: dict(re.findall(r'(\w+): "([^"\\]*)"', b)) for l, b in blocos.items()}
+
+
+BLOG = textos_do_blog()
+UI_DO_CONFIG = json.loads((RAIZ / "config.json").read_text(encoding="utf-8"))["ui"]
+
+
+def blog_como_no_python(html: str, lang: str) -> tuple[str, int]:
+    """Os textos do blog do Astro voltam aos do config.json, só nas nove formas exatas de blogComoNoPython(). Devolve o HTML e quantas trocas."""
+    a = {k: re.escape(v) for k, v in BLOG[lang].items()}
+    p = {k: UI_DO_CONFIG[lang][k].replace("\\", "\\\\") for k in BLOG[lang]}
+    formas = [
+        (rf"(<title>){a['news']}( \| )", rf"\g<1>{p['news']}\g<2>"),
+        (rf'(<meta property="og:title" content="){a["news"]}( \| )', rf"\g<1>{p['news']}\g<2>"),
+        (rf'(<a href="/(?:en|pt)/news/"(?: aria-current="page")?(?: data-astro-cid-[a-z0-9]+)?>){a["news"]}(</a>)', rf"\g<1>{p['news']}\g<2>"),
+        (rf'(<div class="wrap block news-wrap"><h1>){a["news"]}(</h1>)', rf"\g<1>{p['news']}\g<2>"),
+        (rf'(<input type="search" class="news-search" placeholder="){a["news_search_ph"]}(" aria-label="){a["news_search_ph"]}(")', rf"\g<1>{p['news_search_ph']}\g<2>{p['news_search_ph']}\g<3>"),
+        (rf'(<p class="news-none" hidden>){a["news_none"]}(</p>)', rf"\g<1>{p['news_none']}\g<2>"),
+        (rf'(<nav class="pagination" aria-label="){a["news"]}(")', rf"\g<1>{p['news']}\g<2>"),
+        (rf'(<a class="mid" href="/(?:en|pt)/news/">){a["all_news"]}(</a>)', rf"\g<1>{p['all_news']}\g<2>"),
+        (rf'(<span class="tag">){a["tag_news"]}(</span><time>)', rf"\g<1>{p['tag_news']}\g<2>"),
+    ]
+    total = 0
+    for de, por in formas:
+        html, n = re.subn(de, por, html)
+        total += n
+    return html, total
+
+
 def astro_como_no_python(html: str) -> tuple[str, int]:
     """Tira o link "Ver todas as histórias" da home, desfaz o degradê do resumo cortado (T17j), troca o leitor página a página pelas páginas
-    empilhadas e tira a janela do jogo (T17d), e volta ao "Em breve" o botão do cartão que leva ao outro idioma (T17m). Devolve o HTML e
-    quantas trocas."""
+    empilhadas e tira a janela do jogo (T17d), volta ao "Em breve" o botão do cartão que leva ao outro idioma (T17m) e devolve aos textos do
+    config.json os do blog (T17n). Devolve o HTML e quantas trocas."""
     lang = "pt" if re.search(r'<html lang="pt', html) else "en"
+    html, f = blog_como_no_python(html, lang)
     html, e = RE_BOTAO_EM_OUTRO_IDIOMA.subn(f'<span class="button disabled">{EM_BREVE[lang]}</span>', html)
     html, a = RE_LINK_DA_HOME.subn("", html)
     html, b = RE_RESUMO_CORTADO.subn(r"\1… \2", html)
     html, c = folheador_como_no_python(html)
     html, d = sem_janela_do_jogo(html)
-    return html, a + b + c + d + e
+    return html, a + b + c + d + e + f
 
 
 def python_como_no_astro(html: str) -> tuple[str, int]:

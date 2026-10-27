@@ -31,9 +31,10 @@ import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
-import { t } from "../src/lib/config";
+import { t, tDoConfig, type Lang } from "../src/lib/config";
+import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { blogComoNoPython, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -157,6 +158,10 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
 function pythonComoNoAstro(html: string): string {
   return soQuatroHistoriasNaHome(html).html;
 }
+/** Os textos do blog como estão no config.json (os que o build.py mostra). */
+function textosDoBlogNoConfig(lang: Lang) {
+  return Object.fromEntries(CHAVES_DO_BLOG.map((k) => [k, tDoConfig(lang, k)])) as Record<(typeof CHAVES_DO_BLOG)[number], string>;
+}
 /** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j); o leitor página a página
  *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
 function astroComoNoPython(html: string): string {
@@ -165,7 +170,9 @@ function astroComoNoPython(html: string): string {
   if (f.recusados !== 0 || j.foraDoLugar !== 0) throw new Error(`T17d: leitor página a página ou janela do jogo com forma inesperada (${f.recusados} leitor(es), ${j.foraDoLugar} janela(s))`);
   // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá (no Python, "Em breve"; tests/obras-em-outro-idioma.test.ts)
   const lang = /<html lang="pt/.test(j.html) ? "pt" : "en";
-  const c = cartaoEmOutroIdiomaComoNoPython(j.html, t(lang, "soon"));
+  // T17n: "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts); o Python usa os textos do config.json (tests/blog.test.ts)
+  const b = blogComoNoPython(j.html, TEXTOS_DO_BLOG[lang], textosDoBlogNoConfig(lang));
+  const c = cartaoEmOutroIdiomaComoNoPython(b.html, t(lang, "soon"));
   return resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html;
 }
 
@@ -654,26 +661,27 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
     for (const tag of [...lb.tags, ...hd.tags, ...pd.tags]) expect(tag).toMatch(/ srcset="[^"]+\.webp[^"]*"/);
   });
 
-  test("prévia (rascunhos, T17d/T17l): Beira de Estrada entra na fila; O Pêndulo e Cat-Crow-Thing, sem arte para a caixa, são pulados; Ossos em português leva ao inglês", () => {
+  test("prévia (rascunhos, T17d/T17l): Beira de Estrada entra na fila; O Pêndulo e Cat-Crow-Thing, sem arte para a caixa, são pulados; Ossos em português leva ao capítulo em português (T17n)", () => {
     const dir = segundaConstrucao();
     const capitulos = verificarPaginas(dir);
-    for (const c of ["/pt/works/roadside/", "/pt/works/roadside/01/", "/pt/works/roadside/02/", "/en/works/roadside/01/", "/pt/works/the-pendulum/01/", "/en/works/the-pendulum/01/", "/pt/works/cat-crow-thing/01/", "/en/works/cat-crow-thing/01/"]) expect(capitulos, c).toContain(c);
+    for (const c of ["/pt/works/all-in-a-nights-work/01/", "/en/works/all-in-a-nights-work/01/", "/pt/works/roadside/", "/pt/works/roadside/01/", "/pt/works/roadside/02/", "/en/works/roadside/01/", "/pt/works/the-pendulum/01/", "/en/works/the-pendulum/01/", "/pt/works/cat-crow-thing/01/", "/en/works/cat-crow-thing/01/"]) expect(capitulos, c).toContain(c);
     // Pederneira (cronológica 6): antes Luz & Sangue, depois Beira de Estrada (7); as duas com dois capítulos → a página da obra (T17l)
     const ped = lados(blocoDe(dir, "/pt/works/firestriker/01/"));
     expect(ped.chrono.prev).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
     expect(ped.chrono.next).toEqual({ href: "/pt/works/roadside/", texto: "Ler Beira de Estrada", externo: false });
     expect(ped.release.next?.texto).toBe("Assistir Luz & Sangue");
     // Beira de Estrada (quadrinho: "estou lendo"), nos capítulos e na página da obra: cronológica Pederneira ← → (O Pêndulo e Cat-Crow-Thing,
-    // sem arte, pulados) ninguém; lançamento (5): Ossos do Ofício (4; em português leva ao capítulo em inglês, T17l) ← → ninguém
+    // sem arte, pulados) ninguém; lançamento (5): Ossos do Ofício (4; desde a T17n tem capítulo em português, e é para ele que leva) ← → ninguém
     for (const url of ["/pt/works/roadside/01/", "/pt/works/roadside/02/", "/pt/works/roadside/"]) {
       const bloco = blocoDe(dir, url);
       expect(bloco, url).toContain("estou lendo em ordem");
       const l = lados(bloco);
       expect(l.chrono.prev, url).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
       expect(l.chrono.next, url).toBeNull();
-      expect(l.release.prev, url).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
+      expect(l.release.prev, url).toEqual({ href: "/pt/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
       expect(l.release.next, url).toBeNull();
-      expect(bloco, url).toContain('<a class="so-side prev" href="/en/works/all-in-a-nights-work/01/" hreflang="en">');
+      expect(bloco, url).toContain('<a class="so-side prev" href="/pt/works/all-in-a-nights-work/01/">');
+      expect(bloco, url).not.toContain("hreflang");
     }
     expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.prev).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
     expect(blocoDe(dir, "/en/works/roadside/01/")).not.toContain("hreflang");
@@ -695,9 +703,10 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
       expect(blocoDe(dir, url), url).not.toMatch(/Coming soon|Em breve/);
       for (const o of ["chrono", "release"] as const) for (const q of ["prev", "next"] as const) expect(lados(blocoDe(dir, url))[o][q]?.href ?? "", url).not.toMatch(/the-pendulum|cat-crow-thing/);
     }
-    // Ossos do Ofício (rascunho; capítulo só em inglês) com a arte em camadas: asas, Giuseppe, olhos; tela quadrada; as asas saem da moldura (T17l)
-    for (const url of ["/en/works/light-and-blood/01/", "/pt/works/light-and-blood/01/"]) {
-      const ossos = /<a class="so-side prev[^"]*" href="\/en\/works\/all-in-a-nights-work\/01\/"[^>]*>([\s\S]*?)<\/a>/.exec(blocoDe(dir, url))?.[1] ?? "";
+    // Ossos do Ofício (rascunho; capítulo em inglês e, desde a T17n, em português) com a arte em camadas: asas, Giuseppe, olhos; tela quadrada; as asas saem da moldura (T17l)
+    for (const lang of ["en", "pt"] as const) {
+      const url = `/${lang}/works/light-and-blood/01/`;
+      const ossos = new RegExp(`<a class="so-side prev[^"]*" href="/${lang}/works/all-in-a-nights-work/01/"[^>]*>([\\s\\S]*?)</a>`).exec(blocoDe(dir, url))?.[1] ?? "";
       expect([...ossos.matchAll(/<img class="(so-layer[^"]*)" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => `${decodeURIComponent(m[2] ?? "")}:${m[1]}`), url).toEqual(["Giuseppe Asas:so-layer so-surge", "Giuseppe:so-layer", "Giuseppe Olhos:so-layer so-surge"]);
       expect(ossos, url).toContain('<span class="so-art so-layers so-sangra"><span class="so-stage so-tem-surge" style="--ar:1000 / 1000;--razao:1">');
     }

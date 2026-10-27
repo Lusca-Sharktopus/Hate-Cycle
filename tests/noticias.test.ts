@@ -22,11 +22,12 @@ import ArtigoDeNoticia from "../src/components/ArtigoDeNoticia.astro";
 import ListaDeNoticias from "../src/components/ListaDeNoticias.astro";
 import { artigosDasNoticias, desenhoDaNoticia, estiloDaImagemDeFundo, figurinhaDaLinha, paginaDaListaDeNoticias, type NoticiaParaArtigo } from "../src/lib/artigos";
 import { secaoDeComentarios, type ChavesDoSupabase, type TextosDaInterface } from "../src/lib/comentarios";
-import { langs, type Lang } from "../src/lib/config";
+import { langs, tDoConfig, type Lang } from "../src/lib/config";
+import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { barraDePaginas, combinaComBusca, ITENS_POR_PAGINA, itensDaPagina, normalizarBusca, paginaPedida, paginaValida, palavrasDaBusca, totalDePaginas } from "../src/lib/paginacao";
 import { finalizarMain } from "../src/lib/pagina";
-import { canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, resumoCortadoComoNoPython, semScriptsAntigosDosComentarios } from "./ajudantes/html";
+import { blogComoNoPython, canonicoDoMiolo, RE_SCRIPT_DOS_COMENTARIOS, resumoCortadoComoNoPython, semScriptsAntigosDosComentarios } from "./ajudantes/html";
 import { CARACTERES_DO_DEGRADE, partesDoResumoCortado, resumoAutomatico, resumoFoiCortado, textoDeBuscaDaNoticia, textoPuro } from "../src/lib/resumos";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
@@ -75,6 +76,10 @@ const sha = (arquivos: Record<string, string>) => createHash("sha1").update(pyth
 
 const container = await AstroContainer.create();
 
+/** T17n: o HTML do Astro com os textos do blog ("Blog", "Todos os posts"…) como os do config.json, que o build.py usa (tests/blog.test.ts). */
+const textosDoBlogNoConfig = (l: Lang) => Object.fromEntries(CHAVES_DO_BLOG.map((k) => [k, tDoConfig(l, k)])) as Record<(typeof CHAVES_DO_BLOG)[number], string>;
+const blogComoNoPythonEm = (html: string, l: Lang) => blogComoNoPython(html, TEXTOS_DO_BLOG[l], textosDoBlogNoConfig(l)).html;
+
 let comparadas = 0;
 afterAll(() => console.log(`\nNotícias — ${comparadas} páginas (listas e artigos) de sites inventados comparadas com o build.py (<main> e argumentos do shell()).\n`));
 
@@ -111,10 +116,13 @@ for (const amb of ref.ambientes) {
     test.each(listas.map((p) => [p.url, p] as const))("lista %s", async (url, pagina) => {
       const py = amb.noticias[url];
       if (!py) throw new Error(`o Python não gerou ${url}`);
-      expect({ titulo: pagina.titulo, alt: pagina.alternativas, cls: "", desc: "", imagem: "", noindex: false }, url).toEqual(py.shell);
+      // T17n: o título da lista é "Blog" (src/lib/textosDoBlog.ts); o do Python, o do config.json
+      expect(pagina.titulo, url).toBe(TEXTOS_DO_BLOG[pagina.lang].news);
+      expect({ titulo: tDoConfig(pagina.lang, "news"), alt: pagina.alternativas, cls: "", desc: "", imagem: "", noindex: false }, url).toEqual(py.shell);
       const pronto = finalizarMain(await container.renderToString(ListaDeNoticias, { props: { pagina } }), pagina.lang);
       // T17j: o resumo cortado termina num degradê e o "…" vai para o link; desfeito só isso (resumoCortadoComoNoPython, provada abaixo)
-      expect(canonicoDoMiolo(resumoCortadoComoNoPython(pronto.html).html), url).toBe(canonicoDoMiolo(py.main));
+      // T17n: "Blog", "Buscar no blog…", "Nenhum post encontrado." voltam aos textos do config.json (blogComoNoPython)
+      expect(canonicoDoMiolo(resumoCortadoComoNoPython(blogComoNoPythonEm(pronto.html, pagina.lang)).html), url).toBe(canonicoDoMiolo(py.main));
       // a lista sempre leva o JavaScript da busca e das páginas
       expect(pronto.scripts, `${url}: script da lista`).not.toBe("");
       comparadas++;
@@ -131,7 +139,8 @@ for (const amb of ref.ambientes) {
       const semAntigos = semScriptsAntigosDosComentarios(py.main);
       const temCaixa = artigo.comentarios?.tipo === "caixa";
       expect({ pares: semAntigos.quantos, sobrou: semAntigos.sobrou }, url).toEqual({ pares: temCaixa ? 1 : 0, sobrou: false });
-      expect(canonicoDoMiolo(pronto.html), url).toBe(canonicoDoMiolo(semAntigos.html));
+      // T17n: o botão do meio ("Todos os posts") volta ao texto do config.json (blogComoNoPython)
+      expect(canonicoDoMiolo(blogComoNoPythonEm(pronto.html, artigo.lang)), url).toBe(canonicoDoMiolo(semAntigos.html));
       // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
       const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
       expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);
