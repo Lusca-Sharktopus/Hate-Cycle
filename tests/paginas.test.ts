@@ -31,8 +31,9 @@ import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
+import { t } from "../src/lib/config";
 import { pyStrip } from "../src/lib/frontmatter";
-import { canalDoYoutubeComoNoPython, canonicoDoMiolo, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -151,9 +152,10 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
 
 // ───────────── as diferenças decididas da T17j (cada uma provada no seu teste) ─────────────
 
-/** O HTML do Python com o que o Astro decidiu diferente: sem os scripts dos posts (T17g) e só 4 histórias na home (T17j). */
+/** O HTML do Python com o que o Astro decidiu diferente: só 4 histórias na home (T17j). (Os posts incorporados são iguais nos dois desde a
+ *  T17m: os scripts oficiais, como no site antigo; a exceção semScriptsDosPosts da T17g saiu.) */
 function pythonComoNoAstro(html: string): string {
-  return soQuatroHistoriasNaHome(semScriptsDosPosts(html).html).html;
+  return soQuatroHistoriasNaHome(html).html;
 }
 /** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j); o leitor página a página
  *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
@@ -161,7 +163,10 @@ function astroComoNoPython(html: string): string {
   const f = folheadorComoNoPython(html);
   const j = semJanelaDoJogo(f.html);
   if (f.recusados !== 0 || j.foraDoLugar !== 0) throw new Error(`T17d: leitor página a página ou janela do jogo com forma inesperada (${f.recusados} leitor(es), ${j.foraDoLugar} janela(s))`);
-  return resumoCortadoComoNoPython(homeComoNoPython(j.html).html).html;
+  // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá (no Python, "Em breve"; tests/obras-em-outro-idioma.test.ts)
+  const lang = /<html lang="pt/.test(j.html) ? "pt" : "en";
+  const c = cartaoEmOutroIdiomaComoNoPython(j.html, t(lang, "soon"));
+  return resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html;
 }
 
 // ───────────── página a página, grupo a grupo ─────────────
@@ -189,7 +194,6 @@ for (const ref of refs) {
         // T15: a única diferença aceita — o Python carrega o supabase-js do CDN e o /comments.js; o Astro, o script empacotado
         const doPython = semScriptsAntigosDosComentarios(ref.paginas[url] ?? "");
         if (doPython.sobrou) throw new Error(`${url}: o Python tem supabase-js/comments.js fora do lugar de sempre (depois do window.HC)`);
-        // T17g/T17j: o Python tem o <script src> do X/Reddit/Instagram dentro de cada post; o Astro, nenhum (tests/embeds.test.ts)
         // T17j: a home do Python tem até 5 histórias; a do Astro, até 4 (tests/home.test.ts)
         py = lerPagina(pythonComoNoAstro(doPython.html));
         const arquivo = paginasDoDist(dist).get(url);
@@ -720,11 +724,12 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
 describe("T17d: as três obras novas só existem na prévia; o leitor página a página, o vídeo e a página de jogo no site de verdade", () => {
   const NOVAS = /works\/(roadside|the-pendulum|cat-crow-thing)\b|Cat-Crow-Thing|comics\/provisorio|logo%20steam|data-folheador|data-jogo|fl-runa/;
 
-  test("site publicado: nada delas em NENHUM arquivo (páginas, Histórias, home, sitemap, feeds); nenhum <script src> de fora", () => {
+  test("site publicado: nada delas em NENHUM arquivo (páginas, Histórias, home, sitemap, feeds); nenhum <script src> de fora além dos scripts oficiais dos posts (T17m)", () => {
+    const oficiais = ["https://platform.x.com/widgets.js", "https://embed.reddit.com/widgets.js", "//www.instagram.com/embed.js"]; // os --permitir do deploy.yml (tests/scripts-de-fora.test.ts)
     for (const arquivo of arquivosDe(dist).filter((a) => /\.(html|xml)$/.test(a))) {
       const texto = readFileSync(join(dist, arquivo), "utf8");
       expect(NOVAS.test(texto), arquivo).toBe(false);
-      expect(texto, arquivo).not.toMatch(/<script\b[^>]*\bsrc="(https?:)?\/\//);
+      for (const m of texto.matchAll(/<script\b[^>]*\bsrc="((?:https?:)?\/\/[^"]*)"/g)) expect(oficiais, arquivo).toContain(m[1]);
     }
     expect(arquivosDe(dist).filter((a) => a.endsWith(".html"))).toHaveLength(197); // as 193 de baseline/urls.json + as 4 páginas antigas de static/ (B35)
   });

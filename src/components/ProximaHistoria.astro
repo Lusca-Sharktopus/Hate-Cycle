@@ -110,6 +110,13 @@ const DIRECOES = ["prev", "next"] as const;
     @media (min-width: 701px) {
       .so-art.so-sangra, .so-art.so-sangra > .so-stage { overflow: visible; }
     }
+    /* (T17m, pedido do autor de 22/10) no celular a moldura continua sendo o limite, mas sem corte seco: as bordas "desvanecem" num
+       degradê radial (máscara), centrado embaixo, no meio (onde o personagem fica). Opaco até 55% do raio, transparente na borda da
+       moldura (e nos cantos de cima): o personagem fica inteiro, as asas somem aos poucos. Nada sai da moldura (a outra história continua
+       inteira e clicável). No computador nada muda: as camadas saem da moldura e a caixa é a máscara (a T17m deixou as asas dentro dela). */
+    @media (max-width: 700px) {
+      .so-art.so-sangra { -webkit-mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent); mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent); }
+    }
 
     /* mouse por cima (e teclado): a arte troca da 1 para a 2 com um leve crescimento */
     a.so-side:is(:hover, :focus-visible) .so-art:not(.so-layers) { transform: scale(1.07); }

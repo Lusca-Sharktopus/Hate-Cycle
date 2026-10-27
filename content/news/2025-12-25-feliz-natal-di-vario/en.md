@@ -5,7 +5,7 @@ thumb: news/feliz-natal-di-vario.png
 tags:
   - Speedpaint
   - Post
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 {{embed:youtube-feliz-natal}}

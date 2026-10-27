@@ -38,6 +38,8 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      TRÁS da frase de cima (ordem de pintura medida com elementsFromPoint) e são cortadas pela caixa (overflow hidden, canto arredondado);
      não pegam clique: o seletor de ordem e a outra história continuam sendo o que está embaixo do ponteiro (elementFromPoint); a 390 px a
      moldura volta a cortar; O Pêndulo e Cat-Crow-Thing (sem arte para a caixa) não aparecem em bloco nenhum; o bloco da página da obra.
+ 15. (T17m, com --previa) a CABEÇA dos personagens de toda arte do mesmo tamanho que a da Olivia e do Harry (Pederneira), antes e com o
+     mouse, a 1100 e 390 px (média de cada obra a até 15%); no celular as asas do Giuseppe somem num degradê radial na borda da moldura.
 
 Como usar (servidores sob timeout; nunca pkill):
   pnpm build                      # site publicado em dist/
@@ -491,7 +493,8 @@ LER_ASAS = """() => {
   const cs = getComputedStyle(caixa);
   return { asas: r(asas), moldura: r(moldura), caixa: { esq: cx.left, dir: cx.right, cima: cx.top, baixo: cx.bottom }, opacidade: +getComputedStyle(asas).opacity,
            corteDaMoldura: getComputedStyle(moldura).overflow, corteDaCaixa: cs.overflow, canto: parseFloat(cs.borderTopRightRadius),
-           seletor: noSeletor && noSeletor.classList.contains('so-select'), outro: noOutro, asasNoPonto: iAsas, textoNoPonto: iTexto,
+           seletor: noSeletor && noSeletor.classList.contains('so-select'), outro: noOutro, asasNoPonto: iAsas, textoNoPonto: iTexto, valorBaixo: valor.bottom,
+           mascara: getComputedStyle(moldura).maskImage || getComputedStyle(moldura).webkitMaskImage || 'none',
            asasPegamClique: getComputedStyle(asas).pointerEvents };
 }"""
 
@@ -525,9 +528,12 @@ def asas(browser, porta):
                 caixa_depois = pg.evaluate("() => { const r = document.querySelector('[data-story-order]').getBoundingClientRect(); return [r.width, r.height]; }")
                 tag = f"{url} ({lado}, {modo})"
                 conferir(antes["opacidade"] == 0 and d["opacidade"] == 1, f"{tag}: as asas surgem (opacidade {antes['opacidade']} → {d['opacidade']})")
-                conferir(d["corteDaMoldura"] == "visible" and d["asas"]["cima"] < d["moldura"]["cima"] - 50 and (d["asas"]["esq"] < d["moldura"]["esq"] - 50 or d["asas"]["dir"] > d["moldura"]["dir"] + 50), f"{tag}: as asas saem da moldura ({round(d['asas']['esq'])}–{round(d['asas']['dir'])} × {round(d['asas']['cima'])} contra a moldura {round(d['moldura']['esq'])}–{round(d['moldura']['dir'])} × {round(d['moldura']['cima'])})")
-                conferir(d["corteDaCaixa"] == "hidden" and d["canto"] > 10 and (d["asas"]["cima"] < d["caixa"]["cima"] or d["asas"]["dir"] > d["caixa"]["dir"] or d["asas"]["esq"] < d["caixa"]["esq"]), f"{tag}: a caixa corta as asas (overflow {d['corteDaCaixa']}, canto {d['canto']} px; as asas passam da borda)")
-                conferir(d["asasNoPonto"] >= 0 and 0 <= d["textoNoPonto"] < d["asasNoPonto"], f"{tag}: as asas ficam POR TRÁS da frase de cima (pintura: texto {d['textoNoPonto']}, asas {d['asasNoPonto']})")
+                # T17m: o Giuseppe (e as asas, na mesma escala) diminuiu para a cabeça ficar do tamanho da da Olivia e do Harry; as asas ainda saem
+                # da moldura pelos lados, mas não chegam mais em cima (nem à frase) e só passam da borda da caixa com a Ossos do lado direito
+                conferir(d["corteDaMoldura"] == "visible" and (d["asas"]["esq"] < d["moldura"]["esq"] - 5 or d["asas"]["dir"] > d["moldura"]["dir"] + 5), f"{tag}: as asas saem da moldura ({round(d['asas']['esq'])}–{round(d['asas']['dir'])} × {round(d['asas']['cima'])} contra a moldura {round(d['moldura']['esq'])}–{round(d['moldura']['dir'])} × {round(d['moldura']['cima'])})")
+                passa = d["asas"]["cima"] < d["caixa"]["cima"] or d["asas"]["dir"] > d["caixa"]["dir"] or d["asas"]["esq"] < d["caixa"]["esq"]
+                conferir(d["corteDaCaixa"] == "hidden" and d["canto"] > 10, f"{tag}: a caixa é a máscara das asas (overflow {d['corteDaCaixa']}, canto {d['canto']} px; as asas {'passam' if passa else 'não passam'} da borda)")
+                conferir((d["asasNoPonto"] < 0 and d["asas"]["cima"] > d["valorBaixo"]) or (d["asasNoPonto"] >= 0 and 0 <= d["textoNoPonto"] < d["asasNoPonto"]), f"{tag}: as asas ficam POR TRÁS da frase de cima ou abaixo dela (pintura: texto {d['textoNoPonto']}, asas {d['asasNoPonto']}; topo das asas {round(d['asas']['cima'])}, fim da frase {round(d['valorBaixo'])})")
                 conferir(d["asasPegamClique"] == "none" and d["seletor"], f"{tag}: o seletor de ordem continua clicável (as asas não pegam clique)")
                 conferir(d["outro"] is not False, f"{tag}: a outra história continua clicável por cima/embaixo das asas")
                 conferir(caixa_antes == caixa_depois, f"{tag}: a caixa não muda de tamanho com as asas ({caixa_antes} → {caixa_depois})")
@@ -543,7 +549,60 @@ def asas(browser, porta):
         d = pg.evaluate(LER_ASAS)
         rol = pg.evaluate("() => [document.documentElement.scrollWidth, innerWidth]")
         conferir(d["corteDaMoldura"] in ("clip", "hidden") and rol[0] <= rol[1], f"{largura} px: a moldura das asas volta a cortar ({d['corteDaMoldura']}) e não há rolagem para o lado")
+        # T17m (pedido do autor): no celular, sem corte seco: as bordas da moldura desvanecem num degradê radial (máscara)
+        conferir(d["mascara"].startswith("radial-gradient(farthest-side at 50% 100%"), f"{largura} px: as asas somem num degradê radial na borda da moldura ({d['mascara'][:60]})")
+        conferir(d["outro"] is not False and d["seletor"], f"{largura} px: com as asas à vista, a outra história e o seletor continuam clicáveis")
         ctx.close()
+    # no computador a máscara não existe (quem corta é a caixa)
+    ctx = novo_contexto(browser, 1100)
+    pg = ctx.new_page()
+    abrir(pg, porta, "/en/works/light-and-blood/01/")
+    pg.select_option("[data-story-order] select", "release")
+    conferir(pg.evaluate(LER_ASAS)["mascara"] == "none", "1100 px: sem degradê na moldura (a caixa é a máscara, como o autor pediu na T17l)")
+    ctx.close()
+
+
+# T17m: a CABEÇA dos personagens de toda arte do bloco ~ do tamanho da da Olivia e do Harry (Pederneira), antes e com o mouse.
+# Altura da cabeça em px do PNG (do alto do cabelo/chapéu ao queixo/barba; Thymorr não conta), medida nas grades dos PNGs de static/ordem/.
+CABECA_NO_PNG = {"Olivia": [("Olivia", 287)], "Harry": [("Harry", 223)], "John": [("John", 153)], "Oliver": [("Oliver", 179)], "Ellie": [("Ellie", 235)],
+                 "Lucas": [("Lucas", 333)], "Wellersson": [("Wellersson", 410)], "Jean": [("Jean", 392)], "Cezar e Iris": [("Cezar", 412), ("Iris", 306)],
+                 "Giuseppe": [("Giuseppe", 450)]}
+LARGURA_DO_PNG = {"Olivia": 926, "Harry": 1007, "John": 216, "Oliver": 526, "Ellie": 607, "Lucas": 1461, "Wellersson": 1009, "Jean": 779, "Cezar e Iris": 998, "Giuseppe": 828}
+
+
+def cabecas(browser, porta):
+    """T17m: a altura da cabeça de cada personagem (px na tela, a 1100 e 390 px), antes e com o mouse; a média de cada obra fica a até 15%
+    da média da Olivia e do Harry (média geométrica dos dois estados, já que cada arte cresce do seu jeito no mouse)."""
+    print(f"\n== cabeças do mesmo tamanho (prévia, porta {porta})")
+    artes = {"pederneira": ("/en/works/light-and-blood/01/", "chrono", "next"), "luz-e-sangue": ("/pt/works/firestriker/01/", "chrono", "prev"),
+             "beira": ("/pt/works/firestriker/01/", "chrono", "next"), "di-vario": ("/pt/works/firestriker/01/", "release", "prev"),
+             "ossos": ("/en/works/light-and-blood/01/", "chrono", "prev")}
+    for largura in (1100, 390):
+        medias = {}
+        for arte, (url, ordem, lado) in artes.items():
+            ctx = novo_contexto(browser, largura)
+            pg = ctx.new_page()
+            abrir(pg, porta, url)
+            pg.select_option("[data-story-order] select", ordem)
+            pg.evaluate("document.querySelectorAll('.so-layer').forEach(i => { i.loading = 'eager' })")
+            pg.mouse.move(1, 1)
+            pg.wait_for_timeout(700)
+            estados = []
+            for estado in ("antes", "mouse"):
+                if estado == "mouse":
+                    pg.hover(f".so-order:not([hidden]) a.so-side.{lado} .so-art")
+                    pg.wait_for_timeout(900)
+                larguras = pg.evaluate("(l) => [...document.querySelectorAll('.so-order:not([hidden]) a.so-side.' + l + ' .so-layer')].map(i => [decodeURIComponent(i.getAttribute('src')).split('/').pop().replace(' Site Cronologia.png', ''), parseFloat(getComputedStyle(i).width)])", lado)
+                cab = {n: w / LARGURA_DO_PNG[a] * px for a, w in larguras if a in CABECA_NO_PNG for n, px in CABECA_NO_PNG[a]}
+                estados.append(cab)
+            ctx.close()
+            m = [sum(c.values()) / len(c) for c in estados]
+            medias[arte] = (m[0] * m[1]) ** 0.5
+            print("        " + f"{largura} px {arte:13s} " + "  ".join(f"{n} {estados[0][n]:.1f} → {estados[1][n]:.1f}" for n in estados[0]))
+        ref = medias["pederneira"]
+        for arte, v in medias.items():
+            if arte != "pederneira":
+                conferir(abs(v / ref - 1) <= 0.15, f"{largura} px: cabeça média de {arte} {v:.1f} px, Pederneira {ref:.1f} px ({(v / ref - 1) * 100:+.0f}%)")
 
 
 def main() -> int:
@@ -564,6 +623,7 @@ def main() -> int:
                 print(f"\n== Ossos do Ofício (prévia, {lang})")
                 artes_novas(browser, a.previa, "ossos", lang)
             asas(browser, a.previa)
+            cabecas(browser, a.previa)
             for lang in ("pt", "en"):  # T17d: a Beira de Estrada tem capítulos na prévia de verdade (o --beira ficou opcional)
                 print(f"\n== Beira de Estrada ({lang}, prévia)")
                 artes_novas(browser, a.previa, "beira", lang)

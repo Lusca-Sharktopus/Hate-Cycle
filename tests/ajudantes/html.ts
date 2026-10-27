@@ -260,18 +260,9 @@ export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
   return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main") };
 }
 
-// ───────────── T17g/T17j: a única diferença aceita nos posts incorporados (B27) ─────────────
-//
-// No site Python, cada post do X, do Reddit e do Instagram traz o <script src> do serviço logo depois do <blockquote>, dentro do
-// <div class="embed">. O Astro não tem nenhum desses scripts: o build os tira (src/lib/postsIncorporados.ts) e NÃO acrescenta nada (a
-// moldura isolada é criada no navegador, por src/scripts/embeds/). Para comparar o <main>, só o Python muda:
-//   - do HTML do PYTHON sai SÓ: <script> com src de um dos domínios dos três serviços (DOMINIOS_DOS_SCRIPTS_DOS_POSTS), DENTRO de um
-//     div.embed. Script de outro domínio, ou fora do .embed, fica.
-// tests/embeds.test.ts prova que nada além disso sai (inclusive casos negativos) e que, em toda página, o número de scripts tirados
-// do Python é igual ao de posts que o Astro tem.
+// ───────────── ajudantes das exceções que trocam pedaços do HTML pela posição (parse5 com sourceCodeLocationInfo) ─────────────
+// (T17m: a exceção dos posts incorporados da T17g/T17j, semScriptsDosPosts, saiu: os posts voltaram aos scripts oficiais, como no Python.)
 
-/** Os domínios dos scripts oficiais dos três serviços (X, Reddit, Instagram). */
-export const DOMINIOS_DOS_SCRIPTS_DOS_POSTS: ReadonlySet<string> = new Set(["platform.x.com", "platform.twitter.com", "embed.reddit.com", "www.instagram.com"]);
 const temClasse = (e: Elemento, c: string) => (attr(e, "class") ?? "").split(ESPACO).includes(c);
 
 function arvoreComPosicoes(html: string) {
@@ -286,35 +277,6 @@ function cortar(html: string, cortes: { de: number; ate: number; texto?: string 
     pos = c.ate;
   }
   return saida + html.slice(pos);
-}
-
-export interface SemScriptsDosPosts {
-  html: string;
-  /** O src de cada <script> que saiu, na ordem. */
-  removidos: string[];
-}
-/** O HTML do Python (página inteira ou pedaço) sem os <script src> dos três serviços que estão dentro de um div.embed. */
-export function semScriptsDosPosts(html: string): SemScriptsDosPosts {
-  const cortes: { de: number; ate: number }[] = [];
-  const removidos: string[] = [];
-  for (const embed of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && temClasse(e, "embed"))) {
-    for (const s of varrer(embed, (e) => e.tagName === "script")) {
-      const src = attr(s, "src");
-      if (!src) continue;
-      let dominio = "";
-      try {
-        dominio = new URL(src.startsWith("//") ? `https:${src}` : src).hostname;
-      } catch {
-        continue;
-      }
-      if (!DOMINIOS_DOS_SCRIPTS_DOS_POSTS.has(dominio)) continue;
-      const loc = s.sourceCodeLocation;
-      if (!loc) throw new Error("não achei onde o script começa e termina");
-      cortes.push({ de: loc.startOffset, ate: loc.endOffset });
-      removidos.push(src);
-    }
-  }
-  return { html: cortar(html, cortes), removidos };
 }
 
 // ───────────── T17h: a única diferença aceita no rodapé (o canal do YouTube por idioma) ─────────────
@@ -507,4 +469,32 @@ export function semJanelaDoJogo(html: string): SemJanelaDoJogo {
     removidos.push(html.slice(loc.startOffset, loc.endOffset));
   }
   return { html: cortar(html, cortes), removidos, foraDoLugar };
+}
+
+// ───────────── T17m: o cartão da obra que só tem capítulo em OUTRO idioma (só no Astro) ─────────────
+//
+// Pedido do autor (22/10, "por agora sim"): em Histórias (e na home), a obra que não tem nada no idioma da página mas tem no outro (hoje
+// Ossos do Ofício em português, só na prévia) ganha o botão de verdade, que leva ao outro idioma com `hreflang` (src/lib/obras.ts →
+// cartaoDaObra). O build.py mostra o "Em breve" apagado. Exceção de UMA forma exata, no HTML do ASTRO: o <a class="button" href hreflang>
+// que é filho de um article.work-card, sem target (não é link externo), vira o <span class="button disabled">Em breve</span> do Python
+// (`emBreve` = config.json → ui.<idioma>.soon). Outro <a> (sem hreflang, ou fora do cartão) fica e aparece como diferença.
+// tests/obras-em-outro-idioma.test.ts prova a regra (inclusive casos negativos).
+
+export interface CartaoEmOutroIdiomaComoNoPython {
+  html: string;
+  /** Quantos botões voltaram a ser o "Em breve". */
+  trocados: number;
+}
+/** O HTML do Astro com cada botão "no outro idioma" dos cartões de obra escrito como o "Em breve" do Python. */
+export function cartaoEmOutroIdiomaComoNoPython(html: string, emBreve: string): CartaoEmOutroIdiomaComoNoPython {
+  const cortes: { de: number; ate: number; texto: string }[] = [];
+  const escapar = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  for (const a of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "a" && attr(e, "hreflang") !== undefined)) {
+    const pai = a.parentNode as Elemento | null;
+    const noLugar = !!pai && pai.tagName === "article" && attr(pai, "class") === "work-card" && attr(a, "class") === "button" && attr(a, "target") === undefined && attr(a, "href") !== undefined;
+    const loc = a.sourceCodeLocation;
+    if (!noLugar || !loc) continue;
+    cortes.push({ de: loc.startOffset, ate: loc.endOffset, texto: `<span class="button disabled">${escapar(emBreve)}</span>` });
+  }
+  return { html: cortar(html, cortes), trocados: cortes.length };
 }

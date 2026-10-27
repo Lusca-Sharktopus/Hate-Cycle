@@ -219,7 +219,7 @@ As notícias não ganharam lição própria porque quase tudo já existia: a not
 
 Para conferir tudo contra o site atual: `HC_DIST=dist pnpm vitest run paginas` (as 168 páginas de notícias) e `python3 tools/noticias_playwright.py --python 8791 --astro 8792` (busca, páginas e botões dos posts no navegador, passo a passo; leva uns 2 min e as instruções estão no topo do script).
 
-## "Estou lendo em ordem…" (T17c, T17h, T17i e T17l): quem vem antes e depois, a obra em rascunho, o pulo do "Em breve", as imagens em camadas, a caixa que não muda de tamanho e as asas que saem da moldura
+## "Estou lendo em ordem…" (T17c, T17h, T17i, T17l e T17m): quem vem antes e depois, a obra em rascunho, o pulo do "Em breve", as imagens em camadas, a caixa que não muda de tamanho, as asas que saem da moldura e as cabeças do mesmo tamanho
 
 Duas coisas novas que se apoiam uma na outra. A primeira é uma **regra de publicação**; a segunda, um **bloco novo no fim de cada capítulo**, que só existe no Astro (o `build.py` está congelado e não o tem).
 
@@ -278,6 +278,16 @@ Pedidos do PDF "Mini Micro Mudancitas" (22/10, mudanças 7, 9, 10, 11 e 12).
 - **O leitor página a página no papel (mudança 9):** ver a seção do leitor página a página, abaixo.
 - **Prova:** `tests/ordem.test.ts` (sites inventados: a regra nova dos links, a obra sem arte pulada, a obra só em inglês numa página em português com `hreflang`, o `bleed` no schema, no modelo, no componente e no CSS, o Giuseppe medido) e `tests/paginas.test.ts` (o bloco nas páginas de obra; a prévia); no navegador, `python3 tools/ordem_playwright.py --astro <porta> --previa <porta>` (as asas: saem da moldura, ficam por trás da frase pela ordem de pintura de `elementsFromPoint`, a caixa corta, o seletor e a outra história continuam embaixo do ponteiro, a caixa não muda de tamanho; os links novos em todo capítulo e página de obra; Pêndulo e Cat-Crow-Thing fora de todo bloco).
 
+### 6. As cabeças do mesmo tamanho, o degradê no celular e o cartão que leva ao outro idioma (T17m)
+
+Pedidos de 22/10 (09:19–09:26).
+
+- **A régua das cabeças ("Use isso como guideline para padronizar todas as histórias na caixa de cronologia"):** em toda arte do bloco, a cabeça dos personagens tem mais ou menos o tamanho da da **Olivia e do Harry** na arte de *Pederneira* (a referência, que não mudou), antes e com o mouse. **Como se mede:** a altura da cabeça no PNG (do alto do cabelo ou do chapéu ao queixo ou à barba, medida numa grade sobre cada PNG de `static/ordem/`; o Thymorr não conta) vezes a escala da camada na tela (a largura que o navegador dá à `<img>` ÷ a largura do PNG). A 1100 px: Olivia 42,7 px (45,1 com o mouse) e Harry 33,2 (35,5). **Como se ajusta:** todas as camadas de uma obra escalam **juntas**, em volta de um ponto (o pé do desenho, no meio): `x' = âncora + (x − âncora) × s`, o mesmo para `y`, e `width × s`, nos dois estados. Assim o movimento, as proporções entre os personagens e os olhos colados não mudam (é uma conta só para todas as camadas). O fator de cada obra faz a **média** das cabeças dela bater com a média da Olivia e do Harry (a média geométrica dos dois estados, porque cada arte cresce do seu jeito no mouse): Luz & Sangue ×0,7708, Beira de Estrada ×0,7067, Alô? ×0,6328, Ossos do Ofício ×0,4503. Depois: Giuseppe 37,9/40,3 px (era 84,3/89,5); Luz & Sangue 31–44/38–51 (era 40–57/49–66); Beira 30–41/34–46 (era 43–58/49–66); Alô? 34–42/36–45 (era 53–66/58–71). A diferença que sobra **dentro** de cada obra é a do seu desenho (a Ellie, com o cabelo, é maior que o John; a Iris é criança). Ninguém precisou sair da moldura: como todo mundo encolheu, sobrou espaço em cima (a arte fica encostada embaixo, perto do rótulo).
+- **Ossos desceu ("Estou achando o espaço entre ele e o texto 'Ler Ossos do Ofício' muito grande"):** o desenho do Giuseppe termina (desbotando) a 83% do PNG, e com o tamanho da T17l sobrava 13% da moldura entre o fim do desenho e o rótulo; nas outras artes sobra 0 a 4%. Agora o fim do desenho fica a 98% da moldura (2%, como Luz & Sangue e Beira). As asas acompanham (a mesma conta) e ainda saem do quadrado pelos lados, mas não chegam mais à frase de cima; no computador só a ponta da asa direita encosta na borda da caixa, quando Ossos fica do lado direito (a caixa continua sendo a máscara que você pediu na T17l).
+- **O degradê no celular ("pode aplicar um Degradê radial"):** até 700 px o quadrado da arte continua sendo o limite (as asas não cobrem a outra história), mas as bordas desvanecem: `mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent)` em `.so-art.so-sangra` (`ProximaHistoria.astro`). O centro do degradê é embaixo, no meio, onde o personagem fica; ele é opaco até 55% do raio (o Giuseppe inteiro) e transparente na borda do quadrado e nos cantos de cima. Só a arte com `bleed` ganha a máscara; no computador nada muda.
+- **O cartão que leva ao outro idioma ("por agora sim"):** a regra do bloco (seção 5) valeu também para o **cartão** de Histórias e da home: obra sem nada no idioma da página mas com capítulo no outro idioma ganha o botão de verdade, com o texto no idioma da página e `hreflang` (`cartaoDaObra(…, outrosIdiomas)` em `src/lib/obras.ts`; os capítulos dos outros idiomas vêm de `capitulosEmOutrosIdiomas` em `dadosDoIdioma()`, `src/lib/idioma.ts`). Hoje só Ossos do Ofício em português, na prévia. A home em português não mostra Ossos (não está entre as 4 mais recentes), e a **ordem** do carrossel continua a do Python. O seletor de idioma não muda: Ossos não tem página em português. O build.py não tem a regra: exceção de paridade estreita `cartaoEmOutroIdiomaComoNoPython()` (`tests/ajudantes/html.ts`, também em `tools/paridade_html.mjs` e no `tools/paridade_t18.py`), prova em `tests/obras-em-outro-idioma.test.ts`.
+- **No navegador:** `tools/ordem_playwright.py --previa` mede as cabeças (a 1100 e 390 px, antes e com o mouse; a média de cada obra a até 15% da referência) e confere o degradê do celular (e que a outra história e o seletor continuam clicáveis).
+
 ### Tente (ordem)
 
 00. **Veja o link para a lista de capítulos.** Rode `pnpm dev`, abra `/pt/works/firestriker/01/`: na Cronológica, "Assistir Luz & Sangue" leva a `/pt/works/light-and-blood/` (a lista dos dois episódios); "Assistir Alô?…" (Lançamento) continua levando ao YouTube. Abra `/pt/works/light-and-blood/`: o bloco está logo depois da lista.
@@ -331,58 +341,17 @@ python3 tools/folheador_playwright.py --previa 8792      # no navegador (servido
 1. **Quebre a contagem de propósito.** Em `content/works/roadside/work.json`, apague a última runa de `page_runes` e rode `pnpm build`: ele pára, e a mensagem diz que o capítulo tem 8 páginas e a lista, 7 (no `pnpm dev`, a mesma mensagem aparece ao abrir o capítulo). Volte a runa.
 2. **Mude uma runa.** Troque `"⼒"` por `"ᛟ"` e abra `/pt/works/roadside/01/#p7` no `pnpm dev`: a 7ª runa mudou (e brilha, porque você abriu direto na página 7). Volte.
 
-## Posts incorporados em moldura isolada (T17g → T17j, B27): o post aparece sozinho, como antes, sem o programa da rede social na sua página
+## Posts incorporados: como no site antigo (T17m, decisão do autor de 22/10/2026)
 
-### O problema, em uma frase
+**O que o visitante vê:** os posts do X, do Reddit e do Instagram aparecem como sempre apareceram no site antigo: o código de incorporação que você colou (o `blockquote` e o `<script>` do serviço) vai para a página **igual** ao do Python, e quem desenha o post é o **script oficial** de cada rede (`https://platform.x.com/widgets.js`, `https://embed.reddit.com/widgets.js`, `//www.instagram.com/embed.js`). Nos posts alternados (`{{embed:A | B}}`), ao trocar de painel o `PostsAlternados.astro` pede ao script de cada rede para desenhar de novo (`twttr.widgets.load`, `instgrm.Embeds.process`, `tiktokEmbedLoad`), como antes da T17g. YouTube e TikTok (que são `<iframe>`) não mudaram.
 
-Quem comenta fica "conectado": o Supabase guarda essa sessão no `localStorage` do **endereço do site**. Até o site antigo, cada notícia com post do X, do Reddit ou do Instagram punha na página o **script** desses sites (`widgets.js`, `embed.js`), e um script roda com os mesmos poderes da página que o carrega: se um deles fosse adulterado, poderia ler a sessão de quem está conectado, inclusive a sua, de administrador.
+**Por quê:** de 21 a 22/10 o Astro trocava esses scripts por uma moldura isolada (T17g: com clique; T17j: sem clique, a mesma moldura que o script oficial criaria). Em 22/10 você decidiu voltar ao jeito do site antigo até a virada e resolver a segurança (o **B27**) depois, com o site no ar. Com isso o HTML dos posts é igual nos dois geradores e a paridade fecha **sem** exceção para os posts (a `semScriptsDosPosts()` saiu de `tests/ajudantes/html.ts` e de `tools/paridade_html.mjs`); saíram também `src/scripts/embeds/`, `src/lib/postsIncorporados.ts`, `PostsIncorporados.astro`, `tests/embeds*.test.ts` e `tools/embeds_playwright.py` (apagado na T17m, quando os posts voltaram aos scripts oficiais) (o histórico está nos commits `b568381` e `b0a3ec0`).
 
-### O que você decidiu (21/10/2026, 20:14)
+**O que fica para depois (B27):** um script rodando no endereço do site tem os poderes da página, inclusive o de ler a sessão de quem está conectado para comentar (o Supabase a guarda no `localStorage` do site). É o mesmo risco do site antigo, aceito por você até depois da virada. Enquanto isso: **saia da conta** (do site) depois de moderar os comentários. A ideia da moldura isolada continua no histórico para quando o B27 voltar.
 
-Primeiro (T17g) os posts passaram a carregar só com um clique. Você preferiu sem clique, "desde que não possua diferença com o que estava antes visualmente e em funcionalidade". Então, desde a T17j: **o post aparece sozinho, do mesmo tamanho e no mesmo lugar de antes**, mas o programa da rede social roda **dentro de uma moldura isolada**, no endereço dela, e não no seu.
+**A rede de segurança do deploy (CI):** o passo "Conferir o resultado" do `.github/workflows/deploy.yml` só deixa passar esses três scripts, escritos um por um (`--permitir`); qualquer outro `<script src>` de fora do site faz o deploy parar. A conferência lê cada HTML **inteiro** (`tools/scripts_de_fora.mjs`): a busca antiga, linha por linha, deixava passar uma tag com o `src=` na linha de baixo. Prova: `tests/scripts-de-fora.test.ts` (permitido passa; desconhecido, várias linhas, aspas simples, sem aspas, `//cdn…`, entidades, `data:` barram; a lista do workflow é exatamente a dos scripts que o `content/` usa; o `dist/` passa e esses scripts só moram dentro de um post).
 
-### O porquê, numa tabela
-
-| | Antes (script oficial na nossa página) | Agora (moldura isolada) |
-|---|---|---|
-| Onde o programa do X/Reddit/Instagram roda | no endereço `hatecycle.com`, junto da sessão de quem comenta | dentro de um `<iframe>`, no endereço **deles** (`platform.twitter.com`, `embed.reddit.com`, `www.instagram.com`) |
-| Pode ler a sessão (o `localStorage` do site)? | **sim**, se o script fosse adulterado | **não**: o navegador não deixa um endereço ler o `localStorage` de outro |
-| O que aparece na tela | o `<iframe>` que o script criava | **o mesmo `<iframe>`**, com os mesmos atributos e estilos, criado pelo nosso script |
-| Sem JavaScript | o texto do código (o `blockquote`) | o mesmo |
-| A rede social fora do ar ou bloqueada | ficava o texto do código | depois de 30 s sem resposta, o texto do código volta |
-
-O segredo é que o script oficial **já** criava um `<iframe>` com a "página de incorporação" do serviço; o perigo era só o script em si, que rodava na nossa página para criar esse `<iframe>`. Agora quem cria o `<iframe>` é o nosso script (que não lê nada de terceiros), e o programa deles só roda lá dentro.
-
-### Como funciona
-
-1. **No build** (`src/lib/postsIncorporados.ts`, chamado pelo `BaseLayout.astro`): em todo `<div class="embed">`, os `<script>` saem; **nada é acrescentado**. O `<blockquote>` do código que você colou fica exatamente como está, e o HTML da página fica igual ao do Python, a não ser pelo `<script>` que saiu.
-2. **No navegador** (`src/scripts/embeds/`, só nas páginas que têm post), ao carregar, sem clique:
-   - **X:** como o `widgets.js`, põe antes do `blockquote` um `<div class="twitter-tweet twitter-tweet-rendered">` com o `<iframe>` da `Tweet.html`. Enquanto a primeira altura não chega, o texto continua à vista e a moldura fica escondida; quando chega, a moldura aparece e o texto sai.
-   - **Reddit e Instagram:** como os scripts deles, o `<iframe>` toma o lugar do `blockquote` logo de saída e cresce quando a medida chega.
-   - **Alternâncias** (`{{embed:A | B}}`): o post de um painel escondido ganha a moldura quando o painel aparece (antes, trocar de painel mandava o script do serviço redesenhar; o resultado é o mesmo: o post já nasce do tamanho certo).
-3. **A altura:** o serviço avisa por mensagem (`postMessage`). O script só aceita mensagem **da janela daquela moldura e do endereço do serviço**, no formato do serviço; a altura fica entre 60 e 5.000 px, e o `0` que o Reddit manda quando a página ainda não tem tamanho é ignorado (a moldura não encolhe a nada).
-4. **O sandbox:** cada moldura tem um `sandbox` (as permissões do `<iframe>`). O do Reddit é **o mesmo que o próprio Reddit já usa**; o do X e o do Instagram deixam rodar o programa deles, no endereço deles, e abrir links em outra aba, mas não deixam mudar a sua página, enviar formulário, baixar arquivo nem abrir diálogo.
-5. **O endereço da sua página** que vai ao serviço (como antes: o X e o Reddit pedem) leva só o endereço, **nunca** o `?…` nem o `#…`: na volta do login por e-mail ou Google o `#` traz o token da sessão.
-
-### O que você faz quando cola um post novo
-
-**Nada muda.** Continue escrevendo `{{embed:link}}` ou colando o código de incorporação em `content/embeds/<nome>.html` (com o `<script>` junto, que o build tira sozinho). Vídeos do YouTube e do TikTok continuam como eram.
-
-### O que sobra de risco
-
-- O conteúdo do serviço aparece sem o visitante pedir, como antes (o serviço vê o IP de quem abre a página, como o YouTube). Mas a sessão de quem comenta continua **fora do alcance** dele.
-- Uma página de incorporação adulterada pode mandar mensagens à nossa página: elas só mexem na **altura** daquela moldura (limitada).
-
-### Como se prova
-
-- `tests/embeds.test.ts`: as regras (endereço do post, endereço da moldura com os parâmetros do script oficial, atributos e estilos, mensagens nos formatos reais, sandbox); o passo de build (só sai script, nada entra); a exceção de paridade (`semScriptsDosPosts()` tira **só** o `<script src>` dos quatro endereços de script dos serviços, dentro de um `.embed`); o site construído (nenhum `<script src>` de fora em nenhuma página; os scripts que o Python tinha são tantos quanto os posts do Astro, página a página: 144 páginas, 184 posts).
-- `tests/embeds-dom.test.ts` (navegador simulado): a moldura de cada serviço com os atributos na ordem do script oficial; mensagens de outra janela ou de outro endereço ignoradas; serviço mudo; painéis; `#access_token` fora do endereço.
-- No navegador de verdade, com **serviços falsos** (o sandbox não tem internet): `python3 tools/embeds_playwright.py [--fotos <pasta>] [--lento]`.
-
-### Tente
-
-1. **No seu computador (tem internet):** `pnpm dev` e abra `/pt/news/2024-04-29-hygranocianos/` (X), `/pt/news/2024-02-23-avialuna-aeternogyrinians/` (Reddit) e `/pt/news/2025-04-14-speedpaint-pederneira/` (Instagram). Compare com o site antigo no ar: tamanho, cantos, sombra, vídeo, tela cheia, links abrindo em outra aba.
-2. **Veja a moldura por dentro:** no navegador, botão direito no post → Inspecionar: o `<iframe>` tem `sandbox="…"` e o endereço é o do serviço.
+**Quando você cola um post novo:** nada muda. Se um dia um serviço passar a usar outro endereço de script, o deploy vai parar e avisar: aí o endereço novo entra como mais um `--permitir` (e no teste).
 
 ## Pequenas correções do celular (T17k, 22/10/2026)
 
@@ -393,6 +362,6 @@ Quatro defeitos que já existiam no site de hoje e que você pediu para adiantar
 3. **A busca de Notícias e o `?p=`** (`src/lib/paginacao.ts` / bloco 6 do `site.js`): "Hᴀᴛᴇ Cʏᴄʟᴇ" é escrito com letras Unicode de versalete, que não são o "a" ou o "t" para o computador; a busca só achava se você digitasse em versalete. Agora ela troca cada letra de versalete pela letra comum antes de comparar (a mesma tabela do `build.py`), e "hate", "Hate", "HATE" e "cycle" acham os títulos. O `?p=2x` valia 2 (o `parseInt` lê até onde dá); agora só dígitos valem e o resto é a página 1, como já acontecia com páginas fora do intervalo (que viram a última).
 4. **Rolagem lateral no celular:** a causa não eram só os posts. Na medição: um título de notícia com uma palavra muito comprida ("importantes/interessantes") empurrava a página (agora a palavra quebra: `overflow-wrap` nos títulos); a carta que vira de Ossos do Ofício tem 300 px fixos e passava da tela a 320 px (agora `max-width: 100%` com proporção 2:3); e os três botões dos posts alternados (Instagram, TikTok, YouTube) passavam da caixa a 320 px (agora descem para a linha de baixo). Os posts em moldura isolada (T17j) não empurram a página: o Instagram pede 326 px, e a moldura rola dentro da própria caixa, como antes.
 
-**Como se prova:** `python3 tools/celular_playwright.py --python <porta> --astro <porta> [--fotos <pasta>]` (nos dois sites: nada rola para o lado a 320, 360 e 390 px nas páginas afetadas; a barra cabe e, a 390 e 1100 px, está onde sempre esteve; o menu aberto fica dentro da tela; a busca e o `?p=`), `tools/noticias_playwright.py` (agora também confere os valores absolutos) e `tools/embeds_playwright.py` (também a 320 px). Rode a ferramenta contra um site gerado ANTES da correção e ela acusa cada defeito.
+**Como se prova:** `python3 tools/celular_playwright.py --python <porta> --astro <porta> [--fotos <pasta>]` (nos dois sites: nada rola para o lado a 320, 360 e 390 px nas páginas afetadas; a barra cabe e, a 390 e 1100 px, está onde sempre esteve; o menu aberto fica dentro da tela; a busca e o `?p=`), `tools/noticias_playwright.py` (agora também confere os valores absolutos) e `tools/embeds_playwright.py` (apagado na T17m, quando os posts voltaram aos scripts oficiais) (também a 320 px). Rode a ferramenta contra um site gerado ANTES da correção e ela acusa cada defeito.
 
 **Ferramenta de paridade da T18:** `tools/paridade_t18.py` e `tools/paridade_html.mjs` passaram a reconhecer o leitor página a página dos quadrinhos (o script embutido dele e a estrutura) e a janela do jogo, pelas mesmas exceções estreitas da T17d (`folheadorComoNoPython()`, `semJanelaDoJogo()`), exigindo que o script do leitor vá exatamente nas páginas que têm o leitor. A `baseline/` foi refeita (`python3 tools/baseline.py --sem-screens`) porque o site de hoje mudou de propósito (arquivos novos em `static/`, o banner do canal na página Apoio, e agora o `site.js` e o `style.css`).

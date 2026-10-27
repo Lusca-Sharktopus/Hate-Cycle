@@ -25,9 +25,9 @@
   "order_art": {
     "size": [2087, 1752],
     "layers": [
-      { "image": "ordem/John Site Cronologia.png", "x": 20.53, "y": 69.74, "width": 18.86, "hover": { "x": 12.4, "y": 62.17, "width": 23.23, "rotate": -6.52 } },
-      { "image": "ordem/Oliver Site Cronologia.png", "x": 66.81, "y": 69.04, "width": 42.66, "hover": { "x": 73.92, "y": 65.24, "width": 47.78, "rotate": 7.19 } },
-      { "image": "ordem/Ellie Site Cronologia.png", "x": 43.18, "y": 57.73, "width": 49.23, "hover": { "x": 42.91, "y": 52.06, "width": 56.29 } }
+      { "image": "ordem/John Site Cronologia.png", "x": 27.28, "y": 76.68, "width": 14.54, "hover": { "x": 21.02, "y": 70.84, "width": 17.91, "rotate": -6.52 } },
+      { "image": "ordem/Oliver Site Cronologia.png", "x": 62.96, "y": 76.14, "width": 32.88, "hover": { "x": 68.44, "y": 73.21, "width": 36.83, "rotate": 7.19 } },
+      { "image": "ordem/Ellie Site Cronologia.png", "x": 44.74, "y": 67.42, "width": 37.95, "hover": { "x": 44.54, "y": 63.05, "width": 43.39 } }
     ]
   },
   "media": "live-ttrpg"

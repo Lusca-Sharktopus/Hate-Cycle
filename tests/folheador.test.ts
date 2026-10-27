@@ -23,7 +23,7 @@ import { janelaDoJogo, SANDBOX_DA_DEMO } from "../src/lib/jogo";
 import { leiturasDaObra, type LeituraDoCapitulo } from "../src/lib/leitura";
 import { finalizarMain } from "../src/lib/pagina";
 import { arquivosDoGlob } from "../src/lib/quadrinhos";
-import { criarSchemas } from "../src/lib/schemas";
+import { criarSchemas, dominioDoProprioSite, DOMINIOS_DO_PROPRIO_SITE } from "../src/lib/schemas";
 import { TEXTOS_DO_FOLHEADOR } from "../src/lib/textosDoFolheador";
 import { TEXTOS_DO_JOGO } from "../src/lib/textosDoJogo";
 import { direcaoDaTecla, fragmentoDaPagina, paginaDoFragmento, paginasParaBaixar, rotuloDaPagina, setasDaPagina } from "../src/scripts/folheador/regras";
@@ -248,6 +248,28 @@ describe("schema do work.json: page_runes e game", () => {
     expect(erro({ game: { demo: "http://x.itch.io" } })).toMatch(/https:\/\//);
     expect(erro({ game: { demo: "javascript:alert(1)" } })).toMatch(/https:\/\//);
     expect(erro({ game: { link: "https://x" } })).toMatch(/campo desconhecido.*"link".*demo, steam/);
+  });
+  // T17m (revisão final): a demo roda com allow-scripts allow-same-origin; no próprio site (ou num subdomínio) não ficaria isolada
+  test("a demo não pode ser do próprio site (domínios do config.json e do static/CNAME, e os subdomínios deles) nem relativa", () => {
+    expect(DOMINIOS_DO_PROPRIO_SITE).toEqual(expect.arrayContaining(["hatecycle.com", "lusca-sharktopus.github.io"]));
+    for (const demo of [
+      "https://hatecycle.com/jogo/",
+      "https://www.hatecycle.com/demo/index.html",
+      "https://HATECYCLE.COM/x",
+      "https://hatecycle.com./x",
+      "https://hatecycle.com:443/x",
+      "https://usuario@hatecycle.com/x",
+      "https://jogos.hatecycle.com/",
+      "https://lusca-sharktopus.github.io/Hate-Cycle/demo/",
+      "https://Lusca-Sharktopus.github.io/outro/",
+    ]) expect(erro({ game: { demo } }), demo).toMatch(/demo não pode ser um endereço do próprio site \((hatecycle\.com|lusca-sharktopus\.github\.io)\).*itch\.io/);
+    for (const demo of ["/jogo/", "jogo/index.html", "//hatecycle.com/jogo/", "../demo"]) expect(erro({ game: { demo } }), demo).toMatch(/https:\/\//);
+    // parecidos que NÃO são o site continuam valendo
+    for (const demo of ["https://hatecycle.com.evil.example/x", "https://nothatecycle.com/x", "https://x.itch.io/hatecycle.com", "https://evil.example/?u=https://hatecycle.com", "https://hatecycle.com@x.itch.io/y"]) expect(ok({ game: { demo } }), demo).toBe(true);
+    // a Steam não roda dentro do site (é só um link): continua aceitando qualquer https
+    expect(ok({ game: { steam: "https://hatecycle.com/steam" } })).toBe(true);
+    expect(dominioDoProprioSite("https://www.hatecycle.com/")).toBe("hatecycle.com");
+    expect(dominioDoProprioSite("nao é endereço")).toBeNull();
   });
 });
 

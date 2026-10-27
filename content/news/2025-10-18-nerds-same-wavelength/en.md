@@ -4,7 +4,7 @@ date: 2025-10-18
 thumb: news/nerds-same-wavelength.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 The nerds sometimes are on the same wavelength

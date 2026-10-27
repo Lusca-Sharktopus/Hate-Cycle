@@ -83,13 +83,16 @@ jobs:
           done
           test -d dist/_astro || { echo "::error::falta dist/_astro/"; exit 1; }
           test ! -e dist/dev || { echo "::error::dist/dev/ existe (é coisa de prévia)"; exit 1; }
-          # Nenhum script de fora pode rodar no endereço do site (B27, T17g/T17j: a sessão dos comentários mora aqui).
-          # Os posts do X/Reddit/Instagram aparecem sozinhos, mas numa moldura isolada (iframe no endereço do serviço), sem o
-          # script deles na página; um <script src="https://…"> colado no texto de uma notícia faria o deploy parar aqui,
-          # em vez de ir ao ar sem ninguém ver.
-          if grep -rliE "<script[^>]*[[:space:]]src=[\"']?(https?:)?//" dist --include='*.html' > /tmp/scripts-externos.txt; then
-            echo "::error::script de outro site no HTML publicado (ver lição 08, posts incorporados):"; cat /tmp/scripts-externos.txt; exit 1
-          fi
+          # Scripts de fora no endereço do site (B27: a sessão dos comentários mora aqui). Decisão do autor de 22/10 (T17m): os posts
+          # do X, do Reddit e do Instagram usam os scripts OFICIAIS, como no site antigo, até resolver o B27 depois da virada. Só estes
+          # três endereços EXATOS (os que o content/ e o src/lib/markdown.ts usam hoje) passam; qualquer outro <script src> de fora
+          # (colado no texto de uma notícia, por exemplo) faz o deploy PARAR aqui, em vez de ir ao ar sem ninguém ver. O arquivo é lido
+          # inteiro (a tag pode quebrar de linha; aspas duplas, simples ou nenhuma; `//` sem protocolo): tools/scripts_de_fora.mjs.
+          # Endereço novo de um serviço = acrescentar um --permitir aqui (e em tests/scripts-de-fora.test.ts).
+          node tools/scripts_de_fora.mjs dist \
+            --permitir "https://platform.x.com/widgets.js" \
+            --permitir "https://embed.reddit.com/widgets.js" \
+            --permitir "//www.instagram.com/embed.js"
           echo "HTML no dist: $(find dist -name '*.html' | wc -l) · tamanho: $(du -sh dist | cut -f1)"
 
       # Empacota a pasta dist/ para o Pages. Roda também no pull request, para o "ensaio" cobrir o empacotamento;

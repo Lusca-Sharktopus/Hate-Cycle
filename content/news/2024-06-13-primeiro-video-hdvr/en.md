@@ -1,5 +1,5 @@
 ---
-title: The First Video of Hello? Di Vario Residency
+title: The First Video of Hello? Di Vario Residence
 date: 2024-06-13
 thumb: news/primeiro-video-hdvr.png
 stickers:
@@ -12,7 +12,7 @@ overlay: news/fundo-papel.jpg
 tags:
   - New Work
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like Nirami, Cole, ClearlyConfused, Wincel and Kenzou. This video finally kicks off that idea!

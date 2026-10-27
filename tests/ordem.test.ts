@@ -77,7 +77,7 @@ const cap = (obra: string, pasta = "01", fm = "date: 2026-01-01") => ({
  */
 function sitePdf(extra: Record<string, string> = {}): Record<string, string> {
   return {
-    "works/hdvr/work.json": wj({ kind: "video", title: { en: "Hello? Di Vario Residency", pt: "Alô? Residência dos Di Vario" }, external: "https://www.youtube.com/@ResidenciaDosDiVario", order: { release: 1, chrono: false }, media: "misc", cover: "covers/hdvr.png", order_images: ["ordem/hdvr.png"] }),
+    "works/hdvr/work.json": wj({ kind: "video", title: { en: "Hello? Di Vario Residence", pt: "Alô? Residência dos Di Vario" }, external: "https://www.youtube.com/@ResidenciaDosDiVario", order: { release: 1, chrono: false }, media: "misc", cover: "covers/hdvr.png", order_images: ["ordem/hdvr.png"] }),
     "works/firestriker/work.json": wj({ kind: "prose", oneshot: true, title: { en: "Firestriker", pt: "Pederneira" }, order: { release: 2, chrono: 6 }, media: "short-story", cover: "covers/fs.png" }),
     ...cap("firestriker"),
     "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_images: ["ordem/lb-1.png", "ordem/lb-2.png"] }),
@@ -852,6 +852,8 @@ describe("T17l: `bleed` (as camadas saem da moldura até a borda da caixa) e o G
   test("o CSS: com so-sangra a moldura e a tela não cortam, só fora do celular; a caixa corta (overflow hidden); as camadas não pegam clique; a frase fica na frente", () => {
     const css = readFileSync(join(RAIZ, "src/components/ProximaHistoria.astro"), "utf8");
     expect(css).toMatch(/@media \(min-width: 701px\) \{\s*\.so-art\.so-sangra, \.so-art\.so-sangra > \.so-stage \{ overflow: visible; \}\s*\}/);
+    // T17m: no celular a moldura continua sendo o limite, mas as bordas desvanecem (degradê radial), sem corte seco
+    expect(css).toMatch(/@media \(max-width: 700px\) \{\s*\.so-art\.so-sangra \{ -webkit-mask-image: radial-gradient\(farthest-side at 50% 100%, #000 55%, transparent\); mask-image: radial-gradient\(farthest-side at 50% 100%, #000 55%, transparent\); \}\s*\}/);
     expect(css).toMatch(/\.story-order \{[^}]*overflow: hidden;/);
     expect(css).toMatch(/\.so-layer \{[^}]*pointer-events: none;/);
     expect(css).toMatch(/\.so-top \{[^}]*z-index: 2;[^}]*pointer-events: none;/);
@@ -859,14 +861,15 @@ describe("T17l: `bleed` (as camadas saem da moldura até a borda da caixa) e o G
     expect(css).toContain(".reader-box.story-order { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; background: var(--paper), var(--sheet); background-color: var(--sheet); }");
   });
 
-  test("Ossos do Ofício (content de verdade): tela quadrada (= a moldura), bleed, e o Giuseppe medido nos prints do autor (51,5% da moldura antes, 54,7% com o mouse)", () => {
+  test("Ossos do Ofício (content de verdade): tela quadrada (= a moldura), bleed, e o Giuseppe do tamanho da T17m (cabeça como a da Olivia e do Harry: 23,2% da moldura antes, 24,65% com o mouse)", () => {
     const { dados } = ler(Object.fromEntries(realContent()), true);
     const a = dados.pt.obras.find((o) => o.data._origem.slug === "all-in-a-nights-work")?.data.order_art;
     expect(a?.size).toEqual([1000, 1000]);
     expect(a?.bleed).toBe(true);
     const g = a?.layers.find((l) => l.image === "ordem/Giuseppe Site Cronologia.png");
-    expect(g?.width).toBeCloseTo(51.51, 1);
-    expect(g?.hover?.width).toBeCloseTo(54.74, 1);
+    // T17l: 51,51% e 54,74% (medidos nos prints do autor); T17m: tudo × 0,4503 (a cabeça do Giuseppe do tamanho da da Olivia e do Harry)
+    expect(g?.width).toBeCloseTo(51.51 * 0.4503, 1);
+    expect(g?.hover?.width).toBeCloseTo(54.74 * 0.4503, 1);
     // as asas: a mesma escala do Giuseppe (a tela do autor), presas a ele (crescem juntas): largura das asas ÷ largura do Giuseppe = 4268 ÷ 828
     const asas = a?.layers.find((l) => l.image === "ordem/Giuseppe Asas Site Cronologia.png");
     expect((asas?.width ?? 0) / (g?.width ?? 1)).toBeCloseTo(4268 / 828, 1);

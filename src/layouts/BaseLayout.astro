@@ -18,8 +18,6 @@ import { langs, htmlLang, siteName, siteUrl, t, type Lang } from "../lib/config"
 import { ATALHOS } from "../lib/corpos";
 import { finalizarMain } from "../lib/pagina";
 import { otimizarImagensDoHtml } from "../lib/imagensDoHtml";
-import { tirarScriptsDosPosts } from "../lib/postsIncorporados";
-import PostsIncorporados from "../components/PostsIncorporados.astro";
 import { icones } from "../lib/imagens";
 
 interface Props {
@@ -87,11 +85,9 @@ for (const nome of ATALHOS) {
 }
 const { html: acabado, scripts } = finalizarMain(miolo, lang, atalhos);
 // T17: as imagens do <main> (dos componentes e do texto do autor) ganham as versões leves no srcset; o `src` não muda (src/lib/imagensDoHtml.ts).
-// T17g/T17j (B27): nenhuma página publicada leva script do X, do Reddit ou do Instagram. O passo tira esses <script> do <main> e deixa o
-// <blockquote> do autor como está (src/lib/postsIncorporados.ts); no navegador, o PostsIncorporados troca cada post pela moldura isolada.
-const { html: semScriptsDeTerceiros, relatorio: relatorioDosPosts } = tirarScriptsDosPosts(acabado);
-for (const aviso of relatorioDosPosts.avisos) console.warn(`[embeds] ${Astro.url.pathname}: ${aviso}`);
-const main = await otimizarImagensDoHtml(semScriptsDeTerceiros);
+// T17m (decisão do autor de 22/10): os posts do X, do Reddit e do Instagram usam os SCRIPTS OFICIAIS, como no site antigo (o <script>
+// do código de incorporação fica onde o autor o pôs, igual ao do Python). A moldura isolada da T17g/T17j saiu; o B27 ficou para depois.
+const main = await otimizarImagensDoHtml(acabado);
 ---
 
 <!doctype html>
@@ -132,7 +128,6 @@ const main = await otimizarImagensDoHtml(semScriptsDeTerceiros);
       </main>
     </div>
     <Footer lang={lang} />
-    {relatorioDosPosts.posts.length > 0 && <PostsIncorporados />}
     {/* O site.js (ordenação, carrossel, imagem ausente…) virou <script> dos componentes que o usam. O Astro os deixa dentro do miolo;
         finalizarMain() os tira de lá e eles voltam aqui, no fim da página, como o <script src="site.js"> do build.py. */}
     <Fragment set:html={scripts} />

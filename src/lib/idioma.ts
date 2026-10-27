@@ -62,6 +62,8 @@ export interface DadosDoIdioma<
   obras: O[];
   /** Capítulos listados e ocultos de uma obra neste idioma. */
   capitulosDe: (obra: O) => { listados: K[]; ocultos: K[] };
+  /** (T17m) Os capítulos da obra nos OUTROS idiomas do site: o cartão da obra que só tem capítulo em outro idioma leva até lá. */
+  capitulosEmOutrosIdiomas: (obra: O) => { lang: Lang; capitulos: { listados: K[]; ocultos: K[] } }[];
   /** Histórias do universo, em ordem de lançamento (a grade de Histórias). */
   universo: O[];
   /** "Outras histórias" (universe: false). */
@@ -106,6 +108,8 @@ export function dadosDoIdioma<
     if (!c) memoria.set(slug, (c = capitulosDaObra(entradas.chapters, slug, lang, comRascunhos)));
     return c;
   };
+  const capitulosEmOutrosIdiomas = (obra: O) =>
+    todosOsIdiomas.filter((l) => l !== lang).map((l) => ({ lang: l, capitulos: capitulosDaObra(entradas.chapters, obra.data._origem.slug, l, comRascunhos) }));
   const noticias = ordenarNoticias(itensDoIdioma(entradas.news, lang, comRascunhos));
   const paginas = itensDoIdioma(entradas.pages, lang, comRascunhos);
   const { universo, outras } = separarObras(obras, lang, todosOsIdiomas);
@@ -114,6 +118,7 @@ export function dadosDoIdioma<
     lang,
     obras,
     capitulosDe,
+    capitulosEmOutrosIdiomas,
     universo,
     outras,
     destaques: destaquesDaHome(universo, lang, (o) => capitulosDe(o).listados),

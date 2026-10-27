@@ -4,7 +4,7 @@ date: 2025-10-17
 thumb: news/a-bit-slow.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 They’re a bit slow sometimes

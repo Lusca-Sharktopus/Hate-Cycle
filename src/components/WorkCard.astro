@@ -18,7 +18,7 @@ const release = c.ordem.release === undefined ? undefined : String(c.ordem.relea
 ---
 
 {/* Atenção às quebras de linha: o HTML sai exatamente como está escrito aqui (compressHTML: false), por isso o cartão fica numa linha só. */}
-<article class="work-card" data-title={c.titulo} data-chrono={chrono} data-release={release} data-media={c.midia}>{c.imagem ? <img src={assetUrl(c.imagem)} alt={c.titulo} loading="lazy" /> : <div class="nocover"></div>}<h3>{c.titulo}</h3><p>{c.resumo}</p>{botao.tipo === "link" ? <a class="button" href={botao.href} target={botao.externo ? "_blank" : undefined} rel={botao.externo ? "noopener noreferrer" : undefined}>{botao.rotulo}</a> : <span class="button disabled">{botao.rotulo}</span>}{c.previa && <a class="preview-link" href={c.previa.href}>👁 {c.previa.rotulo}</a>}</article>
+<article class="work-card" data-title={c.titulo} data-chrono={chrono} data-release={release} data-media={c.midia}>{c.imagem ? <img src={assetUrl(c.imagem)} alt={c.titulo} loading="lazy" /> : <div class="nocover"></div>}<h3>{c.titulo}</h3><p>{c.resumo}</p>{botao.tipo === "link" ? <a class="button" href={botao.href} hreflang={botao.idioma ?? undefined} target={botao.externo ? "_blank" : undefined} rel={botao.externo ? "noopener noreferrer" : undefined}>{botao.rotulo}</a> : <span class="button disabled">{botao.rotulo}</span>}{c.previa && <a class="preview-link" href={c.previa.href}>👁 {c.previa.rotulo}</a>}</article>
 
 <script>
   // Imagem que não carrega: a capa vira um bloco liso (o bloco 5 do static/site.js).

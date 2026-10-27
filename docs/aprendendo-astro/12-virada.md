@@ -18,7 +18,7 @@ Esta lição é diferente das outras: quase não tem código do site. O arquivo 
 ## Abra lado a lado
 
 1. `.github/workflows/deploy.yml` (o workflow).
-2. `docs/virada.md` (o roteiro do autor: domingo à noite, segunda, voltar atrás, dia a dia; a virada foi remarcada de sábado 24/10 para segunda 26/10).
+2. `docs/virada.md` (o roteiro do autor: a véspera, o dia da virada, voltar atrás, dia a dia; a virada, marcada para sábado 24/10 e depois para segunda 26/10, está sem data marcada (decisão do autor de 27/10)).
 3. `tools/conferir_no_ar.py` (a conferência dos endereços-chave).
 4. `package.json` (`packageManager`, `engines`) e `.nvmrc` (de onde o workflow tira as versões do pnpm e do Node).
 5. `astro.config.mjs` (`site`, `outDir`, `publicDir`) e `static/CNAME` (o arquivo com `hatecycle.com`, que o Astro copia para `dist/CNAME`; confira com `cat dist/CNAME`).
@@ -76,7 +76,7 @@ concurrency:
 | `pnpm install --frozen-lockfile` | Instala **exatamente** o que o `pnpm-lock.yaml` diz. | Se o `package.json` e o lockfile discordam, **falha** em vez de instalar outra versão. |
 | `pnpm check` | O `astro check`: tipos. Tem de dar 0 erros. | Pega erro de programação antes de publicar. |
 | `pnpm build` | Gera `dist/`. | O site. Erros de front matter do conteúdo (campo desconhecido, `draft: yes`) param aqui, com mensagem. |
-| "Conferir o resultado" | Confere `dist/CNAME` = `hatecycle.com`, que existem `index.html`, `404.html`, `pt/` e `en/`, os dois `feed.xml`, `sitemap.xml`, `_astro/`, e que **não** existe `dist/dev/`. | Rede de segurança barata contra publicar um site vazio ou com cara de prévia. Não conta páginas (o número muda a cada notícia). |
+| "Conferir o resultado" | Confere `dist/CNAME` = `hatecycle.com`, que existem `index.html`, `404.html`, `pt/` e `en/`, os dois `feed.xml`, `sitemap.xml`, `_astro/`, e que **não** existe `dist/dev/`; e (T17m) que nenhuma página carrega `<script src>` de fora do site, a não ser os três scripts oficiais dos posts (X, Reddit, Instagram), escritos um por um com `--permitir` (`node tools/scripts_de_fora.mjs dist`, que lê cada HTML inteiro: tag quebrada em linhas, aspas simples, sem aspas, `//` sem protocolo). | Rede de segurança barata contra publicar um site vazio ou com cara de prévia, ou com um script desconhecido colado num texto. Não conta páginas (o número muda a cada notícia). |
 | `actions/upload-pages-artifact` | Empacota `dist/` num arquivo (um `.tar`) e guarda como **artefato**. | É o que o Pages sabe receber (seção 4). |
 
 ### O job `publicar`
@@ -121,7 +121,7 @@ O preço: o SHA não se atualiza sozinho. A T21 põe o **Dependabot**, que abre 
 
 ## 4. O que o GitHub Pages faz com o pacote
 
-1. O `upload-pages-artifact` junta `dist/` num `.tar` e o guarda como artefato do *run* (por 1 dia). Limites do Pages: **1 GB** o artefato/site e **100 MB** por arquivo. O nosso `dist/` tem **155 MiB** (797 arquivos), o maior arquivo tem 4,5 MB.
+1. O `upload-pages-artifact` junta `dist/` num `.tar` e o guarda como artefato do *run* (por 1 dia). Limites do Pages: **1 GB** o artefato/site e **100 MB** por arquivo. O nosso `dist/` tem **174 MiB** (858 arquivos, medido na T17m em 22/10; era 155 MiB e 797 arquivos na T20), o maior arquivo tem 10 MB (o banner da página Apoio, `support/banner.png`).
 2. O `deploy-pages` pede ao Pages: "publique este artefato". O Pages troca o site inteiro **de uma vez** (não arquivo por arquivo): quem está no site vê o antigo ou o novo, nunca um meio-termo.
 3. O site vai para uma rede de servidores (CDN) que guarda cópias por até **10 minutos** (`cache-control: max-age=600`). É por isso que, depois de verde, uma pessoa ainda pode ver a versão anterior por um tempo.
 4. **Domínio e HTTPS.** Com "Deploy from a branch", o domínio vinha do arquivo `CNAME` da branch. Com **GitHub Actions** o arquivo `CNAME` do site é **ignorado**: o domínio é o campo **Custom domain** de Settings → Pages. (O `dist/CNAME` continua existindo, de propósito: é inofensivo e documenta o domínio. O certificado HTTPS é do domínio, não do site, e não muda.)

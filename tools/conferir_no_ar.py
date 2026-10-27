@@ -2,7 +2,7 @@
 """Conferência do site no ar (T20): para cada endereço-chave, confere o status, o título e um pedaço de texto esperado.
 
 Só biblioteca padrão do Python (3.12+). NÃO faz parte do `pnpm test`: é uma ferramenta para rodar na hora da virada
-(segunda, 26/10) e depois de qualquer publicação, contra o site de verdade ou contra um servidor local.
+(no dia da virada, sem data marcada — decisão do autor de 27/10 —) e depois de qualquer publicação, contra o site de verdade ou contra um servidor local.
 
 Uso:
     python3 tools/conferir_no_ar.py https://hatecycle.com              # o site no ar
@@ -16,8 +16,13 @@ Saída: uma linha por conferência ("ok" ou "FALHOU", com o motivo) e o total. C
 Atenção a duas coisas:
   - Contra `python3 -m http.server`, a conferência da página 404 do site (título "404 | …") só vale em https; localmente use
     `--servir`, que devolve a 404.html com status 404, como o GitHub Pages.
-  - RASCUNHOS: a lista `RASCUNHOS` abaixo são obras com "draft": true, que NÃO podem estar no ar. Quando o autor publicar uma
-    delas, tire-a da lista (senão a conferência acusa, com razão, que ela apareceu).
+  - RASCUNHOS (T17m): as obras com "draft": true (content/works/<pasta>/work.json) e os emissários com `draft: true`
+    (content/emissaries/<pasta>/pt.md) NÃO podem estar no ar. A lista é LIDA do content/ do projeto a cada vez (quando o autor publica
+    uma obra, ela sai da lista sozinha); só se o content/ não estiver ao lado (o script copiado para outro lugar) vale a lista fixa
+    `RASCUNHOS_SE_NAO_ACHAR_O_CONTEUDO`.
+  - TÍTULOS (T17m): o título esperado das páginas de conteúdo (obra, capítulo, notícia, Sobre, Apoio) também é lido do content/ (o
+    `title` do work.json e do front matter), para a conferência não acusar um "FALHOU" falso quando o autor renomeia um episódio
+    (aconteceu na T17l: "Episódio 2" virou "1 Coríntios 2:15"). Sem o content/, confere só que o título termina em " | Hᴀᴛᴇ Cʏᴄʟᴇ".
 """
 from __future__ import annotations
 
@@ -37,10 +42,70 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
-# Obras em rascunho (content/works/<pasta>/work.json com "draft": true): não existem no site publicado.
-RASCUNHOS = ["all-in-a-nights-work", "roadside", "the-pendulum", "cat-crow-thing"]
-
 MARCA = "Hᴀᴛᴇ Cʏᴄʟᴇ"  # versalete Unicode: o nome da marca nos <title>
+
+# O content/ do projeto (ao lado de tools/): de onde saem os rascunhos e os títulos esperados (T17m).
+CONTEUDO = Path(__file__).resolve().parent.parent / "content"
+# Só se o content/ não estiver ao lado: obras em rascunho no dia 22/10/2026.
+RASCUNHOS_SE_NAO_ACHAR_O_CONTEUDO = ["all-in-a-nights-work", "roadside", "the-pendulum", "cat-crow-thing"]
+
+
+def _front_matter(arquivo: Path) -> dict[str, str]:
+    """As linhas `chave: valor` do front matter de um .md (só o necessário aqui: title e draft)."""
+    try:
+        texto = arquivo.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+    m = re.match(r"---\r?\n(.*?)\r?\n---", texto, re.S)
+    if not m:
+        return {}
+    campos: dict[str, str] = {}
+    for linha in m.group(1).splitlines():
+        if ":" in linha and not linha.startswith((" ", "\t", "-", "#")):
+            k, v = linha.split(":", 1)
+            campos[k.strip()] = v.split(" #")[0].strip().strip('"').strip("'")
+    return campos
+
+
+def _work(pasta: str) -> dict:
+    try:
+        import json
+        return json.loads((CONTEUDO / "works" / pasta / "work.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def obras_em_rascunho() -> list[str]:
+    if not (CONTEUDO / "works").is_dir():
+        return list(RASCUNHOS_SE_NAO_ACHAR_O_CONTEUDO)
+    return sorted(p.parent.name for p in (CONTEUDO / "works").glob("*/work.json") if _work(p.parent.name).get("draft") is True)
+
+
+def emissarios_em_rascunho() -> list[str]:
+    """Os NOMES (title) dos emissários com `draft: true` (hoje: Tutti, T17l)."""
+    nomes = []
+    for md in sorted((CONTEUDO / "emissaries").glob("*/pt.md")):
+        fm = _front_matter(md)
+        if fm.get("draft") == "true" and fm.get("title"):
+            nomes.append(fm["title"])
+    return nomes
+
+
+def titulo_da_obra(pasta: str, lang: str) -> str | None:
+    t = _work(pasta).get("title")
+    return (t.get(lang) if isinstance(t, dict) else t) or None
+
+
+def titulo_do_md(caminho: str) -> str | None:
+    """O `title` do front matter de content/<caminho> (ex.: "news/2025-04-18-saiu-pederneira/pt.md")."""
+    return _front_matter(CONTEUDO / caminho).get("title") or None
+
+
+def titulo_esperado(*partes: str | None) -> str:
+    """"Parte — parte | Hᴀᴛᴇ Cʏᴄʟᴇ"; se alguma parte não foi achada no content/, "… | Hᴀᴛᴇ Cʏᴄʟᴇ" (= só confere o final do título)."""
+    if any(p is None for p in partes):
+        return f"… | {MARCA}"
+    return " — ".join(p for p in partes if p) + f" | {MARCA}"
 
 
 @dataclass
@@ -67,20 +132,26 @@ def conferencias() -> list[Conferencia]:
         Conferencia("/pt/works/", tipo=html_, titulo=f"Histórias | {MARCA}", nome="Histórias (pt)"),
         Conferencia("/en/works/", tipo=html_, titulo=f"Stories | {MARCA}", nome="Histórias (en)"),
         # Capítulos: o data-page é o ID da conversa de comentários (invariante 2: igual nos dois idiomas)
-        Conferencia("/pt/works/firestriker/01/", tipo=html_, titulo=f"Pederneira | {MARCA}",
+        # (T17m) o título esperado vem do content/ (o autor pode renomear um episódio sem a conferência acusar falha falsa); o que
+        # NÃO muda nunca é o data-page (o ID da conversa) e o endereço
+        Conferencia("/pt/works/firestriker/01/", tipo=html_, titulo=titulo_esperado(titulo_da_obra("firestriker", "pt")),
                     textos=['data-page="works/firestriker/01"', "window.HC"], nome="Pederneira (pt)"),
-        Conferencia("/en/works/firestriker/01/", tipo=html_, titulo=f"Firestriker | {MARCA}",
+        Conferencia("/en/works/firestriker/01/", tipo=html_, titulo=titulo_esperado(titulo_da_obra("firestriker", "en")),
                     textos=['data-page="works/firestriker/01"'], nome="Firestriker (en)"),
-        Conferencia("/pt/works/light-and-blood/02/", tipo=html_, titulo=f"Luz & Sangue — Episódio 2 | {MARCA}",
+        Conferencia("/pt/works/light-and-blood/02/", tipo=html_,
+                    titulo=titulo_esperado(titulo_da_obra("light-and-blood", "pt"), titulo_do_md("works/light-and-blood/02/pt.md")),
                     textos=['data-page="works/light-and-blood/02"'], nome="Luz & Sangue 02 (pt)"),
         # Notícia, Sobre, Apoio
         Conferencia("/pt/news/", tipo=html_, titulo=f"Notícias | {MARCA}", nome="lista de notícias"),
         Conferencia("/pt/news/2025-04-18-saiu-pederneira/", tipo=html_,
-                    titulo=f"Saiu Pederneira, o primeiro Conto do universo de {MARCA}! | {MARCA}",
+                    titulo=titulo_esperado(titulo_do_md("news/2025-04-18-saiu-pederneira/pt.md")),
                     textos=['data-page="news/2025-04-18-saiu-pederneira"'], nome="notícia (Saiu Pederneira)"),
-        Conferencia("/pt/about/", tipo=html_, titulo=f"Sobre o autor | {MARCA}", nome="Sobre (pt)"),
-        Conferencia("/pt/support/", tipo=html_, titulo=f"Apoio | {MARCA}", nome="Apoio (pt)"),
-        Conferencia("/en/support/", tipo=html_, titulo=f"Support | {MARCA}", nome="Apoio (en)"),
+        Conferencia("/pt/about/", tipo=html_, titulo=titulo_esperado(titulo_do_md("pages/about/pt.md")),
+                    ausentes=[f">{n}<" for n in emissarios_em_rascunho()], nome="Sobre (pt), sem emissário em rascunho"),
+        Conferencia("/en/about/", tipo=html_, titulo=titulo_esperado(titulo_do_md("pages/about/en.md")),
+                    ausentes=[f">{n}<" for n in emissarios_em_rascunho()], nome="Sobre (en), sem emissário em rascunho"),
+        Conferencia("/pt/support/", tipo=html_, titulo=titulo_esperado(titulo_do_md("pages/support/pt.md")), nome="Apoio (pt)"),
+        Conferencia("/en/support/", tipo=html_, titulo=titulo_esperado(titulo_do_md("pages/support/en.md")), nome="Apoio (en)"),
         # Redirecionamentos do site antigo (invariante 3): páginas que mandam para o endereço novo
         Conferencia("/PT.html", tipo=html_, textos=['url=/pt/'], nome="site antigo: PT.html -> /pt/"),
         Conferencia("/ossos.html", tipo=html_, textos=['url=/pt/'], nome="site antigo: ossos.html -> /pt/"),
@@ -100,14 +171,15 @@ def conferencias() -> list[Conferencia]:
         Conferencia("/pt/esta-pagina-nao-existe/", status=404, tipo=html_, titulo=f"404 | {MARCA}", so_em_https=True,
                     nome="a 404 é a página do site"),
     ]
-    # Rascunhos não podem estar no ar
-    for obra in RASCUNHOS:
+    # Rascunhos não podem estar no ar: a página da obra e TODOS os capítulos que o content/ tem dela, nos dois idiomas (T17m: lidos do
+    # content/; T17d: inclusive os capítulos provisórios da Beira de Estrada, de O Pêndulo e do Cat-Crow-Thing)
+    for obra in obras_em_rascunho():
         for lang in ("pt", "en"):
             c.append(Conferencia(f"/{lang}/works/{obra}/", status=404, textos=["404"], nome=f"rascunho fora do ar: {lang}/{obra}"))
-    c.append(Conferencia("/en/works/all-in-a-nights-work/01/", status=404, textos=["404"], nome="rascunho fora do ar: capítulo de Ossos"))
-    # T17d: os capítulos provisórios das três obras novas (Beira de Estrada, O Pêndulo, Cat-Crow-Thing) também não podem estar no ar
-    for caminho in ("/pt/works/roadside/01/", "/en/works/roadside/02/", "/pt/works/the-pendulum/01/", "/en/works/cat-crow-thing/01/"):
-        c.append(Conferencia(caminho, status=404, textos=["404"], nome=f"rascunho fora do ar: {caminho}"))
+        for md in sorted((CONTEUDO / "works" / obra).glob("*/*.md")):
+            if md.stem in ("pt", "en"):
+                caminho = f"/{md.stem}/works/{obra}/{md.parent.name}/"
+                c.append(Conferencia(caminho, status=404, textos=["404"], nome=f"rascunho fora do ar: {caminho}"))
     # Coisas que só existem na prévia ou no repositório e nunca podem ser servidas
     for p in ("/config.json", "/dev/markdown/", "/package.json", "/build.py"):
         c.append(Conferencia(p, status=404, textos=["404"], nome=f"não existe no site: {p}"))
@@ -175,7 +247,11 @@ def conferir(base: str, c: Conferencia, detalhar: bool) -> tuple[bool, str]:
     if c.tipo and c.tipo not in ct.lower():
         probs.append(f"tipo '{ct}' (esperado '{c.tipo}')")
     texto = r.corpo.decode("utf-8", errors="replace")
-    if c.titulo is not None:
+    if c.titulo is not None and c.titulo.startswith("… "):
+        t = titulo_de(texto) or ""
+        if not t.endswith(c.titulo[1:]) or len(t) <= len(c.titulo[1:]):
+            probs.append(f"título {t!r} (esperado algo que termine em {c.titulo[1:]!r})")
+    elif c.titulo is not None:
         t = titulo_de(texto)
         if t != c.titulo:
             probs.append(f"título {t!r} (esperado {c.titulo!r})")

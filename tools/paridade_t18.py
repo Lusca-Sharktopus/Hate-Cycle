@@ -26,7 +26,9 @@ O que confere, em cada par:
      baseline/ (o Python de hoje tem de bater com a foto — senão a foto está velha); nas prévias, Astro × Python.
      O texto do bloco "estou lendo em ordem…" (T17c) e o do link "Ver todas as histórias" da home (T17j), que só existem no Astro,
      saem antes de ler; o leitor página a página dos quadrinhos vira as páginas empilhadas e a janela do jogo sai (T17d/T17k); o resumo cortado da lista de Notícias volta à forma do Python, e a home do Python fica com os 4 primeiros
-     cartões, como a do Astro (T17j; as mesmas regras de tests/ajudantes/html.ts).
+     cartões, como a do Astro (T17j; as mesmas regras de tests/ajudantes/html.ts); o botão do cartão que leva ao outro idioma (Ossos do
+     Ofício em português, na prévia) volta ao "Em breve" do Python (T17m). Os posts incorporados não têm regra nenhuma: desde a T17m o
+     HTML deles (com os scripts oficiais) é igual nos dois.
 Sai com 0 se tudo bater (ou só sobrar o que foi decidido), 1 se houver diferença. Só biblioteca padrão + Node (para o passo 3).
 """
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, tempfile
@@ -159,14 +161,23 @@ def sem_janela_do_jogo(html: str) -> tuple[str, int]:
     return html, n
 
 
+# T17m: o cartão da obra que só tem capítulo no OUTRO idioma leva até lá no Astro (<a class="button" … hreflang>, filho do article.work-card);
+# no Python é o "Em breve" apagado. A mesma regra de tests/ajudantes/html.ts → cartaoEmOutroIdiomaComoNoPython, aqui só para o TEXTO.
+RE_BOTAO_EM_OUTRO_IDIOMA = re.compile(r'(?<=</p>)<a class="button" href="[^"]*" hreflang="[a-z]{2}">[^<]*</a>(?=(?:<a class="preview-link"[^>]*>[^<]*</a>)?</article>)')
+EM_BREVE = {l: v["soon"] for l, v in json.loads((RAIZ / "config.json").read_text(encoding="utf-8"))["ui"].items()}
+
+
 def astro_como_no_python(html: str) -> tuple[str, int]:
     """Tira o link "Ver todas as histórias" da home, desfaz o degradê do resumo cortado (T17j), troca o leitor página a página pelas páginas
-    empilhadas e tira a janela do jogo (T17d). Devolve o HTML e quantas trocas."""
+    empilhadas e tira a janela do jogo (T17d), e volta ao "Em breve" o botão do cartão que leva ao outro idioma (T17m). Devolve o HTML e
+    quantas trocas."""
+    lang = "pt" if re.search(r'<html lang="pt', html) else "en"
+    html, e = RE_BOTAO_EM_OUTRO_IDIOMA.subn(f'<span class="button disabled">{EM_BREVE[lang]}</span>', html)
     html, a = RE_LINK_DA_HOME.subn("", html)
     html, b = RE_RESUMO_CORTADO.subn(r"\1… \2", html)
     html, c = folheador_como_no_python(html)
     html, d = sem_janela_do_jogo(html)
-    return html, a + b + c + d
+    return html, a + b + c + d + e
 
 
 def python_como_no_astro(html: str) -> tuple[str, int]:

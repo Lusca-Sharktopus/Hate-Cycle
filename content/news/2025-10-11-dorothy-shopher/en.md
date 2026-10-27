@@ -4,7 +4,7 @@ date: 2025-10-11
 thumb: news/dorothy-shopher.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 Dorothy can’t spell shopher

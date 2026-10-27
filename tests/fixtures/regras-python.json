@@ -6573,7 +6573,7 @@
    "characters/olivia-purinna/pt.md": "Página de exemplo — edite ou apague. Olivia Purinna tem absoluta certeza de que dragões existem, e vai provar isso não importa o…",
    "emissaries/adolas-podcast/en.md": "A Christian podcast made by and for teenagers. As a founding member of this Podcast, I saw the opportunity for a partnership…",
    "emissaries/adolas-podcast/pt.md": "Um Podcast cristão feito por e para adolescentes. Como membro fundador deste Podcast, vi a oportunidade de uma parceria entre os…",
-   "emissaries/joao-revan/en.md": "A great companion and a true After Effects wizard. All the logo animations, be it the main logo or the Hello? Di Vario Residency…",
+   "emissaries/joao-revan/en.md": "A great companion and a true After Effects wizard. All the logo animations, be it the main logo or the Hello? Di Vario Residence…",
    "emissaries/joao-revan/pt.md": "Um grande companheiro e um verdadeiro mago do After Effects. Todas as animações de logotipos, seja a da logo principal, seja a de…",
    "emissaries/kaisui/en.md": "A longtime friend of mine whom I met in piano classes. He has been with me on other projects like Safe Haven and Corte do…",
    "emissaries/kaisui/pt.md": "Um amigo meu de longa data que conheci nas aulas de piano. Esteve comigo em outros projetos como a Safe Haven e a Corte do…",
@@ -6797,11 +6797,11 @@
     "tamanho": 269
    },
    "emissaries/joao-revan/en.md": {
-    "sha1": "79184ab8f158a7255259bec4e82abd90a076e2eb",
+    "sha1": "9a0daaa1188d75d62d6e2863c09f2c912d3cd283",
     "tamanho": 272
    },
    "emissaries/joao-revan/pt.md": {
-    "sha1": "b13f288eccda863d48137b3395643dd8fcc77168",
+    "sha1": "7b9f57cfbf1e83a2d40e33f9f1c3b71e2e9b0bbd",
     "tamanho": 299
    },
    "emissaries/kaisui/en.md": {
@@ -7694,8 +7694,8 @@
        "midia": "short-story"
       },
       "hdvr": {
-       "titulo": "Hello? Di Vario Residency",
-       "titulo_dado": "Hello? Di Vario Residency",
+       "titulo": "Hello? Di Vario Residence",
+       "titulo_dado": "Hello? Di Vario Residence",
        "resumo": "The di Vario family is many things. \"Normal\" is not one of them!",
        "imagem": "/covers/EN/Cover%20HDVR.png",
        "botao": {
@@ -8297,7 +8297,7 @@
       {
        "date": "2024-06-13",
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/",
-       "title": "The First Video of Hello? Di Vario Residency",
+       "title": "The First Video of Hello? Di Vario Residence",
        "kind": "tag_news",
        "text": "I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like…",
        "image": "news/primeiro-video-hdvr.png",
@@ -10034,14 +10034,14 @@
       },
       {
        "escondida": false,
-       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residency Dec 25, 2025 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
+       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residence Dec 25, 2025 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
        "data": "Dec 25, 2025",
        "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
        "miniatura": "/news/feliz-natal-di-vario.png",
        "tags": [
         "Speedpaint",
         "Post",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
        "url": "/en/news/2025-12-25-feliz-natal-di-vario/"
@@ -10438,78 +10438,78 @@
       },
       {
        "escondida": true,
-       "busca": "Best Friends in every universe New Video Hello? Di Vario Residency Oct 18, 2025 Best Friends in every universe Watch on YouTube",
+       "busca": "Best Friends in every universe New Video Hello? Di Vario Residence Oct 18, 2025 Best Friends in every universe Watch on YouTube",
        "data": "Oct 18, 2025",
        "titulo": "Best Friends in every universe",
        "miniatura": "/news/best-friends.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Best Friends in every universe Watch on YouTube",
        "url": "/en/news/2025-10-18-best-friends/"
       },
       {
        "escondida": true,
-       "busca": "The nerds sometimes are on the same wavelength New Video Hello? Di Vario Residency Oct 18, 2025 The nerds sometimes are on the same wavelength Watch on YouTube",
+       "busca": "The nerds sometimes are on the same wavelength New Video Hello? Di Vario Residence Oct 18, 2025 The nerds sometimes are on the same wavelength Watch on YouTube",
        "data": "Oct 18, 2025",
        "titulo": "The nerds sometimes are on the same wavelength",
        "miniatura": "/news/nerds-same-wavelength.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "The nerds sometimes are on the same wavelength Watch on YouTube",
        "url": "/en/news/2025-10-18-nerds-same-wavelength/"
       },
       {
        "escondida": true,
-       "busca": "They’re a bit slow sometimes New Video Hello? Di Vario Residency Oct 17, 2025 They’re a bit slow sometimes Watch on YouTube",
+       "busca": "They’re a bit slow sometimes New Video Hello? Di Vario Residence Oct 17, 2025 They’re a bit slow sometimes Watch on YouTube",
        "data": "Oct 17, 2025",
        "titulo": "They’re a bit slow sometimes",
        "miniatura": "/news/a-bit-slow.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "They’re a bit slow sometimes Watch on YouTube",
        "url": "/en/news/2025-10-17-a-bit-slow/"
       },
       {
        "escondida": true,
-       "busca": "Henrique is not having it New Video Hello? Di Vario Residency Oct 14, 2025 Henrique is not having it Watch on YouTube",
+       "busca": "Henrique is not having it New Video Hello? Di Vario Residence Oct 14, 2025 Henrique is not having it Watch on YouTube",
        "data": "Oct 14, 2025",
        "titulo": "Henrique is not having it",
        "miniatura": "/news/henrique-not-having-it.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Henrique is not having it Watch on YouTube",
        "url": "/en/news/2025-10-14-henrique-not-having-it/"
       },
       {
        "escondida": true,
-       "busca": "WHAT ARE THOSE?? New Video Hello? Di Vario Residency Oct 12, 2025 Their names are Aysa & Karla btw Watch on YouTube",
+       "busca": "WHAT ARE THOSE?? New Video Hello? Di Vario Residence Oct 12, 2025 Their names are Aysa & Karla btw Watch on YouTube",
        "data": "Oct 12, 2025",
        "titulo": "WHAT ARE THOSE??",
        "miniatura": "/news/what-are-those.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Their names are Aysa & Karla btw Watch on YouTube",
        "url": "/en/news/2025-10-12-what-are-those/"
       },
       {
        "escondida": true,
-       "busca": "Dorothy can’t spell shopher New Video Hello? Di Vario Residency Oct 11, 2025 Dorothy can’t spell shopher Watch on YouTube",
+       "busca": "Dorothy can’t spell shopher New Video Hello? Di Vario Residence Oct 11, 2025 Dorothy can’t spell shopher Watch on YouTube",
        "data": "Oct 11, 2025",
        "titulo": "Dorothy can’t spell shopher",
        "miniatura": "/news/dorothy-shopher.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Dorothy can’t spell shopher Watch on YouTube",
        "url": "/en/news/2025-10-11-dorothy-shopher/"
@@ -10648,27 +10648,27 @@
       },
       {
        "escondida": true,
-       "busca": "Lucas is addicted to caffeine New Video Hello? Di Vario Residency Jun 14, 2024 Lucas is addicted to caffeine Watch on YouTube",
+       "busca": "Lucas is addicted to caffeine New Video Hello? Di Vario Residence Jun 14, 2024 Lucas is addicted to caffeine Watch on YouTube",
        "data": "Jun 14, 2024",
        "titulo": "Lucas is addicted to caffeine",
        "miniatura": "/news/lucas-viciado-em-cafeina.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Lucas is addicted to caffeine Watch on YouTube",
        "url": "/en/news/2024-06-14-lucas-viciado-em-cafeina/"
       },
       {
        "escondida": true,
-       "busca": "The First Video of Hello? Di Vario Residency New Work New Video Hello? Di Vario Residency Jun 13, 2024 I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like Nirami, Cole, ClearlyConfused, Wincel and Kenzou. This video finally kicks off that idea! Watch on YouTube",
+       "busca": "The First Video of Hello? Di Vario Residence New Work New Video Hello? Di Vario Residence Jun 13, 2024 I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like Nirami, Cole, ClearlyConfused, Wincel and Kenzou. This video finally kicks off that idea! Watch on YouTube",
        "data": "Jun 13, 2024",
-       "titulo": "The First Video of Hello? Di Vario Residency",
+       "titulo": "The First Video of Hello? Di Vario Residence",
        "miniatura": "/news/primeiro-video-hdvr.png",
        "tags": [
         "New Work",
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like…",
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/"
@@ -11316,7 +11316,7 @@
       "tags": [
        "Speedpaint",
        "Post",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-12-25-feliz-natal-di-vario",
       "anterior": {
@@ -12339,7 +12339,7 @@
       "h1": "Best Friends in every universe",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-18-best-friends",
       "anterior": {
@@ -12372,7 +12372,7 @@
       "h1": "The nerds sometimes are on the same wavelength",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-18-nerds-same-wavelength",
       "anterior": {
@@ -12405,7 +12405,7 @@
       "h1": "They’re a bit slow sometimes",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-17-a-bit-slow",
       "anterior": {
@@ -12438,7 +12438,7 @@
       "h1": "Henrique is not having it",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-14-henrique-not-having-it",
       "anterior": {
@@ -12471,7 +12471,7 @@
       "h1": "WHAT ARE THOSE??",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-12-what-are-those",
       "anterior": {
@@ -12504,7 +12504,7 @@
       "h1": "Dorothy can’t spell shopher",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-11-dorothy-shopher",
       "anterior": {
@@ -12869,12 +12869,12 @@
       "h1": "Lucas is addicted to caffeine",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2024-06-14-lucas-viciado-em-cafeina",
       "anterior": {
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/",
-       "titulo": "The First Video of Hello? Di Vario Residency"
+       "titulo": "The First Video of Hello? Di Vario Residence"
       },
       "proximo": {
        "url": "/en/news/2024-06-21-genius-genius-dumb/",
@@ -12888,7 +12888,7 @@
     },
     "/en/news/2024-06-13-primeiro-video-hdvr/": {
      "lang": "en",
-     "titulo": "The First Video of Hello? Di Vario Residency",
+     "titulo": "The First Video of Hello? Di Vario Residence",
      "cls": "news-page",
      "desc": "",
      "imagem": "",
@@ -12899,11 +12899,11 @@
      },
      "noticia": {
       "data": "Jun 13, 2024",
-      "h1": "The First Video of Hello? Di Vario Residency",
+      "h1": "The First Video of Hello? Di Vario Residence",
       "tags": [
        "New Work",
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2024-06-13-primeiro-video-hdvr",
       "anterior": {
@@ -12945,7 +12945,7 @@
       },
       "proximo": {
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/",
-       "titulo": "The First Video of Hello? Di Vario Residency"
+       "titulo": "The First Video of Hello? Di Vario Residence"
       },
       "voltar": {
        "url": "/en/news/",
@@ -18242,8 +18242,8 @@
        "midia": "short-story"
       },
       "hdvr": {
-       "titulo": "Hello? Di Vario Residency",
-       "titulo_dado": "Hello? Di Vario Residency",
+       "titulo": "Hello? Di Vario Residence",
+       "titulo_dado": "Hello? Di Vario Residence",
        "resumo": "The di Vario family is many things. \"Normal\" is not one of them!",
        "imagem": "/covers/EN/Cover%20HDVR.png",
        "botao": {
@@ -18281,7 +18281,7 @@
        "titulo": "Roadside",
        "titulo_dado": "Roadside",
        "resumo": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
-       "imagem": "/covers/EN/Cover%20Roadside.png",
+       "imagem": "/covers/PT/Capa%20Beira%20de%20Estrada.png",
        "botao": {
         "tipo": "link",
         "href": "/en/works/roadside/",
@@ -18893,7 +18893,7 @@
       {
        "date": "2024-06-13",
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/",
-       "title": "The First Video of Hello? Di Vario Residency",
+       "title": "The First Video of Hello? Di Vario Residence",
        "kind": "tag_news",
        "text": "I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like…",
        "image": "news/primeiro-video-hdvr.png",
@@ -20716,14 +20716,14 @@
      "titulo": "Roadside",
      "cls": "",
      "desc": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
-     "imagem": "covers/EN/Cover Roadside.png",
+     "imagem": "covers/PT/Capa Beira de Estrada.png",
      "noindex": false,
      "alt": {
       "en": "/en/works/roadside/",
       "pt": "/pt/works/roadside/"
      },
      "obra": {
-      "capa": "/covers/EN/Cover%20Roadside.png",
+      "capa": "/covers/PT/Capa%20Beira%20de%20Estrada.png",
       "titulo": "Roadside",
       "resumo": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
       "primeiro": {
@@ -20756,7 +20756,7 @@
      "titulo": "Roadside — The Little Girl with Red Eyes",
      "cls": "reader reader-comic",
      "desc": "",
-     "imagem": "covers/EN/Cover Roadside.png",
+     "imagem": "covers/PT/Capa Beira de Estrada.png",
      "noindex": false,
      "alt": {
       "en": "/en/works/roadside/01/",
@@ -20783,7 +20783,7 @@
      "titulo": "Roadside — Finding a safe place",
      "cls": "reader reader-comic",
      "desc": "",
-     "imagem": "covers/EN/Cover Roadside.png",
+     "imagem": "covers/PT/Capa Beira de Estrada.png",
      "noindex": false,
      "alt": {
       "en": "/en/works/roadside/02/",
@@ -20958,14 +20958,14 @@
       },
       {
        "escondida": false,
-       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residency Dec 25, 2025 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
+       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residence Dec 25, 2025 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
        "data": "Dec 25, 2025",
        "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
        "miniatura": "/news/feliz-natal-di-vario.png",
        "tags": [
         "Speedpaint",
         "Post",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
        "url": "/en/news/2025-12-25-feliz-natal-di-vario/"
@@ -21362,78 +21362,78 @@
       },
       {
        "escondida": true,
-       "busca": "Best Friends in every universe New Video Hello? Di Vario Residency Oct 18, 2025 Best Friends in every universe Watch on YouTube",
+       "busca": "Best Friends in every universe New Video Hello? Di Vario Residence Oct 18, 2025 Best Friends in every universe Watch on YouTube",
        "data": "Oct 18, 2025",
        "titulo": "Best Friends in every universe",
        "miniatura": "/news/best-friends.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Best Friends in every universe Watch on YouTube",
        "url": "/en/news/2025-10-18-best-friends/"
       },
       {
        "escondida": true,
-       "busca": "The nerds sometimes are on the same wavelength New Video Hello? Di Vario Residency Oct 18, 2025 The nerds sometimes are on the same wavelength Watch on YouTube",
+       "busca": "The nerds sometimes are on the same wavelength New Video Hello? Di Vario Residence Oct 18, 2025 The nerds sometimes are on the same wavelength Watch on YouTube",
        "data": "Oct 18, 2025",
        "titulo": "The nerds sometimes are on the same wavelength",
        "miniatura": "/news/nerds-same-wavelength.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "The nerds sometimes are on the same wavelength Watch on YouTube",
        "url": "/en/news/2025-10-18-nerds-same-wavelength/"
       },
       {
        "escondida": true,
-       "busca": "They’re a bit slow sometimes New Video Hello? Di Vario Residency Oct 17, 2025 They’re a bit slow sometimes Watch on YouTube",
+       "busca": "They’re a bit slow sometimes New Video Hello? Di Vario Residence Oct 17, 2025 They’re a bit slow sometimes Watch on YouTube",
        "data": "Oct 17, 2025",
        "titulo": "They’re a bit slow sometimes",
        "miniatura": "/news/a-bit-slow.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "They’re a bit slow sometimes Watch on YouTube",
        "url": "/en/news/2025-10-17-a-bit-slow/"
       },
       {
        "escondida": true,
-       "busca": "Henrique is not having it New Video Hello? Di Vario Residency Oct 14, 2025 Henrique is not having it Watch on YouTube",
+       "busca": "Henrique is not having it New Video Hello? Di Vario Residence Oct 14, 2025 Henrique is not having it Watch on YouTube",
        "data": "Oct 14, 2025",
        "titulo": "Henrique is not having it",
        "miniatura": "/news/henrique-not-having-it.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Henrique is not having it Watch on YouTube",
        "url": "/en/news/2025-10-14-henrique-not-having-it/"
       },
       {
        "escondida": true,
-       "busca": "WHAT ARE THOSE?? New Video Hello? Di Vario Residency Oct 12, 2025 Their names are Aysa & Karla btw Watch on YouTube",
+       "busca": "WHAT ARE THOSE?? New Video Hello? Di Vario Residence Oct 12, 2025 Their names are Aysa & Karla btw Watch on YouTube",
        "data": "Oct 12, 2025",
        "titulo": "WHAT ARE THOSE??",
        "miniatura": "/news/what-are-those.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Their names are Aysa & Karla btw Watch on YouTube",
        "url": "/en/news/2025-10-12-what-are-those/"
       },
       {
        "escondida": true,
-       "busca": "Dorothy can’t spell shopher New Video Hello? Di Vario Residency Oct 11, 2025 Dorothy can’t spell shopher Watch on YouTube",
+       "busca": "Dorothy can’t spell shopher New Video Hello? Di Vario Residence Oct 11, 2025 Dorothy can’t spell shopher Watch on YouTube",
        "data": "Oct 11, 2025",
        "titulo": "Dorothy can’t spell shopher",
        "miniatura": "/news/dorothy-shopher.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Dorothy can’t spell shopher Watch on YouTube",
        "url": "/en/news/2025-10-11-dorothy-shopher/"
@@ -21572,27 +21572,27 @@
       },
       {
        "escondida": true,
-       "busca": "Lucas is addicted to caffeine New Video Hello? Di Vario Residency Jun 14, 2024 Lucas is addicted to caffeine Watch on YouTube",
+       "busca": "Lucas is addicted to caffeine New Video Hello? Di Vario Residence Jun 14, 2024 Lucas is addicted to caffeine Watch on YouTube",
        "data": "Jun 14, 2024",
        "titulo": "Lucas is addicted to caffeine",
        "miniatura": "/news/lucas-viciado-em-cafeina.png",
        "tags": [
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "Lucas is addicted to caffeine Watch on YouTube",
        "url": "/en/news/2024-06-14-lucas-viciado-em-cafeina/"
       },
       {
        "escondida": true,
-       "busca": "The First Video of Hello? Di Vario Residency New Work New Video Hello? Di Vario Residency Jun 13, 2024 I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like Nirami, Cole, ClearlyConfused, Wincel and Kenzou. This video finally kicks off that idea! Watch on YouTube",
+       "busca": "The First Video of Hello? Di Vario Residence New Work New Video Hello? Di Vario Residence Jun 13, 2024 I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like Nirami, Cole, ClearlyConfused, Wincel and Kenzou. This video finally kicks off that idea! Watch on YouTube",
        "data": "Jun 13, 2024",
-       "titulo": "The First Video of Hello? Di Vario Residency",
+       "titulo": "The First Video of Hello? Di Vario Residence",
        "miniatura": "/news/primeiro-video-hdvr.png",
        "tags": [
         "New Work",
         "New Video",
-        "Hello? Di Vario Residency"
+        "Hello? Di Vario Residence"
        ],
        "resumo": "I’ve had the idea of a YouTube channel for a long time, with videos in the format of “Animation Memes”, inspired by channels like…",
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/"
@@ -22240,7 +22240,7 @@
       "tags": [
        "Speedpaint",
        "Post",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-12-25-feliz-natal-di-vario",
       "anterior": {
@@ -23263,7 +23263,7 @@
       "h1": "Best Friends in every universe",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-18-best-friends",
       "anterior": {
@@ -23296,7 +23296,7 @@
       "h1": "The nerds sometimes are on the same wavelength",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-18-nerds-same-wavelength",
       "anterior": {
@@ -23329,7 +23329,7 @@
       "h1": "They’re a bit slow sometimes",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-17-a-bit-slow",
       "anterior": {
@@ -23362,7 +23362,7 @@
       "h1": "Henrique is not having it",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-14-henrique-not-having-it",
       "anterior": {
@@ -23395,7 +23395,7 @@
       "h1": "WHAT ARE THOSE??",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-12-what-are-those",
       "anterior": {
@@ -23428,7 +23428,7 @@
       "h1": "Dorothy can’t spell shopher",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2025-10-11-dorothy-shopher",
       "anterior": {
@@ -23793,12 +23793,12 @@
       "h1": "Lucas is addicted to caffeine",
       "tags": [
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2024-06-14-lucas-viciado-em-cafeina",
       "anterior": {
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/",
-       "titulo": "The First Video of Hello? Di Vario Residency"
+       "titulo": "The First Video of Hello? Di Vario Residence"
       },
       "proximo": {
        "url": "/en/news/2024-06-21-genius-genius-dumb/",
@@ -23812,7 +23812,7 @@
     },
     "/en/news/2024-06-13-primeiro-video-hdvr/": {
      "lang": "en",
-     "titulo": "The First Video of Hello? Di Vario Residency",
+     "titulo": "The First Video of Hello? Di Vario Residence",
      "cls": "news-page",
      "desc": "",
      "imagem": "",
@@ -23823,11 +23823,11 @@
      },
      "noticia": {
       "data": "Jun 13, 2024",
-      "h1": "The First Video of Hello? Di Vario Residency",
+      "h1": "The First Video of Hello? Di Vario Residence",
       "tags": [
        "New Work",
        "New Video",
-       "Hello? Di Vario Residency"
+       "Hello? Di Vario Residence"
       ],
       "comentarios": "news/2024-06-13-primeiro-video-hdvr",
       "anterior": {
@@ -23869,7 +23869,7 @@
       },
       "proximo": {
        "url": "/en/news/2024-06-13-primeiro-video-hdvr/",
-       "titulo": "The First Video of Hello? Di Vario Residency"
+       "titulo": "The First Video of Hello? Di Vario Residence"
       },
       "voltar": {
        "url": "/en/news/",

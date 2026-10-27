@@ -19,10 +19,16 @@
 //   bleed   = (opcional, T17l) true deixa as camadas SAÍREM da moldura da arte até a borda da caixa do bloco, que serve de "máscara de
 //             camada" (corta no canto arredondado), por trás da frase de cima ("estou lendo em ordem" + o seletor). Pedido do autor para as
 //             asas do Giuseppe ("print giuseppe 3.png"). Sem ele (o padrão), o que sair da moldura é cortado. No celular (até 700 px) a
-//             caixa é estreita e as duas artes ficam lado a lado: ali a moldura volta a cortar (a camada não cobre a outra história).
+//             caixa é estreita e as duas artes ficam lado a lado: ali a moldura volta a ser o limite (a camada não cobre a outra
+//             história), mas sem corte seco: as bordas somem num degradê radial (T17m, `mask-image` no ProximaHistoria.astro).
 //             Com `bleed`, use `size` QUADRADO (ex.: [1000, 1000]): a tela fica do tamanho da moldura, e x, y e width passam a valer em %
 //             da moldura (podem passar de 0–100 para sair dela).
 // Uma transição só (suave, a mesma para todas as camadas) leva do estado inicial ao do mouse; ao tirar o mouse ela volta.
+//
+// O TAMANHO (T17m, pedido do autor de 22/10): em toda arte, a CABEÇA dos personagens fica mais ou menos do tamanho da da Olivia e do Harry
+// (Pederneira, a referência), antes e com o mouse. Para ajustar uma arte, todas as camadas escalam juntas em volta do pé do desenho
+// (x' = âncora + (x − âncora) × s, o mesmo para y, width × s, nos dois estados): o movimento e os olhos colados não mudam.
+// tools/ordem_playwright.py (com --previa) mede as cabeças no navegador; a lição 08 (seção 6 do bloco) tem a tabela.
 //
 // Como o navegador recebe: cada camada é uma <img> com variáveis de CSS (`--x`, `--hx`…) no atributo `style`; quem anima é o CSS do
 // ProximaHistoria.astro. Sem JavaScript a composição já aparece (é CSS).

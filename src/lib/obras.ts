@@ -130,10 +130,19 @@ export function valoresDeOrdem(obra: ObraComDados): ValoresDeOrdem {
   return saida;
 }
 
-/** O botão do cartão: um link (com texto) ou o aviso "Em breve". */
+/**
+ * O botão do cartão: um link (com texto) ou o aviso "Em breve". `idioma` (T17m): o link leva à obra em OUTRO idioma do site (a obra não
+ * tem nada no idioma da página, mas tem no outro; o `<a>` ganha `hreflang`); ausente = o idioma da própria página.
+ */
 export type BotaoDoCartao =
-  | { tipo: "link"; href: string; externo: boolean; rotulo: string }
+  | { tipo: "link"; href: string; externo: boolean; rotulo: string; idioma?: Lang | undefined }
   | { tipo: "em-breve"; rotulo: string };
+
+/** Os capítulos da obra em OUTRO idioma do site (para a regra do "em outro idioma": o cartão de Histórias e o bloco "em ordem"). */
+export interface CapitulosEmOutroIdioma {
+  lang: Lang;
+  capitulos: CapitulosDaObra;
+}
 
 /** Tudo o que o cartão de uma obra mostra e carrega (o card_work do build.py), sem HTML. */
 export interface CartaoDaObra {
@@ -149,12 +158,28 @@ export interface CartaoDaObra {
   midia: string | undefined;
 }
 
-/** card_work(): os dados do cartão de uma obra. `comRascunhos` = prévia (o `DRAFTS` do build.py). */
-export function cartaoDaObra(obra: ObraComDados, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean): CartaoDaObra {
+/**
+ * card_work(): os dados do cartão de uma obra. `comRascunhos` = prévia (o `DRAFTS` do build.py).
+ * `outrosIdiomas` (T17m, pedido do autor de 22/10, "por agora sim"; só no Astro): a obra que não tem nada no idioma da página, mas tem
+ * em outro idioma do site, ganha o botão de verdade (texto no idioma da página) que leva ao outro idioma — a mesma regra do bloco
+ * "em ordem" (src/lib/ordemDeLeitura.ts, T17l). Hoje: Ossos do Ofício em português (rascunho: só na prévia). Sem o argumento, nada muda
+ * (o `destinoNoIdioma()` do bloco chama assim). O build.py não tem a regra: tests/ajudantes/html.ts → cartaoEmOutroIdiomaComoNoPython().
+ */
+export function cartaoDaObra(obra: ObraComDados, lang: Lang, capitulos: CapitulosDaObra, comRascunhos: boolean, outrosIdiomas: readonly CapitulosEmOutroIdioma[] = []): CartaoDaObra {
   const link = linkDaObra(obra, lang, capitulos.listados);
-  const botao: BotaoDoCartao = link.href
+  let botao: BotaoDoCartao = link.href
     ? { tipo: "link", href: link.href, externo: link.externo, rotulo: rotuloDoBotao(obra, lang) }
     : { tipo: "em-breve", rotulo: t(lang, "soon") };
+  if (!link.href) {
+    for (const outro of outrosIdiomas) {
+      if (outro.lang === lang) continue;
+      const la = linkDaObra(obra, outro.lang, outro.capitulos.listados);
+      if (la.href) {
+        botao = { tipo: "link", href: la.href, externo: la.externo, rotulo: rotuloDoBotao(obra, lang), idioma: outro.lang };
+        break;
+      }
+    }
+  }
   const oculto = capitulos.ocultos[0];
   return {
     slug: obra.data._origem.slug,
@@ -162,7 +187,7 @@ export function cartaoDaObra(obra: ObraComDados, lang: Lang, capitulos: Capitulo
     resumo: resumoDaObra(obra, lang),
     imagem: capaDaObra(obra, lang) || logoDaObra(obra, lang),
     botao,
-    previa: !link.href && comRascunhos && oculto ? { href: urlDoCapitulo(oculto), rotulo: t(lang, "preview") } : null,
+    previa: botao.tipo !== "link" && comRascunhos && oculto ? { href: urlDoCapitulo(oculto), rotulo: t(lang, "preview") } : null,
     ordem: valoresDeOrdem(obra),
     midia: obra.data.media || undefined,
   };

@@ -10,7 +10,7 @@ import { formatarData } from "./datas";
 import { cartaoDoEmissario, type CartaoDoEmissario, type EmissarioComDados } from "./emissarios";
 import { aplicarAtalhos } from "./corpos";
 import { HISTORIAS_NA_HOME } from "./home";
-import { cartaoDaObra, dadosDoSeletor, type CapitulosDaObra, type CartaoDaObra, type DadosDoSeletor, type ObraComDados } from "./obras";
+import { cartaoDaObra, dadosDoSeletor, type CapitulosDaObra, type CapitulosEmOutroIdioma, type CartaoDaObra, type DadosDoSeletor, type ObraComDados } from "./obras";
 
 /** O que as funções daqui leem de `dadosDoIdioma()` (os campos de que precisam; o resultado completo serve). */
 export interface DadosParaPaginas<O extends ObraComDados, E extends EmissarioComDados & { rendered?: { html?: string | undefined } | undefined }> {
@@ -19,6 +19,8 @@ export interface DadosParaPaginas<O extends ObraComDados, E extends EmissarioCom
   outras: O[];
   destaques: O[];
   capitulosDe: (obra: O) => CapitulosDaObra;
+  /** (T17m) Os capítulos da obra nos outros idiomas (o cartão da obra que só existe no outro idioma leva até lá). Sem ele, nada muda. */
+  capitulosEmOutrosIdiomas?: ((obra: O) => readonly CapitulosEmOutroIdioma[]) | undefined;
   atualizacoes: Atualizacao[];
   universoExtra: readonly unknown[];
   sobre: { titulo: string; resumo: string; url: string } | null;
@@ -62,7 +64,7 @@ export function dadosDaHome<O extends ObraComDados, E extends EmissarioComDados 
       titulo: a.titulo,
       texto: a.texto,
     })),
-    destaques: dados.destaques.slice(0, HISTORIAS_NA_HOME).map((o) => cartaoDaObra(o, lang, dados.capitulosDe(o), comRascunhos)),
+    destaques: dados.destaques.slice(0, HISTORIAS_NA_HOME).map((o) => cartaoDaObra(o, lang, dados.capitulosDe(o), comRascunhos, dados.capitulosEmOutrosIdiomas?.(o))),
     temUniverso: dados.universoExtra.length > 0,
     sobre: dados.sobre,
   };
@@ -89,7 +91,7 @@ export function dadosDosAtalhos<O extends ObraComDados, E extends EmissarioComDa
   mostrarTextos: boolean,
 ): DadosDosAtalhos {
   const lang = dados.lang;
-  const cartao = (o: O) => cartaoDaObra(o, lang, dados.capitulosDe(o), comRascunhos);
+  const cartao = (o: O) => cartaoDaObra(o, lang, dados.capitulosDe(o), comRascunhos, dados.capitulosEmOutrosIdiomas?.(o));
   return {
     historias: { cartoes: dados.universo.map(cartao), seletor: dadosDoSeletor(lang, dados.universo) },
     outras: dados.outras.map(cartao),

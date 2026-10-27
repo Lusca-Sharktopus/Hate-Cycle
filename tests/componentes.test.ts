@@ -22,11 +22,11 @@ import OutrasHistorias from "../src/components/OutrasHistorias.astro";
 import SecaoEmissarios from "../src/components/SecaoEmissarios.astro";
 import SecaoHistorias from "../src/components/SecaoHistorias.astro";
 import { paginaDaObra } from "../src/lib/capitulos";
-import { langs, type Lang } from "../src/lib/config";
+import { langs, t, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { finalizarMain, separarScripts } from "../src/lib/pagina";
 import { dadosDaHome, dadosDosAtalhos } from "../src/lib/paginas";
-import { canonicoDoMiolo, homeComoNoPython, soQuatroHistoriasNaHome } from "./ajudantes/html";
+import { canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, homeComoNoPython, soQuatroHistoriasNaHome } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Ambiente {
@@ -88,8 +88,9 @@ for (const amb of ref.ambientes) {
       const dados = dadosDoIdioma(entradas, lang, { comRascunhos: amb.rascunhos, mostrarExtras: cfg.show_extras, emissariosEscondidos: cfg.emissaries_hide, todosOsIdiomas: langs });
       const atalhos = dadosDosAtalhos(dados, amb.rascunhos, cfg.emissaries_show_texts);
 
+      // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá; no Python, "Em breve" (tests/obras-em-outro-idioma.test.ts)
       const igual = (atual: string, esperado: string, quem: string) => {
-        expect(canonicoDoMiolo(atual), quem).toBe(canonicoDoMiolo(esperado));
+        expect(canonicoDoMiolo(cartaoEmOutroIdiomaComoNoPython(atual, t(lang, "soon")).html), quem).toBe(canonicoDoMiolo(esperado));
         comparados++;
       };
 

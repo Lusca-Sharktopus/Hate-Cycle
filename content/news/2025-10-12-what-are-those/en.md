@@ -4,7 +4,7 @@ date: 2025-10-12
 thumb: news/what-are-those.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 Their names are Aysa & Karla btw

@@ -4,7 +4,7 @@ date: 2025-10-18
 thumb: news/best-friends.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 Best Friends in every universe

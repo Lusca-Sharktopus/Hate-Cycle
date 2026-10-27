@@ -2,10 +2,9 @@
 //
 // O arquivo é lido NO LUGAR, sem cópia: o caminho ../../config.json sai de src/lib/ e volta à raiz.
 // Só os campos importados abaixo entram no site; o resto do config.json (inclusive as chaves
-// do Supabase em `comments`, além de `base_url`, `email`, `redirects`…) não é importado
-// aqui. NUNCA importe nem exporte `comments` neste arquivo: desde a T12, o ÚNICO arquivo que lê
+// do Supabase em `comments`, além de `email`…) não é importado aqui (`base_url` só entra para saber o domínio, em `dominiosDoSite`). NUNCA importe nem exporte `comments` neste arquivo: desde a T12, o ÚNICO arquivo que lê
 // `comments` é src/lib/comentarios.ts (que monta a caixa de comentários igual à do build.py).
-import { site_name, site_url, logo, author, show_extras, socials, languages, intro, ui, emissaries, redirects } from "../../config.json";
+import { site_name, site_url, base_url, logo, author, show_extras, socials, languages, intro, ui, emissaries, redirects } from "../../config.json";
 
 /** Os idiomas do site. Têm de ser os mesmos de config.json → languages (os valores de `[lang]` em src/pages/ vêm daí). */
 export type Lang = "en" | "pt";
@@ -178,6 +177,19 @@ export const siteName = config.site_name;
 
 /** Endereço público do site (config.json → site_url). Vazio = sem link de RSS, como no build.py. */
 export const siteUrl = config.site_url;
+
+/**
+ * (T17m) Os domínios do PRÓPRIO site, em minúsculas: o de `site_url` (hatecycle.com) e o de `base_url` (o endereço do GitHub Pages).
+ * O schema soma o do static/CNAME e recusa uma demo de jogo hospedada neles ou num subdomínio deles (src/lib/schemas.ts → enderecoDaDemo).
+ */
+export const dominiosDoSite: readonly string[] = [site_url, base_url].flatMap((u) => {
+  try {
+    const h = new URL(u).hostname.toLowerCase().replace(/\.$/, "");
+    return h ? [h] : [];
+  } catch {
+    return [];
+  }
+});
 
 /** Arquivo da logo do cabeçalho, relativo a static/ (ex.: "logos/Hate Cycle Glow.png"). */
 export const logoFile = config.logo;

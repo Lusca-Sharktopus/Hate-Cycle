@@ -40,7 +40,7 @@ import { ORDEM_PADRAO, ORDENS } from "../scripts/ordem/regras";
 import type { Lang } from "./config";
 import { arteEmCamadas, type ArteCrua, type ArteEmCamadas } from "./artesDaOrdem";
 import { LARGURA_MAXIMA, LARGURAS, UNIDADES_POR_EM } from "./largurasDoRotulo";
-import { cartaoDaObra, tituloDaObra, urlDaObra, urlDoCapitulo, valoresDeOrdem, type CapitulosDaObra, type ObraComDados } from "./obras";
+import { cartaoDaObra, tituloDaObra, urlDaObra, urlDoCapitulo, valoresDeOrdem, type CapitulosDaObra, type CapitulosEmOutroIdioma, type ObraComDados } from "./obras";
 import { organizarCartoes } from "./seletor";
 import { obraTemPagina } from "./visibilidade";
 import { TEXTOS_DA_ORDEM, type OrdemDeLeitura, type Verbo } from "./textosDaOrdem";
@@ -166,11 +166,8 @@ export function arteDaObra(obra: ObraParaOrdem): LadoDaOrdem["arte"] | null {
   return principal ? { tipo: "imagens", principal, hover: proprias[1] ?? null } : null;
 }
 
-/** Os capítulos da obra em OUTRO idioma do site (para a regra do "em outro idioma"; ver o topo do arquivo). */
-export interface CapitulosEmOutroIdioma {
-  lang: Lang;
-  capitulos: CapitulosDaObra;
-}
+/** Os capítulos da obra em OUTRO idioma do site (para a regra do "em outro idioma"; ver o topo do arquivo). Mora em obras.ts (T17m). */
+export type { CapitulosEmOutroIdioma } from "./obras";
 
 /**
  * Para onde o lado de uma obra leva NUM idioma, ou null se ali ela não tem nada lançado (o cartão cinza "Em breve"). Link externo: o do

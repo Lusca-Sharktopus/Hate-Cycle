@@ -20,13 +20,13 @@
 //   T17d  o leitor página a página dos quadrinhos (div.folheador) vira o <div class="comic"> de dentro e a janela do jogo (div.jogo) sai do Astro
 //         (tests/ajudantes/html.ts → folheadorComoNoPython, semJanelaDoJogo); o script embutido do leitor (reconhecido por `data-folheador`
 //         + `fl-runa`) é um comportamento só do Astro, e a ferramenta exige que ele vá exatamente nas páginas que têm o leitor (T17k);
-//   T17g/T17j  o <script src> do X/Reddit/Instagram dentro de cada post sai do Python (tests/ajudantes/html.ts → semScriptsDosPosts);
-//         o Astro não acrescenta nada (a moldura isolada nasce no navegador). A ferramenta confere, página a página, que o Python tinha
-//         tantos scripts quanto o Astro tem posts (blockquotes dos três serviços), e que só as páginas com post levam o script empacotado
-//         dos posts;
+//   (T17m: os posts do X/Reddit/Instagram voltaram aos scripts oficiais, como no site antigo, por decisão do autor de 22/10: o HTML dos
+//         posts é IGUAL nos dois e não há mais regra para eles; a da T17g/T17j, semScriptsDosPosts, saiu;)
 //   T17j  a home: o trilho <div class="rail rail-home"> e o link "Ver todas as histórias" saem do Astro; do Python sai o 5º cartão em
 //         diante (a home do Astro mostra até 4); o resumo cortado da lista de Notícias (degradê + "…leia mais") volta à forma do Python
 //         (tests/ajudantes/html.ts → homeComoNoPython, soQuatroHistoriasNaHome, resumoCortadoComoNoPython);
+//   T17m  o cartão da obra que só tem capítulo no OUTRO idioma (Ossos do Ofício em português, na prévia) leva até lá no Astro; o
+//         <a class="button" hreflang> desse cartão volta ao "Em breve" do Python (tests/ajudantes/html.ts → cartaoEmOutroIdiomaComoNoPython);
 //   T17h  o ícone do YouTube do rodapé leva ao canal do idioma no Astro (@HateCycleEn / @HateCycleBR; o Python tem @HateCycle): troca só o
 //         href dessa <a> (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython), exigindo 1 por página e o canal do idioma da URL;
 //   T17   <link> de fontes (Google no Python; preload no Astro) saem; os ícones (1 no Python, 32+192 px no Astro) viram um só;
@@ -37,7 +37,7 @@
 //   T06   o CSS: /style.css?v= (Python) × /_astro/*.css e <style> (Astro) saem dos dois lados; o /custom.css do autor fica e é conferido;
 //   T06+  os scripts DO SITE saem da árvore dos dois lados (site.js, os inline da abertura e do menu no Python; os da abertura e os
 //         <script type="module"> no Astro) e são conferidos à parte, como COMPORTAMENTOS (abaixo). Outros scripts de conteúdo e o
-//         window.HC ficam na árvore e são comparados normalmente (os de posts incorporados, só depois da regra T17g);
+//         window.HC ficam na árvore e são comparados normalmente (inclusive os scripts oficiais dos posts incorporados, T17m);
 //   —     as chaves do Supabase do window.HC viram marcadores (antes, confere que são iguais nos dois; nunca são impressas);
 //   —     data-astro-cid-* (marca de escopo do CSS do Astro) não conta (régua de tests/ajudantes/html.ts).
 // Comportamentos: para cada página, quais blocos do static/site.js AGIRIAM nela (o seletor de cada bloco acha algo na página) e
@@ -47,7 +47,9 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
-import { canalDoYoutubeComoNoPython, canonico, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, semScriptsDosPosts, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
+// só os textos da interface (ui) do config.json do autor: o "Em breve" de cada idioma (T17m)
+const UI = JSON.parse(readFileSync(new URL("../config.json", import.meta.url), "utf8")).ui;
+import { canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
 
 // ───────────── argumentos ─────────────
 const args = process.argv.slice(2);
@@ -104,7 +106,6 @@ const SCRIPTS_DO_ASTRO = [
   ["7 posts alternados (.embed-alt)", (s) => s.modulo && /\.embed-alt/.test(s.texto)],
   ["T15 comentários (script empacotado)", (s) => s.modulo && /CaixaDeComentarios\.astro/.test(s.src)],
   ["T17c bloco de ordem", (s) => s.modulo && /hc-ordem-de-leitura/.test(s.texto)],
-  ["T17j posts incorporados em moldura (script empacotado)", (s) => s.modulo && /PostsIncorporados\.astro/.test(s.src)],
   // T17d (só no Astro, só na prévia): o script do leitor página a página vem EMBUTIDO na página (não tem src); o que o reconhece é o que ele
   // procura (`[data-folheador]`) e os `.fl-runa` que ele marca (src/scripts/folheador/). O Python não tem o leitor (desenha as páginas empilhadas).
   ["T17d leitor página a página (script)", (s) => s.modulo && /data-folheador/.test(s.texto) && /fl-runa/.test(s.texto)],
@@ -153,8 +154,6 @@ function ehScriptDoSite(s, lado) {
 const CONTAGEM = {};
 const conta = (regra, url) => ((CONTAGEM[regra] ??= new Set()).add(url));
 const FALHAS = [];
-/** url → { python: scripts de post que o Python tinha, astro: posts (blockquotes dos três serviços) que o Astro tem } (T17g/T17j). */
-const POSTS = new Map();
 const falha = (url, o_que) => FALHAS.push(`${url}: ${o_que}`);
 
 const RE_HC = /<script>window\.HC=(\{[\s\S]*?\});<\/script>/g;
@@ -174,17 +173,10 @@ function normalizar(html, lado, url, existe) {
     if (s.sobrou) falha(url, "o Python tem supabase-js/comments.js fora do par de sempre");
     if (s.quantos) conta("T15: par de <script> antigo dos comentários (Python)", url);
     html = s.html;
-    const posts = semScriptsDosPosts(html);
-    if (posts.removidos.length) conta("T17g: <script src> de post incorporado (Python)", url);
-    POSTS.set(url, { ...(POSTS.get(url) ?? {}), python: posts.removidos.length });
-    html = posts.html;
     const h = soQuatroHistoriasNaHome(html);
     if (h.tirados) conta("T17j: 5º cartão em diante da home (Python)", url);
     html = h.html;
   } else {
-    const nPosts = (html.match(/<blockquote class="(twitter-tweet|reddit-embed-bq|instagram-media)"/g) ?? []).length;
-    POSTS.set(url, { ...(POSTS.get(url) ?? {}), astro: nPosts });
-    if (/embed-gate|data-embed-servico/.test(html)) falha(url, "sobrou marcação do quadro com clique da T17g");
     const t = homeComoNoPython(html);
     if (t.trilhos) conta("T17j: trilho e link \"Ver todas as histórias\" da home (Astro)", url);
     if (t.trilhos && !/^\/(en|pt)\/$/.test(url)) falha(url, "trilho da home fora da home");
@@ -198,6 +190,11 @@ function normalizar(html, lado, url, existe) {
     if (fo.trocados) conta("T17d: leitor página a página dos quadrinhos (Astro)", url);
     if (fo.recusados) falha(url, "leitor página a página com forma inesperada");
     html = fo.html;
+    // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá; no Python, "Em breve" (tests/ajudantes/html.ts)
+    const langDoCartao = /^\/pt\//.test(url) ? "pt" : "en";
+    const ca = cartaoEmOutroIdiomaComoNoPython(html, UI[langDoCartao].soon);
+    if (ca.trocados) conta("T17m: cartão de obra que leva ao outro idioma (Astro)", url);
+    html = ca.html;
     const jo = semJanelaDoJogo(html);
     if (jo.removidos.length) conta("T17d: janela da demo e botão da Steam (Astro)", url);
     if (jo.foraDoLugar) falha(url, "janela do jogo fora do lugar");
@@ -358,7 +355,7 @@ for (const url of [...pp.keys()].filter((u) => pa.has(u)).sort()) {
   // comportamentos
   const cp = [...p.comportamentos].filter((c) => !c.startsWith("3 ")), ca = [...a.comportamentos];
   if (p.comportamentos.has("3 GIFs de .page-project (nunca age: T14)")) falha(url, "o bloco 3 do site.js (GIFs de .page-project) agiria aqui, e o Astro não o tem (T14 diz que nunca age)");
-  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17j posts incorporados em moldura (script empacotado)", "T17d leitor página a página (script)"]);
+  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17d leitor página a página (script)"]);
   const faltam = cp.filter((c) => !a.comportamentos.has(c));
   const sobram = ca.filter((c) => !p.comportamentos.has(c) && !extrasDecididos.has(c));
   if (faltam.length) falha(url, `comportamento do Python sem script no Astro: ${faltam.join("; ")}`);
@@ -367,9 +364,6 @@ for (const url of [...pp.keys()].filter((u) => pa.has(u)).sort()) {
   if (a.comportamentos.has("T17c bloco de ordem") !== (CONTAGEM['T17c: bloco "estou lendo em ordem" (Astro)']?.has(url) === true)) falha(url, "script do bloco de ordem × bloco de ordem");
   // T17d: o script do leitor página a página só vai nas páginas que têm o leitor (o que a regra folheadorComoNoPython acabou de trocar)
   if (a.comportamentos.has("T17d leitor página a página (script)") !== (CONTAGEM["T17d: leitor página a página dos quadrinhos (Astro)"]?.has(url) === true)) falha(url, "script do leitor página a página × leitor página a página");
-  const posts = POSTS.get(url) ?? {};
-  if ((posts.python ?? 0) !== (posts.astro ?? 0)) falha(url, `posts incorporados: o Python tinha ${posts.python ?? 0} script(s) de X/Reddit/Instagram, o Astro tem ${posts.astro ?? 0} post(s)`);
-  if (a.comportamentos.has("T17j posts incorporados em moldura (script empacotado)") !== ((posts.astro ?? 0) > 0)) falha(url, "script dos posts × posts");
   const chave = `Python: ${[...p.comportamentos].sort().join(" | ")}\nAstro:  ${ca.sort().join(" | ")}`;
   (tabelaComportamentos.get(chave) ?? tabelaComportamentos.set(chave, []).get(chave)).push(url);
   if (p.canonico === a.canonico) resultado.iguaisDepoisDasRegras++;

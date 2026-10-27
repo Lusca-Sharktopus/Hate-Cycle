@@ -4,7 +4,7 @@ date: 2025-10-14
 thumb: news/henrique-not-having-it.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 Henrique is not having it

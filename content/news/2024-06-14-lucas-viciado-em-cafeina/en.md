@@ -4,7 +4,7 @@ date: 2024-06-14
 thumb: news/lucas-viciado-em-cafeina.png
 tags:
   - New Video
-  - Hello? Di Vario Residency
+  - Hello? Di Vario Residence
 ---
 
 Lucas is addicted to caffeine

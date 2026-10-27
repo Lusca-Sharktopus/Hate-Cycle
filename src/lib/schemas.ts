@@ -13,8 +13,10 @@
 //    do mesmo jeito (`fm.get("tags", []) or []`).
 //  - Referências (related, appears_in) são conferidas: apontar para algo que não existe = erro.
 //  - Mensagens em português, sempre com o valor que veio. O Astro acrescenta a coleção, o item e o arquivo.
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { z } from "astro/zod";
-import { langs, type Lang } from "./config";
+import { dominiosDoSite, langs, type Lang } from "./config";
 
 // ───────────── valores permitidos ─────────────
 
@@ -169,13 +171,49 @@ const enderecoHttps = (oQue: string) =>
   texto().refine((v) => v === "" || /^https:\/\/[^\s"'<>]+$/.test(v), { error: (i) => `${oQue} tem de ser um endereço completo que começa com https:// (ou "" enquanto não existe), mas veio ${descrever(i.input)}.` });
 
 /**
+ * (T17m, achado da revisão final) Os domínios do PRÓPRIO site: os do config.json (site_url, base_url) e o do static/CNAME. Uma demo de
+ * jogo roda num <iframe> com `allow-scripts allow-same-origin` (src/lib/jogo.ts): hospedada no próprio site (ou num subdomínio dele),
+ * ela não ficaria isolada e alcançaria a sessão dos comentários. Por isso o schema recusa esses endereços.
+ */
+export const DOMINIOS_DO_PROPRIO_SITE: readonly string[] = (() => {
+  const d = new Set(dominiosDoSite);
+  try {
+    for (const linha of readFileSync(join(process.cwd(), "static", "CNAME"), "utf8").split(/\s+/)) {
+      const h = linha.trim().toLowerCase().replace(/\.$/, "");
+      if (h) d.add(h);
+    }
+  } catch {
+    // sem static/CNAME (um site inventado de teste): valem os do config.json
+  }
+  return [...d];
+})();
+
+/** O domínio do próprio site que o endereço usa (ele ou um subdomínio dele), ou null. */
+export function dominioDoProprioSite(endereco: string, dominios: readonly string[] = DOMINIOS_DO_PROPRIO_SITE): string | null {
+  let host: string;
+  try {
+    host = new URL(endereco).hostname.toLowerCase().replace(/\.$/, "");
+  } catch {
+    return null;
+  }
+  return dominios.find((d) => host === d || host.endsWith(`.${d}`)) ?? null;
+}
+
+/** O endereço da demo: https:// (ou vazio), e de FORA do próprio site. */
+const enderecoDaDemo = () =>
+  enderecoHttps("demo (o endereço da demo do jogo)").refine((v) => v === "" || dominioDoProprioSite(v) === null, {
+    error: (i) =>
+      `demo não pode ser um endereço do próprio site (${dominioDoProprioSite(String(i.input))}): a demo roda numa janela que pode rodar programas e guardar dados, e no próprio site ela não ficaria isolada (alcançaria a sessão dos comentários de quem está lendo). Publique a demo em outro lugar (por exemplo, no itch.io) e cole aqui o endereço de lá; veio ${descrever(i.input)}.`,
+  });
+
+/**
  * game do work.json (T17d): a página de um JOGO (só no Astro): a janela da demo e o botão "Wishlist on Steam". `demo` = o endereço da
  * demo para jogar no navegador (itch.io, por exemplo); `steam` = a página do jogo na Steam. Vazio = ainda não existe (a janela fica
  * escura, com "Demo em breve"; o botão aparece sem link, com "Link em breve"). Ver src/lib/jogo.ts.
  */
 const paginaDeJogo = () =>
   estritoDaArte("game", {
-    demo: enderecoHttps("demo (o endereço da demo do jogo)").optional(),
+    demo: enderecoDaDemo().optional(),
     steam: enderecoHttps("steam (a página do jogo na Steam)").optional(),
   });
 
