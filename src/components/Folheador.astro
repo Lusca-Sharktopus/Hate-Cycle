@@ -46,11 +46,12 @@ const [anterior, proxima] = setas.map(({ direcao, seta }) => ({
 <style is:global>
   @layer site {
     /* O leitor página a página (T17d). O palco: a página no meio, uma seta de cada lado (os mesmos botões redondos do vídeo de Luz & Sangue,
-       .side-btn em Leitor.astro); a página cabe inteira na tela (altura da janela menos um respiro), sem nunca crescer além do arquivo. */
+       .side-btn em Leitor.astro); a página ocupa a largura da folha; a altura máxima é a da janela MAIS 20rem (escolha do autor de 28/10; era "menos 5rem", a página inteira
+       na tela), sem nunca crescer além do arquivo. */
     .folheador { margin: 1rem 0; }
     .fl-palco { display: flex; align-items: center; justify-content: center; gap: 1rem; }
     .fl-palco .comic { margin: 0; min-width: 0; flex: 0 1 auto; }
-    .folheador .comic > img { width: auto; height: auto; max-width: 100%; max-height: calc(100svh - 5rem); }
+    .folheador .comic > img { width: auto; height: auto; max-width: 100%; max-height: calc(100svh + 20rem); }
     .folheador .comic > img[hidden] { display: none; }
     .folheador:not([data-ligado]) .comic > img ~ img { display: none; }
     .fl-seta { flex: none; }

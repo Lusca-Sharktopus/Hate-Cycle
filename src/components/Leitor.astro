@@ -51,6 +51,14 @@ const c = l.conteudo;
     .reader-box.paper { background: var(--paper), var(--sheet); background-color: var(--sheet); }
     .reader-box.slim { padding-top: .8rem; padding-bottom: .8rem; }
     .title-image { display: block; margin: 0 auto 1.5rem; height: 100px; width: auto; }
+    /* (28/10, pedido do autor: "Todas as logos no início de páginas de capítulo devem ter a mesma altura") 100 px para todas; quando a
+       tela é estreita (celular), TODAS descem juntas para a altura em que a logo mais larga de hoje ainda cabe na largura de dentro da
+       caixa de texto (Pederneira em português, 1246 × 337 = 3,70 : 1; folga até 3,75), em vez de só a larga ser espremida de lado (era o
+       que acontecia: a 390 px a de Pederneira ficava 313 × 100, achatada). A conta usa a largura da caixa de TEXTO (largura da tela −
+       2rem − o padding do .reader-box), a mesma para quadrinho, vídeo e texto (a caixa do quadrinho tem padding menor e, com a largura
+       dela, a logo da Beira ficava mais alta). Acima de ~470 px dá 100 px. object-fit: contain = uma logo nova ainda mais larga nunca
+       deforma (fica um pouco mais baixa só no celular). Só no Astro. */
+    .title-image { height: min(100px, (min(1000px, 100vw - 2rem) - 2 * clamp(1.4rem, 5vw, 3.5rem)) / 3.75); object-fit: contain; }
     .chapter-title { text-align: center; font-size: clamp(1.25rem, 2.6vw, 1.6rem); margin-bottom: 1rem; }
     hr.thin { width: 80%; border: 0; border-top: 1px solid #0003; margin: 0 auto 2rem; }
     .reader .prose { max-width: none; }
@@ -60,7 +68,9 @@ const c = l.conteudo;
 
     /* quadrinho: a primeira folha fica escura (roxo-noite) */
     .reader-comic .reader-box:first-of-type { background: var(--night); color: #dff6ee; padding: 1.5rem clamp(.5rem, 3vw, 2rem); }
-    .reader-comic .title-image { height: 70px; }
+    /* (28/10, pedido do autor: "Todas as logos no início de páginas de capítulo devem ter a mesma altura") o quadrinho tinha a logo com
+       70 px; agora vale para ele os mesmos 100 px de .title-image (texto e vídeo). Só no Astro (o static/style.css do Python continua com
+       70 px; hoje o único quadrinho, a Beira de Estrada, é rascunho). */
     .reader-comic .chapter-title { color: #fff; }
     .comic { display: flex; flex-direction: column; align-items: center; margin: 1rem 0; }
     .comic img { display: block; width: 100%; max-width: 860px; }

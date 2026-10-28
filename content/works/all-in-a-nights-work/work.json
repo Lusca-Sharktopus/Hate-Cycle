@@ -31,7 +31,7 @@
     "size": [1000, 1000],
     "bleed": true,
     "layers": [
-      { "image": "ordem/Giuseppe Asas Site Cronologia.png", "x": 58.25, "y": 61.26, "width": 119.49, "opacity": 0, "hover": { "x": 59.17, "y": 59.11, "width": 126.98, "opacity": 1 } },
+      { "image": "ordem/Giuseppe Asas Site Cronologia.png", "x": 58.25, "y": 61.26, "width": 119.49, "opacity": 0, "hover": { "x": 59.17, "y": 59.11, "width": 126.98, "opacity": 1 }, "fade": true },
       { "image": "ordem/Giuseppe Site Cronologia.png", "x": 42.22, "y": 86.66, "width": 23.19, "hover": { "x": 42.14, "y": 86.1, "width": 24.65 } },
       { "image": "ordem/Giuseppe Olhos Site Cronologia.png", "x": 41.95, "y": 85.97, "width": 22.66, "opacity": 0, "hover": { "x": 41.86, "y": 85.37, "width": 24.08, "opacity": 1 } }
     ]

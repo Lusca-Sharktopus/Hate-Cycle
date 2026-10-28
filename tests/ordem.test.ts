@@ -866,11 +866,28 @@ describe("T17l: `bleed` (as camadas saem da moldura até a borda da caixa) e o G
     expect(sem).not.toContain("so-sangra");
   });
 
-  test("o CSS: com so-sangra a moldura e a tela não cortam, só fora do celular; a caixa corta (overflow hidden); as camadas não pegam clique; a frase fica na frente", () => {
+  test("`fade: true` (28/10): só aquela camada vai numa tela à parte dentro de span.so-esmaece, na mesma ordem de trás para a frente; sem fade o HTML é o de antes", async () => {
+    const tres = { size: [1000, 1000] as const, bleed: true, layers: [{ image: "asas.png", x: 50, y: 50, width: 120, fade: true }, { image: "corpo.png", x: 50, y: 80, width: 30 }, { image: "olhos.png", x: 50, y: 70, width: 10 }] };
+    const a = arteEmCamadas(tres);
+    expect(a.grupos.map((g) => [g.esmaece, g.camadas.map((c) => c.imagem)])).toEqual([[true, ["asas.png"]], [false, ["corpo.png", "olhos.png"]]]);
+    expect(a.camadas.map((c) => c.esmaece)).toEqual([true, false, false]);
+    const { fade: _f, ...semFade } = tres.layers[0]!;
+    expect(arteEmCamadas({ ...tres, layers: [semFade, ...tres.layers.slice(1)] }).grupos).toHaveLength(1);
+    const lb = (art: unknown) => sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_art: art }), ...cap("light-and-blood") });
+    const html = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb(tres), false).bloco("firestriker", "pt") } });
+    expect(html).toMatch(/<span class="so-art so-layers so-sangra"><span class="so-esmaece"><span class="so-stage" style="--ar:1000 \/ 1000;--razao:1"><img class="so-layer" src="\/asas\.png"[^>]*><\/span><\/span><span class="so-stage" style="--ar:1000 \/ 1000;--razao:1"><img class="so-layer" src="\/corpo\.png"[^>]*><img class="so-layer" src="\/olhos\.png"[^>]*><\/span><\/span>/);
+    // fade escrito errado: mensagem em português
+    expect(() => ler(lb({ ...tres, layers: [{ ...tres.layers[0], fade: "sim" }] }), false)).toThrow(/fade tem de ser true ou false/);
+  });
+
+  test("o CSS: com so-sangra a moldura e a tela não cortam (desde 28/10 também no celular); só .so-esmaece (as camadas com fade) desvanece no celular; a caixa corta (overflow hidden); as camadas não pegam clique; a frase fica na frente", () => {
     const css = readFileSync(join(RAIZ, "src/components/ProximaHistoria.astro"), "utf8");
-    expect(css).toMatch(/@media \(min-width: 701px\) \{\s*\.so-art\.so-sangra, \.so-art\.so-sangra > \.so-stage \{ overflow: visible; \}\s*\}/);
-    // T17m: no celular a moldura continua sendo o limite, mas as bordas desvanecem (degradê radial), sem corte seco
-    expect(css).toMatch(/@media \(max-width: 700px\) \{\s*\.so-art\.so-sangra \{ -webkit-mask-image: radial-gradient\(farthest-side at 50% 100%, #000 55%, transparent\); mask-image: radial-gradient\(farthest-side at 50% 100%, #000 55%, transparent\); \}\s*\}/);
+    expect(css).toMatch(/\n    \.so-art\.so-sangra, \.so-art\.so-sangra \.so-stage \{ overflow: visible; \}/); // fora de qualquer @media
+    expect(css).not.toMatch(/min-width: 701px/);
+    // T17m → 28/10: no celular SÓ as camadas com `fade` (as asas do Giuseppe) desvanecem (degradê radial na borda da moldura)
+    expect(css).toMatch(/\.so-esmaece \{ position: absolute; inset: 0; \}/);
+    expect(css).toMatch(/@media \(max-width: 700px\) \{\s*\.so-esmaece \{ -webkit-mask-image: radial-gradient\(farthest-side at 50% 100%, #000 55%, transparent\); mask-image: radial-gradient\(farthest-side at 50% 100%, #000 55%, transparent\); \}\s*\}/);
+    expect(css).not.toMatch(/\.so-art\.so-sangra \{[^}]*mask-image/);
     expect(css).toMatch(/\.story-order \{[^}]*overflow: hidden;/);
     expect(css).toMatch(/\.so-layer \{[^}]*pointer-events: none;/);
     expect(css).toMatch(/\.so-top \{[^}]*z-index: 2;[^}]*pointer-events: none;/);

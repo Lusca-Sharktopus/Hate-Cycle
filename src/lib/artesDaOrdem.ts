@@ -18,9 +18,12 @@
 //             fica como estava. Sem `hover`, a camada não se mexe.
 //   bleed   = (opcional, T17l) true deixa as camadas SAÍREM da moldura da arte até a borda da caixa do bloco, que serve de "máscara de
 //             camada" (corta no canto arredondado), por trás da frase de cima ("estou lendo em ordem" + o seletor). Pedido do autor para as
-//             asas do Giuseppe ("print giuseppe 3.png"). Sem ele (o padrão), o que sair da moldura é cortado. No celular (até 700 px) a
-//             caixa é estreita e as duas artes ficam lado a lado: ali a moldura volta a ser o limite (a camada não cobre a outra
-//             história), mas sem corte seco: as bordas somem num degradê radial (T17m, `mask-image` no ProximaHistoria.astro).
+//             asas do Giuseppe ("print giuseppe 3.png"). Sem ele (o padrão), o que sair da moldura é cortado. Desde 28/10 vale também no
+//             celular (até a T17m/T17p a moldura voltava a cortar lá, com degradê em tudo; o autor ligou o bleed nas cinco artes "para que
+//             elas não fossem cortadas").
+//   fade    = (opcional, POR CAMADA, 28/10) true = no celular (até 700 px, as duas artes lado a lado) só esta camada some num degradê
+//             radial na borda da moldura (`span.so-esmaece` com `mask-image` no ProximaHistoria.astro). Hoje só as asas do Giuseppe
+//             ("O degradê para fora deveria ser exclusivo para as asas do Giuseppe"). No computador não muda nada.
 //             Vale com qualquer `size` (desde 28/10 as cinco artes têm `bleed`, com telas de proporções diferentes): as medidas continuam na
 //             tela de montagem, que só deixa de cortar. Com `size` QUADRADO (Ossos, [1000, 1000]) a tela é a própria moldura, e x, y e
 //             width podem passar de 0–100 para sair dela.
@@ -73,6 +76,8 @@ export interface CamadaCrua extends MudancasDaCamada {
   y: number;
   width: number;
   hover?: MudancasDaCamada | undefined;
+  /** (28/10) true = no celular esta camada some num degradê radial na borda da moldura (as asas do Giuseppe). */
+  fade?: boolean | undefined;
 }
 
 /** O `order_art` do work.json. */
@@ -126,6 +131,14 @@ export interface CamadaDaArte {
   surge: boolean;
   /** O atributo `sizes` da <img>: quanto ela ocupa na tela, no maior dos dois estados (o navegador escolhe a versão leve certa; T17). */
   sizes: string;
+  /** (28/10, `fade: true`) no celular, some num degradê radial na borda da moldura. */
+  esmaece: boolean;
+}
+
+/** Camadas vizinhas que se desenham juntas: as que esmaecem no celular ficam numa tela à parte, com a máscara (28/10). */
+export interface GrupoDeCamadas {
+  esmaece: boolean;
+  camadas: CamadaDaArte[];
 }
 
 /** A arte pronta para desenhar. */
@@ -136,10 +149,12 @@ export interface ArteEmCamadas {
   razao: number;
   /** Alguma camada surge (com movimento reduzido, a arte troca de uma vez para o desenho final). */
   temSurge: boolean;
-  /** As camadas podem sair da moldura até a borda da caixa (`bleed: true`, T17l; no celular a moldura volta a cortar). */
+  /** As camadas podem sair da moldura até a borda da caixa (`bleed: true`, T17l; desde 28/10 também no celular). */
   sangra: boolean;
   /** De trás para a frente. */
   camadas: CamadaDaArte[];
+  /** As mesmas camadas em grupos seguidos (de trás para a frente) com o mesmo `esmaece`. Sem `fade`, um grupo só = o HTML de antes. */
+  grupos: GrupoDeCamadas[];
 }
 
 /** A proporção (largura ÷ altura) da moldura de TODA arte do bloco. É a do `aspect-ratio` de `.so-art` em ProximaHistoria.astro. */
@@ -186,12 +201,20 @@ export function arteEmCamadas(crua: ArteCrua): ArteEmCamadas {
     estilo: estiloDaCamada(c),
     surge: c.hover?.opacity !== undefined && c.hover.opacity !== (c.opacity ?? 1),
     sizes: sizesDaCamada(c, razao),
+    esmaece: c.fade === true,
   }));
+  const grupos: GrupoDeCamadas[] = [];
+  for (const c of camadas) {
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && ultimo.esmaece === c.esmaece) ultimo.camadas.push(c);
+    else grupos.push({ esmaece: c.esmaece, camadas: [c] });
+  }
   return {
     proporcao: `${numeroCss(crua.size[0])} / ${numeroCss(crua.size[1])}`,
     razao: Number(razao.toFixed(4)),
     temSurge: camadas.some((c) => c.surge),
     sangra: crua.bleed === true,
     camadas,
+    grupos,
   };
 }

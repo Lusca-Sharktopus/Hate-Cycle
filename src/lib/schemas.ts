@@ -143,6 +143,8 @@ const arteEmCamadas = () =>
           y: numeroDaArte("y (centro, em % da altura da tela)"),
           width: numeroDaArte("width (largura, em % da largura da tela)").positive({ error: "width tem de ser maior que zero." }),
           hover: estritoDaArte("hover", camposQueMudam()).optional(),
+          // (28/10, pedido do autor) só esta camada some num degradê na borda da moldura no celular (as asas do Giuseppe)
+          fade: z.boolean({ error: (i) => `fade tem de ser true ou false, sem aspas (true = no celular esta camada some num degradê na borda do quadrado da arte), mas veio ${descrever(i.input)}.` }).optional(),
         }),
         { error: (i) => `layers tem de ser uma lista de camadas (de trás para a frente), mas veio ${descrever(i.input)}.` },
       )

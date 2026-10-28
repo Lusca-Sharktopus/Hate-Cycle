@@ -104,20 +104,20 @@ const DIRECOES = ["prev", "next"] as const;
     .so-layer { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto; max-width: none; translate: -50% -50%; rotate: var(--r, 0deg); opacity: var(--o, 1); pointer-events: none;
       transition-property: left, top, width, rotate, opacity; transition-duration: .6s; transition-timing-function: cubic-bezier(.2, .7, .2, 1); }
     a.so-side:is(:hover, :focus-visible) .so-layer { left: var(--hx, var(--x)); top: var(--hy, var(--y)); width: var(--hw, var(--w)); rotate: var(--hr, var(--r, 0deg)); opacity: var(--ho, var(--o, 1)); }
-    /* (T17l) `"bleed": true` no order_art (as asas do Giuseppe, "print giuseppe 3.png"): a moldura e a tela deixam de cortar, e as camadas
-       saem dela até a borda da caixa, que serve de "máscara de camada" (.story-order tem overflow: hidden e o canto arredondado). Ficam por
-       trás da frase de cima (.so-top, z-index 2) e não pegam clique (.so-layer tem pointer-events: none): o seletor e a outra história
-       continuam clicáveis. Nada disso ocupa lugar (as camadas são absolutas): a caixa não muda de tamanho. Só fora do celular: até 700 px
-       a caixa é estreita e as duas artes ficam lado a lado, e a moldura volta a cortar (a camada não cobre a outra história). */
-    @media (min-width: 701px) {
-      .so-art.so-sangra, .so-art.so-sangra > .so-stage { overflow: visible; }
-    }
-    /* (T17m, pedido do autor de 22/10) no celular a moldura continua sendo o limite, mas sem corte seco: as bordas "desvanecem" num
-       degradê radial (máscara), centrado embaixo, no meio (onde o personagem fica). Opaco até 55% do raio, transparente na borda da
-       moldura (e nos cantos de cima): o personagem fica inteiro, as asas somem aos poucos. Nada sai da moldura (a outra história continua
-       inteira e clicável). No computador nada muda: as camadas saem da moldura e a caixa é a máscara (a T17m deixou as asas dentro dela). */
+    /* (T17l) `"bleed": true` no order_art: a moldura e a tela deixam de cortar, e as camadas saem dela até a borda da caixa, que serve de
+       "máscara de camada" (.story-order tem overflow: hidden e o canto arredondado). Ficam por trás da frase de cima (.so-top, z-index 2) e
+       não pegam clique (.so-layer tem pointer-events: none): o seletor e a outra história continuam clicáveis. Nada disso ocupa lugar (as
+       camadas são absolutas): a caixa não muda de tamanho. (28/10, pedido do autor: "apliquei a função bleed nas outras imagens para que
+       elas não fossem cortadas") vale também no celular: a moldura não corta ninguém com `bleed`. */
+    .so-art.so-sangra, .so-art.so-sangra .so-stage { overflow: visible; }
+    /* (28/10) as camadas com `"fade": true` (só as asas do Giuseppe: "O degradê para fora deveria ser exclusivo para as asas do Giuseppe")
+       ficam numa tela igual, à parte, dentro de .so-esmaece, que tem o tamanho da moldura (a tela de dentro mede cqw/cqh da moldura, que
+       é o container). No computador nada muda (sem máscara: as asas vão até a borda da caixa). No celular a caixa é estreita e as duas
+       artes ficam lado a lado: só essas camadas somem num degradê radial na borda da moldura (opaco até 55% do raio, centrado embaixo, no
+       meio), sem corte seco e sem cobrir a outra história; o resto da arte continua inteiro (T17m → 28/10). */
+    .so-esmaece { position: absolute; inset: 0; }
     @media (max-width: 700px) {
-      .so-art.so-sangra { -webkit-mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent); mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent); }
+      .so-esmaece { -webkit-mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent); mask-image: radial-gradient(farthest-side at 50% 100%, #000 55%, transparent); }
     }
 
     /* mouse por cima (e teclado): a arte troca da 1 para a 2 com um leve crescimento */

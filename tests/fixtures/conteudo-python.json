@@ -2369,14 +2369,20 @@
   "works/roadside/01/en.md": {
    "fm": {
     "title": "The Little Girl with Red Eyes",
-    "pages_glob": "comics/provisorio/*.png"
+    "pages": [
+     "comics/roadside/01/01.png"
+    ],
+    "pages_glob": "comics/provisorio/pagina placeholder [2-8].png"
    },
    "body": ""
   },
   "works/roadside/01/pt.md": {
    "fm": {
     "title": "A Garotinha dos Olhos Vermelhos",
-    "pages_glob": "comics/provisorio/*.png"
+    "pages": [
+     "comics/roadside/01/01.png"
+    ],
+    "pages_glob": "comics/provisorio/pagina placeholder [2-8].png"
    },
    "body": ""
   },
@@ -2455,7 +2461,8 @@
        "y": 59.11,
        "width": 126.98,
        "opacity": 1
-      }
+      },
+      "fade": true
      },
      {
       "image": "ordem/Giuseppe Site Cronologia.png",
@@ -2672,7 +2679,7 @@
     "chrono": 5
    },
    "order_art": {
-    "escala": 1.4,
+    "escala": 1.5,
     "bleed": true,
     "size": [
      2087,
@@ -2746,7 +2753,7 @@
     "chrono": 7
    },
    "order_art": {
-    "escala": 1.4,
+    "escala": 1.3,
     "bleed": true,
     "size": [
      1950,

@@ -547,7 +547,8 @@ LER_ASAS = """() => {
   return { asas: r(asas), moldura: r(moldura), caixa: { esq: cx.left, dir: cx.right, cima: cx.top, baixo: cx.bottom }, opacidade: +getComputedStyle(asas).opacity,
            corteDaMoldura: getComputedStyle(moldura).overflow, corteDaCaixa: cs.overflow, canto: parseFloat(cs.borderTopRightRadius),
            seletor: noSeletor && noSeletor.classList.contains('so-select'), outro: noOutro, asasNoPonto: iAsas, textoNoPonto: iTexto, valorBaixo: valor.bottom, cruzam,
-           mascara: getComputedStyle(moldura).maskImage || getComputedStyle(moldura).webkitMaskImage || 'none',
+           mascara: (() => { const e = ossos.querySelector('.so-esmaece'); if (!e) return 'sem .so-esmaece'; const c = getComputedStyle(e); return c.maskImage || c.webkitMaskImage || 'none'; })(),
+           asasNaMascara: !!asas.closest('.so-esmaece'), mascaraDaMoldura: getComputedStyle(moldura).maskImage || 'none',
            asasPegamClique: getComputedStyle(asas).pointerEvents };
 }"""
 
@@ -592,7 +593,7 @@ def asas(browser, porta):
                 conferir(d["outro"] is not False, f"{tag}: a outra história continua clicável por cima/embaixo das asas")
                 conferir(caixa_antes == caixa_depois, f"{tag}: a caixa não muda de tamanho com as asas ({caixa_antes} → {caixa_depois})")
                 ctx.close()
-    # celular: a moldura volta a cortar (a caixa é estreita e as duas artes ficam lado a lado)
+    # celular (28/10, pedido do autor): a moldura NÃO corta mais (bleed vale no celular); só as asas (`fade`) somem num degradê
     for largura in (390, 320):
         ctx = novo_contexto(browser, largura)
         pg = ctx.new_page()
@@ -602,9 +603,12 @@ def asas(browser, porta):
         pg.wait_for_timeout(900)
         d = pg.evaluate(LER_ASAS)
         rol = pg.evaluate("() => [document.documentElement.scrollWidth, innerWidth]")
-        conferir(d["corteDaMoldura"] in ("clip", "hidden") and rol[0] <= rol[1], f"{largura} px: a moldura das asas volta a cortar ({d['corteDaMoldura']}) e não há rolagem para o lado")
-        # T17m (pedido do autor): no celular, sem corte seco: as bordas da moldura desvanecem num degradê radial (máscara)
-        conferir(d["mascara"].startswith("radial-gradient(farthest-side at 50% 100%"), f"{largura} px: as asas somem num degradê radial na borda da moldura ({d['mascara'][:60]})")
+        conferir(d["corteDaMoldura"] == "visible" and d["mascaraDaMoldura"] == "none" and rol[0] <= rol[1], f"{largura} px: a moldura não corta nem desvanece o Giuseppe ({d['corteDaMoldura']}, máscara {d['mascaraDaMoldura'][:30]}) e não há rolagem para o lado")
+        # T17m → 28/10: só as asas (a camada com `fade`, dentro de .so-esmaece) somem num degradê radial na borda da moldura
+        conferir(d["asasNaMascara"] and d["mascara"].startswith("radial-gradient(farthest-side at 50% 100%"), f"{largura} px: só as asas somem num degradê radial na borda da moldura ({d['mascara'][:60]})")
+        # e as outras artes (bleed sem fade) ficam inteiras: nenhuma moldura corta nem desvanece
+        outras = pg.evaluate("() => [...document.querySelectorAll('.so-order:not([hidden]) a.so-side .so-art.so-layers')].filter(a => !a.querySelector('.so-esmaece')).map(a => [getComputedStyle(a).overflow, getComputedStyle(a).maskImage || 'none', a.querySelector('.so-stage') && getComputedStyle(a.querySelector('.so-stage')).overflow])")
+        conferir(all(o == ["visible", "none", "visible"] for o in outras), f"{largura} px: a outra arte não é cortada nem desvanece ({outras})")
         conferir(d["outro"] is not False and d["seletor"], f"{largura} px: com as asas à vista, a outra história e o seletor continuam clicáveis")
         ctx.close()
     # no computador a máscara não existe (quem corta é a caixa)

@@ -717,7 +717,10 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
       const url = `/${lang}/works/light-and-blood/01/`;
       const ossos = new RegExp(`<a class="so-side prev[^"]*" href="/${lang}/works/all-in-a-nights-work/01/"[^>]*>([\\s\\S]*?)</a>`).exec(blocoDe(dir, url))?.[1] ?? "";
       expect([...ossos.matchAll(/<img class="(so-layer[^"]*)" src="\/ordem\/([^"]+?)%20Site%20Cronologia\.png"/g)].map((m) => `${decodeURIComponent(m[2] ?? "")}:${m[1]}`), url).toEqual(["Giuseppe Asas:so-layer so-surge", "Giuseppe:so-layer", "Giuseppe Olhos:so-layer so-surge"]);
-      expect(ossos, url).toContain('<span class="so-art so-layers so-sangra"><span class="so-stage so-tem-surge" style="--ar:1000 / 1000;--razao:1">');
+      // desde 28/10 as asas (`fade: true`) vão numa tela à parte, dentro de span.so-esmaece (o degradê do celular é só delas); o Giuseppe e os olhos na tela normal
+      expect(ossos, url).toContain('<span class="so-art so-layers so-sangra"><span class="so-esmaece"><span class="so-stage so-tem-surge" style="--ar:1000 / 1000;--razao:1"><img class="so-layer so-surge" src="/ordem/Giuseppe%20Asas%20Site%20Cronologia.png"');
+      expect(ossos.match(/<span class="so-esmaece">/g), url).toHaveLength(1);
+      expect(ossos, url).toMatch(/<\/span><\/span><span class="so-stage so-tem-surge" style="--ar:1000 \/ 1000;--razao:1"><img class="so-layer" src="\/ordem\/Giuseppe%20Site%20Cronologia\.png"/);
     }
     // a arte em camadas da Beira de Estrada (Jean, Cezar e Iris, os olhos da Iris)
     const beira = /<a class="so-side next[^"]*" href="\/pt\/works\/roadside\/">([\s\S]*?)<\/a>/.exec(blocoDe(dir, "/pt/works/firestriker/01/"))?.[1] ?? "";
@@ -777,9 +780,11 @@ describe("T17d: as três obras novas só existem na prévia; o leitor página a 
         const runas = [...html.matchAll(/<a class="fl-runa" href="#p(\d)"[^>]*?( aria-current="page")?><span aria-hidden="true">([^<]+)<\/span><\/a>/g)];
         expect(runas.map((m) => m[3]).join(" "), url).toBe("ᚣ 弓 ♐︎ ᚸ エ ꑭ ⼒ Ⱝ");
         expect(runas.map((m) => !!m[2]), url).toEqual([true, false, false, false, false, false, false, false]);
-        // as 8 páginas provisórias, na ordem, com as versões leves (T17) nas que pesam mais de 30 KB
-        const imgs = [...(/<div class="comic">([\s\S]*?)<\/div>/.exec(html)?.[1] ?? "").matchAll(/<img src="\/comics\/provisorio\/pagina%20placeholder%20(\d)\.png"/g)].map((m) => m[1]);
-        expect(imgs, url).toEqual(["1", "2", "3", "4", "5", "6", "7", "8"]);
+        // as 8 páginas, na ordem, com as versões leves (T17) nas que pesam mais de 30 KB: desde 28/10 a 1ª do capítulo 01 é a de verdade
+        // (comics/roadside/01/01.png); o resto continua provisório
+        const imgs = [...(/<div class="comic">([\s\S]*?)<\/div>/.exec(html)?.[1] ?? "").matchAll(/<img src="\/comics\/(provisorio\/pagina%20placeholder%20\d|roadside\/01\/01)\.png"/g)].map((m) => m[1]);
+        const provisorias = (de: number) => Array.from({ length: 9 - de }, (_, i) => `provisorio/pagina%20placeholder%20${de + i}`);
+        expect(imgs, url).toEqual(cap === "01" ? ["roadside/01/01", ...provisorias(2)] : provisorias(1));
         expect(idsDeComentarios(html), url).toEqual([`works/roadside/${cap}`]);
         // as setas no estado da página 1: no 01, a da esquerda some (primeiro capítulo); no 02, leva à 8ª do 01; a da direita vai à página 2
         expect(html, url).toContain(`<a class="side-btn next fl-seta" href="#p2"`);

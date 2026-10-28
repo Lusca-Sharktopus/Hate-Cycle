@@ -1,5 +1,9 @@
 ---
 title: The Little Girl with Red Eyes
-# PROVISÓRIO (T17d): as 8 páginas são as "pagina placeholder" do autor, iguais nos dois capítulos. Troque pelo caminho das páginas de verdade.
-pages_glob: comics/provisorio/*.png
+# Página 1 de verdade ("Roaside Ch1Pg1.png", 28/10; a mesma nos dois idiomas). PROVISÓRIO: as páginas 2 a 8 ainda são as "pagina placeholder".
+# Quando chegarem as outras, guarde-as em static/comics/roadside/01/ (02.png, 03.png…), apague as linhas "pages" e "  - …" e troque o
+# pages_glob por: comics/roadside/01/*.png
+pages:
+  - comics/roadside/01/01.png
+pages_glob: comics/provisorio/pagina placeholder [2-8].png
 ---
