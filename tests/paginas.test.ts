@@ -644,7 +644,7 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
     const camadas = (bloco: string, ordem: "chrono" | "release", lado: "prev" | "next") => {
       const div = new RegExp(`<div class="so-order" data-ordem="${ordem}"(?: hidden)?>([\\s\\S]*?)</div>(?=<div class="so-order"|</section>)`).exec(bloco)?.[1] ?? "";
       const a = new RegExp(`<a class="so-side ${lado}[^"]*"[^>]*>([\\s\\S]*?)</a>`).exec(div)?.[1] ?? "";
-      return { tela: /<span class="so-art so-layers"><span class="so-stage[^"]*" style="--ar:([^;"]+);--razao:[\d.]+">/.exec(a)?.[1] ?? null, imgs: [...a.matchAll(/<img class="so-layer[^"]*" src="\/ordem\/([^"/]+?)%20Site%20Cronologia\.png"/g)].map((m) => decodeURIComponent(m[1] ?? "")), tags: a.match(/<img\b[^>]*>/g) ?? [], sobImgs: (a.match(/so-img/g) ?? []).length };
+      return { tela: /<span class="so-art so-layers(?: so-sangra)?"><span class="so-stage[^"]*" style="--ar:([^;"]+);--razao:[\d.]+">/.exec(a)?.[1] ?? null, imgs: [...a.matchAll(/<img class="so-layer[^"]*" src="\/ordem\/([^"/]+?)%20Site%20Cronologia\.png"/g)].map((m) => decodeURIComponent(m[1] ?? "")), tags: a.match(/<img\b[^>]*>/g) ?? [], sobImgs: (a.match(/so-img/g) ?? []).length };
     };
     const ped = blocoDe(dist, "/pt/works/firestriker/01/");
     const lb = camadas(ped, "chrono", "prev"); // Luz & Sangue

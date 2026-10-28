@@ -23,6 +23,8 @@
     "chrono": 5
   },
   "order_art": {
+    "escala": 1.4,
+    "bleed": true,
     "size": [2087, 1752],
     "layers": [
       { "image": "ordem/John Site Cronologia.png", "x": 27.28, "y": 76.68, "width": 14.54, "hover": { "x": 21.02, "y": 70.84, "width": 17.91, "rotate": -6.52 } },

@@ -27,6 +27,7 @@
   },
   "reading_font": "times",
   "order_art": {
+    "escala": 2.1,
     "size": [1000, 1000],
     "bleed": true,
     "layers": [

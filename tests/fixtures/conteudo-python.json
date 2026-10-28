@@ -2437,6 +2437,7 @@
    },
    "reading_font": "times",
    "order_art": {
+    "escala": 2.1,
     "size": [
      1000,
      1000
@@ -2545,6 +2546,8 @@
    },
    "reading_font": "times",
    "order_art": {
+    "escala": 1.1,
+    "bleed": true,
     "size": [
      2002,
      2023
@@ -2613,6 +2616,8 @@
     "chrono": false
    },
    "order_art": {
+    "escala": 1.6,
+    "bleed": true,
     "size": [
      627,
      600
@@ -2667,6 +2672,8 @@
     "chrono": 5
    },
    "order_art": {
+    "escala": 1.4,
+    "bleed": true,
     "size": [
      2087,
      1752
@@ -2739,6 +2746,8 @@
     "chrono": 7
    },
    "order_art": {
+    "escala": 1.4,
+    "bleed": true,
     "size": [
      1950,
      2143

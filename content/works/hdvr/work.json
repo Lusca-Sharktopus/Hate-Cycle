@@ -23,6 +23,8 @@
     "chrono": false
   },
   "order_art": {
+    "escala": 1.6,
+    "bleed": true,
     "size": [627, 600],
     "layers": [
       { "image": "ordem/Lucas Site Cronologia.png", "x": 48.39, "y": 69.02, "width": 49.16, "hover": { "x": 45.36, "width": 53.09 } },

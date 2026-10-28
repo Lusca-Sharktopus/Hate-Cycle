@@ -21,14 +21,17 @@
 //             asas do Giuseppe ("print giuseppe 3.png"). Sem ele (o padrão), o que sair da moldura é cortado. No celular (até 700 px) a
 //             caixa é estreita e as duas artes ficam lado a lado: ali a moldura volta a ser o limite (a camada não cobre a outra
 //             história), mas sem corte seco: as bordas somem num degradê radial (T17m, `mask-image` no ProximaHistoria.astro).
-//             Com `bleed`, use `size` QUADRADO (ex.: [1000, 1000]): a tela fica do tamanho da moldura, e x, y e width passam a valer em %
-//             da moldura (podem passar de 0–100 para sair dela).
+//             Vale com qualquer `size` (desde 28/10 as cinco artes têm `bleed`, com telas de proporções diferentes): as medidas continuam na
+//             tela de montagem, que só deixa de cortar. Com `size` QUADRADO (Ossos, [1000, 1000]) a tela é a própria moldura, e x, y e
+//             width podem passar de 0–100 para sair dela.
 // Uma transição só (suave, a mesma para todas as camadas) leva do estado inicial ao do mouse; ao tirar o mouse ela volta.
 //
 // O TAMANHO (T17m, pedido do autor de 22/10): em toda arte, a CABEÇA dos personagens fica mais ou menos do tamanho da da Olivia e do Harry
 // (Pederneira, a referência), antes e com o mouse. Para ajustar uma arte, todas as camadas escalam juntas em volta do pé do desenho
 // (x' = âncora + (x − âncora) × s, o mesmo para y, width × s, nos dois estados): o movimento e os olhos colados não mudam.
-// tools/ordem_playwright.py (com --previa) mede as cabeças no navegador; a lição 08 (seção 6 do bloco) tem a tabela.
+// tools/ordem_playwright.py (com --previa) mede as cabeças no navegador; a lição 08 (seção 6 do bloco) tem a tabela. Desde 28/10 o tamanho
+// final é o que o autor escolheu com a `escala` de cada obra (Alô? 1.6, Pederneira 1.1, Luz & Sangue 1.4, Beira 1.4, Ossos 2.1): a régua
+// da T17m virou o ponto de partida e a ferramenta só mostra as medidas.
 // O ponto de apoio da T17m foi o CENTRO DA BORDA DE BAIXO da tela de montagem (x 50%, y 100%): refazendo a conta com os números de
 // antes e depois da T17m, Luz & Sangue, Alô? e Beira dão âncora (50,0; 100,0) a 0,01 (Ossos também desceu, à parte). Como a tela fica
 // encostada embaixo e centrada na moldura, esse ponto é sempre o meio da borda de baixo da moldura, onde ficam os pés.

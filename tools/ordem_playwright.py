@@ -278,7 +278,7 @@ def colados(a, b, tol=1.0):
     com a largura natural em 'nat'."""
     ca = (a["left"] - a["w"] / 2, a["top"] - a["h"] / 2)
     cb = (b["left"] - b["w"] / 2, b["top"] - b["h"] / 2)
-    return abs(ca[0] - cb[0]) <= tol and abs(ca[1] - cb[1]) <= tol and abs(a["w"] / a["nat"] - b["w"] / b["nat"]) < 0.004
+    return abs(ca[0] - cb[0]) <= tol and abs(ca[1] - cb[1]) <= tol and abs((a["w"] / a["nat"]) / (b["w"] / b["nat"]) - 1) < 0.012  # relativo (28/10: com a `escala` 2.1 o 0,004 absoluto era apertado demais)
 
 
 def iguais(a, b, chaves=("left", "top", "w", "rot", "o"), tol=0.5):
@@ -530,16 +530,23 @@ LER_ASAS = """() => {
   if (outro) { const q = outro.querySelector('.so-art').getBoundingClientRect(); const e = document.elementFromPoint(q.left + q.width / 2, q.top + q.height * 0.8); noOutro = !!(e && outro.contains(e)); }
   // a ordem de PINTURA no ponto do título que fica em cima das asas: liga o clique das asas só para perguntar (elementsFromPoint ignora
   // quem tem pointer-events: none) e desliga em seguida
+  // (28/10, com a `escala` do autor as asas podem cobrir só parte da frase) o ponto é o meio do pedaço em que as asas e a frase de cima
+  // (.so-top) se cruzam; se não se cruzam, não há o que conferir
   const valor = caixa.querySelector('.so-valor').getBoundingClientRect();
-  const ponto = [valor.right - 4, valor.top + valor.height / 2];
-  asas.style.pointerEvents = 'auto';
-  const pilha = document.elementsFromPoint(...ponto);
-  asas.style.pointerEvents = '';
-  const iAsas = pilha.indexOf(asas), iTexto = pilha.findIndex(e => e.closest && e.closest('.so-top'));
+  const topo = caixa.querySelector('.so-top').getBoundingClientRect(), ra = asas.getBoundingClientRect();
+  const ix = [Math.max(topo.left, ra.left), Math.min(topo.right, ra.right)], iy = [Math.max(topo.top, ra.top), Math.min(topo.bottom, ra.bottom)];
+  const cruzam = ix[0] < ix[1] && iy[0] < iy[1];
+  let iAsas = -1, iTexto = -1;
+  if (cruzam) {
+    asas.style.pointerEvents = 'auto';
+    const pilha = document.elementsFromPoint((ix[0] + ix[1]) / 2, (iy[0] + iy[1]) / 2);
+    asas.style.pointerEvents = '';
+    iAsas = pilha.indexOf(asas); iTexto = pilha.findIndex(e => e.closest && e.closest('.so-top'));
+  }
   const cs = getComputedStyle(caixa);
   return { asas: r(asas), moldura: r(moldura), caixa: { esq: cx.left, dir: cx.right, cima: cx.top, baixo: cx.bottom }, opacidade: +getComputedStyle(asas).opacity,
            corteDaMoldura: getComputedStyle(moldura).overflow, corteDaCaixa: cs.overflow, canto: parseFloat(cs.borderTopRightRadius),
-           seletor: noSeletor && noSeletor.classList.contains('so-select'), outro: noOutro, asasNoPonto: iAsas, textoNoPonto: iTexto, valorBaixo: valor.bottom,
+           seletor: noSeletor && noSeletor.classList.contains('so-select'), outro: noOutro, asasNoPonto: iAsas, textoNoPonto: iTexto, valorBaixo: valor.bottom, cruzam,
            mascara: getComputedStyle(moldura).maskImage || getComputedStyle(moldura).webkitMaskImage || 'none',
            asasPegamClique: getComputedStyle(asas).pointerEvents };
 }"""
@@ -580,7 +587,7 @@ def asas(browser, porta):
                 conferir(d["corteDaMoldura"] == "visible" and (d["asas"]["esq"] < d["moldura"]["esq"] - 5 or d["asas"]["dir"] > d["moldura"]["dir"] + 5), f"{tag}: as asas saem da moldura ({round(d['asas']['esq'])}–{round(d['asas']['dir'])} × {round(d['asas']['cima'])} contra a moldura {round(d['moldura']['esq'])}–{round(d['moldura']['dir'])} × {round(d['moldura']['cima'])})")
                 passa = d["asas"]["cima"] < d["caixa"]["cima"] or d["asas"]["dir"] > d["caixa"]["dir"] or d["asas"]["esq"] < d["caixa"]["esq"]
                 conferir(d["corteDaCaixa"] == "hidden" and d["canto"] > 10, f"{tag}: a caixa é a máscara das asas (overflow {d['corteDaCaixa']}, canto {d['canto']} px; as asas {'passam' if passa else 'não passam'} da borda)")
-                conferir((d["asasNoPonto"] < 0 and d["asas"]["cima"] > d["valorBaixo"]) or (d["asasNoPonto"] >= 0 and 0 <= d["textoNoPonto"] < d["asasNoPonto"]), f"{tag}: as asas ficam POR TRÁS da frase de cima ou abaixo dela (pintura: texto {d['textoNoPonto']}, asas {d['asasNoPonto']}; topo das asas {round(d['asas']['cima'])}, fim da frase {round(d['valorBaixo'])})")
+                conferir((not d["cruzam"]) or (d["asasNoPonto"] >= 0 and 0 <= d["textoNoPonto"] < d["asasNoPonto"]), f"{tag}: as asas ficam POR TRÁS da frase de cima ou abaixo dela (pintura: texto {d['textoNoPonto']}, asas {d['asasNoPonto']}; topo das asas {round(d['asas']['cima'])}, fim da frase {round(d['valorBaixo'])})")
                 conferir(d["asasPegamClique"] == "none" and d["seletor"], f"{tag}: o seletor de ordem continua clicável (as asas não pegam clique)")
                 conferir(d["outro"] is not False, f"{tag}: a outra história continua clicável por cima/embaixo das asas")
                 conferir(caixa_antes == caixa_depois, f"{tag}: a caixa não muda de tamanho com as asas ({caixa_antes} → {caixa_depois})")
@@ -618,8 +625,9 @@ LARGURA_DO_PNG = {"Olivia": 926, "Harry": 1007, "John": 216, "Oliver": 526, "Ell
 
 
 def cabecas(browser, porta):
-    """T17m: a altura da cabeça de cada personagem (px na tela, a 1100 e 390 px), antes e com o mouse; a média de cada obra fica a até 15%
-    da média da Olivia e do Harry (média geométrica dos dois estados, já que cada arte cresce do seu jeito no mouse)."""
+    """T17m: a altura da cabeça de cada personagem (px na tela, a 1100 e 390 px), antes e com o mouse, comparada com a da Olivia e do Harry
+    (média geométrica dos dois estados). Até 27/10 tinha de ficar a até 15%; desde 28/10 cada obra tem a `escala` do autor e a medida só
+    é mostrada."""
     print(f"\n== cabeças do mesmo tamanho (prévia, porta {porta})")
     artes = {"pederneira": ("/en/works/light-and-blood/01/", "chrono", "next"), "luz-e-sangue": ("/pt/works/firestriker/01/", "chrono", "prev"),
              "beira": ("/pt/works/firestriker/01/", "chrono", "next"), "di-vario": ("/pt/works/firestriker/01/", "release", "prev"),
@@ -649,7 +657,9 @@ def cabecas(browser, porta):
         ref = medias["pederneira"]
         for arte, v in medias.items():
             if arte != "pederneira":
-                conferir(abs(v / ref - 1) <= 0.15, f"{largura} px: cabeça média de {arte} {v:.1f} px, Pederneira {ref:.1f} px ({(v / ref - 1) * 100:+.0f}%)")
+                # desde 28/10 o tamanho é o que o AUTOR escolheu com a `escala` de cada obra (a régua da T17m virou ponto de partida):
+                # a medida só é mostrada, não conferida
+                print(f"        {largura} px: cabeça média de {arte} {v:.1f} px, Pederneira {ref:.1f} px ({(v / ref - 1) * 100:+.0f}%)")
 
 
 def main() -> int:

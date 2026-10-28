@@ -17,6 +17,8 @@
     "chrono": 7
   },
   "order_art": {
+    "escala": 1.4,
+    "bleed": true,
     "size": [1950, 2143],
     "layers": [
       { "image": "ordem/Jean Site Cronologia.png", "x": 64.62, "y": 67.99, "width": 28.23, "hover": { "x": 68.2, "y": 65.06, "width": 32, "rotate": 4.05 } },

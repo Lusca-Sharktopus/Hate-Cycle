@@ -1039,9 +1039,10 @@ describe("T17o: `escala` no order_art (todas as camadas juntas, em volta do pé 
     const { dados } = ler(Object.fromEntries(realContent()), true);
     const reais = dados.pt.obras.flatMap((o) => (o.data.order_art ? [o.data.order_art] : []));
     expect(reais.length).toBeGreaterThanOrEqual(5);
+    // desde 28/10 as cinco obras têm a `escala` escolhida pelo autor: sem ela (ou com 1) o desenho é o dos números escritos
     for (const a of reais) {
-      expect(a.escala, "nenhuma obra tem `escala` ainda (T17o)").toBeUndefined();
-      expect(arteEmCamadas({ ...a, escala: 1 })).toEqual(arteEmCamadas(a));
+      const { escala: _escala, ...semEscala } = a;
+      expect(arteEmCamadas({ ...semEscala, escala: 1 })).toEqual(arteEmCamadas(semEscala));
     }
     const sem = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb(ARTE), false).bloco("firestriker", "pt") } });
     const com1 = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb({ ...ARTE, escala: 1 }), false).bloco("firestriker", "pt") } });

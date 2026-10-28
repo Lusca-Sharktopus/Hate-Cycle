@@ -25,6 +25,8 @@
   },
   "reading_font": "times",
   "order_art": {
+    "escala": 1.1,
+    "bleed": true,
     "size": [2002, 2023],
     "layers": [
       { "image": "ordem/Thymorr Site Cronologia.png", "x": 62.18, "y": 44.52, "width": 61.66, "opacity": 0, "hover": { "x": 69.18, "opacity": 1 } },
