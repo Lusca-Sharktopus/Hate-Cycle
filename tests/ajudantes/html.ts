@@ -232,6 +232,11 @@ export function idsDeComentarios(html: string): string[] {
 // as <section> que levam o atributo `data-story-order` — o atributo só esse componente usa. Nada mais é removido: tests/ordem.test.ts
 // confere que, em toda página, saem 0 (fora dos capítulos) ou 1 (capítulos) dessas seções, que cada uma é filha direta do <main>,
 // fica entre a caixa do capítulo e a dos comentários, e que não leva nem comentários, nem script, nem texto do autor.
+// T17o: na PÁGINA DA OBRA o bloco é uma caixa própria abaixo da folha, FORA do <main>: filho do <body> logo depois da div.layout (slot
+// "depois-do-main" do BaseLayout). `lugares` diz onde cada um estava; quem confere exige "main" nos capítulos e "depois-do-main" na obra.
+
+/** Onde estava um bloco removido: filho direto do <main>; filho do <body> logo depois da div.layout (T17o); outro lugar. */
+export type LugarDoBloco = "main" | "depois-do-main" | "outro";
 
 export interface SemBlocoDeOrdem {
   /** O HTML sem as seções do bloco. */
@@ -240,13 +245,24 @@ export interface SemBlocoDeOrdem {
   removidos: string[];
   /** Para cada removida: o `<main>` é o pai direto? */
   filhasDiretasDoMain: boolean[];
+  /** Para cada removida: onde estava (T17o). */
+  lugares: LugarDoBloco[];
+}
+
+function lugarDoBloco(e: Elemento): LugarDoBloco {
+  const pai = e.parentNode as Elemento | null;
+  if (pai?.tagName === "main") return "main";
+  if (pai?.tagName !== "body") return "outro";
+  const irmaos = pai.childNodes.filter((n): n is Elemento => "tagName" in n);
+  const antes = irmaos[irmaos.indexOf(e) - 1];
+  return antes?.tagName === "div" && (attr(antes, "class") ?? "").split(ESPACO).includes("layout") ? "depois-do-main" : "outro";
 }
 
 /** O HTML do Astro (página inteira ou pedaço do miolo) sem o bloco "estou lendo em ordem…". */
 export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
   const arvore = /<html[\s>]/i.test(html) ? parse(html, { sourceCodeLocationInfo: true }) : parseFragment(html, { sourceCodeLocationInfo: true });
   const achadas = varrer(arvore as unknown as No, (e) => e.tagName === "section" && attr(e, "data-story-order") !== undefined);
-  const cortes = achadas.map((e) => ({ de: e.sourceCodeLocation?.startOffset ?? -1, ate: e.sourceCodeLocation?.endOffset ?? -1, pai: (e.parentNode as Elemento | null)?.tagName }));
+  const cortes = achadas.map((e) => ({ de: e.sourceCodeLocation?.startOffset ?? -1, ate: e.sourceCodeLocation?.endOffset ?? -1, pai: (e.parentNode as Elemento | null)?.tagName, lugar: lugarDoBloco(e) }));
   if (cortes.some((c) => c.de < 0 || c.ate < c.de)) throw new Error("não consegui achar onde o bloco de ordem começa e termina");
   let saida = "";
   let pos = 0;
@@ -257,7 +273,7 @@ export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
     pos = c.ate;
   }
   saida += html.slice(pos);
-  return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main") };
+  return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main"), lugares: cortes.map((c) => c.lugar) };
 }
 
 // ───────────── ajudantes das exceções que trocam pedaços do HTML pela posição (parse5 com sourceCodeLocationInfo) ─────────────

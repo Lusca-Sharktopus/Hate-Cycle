@@ -25,7 +25,7 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      português até a T17n) leva à página daquele idioma, com hreflang; em todo capítulo E em toda página de obra (o bloco também mora lá, T17l);
  10. (T17i) a CAIXA DO MESMO TAMANHO: em TODO capítulo e página de obra do site (e da prévia), a 1100, 390 e 320 px, getBoundingClientRect
      da caixa na Cronológica, no Lançamento e com o mouse em cada lado: largura e altura iguais; as molduras das artes, iguais entre si e
-     entre as obras (por tipo de página: a caixa da página da obra mora dentro da folha, mais estreita);
+     entre as obras; (T17o) a caixa da página da obra é a mesma dos capítulos (do mesmo tamanho, em toda página do site);
  11. (T17i) o rótulo "Ler/Assistir/Jogar [obra]" numa linha só, dentro da caixa e sem encostar no outro rótulo, em todo capítulo e largura;
  12. (T17i, com --previa) Ossos do Ofício: asas atrás, Giuseppe, olhos na frente; as três crescem juntas, asas e olhos de 0 a 1 de
      opacidade, os olhos colados no Giuseppe (mesmo canto, mesma escala) no começo, no fim e no MEIO da transição; teclado; movimento
@@ -40,6 +40,9 @@ O que confere (em /pt/ e /en/, 1100 px e 390 px):
      moldura volta a cortar; O Pêndulo e Cat-Crow-Thing (sem arte para a caixa) não aparecem em bloco nenhum; o bloco da página da obra.
  15. (T17m, com --previa) a CABEÇA dos personagens de toda arte do mesmo tamanho que a da Olivia e do Harry (Pederneira), antes e com o
      mouse, a 1100 e 390 px (média de cada obra a até 15%); no celular as asas do Giuseppe somem num degradê radial na borda da moldura.
+ 16. (T17o) na PÁGINA DA OBRA o bloco é uma caixa própria ABAIXO da folha da lista (pedido do autor de 27/10): fora do <main>, logo depois
+     da div.layout (é um landmark "region" com nome), separada da folha pelo mesmo espaço das caixas do capítulo (1.5rem), com a mesma
+     largura e a mesma sombra da caixa nos capítulos, a 1100 e 390 px (publicado e prévia).
 
 Como usar (servidores sob timeout; nunca pkill):
   pnpm build                      # site publicado em dist/
@@ -373,6 +376,7 @@ def tamanho_da_caixa(browser, porta, nome):
     print(f"\n== tamanho da caixa e rótulos ({nome}, porta {porta}): {len(capitulos)} capítulos")
     conferir(len(capitulos) > 0, f"{nome}: achou os capítulos ({capitulos})")
     molduras_do_site = {}
+    caixas_do_site = {}
     for largura in (1100, 390, 320):
         ctx = novo_contexto(browser, largura)
         pg = ctx.new_page()
@@ -396,12 +400,14 @@ def tamanho_da_caixa(browser, porta, nome):
             conferir(len(tamanhos) == 1, f"{largura} px {url}: a caixa tem o MESMO tamanho nas duas ordens e com o mouse ({sorted(tamanhos)}; {len(medidas)} medidas)")
             # (T17d) só com o mouse fora: a arte de imagem/capa (O Pêndulo, Cat-Crow-Thing) cresce 7% com o mouse por cima (o "crescimento leve"
             # da T17c, `transform: scale(1.07)`), e o getBoundingClientRect mede a moldura já crescida; a CAIXA não muda (conferido acima)
-            tipo = "página da obra" if EH_PAGINA_DA_OBRA.match(url) else "capítulo"
+            # (T17o) a caixa da página da obra deixou de morar dentro da folha: é a mesma dos capítulos, então tudo é comparado junto
+            tipo = "capítulos e páginas de obra"
             for _, estado, m in medidas:
                 if estado != "parado":
                     continue
                 for mo in m["molduras"]:
                     molduras_do_site.setdefault((largura, tipo), set()).add(tuple(mo))
+                caixas_do_site.setdefault(largura, {}).setdefault((round(m["w"], 1), round(m["h"], 1)), []).append(url)
             letras = {r["letra"] for _, _, m in medidas for r in m["rotulos"]}
             conferir(len(letras) <= 1, f"{largura} px {url}: a mesma letra nos rótulos das duas ordens ({sorted(letras)})")
             for ordem, estado, m in medidas:
@@ -416,6 +422,46 @@ def tamanho_da_caixa(browser, porta, nome):
     for (largura, tipo), ms in sorted(molduras_do_site.items()):
         conferir(len(ms) == 1, f"{largura} px ({tipo}): todas as molduras de arte, de todas as obras, do mesmo tamanho ({sorted(ms)})")
         conferir(all(abs(w - h) < 0.6 for w, h in ms), f"{largura} px ({tipo}): a moldura é quadrada (PROPORCAO_DA_MOLDURA = 1)")
+    for largura, cs in sorted(caixas_do_site.items()):
+        conferir(len(cs) == 1, f"{largura} px: a caixa tem o MESMO tamanho em toda página, capítulos e páginas de obra ({ {k: len(v) for k, v in cs.items()} })")
+
+
+MEDIR_SEPARADA = """() => {
+  const b = document.querySelector('[data-story-order]'), r = b.getBoundingClientRect(), cs = getComputedStyle(b);
+  const main = document.querySelector('main'), m = main.getBoundingClientRect();
+  return { dentroDoMain: !!b.closest('main'), depoisDaLayout: !!(b.previousElementSibling && b.previousElementSibling.matches('div.layout')),
+           paiBody: b.parentElement === document.body, nome: b.getAttribute('aria-labelledby') && document.getElementById(b.getAttribute('aria-labelledby')) ? document.getElementById(b.getAttribute('aria-labelledby')).textContent : null,
+           espaco: r.top - m.bottom, w: r.width, esq: r.left, sombra: cs.boxShadow, fundo: cs.backgroundColor, raio: cs.borderTopLeftRadius,
+           mainSheet: main.classList.contains('sheet'), z: cs.zIndex, rem: parseFloat(getComputedStyle(document.documentElement).fontSize) };
+}"""
+MEDIR_NO_CAPITULO = """() => {
+  const b = document.querySelector('[data-story-order]'), r = b.getBoundingClientRect(), cs = getComputedStyle(b);
+  const antes = b.previousElementSibling.getBoundingClientRect();
+  return { w: r.width, esq: r.left, sombra: cs.boxShadow, fundo: cs.backgroundColor, raio: cs.borderTopLeftRadius, espaco: r.top - antes.bottom };
+}"""
+
+
+def caixa_separada(browser, porta, nome):
+    """T17o: na página da obra, o bloco é uma caixa própria abaixo da folha da lista, como nos capítulos (fora do <main>)."""
+    paginas = [u for u in capitulos_do_site(porta) if EH_PAGINA_DA_OBRA.match(u)]
+    print(f"\n== T17o: a caixa separada na página da obra ({nome}, porta {porta}): {paginas}")
+    conferir(len(paginas) > 0, f"{nome}: achou páginas de obra com o bloco")
+    for largura in (1100, 390):
+        ctx = novo_contexto(browser, largura)
+        pg = ctx.new_page()
+        for url in paginas:
+            abrir(pg, porta, url)
+            o = pg.evaluate(MEDIR_SEPARADA)
+            primeiro = pg.evaluate("() => document.querySelector('ol.chapter-list a').getAttribute('href')")
+            abrir(pg, porta, primeiro)
+            c = pg.evaluate(MEDIR_NO_CAPITULO)
+            conferir(o["mainSheet"] and not o["dentroDoMain"] and o["depoisDaLayout"] and o["paiBody"], f"{largura} px {url}: o bloco fica FORA da folha (<main class=sheet>), logo depois da div.layout")
+            conferir(bool(o["nome"]), f"{largura} px {url}: o bloco é uma região com nome (aria-labelledby → {o['nome']!r})")
+            conferir(abs(o["espaco"] - 1.5 * o["rem"]) < 0.6 and abs(c["espaco"] - 1.5 * o["rem"]) < 0.6, f"{largura} px {url}: separado da folha pelo mesmo espaço das caixas do capítulo ({o['espaco']:.1f} px; no capítulo {c['espaco']:.1f} px)")
+            conferir(abs(o["w"] - c["w"]) < 0.6 and abs(o["esq"] - c["esq"]) < 0.6, f"{largura} px {url}: a mesma largura e o mesmo lugar da caixa no capítulo ({o['w']:.1f} × {c['w']:.1f} px; esquerda {o['esq']:.1f} × {c['esq']:.1f})")
+            conferir(o["sombra"] == c["sombra"] and o["fundo"] == c["fundo"] and o["raio"] == c["raio"], f"{largura} px {url}: a mesma sombra, o mesmo papel e o mesmo canto da caixa no capítulo ({o['sombra']})")
+            conferir(o["z"] == "1", f"{largura} px {url}: por cima das runas do fundo, como o <main> (z-index {o['z']})")
+        ctx.close()
 
 
 def links(browser, porta, nome):
@@ -456,11 +502,11 @@ def previa(browser, porta):
     abrir(pg, porta, "/pt/works/light-and-blood/01/")
     ossos = pg.locator('.so-order[data-ordem="chrono"] a.so-side.prev')
     conferir(ossos.get_attribute("href") == "/pt/works/all-in-a-nights-work/01/" and ossos.get_attribute("hreflang") is None and "Ler Ossos do Ofício" in (ossos.text_content() or ""), "prévia, /pt/: \"Ler Ossos do Ofício\" leva ao capítulo em português (sem hreflang)")
-    # T17l: o bloco também na página da obra, logo depois da lista de capítulos
+    # T17l/T17o: o bloco também na página da obra, abaixo da folha da lista de capítulos (a caixa separada é medida em caixa_separada())
     for url in ("/pt/works/roadside/", "/en/works/light-and-blood/"):
         abrir(pg, porta, url)
-        depois_da_lista = pg.evaluate("() => { const b = document.querySelector('[data-story-order]'); const p = b && b.previousElementSibling; return !!(p && p.querySelector('ol.chapter-list')); }")
-        conferir(depois_da_lista, f"prévia, {url}: o bloco vem logo depois da lista de capítulos")
+        depois_da_lista = pg.evaluate("() => { const b = document.querySelector('[data-story-order]'); const p = b && b.previousElementSibling; return !!(p && p.matches('div.layout') && p.querySelector('main ol.chapter-list') && !b.closest('main')); }")
+        conferir(depois_da_lista, f"prévia, {url}: o bloco vem logo depois da folha da lista de capítulos, fora do <main>")
     # T17l: O Pêndulo e Cat-Crow-Thing (sem order_art nem order_images) não aparecem em bloco nenhum
     for url in capitulos_do_site(porta):
         abrir(pg, porta, url)
@@ -502,15 +548,16 @@ LER_ASAS = """() => {
 def asas(browser, porta):
     """T17l: as asas do Giuseppe saem da moldura, ficam por trás da frase de cima, são cortadas pela caixa e não pegam clique."""
     print(f"\n== as asas do Giuseppe (prévia, porta {porta})")
-    # Ossos do Ofício do lado da direita (Luz & Sangue, Lançamento) e do lado da esquerda (Beira de Estrada, Lançamento)
+    # Ossos do Ofício do lado da direita (Beira de Estrada, Lançamento: desde a T17o Beira 4 → Ossos 5) e do lado da esquerda (Luz & Sangue,
+    # Cronológica: Ossos 4 → Luz & Sangue 5)
     for lang in ("en", "pt"):
-        for url, lado in ((f"/{lang}/works/light-and-blood/01/", "next"), (f"/{lang}/works/roadside/01/", "prev")):
+        for url, ordem, lado in ((f"/{lang}/works/roadside/01/", "release", "next"), (f"/{lang}/works/light-and-blood/01/", "chrono", "prev")):
             for modo in ("mouse", "teclado"):
                 ctx = novo_contexto(browser, 1100)
                 pg = ctx.new_page()
                 abrir(pg, porta, url)
                 pg.evaluate("document.querySelectorAll('.so-layer').forEach(i => { i.loading = 'eager' })")
-                pg.select_option("[data-story-order] select", "release")
+                pg.select_option("[data-story-order] select", ordem)
                 pg.mouse.move(1, 1)
                 pg.wait_for_timeout(700)
                 antes = pg.evaluate(LER_ASAS)
@@ -542,7 +589,7 @@ def asas(browser, porta):
     for largura in (390, 320):
         ctx = novo_contexto(browser, largura)
         pg = ctx.new_page()
-        abrir(pg, porta, "/en/works/light-and-blood/01/")
+        abrir(pg, porta, "/en/works/roadside/01/")  # T17o: Ossos à direita da Beira de Estrada, no Lançamento
         pg.select_option("[data-story-order] select", "release")
         pg.hover(".so-order:not([hidden]) a.so-side.next")
         pg.wait_for_timeout(900)
@@ -556,7 +603,7 @@ def asas(browser, porta):
     # no computador a máscara não existe (quem corta é a caixa)
     ctx = novo_contexto(browser, 1100)
     pg = ctx.new_page()
-    abrir(pg, porta, "/en/works/light-and-blood/01/")
+    abrir(pg, porta, "/en/works/roadside/01/")  # T17o: Ossos à direita da Beira de Estrada, no Lançamento
     pg.select_option("[data-story-order] select", "release")
     conferir(pg.evaluate(LER_ASAS)["mascara"] == "none", "1100 px: sem degradê na moldura (a caixa é a máscara, como o autor pediu na T17l)")
     ctx.close()
@@ -617,6 +664,7 @@ def main() -> int:
             roteiro(browser, a.astro, lang)
         links(browser, a.astro, "publicado")
         tamanho_da_caixa(browser, a.astro, "publicado")
+        caixa_separada(browser, a.astro, "publicado")
         if a.previa:
             previa(browser, a.previa)
             for lang in ("en", "pt"):  # T17l: em português, com o link para o inglês
@@ -629,6 +677,7 @@ def main() -> int:
                 artes_novas(browser, a.previa, "beira", lang)
             links(browser, a.previa, "prévia")
             tamanho_da_caixa(browser, a.previa, "prévia")
+            caixa_separada(browser, a.previa, "prévia")
         if a.beira:
             for lang in ("pt", "en"):
                 print(f"\n== Beira de Estrada ({lang}, cópia com capítulo inventado)")

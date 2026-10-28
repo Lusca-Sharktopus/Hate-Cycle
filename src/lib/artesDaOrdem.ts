@@ -29,6 +29,17 @@
 // (Pederneira, a referência), antes e com o mouse. Para ajustar uma arte, todas as camadas escalam juntas em volta do pé do desenho
 // (x' = âncora + (x − âncora) × s, o mesmo para y, width × s, nos dois estados): o movimento e os olhos colados não mudam.
 // tools/ordem_playwright.py (com --previa) mede as cabeças no navegador; a lição 08 (seção 6 do bloco) tem a tabela.
+// O ponto de apoio da T17m foi o CENTRO DA BORDA DE BAIXO da tela de montagem (x 50%, y 100%): refazendo a conta com os números de
+// antes e depois da T17m, Luz & Sangue, Alô? e Beira dão âncora (50,0; 100,0) a 0,01 (Ossos também desceu, à parte). Como a tela fica
+// encostada embaixo e centrada na moldura, esse ponto é sempre o meio da borda de baixo da moldura, onde ficam os pés.
+//
+// A ESCALA DO AUTOR (T17o, pedido de 27/10): `escala` no `order_art` (opcional; padrão 1) faz essa MESMA conta no build, em volta do
+// MESMO ponto, sobre os números escritos (que continuam os de sempre): x' = 50 + (x − 50) × s, y' = 100 + (y − 100) × s, width × s, no
+// estado inicial e no `hover` (só nos campos que o `hover` tem; o que ele não tem cai no inicial já escalado, pelo `var(--hx, var(--x))`).
+// rotate e opacity não mudam. Assim o movimento do mouse fica proporcional, camadas com os mesmos números (os olhos da Iris) continuam
+// iguais e as coladas por conta (os olhos do Giuseppe) continuam coladas (a conta é a mesma semelhança para todas). A linha de baixo da
+// tela não se mexe; um pé a d% da borda de baixo anda d% × (s − 1) da altura (2% × 0,3 = 0,6% com 1.3). Sem `escala`, ou com 1, nada é
+// recalculado: o HTML sai idêntico ao de antes. O que passar da moldura é cortado como sempre (ou vai até a caixa, com `bleed`).
 //
 // Como o navegador recebe: cada camada é uma <img> com variáveis de CSS (`--x`, `--hx`…) no atributo `style`; quem anima é o CSS do
 // ProximaHistoria.astro. Sem JavaScript a composição já aparece (é CSS).
@@ -66,6 +77,40 @@ export interface ArteCrua {
   size: readonly [number, number];
   layers: readonly CamadaCrua[];
   bleed?: boolean | undefined;
+  /** O tamanho de todas as camadas juntas (T17o): 1 (o padrão) = como está escrito. */
+  escala?: number | undefined;
+}
+
+/** A faixa aceita para `escala` (o schema confere; src/lib/schemas.ts). */
+export const ESCALA_MINIMA = 0.3;
+export const ESCALA_MAXIMA = 3;
+
+/** O ponto de apoio da escala, em % da tela de montagem: o meio da borda de baixo (o mesmo da T17m). */
+export const APOIO_DA_ESCALA = { x: 50, y: 100 } as const;
+
+/** Uma camada com todas as medidas escaladas em volta do ponto de apoio (rotate e opacity ficam como estão). */
+function escalarCamada(c: CamadaCrua, s: number): CamadaCrua {
+  const ex = (x: number) => APOIO_DA_ESCALA.x + (x - APOIO_DA_ESCALA.x) * s;
+  const ey = (y: number) => APOIO_DA_ESCALA.y + (y - APOIO_DA_ESCALA.y) * s;
+  const h = c.hover;
+  return {
+    ...c,
+    x: ex(c.x),
+    y: ey(c.y),
+    width: c.width * s,
+    hover: h && {
+      ...h,
+      ...(h.x !== undefined && { x: ex(h.x) }),
+      ...(h.y !== undefined && { y: ey(h.y) }),
+      ...(h.width !== undefined && { width: h.width * s }),
+    },
+  };
+}
+
+/** As camadas como o build as desenha: as escritas, ou (com `escala` diferente de 1) as escaladas juntas. */
+export function camadasEscaladas(crua: ArteCrua): readonly CamadaCrua[] {
+  const s = crua.escala ?? 1;
+  return s === 1 ? crua.layers : crua.layers.map((c) => escalarCamada(c, s));
 }
 
 /** Uma camada pronta para desenhar. */
@@ -133,7 +178,7 @@ export function estiloDaCamada(c: CamadaCrua): string {
 /** Do `order_art` do work.json para o que o componente desenha. */
 export function arteEmCamadas(crua: ArteCrua): ArteEmCamadas {
   const razao = crua.size[0] / crua.size[1];
-  const camadas = crua.layers.map((c) => ({
+  const camadas = camadasEscaladas(crua).map((c) => ({
     imagem: c.image,
     estilo: estiloDaCamada(c),
     surge: c.hover?.opacity !== undefined && c.hover.opacity !== (c.opacity ?? 1),

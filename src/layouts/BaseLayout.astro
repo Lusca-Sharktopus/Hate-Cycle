@@ -83,11 +83,22 @@ const atalhos: Partial<Record<(typeof ATALHOS)[number], string>> = {};
 for (const nome of ATALHOS) {
   if (Astro.slots.has(`atalho-${nome}`)) atalhos[nome] = await Astro.slots.render(`atalho-${nome}`);
 }
-const { html: acabado, scripts } = finalizarMain(miolo, lang, atalhos);
+const { html: acabado, scripts: scriptsDoMiolo } = finalizarMain(miolo, lang, atalhos);
+const scripts = scriptsDoMiolo ? [scriptsDoMiolo] : [];
 // T17: as imagens do <main> (dos componentes e do texto do autor) ganham as versões leves no srcset; o `src` não muda (src/lib/imagensDoHtml.ts).
 // T17m (decisão do autor de 22/10): os posts do X, do Reddit e do Instagram usam os SCRIPTS OFICIAIS, como no site antigo (o <script>
 // do código de incorporação fica onde o autor o pôs, igual ao do Python). A moldura isolada da T17g/T17j saiu; o B27 ficou para depois.
 const main = await otimizarImagensDoHtml(acabado);
+
+// DEPOIS DO <main> (T17o, pedido do autor de 27/10): uma caixa própria, fora da folha de papel, logo abaixo dela. Hoje só a página da obra
+// usa (o bloco "estou lendo em ordem…" depois da lista de capítulos, separado como nos capítulos). Passa pelo MESMO acabamento do miolo
+// (atalhos, versalete uma vez, imagens leves; os scripts vão para o fim da página). Sem o slot, a página sai exatamente como antes.
+let depoisDoMain = "";
+if (Astro.slots.has("depois-do-main")) {
+  const pronto = finalizarMain(await Astro.slots.render("depois-do-main"), lang);
+  depoisDoMain = (await otimizarImagensDoHtml(pronto.html)).trim(); // colado no </div> e sem linhas vazias: tirado o bloco, a página é a de antes
+  if (pronto.scripts) scripts.push(pronto.scripts);
+}
 ---
 
 <!doctype html>
@@ -126,10 +137,10 @@ const main = await otimizarImagensDoHtml(acabado);
       <main id="main" class={isReader ? undefined : "sheet"}>
         <Fragment set:html={main} />
       </main>
-    </div>
+    </div>{depoisDoMain && <Fragment set:html={depoisDoMain} />}
     <Footer lang={lang} />
     {/* O site.js (ordenação, carrossel, imagem ausente…) virou <script> dos componentes que o usam. O Astro os deixa dentro do miolo;
         finalizarMain() os tira de lá e eles voltam aqui, no fim da página, como o <script src="site.js"> do build.py. */}
-    <Fragment set:html={scripts} />
+    <Fragment set:html={scripts.join("\n")} />
   </body>
 </html>

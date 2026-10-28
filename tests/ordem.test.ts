@@ -27,7 +27,7 @@ import { langs, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { leiturasDaObra } from "../src/lib/leitura";
 import { cartaoDaObra } from "../src/lib/obras";
-import { arteEmCamadas, estiloDaCamada, PROPORCAO_DA_MOLDURA, sizesDaCamada } from "../src/lib/artesDaOrdem";
+import { APOIO_DA_ESCALA, arteEmCamadas, camadasEscaladas, ESCALA_MAXIMA, ESCALA_MINIMA, estiloDaCamada, PROPORCAO_DA_MOLDURA, sizesDaCamada, type ArteCrua } from "../src/lib/artesDaOrdem";
 import { CARIMBOS_DA_FONTE, LARGURA_MAXIMA } from "../src/lib/largurasDoRotulo";
 import { arteDaObra, blocoDaOrdem, emDaLinha, ESPACO_ENTRE_ROTULOS_EM, ladoDaObra, larguraDoRotulo, ORDEM_PADRAO, ORDENS_DE_LEITURA, sequenciaDaOrdem, TEXTOS_DA_ORDEM, verboDaObra, type BlocoDaOrdem } from "../src/lib/ordemDeLeitura";
 import { finalizarMain } from "../src/lib/pagina";
@@ -470,12 +470,14 @@ describe("T17l: quem não tem arte para a caixa é pulado; obra só com capítul
   test("conteúdo de verdade (prévia): Ossos do Ofício nas páginas em português leva ao capítulo em PORTUGUÊS (T17n; até a T17m, ao inglês)", () => {
     const r = ler(Object.fromEntries(realContent()), true);
     const pt = r.dados.pt;
-    // Luz & Sangue: na cronológica Ossos do Ofício (4) vem antes; no lançamento, depois
+    // Luz & Sangue: na cronológica Ossos do Ofício (4) vem antes; no lançamento (T17o: Beira de Estrada 4, Ossos 5), vem depois da Beira de Estrada
     const obra = pt.obras.find((o) => o.data._origem.slug === "light-and-blood")!;
+    const beira = pt.obras.find((o) => o.data._origem.slug === "roadside")!;
     const outros = (o: (typeof pt.obras)[number]) => [{ lang: "en" as const, capitulos: r.dados.en.capitulosDe(r.dados.en.obras.find((x) => x.data._origem.slug === o.data._origem.slug)!) }];
+    expect(blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros).listas.release.proximo?.slug).toBe("roadside");
     // com ou sem a informação dos outros idiomas, o mesmo destino: o capítulo em português, sem hreflang (a regra do "outro idioma" não vale mais para Ossos)
-    for (const b of [blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros), blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true)]) {
-      for (const ossos of [b.listas.chrono.anterior, b.listas.release.proximo]) {
+    for (const [b, c] of [obra, beira].flatMap((o) => [blocoDaOrdem(o, "pt", pt.universo, pt.capitulosDe, true, outros), blocoDaOrdem(o, "pt", pt.universo, pt.capitulosDe, true)].map((x) => [x, o] as const))) {
+      for (const ossos of c === obra ? [b.listas.chrono.anterior] : [b.listas.release.proximo]) {
         expect(ossos?.slug).toBe("all-in-a-nights-work");
         expect(ossos?.rotulo).toBe("Ler Ossos do Ofício");
         expect(ossos?.destino).toEqual({ tipo: "link", href: "/pt/works/all-in-a-nights-work/01/", externo: false, idioma: null });
@@ -677,6 +679,21 @@ describe("a exceção de paridade tira só o bloco (semBlocoDeOrdem)", () => {
     expect(semBlocoDeOrdem(dois).html).toBe("<main><p>x</p></main>");
     // outra <section> (ou um elemento que não é section) com o mesmo atributo NÃO sai
     expect(semBlocoDeOrdem('<main><div data-story-order>a</div><section class="x">b</section></main>').removidos).toEqual([]);
+  });
+
+  test("T17o: diz onde cada bloco estava (no <main>; logo depois da div.layout, fora do <main>; outro lugar)", () => {
+    const pagina = (corpo: string) => `<!doctype html><html><head></head><body>${corpo}</body></html>`;
+    const SEC = '<section data-story-order>b</section>';
+    expect(semBlocoDeOrdem(pagina(`<div class="layout"><main>${SEC}</main></div>`)).lugares).toEqual(["main"]);
+    const fora = semBlocoDeOrdem(pagina(`<div class="layout"><main><p>x</p></main></div>${SEC}<footer></footer>`));
+    expect(fora.lugares).toEqual(["depois-do-main"]);
+    expect(fora.filhasDiretasDoMain).toEqual([false]);
+    expect(fora.html).toBe(pagina('<div class="layout"><main><p>x</p></main></div><footer></footer>'));
+    // casos negativos: depois do rodapé, antes da .layout, dentro de outra div, depois de uma div que não é a .layout
+    expect(semBlocoDeOrdem(pagina(`<div class="layout"><main></main></div><footer></footer>${SEC}`)).lugares).toEqual(["outro"]);
+    expect(semBlocoDeOrdem(pagina(`${SEC}<div class="layout"><main></main></div>`)).lugares).toEqual(["outro"]);
+    expect(semBlocoDeOrdem(pagina(`<div class="layout"><main></main><div>${SEC}</div></div>`)).lugares).toEqual(["outro"]);
+    expect(semBlocoDeOrdem(pagina(`<div class="layoutx"></div>${SEC}`)).lugares).toEqual(["outro"]);
   });
 });
 
@@ -947,4 +964,132 @@ function isDir(p: string): boolean {
 test("as duas ordens e a padrão", () => {
   expect(ORDENS_DE_LEITURA).toEqual(["chrono", "release"]);
   expect(ORDEM_PADRAO).toBe("chrono");
+});
+
+// ───────────── T17o: a `escala` do autor (todas as camadas de uma história juntas) ─────────────
+// O autor experimenta o tamanho de cada arte mexendo num número só (`"escala": 1.2` no order_art). A conta é a da T17m, no build, em volta
+// do meio da borda de baixo da tela de montagem (x 50%, y 100%: o pé do desenho). Sem `escala`, ou com 1, nada muda.
+describe("T17o: `escala` no order_art (todas as camadas juntas, em volta do pé do desenho)", () => {
+  const lb = (art: unknown) => sitePdf({ "works/light-and-blood/work.json": wj({ kind: "video", title: "Light & Blood", order: { release: 3, chrono: 5 }, media: "live-ttrpg", order_art: art }), ...cap("light-and-blood") });
+  // tela 2000 × 1600; a camada "a" é um PNG 4 × 5 (altura = 1,25 × a largura) com o PÉ exatamente na borda de baixo (y + altura/2 = 100%);
+  // "b" e "c" são os "olhos colados": os mesmos números (como os da Iris), "b" surge com o mouse
+  const ARTE: ArteCrua = {
+    size: [2000, 1600],
+    layers: [
+      { image: "a.png", x: 30, y: 68.75, width: 40, rotate: -6, hover: { x: 25, y: 66, width: 44, rotate: -9 } },
+      { image: "b.png", x: 65, y: 60, width: 50, rotate: 4, opacity: 0, hover: { width: 55, opacity: 1 } },
+      { image: "c.png", x: 65, y: 60, width: 50, rotate: 4, hover: { width: 55 } },
+    ],
+  };
+  const PROPORCAO_DO_PNG_A = 5 / 4;
+  /** As variáveis de CSS de uma camada como números ({ "--x": 30, "--hw": 44, … }). */
+  const vars = (estilo: string) => Object.fromEntries(estilo.split(";").map((p) => { const [k = "", v = ""] = p.split(":"); return [k, parseFloat(v)]; })) as Record<string, number>;
+  /** Onde fica o pé (a borda de baixo) de uma camada, em % da altura da tela, para um PNG de proporção `k` (altura ÷ largura). */
+  const pe = (y: number, w: number, k: number) => y + (w * (ARTE.size[0] / ARTE.size[1]) * k) / 2;
+
+  test("o ponto de apoio é o meio da borda de baixo da tela (o mesmo da T17m) e a faixa aceita é 0.3 a 3", () => {
+    expect(APOIO_DA_ESCALA).toEqual({ x: 50, y: 100 });
+    expect([ESCALA_MINIMA, ESCALA_MAXIMA]).toEqual([0.3, 3]);
+  });
+
+  for (const s of [1.5, 0.5]) {
+    describe(`escala ${s}`, () => {
+      const antes = arteEmCamadas(ARTE).camadas.map((c) => vars(c.estilo));
+      const depois = arteEmCamadas({ ...ARTE, escala: s }).camadas.map((c) => vars(c.estilo));
+
+      test("a largura de toda camada, antes e com o mouse, fica × o fator", () => {
+        depois.forEach((d, n) => {
+          expect(d["--w"], `camada ${n}`).toBeCloseTo(antes[n]!["--w"]! * s, 3);
+          if (antes[n]!["--hw"] !== undefined) expect(d["--hw"], `camada ${n} (mouse)`).toBeCloseTo(antes[n]!["--hw"]! * s, 3);
+        });
+      });
+      test("o pé do desenho fica no lugar (na borda de baixo) e a posição horizontal do conjunto também (x' − 50 = (x − 50) × fator)", () => {
+        const a = depois[0]!;
+        expect(pe(a["--y"]!, a["--w"]!, PROPORCAO_DO_PNG_A)).toBeCloseTo(100, 3);
+        expect(pe(a["--hy"]!, a["--hw"]!, PROPORCAO_DO_PNG_A) - 100).toBeCloseTo((pe(66, 44, PROPORCAO_DO_PNG_A) - 100) * s, 3); // com o mouse: a distância até a borda × o fator
+        depois.forEach((d, n) => expect(d["--x"]! - APOIO_DA_ESCALA.x, `camada ${n}`).toBeCloseTo((antes[n]!["--x"]! - APOIO_DA_ESCALA.x) * s, 3));
+        // uma camada centrada (x 50) continua centrada
+        expect(vars(arteEmCamadas({ size: [10, 10], layers: [{ image: "z.png", x: 50, y: 50, width: 10 }], escala: s }).camadas[0]!.estilo)["--x"]).toBe(50);
+      });
+      test("o movimento do mouse fica proporcional (o deslocamento × o fator; o crescimento na mesma razão)", () => {
+        const a = depois[0]!;
+        expect(a["--hx"]! - a["--x"]!).toBeCloseTo((25 - 30) * s, 3);
+        expect(a["--hy"]! - a["--y"]!).toBeCloseTo((66 - 68.75) * s, 3);
+        expect(a["--hw"]! / a["--w"]!).toBeCloseTo(44 / 40, 6);
+      });
+      test("giro e opacidade não mudam; os olhos colados (mesmos números) continuam iguais", () => {
+        depois.forEach((d, n) => {
+          for (const k of ["--r", "--hr", "--o", "--ho"]) expect(d[k], `camada ${n} ${k}`).toBe(antes[n]![k]);
+        });
+        const semOpacidade = (v: Record<string, number>) => Object.fromEntries(Object.entries(v).filter(([k]) => k !== "--o" && k !== "--ho"));
+        expect(semOpacidade(depois[1]!)).toEqual(semOpacidade(depois[2]!));
+        // o que o hover não tem continua não estando lá (o CSS usa o inicial, já escalado: var(--hx, var(--x)))
+        expect(depois[1]!["--hx"]).toBeUndefined();
+        expect(arteEmCamadas({ ...ARTE, escala: s }).camadas.map((c) => c.surge)).toEqual([false, true, false]);
+      });
+      test("o `sizes` acompanha a largura escalada", () => {
+        const c = arteEmCamadas({ ...ARTE, escala: s }).camadas[0]!;
+        expect(c.sizes).toBe(sizesDaCamada({ ...ARTE.layers[0]!, width: 40 * s, hover: { width: 44 * s } }, 2000 / 1600));
+      });
+    });
+  }
+
+  test("sem `escala`, ou com 1, o desenho é EXATAMENTE o de hoje (o exemplo e todas as artes de verdade; o componente também)", async () => {
+    expect(arteEmCamadas({ ...ARTE, escala: 1 })).toEqual(arteEmCamadas(ARTE));
+    const { dados } = ler(Object.fromEntries(realContent()), true);
+    const reais = dados.pt.obras.flatMap((o) => (o.data.order_art ? [o.data.order_art] : []));
+    expect(reais.length).toBeGreaterThanOrEqual(5);
+    for (const a of reais) {
+      expect(a.escala, "nenhuma obra tem `escala` ainda (T17o)").toBeUndefined();
+      expect(arteEmCamadas({ ...a, escala: 1 })).toEqual(arteEmCamadas(a));
+    }
+    const sem = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb(ARTE), false).bloco("firestriker", "pt") } });
+    const com1 = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb({ ...ARTE, escala: 1 }), false).bloco("firestriker", "pt") } });
+    expect(com1).toBe(sem);
+    const com15 = await container.renderToString(ProximaHistoria, { props: { bloco: ler(lb({ ...ARTE, escala: 1.5 }), false).bloco("firestriker", "pt") } });
+    expect(com15).not.toBe(sem);
+    expect(com15).toContain("--x:20%;--y:53.125%;--w:60%;--r:-6deg;--hx:12.5%;--hy:49%;--hw:66%;--hr:-9deg");
+  });
+
+  test("com `escala`, os olhos do Giuseppe e os da Iris (content de verdade) continuam colados, antes e com o mouse", () => {
+    const { dados } = ler(Object.fromEntries(realContent()), true);
+    const crua = (slug: string) => dados.pt.obras.find((o) => o.data._origem.slug === slug)?.data.order_art as ArteCrua;
+    for (const s of [1.3, 0.6]) {
+      // Ossos: o canto de cima à esquerda dos dois PNGs coincide (Giuseppe 828 × 1231, olhos 809 × 1182), como no teste da T17i
+      const ossos = crua("all-in-a-nights-work");
+      const [W, H] = ossos.size;
+      const cs = camadasEscaladas({ ...ossos, escala: s });
+      const g = cs.find((l) => l.image === "ordem/Giuseppe Site Cronologia.png")!;
+      const o = cs.find((l) => l.image === "ordem/Giuseppe Olhos Site Cronologia.png")!;
+      const canto = (x: number, y: number, w: number, nat: [number, number]) => {
+        const lpx = (w / 100) * W;
+        return [(x / 100) * W - lpx / 2, (y / 100) * H - (lpx * nat[1]) / nat[0] / 2, lpx / nat[0]];
+      };
+      for (const estado of ["inicio", "mouse"] as const) {
+        const pegar = (l: typeof g) => (estado === "inicio" ? [l.x, l.y, l.width] : [l.hover?.x ?? l.x, l.hover?.y ?? l.y, l.hover?.width ?? l.width]) as [number, number, number];
+        const cg = canto(...pegar(g), [828, 1231]);
+        const co = canto(...pegar(o), [809, 1182]);
+        expect(Math.abs(cg[0]! - co[0]!), `Ossos ${s}: x do canto (${estado})`).toBeLessThan(2 * Math.max(1, s));
+        expect(Math.abs(cg[1]! - co[1]!), `Ossos ${s}: y do canto (${estado})`).toBeLessThan(2 * Math.max(1, s));
+        expect(Math.abs(cg[2]! / co[2]! - 1), `Ossos ${s}: escala (${estado})`).toBeLessThan(0.002);
+      }
+      // Beira: os olhos da Iris continuam com os MESMOS números de Cezar e Iris
+      const beira = camadasEscaladas({ ...crua("roadside"), escala: s });
+      const ci = beira.find((l) => l.image === "ordem/Cezar e Iris Site Cronologia.png")!;
+      const olhos = beira.find((l) => l.image === "ordem/Iris Olhos Site Cronologia.png")!;
+      expect({ x: olhos.x, y: olhos.y, width: olhos.width, rotate: olhos.rotate }).toEqual({ x: ci.x, y: ci.y, width: ci.width, rotate: ci.rotate });
+      const { opacity: _o, ...semOpacidade } = olhos.hover ?? {};
+      expect(semOpacidade).toEqual(ci.hover);
+    }
+  });
+
+  test("o schema aceita 0.3, 1, 1.2 e 3 e recusa fora da faixa, texto e true, com mensagem em português", () => {
+    const arte = { size: [1000, 1000], layers: [{ image: "a.png", x: 50, y: 50, width: 50 }] };
+    for (const ok of [0.3, 1, 1.2, 3]) expect(() => ler(lb({ ...arte, escala: ok }), false), String(ok)).not.toThrow();
+    for (const fora of [0.29, 0, -1, 3.5, 10]) expect(() => ler(lb({ ...arte, escala: fora }), false), String(fora)).toThrow(/escala tem de ficar entre 0\.3 e 3 \(1 = o tamanho de hoje; use ponto, como em 1\.2\)/);
+    expect(() => ler(lb({ ...arte, escala: "1.2" }), false)).toThrow(/escala \(o tamanho de todas as camadas juntas, com ponto: 1\.2 = 20% maior; 1 = como está\) tem de ser um número, sem aspas/);
+    expect(() => ler(lb({ ...arte, escala: true }), false)).toThrow(/escala .* tem de ser um número, sem aspas/);
+    // dentro de uma camada não vale (é da história inteira)
+    expect(() => ler(lb({ ...arte, layers: [{ ...arte.layers[0], escala: 2 }] }), false)).toThrow(/campo desconhecido \(\\?"escala\\?"\)/);
+  });
 });

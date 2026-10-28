@@ -217,7 +217,9 @@ function normalizar(html, lado, url, existe) {
       conta("T17c: bloco \"estou lendo em ordem\" (Astro)", url);
       // T17l: também na página da obra (/pt/works/<obra>/, logo depois da lista de capítulos)
       if (!/^\/(en|pt)\/works\/[^/]+\/([^/]+\/)?$/.test(url)) falha(url, "bloco de ordem fora de um capítulo e de uma página de obra");
-      if (s.removidos.length !== 1 || !s.filhasDiretasDoMain.every(Boolean)) falha(url, "bloco de ordem: não é 1 filho direto do <main>");
+      // T17o: no capítulo, filho direto do <main>; na página da obra, uma caixa própria FORA do <main>, logo depois da div.layout
+      const lugar = /^\/(en|pt)\/works\/[^/]+\/$/.test(url) ? "depois-do-main" : "main";
+      if (s.removidos.length !== 1 || s.lugares[0] !== lugar) falha(url, `bloco de ordem: não é 1 só, no lugar certo (${lugar === "main" ? "filho direto do <main>" : "logo depois da div.layout, fora do <main>"}; veio ${s.lugares.join(", ") || "nenhum"})`);
     }
     html = s.html;
     // T17h: o ícone do YouTube do rodapé leva ao canal do idioma (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython): troca só o href dessa <a>

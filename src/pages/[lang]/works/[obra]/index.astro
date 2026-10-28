@@ -4,10 +4,13 @@
 // leva direto ao destino. Quem decide é paginaDaObra() (src/lib/capitulos.ts), que devolve null nesses casos;
 // getStaticPaths() só cria uma página para quem não é null.
 // Desde a T17l (pedido do autor de 22/10, mudança 7), logo depois da lista de capítulos vem o bloco "estou lendo em ordem…", o mesmo do
-// fim dos capítulos (src/lib/ordemDeLeitura.ts → blocoDaOrdem; a "história atual" é a da página).
+// fim dos capítulos (src/lib/ordemDeLeitura.ts → blocoDaOrdem; a "história atual" é a da página). Desde a T17o (pedido do autor de 27/10)
+// ele é uma caixa própria ABAIXO da folha da lista, como nos capítulos: vai no slot "depois-do-main" do BaseLayout (fora do <main>; a
+// <section> com nome, aria-labelledby, é um landmark "region" próprio).
 // Lição: docs/aprendendo-astro/07-paginas.md e 08-leitor.md.
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import ConteudoDaObra from "../../../../components/ConteudoDaObra.astro";
+import ProximaHistoria from "../../../../components/ProximaHistoria.astro";
 import { alternativasDaObra } from "../../../../lib/alternativas";
 import { paginaDaObra, type PaginaDaObra } from "../../../../lib/capitulos";
 import { langs, type Lang } from "../../../../lib/config";
@@ -39,5 +42,5 @@ const { pagina, alternates, ordem } = Astro.props as { pagina: PaginaDaObra; alt
 ---
 
 <BaseLayout lang={lang} title={pagina.titulo} description={pagina.descricao} image={pagina.capa} alternates={alternates}>
-  <ConteudoDaObra pagina={pagina} ordem={ordem} />
+  <ConteudoDaObra pagina={pagina} />{ordem && <ProximaHistoria slot="depois-do-main" bloco={ordem} />}
 </BaseLayout>

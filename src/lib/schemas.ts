@@ -16,6 +16,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "astro/zod";
+import { ESCALA_MAXIMA, ESCALA_MINIMA } from "./artesDaOrdem";
 import { dominiosDoSite, langs, type Lang } from "./config";
 
 // ───────────── valores permitidos ─────────────
@@ -108,7 +109,7 @@ const listaOrdemDeImagens = () =>
  * order_art do work.json (T17h): a arte do bloco "estou lendo em ordem…" em CAMADAS animadas (ver src/lib/artesDaOrdem.ts e o
  * guia do autor). `size` = [largura, altura] da tela de montagem; `layers` = as camadas, de trás para a frente, cada uma com a
  * posição inicial e, em `hover`, só o que muda com o mouse por cima; `bleed` (T17l) = as camadas podem sair da moldura até a borda da
- * caixa. Campo desconhecido, em qualquer nível, é erro.
+ * caixa; `escala` (T17o) = o tamanho de todas as camadas juntas (1 = como está escrito). Campo desconhecido, em qualquer nível, é erro.
  */
 const numeroDaArte = (oQue: string) => z.number({ error: (i) => `${oQue} tem de ser um número, sem aspas, mas veio ${descrever(i.input)}.` });
 const estritoDaArte = <S extends z.ZodRawShape>(onde: string, campos: S) =>
@@ -148,6 +149,11 @@ const arteEmCamadas = () =>
       .min(1, { error: "layers precisa de pelo menos uma camada." })
       .max(8, { error: "layers aceita no máximo 8 camadas." }),
     bleed: z.boolean({ error: (i) => `bleed tem de ser true ou false, sem aspas (true = as camadas podem sair da moldura até a borda da caixa), mas veio ${descrever(i.input)}.` }).optional(),
+    // T17o: o tamanho de TODAS as camadas juntas (1 = como está escrito; 1.2 = 20% maior). A conta está em src/lib/artesDaOrdem.ts.
+    escala: numeroDaArte("escala (o tamanho de todas as camadas juntas, com ponto: 1.2 = 20% maior; 1 = como está)")
+      .min(ESCALA_MINIMA, { error: (i) => `escala tem de ficar entre ${ESCALA_MINIMA} e ${ESCALA_MAXIMA} (1 = o tamanho de hoje; use ponto, como em 1.2), mas veio ${descrever(i.input)}.` })
+      .max(ESCALA_MAXIMA, { error: (i) => `escala tem de ficar entre ${ESCALA_MINIMA} e ${ESCALA_MAXIMA} (1 = o tamanho de hoje; use ponto, como em 1.2), mas veio ${descrever(i.input)}.` })
+      .optional(),
   });
 
 /**

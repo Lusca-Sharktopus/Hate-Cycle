@@ -199,13 +199,13 @@ Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + E
 
 O visitante escolhe **Lançamento**, **Cronológica** ou **Alfabética** e pode inverter. Os números ficam em cada `work.json`, no campo `"order": {"release": 2, "chrono": 30}`.
 
-- **Lançamento** (`release`): Alô? Residência dos Di Vario 1, Pederneira 2, Luz & Sangue 3, Ossos do Ofício 4, Beira de Estrada 5, O Pêndulo 6. Novas obras: 7, 8…
+- **Lançamento** (`release`): Alô? Residência dos Di Vario 1, Pederneira 2, Luz & Sangue 3, Beira de Estrada 4, Ossos do Ofício 5, O Pêndulo 6, Cat-Crow-Thing 7. Novas obras: 8, 9… (Desde 27/10, seu aviso "estou me planejando para lançar Beira de Estrada antes de Ossos do Ofício": antes era Ossos 4 e Beira 5. As duas ainda são rascunho, então o site publicado não muda; a `cronologia.json` só guarda a Cronológica.)
 - **Cronológica** (`chrono`): segue a **posição da obra na planilha da linha do tempo**, guardada completa (inclusive obras que ainda não estão no site) em `cronologia.json`. Hoje: Ossos do Ofício 4, Luz & Sangue 5, Pederneira 6, Beira de Estrada 7, O Pêndulo 11.
 - Obras **sem** número cronológico (como *Alô? Residência dos Di Vario*, `"chrono": false`) somem só nessa ordem.
 
 ### "Estou lendo em ordem" no fim de cada capítulo (só no site novo, Astro)
 
-No fim de cada capítulo (entre o texto e os comentários) e, desde 22/10, também na **página de cada obra**, logo depois da lista de capítulos (ex.: `/pt/works/light-and-blood/`; a "história atual" é a da página), há uma caixa com a frase **"estou lendo em ordem"** (ou "estou assistindo…" / "estou jogando…", conforme o tipo da história em que o visitante está) e um seletor **Cronológica / Lançamento**. À esquerda fica a história que vem **antes** nessa ordem, à direita a que vem **depois**; o botão diz "Ler …", "Assistir …" ou "Jogar …" conforme o tipo da história de **destino**, sempre numa linha só (o site diminui a letra se o título for comprido, nunca corta).
+No fim de cada capítulo (entre o texto e os comentários) e, desde 22/10, também na **página de cada obra**, depois da lista de capítulos (ex.: `/pt/works/light-and-blood/`; a "história atual" é a da página; desde 27/10, seu pedido, numa **caixa separada abaixo da folha da lista**, com o mesmo espaço, a mesma largura e a mesma sombra que nos capítulos, e não mais dentro da folha), há uma caixa com a frase **"estou lendo em ordem"** (ou "estou assistindo…" / "estou jogando…", conforme o tipo da história em que o visitante está) e um seletor **Cronológica / Lançamento**. À esquerda fica a história que vem **antes** nessa ordem, à direita a que vem **depois**; o botão diz "Ler …", "Assistir …" ou "Jogar …" conforme o tipo da história de **destino**, sempre numa linha só (o site diminui a letra se o título for comprido, nunca corta).
 
 **Para onde cada lado leva (desde 22/10, seu pedido "Mude de volta…"):** história com **mais de um capítulo** → a **lista de capítulos** dela (a página da obra); história com **um capítulo só** → o capítulo. Os dois lados levam ao mesmo lugar (a regra de 21/10, "último capítulo da anterior, primeiro da seguinte", saiu). Contam só os capítulos que existem ali (no site publicado, os publicados; na prévia, também os rascunhos). Obra de link externo, como *Alô? Residência dos Di Vario*, continua levando ao link externo, em outra aba.
 
@@ -254,12 +254,42 @@ O que fica escrito em `content/works/<obra>/work.json` (exemplo real, resumido, 
 | `opacity` | De 0 (invisível) a 1. Opcional (padrão 1). |
 | `hover` | **Só o que muda** com o mouse por cima (`x`, `y`, `width`, `rotate`, `opacity`); o que não aparece aqui fica como estava. Sem `hover`, a camada fica parada. |
 | `bleed` | (opcional, fica ao lado de `size` e `layers`) `true` = as camadas podem **sair do quadrado da arte** até a borda da caixa, que funciona como máscara de camada (corta no canto arredondado), sempre **por trás** da frase "estou lendo em ordem" e do seletor, e sem pegar o clique (o seletor e a outra história continuam clicáveis). Use com `size` **quadrado** (ex.: `[1000, 1000]`): aí `x`, `y` e `width` valem em % do quadrado da arte e podem passar de 0–100 (as asas do Giuseppe têm `width` 265 a 282). No celular (até 700 px) a caixa é estreita e as duas artes ficam lado a lado, então ali o quadrado volta a ser o limite (as asas não cobrem a outra história), mas sem corte seco: as bordas somem num degradê radial (desde 22/10, seu pedido). Hoje só *Ossos do Ofício* (as asas têm `width` 119 a 127). |
+| `escala` | (opcional, fica ao lado de `size` e `layers`; desde 27/10) o tamanho de **todas** as camadas juntas: `1` (ou sem o campo) = como está; `1.2` = 20% maior; `0.8` = 20% menor. Aceita de `0.3` a `3`. Veja "Experimentar o tamanho de uma arte sozinho", logo abaixo. Hoje nenhuma história usa. |
 
 Como se comporta: **uma transição só** (0,6 s, suave, a mesma para todas as camadas) leva do começo ao estado do mouse, e volta quando o mouse sai; vale também para o teclado. Sem JavaScript a composição já aparece (é só CSS). Para quem pediu **menos movimento** no aparelho nada anima: a arte que só se mexe (Luz & Sangue, Alô?) fica parada; a que tem algo surgindo (Pederneira, Ossos, Beira) troca **de uma vez** para o desenho do mouse, com tudo no lugar (os olhos em cima do rosto). **Uma camada que tem de acompanhar outra** (os olhos do Giuseppe, os da Iris): se o PNG tem o mesmo tamanho do personagem (como os olhos da Iris), use os mesmos números; se tem outro tamanho (os olhos do Giuseppe), me mande, que eu calculo a posição para os dois ficarem colados durante a animação inteira. No celular a composição encolhe junto com a coluna, sem rolagem para o lado. Se uma imagem do `order_art` não existir em `static/`, o build avisa. Se a obra tiver `order_art` **e** `order_images`, as camadas ganham. Os mesmos arquivos passam pelas versões leves (WebP) do site; o John, que é pequeno (216 × 448), não é ampliado além do tamanho real dele.
 
 **O tamanho dos personagens (seu pedido de 22/10, "Use isso como guideline para padronizar todas as histórias na caixa de cronologia"):** em toda arte, a **cabeça** dos personagens fica mais ou menos do tamanho da da **Olivia e do Harry** na arte de *Pederneira* (a referência), antes e com o mouse. Medida a 1100 px de janela (alto do cabelo ou do chapéu até o queixo ou a barba): Olivia 43 px (45 com o mouse), Harry 33 (36). Para ajustar uma arte, todas as camadas dela crescem ou encolhem **juntas** (o movimento e as proporções entre os personagens não mudam; olhos continuam colados) e a arte fica encostada embaixo, perto do rótulo. Arte nova: eu meço e escrevo os números já nessa régua (o `tools/ordem_playwright.py` mede as cabeças e reclama se uma obra passar de 15% da média da Olivia e do Harry). No **celular**, a arte que sai do quadrado (`bleed`) some num **degradê** nas bordas do quadrado, em vez de ser cortada seco.
 
 Para **mudar** uma arte que já existe (afastar mais o Lucas do Wellersson, o Thymorr começar mais perto do centro…), mexa só nos números do `hover` (ou me peça).
+
+#### Experimentar o tamanho de uma arte sozinho: `escala` (desde 27/10, seu pedido)
+
+Para deixar todos os personagens de uma história maiores ou menores na caixa, sem mexer nos números das camadas, escreva **um número só**: `"escala"`. `1` é o tamanho de hoje; `1.2` = 20% maior; `0.8` = 20% menor (vale de `0.3` a `3`, sempre com **ponto** e sem aspas). Todas as camadas daquela história mudam juntas, antes e com o mouse: o pé do desenho fica no mesmo lugar (a linha de baixo do quadrado da arte, logo acima do "Ler …"), o conjunto continua centrado, os olhos continuam colados, o giro não muda e o movimento do mouse acompanha (com `1.2`, o personagem também anda 20% mais).
+
+1. **Abra o `work.json` da história** (num editor de texto):
+   - Pederneira → `content/works/firestriker/work.json`
+   - Luz & Sangue → `content/works/light-and-blood/work.json`
+   - Alô? Residência dos Di Vario → `content/works/hdvr/work.json`
+   - Beira de Estrada → `content/works/roadside/work.json`
+   - Ossos do Ofício → `content/works/all-in-a-nights-work/work.json`
+2. **Ache a linha `"order_art": {`** e, logo abaixo dela, acrescente a linha `"escala": 1.2,` (**com a vírgula no fim**). Fica assim (exemplo de Luz & Sangue):
+   ```json
+   "order_art": {
+     "escala": 1.2,
+     "size": [2087, 1752],
+     "layers": [
+   ```
+   Não mexa nos outros números (`size`, `layers`).
+3. **Veja o resultado:** no terminal, na pasta do site, rode `pnpm dev` (deixe rodando) e abra no navegador um capítulo em que a caixa mostre essa história. A arte de uma história aparece na caixa das **vizinhas** dela, nunca na própria:
+   - Luz & Sangue: `http://localhost:4321/pt/works/firestriker/01/` (Cronológica, à esquerda);
+   - Pederneira: `http://localhost:4321/pt/works/light-and-blood/01/` (Cronológica, à direita);
+   - Alô?: `http://localhost:4321/pt/works/firestriker/01/` com o seletor em **Lançamento** (à esquerda);
+   - Ossos do Ofício: `http://localhost:4321/pt/works/light-and-blood/01/` (Cronológica, à esquerda);
+   - Beira de Estrada: `http://localhost:4321/pt/works/firestriker/01/` (Cronológica, à direita).
+   (Ossos e Beira são rascunho; o `pnpm dev` mostra os rascunhos.)
+4. **Troque o número e salve** o `work.json`: em uns 2 segundos a página se atualiza sozinha (se não, recarregue). Passe o mouse por cima da arte para ver o estado do mouse, e olhe também com a janela estreita (como no celular).
+5. **Valores grandes:** a caixa **não muda de tamanho**. O que passar do quadrado da arte é **cortado** na borda dele (em Ossos do Ofício, que tem `bleed`, só na borda da caixa; no celular, some no degradê). Um pé que já estava um pouco abaixo da linha de baixo desce na mesma proporção (e continua cortado ali). Se o número sair da faixa ou vier com vírgula ou aspas (`"1,2"`), o terminal do `pnpm dev` mostra uma mensagem em português dizendo o que corrigir.
+6. **Quando gostar, me passe os números finais** (ex.: "Luz & Sangue 1.15, Ossos do Ofício 1.3"). Eu ponho no site, confiro em todos os capítulos e larguras e entrego. Para desfazer, apague a linha ou volte para `1`.
 
 - **Textos da caixa:** estão em `src/lib/textosDaOrdem.ts` (não no `config.json`). Os em inglês são uma proposta, para você aprovar ou trocar.
 

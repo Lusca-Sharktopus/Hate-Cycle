@@ -304,10 +304,11 @@ def bloco(browser, porta, fotos):
     casos = {
         "/pt/works/firestriker/01/": {"chrono": [["/pt/works/light-and-blood/", "Assistir Luz & Sangue"], ["/pt/works/roadside/", "Ler Beira de Estrada"]]},
         "/pt/works/roadside/01/": {"titulo": "estou lendo em ordem", "chrono": [["/pt/works/firestriker/01/", "Ler Pederneira"], None],
-                                   "release": [["/pt/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"], None]},
+                                   "release": [["/pt/works/light-and-blood/", "Assistir Luz & Sangue"], ["/pt/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"]]},
+        # T17o: no Lançamento a Beira de Estrada (4) vem antes de Ossos do Ofício (5); O Pêndulo e Cat-Crow-Thing (sem arte) são pulados
         "/pt/works/the-pendulum/01/": {"titulo": "estou assistindo em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None],
-                                       "release": [["/pt/works/roadside/", "Ler Beira de Estrada"], None]},
-        "/pt/works/cat-crow-thing/01/": {"titulo": "estou jogando em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None], "release": [["/pt/works/roadside/", "Ler Beira de Estrada"], None]},
+                                       "release": [["/pt/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"], None]},
+        "/pt/works/cat-crow-thing/01/": {"titulo": "estou jogando em ordem", "chrono": [["/pt/works/roadside/", "Ler Beira de Estrada"], None], "release": [["/pt/works/all-in-a-nights-work/01/", "Ler Ossos do Ofício"], None]},
     }
     for url, esperado in casos.items():
         abrir(pg, porta, url, "[data-story-order]")

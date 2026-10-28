@@ -1,7 +1,8 @@
 ---
 // O bloco "estou lendo em ordem…" (T17c) que fecha todo capítulo: uma caixa de papel entre a do capítulo e a dos comentários, com a história
 // que vem ANTES (à esquerda) e a que vem DEPOIS (à direita) na ordem que o visitante escolheu (Cronológica ou Lançamento). Desde a T17l
-// (pedido do autor de 22/10, mudança 7) também na PÁGINA DA OBRA, logo depois da lista de capítulos (a "história atual" é a da página).
+// (pedido do autor de 22/10, mudança 7) também na PÁGINA DA OBRA, depois da lista de capítulos (a "história atual" é a da página); desde
+// a T17o numa caixa própria abaixo da folha da lista, fora do <main>, como nos capítulos (slot "depois-do-main" do BaseLayout).
 // Só no Astro: o build.py não tem este bloco (tests/ajudantes/html.ts ignora exatamente esta <section>; lição 08-leitor.md).
 //
 // Só desenha: tudo vem decidido em `bloco` (src/lib/ordemDeLeitura.ts), nas DUAS ordens. O servidor desenha as duas listas (a padrão
@@ -47,9 +48,10 @@ const DIRECOES = ["prev", "next"] as const;
        valia era SEMPRE a da .reader-box (clamp(1.4rem, 5vw, 3.5rem)); o `padding` que este arquivo dava a .story-order (e o `padding-top`
        do celular) perdia para ela e foi tirado. */
     .reader-box.story-order { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; background: var(--paper), var(--sheet); background-color: var(--sheet); }
-    /* (T17l) na página da obra a caixa vem logo depois da lista de capítulos (section.block), dentro da folha da página: ocupa a largura
-       da lista (o conteúdo da folha), em vez de 2rem a menos */
-    .block + .reader-box.story-order { width: 100%; }
+    /* (T17o, pedido do autor de 27/10) na página da obra a caixa vem DEPOIS da folha da lista, fora do <main> (logo depois de .layout; slot
+       "depois-do-main" do BaseLayout): separada dela pelo mesmo espaço que separa as caixas do capítulo (1.5rem, o margin-bottom da
+       .reader-box) e acima das runas do fundo, como o <main> (z-index 1). A largura é a dos capítulos (min(1000px, 100% − 2rem)). */
+    .layout + .reader-box.story-order { z-index: 1; margin-top: 1.5rem; }
     .story-order { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; color: var(--green); font-family: var(--font-text);
       /* o tamanho MÁXIMO do rótulo "Ler [obra]" (T17i: um pouco menor que antes, que era clamp(.95rem, 2.5vw, 1.8rem)) */
       --so-cap: clamp(.85rem, 2.2vw, 1.6rem); }

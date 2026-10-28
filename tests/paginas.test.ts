@@ -549,13 +549,15 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
       }
       capitulos.push(url);
       expect(r.removidos, `${url}: exatamente 1 bloco`).toHaveLength(1);
-      expect(r.filhasDiretasDoMain, `${url}: o bloco é filho direto do <main>`).toEqual([true]);
       if (ehCapitulo(url)) {
+        expect(r.lugares, `${url}: o bloco é filho direto do <main>`).toEqual(["main"]);
         // entre a caixa do capítulo e a caixa (fina) dos comentários
         expect(html, url).toMatch(/<\/div>\s*<section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<div class="reader-box paper slim">/);
       } else {
-        // T17l: logo depois da lista de capítulos, e é a última coisa do <main>
-        expect(html, url).toMatch(/<ol class="chapter-list">[\s\S]*?<\/ol><\/section>\s*<section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<\/main>/);
+        // T17o (pedido do autor de 27/10): uma caixa própria ABAIXO da folha da lista, fora do <main> (colada no </div> da .layout, antes do
+        // rodapé); a lista de capítulos é a última coisa do <main>
+        expect(r.lugares, `${url}: o bloco vem logo depois da div.layout, fora do <main>`).toEqual(["depois-do-main"]);
+        expect(html, url).toMatch(/<ol class="chapter-list">[\s\S]*?<\/ol><\/section>\s*<\/main>\s*<\/div><section class="reader-box paper story-order"[\s\S]*?<\/section>\s*<footer class="site-footer"/);
       }
       expect(scripts, `${url}: o script do bloco, uma vez`).toHaveLength(1);
       expect(html.indexOf(scripts[0] ?? ""), `${url}: o script vai depois do </main>`).toBeGreaterThan(html.indexOf("</main>"));
@@ -671,21 +673,28 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
     expect(ped.chrono.next).toEqual({ href: "/pt/works/roadside/", texto: "Ler Beira de Estrada", externo: false });
     expect(ped.release.next?.texto).toBe("Assistir Luz & Sangue");
     // Beira de Estrada (quadrinho: "estou lendo"), nos capítulos e na página da obra: cronológica Pederneira ← → (O Pêndulo e Cat-Crow-Thing,
-    // sem arte, pulados) ninguém; lançamento (5): Ossos do Ofício (4; desde a T17n tem capítulo em português, e é para ele que leva) ← → ninguém
+    // sem arte, pulados) ninguém; lançamento (4, desde a T17o: o autor vai lançar a Beira antes de Ossos): Luz & Sangue (3) ← → Ossos do
+    // Ofício (5; desde a T17n tem capítulo em português, e é para ele que leva)
     for (const url of ["/pt/works/roadside/01/", "/pt/works/roadside/02/", "/pt/works/roadside/"]) {
       const bloco = blocoDe(dir, url);
       expect(bloco, url).toContain("estou lendo em ordem");
       const l = lados(bloco);
       expect(l.chrono.prev, url).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
       expect(l.chrono.next, url).toBeNull();
-      expect(l.release.prev, url).toEqual({ href: "/pt/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
-      expect(l.release.next, url).toBeNull();
-      expect(bloco, url).toContain('<a class="so-side prev" href="/pt/works/all-in-a-nights-work/01/">');
+      expect(l.release.prev, url).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
+      expect(l.release.next, url).toEqual({ href: "/pt/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
+      expect(bloco, url).toContain('<a class="so-side next" href="/pt/works/all-in-a-nights-work/01/">');
       expect(bloco, url).not.toContain("hreflang");
     }
-    expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.prev).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
+    expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.next).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
     expect(blocoDe(dir, "/en/works/roadside/01/")).not.toContain("hreflang");
-    // O Pêndulo (vídeo: "estou assistindo") e Cat-Crow-Thing (jogo: "estou jogando") ainda TÊM o bloco; antes deles, a Beira de Estrada
+    // T17o: lançamento na prévia = Alô? 1 · Pederneira 2 · Luz & Sangue 3 · Beira de Estrada 4 · Ossos do Ofício 5 (O Pêndulo 6 e Cat-Crow-Thing 7, sem arte, pulados)
+    expect(lados(blocoDe(dir, "/pt/works/light-and-blood/01/")).release.next?.href).toBe("/pt/works/roadside/");
+    const ossosNoLancamento = lados(blocoDe(dir, "/pt/works/all-in-a-nights-work/01/")).release;
+    expect(ossosNoLancamento.prev?.href).toBe("/pt/works/roadside/");
+    expect(ossosNoLancamento.next).toBeNull();
+    // O Pêndulo (vídeo: "estou assistindo") e Cat-Crow-Thing (jogo: "estou jogando") ainda TÊM o bloco; antes deles, a Beira de Estrada na
+    // cronológica e (T17o) Ossos do Ofício no lançamento
     const pen = blocoDe(dir, "/pt/works/the-pendulum/01/");
     expect(pen).toContain("estou assistindo em ordem");
     for (const lang of ["pt", "en"] as const) {
@@ -693,7 +702,7 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
       expect(cct).toContain(lang === "pt" ? "estou jogando em ordem" : "I’m playing in");
       for (const bloco of [cct, blocoDe(dir, `/${lang}/works/the-pendulum/01/`)]) {
         for (const o of ["chrono", "release"] as const) {
-          expect(lados(bloco)[o].prev?.href).toBe(`/${lang}/works/roadside/`);
+          expect(lados(bloco)[o].prev?.href).toBe(o === "chrono" ? `/${lang}/works/roadside/` : `/${lang}/works/all-in-a-nights-work/01/`);
           expect(lados(bloco)[o].next).toBeNull();
         }
       }

@@ -1,25 +1,21 @@
 ---
-// O miolo da página de uma obra (/pt/works/light-and-blood/): capa, título, resumo, os dois botões e a lista de capítulos e, logo depois
-// da lista (T17l), o bloco "estou lendo em ordem…" (ProximaHistoria.astro, o mesmo do fim dos capítulos; só no Astro).
-// Só desenha: tudo já vem decidido em `pagina` (src/lib/capitulos.ts → paginaDaObra) e em `ordem` (src/lib/ordemDeLeitura.ts).
-// O bloco vem logo depois do </section> da lista: sem ele (tests/ajudantes/html.ts → semBlocoDeOrdem) a página fica igual à do Python.
+// O miolo da página de uma obra (/pt/works/light-and-blood/): capa, título, resumo, os dois botões e a lista de capítulos.
+// Só desenha: tudo já vem decidido em `pagina` (src/lib/capitulos.ts → paginaDaObra). É o mesmo <main> do Python.
+// O bloco "estou lendo em ordem…" (T17l) NÃO mora aqui desde a T17o (pedido do autor de 27/10): fica numa caixa própria, abaixo da folha,
+// fora do <main> (slot "depois-do-main" do BaseLayout; src/pages/[lang]/works/[obra]/index.astro).
 import { assetUrl } from "../lib/assets";
 import type { PaginaDaObra } from "../lib/capitulos";
-import type { BlocoDaOrdem } from "../lib/ordemDeLeitura";
-import ProximaHistoria from "./ProximaHistoria.astro";
 
 interface Props {
   pagina: PaginaDaObra;
-  /** O bloco "estou lendo em ordem…" (T17l); sem ele, a página sai como a do Python. */
-  ordem?: BlocoDaOrdem | undefined;
 }
 
-const { pagina: p, ordem } = Astro.props;
+const { pagina: p } = Astro.props;
 ---
 
 <div class="wrap block work-head">{p.capa && <img class="cover" src={assetUrl(p.capa)} alt="" />}<div><h1>{p.titulo}</h1><p>{p.descricao}</p><div class="hero-actions"><a class="button" href={p.primeiro.url}>{p.primeiro.rotulo}</a>
 <a class="button ghost" href={p.ultimo.url}>{p.ultimo.rotulo}</a></div></div></div>
-<section class="wrap block"><h2>{p.tituloDaLista}</h2><ol class="chapter-list">{p.capitulos.map((c) => <li><a href={c.url}><span class="n">{c.numero}</span><span class="t">{c.titulo}</span><time>{c.data}</time></a></li>)}</ol></section>{ordem && <ProximaHistoria bloco={ordem} />}
+<section class="wrap block"><h2>{p.tituloDaLista}</h2><ol class="chapter-list">{p.capitulos.map((c) => <li><a href={c.url}><span class="n">{c.numero}</span><span class="t">{c.titulo}</span><time>{c.data}</time></a></li>)}</ol></section>
 
 <style is:global>
   @layer site {
