@@ -6141,6 +6141,10 @@
  "indice": {
   "build": {
    "en": {
+    "emissaries/adolas-podcast": [
+     "Adolas Podcast",
+     "/en/emissaries/adolas-podcast/"
+    ],
     "emissaries/joao-revan": [
      "João Revan",
      "/en/emissaries/joao-revan/"
@@ -6511,6 +6515,10 @@
     ]
    },
    "pt": {
+    "emissaries/adolas-podcast": [
+     "Adolas Podcast",
+     "/pt/emissaries/adolas-podcast/"
+    ],
     "emissaries/joao-revan": [
      "João Revan",
      "/pt/emissaries/joao-revan/"

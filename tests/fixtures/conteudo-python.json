@@ -80,8 +80,7 @@
     "order": "4",
     "instagram": "https://www.instagram.com/adolaspodcast/",
     "tiktok": "https://www.tiktok.com/@adolaspodcast",
-    "youtube": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl",
-    "draft": true
+    "youtube": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl"
    },
    "body": "\nA Christian podcast made by and for teenagers. As a founding member of this Podcast, I saw the opportunity for a partnership between the projects; from it was born Light & Blood, a Christian RPG; a testament that there is no art form that cannot be used to glorify God.\n"
   },
@@ -93,8 +92,7 @@
     "order": "4",
     "instagram": "https://www.instagram.com/adolaspodcast/",
     "tiktok": "https://www.tiktok.com/@adolaspodcast",
-    "youtube": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl",
-    "draft": true
+    "youtube": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl"
    },
    "body": "\nUm Podcast cristão feito por e para adolescentes. Como membro fundador deste Podcast, vi a oportunidade de uma parceria entre os projetos; daí nasceu Luz & Sangue, um RPG cristão; um testamento de que não há forma de arte que não possa ser usada para glorificar a Deus.\n"
   },
@@ -3450,11 +3448,13 @@
     },
     "emissaries": {
      "en": [
+      "adolas-podcast",
       "joao-revan",
       "kaisui",
       "saf"
      ],
      "pt": [
+      "adolas-podcast",
       "joao-revan",
       "kaisui",
       "saf"
@@ -3463,11 +3463,13 @@
    },
    "emissarios_visiveis": {
     "en": [
+     "adolas-podcast",
      "joao-revan",
      "kaisui",
      "saf"
     ],
     "pt": [
+     "adolas-podcast",
      "joao-revan",
      "kaisui",
      "saf"
@@ -3734,6 +3736,7 @@
     "/pt/works/light-and-blood/02/"
    ],
    "index": [
+    "en:emissaries/adolas-podcast",
     "en:emissaries/joao-revan",
     "en:emissaries/kaisui",
     "en:emissaries/saf",
@@ -3826,6 +3829,7 @@
     "en:works/firestriker",
     "en:works/hdvr",
     "en:works/light-and-blood",
+    "pt:emissaries/adolas-podcast",
     "pt:emissaries/joao-revan",
     "pt:emissaries/kaisui",
     "pt:emissaries/saf",

@@ -8664,7 +8664,8 @@
      "emissarios": [
       "saf",
       "kaisui",
-      "joao-revan"
+      "joao-revan",
+      "adolas-podcast"
      ],
      "emissarios_cartoes": {
       "saf": {
@@ -8705,6 +8706,30 @@
          "chave": "instagram",
          "rotulo": "Instagram",
          "url": "https://www.instagram.com/jrevan.aex/"
+        }
+       ],
+       "mostra_texto": false
+      },
+      "adolas-podcast": {
+       "titulo": "Adolas Podcast",
+       "papel": "Partners",
+       "foto": "/emissaries/adolas.png",
+       "inicial": null,
+       "redes": [
+        {
+         "chave": "instagram",
+         "rotulo": "Instagram",
+         "url": "https://www.instagram.com/adolaspodcast/"
+        },
+        {
+         "chave": "tiktok",
+         "rotulo": "TikTok",
+         "url": "https://www.tiktok.com/@adolaspodcast"
+        },
+        {
+         "chave": "youtube",
+         "rotulo": "YouTube",
+         "url": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl"
         }
        ],
        "mostra_texto": false
@@ -9713,7 +9738,8 @@
      "emissarios": [
       "saf",
       "kaisui",
-      "joao-revan"
+      "joao-revan",
+      "adolas-podcast"
      ],
      "emissarios_cartoes": {
       "saf": {
@@ -9754,6 +9780,30 @@
          "chave": "instagram",
          "rotulo": "Instagram",
          "url": "https://www.instagram.com/jrevan.aex/"
+        }
+       ],
+       "mostra_texto": false
+      },
+      "adolas-podcast": {
+       "titulo": "Adolas Podcast",
+       "papel": "Parceiros",
+       "foto": "/emissaries/adolas.png",
+       "inicial": null,
+       "redes": [
+        {
+         "chave": "instagram",
+         "rotulo": "Instagram",
+         "url": "https://www.instagram.com/adolaspodcast/"
+        },
+        {
+         "chave": "tiktok",
+         "rotulo": "TikTok",
+         "url": "https://www.tiktok.com/@adolaspodcast"
+        },
+        {
+         "chave": "youtube",
+         "rotulo": "YouTube",
+         "url": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl"
         }
        ],
        "mostra_texto": false

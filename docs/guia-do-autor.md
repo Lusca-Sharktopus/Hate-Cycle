@@ -333,7 +333,7 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 - **Textos dos Emissários** (ocultos por enquanto): em `config.json`, `"emissaries": { "show_texts": false, ... }` → mude para `true` para mostrá-los de novo.
 - **Esconder um emissário:** em `config.json`, `"emissaries": { "hide": ["saf"] }`; deixe a lista vazia (`[]`) para todos aparecerem (hoje está vazia: a Saf aparece). Outra forma: `draft: true` nos dois `.md` dele.
 - **Tutti** está fora dos Emissários desde 22/10/2026 (pedido seu): `draft: true` em `content/emissaries/tutti/en.md` e `pt.md` (o `config.json` não mudou). Para recolocá-lo, apague essa linha nos dois arquivos.
-- **Adolas Podcast:** hoje está **fora** dos Emissários: o `content/emissaries/adolas-podcast/pt.md` (e o `en.md`) tem `draft: true` (conferido na T17m, 22/10: ele não aparece na Sobre). Para recolocá-lo, apague essa linha nos dois arquivos; para tirar outro emissário, é a mesma coisa que o Tutti.
+- **Adolas Podcast:** desde 28/10 (seu "Deve aparecer") está **de volta** aos Emissários, na página Sobre (a linha `draft: true` saiu do `content/emissaries/adolas-podcast/pt.md` e do `en.md`). Para esconder um emissário, ponha `draft: true` no front matter dos dois arquivos; para tirar outro emissário, é a mesma coisa que o Tutti.
 
 ## 10. Notícias
 
@@ -456,7 +456,7 @@ As fontes Noto vêm do Google Fonts, restritas a esses símbolos (no site novo, 
 
 ## 18. Barra lateral de botões (desligada)
 
-- **Para religar:** em `build.py`, troque `SIDEBAR_ON = False` por `True` (as redes sociais voltam do rodapé para a barra). O Adolas Podcast foi tirado dos Emissários por causa dela; para recolocá-lo lá, apague `draft: true` em `content/emissaries/adolas-podcast/*.md`.
+- **Para religar:** em `build.py`, troque `SIDEBAR_ON = False` por `True` (as redes sociais voltam do rodapé para a barra). (O Adolas Podcast, que tinha saído dos Emissários por causa dela, voltou em 28/10.)
 - Fica à direita do conteúdo em telas largas (≥ 1100 px) e vai para baixo do conteúdo, antes do rodapé, em telas estreitas. Quando ligada, as redes sociais do projeto saem do rodapé e vivem nela.
 - Ordem: divisor → "Siga o projeto" (+ redes) → "Siga o autor" (Instagram, X, TikTok) → Discord (sem link) → divisor → Catarse (sem link) → botão branco "Tip Jar" → divisor → "Projetos parceiros" (Adolas Podcast, Corte do Submundo, Lusca Sharktopus, Safe Haven, Two Ways, cada um com link e versão "hover").
 - **Imagens em `static/sidebar/`.** Por enquanto são *placeholders*; para usar a arte definitiva, substitua o arquivo mantendo o MESMO nome: `divisor.png`, `Discord Server.png`, `Catarse.png`, `kofi.png`, `Adolas Podcast.png` + `Adolas Podcast hover.png` (idem `Corte do Submundo`, `Lusca Sharktopus`, `Safe Haven`, `Two Ways`).
