@@ -178,10 +178,10 @@ CLAUDE.md, `.claude/rules` e todas as skills refletindo os comandos e a estrutur
 | B4 | Fotos de perfil nos comentários | Adiado a pedido |
 | B5 | Adolas Podcast nos Emissários | **Resolvido (28/10):** o autor respondeu "Deve aparecer"; o `draft: true` saiu dos dois `.md`, e ele aparece na Sobre (EN e PT) nos dois geradores. |
 | B6 | Publicar Ossos do Ofício: hoje aparece como "Em breve"; o capítulo 01 existe só em inglês e está `unlisted` | **Atualizado (T17n, 27/10):** a obra inteira é rascunho (`work.json → draft`) e a cena 1 existe em inglês e, desde 27/10, em português (o mesmo texto em inglês, com o quadrinho e o GIF em português; os dois capítulos com `draft: true`). Falta o autor dizer quando publicar (e se traduz o texto antes). |
-| B7 | Assets ainda sem uso: `ossos-memoria-vito.png`, `feliz-natal-di-vario-ilustracao.jpg` | Onde entram? |
+| B7 | Assets ainda sem uso: `ossos-memoria-vito.png`, `feliz-natal-di-vario-ilustracao.jpg` | **Respondida (28/10):** `ossos-memoria-vito.png` apagada ("pode ser descartada, já que é uma versão antiga do flashback do Giuseppe"); a ilustração de Natal fica guardada onde está, em `static/news/` ("guarde por agora"). |
 | B8 | O gerador diz "Python 3.8+", mas só roda no **Python 3.12+** (f-strings novas no `build.py`; conferido com 3.11 e 3.12) | Qual Python o autor tem? Se for < 3.12, corrigir as linhas (exceção ao congelamento) |
-| B9 | Textos dos Emissários ocultos (`config.json → emissaries.show_texts: false`) | Voltar a mostrar? |
-| B10 | Extras (Universo, Personagens) retirados (`show_extras: false`); 3 páginas de exemplo em rascunho (`harry`, `olivia-purinna`, `hidden-magic`) | Editar, apagar ou religar? |
+| B9 | Textos dos Emissários ocultos (`config.json → emissaries.show_texts: false`) | **Respondida (28/10): "não"** — continuam ocultos. |
+| B10 | Extras (Universo, Personagens) retirados (`show_extras: false`); 3 páginas de exemplo em rascunho (`harry`, `olivia-purinna`, `hidden-magic`) | **Respondida (28/10): guardar** ("pretendo fazer uso delas no futuro"): tudo fica como está, desligado e em rascunho. |
 | B11 | ~~"Outras histórias" fora da home e da página Sobre~~ — **resolvido (15/10):** o autor pediu para excluir do site as histórias que não são do universo. Goblin: Ascenção, Goblin: Era do Guardião, Trilha do Caçador e Two Ways (e as capas) foram movidas para `guardados/obras-fora-do-universo/`. | — |
 | B12 | *O Pêndulo* e *Beira de Estrada* ocultos (`"listed": false`) | Quando mostrar? |
 | B13 | Pasta `static/Produtos` sem uso em nenhuma página | Página de produtos/merch no futuro? |
