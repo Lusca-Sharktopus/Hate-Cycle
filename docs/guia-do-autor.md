@@ -108,7 +108,7 @@ Se algo der muito errado, o site antigo está guardado e dá para pô-lo de volt
 
 Campo `date: AAAA-MM-DD` no topo de cada capítulo/episódio. Aparece na lista de capítulos (em português sai como "18 de ago. de 2026") e faz o capítulo entrar em "Últimas atualizações". **Desde 28/10 (seu pedido; só no site novo) ela não aparece mais sob o título, na página do capítulo.**
 
-**O topo de toda página de capítulo (desde 28/10, só no site novo):** a logo, o título, o aviso do capítulo (se houver, ver abaixo) e a **linha fina** que o texto já tinha (Pederneira, Ossos do Ofício) — agora também nos vídeos e quadrinhos.
+**O topo de toda página de capítulo (desde 28/10, só no site novo):** a logo, logo abaixo dela a **linha fina** (a que o texto já tinha em Pederneira e Ossos do Ofício, agora em todos os capítulos, também vídeos e quadrinhos), depois o título e o aviso do capítulo (se houver, ver abaixo).
 
 **Aviso sob o título (`chapter_note`, desde 28/10):** no `work.json` da obra, um texto curto que aparece sob o título de **todos** os capítulos dela, no lugar onde ficava a data, só no idioma que você escrever. Hoje Luz & Sangue e O Pêndulo têm `"chapter_note": { "en": "Turn Close Captions on!" }` (só em inglês; a página em português fica sem). Para pôr nos dois idiomas, acrescente `"pt": "…"`; para tirar, apague o bloco.
 

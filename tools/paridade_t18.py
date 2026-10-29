@@ -120,10 +120,12 @@ RE_RESUMO_CORTADO = re.compile(r'<span class="news-fade">([^<]*)</span> (<a clas
 RE_CARTAO = re.compile(r'<article class="work-card[ "].*?</article>', re.S)
 # 28/10: o cabeçalho dos capítulos (só no Astro): sem a data sob o título, com o aviso `chapter_note` e a linha fina também no vídeo e no
 # quadrinho. As mesmas formas exatas de tests/ajudantes/html.ts → cabecalhoDoCapituloComoNoPython / semDataDoCapitulo.
-RE_AVISO_DO_CAPITULO = re.compile(r'(</h1>)<p class="chapter-note">[^<]*</p>')
-RE_LINHA_DO_CABECALHO = re.compile(r'(</h1>)<hr class="thin">(?=<div class="player-row">|<div class="video-wrapper">|<nav class="pager"|<div class="comic">|<div class="folheador")')
-RE_DATA_DO_CAPITULO = re.compile(r'(</h1>)<p class="chapter-date"><time datetime="[^"]*">[^<]*</time></p>')
-RE_DATA_DO_CAPITULO_TEXTO = re.compile(r'</h1><p class="chapter-date"><time datetime="[^"]*">([^<]*)</time></p>')
+RE_LINHA_DEPOIS_DA_LOGO = re.compile(r'(<img class="title-image"(?:\s+[\w:-]+(?:="[^"]*")?)*\s*/?>(?:</a>)?)<hr class="thin">')
+RE_TEXTO_DEPOIS_DO_TITULO = re.compile(r'(<h1 class="(?:chapter-title|sr-only)">(?:(?!</h1>).)*</h1>)(?=<div class="prose story|<div class="jogo")')
+RE_AVISO_DO_CAPITULO = re.compile(r'(<h1 class="(?:chapter-title|sr-only)">(?:(?!</h1>).)*</h1>)<p class="chapter-note">[^<]*</p>')
+RE_LINHA_DO_CABECALHO = re.compile(r'(<h1 class="(?:chapter-title|sr-only)">(?:(?!</h1>).)*</h1>)<hr class="thin">(?=<div class="player-row">|<div class="video-wrapper">|<nav class="pager"|<div class="comic">|<div class="folheador")')
+RE_DATA_DO_CAPITULO = re.compile(r'(<h1 class="(?:chapter-title|sr-only)">(?:(?!</h1>).)*</h1>)<p class="chapter-date"><time datetime="[^"]*">[^<]*</time></p>')
+RE_DATA_DO_CAPITULO_TEXTO = re.compile(r'<h1 class="(?:chapter-title|sr-only)">(?:(?!</h1>).)*</h1><p class="chapter-date"><time datetime="[^"]*">([^<]*)</time></p>')
 
 
 # T17d (só no Astro, só na prévia): o leitor página a página dos quadrinhos vira o <div class="comic"> que ele tem dentro, e a janela da demo
@@ -221,10 +223,13 @@ def astro_como_no_python(html: str) -> tuple[str, int]:
     html, a = RE_LINK_DA_HOME.subn("", html)
     html, b = RE_RESUMO_CORTADO.subn(r"\1… \2", html)
     html, c = folheador_como_no_python(html)
+    # 28/10 (antes da janela do jogo, que o Python desenha logo depois da linha): a mesma ordem de cabecalhoDoCapituloComoNoPython()
+    html, g1 = RE_LINHA_DEPOIS_DA_LOGO.subn(r"\1", html)
+    html, g2 = RE_AVISO_DO_CAPITULO.subn(r"\1", html)
+    html, g3 = RE_TEXTO_DEPOIS_DO_TITULO.subn(r'\1<hr class="thin">', html)
+    html, g4 = RE_LINHA_DO_CABECALHO.subn(r"\1", html)
     html, d = sem_janela_do_jogo(html)
-    html, g = RE_AVISO_DO_CAPITULO.subn(r"\1", html)
-    html, h = RE_LINHA_DO_CABECALHO.subn(r"\1", html)
-    return html, a + b + c + d + e + f + g + h
+    return html, a + b + c + d + e + f + g1 + g2 + g3 + g4
 
 
 def python_como_no_astro(html: str, sem_data: bool = True) -> tuple[str, int]:

@@ -578,12 +578,16 @@ export function blogComoNoPython(html: string, astro: TextosDoBlogNaParidade, py
 // ───────────── 28/10: o cabeçalho dos capítulos (só no Astro) ─────────────
 //
 // Pedidos do autor de 28/10, só no Astro (o build.py está congelado): (1) "retire as datas de debaixo dos nomes dos capítulos";
-// (2) "todas as páginas de história [com] a mesma linha horizontal presente em Pederneira e Ossos do Ofício abaixo da logo" (o
-// <hr class="thin"> que o texto já tinha passa a vir também no vídeo e no quadrinho); (3) "Turn Close Captions on!" sob o título, no
-// lugar da data, só em inglês (Luz & Sangue e O Pêndulo; `chapter_note` no work.json). Duas exceções, cada uma de formas exatas:
-//   - cabecalhoDoCapituloComoNoPython() (no HTML do ASTRO): sai o <p class="chapter-note">…</p> que vem logo depois do </h1>, e sai o
-//     <hr class="thin"> que vem logo depois do </h1> quando o que segue é o vídeo (div.player-row, div.video-wrapper) ou o quadrinho
-//     (nav.pager, div.comic, div.folheador). O hr do texto (seguido de div.prose ou div.jogo) fica: ele existe nos dois.
+// (2) a linha fina (hr.thin) em todas as páginas de história, "realmente logo abaixo da logo" (antes do título); (3) "Turn Close Captions
+// on!" sob o título, no lugar da data, só em inglês (Luz & Sangue e O Pêndulo; `chapter_note` no work.json). O Python desenha: logo,
+// título, data e, SÓ no texto, a linha depois do título; vídeo e quadrinho sem linha. Duas exceções, cada uma de formas exatas:
+//   - cabecalhoDoCapituloComoNoPython() (no HTML do ASTRO), em três passos:
+//       a. sai o <hr class="thin"> que vem logo depois da logo (<img class="title-image" …>, ou o </a> em volta dela);
+//       b. sai o <p class="chapter-note">…</p> que vem logo depois do </h1>;
+//       c. no TEXTO (o </h1> seguido de div.prose.story ou div.jogo), a linha volta para depois do título, onde o Python a desenha; e sai a linha
+//          que vem logo depois do </h1> no vídeo (div.player-row, div.video-wrapper) e no quadrinho (nav.pager, div.comic, div.folheador)
+//          — a de capítulo SEM logo, que o Astro desenha depois do título.
+//     Tem de rodar ANTES de semJanelaDoJogo() (que procura a janela logo depois da linha, como no Python).
 //   - semDataDoCapitulo() (no HTML do PYTHON): sai o <p class="chapter-date"><time datetime="…">…</time></p> que vem logo depois do </h1>.
 // tests/cabecalho.test.ts prova as duas (inclusive casos negativos).
 
@@ -591,18 +595,30 @@ export interface CabecalhoDoCapituloComoNoPython {
   html: string;
   /** Quantos avisos (`chapter-note`) saíram. */
   avisos: number;
-  /** Quantas linhas (hr.thin) de vídeo/quadrinho saíram. */
+  /** Quantas linhas saíram de logo abaixo da logo. */
   linhas: number;
+  /** Quantas linhas voltaram para depois do título no texto (onde o Python as desenha). */
+  devolvidas: number;
+  /** Quantas linhas de vídeo/quadrinho sem logo saíram (depois do título). */
+  semLogo: number;
 }
-const RE_AVISO_DO_CAPITULO = /(<\/h1>)<p class="chapter-note">[^<]*<\/p>/g;
-const RE_LINHA_DO_CABECALHO = /(<\/h1>)<hr class="thin">(?=<div class="player-row">|<div class="video-wrapper">|<nav class="pager"|<div class="comic">|<div class="folheador")/g;
-/** O HTML do Astro sem o aviso sob o título e sem a linha fina do vídeo/quadrinho (como o Python desenha). */
+// (o alt da logo pode ter ">" sem escape, como "Setas -> B": os atributos são lidos entre aspas; o título é o <h1> do capítulo, nunca o
+// <h1> de uma página avulsa — "Sobre" tem um <h1 class="sr-only"> seguido de div.prose —; o texto do capítulo é div.prose.story)
+const RE_LINHA_DEPOIS_DA_LOGO = /(<img class="title-image"(?:\s+[\w:-]+(?:="[^"]*")?)*\s*\/?>(?:<\/a>)?)<hr class="thin">/g;
+const RE_AVISO_DO_CAPITULO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)<p class="chapter-note">[^<]*<\/p>/g;
+const RE_TEXTO_DEPOIS_DO_TITULO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)(?=<div class="prose story|<div class="jogo")/g;
+const RE_LINHA_DO_CABECALHO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)<hr class="thin">(?=<div class="player-row">|<div class="video-wrapper">|<nav class="pager"|<div class="comic">|<div class="folheador")/g;
+/** O HTML do Astro com o cabeçalho do capítulo como o Python o desenha (sem aviso, linha só no texto, depois do título). */
 export function cabecalhoDoCapituloComoNoPython(html: string): CabecalhoDoCapituloComoNoPython {
   let avisos = 0;
   let linhas = 0;
-  const semAviso = html.replace(RE_AVISO_DO_CAPITULO, (_m, h1: string) => (avisos++, h1));
-  const semLinha = semAviso.replace(RE_LINHA_DO_CABECALHO, (_m, h1: string) => (linhas++, h1));
-  return { html: semLinha, avisos, linhas };
+  let devolvidas = 0;
+  let semLogo = 0;
+  const a = html.replace(RE_LINHA_DEPOIS_DA_LOGO, (_m, logo: string) => (linhas++, logo));
+  const b = a.replace(RE_AVISO_DO_CAPITULO, (_m, h1: string) => (avisos++, h1));
+  const c = b.replace(RE_TEXTO_DEPOIS_DO_TITULO, (_m, h1: string) => (devolvidas++, `${h1}<hr class="thin">`));
+  const d = c.replace(RE_LINHA_DO_CABECALHO, (_m, h1: string) => (semLogo++, h1));
+  return { html: d, avisos, linhas, devolvidas, semLogo };
 }
 
 export interface SemDataDoCapitulo {
@@ -610,7 +626,7 @@ export interface SemDataDoCapitulo {
   /** Quantas datas saíram. */
   tiradas: number;
 }
-const RE_DATA_DO_CAPITULO = /(<\/h1>)<p class="chapter-date"><time datetime="[^"]*">[^<]*<\/time><\/p>/g;
+const RE_DATA_DO_CAPITULO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)<p class="chapter-date"><time datetime="[^"]*">[^<]*<\/time><\/p>/g;
 /** O HTML do Python sem a data sob o título do capítulo (o Astro não a desenha desde 28/10). */
 export function semDataDoCapitulo(html: string): SemDataDoCapitulo {
   let tiradas = 0;

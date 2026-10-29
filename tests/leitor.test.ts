@@ -126,19 +126,26 @@ for (const amb of ref.ambientes) {
       expect({ pares: semAntigos.quantos, sobrou: semAntigos.sobrou }, url).toEqual({ pares: temCaixa ? 1 : 0, sobrou: false });
       // T17d: o leitor página a página (obra com page_runes) e a janela do jogo (obra com game) só existem no Astro (tests/folheador.test.ts)
       const comoNoPython = folheadorComoNoPython(pronto.html);
-      const semJogo = semJanelaDoJogo(comoNoPython.html);
+      // 28/10: sem a data sob o título, com o aviso (`chapter_note`) e a linha fina logo abaixo da logo (tests/ajudantes/html.ts); antes da
+      // janela do jogo, que o Python desenha logo depois da linha
+      const cab = cabecalhoDoCapituloComoNoPython(comoNoPython.html);
+      const temLogo = leitura.cabecalho.logo !== null;
+      const ehTexto = leitura.conteudo.formato === "prose";
+      expect({ linhas: cab.linhas, devolvidas: cab.devolvidas, semLogo: cab.semLogo, avisos: cab.avisos }, `${url}: o cabeçalho`).toEqual({
+        linhas: temLogo ? 1 : 0,
+        devolvidas: ehTexto && temLogo ? 1 : 0,
+        semLogo: !ehTexto && !temLogo ? 1 : 0,
+        avisos: leitura.cabecalho.aviso ? 1 : 0,
+      });
+      expect(pronto.html, `${url}: a data sob o título saiu`).not.toContain('class="chapter-date"');
+      const semJogo = semJanelaDoJogo(cab.html);
       expect({ trocados: comoNoPython.trocados, recusados: comoNoPython.recusados, janelas: semJogo.removidos.length, foraDoLugar: semJogo.foraDoLugar }, url).toEqual({
         trocados: leitura.conteudo.formato === "comic" && leitura.conteudo.folheador ? 1 : 0,
         recusados: 0,
         janelas: leitura.conteudo.formato === "prose" && leitura.conteudo.jogo ? 1 : 0,
         foraDoLugar: 0,
       });
-      // 28/10: sem a data sob o título, com o aviso (`chapter_note`) e a linha fina também no vídeo/quadrinho (tests/ajudantes/html.ts)
-      const cab = cabecalhoDoCapituloComoNoPython(semJogo.html);
-      expect(cab.linhas, `${url}: a linha fina do vídeo/quadrinho`).toBe(leitura.conteudo.formato === "prose" ? 0 : 1);
-      expect(cab.avisos, `${url}: o aviso sob o título`).toBe(leitura.cabecalho.aviso ? 1 : 0);
-      expect(pronto.html, `${url}: a data sob o título saiu`).not.toContain('class="chapter-date"');
-      expect(canonicoDoMiolo(cab.html), url).toBe(canonicoDoMiolo(semDataDoCapitulo(semAntigos.html).html));
+      expect(canonicoDoMiolo(semJogo.html), url).toBe(canonicoDoMiolo(semDataDoCapitulo(semAntigos.html).html));
       // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
       const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
       expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);

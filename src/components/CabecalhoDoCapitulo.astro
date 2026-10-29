@@ -1,6 +1,8 @@
 ---
 // O topo de um capítulo: a logo da obra (link para a página da obra, quando não é obra de capítulo único), o título e, desde 28/10,
-// o aviso do capítulo (`chapter_note`; a data saiu a pedido do autor: "retire as datas de debaixo dos nomes dos capítulos"). Só desenha: tudo vem decidido em `cabecalho` (src/lib/leitura.ts → cabecalhoDoCapitulo, build.py ~792–799).
+// o aviso do capítulo (`chapter_note`; a data saiu a pedido do autor: "retire as datas de debaixo dos nomes dos capítulos"), e a linha
+// fina (hr.thin) LOGO ABAIXO DA LOGO, antes do título ("realmente logo abaixo da logo", 28/10), em todo formato; sem logo, ela vem
+// depois do título/aviso (onde o texto sempre a teve). Só desenha: tudo vem decidido em `cabecalho` (src/lib/leitura.ts → cabecalhoDoCapitulo, build.py ~792–799).
 import { assetUrl } from "../lib/assets";
 import type { CabecalhoDoCapitulo } from "../lib/leitura";
 
@@ -12,4 +14,4 @@ const { cabecalho: c } = Astro.props;
 const logo = c.logo ? { src: assetUrl(c.logo.arquivo), alt: c.logo.alt } : null;
 ---
 
-{logo && (c.linkDaLogo ? <a href={c.linkDaLogo}><img class="title-image" src={logo.src} alt={logo.alt} /></a> : <img class="title-image" src={logo.src} alt={logo.alt} />)}<h1 class={c.classeDoTitulo}>{c.titulo}</h1>{c.aviso && <p class="chapter-note">{c.aviso}</p>}
+{logo && (c.linkDaLogo ? <a href={c.linkDaLogo}><img class="title-image" src={logo.src} alt={logo.alt} /></a> : <img class="title-image" src={logo.src} alt={logo.alt} />)}{logo && <hr class="thin" />}<h1 class={c.classeDoTitulo}>{c.titulo}</h1>{c.aviso && <p class="chapter-note">{c.aviso}</p>}{!logo && <hr class="thin" />}

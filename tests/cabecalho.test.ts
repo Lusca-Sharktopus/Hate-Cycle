@@ -26,25 +26,40 @@ describe("avisoDoCapitulo (chapter_note do work.json)", () => {
 });
 
 describe("cabecalhoDoCapituloComoNoPython (HTML do Astro)", () => {
+  const logo = '<a href="/en/works/light-and-blood/"><img class="title-image" src="/logos/x.png" alt="Light &amp; Blood" srcset="/x.webp 380w" sizes="380px"></a>';
+  const logoSemLink = '<img class="title-image" src="/logos/p.png" alt="Pederneira">';
   const h1 = '<h1 class="chapter-title">Luke 10:3</h1>';
-  test("tira o aviso logo depois do </h1> e a linha antes do vídeo", () => {
-    const astro = `${h1}<p class="chapter-note">Turn Close Captions on!</p><hr class="thin"><div class="player-row">x</div>`;
-    expect(cabecalhoDoCapituloComoNoPython(astro)).toEqual({ html: `${h1}<div class="player-row">x</div>`, avisos: 1, linhas: 1 });
+  const zero = { avisos: 0, linhas: 0, devolvidas: 0, semLogo: 0 };
+  test("vídeo: tira a linha de logo abaixo da logo e o aviso (o Python não tem nenhum dos dois)", () => {
+    const astro = `${logo}<hr class="thin">${h1}<p class="chapter-note">Turn Close Captions on!</p><div class="player-row">x</div>`;
+    expect(cabecalhoDoCapituloComoNoPython(astro)).toEqual({ html: `${logo}${h1}<div class="player-row">x</div>`, ...zero, avisos: 1, linhas: 1 });
   });
-  test("tira a linha antes do quadrinho (pager, comic, folheador) e do vídeo sem setas", () => {
-    for (const depois of ['<nav class="pager">', '<div class="comic">', '<div class="folheador" data-folheador>', '<div class="video-wrapper">']) {
-      expect(cabecalhoDoCapituloComoNoPython(`${h1}<hr class="thin">${depois}`), depois).toEqual({ html: `${h1}${depois}`, avisos: 0, linhas: 1 });
+  test("texto: a linha volta para depois do título (onde o Python a desenha), também antes da janela do jogo", () => {
+    const sr = '<h1 class="sr-only">Pederneira</h1>';
+    for (const depois of ['<div class="prose story font-times">', '<div class="prose story">', '<div class="jogo" data-jogo>']) {
+      expect(cabecalhoDoCapituloComoNoPython(`${logoSemLink}<hr class="thin">${sr}${depois}`), depois).toEqual({ html: `${logoSemLink}${sr}<hr class="thin">${depois}`, ...zero, linhas: 1, devolvidas: 1 });
     }
   });
-  test("NÃO tira a linha do texto (ela existe nos dois geradores), nem linha ou aviso fora do lugar", () => {
+  test("o alt da logo pode ter \">\" sem escape (\"Setas -> B\")", () => {
+    const comSeta = '<img class="title-image" src="/logos/setas.png" alt="Setas -> B">';
+    expect(cabecalhoDoCapituloComoNoPython(`${comSeta}<hr class="thin">${h1}<nav class="pager">`)).toEqual({ html: `${comSeta}${h1}<nav class="pager">`, ...zero, linhas: 1 });
+  });
+  test("sem logo: o texto já está como no Python; no vídeo/quadrinho sai a linha depois do título", () => {
+    expect(cabecalhoDoCapituloComoNoPython(`${h1}<hr class="thin"><div class="prose story">`)).toEqual({ html: `${h1}<hr class="thin"><div class="prose story">`, ...zero });
+    for (const depois of ['<nav class="pager">', '<div class="comic">', '<div class="folheador" data-folheador>', '<div class="video-wrapper">', '<div class="player-row">']) {
+      expect(cabecalhoDoCapituloComoNoPython(`${h1}<hr class="thin">${depois}`), depois).toEqual({ html: `${h1}${depois}`, ...zero, semLogo: 1 });
+    }
+  });
+  test("NÃO mexe em linha ou aviso fora do lugar", () => {
     const casos = [
-      `${h1}<hr class="thin"><div class="prose story">`,
-      `${h1}<hr class="thin"><div class="jogo" data-jogo>`,
       `<p>x</p><hr class="thin"><div class="player-row">`,
+      `<img src="/outra.png"><hr class="thin">`,
       `<p>x</p><p class="chapter-note">Turn Close Captions on!</p>`,
-      `${h1}<p class="chapter-note"><b>x</b></p>`,
+      `<p>x</p><div class="prose">`,
+      `<h1>About</h1><div class="prose">`, // página avulsa: o <h1> dela não é o do capítulo
+      `<h1 class="sr-only">About the author</h1><div class="prose">`, // a Sobre: <h1> escondido, mas o texto não é o de capítulo (prose story)
     ];
-    for (const c of casos) expect(cabecalhoDoCapituloComoNoPython(c), c).toEqual({ html: c, avisos: 0, linhas: 0 });
+    for (const c of casos) expect(cabecalhoDoCapituloComoNoPython(c), c).toEqual({ html: c, ...zero });
   });
 });
 

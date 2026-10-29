@@ -216,11 +216,12 @@ function normalizar(html, lado, url, existe) {
     if (bl.trocas.todos && !/^\/(en|pt)\/news\/[^/]+\/$/.test(url)) falha(url, "\"Todos os posts\" fora de um post");
     if (bl.trocas.etiqueta && !/^\/(en|pt)\/$/.test(url)) falha(url, "etiqueta \"Post do blog\" fora da home");
     html = bl.html;
-    // 28/10: o aviso sob o título (`chapter_note`) e a linha fina do vídeo/quadrinho só existem no Astro (tests/ajudantes/html.ts)
+    // 28/10: o aviso sob o título (`chapter_note`) e a linha fina logo abaixo da logo só existem no Astro; no Python a linha vem depois do
+    // título e só no texto (tests/ajudantes/html.ts). Antes da janela do jogo, que o Python desenha logo depois dessa linha.
     const cab = cabecalhoDoCapituloComoNoPython(html);
     if (cab.avisos) conta("28/10: aviso sob o título do capítulo (Astro)", url);
-    if (cab.linhas) conta("28/10: linha fina abaixo do cabeçalho em vídeo/quadrinho (Astro)", url);
-    if ((cab.avisos || cab.linhas) && !/^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url)) falha(url, "cabeçalho de capítulo fora de uma página de capítulo");
+    if (cab.linhas || cab.semLogo) conta("28/10: linha fina logo abaixo da logo, em todo capítulo (Astro)", url);
+    if ((cab.avisos || cab.linhas || cab.devolvidas || cab.semLogo) && !/^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url)) falha(url, "cabeçalho de capítulo fora de uma página de capítulo");
     if (cab.avisos && !/^\/en\//.test(url)) falha(url, "aviso sob o título fora do inglês (hoje só existe em inglês)");
     html = cab.html;
     const jo = semJanelaDoJogo(html);

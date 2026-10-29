@@ -167,16 +167,17 @@ function textosDoBlogNoConfig(lang: Lang) {
  *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
 function astroComoNoPython(html: string): string {
   const f = folheadorComoNoPython(html);
-  const j = semJanelaDoJogo(f.html);
+  // 28/10: o aviso sob o título (`chapter_note`) e a linha fina logo abaixo da logo só existem no Astro; no Python a linha vem depois do
+  // título e só no texto (tests/ajudantes/html.ts). ANTES da janela do jogo, que o Python desenha logo depois dessa linha.
+  const cab = cabecalhoDoCapituloComoNoPython(f.html);
+  const j = semJanelaDoJogo(cab.html);
   if (f.recusados !== 0 || j.foraDoLugar !== 0) throw new Error(`T17d: leitor página a página ou janela do jogo com forma inesperada (${f.recusados} leitor(es), ${j.foraDoLugar} janela(s))`);
   // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá (no Python, "Em breve"; tests/obras-em-outro-idioma.test.ts)
   const lang = /<html lang="pt/.test(j.html) ? "pt" : "en";
   // T17n: "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts); o Python usa os textos do config.json (tests/blog.test.ts)
   const b = blogComoNoPython(j.html, TEXTOS_DO_BLOG[lang], textosDoBlogNoConfig(lang));
   const c = cartaoEmOutroIdiomaComoNoPython(b.html, t(lang, "soon"));
-  // 28/10: o aviso sob o título (`chapter_note`) e a linha fina do vídeo/quadrinho só existem no Astro (tests/ajudantes/html.ts)
-  const cab = cabecalhoDoCapituloComoNoPython(c.html);
-  return resumoCortadoComoNoPython(homeComoNoPython(cab.html).html).html;
+  return resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html;
 }
 
 // ───────────── página a página, grupo a grupo ─────────────
