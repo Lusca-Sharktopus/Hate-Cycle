@@ -73,7 +73,7 @@ draft: true
 
 <div class="s1 ps">“I’m sorry if I sounded intrusive!” Elijah carries a concerned expression. He notices Giuseppe staring at the passengers. “A-are you sure you’re okay, sir?”</div>
 
-<div class="s1 ps">“Yes, I just…” Giuseppe seemed to pause for a moment, pondering about whatever it was that was going through his eccentric mind. “Do you know what a cathameral animal is?”</div>
+<div class="s1 ps">“Yes, I just…” Giuseppe seemed to pause for a moment, pondering about whatever it was that was going through his eccentric mind. “Do you know what a cathemeral animal is?”</div>
 
 <div class="s1 ps">The sudden subject shift incited a strong facial response in Elijah. One Giuseppe didn’t quite knew how to interpret. Not that it mattered anyway, as he was not looking at Elijah’s face, but rather at the window behind it, where nothing unusual happened.</div>
 
@@ -83,9 +83,9 @@ draft: true
 
 <div class="s1 ps">“That’s all very interesting, Mr. Giuseppe. Are you a naturalist of sorts?” Elijah asked. His voice had, for some reason, a certain nervousness.</div>
 
-<div class="s1 ps">“I do consider myself something along those lines but, if your question is whether or not I work with animals, the answer is no” Giuseppe explained. Elijah started to notice Giuseppe rarely ever looked into his eyes. During these last words he was always looking out into the window. “I do love animals, and we have a cat at home, but anything beyond that would be difficult to balance with my work.” Giuseppe kept looking at the window, but he didn’t see anything unusual.</div>
+<div class="s1 ps">“I do consider myself something along those lines but, if your question is whether or not I work with animals, the answer is no” Giuseppe kept looking at the window, but he didn’t see anything unusual.</div>
 
-<div class="s1 ps">Elijah started to notice Giuseppe rarely ever looked into his eyes. During these last words he was always looking out into the window. “I do love animals, and we have a cat at home, but anything beyond that would be difficult to balance with my work.”Giuseppe kept looking at the window, but he also noticed the rain seemed louder, as if trying to distract his ears from something.</div>
+<div class="s1 ps">Elijah started to notice Giuseppe rarely ever looked into his eyes. During these last words he was always looking out into the window. “I do love animals, and we have a cat at home, but anything beyond that would be difficult to balance with my work.” Giuseppe kept looking at the window, but he also noticed the rain seemed louder, as if trying to distract his ears from something.</div>
 
 <div class="s1 ps">“You would know a lot about that, right…?” Giuseppe asked “…Having trouble balancing tasks”.</div>
 
@@ -185,7 +185,7 @@ Giuseppe took a good look into the letter. The movement of his eyes didn’t ind
 
 <div class="strip"><img src="@/other images/ossos-memoria-1.png" alt="Giuseppe’s memory of his childhood: Signor Filippo explains that souls are made of Æther, and that angels’ souls are made of the same Æther as his" loading="lazy"><div class="strip-row"><img src="@/other images/ossos-memoria-2.png" alt="" loading="lazy"><p>And as he stood up, holding his bleeding shoulder with his other arm, a golden mist emanated from his body, creating a cloud that thundered harmonically like a choir of storms, with golden lightning rapidly forming and dissipating.</p></div><img src="@/other images/ossos-memoria-3.png" alt="" loading="lazy"></div>
 
-Giuseppe stared at the creature with his golden glowing eyes. The room was all of a sudden, as lit as if the lights were on, not only by Giuseppe’s eyes and glowing golden knuckles, but by the enormous wings with feathers made of order carried by the angelic figure that hovered over the exorcist. It was himself, or rather his mind, part of his soul, projected outside of his own body while also maintaining his consciousness. a precise and demanding Mind Doubling technique he had been holding onto until now. Emphasis on <i>demanding</i> as the blood running through his nose started to mix with the blood he was already bathed in.
+Giuseppe stared at the creature with his golden glowing eyes. The room was all of a sudden, as lit as if the lights were on, not only by Giuseppe’s eyes and glowing golden knuckles, but by the enormous wings with feathers made of order carried by the angelic figure that hovered over the exorcist. It was himself, or rather his mind, part of his soul, projected outside of his own body while also maintaining his consciousness. A precise and demanding Mind Doubling technique he had been holding onto until now. Emphasis on <i>demanding</i> as the blood running through his nose started to mix with the blood he was already bathed in.
 
 Knowing that he was on a timer, di Vario did not waste any time, pouring all of his authority in the words that came out of his mouth
 
@@ -207,7 +207,7 @@ The Order embedded into the golden knuckles shined brighter as Giuseppe surged h
 
 “E<span class="sc">ᴛ</span>”. A second jab, in the demon’s left shoulder. This left a shining golden mark.
 
-“I<span class="sc">ɴ ᴛᴇʀʀᴀ</span>”. And finally an uppercut, stunning the demon not only by the power of such a strike, but the immense spiritual presence Giuseppe exerted against the foul creature and, as the final golden mark was placed into the monster’s chin, the four of them connected in the middle, forming the imagery of a cross. The dark tar-like aether tried, to no avail, fleeing from the bones it has possessed and, as the golden light encapsulated the entirety of the demons physical and spiritual bodies, all vestige of unholy existence in that hallway, let alone that pile of bones, was banished from this world.
+“I<span class="sc">ɴ ᴛᴇʀʀᴀ</span>”. And finally an uppercut, stunning the demon not only by the power of such a strike, but the immense spiritual presence Giuseppe exerted against the foul creature and, as the final golden mark was placed into the monster’s chin, the four of them connected in the middle, forming the imagery of a cross. The dark tar-like aether tried, to no avail, fleeing from the bones it has possessed and, as the golden light encapsulated the entirety of the demon’s physical and spiritual bodies, all vestige of unholy existence in that hallway, let alone that pile of bones, was banished from this world.
 
 In other words, <i>exorcized.</i>
 
