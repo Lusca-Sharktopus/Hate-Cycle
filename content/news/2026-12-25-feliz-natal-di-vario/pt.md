@@ -12,6 +12,6 @@ tags:
 
 {{embed:https://youtu.be/Zgog1aIPsds}}
 
-E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2026 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!
+E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2027 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!
 
 <figure class="wide"><img src="@/news/Di Vario Christmas.png" alt="Arte oficial: a família di Vario no Natal"></figure>

@@ -12,6 +12,6 @@ tags:
 
 {{embed:https://youtu.be/Zgog1aIPsds}}
 
-And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!
+And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2027 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!
 
 <figure class="wide"><img src="@/news/Di Vario Christmas.png" alt="Official artwork: the di Vario family at Christmas"></figure>
