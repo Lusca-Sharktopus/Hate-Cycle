@@ -81,7 +81,6 @@
     "/en/news/2025-12-23-dia-23-especulacao-evolutiva/",
     "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
     "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
-    "/en/news/2025-12-25-feliz-natal-di-vario/",
     "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
     "/en/news/2025-12-27-dia-27-especulacao-evolutiva/",
     "/en/news/2025-12-28-dia-28-especulacao-evolutiva/",
@@ -179,7 +178,6 @@
     "/pt/news/2025-12-23-dia-23-especulacao-evolutiva/",
     "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/",
     "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
-    "/pt/news/2025-12-25-feliz-natal-di-vario/",
     "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
     "/pt/news/2025-12-27-dia-27-especulacao-evolutiva/",
     "/pt/news/2025-12-28-dia-28-especulacao-evolutiva/",
@@ -215,5 +213,5 @@
     "/ossos.html": "/pt/",
     "/pederneira.html": "/pt/works/firestriker/01/"
   },
-  "total_html": 193
+  "total_html": 191
 }

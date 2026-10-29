@@ -6527,8 +6527,6 @@
     "news/2025-12-24-dia-24-especulacao-evolutiva/pt.md": "Dia 24 desenhando uma criatura de…",
     "news/2025-12-25-dia-25-especulacao-evolutiva/en.md": "Day 25 of Drawing a Spec Evo creature…",
     "news/2025-12-25-dia-25-especulacao-evolutiva/pt.md": "Dia 25 desenhando uma criatura de…",
-    "news/2025-12-25-feliz-natal-di-vario/en.md": "Official Artwork: The di Varios wish…",
-    "news/2025-12-25-feliz-natal-di-vario/pt.md": "Arte Oficial: Os di Vario desejam um…",
     "news/2025-12-26-dia-26-especulacao-evolutiva/en.md": "Day 26 of Drawing a Spec Evo creature…",
     "news/2025-12-26-dia-26-especulacao-evolutiva/pt.md": "Dia 26 desenhando uma criatura de…",
     "news/2025-12-27-dia-27-especulacao-evolutiva/en.md": "Day 27 of Drawing a Spec Evo creature…",
@@ -6545,6 +6543,8 @@
     "news/2026-08-18-novo-episodio-luz-e-sangue/pt.md": "Novo Episódio de Luz & Sangue!",
     "news/2026-08-19-more-amphibious-doodles/en.md": "Official Artwork: More Amphibious…",
     "news/2026-08-19-more-amphibious-doodles/pt.md": "Arte Oficial: Mais Rabiscos do Anfíbio",
+    "news/2026-12-25-feliz-natal-di-vario/en.md": "Official Artwork: The di Varios wish…",
+    "news/2026-12-25-feliz-natal-di-vario/pt.md": "Arte Oficial: Os di Vario desejam um…",
     "pages/about/en.md": "About the author",
     "pages/about/pt.md": "Sobre o autor",
     "pages/project/en.md": "About the project",
@@ -6730,8 +6730,6 @@
    "news/2025-12-24-dia-24-especulacao-evolutiva/pt.md": "A rena-lunar (Selenorangifer natalinus), chamada nativamente de ttikiwa pelos Avialunari, é uma espécie de macaco-lunar…",
    "news/2025-12-25-dia-25-especulacao-evolutiva/en.md": "Stellars are a magical phenomenon that happens to living beings which don't possess enough æther in their souls to have…",
    "news/2025-12-25-dia-25-especulacao-evolutiva/pt.md": "Estelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência…",
-   "news/2025-12-25-feliz-natal-di-vario/en.md": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
-   "news/2025-12-25-feliz-natal-di-vario/pt.md": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
    "news/2025-12-26-dia-26-especulacao-evolutiva/en.md": "The true unicorn (Equus unicornius), often just called unicorn, is a species of equid native to all of Alfheim, formerly found in…",
    "news/2025-12-26-dia-26-especulacao-evolutiva/pt.md": "O unicórnio verdadeiro (Equus unicornius), muitas vezes chamado apenas de unicórnio, é uma espécie de eqüídeo nativa de todo…",
    "news/2025-12-27-dia-27-especulacao-evolutiva/en.md": "The qilin (Hydropotes inermis × Shen long) is one of the primary examples of how dragonborn work. During the arcane collapse…",
@@ -6748,6 +6746,8 @@
    "news/2026-08-18-novo-episodio-luz-e-sangue/pt.md": "Demorou um pouco, mas enfim saiu o segundo episódio de Luz & Sangue! confira agora no canal TV Palavra Viva no YouTube ou Assista…",
    "news/2026-08-19-more-amphibious-doodles/en.md": "",
    "news/2026-08-19-more-amphibious-doodles/pt.md": "",
+   "news/2026-12-25-feliz-natal-di-vario/en.md": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
+   "news/2026-12-25-feliz-natal-di-vario/pt.md": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
    "pages/about/en.md": "About the author Affur Akmosh! I'm Lusca Sharktopus, author of the stories you’ll read, watch, listen to and play on this…",
    "pages/about/pt.md": "Sobre o autor Affur Akmosh! Eu sou Lusca Sharktopus, autor das histórias que você vai ler, assistir, ouvir e jogar nesse site!…",
    "pages/project/en.md": "About the project The world of Hᴀᴛᴇ Cʏᴄʟᴇ is one of inherent magic and wonder, even if hidden underneath many layers of fear…",
@@ -7422,14 +7422,6 @@
     "sha1": "c39e1336436e41f374be37aa90a6d48ee23815c4",
     "tamanho": 1555
    },
-   "news/2025-12-25-feliz-natal-di-vario/en.md": {
-    "sha1": "422f87707ee2bd655b962423861ab56e282d5af3",
-    "tamanho": 227
-   },
-   "news/2025-12-25-feliz-natal-di-vario/pt.md": {
-    "sha1": "1f2a2a4361ac6e0ab71ca99597c02ca80381222b",
-    "tamanho": 244
-   },
    "news/2025-12-26-dia-26-especulacao-evolutiva/en.md": {
     "sha1": "dff020b5330fcf9a59700a0fe87f408f1a5a9dab",
     "tamanho": 2313
@@ -7493,6 +7485,14 @@
    "news/2026-08-19-more-amphibious-doodles/pt.md": {
     "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
     "tamanho": 0
+   },
+   "news/2026-12-25-feliz-natal-di-vario/en.md": {
+    "sha1": "422f87707ee2bd655b962423861ab56e282d5af3",
+    "tamanho": 227
+   },
+   "news/2026-12-25-feliz-natal-di-vario/pt.md": {
+    "sha1": "1f2a2a4361ac6e0ab71ca99597c02ca80381222b",
+    "tamanho": 244
    },
    "pages/about/en.md": {
     "sha1": "ed619dbf3274ac0d815d13c5661e98290a672212",
@@ -7866,15 +7866,6 @@
        "kind": "tag_news",
        "text": "Stellars are a magical phenomenon that happens to living beings which don't possess enough æther in their souls to have…",
        "image": "news/dia-25-especulacao-evolutiva.png",
-       "work": null
-      },
-      {
-       "date": "2025-12-25",
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/",
-       "title": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-       "kind": "tag_news",
-       "text": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
-       "image": "news/feliz-natal-di-vario.png",
        "work": null
       },
       {
@@ -8584,7 +8575,6 @@
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-22-clip-studio-test-drive",
@@ -8940,15 +8930,6 @@
        "kind": "tag_news",
        "text": "Estelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência…",
        "image": "news/dia-25-especulacao-evolutiva.png",
-       "work": null
-      },
-      {
-       "date": "2025-12-25",
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/",
-       "title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-       "kind": "tag_news",
-       "text": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
-       "image": "news/feliz-natal-di-vario.png",
        "work": null
       },
       {
@@ -9658,7 +9639,6 @@
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-22-clip-studio-test-drive",
@@ -10090,20 +10070,6 @@
       },
       {
        "escondida": false,
-       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residence Dec 25, 2025 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
-       "data": "Dec 25, 2025",
-       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-       "miniatura": "/news/feliz-natal-di-vario.png",
-       "tags": [
-        "Speedpaint",
-        "Post",
-        "Hello? Di Vario Residence"
-       ],
-       "resumo": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/"
-      },
-      {
-       "escondida": true,
        "busca": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it Post Worldbuilding Dec 24, 2025 The lunar reindeer (Selenorangifer natalinus), natively called ttikiwa by the Avialunari, is a species of Insignolophid lunar monkey pentapod native to Hwaiga, north of Gattewe, closely related to the steppe skippers (Insignolophus chortinos). The wings of lunar reindeers are quite large compared to other Insignolophids, despite lacking the same level of ornamentation. They’re also the largest species of Insignolophid and, by extension, of lunar monkey. Their keratinous horns are used in combat by males during mating season, similarly to Earth’s cervids. Legends of the Tene’awi peoples tell about a deity called Santa Kallawa, whose sled is pulled by magical flying ttikiwas. The similarity with Earth’s Santa Claus is striking, and has puzzled specialists of numerous fields, from comparing mythology to prosoponology. All evidence points to it being a coincidence, but many find this hard to accept. The name ttikiwa /ᵏǃi.ˈki.ɰa/ comes from the Avialunari language, and originates from the proto-avialunari ttiki wikiwa, meaning “large wing”, in reference to the size of their wings compared to other similar cursorial lunar monkeys. The name Selenorangifer comes from the greek root Σελήνη, which is the goddess of the Moon, commonly used in scientific names for Avialunan species, and rangifer, which is the Genus of Earth’s reindeer.",
        "data": "Dec 24, 2025",
        "titulo": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it",
@@ -11342,46 +11308,12 @@
       ],
       "comentarios": "news/2025-12-25-dia-25-especulacao-evolutiva",
       "anterior": {
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!"
-      },
-      "proximo": {
-       "url": "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
-       "titulo": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2025-12-25-feliz-natal-di-vario/": {
-     "lang": "en",
-     "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-12-25-feliz-natal-di-vario/",
-      "pt": "/pt/news/2025-12-25-feliz-natal-di-vario/"
-     },
-     "noticia": {
-      "data": "Dec 25, 2025",
-      "h1": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-      "tags": [
-       "Speedpaint",
-       "Post",
-       "Hello? Di Vario Residence"
-      ],
-      "comentarios": "news/2025-12-25-feliz-natal-di-vario",
-      "anterior": {
        "url": "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
        "titulo": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "proximo": {
-       "url": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
-       "titulo": "Day 25 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
+       "url": "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
+       "titulo": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "voltar": {
        "url": "/en/news/",
@@ -11413,8 +11345,8 @@
        "titulo": "Day 23 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "proximo": {
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!"
+       "url": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
+       "titulo": "Day 25 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "voltar": {
        "url": "/en/news/",
@@ -14103,20 +14035,6 @@
       },
       {
        "escondida": false,
-       "busca": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos! Speedpaint Post Alô? Residência dos di Vario 25 de dez. de 2025 E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2026 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!",
-       "data": "25 de dez. de 2025",
-       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-       "miniatura": "/news/feliz-natal-di-vario.png",
-       "tags": [
-        "Speedpaint",
-        "Post",
-        "Alô? Residência dos di Vario"
-       ],
-       "resumo": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/"
-      },
-      {
-       "escondida": true,
        "busca": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele Post Worldbuilding 24 de dez. de 2025 A rena-lunar (Selenorangifer natalinus), chamada nativamente de ttikiwa pelos Avialunari, é uma espécie de macaco-lunar insignolofídeo pentápode nativa de Hwaiga, ao norte de Gattewe, próxima dos saltadores-da-estepe (Insignolophus chortinos). As asas das renas-lunares são bem grandes comparadas às de outros insignolofídeos, apesar de não terem o mesmo nível de ornamentação. Também são a maior espécie de insignolofídeo e, por extensão, de macaco-lunar. Seus chifres queratinosos são usados em combate pelos machos durante a época de acasalamento, de forma semelhante aos cervídeos da Terra. As lendas dos povos Tene'awi falam de uma divindade chamada Santa Kallawa, cujo trenó é puxado por ttikiwas mágicas voadoras. A semelhança com o Papai Noel da Terra é impressionante e intrigou especialistas de inúmeras áreas, da mitologia comparada à prosopologia. Todas as evidências apontam para uma coincidência, mas muitos acham isso difícil de aceitar. O nome ttikiwa /ᵏǃi.ˈki.ɰa/ vem da língua avialunari e se origina do proto-avialunari ttiki wikiwa, que significa “asa grande”, em referência ao tamanho das asas em comparação com outros macacos-lunares cursoriais semelhantes. O nome Selenorangifer vem da raiz grega Σελήνη, a deusa da Lua, comumente usada em nomes científicos de espécies de Avialuna, e rangifer, o gênero das renas da Terra.",
        "data": "24 de dez. de 2025",
        "titulo": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele",
@@ -15355,46 +15273,12 @@
       ],
       "comentarios": "news/2025-12-25-dia-25-especulacao-evolutiva",
       "anterior": {
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!"
-      },
-      "proximo": {
-       "url": "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
-       "titulo": "Dia 26 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2025-12-25-feliz-natal-di-vario/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-12-25-feliz-natal-di-vario/",
-      "pt": "/pt/news/2025-12-25-feliz-natal-di-vario/"
-     },
-     "noticia": {
-      "data": "25 de dez. de 2025",
-      "h1": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-      "tags": [
-       "Speedpaint",
-       "Post",
-       "Alô? Residência dos di Vario"
-      ],
-      "comentarios": "news/2025-12-25-feliz-natal-di-vario",
-      "anterior": {
        "url": "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/",
        "titulo": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "proximo": {
-       "url": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
-       "titulo": "Dia 25 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
+       "url": "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
+       "titulo": "Dia 26 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -15426,8 +15310,8 @@
        "titulo": "Dia 23 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "proximo": {
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!"
+       "url": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
+       "titulo": "Dia 25 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17897,12 +17781,6 @@
       "descricao": "Stellars are a magical phenomenon that happens to living beings which don't possess enough æther in their souls to have…"
      },
      {
-      "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-      "link": "https://hatecycle.com/en/news/2025-12-25-feliz-natal-di-vario/",
-      "data": "Thu, 25 Dec 2025 00:00:00 +0000",
-      "descricao": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…"
-     },
-     {
       "titulo": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it",
       "link": "https://hatecycle.com/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
       "data": "Wed, 24 Dec 2025 00:00:00 +0000",
@@ -18021,6 +17899,12 @@
       "link": "https://hatecycle.com/en/news/2025-12-08-dia-8-especulacao-evolutiva/",
       "data": "Mon, 08 Dec 2025 00:00:00 +0000",
       "descricao": "The îandapĩ, yandapi or south american tree dolphin (Scandelphinus iandapi) is a species of arboreal remingtonocetid //btw…"
+     },
+     {
+      "titulo": "Day 7 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it",
+      "link": "https://hatecycle.com/en/news/2025-12-07-dia-7-especulacao-evolutiva/",
+      "data": "Sun, 07 Dec 2025 00:00:00 +0000",
+      "descricao": "If you live in the planet of Avialuna, you might be accustomed to see crabs fly; The Palaepterychela golottensis gives us a…"
      }
     ],
     "pt": [
@@ -18077,12 +17961,6 @@
       "link": "https://hatecycle.com/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
       "data": "Thu, 25 Dec 2025 00:00:00 +0000",
       "descricao": "Estelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência…"
-     },
-     {
-      "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-      "link": "https://hatecycle.com/pt/news/2025-12-25-feliz-natal-di-vario/",
-      "data": "Thu, 25 Dec 2025 00:00:00 +0000",
-      "descricao": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…"
      },
      {
       "titulo": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele",
@@ -18203,6 +18081,12 @@
       "link": "https://hatecycle.com/pt/news/2025-12-08-dia-8-especulacao-evolutiva/",
       "data": "Mon, 08 Dec 2025 00:00:00 +0000",
       "descricao": "O îandapĩ, yandapi ou golfinho-arborícola-sul-americano (Scandelphinus iandapi) é uma espécie arborícola de remingtonocetídeo…"
+     },
+     {
+      "titulo": "Dia 7 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele",
+      "link": "https://hatecycle.com/pt/news/2025-12-07-dia-7-especulacao-evolutiva/",
+      "data": "Sun, 07 Dec 2025 00:00:00 +0000",
+      "descricao": "Se você vive no planeta Avialuna, talvez esteja acostumado a ver caranguejos voarem; o Palaepterychela golottensis nos dá um…"
      }
     ]
    }
@@ -18434,6 +18318,15 @@
      },
      "atualizacoes": [
       {
+       "date": "2026-12-25",
+       "url": "/en/news/2026-12-25-feliz-natal-di-vario/",
+       "title": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+       "kind": "tag_news",
+       "text": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
+       "image": "news/feliz-natal-di-vario.png",
+       "work": null
+      },
+      {
        "date": "2026-08-19",
        "url": "/en/news/2026-08-19-more-amphibious-doodles/",
        "title": "Official Artwork: More Amphibious Doodles",
@@ -18512,15 +18405,6 @@
        "kind": "tag_news",
        "text": "Stellars are a magical phenomenon that happens to living beings which don't possess enough æther in their souls to have…",
        "image": "news/dia-25-especulacao-evolutiva.png",
-       "work": null
-      },
-      {
-       "date": "2025-12-25",
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/",
-       "title": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-       "kind": "tag_news",
-       "text": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
-       "image": "news/feliz-natal-di-vario.png",
        "work": null
       },
       {
@@ -19183,6 +19067,14 @@
      ],
      "home_cartoes": [
       {
+       "url": "/en/news/2026-12-25-feliz-natal-di-vario/",
+       "imagem": "/news/feliz-natal-di-vario.png",
+       "rotulo": "News",
+       "data": "Dec 25, 2026",
+       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+       "texto": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…"
+      },
+      {
        "url": "/en/news/2026-08-19-more-amphibious-doodles/",
        "imagem": "/news/more-amphibious-doodles.png",
        "rotulo": "News",
@@ -19205,14 +19097,6 @@
        "data": "Jul 14, 2026",
        "titulo": "Official Artwork: רוח הקודש",
        "texto": "This is רוח הקודש, the Pet Raven of John Magnus, a character by @joaotmzl in our Christian RPG, Light & Blood, a collaboration…"
-      },
-      {
-       "url": "/en/works/light-and-blood/01/",
-       "imagem": "/covers/EN/Cover%20Light%20%26%20Blood.png",
-       "rotulo": "New episode",
-       "data": "Jun 6, 2026",
-       "titulo": "Light & Blood — Luke 10:3",
-       "texto": "After promises upon promises and dates being pushed back further and further, it’s finally here! In partnership with TV Palavra…"
       }
      ],
      "sobre": {
@@ -19221,6 +19105,7 @@
       "url": "/en/about/"
      },
      "noticias": [
+      "2026-12-25-feliz-natal-di-vario",
       "2026-08-19-more-amphibious-doodles",
       "2026-08-18-novo-episodio-luz-e-sangue",
       "2026-07-14-ruach-hakodesh",
@@ -19230,7 +19115,6 @@
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-22-clip-studio-test-drive",
@@ -19617,6 +19501,15 @@
      },
      "atualizacoes": [
       {
+       "date": "2026-12-25",
+       "url": "/pt/news/2026-12-25-feliz-natal-di-vario/",
+       "title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+       "kind": "tag_news",
+       "text": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
+       "image": "news/feliz-natal-di-vario.png",
+       "work": null
+      },
+      {
        "date": "2026-08-19",
        "url": "/pt/news/2026-08-19-more-amphibious-doodles/",
        "title": "Arte Oficial: Mais Rabiscos do Anfíbio",
@@ -19695,15 +19588,6 @@
        "kind": "tag_news",
        "text": "Estelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência…",
        "image": "news/dia-25-especulacao-evolutiva.png",
-       "work": null
-      },
-      {
-       "date": "2025-12-25",
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/",
-       "title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-       "kind": "tag_news",
-       "text": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
-       "image": "news/feliz-natal-di-vario.png",
        "work": null
       },
       {
@@ -20366,6 +20250,14 @@
      ],
      "home_cartoes": [
       {
+       "url": "/pt/news/2026-12-25-feliz-natal-di-vario/",
+       "imagem": "/news/feliz-natal-di-vario.png",
+       "rotulo": "Notícia",
+       "data": "25 de dez. de 2026",
+       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+       "texto": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…"
+      },
+      {
        "url": "/pt/news/2026-08-19-more-amphibious-doodles/",
        "imagem": "/news/more-amphibious-doodles.png",
        "rotulo": "Notícia",
@@ -20388,14 +20280,6 @@
        "data": "14 de jul. de 2026",
        "titulo": "Arte Oficial: רוח הקודש",
        "texto": "Este é רוח הקודש, o Corvo de Estimação de John Magnus, personagem do @joaotmzl no nosso RPG Cristão, Luz & Sangue, uma…"
-      },
-      {
-       "url": "/pt/works/light-and-blood/01/",
-       "imagem": "/covers/PT/Capa%20Luz%20%26%20Sangue.png",
-       "rotulo": "Novo episódio",
-       "data": "6 de jun. de 2026",
-       "titulo": "Luz & Sangue — Lucas 10:3",
-       "texto": "Mediante promessas e mais promessas e datas sendo empurradas cada vez mais, finalmente está aqui! Em parceria com a TV Palavra…"
       }
      ],
      "sobre": {
@@ -20404,6 +20288,7 @@
       "url": "/pt/about/"
      },
      "noticias": [
+      "2026-12-25-feliz-natal-di-vario",
       "2026-08-19-more-amphibious-doodles",
       "2026-08-18-novo-episodio-luz-e-sangue",
       "2026-07-14-ruach-hakodesh",
@@ -20413,7 +20298,6 @@
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-22-clip-studio-test-drive",
@@ -20899,6 +20783,20 @@
      "noticias": [
       {
        "escondida": false,
+       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residence Dec 25, 2026 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
+       "data": "Dec 25, 2026",
+       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+       "miniatura": "/news/feliz-natal-di-vario.png",
+       "tags": [
+        "Speedpaint",
+        "Post",
+        "Hello? Di Vario Residence"
+       ],
+       "resumo": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
+       "url": "/en/news/2026-12-25-feliz-natal-di-vario/"
+      },
+      {
+       "escondida": false,
        "busca": "Official Artwork: More Amphibious Doodles Post Official Art Aug 19, 2026 ",
        "data": "Aug 19, 2026",
        "titulo": "Official Artwork: More Amphibious Doodles",
@@ -21014,20 +20912,6 @@
        ],
        "resumo": "Stellars are a magical phenomenon that happens to living beings which don't possess enough æther in their souls to have…",
        "url": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/"
-      },
-      {
-       "escondida": false,
-       "busca": "Official Artwork: The di Varios wish everyone a Merry Christmas! Speedpaint Post Hello? Di Vario Residence Dec 25, 2025 And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!",
-       "data": "Dec 25, 2025",
-       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-       "miniatura": "/news/feliz-natal-di-vario.png",
-       "tags": [
-        "Speedpaint",
-        "Post",
-        "Hello? Di Vario Residence"
-       ],
-       "resumo": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…",
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/"
       },
       {
        "escondida": true,
@@ -21987,6 +21871,37 @@
       }
      ]
     },
+    "/en/news/2026-12-25-feliz-natal-di-vario/": {
+     "lang": "en",
+     "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2026-12-25-feliz-natal-di-vario/",
+      "pt": "/pt/news/2026-12-25-feliz-natal-di-vario/"
+     },
+     "noticia": {
+      "data": "Dec 25, 2026",
+      "h1": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+      "tags": [
+       "Speedpaint",
+       "Post",
+       "Hello? Di Vario Residence"
+      ],
+      "comentarios": "news/2026-12-25-feliz-natal-di-vario",
+      "anterior": {
+       "url": "/en/news/2026-08-19-more-amphibious-doodles/",
+       "titulo": "Official Artwork: More Amphibious Doodles"
+      },
+      "proximo": null,
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
     "/en/news/2026-08-19-more-amphibious-doodles/": {
      "lang": "en",
      "titulo": "Official Artwork: More Amphibious Doodles",
@@ -22010,7 +21925,10 @@
        "url": "/en/news/2026-08-18-novo-episodio-luz-e-sangue/",
        "titulo": "New Episode of Light & Blood!"
       },
-      "proximo": null,
+      "proximo": {
+       "url": "/en/news/2026-12-25-feliz-natal-di-vario/",
+       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!"
+      },
       "voltar": {
        "url": "/en/news/",
        "rotulo": "All news"
@@ -22269,46 +22187,12 @@
       ],
       "comentarios": "news/2025-12-25-dia-25-especulacao-evolutiva",
       "anterior": {
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!"
-      },
-      "proximo": {
-       "url": "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
-       "titulo": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2025-12-25-feliz-natal-di-vario/": {
-     "lang": "en",
-     "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-12-25-feliz-natal-di-vario/",
-      "pt": "/pt/news/2025-12-25-feliz-natal-di-vario/"
-     },
-     "noticia": {
-      "data": "Dec 25, 2025",
-      "h1": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-      "tags": [
-       "Speedpaint",
-       "Post",
-       "Hello? Di Vario Residence"
-      ],
-      "comentarios": "news/2025-12-25-feliz-natal-di-vario",
-      "anterior": {
        "url": "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
        "titulo": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "proximo": {
-       "url": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
-       "titulo": "Day 25 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
+       "url": "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
+       "titulo": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "voltar": {
        "url": "/en/news/",
@@ -22340,8 +22224,8 @@
        "titulo": "Day 23 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "proximo": {
-       "url": "/en/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!"
+       "url": "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
+       "titulo": "Day 25 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "voltar": {
        "url": "/en/news/",
@@ -25069,6 +24953,20 @@
      "noticias": [
       {
        "escondida": false,
+       "busca": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos! Speedpaint Post Alô? Residência dos di Vario 25 de dez. de 2026 E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2026 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!",
+       "data": "25 de dez. de 2026",
+       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+       "miniatura": "/news/feliz-natal-di-vario.png",
+       "tags": [
+        "Speedpaint",
+        "Post",
+        "Alô? Residência dos di Vario"
+       ],
+       "resumo": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
+       "url": "/pt/news/2026-12-25-feliz-natal-di-vario/"
+      },
+      {
+       "escondida": false,
        "busca": "Arte Oficial: Mais Rabiscos do Anfíbio Post Arte Oficial 19 de ago. de 2026 ",
        "data": "19 de ago. de 2026",
        "titulo": "Arte Oficial: Mais Rabiscos do Anfíbio",
@@ -25184,20 +25082,6 @@
        ],
        "resumo": "Estelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência…",
        "url": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/"
-      },
-      {
-       "escondida": false,
-       "busca": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos! Speedpaint Post Alô? Residência dos di Vario 25 de dez. de 2025 E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2026 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!",
-       "data": "25 de dez. de 2025",
-       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-       "miniatura": "/news/feliz-natal-di-vario.png",
-       "tags": [
-        "Speedpaint",
-        "Post",
-        "Alô? Residência dos di Vario"
-       ],
-       "resumo": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/"
       },
       {
        "escondida": true,
@@ -26157,6 +26041,37 @@
       }
      ]
     },
+    "/pt/news/2026-12-25-feliz-natal-di-vario/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2026-12-25-feliz-natal-di-vario/",
+      "pt": "/pt/news/2026-12-25-feliz-natal-di-vario/"
+     },
+     "noticia": {
+      "data": "25 de dez. de 2026",
+      "h1": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+      "tags": [
+       "Speedpaint",
+       "Post",
+       "Alô? Residência dos di Vario"
+      ],
+      "comentarios": "news/2026-12-25-feliz-natal-di-vario",
+      "anterior": {
+       "url": "/pt/news/2026-08-19-more-amphibious-doodles/",
+       "titulo": "Arte Oficial: Mais Rabiscos do Anfíbio"
+      },
+      "proximo": null,
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
     "/pt/news/2026-08-19-more-amphibious-doodles/": {
      "lang": "pt",
      "titulo": "Arte Oficial: Mais Rabiscos do Anfíbio",
@@ -26180,7 +26095,10 @@
        "url": "/pt/news/2026-08-18-novo-episodio-luz-e-sangue/",
        "titulo": "Novo Episódio de Luz & Sangue!"
       },
-      "proximo": null,
+      "proximo": {
+       "url": "/pt/news/2026-12-25-feliz-natal-di-vario/",
+       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!"
+      },
       "voltar": {
        "url": "/pt/news/",
        "rotulo": "Todas as notícias"
@@ -26439,46 +26357,12 @@
       ],
       "comentarios": "news/2025-12-25-dia-25-especulacao-evolutiva",
       "anterior": {
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!"
-      },
-      "proximo": {
-       "url": "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
-       "titulo": "Dia 26 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2025-12-25-feliz-natal-di-vario/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-12-25-feliz-natal-di-vario/",
-      "pt": "/pt/news/2025-12-25-feliz-natal-di-vario/"
-     },
-     "noticia": {
-      "data": "25 de dez. de 2025",
-      "h1": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-      "tags": [
-       "Speedpaint",
-       "Post",
-       "Alô? Residência dos di Vario"
-      ],
-      "comentarios": "news/2025-12-25-feliz-natal-di-vario",
-      "anterior": {
        "url": "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/",
        "titulo": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "proximo": {
-       "url": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
-       "titulo": "Dia 25 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
+       "url": "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
+       "titulo": "Dia 26 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -26510,8 +26394,8 @@
        "titulo": "Dia 23 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "proximo": {
-       "url": "/pt/news/2025-12-25-feliz-natal-di-vario/",
-       "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!"
+       "url": "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
+       "titulo": "Dia 25 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28927,6 +28811,12 @@
    "rss": {
     "en": [
      {
+      "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+      "link": "https://hatecycle.com/en/news/2026-12-25-feliz-natal-di-vario/",
+      "data": "Fri, 25 Dec 2026 00:00:00 +0000",
+      "descricao": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…"
+     },
+     {
       "titulo": "Official Artwork: More Amphibious Doodles",
       "link": "https://hatecycle.com/en/news/2026-08-19-more-amphibious-doodles/",
       "data": "Wed, 19 Aug 2026 00:00:00 +0000",
@@ -28979,12 +28869,6 @@
       "link": "https://hatecycle.com/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
       "data": "Thu, 25 Dec 2025 00:00:00 +0000",
       "descricao": "Stellars are a magical phenomenon that happens to living beings which don't possess enough æther in their souls to have…"
-     },
-     {
-      "titulo": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-      "link": "https://hatecycle.com/en/news/2025-12-25-feliz-natal-di-vario/",
-      "data": "Thu, 25 Dec 2025 00:00:00 +0000",
-      "descricao": "And it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope…"
      },
      {
       "titulo": "Day 24 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it",
@@ -29109,6 +28993,12 @@
     ],
     "pt": [
      {
+      "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+      "link": "https://hatecycle.com/pt/news/2026-12-25-feliz-natal-di-vario/",
+      "data": "Fri, 25 Dec 2026 00:00:00 +0000",
+      "descricao": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…"
+     },
+     {
       "titulo": "Arte Oficial: Mais Rabiscos do Anfíbio",
       "link": "https://hatecycle.com/pt/news/2026-08-19-more-amphibious-doodles/",
       "data": "Wed, 19 Aug 2026 00:00:00 +0000",
@@ -29161,12 +29051,6 @@
       "link": "https://hatecycle.com/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
       "data": "Thu, 25 Dec 2025 00:00:00 +0000",
       "descricao": "Estelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência…"
-     },
-     {
-      "titulo": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-      "link": "https://hatecycle.com/pt/news/2025-12-25-feliz-natal-di-vario/",
-      "data": "Thu, 25 Dec 2025 00:00:00 +0000",
-      "descricao": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…"
      },
      {
       "titulo": "Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele",

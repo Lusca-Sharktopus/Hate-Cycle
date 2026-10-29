@@ -1998,32 +1998,6 @@
    },
    "body": "\n{{embed:reddit-day-25}}\n\nEstelares são um fenômeno mágico que acontece com seres vivos que não possuem éter suficiente em suas almas para ter senciência: plantas, corais, esponjas-do-mar e cogumelos são alguns dos exemplos mais proeminentes, sendo a estelarização de cogumelos particularmente comum; esses são o que chamamos de [[news/2024-01-25-gnomes|Gnomos]], enquanto plantas estelarizadas são chamadas de Ninfas e animais marinhos, como esponjas e corais, são chamados de Estelares Marinhos.\n\nQuando um agário-das-moscas (Amanita muscaria) se estelariza, ele se torna um Muscismol, um Gnomo que consegue mudar de tamanho para se tornar gigante. A maioria dos gnomos mantém o mesmo tamanho após a estelarização; no caso dos Muscismols, isso significa que têm cerca de 5 a 15 cm de altura em seu tamanho padrão, mas, usando Coromancia – magia do Espaço –, podem mudar de tamanho. Durante a primeira semana da Ressurgência Arcana, um Muscismol aterrorizou a cidade do Rio de Janeiro, no Brasil, chegando a quase 100 m de altura.\n\nA forma estelar de certas espécies parece ser, pelo menos em parte, moldada pela percepção que as pessoas têm dessa espécie. No caso de A. muscaria, os poderes específicos que ela ganha ao se estelarizar parecem estar relacionados ao fato de que a espécie carrega toxinas capazes de alterar a percepção de tamanho e espaço quando ingeridas.\n\nO nome Muscismol foi cunhado em 1820 pelo cofundador da Associação de Catalogação de Gnomos, Karl Höffner, e é um acrônimo de muscimol, um dos principais componentes da neurotoxina de A. muscaria, e smol, uma corruptela do inglês small.\n"
   },
-  "news/2025-12-25-feliz-natal-di-vario/en.md": {
-   "fm": {
-    "title": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
-    "date": "2025-12-25",
-    "thumb": "news/feliz-natal-di-vario.png",
-    "tags": [
-     "Speedpaint",
-     "Post",
-     "Hello? Di Vario Residence"
-    ]
-   },
-   "body": "\n{{embed:youtube-feliz-natal}}\n\nAnd it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!\n\n\n{{embed:https://www.instagram.com/p/DStTaGgkaWm/}}\n"
-  },
-  "news/2025-12-25-feliz-natal-di-vario/pt.md": {
-   "fm": {
-    "title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
-    "date": "2025-12-25",
-    "thumb": "news/feliz-natal-di-vario.png",
-    "tags": [
-     "Speedpaint",
-     "Post",
-     "Alô? Residência dos di Vario"
-    ]
-   },
-   "body": "\n{{embed:youtube-feliz-natal}}\n\nE é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2026 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!\n\n\n{{embed:https://www.instagram.com/p/DStTaGgkaWm/}}\n"
-  },
   "news/2025-12-26-dia-26-especulacao-evolutiva/en.md": {
    "fm": {
     "title": "Day 26 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it",
@@ -2221,6 +2195,34 @@
     ]
    },
    "body": "\n{{embed:https://www.instagram.com/p/DcPZje-xxSx/}}\n"
+  },
+  "news/2026-12-25-feliz-natal-di-vario/en.md": {
+   "fm": {
+    "title": "Official Artwork: The di Varios wish everyone a Merry Christmas!",
+    "date": "2026-12-25",
+    "draft": true,
+    "thumb": "news/feliz-natal-di-vario.png",
+    "tags": [
+     "Speedpaint",
+     "Post",
+     "Hello? Di Vario Residence"
+    ]
+   },
+   "body": "\n{{embed:https://youtu.be/Zgog1aIPsds}}\n\nAnd it’s in the Christmas spirit that I bring you this little illustration of the di Vario family, speedpaint and all! I hope 2026 is a great year for Hᴀᴛᴇ Cʏᴄʟᴇ and for everyone who follows this world as it grows and develops!\n\n<figure class=\"wide\"><img src=\"@/news/Di Vario Christmas.png\" alt=\"Official artwork: the di Vario family at Christmas\"></figure>\n"
+  },
+  "news/2026-12-25-feliz-natal-di-vario/pt.md": {
+   "fm": {
+    "title": "Arte Oficial: Os di Vario desejam um Feliz Natal a Todos!",
+    "date": "2026-12-25",
+    "draft": true,
+    "thumb": "news/feliz-natal-di-vario.png",
+    "tags": [
+     "Speedpaint",
+     "Post",
+     "Alô? Residência dos di Vario"
+    ]
+   },
+   "body": "\n{{embed:https://youtu.be/Zgog1aIPsds}}\n\nE é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero que o ano de 2026 seja um grande ano para Hᴀᴛᴇ Cʏᴄʟᴇ e para todos que acompanham este mundo crescer e se desenvolver!\n\n<figure class=\"wide\"><img src=\"@/news/Di Vario Christmas.png\" alt=\"Arte oficial: a família di Vario no Natal\"></figure>\n"
   },
   "pages/about/en.md": {
    "fm": {
@@ -3336,7 +3338,6 @@
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-28-dia-28-especulacao-evolutiva",
@@ -3421,7 +3422,6 @@
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-28-dia-28-especulacao-evolutiva",
@@ -3626,7 +3626,6 @@
     "/en/news/2025-12-23-dia-23-especulacao-evolutiva/",
     "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
     "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
-    "/en/news/2025-12-25-feliz-natal-di-vario/",
     "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
     "/en/news/2025-12-27-dia-27-especulacao-evolutiva/",
     "/en/news/2025-12-28-dia-28-especulacao-evolutiva/",
@@ -3725,7 +3724,6 @@
     "/pt/news/2025-12-23-dia-23-especulacao-evolutiva/",
     "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/",
     "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
-    "/pt/news/2025-12-25-feliz-natal-di-vario/",
     "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
     "/pt/news/2025-12-27-dia-27-especulacao-evolutiva/",
     "/pt/news/2025-12-28-dia-28-especulacao-evolutiva/",
@@ -3820,7 +3818,6 @@
     "en:news/2025-12-23-dia-23-especulacao-evolutiva",
     "en:news/2025-12-24-dia-24-especulacao-evolutiva",
     "en:news/2025-12-25-dia-25-especulacao-evolutiva",
-    "en:news/2025-12-25-feliz-natal-di-vario",
     "en:news/2025-12-26-dia-26-especulacao-evolutiva",
     "en:news/2025-12-27-dia-27-especulacao-evolutiva",
     "en:news/2025-12-28-dia-28-especulacao-evolutiva",
@@ -3913,7 +3910,6 @@
     "pt:news/2025-12-23-dia-23-especulacao-evolutiva",
     "pt:news/2025-12-24-dia-24-especulacao-evolutiva",
     "pt:news/2025-12-25-dia-25-especulacao-evolutiva",
-    "pt:news/2025-12-25-feliz-natal-di-vario",
     "pt:news/2025-12-26-dia-26-especulacao-evolutiva",
     "pt:news/2025-12-27-dia-27-especulacao-evolutiva",
     "pt:news/2025-12-28-dia-28-especulacao-evolutiva",
@@ -4008,7 +4004,6 @@
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-28-dia-28-especulacao-evolutiva",
@@ -4016,7 +4011,8 @@
       "2026-06-06-bem-vindos-luz-e-sangue",
       "2026-07-14-ruach-hakodesh",
       "2026-08-18-novo-episodio-luz-e-sangue",
-      "2026-08-19-more-amphibious-doodles"
+      "2026-08-19-more-amphibious-doodles",
+      "2026-12-25-feliz-natal-di-vario"
      ],
      "pt": [
       "2023-08-18-orcs",
@@ -4093,7 +4089,6 @@
       "2025-12-23-dia-23-especulacao-evolutiva",
       "2025-12-24-dia-24-especulacao-evolutiva",
       "2025-12-25-dia-25-especulacao-evolutiva",
-      "2025-12-25-feliz-natal-di-vario",
       "2025-12-26-dia-26-especulacao-evolutiva",
       "2025-12-27-dia-27-especulacao-evolutiva",
       "2025-12-28-dia-28-especulacao-evolutiva",
@@ -4101,7 +4096,8 @@
       "2026-06-06-bem-vindos-luz-e-sangue",
       "2026-07-14-ruach-hakodesh",
       "2026-08-18-novo-episodio-luz-e-sangue",
-      "2026-08-19-more-amphibious-doodles"
+      "2026-08-19-more-amphibious-doodles",
+      "2026-12-25-feliz-natal-di-vario"
      ]
     },
     "universe": {
@@ -4344,7 +4340,6 @@
     "/en/news/2025-12-23-dia-23-especulacao-evolutiva/",
     "/en/news/2025-12-24-dia-24-especulacao-evolutiva/",
     "/en/news/2025-12-25-dia-25-especulacao-evolutiva/",
-    "/en/news/2025-12-25-feliz-natal-di-vario/",
     "/en/news/2025-12-26-dia-26-especulacao-evolutiva/",
     "/en/news/2025-12-27-dia-27-especulacao-evolutiva/",
     "/en/news/2025-12-28-dia-28-especulacao-evolutiva/",
@@ -4353,6 +4348,7 @@
     "/en/news/2026-07-14-ruach-hakodesh/",
     "/en/news/2026-08-18-novo-episodio-luz-e-sangue/",
     "/en/news/2026-08-19-more-amphibious-doodles/",
+    "/en/news/2026-12-25-feliz-natal-di-vario/",
     "/en/support/",
     "/en/works/",
     "/en/works/all-in-a-nights-work/01/",
@@ -4449,7 +4445,6 @@
     "/pt/news/2025-12-23-dia-23-especulacao-evolutiva/",
     "/pt/news/2025-12-24-dia-24-especulacao-evolutiva/",
     "/pt/news/2025-12-25-dia-25-especulacao-evolutiva/",
-    "/pt/news/2025-12-25-feliz-natal-di-vario/",
     "/pt/news/2025-12-26-dia-26-especulacao-evolutiva/",
     "/pt/news/2025-12-27-dia-27-especulacao-evolutiva/",
     "/pt/news/2025-12-28-dia-28-especulacao-evolutiva/",
@@ -4458,6 +4453,7 @@
     "/pt/news/2026-07-14-ruach-hakodesh/",
     "/pt/news/2026-08-18-novo-episodio-luz-e-sangue/",
     "/pt/news/2026-08-19-more-amphibious-doodles/",
+    "/pt/news/2026-12-25-feliz-natal-di-vario/",
     "/pt/support/",
     "/pt/works/",
     "/pt/works/all-in-a-nights-work/01/",
@@ -4551,7 +4547,6 @@
     "en:news/2025-12-23-dia-23-especulacao-evolutiva",
     "en:news/2025-12-24-dia-24-especulacao-evolutiva",
     "en:news/2025-12-25-dia-25-especulacao-evolutiva",
-    "en:news/2025-12-25-feliz-natal-di-vario",
     "en:news/2025-12-26-dia-26-especulacao-evolutiva",
     "en:news/2025-12-27-dia-27-especulacao-evolutiva",
     "en:news/2025-12-28-dia-28-especulacao-evolutiva",
@@ -4560,6 +4555,7 @@
     "en:news/2026-07-14-ruach-hakodesh",
     "en:news/2026-08-18-novo-episodio-luz-e-sangue",
     "en:news/2026-08-19-more-amphibious-doodles",
+    "en:news/2026-12-25-feliz-natal-di-vario",
     "en:pages/about",
     "en:pages/project",
     "en:pages/support",
@@ -4649,7 +4645,6 @@
     "pt:news/2025-12-23-dia-23-especulacao-evolutiva",
     "pt:news/2025-12-24-dia-24-especulacao-evolutiva",
     "pt:news/2025-12-25-dia-25-especulacao-evolutiva",
-    "pt:news/2025-12-25-feliz-natal-di-vario",
     "pt:news/2025-12-26-dia-26-especulacao-evolutiva",
     "pt:news/2025-12-27-dia-27-especulacao-evolutiva",
     "pt:news/2025-12-28-dia-28-especulacao-evolutiva",
@@ -4658,6 +4653,7 @@
     "pt:news/2026-07-14-ruach-hakodesh",
     "pt:news/2026-08-18-novo-episodio-luz-e-sangue",
     "pt:news/2026-08-19-more-amphibious-doodles",
+    "pt:news/2026-12-25-feliz-natal-di-vario",
     "pt:pages/about",
     "pt:pages/project",
     "pt:pages/support",

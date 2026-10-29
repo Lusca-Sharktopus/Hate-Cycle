@@ -17,7 +17,7 @@
 // e trocadas pelos mesmos marcadores antes de comparar.
 //
 // T14 (grupo t14 = páginas avulsas, Universo/Personagens e a 404) mais as provas do SITE INTEIRO:
-//   - a lista de endereços do dist/ é exatamente a de baseline/urls.json (193 páginas HTML + os 2 feeds + CNAME) mais o sitemap;
+//   - a lista de endereços do dist/ é exatamente a de baseline/urls.json (191 páginas HTML desde 29/10 + os 2 feeds + CNAME) mais o sitemap;
 //   - a raiz, as páginas do site antigo e os feeds RSS saem IGUAIS BYTE A BYTE ao que o build.py gera;
 //   - o sitemap tem as páginas publicadas e indexáveis (e só elas), conferido contra o dist/;
 //   - uma SEGUNDA construção, com rascunhos e Extras ligados (`NODE_ENV=development HC_SHOW_EXTRAS=1 pnpm build`: o que o autor verá
@@ -313,13 +313,13 @@ function enderecoDoHtml(arquivo: string): string {
 }
 
 describe("a lista de endereços do dist/ é a da baseline (mais o sitemap)", () => {
-  test("as 193 páginas HTML são exatamente as do site atual (nenhuma a mais, nenhuma a menos)", () => {
+  test("as 191 páginas HTML são exatamente as do site atual (nenhuma a mais, nenhuma a menos; eram 193 até o post de Natal de 2025 sair, 29/10)", () => {
     // As páginas .html que vêm prontas de static/ (as do site antigo: produtos.html, night.html…) não são páginas
     // geradas: a baseline as lista em outros_de_static_relevantes (próximo teste), como faz o tools/baseline.py.
     const deStatic = new Set(baselineUrls.outros_de_static_relevantes.filter((f) => f.endsWith(".html")).map((f) => f.slice(1)));
     const html = arquivosDe(dist).filter((a) => a.endsWith(".html") && !deStatic.has(a)).map(enderecoDoHtml).sort();
     expect(html).toEqual([...baselineUrls.html].sort());
-    expect(html).toHaveLength(193);
+    expect(html).toHaveLength(191);
   });
   test("os feeds, o CNAME e o sitemap estão lá; nada mais fora do que o site publica (nem /dev/)", () => {
     const todos = arquivosDe(dist);
@@ -756,7 +756,7 @@ describe("T17d: as três obras novas só existem na prévia; o leitor página a 
       expect(NOVAS.test(texto), arquivo).toBe(false);
       for (const m of texto.matchAll(/<script\b[^>]*\bsrc="((?:https?:)?\/\/[^"]*)"/g)) expect(oficiais, arquivo).toContain(m[1]);
     }
-    expect(arquivosDe(dist).filter((a) => a.endsWith(".html"))).toHaveLength(197); // as 193 de baseline/urls.json + as 4 páginas antigas de static/ (B35)
+    expect(arquivosDe(dist).filter((a) => a.endsWith(".html"))).toHaveLength(195); // as 191 de baseline/urls.json + as 4 páginas antigas de static/ (B35)
   });
 
   test("prévia: a página da Beira de Estrada lista os dois capítulos (como Luz & Sangue); os cartões levam a ela, ao Pêndulo e ao jogo", () => {

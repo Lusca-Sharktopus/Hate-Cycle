@@ -110,6 +110,7 @@
     "logos/EN/Hello Di Vario Residence 1.png": "609d22d1f2850053",
     "logos/EN/Hello Di Vario Residence 2.png": "ea4181eb21b8d4c3",
     "logos/EN/Hello Di Vario Residence 3.png": "69839ab4e27c0682",
+    "logos/EN/Hello Di Vario Residency 5.png": "e2353460f1b6954b",
     "logos/EN/Light & Blood 1.png": "a5cdd76ea2aef58e",
     "logos/EN/Light & Blood 2.png": "e195107c59123ffd",
     "logos/EN/Light & Blood 3.png": "ffbf442c9cc894a6",
@@ -148,6 +149,7 @@
     "logos/PT/Pederneira 1.png": "e0a2118736294c18",
     "logos/Pederneira 3.png": "4a0a56bba96378ef",
     "logos/favicon.png": "1caa2fda85babbec",
+    "news/Di Vario Christmas.png": "ced93e7885089f86",
     "news/a-bit-slow.png": "a8cb78c1b32246dd",
     "news/amphibious-doodles.png": "2058b8915be38f26",
     "news/amphibious-maguire.png": "670015f271670d73",
@@ -305,5 +307,5 @@
     "support/catarse.png": "dd7c35cd2cb8cec3",
     "support/patreon.png": "e6f78775733e123e"
   },
-  "total": 303
+  "total": 305
 }

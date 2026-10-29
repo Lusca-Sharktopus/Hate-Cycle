@@ -53,7 +53,7 @@ O `config.json` é do autor: **não edite**; diga a ele qual chave mudar.
 - `comments(lang, ident, …)` com `ident` = `works/<obra>/<capítulo>` ou `news/<slug>`, igual nos dois idiomas.
 - Capítulos `unlisted` geram página com `noindex`, fora de listas.
 - Obra com `"draft": true` no `work.json` não existe no site publicado (nem cartão, nem Histórias, nem home, nem "Últimas atualizações", nem sitemap/feed/alternativas de idioma, nem páginas de capítulo): é o interruptor único da obra inteira. O Astro tem a mesma regra (`obrasPublicadas()` em `src/lib/visibilidade.ts`); a prova de que os dois concordam está em `tools/regras_ref.py` (cenário variado, obras `u-`…`x-`) e `tests/regras.test.ts`.
-- Ao terminar, rode `python3 build.py` e confira a última linha (`(193 páginas)` hoje); depois `rm -rf public __pycache__`.
+- Ao terminar, rode `python3 build.py` e confira a última linha (`(195 páginas)` hoje, desde 29/10); depois `rm -rf public __pycache__`.
 
 ## Bug conhecido (não corrigir sem o autor)
 
