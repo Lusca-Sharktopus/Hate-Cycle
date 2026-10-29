@@ -34,7 +34,7 @@ import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { t, tDoConfig, type Lang } from "../src/lib/config";
 import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog";
 import { pyStrip } from "../src/lib/frontmatter";
-import { blogComoNoPython, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { blogComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -156,7 +156,8 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
 /** O HTML do Python com o que o Astro decidiu diferente: só 4 histórias na home (T17j). (Os posts incorporados são iguais nos dois desde a
  *  T17m: os scripts oficiais, como no site antigo; a exceção semScriptsDosPosts da T17g saiu.) */
 function pythonComoNoAstro(html: string): string {
-  return soQuatroHistoriasNaHome(html).html;
+  // 28/10: o Astro não desenha mais a data sob o título do capítulo (tests/ajudantes/html.ts → semDataDoCapitulo)
+  return semDataDoCapitulo(soQuatroHistoriasNaHome(html).html).html;
 }
 /** Os textos do blog como estão no config.json (os que o build.py mostra). */
 function textosDoBlogNoConfig(lang: Lang) {
@@ -173,7 +174,9 @@ function astroComoNoPython(html: string): string {
   // T17n: "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts); o Python usa os textos do config.json (tests/blog.test.ts)
   const b = blogComoNoPython(j.html, TEXTOS_DO_BLOG[lang], textosDoBlogNoConfig(lang));
   const c = cartaoEmOutroIdiomaComoNoPython(b.html, t(lang, "soon"));
-  return resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html;
+  // 28/10: o aviso sob o título (`chapter_note`) e a linha fina do vídeo/quadrinho só existem no Astro (tests/ajudantes/html.ts)
+  const cab = cabecalhoDoCapituloComoNoPython(c.html);
+  return resumoCortadoComoNoPython(homeComoNoPython(cab.html).html).html;
 }
 
 // ───────────── página a página, grupo a grupo ─────────────

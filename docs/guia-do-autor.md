@@ -106,7 +106,11 @@ Se algo der muito errado, o site antigo está guardado e dá para pô-lo de volt
 
 ### Datas dos capítulos e episódios
 
-Campo `date: AAAA-MM-DD` no topo de cada capítulo/episódio. Aparece na lista e sob o título (em português sai como "18 de ago. de 2026") e faz o capítulo entrar em "Últimas atualizações".
+Campo `date: AAAA-MM-DD` no topo de cada capítulo/episódio. Aparece na lista de capítulos (em português sai como "18 de ago. de 2026") e faz o capítulo entrar em "Últimas atualizações". **Desde 28/10 (seu pedido; só no site novo) ela não aparece mais sob o título, na página do capítulo.**
+
+**O topo de toda página de capítulo (desde 28/10, só no site novo):** a logo, o título, o aviso do capítulo (se houver, ver abaixo) e a **linha fina** que o texto já tinha (Pederneira, Ossos do Ofício) — agora também nos vídeos e quadrinhos.
+
+**Aviso sob o título (`chapter_note`, desde 28/10):** no `work.json` da obra, um texto curto que aparece sob o título de **todos** os capítulos dela, no lugar onde ficava a data, só no idioma que você escrever. Hoje Luz & Sangue e O Pêndulo têm `"chapter_note": { "en": "Turn Close Captions on!" }` (só em inglês; a página em português fica sem). Para pôr nos dois idiomas, acrescente `"pt": "…"`; para tirar, apague o bloco.
 
 ### Episódios (ex.: Luz & Sangue)
 
@@ -165,6 +169,8 @@ A página do *Cat-Crow-Thing* (`content/works/cat-crow-thing/`, em rascunho) mos
 ### Carta que vira
 
 Só gira ao **clicar** (clique de novo para voltar; também funciona com Tab + Enter).
+
+**Desde 28/10 a carta de Ossos do Ofício é texto de verdade** (seu pedido), nos dois idiomas (em inglês, como antes): o papel em branco (`static/other images/letter-paper.png`) com o texto por cima, na fonte **Pristina** (o placeholder que você mandou). O texto está no próprio `01/en.md` e `01/pt.md` (procure `flip-card`): a frente em `<div class="carta-texto">…</div>`, o verso em `<div class="carta-texto carta-verso">…</div>`, uma linha por `<br>`. Tamanhos e margens em `src/styles/prosa.css` (`.carta-texto`). As imagens antigas (`letter-front.png`, `letter-back.png`) continuam guardadas em `static/other images/`. **Antes de publicar Ossos:** a Pristina vem com o Office e a licença do Office não cobre usá-la num site; hoje ela só vai para a prévia (o site publicado não leva a fonte), mas para o lançamento é preciso a licença para web (Monotype/fonts.com) ou outra fonte. **Carta escrita à mão (sua ideia de 28/10):** o mesmo encaixe serve — a imagem escaneada no lugar do papel e o texto por cima, transparente (dá para selecionar, copiar, buscar e o leitor de tela lê), como num PDF escaneado com texto reconhecido.
 
 ## 5. Mostrar, esconder e lançar
 

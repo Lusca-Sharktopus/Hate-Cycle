@@ -52,7 +52,7 @@ import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
 // só os textos da interface (ui) do config.json do autor: o "Em breve" de cada idioma (T17m)
 const UI = JSON.parse(readFileSync(new URL("../config.json", import.meta.url), "utf8")).ui;
-import { blogComoNoPython, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
+import { blogComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
 // T17n: os textos do blog ("Blog" no lugar de "Notícias"/"News Feed"), que só o Astro usa (o config.json continua com os antigos)
 import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog.ts";
 
@@ -105,6 +105,9 @@ const SCRIPTS_DO_ASTRO = [
   ["1 seletor de Histórias (.sorter)", (s) => s.modulo && /\[`release`,`chrono`,`alpha`\]/.test(s.texto)],
   ["2 carrossel (.works:not(.grid))", (s) => s.modulo && /\.works:not\(\.grid\)/.test(s.texto)],
   ["4 carta que vira (.flip-card)", (s) => s.modulo && /\.flip-card/.test(s.texto)],
+  // 28/10: a fonte da carta (Pristina) entra embutida, num <script type="module"> do CartaQueVira.astro, só nas páginas com a carta: faz
+  // parte do mesmo comportamento (a carta), que o Python também tem
+  ["4 carta que vira (.flip-card)", (s) => s.modulo && /^try\{const f=new FontFace\("Pristina",/.test(s.texto)],
   ["5a capa ausente (.work-card > img)", (s) => s.modulo && /\.work-card > img/.test(s.texto)],
   ["5a foto de emissário ausente (.emi-photo img)", (s) => s.modulo && /\.emi-photo img/.test(s.texto)],
   ["6 notícias: busca e páginas (.news-list)", (s) => s.modulo && /news-list|news-item/.test(s.texto)],
@@ -181,6 +184,11 @@ function normalizar(html, lado, url, existe) {
     const h = soQuatroHistoriasNaHome(html);
     if (h.tirados) conta("T17j: 5º cartão em diante da home (Python)", url);
     html = h.html;
+    // 28/10: o Astro não desenha mais a data sob o título do capítulo (tests/ajudantes/html.ts → semDataDoCapitulo)
+    const d = semDataDoCapitulo(html);
+    if (d.tiradas) conta("28/10: data sob o título do capítulo (Python)", url);
+    if (d.tiradas && !/^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url)) falha(url, "data de capítulo fora de uma página de capítulo");
+    html = d.html;
   } else {
     const t = homeComoNoPython(html);
     if (t.trilhos) conta("T17j: trilho e link \"Ver todas as histórias\" da home (Astro)", url);
@@ -208,6 +216,13 @@ function normalizar(html, lado, url, existe) {
     if (bl.trocas.todos && !/^\/(en|pt)\/news\/[^/]+\/$/.test(url)) falha(url, "\"Todos os posts\" fora de um post");
     if (bl.trocas.etiqueta && !/^\/(en|pt)\/$/.test(url)) falha(url, "etiqueta \"Post do blog\" fora da home");
     html = bl.html;
+    // 28/10: o aviso sob o título (`chapter_note`) e a linha fina do vídeo/quadrinho só existem no Astro (tests/ajudantes/html.ts)
+    const cab = cabecalhoDoCapituloComoNoPython(html);
+    if (cab.avisos) conta("28/10: aviso sob o título do capítulo (Astro)", url);
+    if (cab.linhas) conta("28/10: linha fina abaixo do cabeçalho em vídeo/quadrinho (Astro)", url);
+    if ((cab.avisos || cab.linhas) && !/^\/(en|pt)\/works\/[^/]+\/[^/]+\/$/.test(url)) falha(url, "cabeçalho de capítulo fora de uma página de capítulo");
+    if (cab.avisos && !/^\/en\//.test(url)) falha(url, "aviso sob o título fora do inglês (hoje só existe em inglês)");
+    html = cab.html;
     const jo = semJanelaDoJogo(html);
     if (jo.removidos.length) conta("T17d: janela da demo e botão da Steam (Astro)", url);
     if (jo.foraDoLugar) falha(url, "janela do jogo fora do lugar");

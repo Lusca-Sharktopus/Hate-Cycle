@@ -420,6 +420,9 @@ export function criarSchemas(indice: Indice) {
       game: paginaDeJogo().optional(),
       langs: z.array(idioma, { error: (i) => `tem de ser uma lista de idiomas (${langs.join(", ")}), mas veio ${descrever(i.input)}.` }).optional(),
       title: traduzivel().optional(),
+      /** (28/10, só no Astro) um aviso curto sob o título de TODO capítulo da obra, no idioma que tiver (ex.: {"en": "Turn Close Captions on!"}).
+       *  Só aparece no idioma escrito: sem "pt", a página em português fica sem aviso. */
+      chapter_note: traduzivel().optional(),
       blurb: traduzivel().optional(),
       cover: traduzivel().optional(),
       logo: traduzivel().optional(),

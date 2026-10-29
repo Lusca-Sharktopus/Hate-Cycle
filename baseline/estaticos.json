@@ -269,6 +269,7 @@
     "other images/X_icon.svg": "ce111a95330bea9a",
     "other images/letter-back.png": "52a9ac332ca31687",
     "other images/letter-front.png": "86ac6b024a52d1e3",
+    "other images/letter-paper.png": "1c321d1310a603a7",
     "other images/nao-eu-nao-posso.gif": "a1eb3d6951228a33",
     "other images/no-i-cant.gif": "e1b544a9766bce04",
     "other images/ossos-cena-1-final.png": "54bd862f5e01228a",
@@ -304,5 +305,5 @@
     "support/catarse.png": "dd7c35cd2cb8cec3",
     "support/patreon.png": "e6f78775733e123e"
   },
-  "total": 302
+  "total": 303
 }

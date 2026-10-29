@@ -32,6 +32,7 @@ O que confere, em cada par:
      HTML deles (com os scripts oficiais) é igual nos dois.
 Sai com 0 se tudo bater (ou só sobrar o que foi decidido), 1 se houver diferença. Só biblioteca padrão + Node (para o passo 3).
 """
+from html import unescape
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, tempfile
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -117,6 +118,12 @@ def sem_bloco_de_ordem(html: str) -> tuple[str, int]:
 RE_LINK_DA_HOME = re.compile(r'<a class="rail-btn rail-next rail-more"[^>]*>.*?</a>', re.S)
 RE_RESUMO_CORTADO = re.compile(r'<span class="news-fade">([^<]*)</span> (<a class="more" href="[^"]*">)…')
 RE_CARTAO = re.compile(r'<article class="work-card[ "].*?</article>', re.S)
+# 28/10: o cabeçalho dos capítulos (só no Astro): sem a data sob o título, com o aviso `chapter_note` e a linha fina também no vídeo e no
+# quadrinho. As mesmas formas exatas de tests/ajudantes/html.ts → cabecalhoDoCapituloComoNoPython / semDataDoCapitulo.
+RE_AVISO_DO_CAPITULO = re.compile(r'(</h1>)<p class="chapter-note">[^<]*</p>')
+RE_LINHA_DO_CABECALHO = re.compile(r'(</h1>)<hr class="thin">(?=<div class="player-row">|<div class="video-wrapper">|<nav class="pager"|<div class="comic">|<div class="folheador")')
+RE_DATA_DO_CAPITULO = re.compile(r'(</h1>)<p class="chapter-date"><time datetime="[^"]*">[^<]*</time></p>')
+RE_DATA_DO_CAPITULO_TEXTO = re.compile(r'</h1><p class="chapter-date"><time datetime="[^"]*">([^<]*)</time></p>')
 
 
 # T17d (só no Astro, só na prévia): o leitor página a página dos quadrinhos vira o <div class="comic"> que ele tem dentro, e a janela da demo
@@ -215,22 +222,27 @@ def astro_como_no_python(html: str) -> tuple[str, int]:
     html, b = RE_RESUMO_CORTADO.subn(r"\1… \2", html)
     html, c = folheador_como_no_python(html)
     html, d = sem_janela_do_jogo(html)
-    return html, a + b + c + d + e + f
+    html, g = RE_AVISO_DO_CAPITULO.subn(r"\1", html)
+    html, h = RE_LINHA_DO_CABECALHO.subn(r"\1", html)
+    return html, a + b + c + d + e + f + g + h
 
 
-def python_como_no_astro(html: str) -> tuple[str, int]:
-    """Na home (a página com o carrossel data-more-url), só os 4 primeiros cartões (T17j)."""
+def python_como_no_astro(html: str, sem_data: bool = True) -> tuple[str, int]:
+    """Na home (a página com o carrossel data-more-url), só os 4 primeiros cartões (T17j); nos capítulos, sem a data sob o título (28/10;
+    `sem_data=False` deixa a data, para conferir o Python com a baseline, que a tem)."""
+    html, n = RE_DATA_DO_CAPITULO.subn(r"\1", html) if sem_data else (html, 0)
     if 'data-more-url="' not in html:
-        return html, 0
+        return html, n
     cartoes = list(RE_CARTAO.finditer(html, html.index('data-more-url="')))
     for m in reversed(cartoes[4:]):
         html = html[: m.start()] + html[m.end():]
-    return html, max(0, len(cartoes) - 4)
+    return html, n + max(0, len(cartoes) - 4)
 
 
-def ler_site(pasta: Path, tirar_ordem: bool):
-    """`tirar_ordem` = é o site do Astro (tira o que só ele tem); senão, o do Python (só a regra da home com 4 histórias)."""
-    paginas, comentarios, textos, ordem, trocas = {}, {}, {}, 0, 0
+def ler_site(pasta: Path, tirar_ordem: bool, sem_data: bool = True):
+    """`tirar_ordem` = é o site do Astro (tira o que só ele tem); senão, o do Python (a regra da home com 4 histórias e, com `sem_data`, sem
+    a data sob o título dos capítulos). `datas` = a data tirada de cada página do Python (para tirar a mesma linha do texto da baseline)."""
+    paginas, comentarios, textos, ordem, trocas, datas = {}, {}, {}, 0, 0, {}
     for f in sorted(pasta.rglob("*.html")):
         rel = f.relative_to(pasta).as_posix()
         if rel.startswith("dev/") or (STATIC / rel).is_file():
@@ -243,7 +255,10 @@ def ler_site(pasta: Path, tirar_ordem: bool):
             html, q = astro_como_no_python(html)
             trocas += q
         else:
-            html, q = python_como_no_astro(html)
+            d = RE_DATA_DO_CAPITULO_TEXTO.search(html)
+            if d:
+                datas[url] = unescape(d.group(1))
+            html, q = python_como_no_astro(html, sem_data)
             trocas += q
         L = BL.ler(html)
         paginas[url] = {"title": L.title, "description": L.description, "lang": L.lang, "canonical": L.canonical,
@@ -252,7 +267,7 @@ def ler_site(pasta: Path, tirar_ordem: bool):
         if L.data_pages:
             comentarios[url] = L.data_pages
         textos[url] = L.texto()
-    return {"paginas": paginas, "comentarios": comentarios, "textos": textos, "blocos_de_ordem": ordem, "trocas_t17j": trocas}
+    return {"paginas": paginas, "comentarios": comentarios, "textos": textos, "blocos_de_ordem": ordem, "trocas_t17j": trocas, "datas": datas}
 
 
 def baseline():
@@ -406,8 +421,17 @@ def comparar_par(R: Relatorio, modo: str, py: Path, astro: Path, BLD):
     comparar_leituras(R, nome, lp, la, "Python", "Astro")
     if modo == "publicado":
         foto = {"paginas": BLD["paginas"], "comentarios": BLD["comentarios"]["por_pagina"], "textos": BLD["textos"]}
-        comparar_leituras(R, nome + " × baseline", foto, la, "baseline", "Astro")
-        comparar_leituras(R, nome + " × baseline", foto, lp, "baseline", "Python")
+        # 28/10: o Astro não desenha a data sob o título do capítulo; para ele, a mesma linha sai do texto da baseline (só a 1ª vez que
+        # aparece, e só a data que o Python tinha naquela página). O Python (com a data) é conferido com a baseline como ela é.
+        def sem_a_data(url, texto):
+            linhas = texto.split("\n")
+            d = lp["datas"].get(url)
+            if d is not None and d in linhas:
+                linhas.remove(d)
+            return "\n".join(linhas)
+        foto_astro = {**foto, "textos": {u: sem_a_data(u, t) for u, t in foto["textos"].items()}}
+        comparar_leituras(R, nome + " × baseline", foto_astro, la, "baseline", "Astro")
+        comparar_leituras(R, nome + " × baseline", foto, ler_site(py, False, sem_data=False), "baseline", "Python")
         ids = sorted({i for v in la["comentarios"].values() for i in v})
         if ids != BLD["comentarios"]["ids_unicos"]:
             R.dif(f"[{nome}] IDs únicos do Astro ({len(ids)}) ≠ baseline ({len(BLD['comentarios']['ids_unicos'])})")

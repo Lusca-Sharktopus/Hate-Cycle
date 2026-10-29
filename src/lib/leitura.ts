@@ -12,7 +12,7 @@
 import { alternativasDoCapitulo, type Alternativas } from "./alternativas";
 import { paginasDosCapitulos, tipoDaObra, type CapituloDeLeitura, type PaginaDoCapitulo, type Vizinho } from "./capitulos";
 import type { SecaoDeComentarios } from "./comentarios";
-import { langs, t, type Lang } from "./config";
+import { langs, t, type Lang, type Translatable } from "./config";
 import { pyStrip } from "./frontmatter";
 import { logoDaObra, tituloDaObra, urlDaObra, type ObraComDados } from "./obras";
 import { folheadorDoCapitulo, type Folheador } from "./folheador";
@@ -24,6 +24,8 @@ import { cortarTitulo } from "./titulos";
 export interface ObraParaLer extends ObraComDados {
   data: ObraComDados["data"] & {
     reading_font?: string | undefined;
+    /** (28/10) o aviso sob o título de todo capítulo (ex.: {"en": "Turn Close Captions on!"}). Ver avisoDoCapitulo(). */
+    chapter_note?: Translatable | undefined;
     /** T17d: o leitor página a página dos quadrinhos (uma runa por página). Ver src/lib/folheador.ts. */
     page_runes?: readonly string[] | undefined;
     /** T17d: a página de jogo (janela da demo e botão da Steam). Ver src/lib/jogo.ts. */
@@ -80,8 +82,12 @@ export interface CabecalhoDoCapitulo {
   titulo: string;
   /** "sr-only" (só para leitores de tela) quando a logo já mostra o título: obra de capítulo único com logo. */
   classeDoTitulo: "chapter-title" | "sr-only";
-  /** A data sob o título (nunca em obra de capítulo único). */
+  /** A data sob o título (nunca em obra de capítulo único). Desde 28/10 (pedido do autor: "retire as datas de debaixo dos nomes dos
+   *  capítulos") o componente NÃO a desenha; fica aqui porque as regras de data continuam provadas contra o Python (tests/regras.test.ts). */
   data: { iso: string; texto: string } | null;
+  /** (28/10) O aviso sob o título, no lugar onde ficava a data: `chapter_note` do work.json, só no idioma escrito ("Turn Close Captions on!"
+   *  em Luz & Sangue e O Pêndulo, só em inglês). null = sem aviso. */
+  aviso: string | null;
 }
 
 export type ConteudoDoCapitulo =
@@ -164,6 +170,12 @@ export function notaDoCapitulo(c: CapituloParaLer): string {
 }
 
 /** O cabeçalho do capítulo (logo, título, data): build() linhas ~792–799. */
+/** O `chapter_note` do work.json no idioma da página, SEM cair para o outro idioma (o aviso de legendas é só do vídeo em inglês). */
+export function avisoDoCapitulo(nota: Translatable | undefined, lang: Lang): string | null {
+  const texto = typeof nota === "string" ? nota : nota?.[lang];
+  return texto && texto.trim() ? texto : null;
+}
+
 export function cabecalhoDoCapitulo(obra: ObraParaLer, lang: Lang, p: PaginaDoCapitulo): CabecalhoDoCapitulo {
   const unico = obra.data.oneshot === true;
   const logo = logoDaObra(obra, lang);
@@ -173,6 +185,7 @@ export function cabecalhoDoCapitulo(obra: ObraParaLer, lang: Lang, p: PaginaDoCa
     titulo: p.tituloPrincipal,
     classeDoTitulo: unico && logo ? "sr-only" : "chapter-title",
     data: p.data,
+    aviso: avisoDoCapitulo(obra.data.chapter_note, lang),
   };
 }
 

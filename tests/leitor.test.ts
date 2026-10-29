@@ -26,7 +26,7 @@ import { versaleteEntreTags } from "../src/lib/markdown";
 import { compararNatural } from "../src/lib/ordem";
 import { finalizarMain, protegerAtributos, separarScripts, textoDoAutor, versaleteNoMain } from "../src/lib/pagina";
 import { arquivosDoGlob, globNaPasta } from "../src/lib/quadrinhos";
-import { canonicoDoMiolo, folheadorComoNoPython, RE_SCRIPT_DOS_COMENTARIOS, semJanelaDoJogo, semScriptsAntigosDosComentarios } from "./ajudantes/html";
+import { cabecalhoDoCapituloComoNoPython, canonicoDoMiolo, folheadorComoNoPython, RE_SCRIPT_DOS_COMENTARIOS, semDataDoCapitulo, semJanelaDoJogo, semScriptsAntigosDosComentarios } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -133,7 +133,12 @@ for (const amb of ref.ambientes) {
         janelas: leitura.conteudo.formato === "prose" && leitura.conteudo.jogo ? 1 : 0,
         foraDoLugar: 0,
       });
-      expect(canonicoDoMiolo(semJogo.html), url).toBe(canonicoDoMiolo(semAntigos.html));
+      // 28/10: sem a data sob o título, com o aviso (`chapter_note`) e a linha fina também no vídeo/quadrinho (tests/ajudantes/html.ts)
+      const cab = cabecalhoDoCapituloComoNoPython(semJogo.html);
+      expect(cab.linhas, `${url}: a linha fina do vídeo/quadrinho`).toBe(leitura.conteudo.formato === "prose" ? 0 : 1);
+      expect(cab.avisos, `${url}: o aviso sob o título`).toBe(leitura.cabecalho.aviso ? 1 : 0);
+      expect(pronto.html, `${url}: a data sob o título saiu`).not.toContain('class="chapter-date"');
+      expect(canonicoDoMiolo(cab.html), url).toBe(canonicoDoMiolo(semDataDoCapitulo(semAntigos.html).html));
       // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
       const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
       expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);

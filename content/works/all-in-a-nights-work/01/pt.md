@@ -127,7 +127,7 @@ They are in a carriage, heading to a mansion in Bristol from which they’ve rec
 
 
 
-<div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front"><img src="/other images/letter-front.png" alt="letter"></div><div class="flip-card-back"><img src="/other images/letter-back.png" alt="letter"></div></div></div>
+<div class="flip-card" lang="en"><div class="flip-card-inner"><div class="flip-card-front"><img src="/other images/letter-paper.png" alt=""><div class="carta-texto"><p>To the Wings of Order:</p><p>I hope this letter finds you well. I came in contact with you through this letter because I am in desperate need of help. I’ve recently bought this lovely property in Bristol only to learn that it is haunted by evil spirits that constantly torment my very existence. I haven’t slept properly in four days, as there’s always either weird sounds coming from the hallway keeping me awake, or, when I do catch some sleep, I am met with constant terrible nightmares. I heard about your work through a close friend called Sarah Magnus, from whom I have heard wonderful things.<br>You can find my address at the back of this letter. Please come as soon as possible<br>Thank you in advance</p><p class="carta-assinatura">-Elijah Smith</p></div></div><div class="flip-card-back"><img src="/other images/letter-paper.png" alt=""><div class="carta-texto carta-verso"><p>Building Number: 77<br>Street Name: Corn Street<br>Street Address: St Nicholas Market, The Exchange<br>State: Avon<br>City: Bristol</p></div></div></div></div>
 
 
 
