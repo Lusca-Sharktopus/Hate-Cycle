@@ -1,0 +1,634 @@
+// Ajudante dos testes de PÁGINAS (T11 em diante): lê o HTML de uma página inteira e o transforma numa forma "canônica"
+// que dá para comparar com o HTML do site Python sem se importar com o que não muda o que o visitante vê.
+//
+// Compara de forma ESTRUTURAL e estrita (é um parser de HTML de verdade, o parse5, não expressões regulares):
+//   - a árvore de tags, na mesma ordem;
+//   - os atributos, com os mesmos valores e na mesma ordem (a lista de classes: token por token, na mesma ordem);
+//   - o texto, com os espaços colapsados — e só o espaço que importa para o olho:
+//       * sequências de espaços/quebras de linha viram um espaço só;
+//       * espaço no começo/fim de um bloco, ou colado a um elemento de bloco (<div>, <p>, <section>…), é invisível e some;
+//       * espaço ENTRE dois elementos de linha (<a> e <a>, <span> e <span>) ou junto de texto continua valendo;
+//   - `&#x27;` × `&#39;` e outras formas de escrever o mesmo caractere são iguais (o parser decodifica as duas).
+// Não conta: comentários HTML e atributos `data-astro-cid-*` (a marca de escopo dos estilos do Astro — nenhum dos componentes
+// da T11 tem, mas o Header e o Footer da T06 têm; é uma diferença técnica documentada em docs/aprendendo-astro/07-paginas.md).
+import { parse, parseFragment, type DefaultTreeAdapterMap } from "parse5";
+
+type No = DefaultTreeAdapterMap["node"];
+type Elemento = DefaultTreeAdapterMap["element"];
+
+/** Elementos de bloco: o espaço colado a eles (ou no começo/fim deles) não aparece na tela. */
+const BLOCOS = new Set([
+  "html", "head", "body", "main", "header", "footer", "nav", "section", "article", "aside", "div", "p", "h1", "h2", "h3", "h4", "h5", "h6",
+  "ul", "ol", "li", "dl", "dt", "dd", "blockquote", "figure", "figcaption", "form", "fieldset", "table", "thead", "tbody", "tfoot", "tr", "td", "th",
+  "hr", "br", "details", "summary", "select", "option", "optgroup", "pre", "address", "template", "noscript", "script", "style", "link", "meta", "title",
+]);
+const VAZIOS = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"]);
+/** Dentro destes, o texto vale exatamente como está (espaços e quebras de linha incluídos). */
+const TEXTO_CRU = new Set(["script", "style", "pre", "textarea"]);
+
+const ESPACO = /[ \t\n\r\f]+/g;
+
+function ehElemento(n: No): n is Elemento {
+  return "tagName" in n;
+}
+function ehTexto(n: No): n is DefaultTreeAdapterMap["textNode"] {
+  return n.nodeName === "#text";
+}
+function filhosDe(n: No): No[] {
+  const alvo = "content" in n ? n.content : n; // <template> guarda os filhos em `content`
+  return "childNodes" in alvo ? alvo.childNodes : [];
+}
+
+/**
+ * T17 — a única diferença aceita nas <img>: as versões leves. O Astro acrescenta ao fim da tag `srcset`, `sizes`, `width`, `height` e
+ * (nas preguiçosas) `decoding="async"`; o site Python não tem nada disso (nunca tem `srcset`). Então, numa <img> COM `srcset`, esses cinco
+ * atributos não entram na comparação — todo o resto (src, class, alt, loading, style, a ordem) tem de ser igual ao do Python.
+ * Se o autor já tivesse `width`/`height` ou `decoding` numa imagem com versões leves, o Python teria o atributo e o Astro (que o
+ * descarta aqui) não: a página apareceria como diferente, e é o que se quer (o build nunca duplica atributo do autor; tests/imagens.test.ts).
+ * O que cada versão leve É (arquivo certo, mesma imagem, proporção) é provado em tests/imagens.test.ts, para todas as páginas.
+ */
+const ATRIBUTOS_DAS_VERSOES_LEVES = new Set(["srcset", "sizes", "width", "height", "decoding"]);
+const ehImagemComVersoesLeves = (e: Elemento) => e.tagName === "img" && e.attrs.some((a) => a.name === "srcset");
+
+function atributos(e: Elemento): string {
+  const leve = ehImagemComVersoesLeves(e);
+  return e.attrs
+    .filter((a) => !a.name.startsWith("data-astro-cid-") && !(leve && ATRIBUTOS_DAS_VERSOES_LEVES.has(a.name)))
+    .map((a) => (a.name === "class" ? ` class="${a.value.split(ESPACO).filter(Boolean).join(" ")}"` : ` ${a.name}=${JSON.stringify(a.value)}`))
+    .join("");
+}
+
+/** Os nós de um elemento como linhas canônicas, já com os espaços tratados. */
+function linhasDosFilhos(pai: No, recuo: string): string[] {
+  const paiEhBloco = !ehElemento(pai) || BLOCOS.has(pai.tagName);
+  const cru = ehElemento(pai) && TEXTO_CRU.has(pai.tagName);
+  // 1. junta textos vizinhos e joga fora os comentários
+  const itens: ({ texto: string } | { el: Elemento })[] = [];
+  for (const f of filhosDe(pai)) {
+    if (ehTexto(f)) {
+      const ultimo = itens[itens.length - 1];
+      if (ultimo && "texto" in ultimo) ultimo.texto += f.value;
+      else itens.push({ texto: f.value });
+    } else if (ehElemento(f)) itens.push({ el: f });
+  }
+  // 2. trata os espaços de cada texto
+  const saida: string[] = [];
+  itens.forEach((item, i) => {
+    if ("el" in item) {
+      saida.push(...linhasDoElemento(item.el, recuo));
+      return;
+    }
+    let texto = item.texto;
+    if (!cru) {
+      texto = texto.replace(ESPACO, " ");
+      const antes = itens[i - 1];
+      const depois = itens[i + 1];
+      const colaNoBlocoAntes = antes === undefined ? paiEhBloco : "el" in antes && BLOCOS.has(antes.el.tagName);
+      const colaNoBlocoDepois = depois === undefined ? paiEhBloco : "el" in depois && BLOCOS.has(depois.el.tagName);
+      if (colaNoBlocoAntes) texto = texto.replace(/^ /, "");
+      if (colaNoBlocoDepois) texto = texto.replace(/ $/, "");
+    }
+    if (texto !== "") saida.push(`${recuo}${JSON.stringify(texto)}`);
+  });
+  return saida;
+}
+
+function linhasDoElemento(e: Elemento, recuo: string): string[] {
+  const abre = `${recuo}<${e.tagName}${atributos(e)}>`;
+  if (VAZIOS.has(e.tagName)) return [abre];
+  return [abre, ...linhasDosFilhos(e, recuo + "  "), `${recuo}</${e.tagName}>`];
+}
+
+/** A forma canônica de um elemento: uma linha por tag/texto, recuada. Serve para comparar e, quando difere, para mostrar a diferença. */
+export function canonico(e: Elemento): string {
+  return linhasDoElemento(e, "").join("\n");
+}
+
+// ───────────── achar partes da página ─────────────
+
+function varrer(n: No, quando: (e: Elemento) => boolean, achados: Elemento[] = []): Elemento[] {
+  if (ehElemento(n) && quando(n)) achados.push(n);
+  for (const f of filhosDe(n)) varrer(f, quando, achados);
+  return achados;
+}
+function attr(e: Elemento, nome: string): string | undefined {
+  return e.attrs.find((a) => a.name === nome)?.value;
+}
+function textoDe(e: Elemento): string {
+  return filhosDe(e).map((f) => (ehTexto(f) ? f.value : ehElemento(f) ? textoDe(f) : "")).join("");
+}
+
+// T17 — as únicas diferenças aceitas no <head>, todas sobre FONTES e ÍCONE (o texto delas está em docs/aprendendo-astro/11-imagens-e-fontes.md):
+//   - o site Python pede as fontes ao Google Fonts (2 <link rel="preconnect"> + 1 <link> das fontes do texto + 20 das runas); o Astro as serve
+//     do próprio site (@font-face no CSS empacotado) e só pré-carrega as duas do começo da página (<link rel="preload" as="font">).
+//     Todos esses <link> saem da comparação, dos dois lados; que o Astro NÃO fala com o Google e que os dois pré-carregamentos existem e
+//     apontam para arquivos de verdade está em tests/imagens.test.ts (fontes), para todas as páginas.
+//   - o ícone: o Python tem um <link rel="icon">; o Astro tem dois (32x32 e 192x192, versões leves do mesmo desenho). Comparam-se como um só.
+const ehLinkDeFonte = (e: Elemento) => {
+  const href = attr(e, "href") ?? "";
+  return /^https:\/\/fonts\.(googleapis|gstatic)\.com\b/.test(href) || (attr(e, "rel") === "preload" && attr(e, "as") === "font");
+};
+const ehIcone = (e: Elemento) => attr(e, "rel") === "icon" && /^\/logos\/favicon(_[A-Za-z0-9]+)?\.png$/.test(attr(e, "href") ?? "");
+
+export interface PaginaLida {
+  /** <html lang="…"> */
+  lang: string;
+  /** Tudo do <head> que o visitante, os buscadores e as redes sociais veem. */
+  cabeca: {
+    titulo: string;
+    /** <meta name="…"> e <meta property="…"> (description, robots, og:*), na ordem. */
+    metas: string[];
+    /** <link> que não é o CSS empacotado do Astro (nem o style.css do site Python): ícone, fontes, alternate (hreflang, RSS)… na ordem. */
+    links: string[];
+    /** <script> do <head> sem src e que não é módulo (a abertura). */
+    scriptsInline: string[];
+  };
+  /** class do <body>. */
+  classeDoCorpo: string;
+  /** O fundo de runas (.runes) inteiro. */
+  runas: string;
+  cabecalho: string;
+  /** O miolo: <main> e tudo dentro. */
+  main: string;
+  rodape: string;
+}
+
+export function lerPagina(html: string): PaginaLida {
+  const doc = parse(html);
+  const todos = (quando: (e: Elemento) => boolean) => varrer(doc, quando);
+  const um = (quando: (e: Elemento) => boolean, nome: string) => {
+    const [e] = todos(quando);
+    if (!e) throw new Error(`a página não tem ${nome}`);
+    return e;
+  };
+  const raiz = um((e) => e.tagName === "html", "<html>");
+  const cabeca = um((e) => e.tagName === "head", "<head>");
+  const corpo = um((e) => e.tagName === "body", "<body>");
+  const metas = varrer(cabeca, (e) => e.tagName === "meta" && (attr(e, "name") !== undefined || attr(e, "property") !== undefined)).map(
+    (e) => `${attr(e, "name") ?? attr(e, "property")}=${JSON.stringify(attr(e, "content") ?? "")}`,
+  );
+  const links = varrer(cabeca, (e) => e.tagName === "link")
+    .filter((e) => {
+      const href = attr(e, "href") ?? "";
+      return !(href.startsWith("/_astro/") || href.startsWith("/style.css")) && !ehLinkDeFonte(e);
+    })
+    .map((e) => (ehIcone(e) ? '<link rel="icon" href="/logos/favicon.png" type="image/png">' : `<link${atributos(e).replace(/ href="\/custom\.css\?v=[0-9a-f]+"/, ' href="/custom.css"')}>`))
+    .filter((l, i, todos) => i === 0 || l !== todos[i - 1] || !l.startsWith('<link rel="icon"')); // os dois tamanhos do ícone viram um só
+  const scriptsInline = varrer(cabeca, (e) => e.tagName === "script" && attr(e, "src") === undefined && attr(e, "type") !== "module").map((e) => textoDe(e));
+  return {
+    lang: attr(raiz, "lang") ?? "",
+    cabeca: { titulo: textoDe(um((e) => e.tagName === "title", "<title>")), metas, links, scriptsInline },
+    classeDoCorpo: attr(corpo, "class") ?? "",
+    runas: canonico(um((e) => (attr(e, "class") ?? "").split(ESPACO).includes("runes"), "as runas")),
+    cabecalho: canonico(um((e) => e.tagName === "header", "<header>")),
+    main: canonico(um((e) => e.tagName === "main", "<main>")),
+    rodape: canonico(um((e) => e.tagName === "footer", "<footer>")),
+  };
+}
+
+/** Só o miolo (<main>) de um HTML que pode ser um pedaço (o resultado de um componente, sem <html>). */
+export function canonicoDoMiolo(htmlDoMiolo: string): string {
+  const doc = parse(`<!doctype html><html><head></head><body><main id="main">${htmlDoMiolo}</main></body></html>`);
+  const [main] = varrer(doc, (e) => e.tagName === "main");
+  if (!main) throw new Error("sem <main>");
+  return canonico(main);
+}
+
+// ───────────── T15: a única diferença aceita no HTML dos comentários ─────────────
+//
+// O site Python carrega a caixa de comentários com DOIS <script src> logo depois do <script>window.HC=…</script>: o
+// supabase-js do jsDelivr (versão "2", sem fixar) e o /comments.js?v=…. Desde a T15 o Astro não tem nenhum dos dois: o
+// script dos comentários é empacotado (src/components/CaixaDeComentarios.astro → /_astro/CaixaDeComentarios…js, no fim
+// da página, fora do <main>). Para comparar o resto do <main> com o do Python, tira-se do HTML do PYTHON exatamente esse
+// par, e só quando ele vem colado no window.HC. Qualquer outro script continua sendo comparado.
+
+/** O par de <script src> do comments() do build.py, colado ao window.HC (o grupo 1 é o window.HC, que fica). */
+const RE_SCRIPTS_ANTIGOS_DOS_COMENTARIOS =
+  /(<script>window\.HC=\{[\s\S]*?\};<\/script>)<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js@2"><\/script><script src="\/comments\.js\?v=[0-9a-f]+"><\/script>/g;
+
+/**
+ * O HTML do Python sem o supabase-js do CDN e sem o /comments.js (só o par que vem depois de um window.HC). Devolve também
+ * quantos pares saíram e se sobrou algum desses dois endereços em outro lugar (não deveria: o teste confere).
+ */
+export function semScriptsAntigosDosComentarios(htmlDoPython: string): { html: string; quantos: number; sobrou: boolean } {
+  let quantos = 0;
+  const html = htmlDoPython.replace(RE_SCRIPTS_ANTIGOS_DOS_COMENTARIOS, (_tudo, hc: string) => (quantos++, hc));
+  const sobrou = /cdn\.jsdelivr\.net\/npm\/@supabase|\/comments\.js\?v=/.test(html);
+  return { html, quantos, sobrou };
+}
+
+/** O <script type="module"> do script empacotado dos comentários (o nome do arquivo leva o nome do componente). */
+export const RE_SCRIPT_DOS_COMENTARIOS = /<script type="module" src="[^"]*CaixaDeComentarios\.astro[^"]*"><\/script>/g;
+
+/** Os IDs das conversas de comentários de uma página: todo atributo data-page, na ordem (o mesmo critério de tools/baseline.py). */
+export function idsDeComentarios(html: string): string[] {
+  return varrer(parse(html), (e) => attr(e, "data-page") !== undefined).map((e) => attr(e, "data-page") ?? "");
+}
+
+// ───────────── T17c: a única diferença aceita no <main> dos capítulos ─────────────
+//
+// O bloco "estou lendo em ordem…" (src/components/ProximaHistoria.astro) só existe no Astro: o build.py não o tem (funcionalidade nova,
+// o gerador Python está congelado). Para comparar o resto do <main> do capítulo com o do Python, tira-se do HTML do ASTRO exatamente
+// as <section> que levam o atributo `data-story-order` — o atributo só esse componente usa. Nada mais é removido: tests/ordem.test.ts
+// confere que, em toda página, saem 0 (fora dos capítulos) ou 1 (capítulos) dessas seções, que cada uma é filha direta do <main>,
+// fica entre a caixa do capítulo e a dos comentários, e que não leva nem comentários, nem script, nem texto do autor.
+// T17o: na PÁGINA DA OBRA o bloco é uma caixa própria abaixo da folha, FORA do <main>: filho do <body> logo depois da div.layout (slot
+// "depois-do-main" do BaseLayout). `lugares` diz onde cada um estava; quem confere exige "main" nos capítulos e "depois-do-main" na obra.
+
+/** Onde estava um bloco removido: filho direto do <main>; filho do <body> logo depois da div.layout (T17o); outro lugar. */
+export type LugarDoBloco = "main" | "depois-do-main" | "outro";
+
+export interface SemBlocoDeOrdem {
+  /** O HTML sem as seções do bloco. */
+  html: string;
+  /** O HTML de cada seção removida, na ordem. */
+  removidos: string[];
+  /** Para cada removida: o `<main>` é o pai direto? */
+  filhasDiretasDoMain: boolean[];
+  /** Para cada removida: onde estava (T17o). */
+  lugares: LugarDoBloco[];
+}
+
+function lugarDoBloco(e: Elemento): LugarDoBloco {
+  const pai = e.parentNode as Elemento | null;
+  if (pai?.tagName === "main") return "main";
+  if (pai?.tagName !== "body") return "outro";
+  const irmaos = pai.childNodes.filter((n): n is Elemento => "tagName" in n);
+  const antes = irmaos[irmaos.indexOf(e) - 1];
+  return antes?.tagName === "div" && (attr(antes, "class") ?? "").split(ESPACO).includes("layout") ? "depois-do-main" : "outro";
+}
+
+/** O HTML do Astro (página inteira ou pedaço do miolo) sem o bloco "estou lendo em ordem…". */
+export function semBlocoDeOrdem(html: string): SemBlocoDeOrdem {
+  const arvore = /<html[\s>]/i.test(html) ? parse(html, { sourceCodeLocationInfo: true }) : parseFragment(html, { sourceCodeLocationInfo: true });
+  const achadas = varrer(arvore as unknown as No, (e) => e.tagName === "section" && attr(e, "data-story-order") !== undefined);
+  const cortes = achadas.map((e) => ({ de: e.sourceCodeLocation?.startOffset ?? -1, ate: e.sourceCodeLocation?.endOffset ?? -1, pai: (e.parentNode as Elemento | null)?.tagName, lugar: lugarDoBloco(e) }));
+  if (cortes.some((c) => c.de < 0 || c.ate < c.de)) throw new Error("não consegui achar onde o bloco de ordem começa e termina");
+  let saida = "";
+  let pos = 0;
+  const removidos: string[] = [];
+  for (const c of [...cortes].sort((a, b) => a.de - b.de)) {
+    saida += html.slice(pos, c.de);
+    removidos.push(html.slice(c.de, c.ate));
+    pos = c.ate;
+  }
+  saida += html.slice(pos);
+  return { html: saida, removidos, filhasDiretasDoMain: cortes.map((c) => c.pai === "main"), lugares: cortes.map((c) => c.lugar) };
+}
+
+// ───────────── ajudantes das exceções que trocam pedaços do HTML pela posição (parse5 com sourceCodeLocationInfo) ─────────────
+// (T17m: a exceção dos posts incorporados da T17g/T17j, semScriptsDosPosts, saiu: os posts voltaram aos scripts oficiais, como no Python.)
+
+const temClasse = (e: Elemento, c: string) => (attr(e, "class") ?? "").split(ESPACO).includes(c);
+
+function arvoreComPosicoes(html: string) {
+  return /<html[\s>]/i.test(html) ? parse(html, { sourceCodeLocationInfo: true }) : parseFragment(html, { sourceCodeLocationInfo: true });
+}
+function cortar(html: string, cortes: { de: number; ate: number; texto?: string }[]): string {
+  let saida = "";
+  let pos = 0;
+  for (const c of [...cortes].sort((a, b) => a.de - b.de)) {
+    if (c.de < pos) throw new Error("cortes que se sobrepõem");
+    saida += html.slice(pos, c.de) + (c.texto ?? "");
+    pos = c.ate;
+  }
+  return saida + html.slice(pos);
+}
+
+// ───────────── T17h: a única diferença aceita no rodapé (o canal do YouTube por idioma) ─────────────
+//
+// Pedido do autor (21/10): as páginas em inglês levam ao canal @HateCycleEn e as em português ao @HateCycleBR. O Astro faz isso no rodapé
+// (src/lib/canais.ts → redesDoRodape); o build.py, congelado, e o config.json (do autor) continuam com o endereço antigo @HateCycle. Para
+// comparar o resto do rodapé, troca-se no HTML do ASTRO, e só nele, o `href` desta <a> exata (a do ícone do YouTube do rodapé):
+//   <a href="https://www.youtube.com/@HateCycleEn|BR" target="_blank" rel="noopener" title="YouTube"[ data-astro-cid-…]>  →  href="https://www.youtube.com/@HateCycle"
+// Só vale se o canal for o do idioma da página (`lang`: en → En, pt → BR); se não for (ou se a <a> não tiver exatamente esta forma), nada
+// é trocado e a comparação falha. Quem chama confere que saiu exatamente 1 por página (tests/canais.test.ts prova a regra).
+
+export interface CanalDoYoutubeComoNoPython {
+  html: string;
+  /** Quantas <a> foram trocadas (esperado: 1 por página). */
+  trocados: number;
+  /** Quantas <a> do YouTube do rodapé têm o canal do OUTRO idioma (esperado: 0). */
+  errados: number;
+}
+
+/** O HTML do Astro com o href do ícone do YouTube do rodapé como o do Python. `lang` desconhecido (404, raiz): aceita qualquer um dos dois. */
+export function canalDoYoutubeComoNoPython(html: string, lang?: "en" | "pt"): CanalDoYoutubeComoNoPython {
+  let trocados = 0;
+  let errados = 0;
+  const esperado = lang === "en" ? "En" : lang === "pt" ? "BR" : undefined;
+  const saida = html.replace(/(<a href=")https:\/\/www\.youtube\.com\/@HateCycle(En|BR)(" target="_blank" rel="noopener" title="YouTube"(?: data-astro-cid-[a-z0-9]+)?>)/g, (todo, antes: string, sufixo: string, depois: string) => {
+    if (esperado !== undefined && sufixo !== esperado) {
+      errados += 1;
+      return todo;
+    }
+    trocados += 1;
+    return `${antes}https://www.youtube.com/@HateCycle${depois}`;
+  });
+  return { html: saida, trocados, errados };
+}
+
+// ───────────── T17j: o resumo cortado das Notícias (degradê) ─────────────
+//
+// Pedido do autor (21/10): na lista de Notícias, quando o resumo automático foi cortado, as últimas palavras somem num degradê e o "…"
+// passa para o link. O Astro desenha `<p>começo<span class="news-fade">fim</span> <a class="more" href="…">…leia mais</a></p>`; o Python,
+// `<p>começo fim… <a class="more" href="…">leia mais</a></p>`. Para comparar, no HTML do ASTRO, e só nele, cada trecho com EXATAMENTE
+// esta forma (o span sem atributos além da classe, sem tags dentro, seguido de um espaço e do link "more" que começa com "…") volta a
+// ser o do Python. Qualquer outra forma fica e aparece como diferença. tests/noticias.test.ts prova a regra (casos negativos).
+
+export interface ResumoCortadoComoNoPython {
+  html: string;
+  /** Quantos resumos foram desfeitos. */
+  trocados: number;
+}
+const RE_RESUMO_CORTADO = /<span class="news-fade">([^<]*)<\/span> (<a class="more" href="[^"]*">)…/g;
+/** O HTML do Astro com cada resumo cortado escrito como no Python. */
+export function resumoCortadoComoNoPython(html: string): ResumoCortadoComoNoPython {
+  let trocados = 0;
+  const saida = html.replace(RE_RESUMO_CORTADO, (_t, fim: string, link: string) => {
+    trocados += 1;
+    return `${fim}… ${link}`;
+  });
+  return { html: saida, trocados };
+}
+
+// ───────────── T17j: a home com 4 histórias e a seta que é o link "Ver todas as histórias" ─────────────
+//
+// Pedido do autor (21/10): a home mostra no máximo 4 histórias, e a seta da direita é um link de verdade (src/components/Carrossel.astro).
+// O Astro desenha `<div class="rail rail-home"><div class="works" data-more-url…>cartões</div><a class="rail-btn rail-next rail-more" …>…</a></div>`;
+// o Python, só `<div class="works" data-more-url…>cartões</div>` (o trilho e as setas nasciam no navegador), com até 5 cartões.
+//   - do HTML do ASTRO sai SÓ: o <div class="rail rail-home"> (a tag de abertura e a de fechamento; o que está dentro fica) e o
+//     <a class="rail-btn rail-next rail-more"> que é o ÚLTIMO filho dele, quando o primeiro filho é um div.works com data-more-url;
+//   - do HTML do PYTHON sai SÓ: os div.work-card depois do 4º, dentro de um div.works com data-more-url.
+// tests/home.test.ts prova as duas regras (inclusive casos negativos).
+
+export interface HomeComoNoPython {
+  html: string;
+  /** Quantos trilhos (div.rail-home) foram desfeitos. */
+  trilhos: number;
+}
+/** O HTML do Astro sem o trilho e o link da home. */
+export function homeComoNoPython(html: string): HomeComoNoPython {
+  const cortes: { de: number; ate: number }[] = [];
+  let trilhos = 0;
+  for (const rail of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && attr(e, "class") === "rail rail-home")) {
+    const filhos = filhosDe(rail);
+    const primeiro = filhos[0];
+    const ultimo = filhos.at(-1);
+    if (filhos.length !== 2 || !primeiro || !ultimo || !ehElemento(primeiro) || !ehElemento(ultimo)) continue;
+    if (primeiro.tagName !== "div" || !temClasse(primeiro, "works") || attr(primeiro, "data-more-url") === undefined) continue;
+    if (ultimo.tagName !== "a" || attr(ultimo, "class") !== "rail-btn rail-next rail-more" || attr(ultimo, "href") !== attr(primeiro, "data-more-url")) continue;
+    const r = rail.sourceCodeLocation;
+    const u = ultimo.sourceCodeLocation;
+    if (!r?.startTag || !r.endTag || !u) throw new Error("não achei onde o trilho da home começa e termina");
+    cortes.push({ de: r.startTag.startOffset, ate: r.startTag.endOffset }, { de: u.startOffset, ate: u.endOffset }, { de: r.endTag.startOffset, ate: r.endTag.endOffset });
+    trilhos++;
+  }
+  return { html: cortar(html, cortes), trilhos };
+}
+
+export interface SoQuatroHistoriasNaHome {
+  html: string;
+  /** Quantos cartões saíram (os do 5º em diante). */
+  tirados: number;
+}
+/** O HTML do Python só com os 4 primeiros cartões do carrossel da home. */
+export function soQuatroHistoriasNaHome(html: string, quantas = 4): SoQuatroHistoriasNaHome {
+  const cortes: { de: number; ate: number }[] = [];
+  for (const works of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && temClasse(e, "works") && attr(e, "data-more-url") !== undefined)) {
+    const cartoes = filhosDe(works).filter((f): f is Elemento => ehElemento(f) && temClasse(f, "work-card"));
+    for (const c of cartoes.slice(quantas)) {
+      const loc = c.sourceCodeLocation;
+      if (!loc) throw new Error("não achei onde o cartão começa e termina");
+      cortes.push({ de: loc.startOffset, ate: loc.endOffset });
+    }
+  }
+  return { html: cortar(html, cortes), tirados: cortes.length };
+}
+
+// ───────────── T17d: o leitor página a página dos quadrinhos e a página de jogo (só no Astro) ─────────────
+//
+// Pedidos do autor de 20/10 (MUDANÇA 4), só no Astro (o build.py está congelado e desenha o quadrinho com as páginas uma embaixo da outra,
+// e a página de jogo como um capítulo de texto vazio). Duas exceções, cada uma de UMA forma exata, no HTML do ASTRO:
+//   - folheadorComoNoPython(): cada <div class="folheador" data-folheador> cuja forma é EXATAMENTE a do Folheador.astro —
+//       div.fl-palco [ a.fl-seta.prev, div.comic, a.fl-seta.next ], nav.fl-runas, p[data-fl-status], noscript —
+//     vira o <div class="comic"> de dentro (que fica como está: as mesmas <img> do Python). Outra forma fica e aparece como diferença.
+//   - semJanelaDoJogo(): sai o <div class="jogo" data-jogo> que é filho de um div.reader-box e vem logo depois do <hr class="thin">.
+// tests/folheador.test.ts prova as duas regras (inclusive casos negativos).
+
+export interface FolheadorComoNoPython {
+  html: string;
+  /** Quantos leitores página a página viraram o <div class="comic"> de dentro. */
+  trocados: number;
+  /** Quantos div.folheador têm outra forma (ficaram como estavam). */
+  recusados: number;
+}
+/** Os filhos que são elementos; null se houver texto solto (que não é só espaço) entre eles. */
+function filhosElementos(e: Elemento | undefined): Elemento[] | null {
+  if (!e) return null;
+  const filhos = filhosDe(e);
+  if (filhos.some((f) => ehTexto(f) && f.value.trim() !== "")) return null;
+  return filhos.filter(ehElemento);
+}
+const classeExata = (e: Elemento | undefined, tag: string, ...classes: string[]) => !!e && e.tagName === tag && classes.every((c) => temClasse(e, c));
+/** O HTML do Astro com cada leitor página a página trocado pelo <div class="comic"> que ele tem dentro (como o Python desenha). */
+export function folheadorComoNoPython(html: string): FolheadorComoNoPython {
+  const cortes: { de: number; ate: number; texto: string }[] = [];
+  let recusados = 0;
+  for (const f of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && attr(e, "data-folheador") !== undefined)) {
+    const filhos = filhosElementos(f) ?? [];
+    const [palco, runas, aviso, noscript] = filhos;
+    const doPalco = filhosElementos(palco) ?? [];
+    const [prev, comic, next] = doPalco;
+    const formaCerta =
+      attr(f, "class") === "folheador" && filhos.length === 4 &&
+      classeExata(palco, "div", "fl-palco") && attr(palco as Elemento, "class") === "fl-palco" && doPalco.length === 3 &&
+      classeExata(prev, "a", "fl-seta", "prev") && classeExata(next, "a", "fl-seta", "next") &&
+      comic?.tagName === "div" && attr(comic, "class") === "comic" &&
+      classeExata(runas, "nav", "fl-runas") && (filhosElementos(runas) ?? [undefined]).every((r) => classeExata(r, "a", "fl-runa")) &&
+      aviso?.tagName === "p" && attr(aviso, "data-fl-status") !== undefined && filhosDe(aviso).length === 0 &&
+      noscript?.tagName === "noscript";
+    const loc = f.sourceCodeLocation;
+    const locComic = comic?.sourceCodeLocation;
+    if (!formaCerta || !loc || !locComic) {
+      recusados++;
+      continue;
+    }
+    cortes.push({ de: loc.startOffset, ate: loc.endOffset, texto: html.slice(locComic.startOffset, locComic.endOffset) });
+  }
+  return { html: cortar(html, cortes), trocados: cortes.length, recusados };
+}
+
+export interface SemJanelaDoJogo {
+  html: string;
+  /** O HTML de cada janela que saiu. */
+  removidos: string[];
+  /** Quantos div.jogo[data-jogo] estavam em outro lugar (ficaram). */
+  foraDoLugar: number;
+}
+/** O HTML do Astro sem a janela da demo e o botão da Steam (o <div class="jogo" data-jogo> logo depois do hr.thin de um div.reader-box). */
+export function semJanelaDoJogo(html: string): SemJanelaDoJogo {
+  const cortes: { de: number; ate: number }[] = [];
+  const removidos: string[] = [];
+  let foraDoLugar = 0;
+  for (const j of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "div" && attr(e, "data-jogo") !== undefined)) {
+    const pai = j.parentNode as Elemento | null;
+    const irmaos = pai ? filhosDe(pai).filter(ehElemento) : [];
+    const antes = irmaos[irmaos.indexOf(j) - 1];
+    const loc = j.sourceCodeLocation;
+    const noLugar = attr(j, "class") === "jogo" && !!pai && pai.tagName === "div" && temClasse(pai, "reader-box") && classeExata(antes, "hr", "thin");
+    if (!noLugar || !loc) {
+      foraDoLugar++;
+      continue;
+    }
+    cortes.push({ de: loc.startOffset, ate: loc.endOffset });
+    removidos.push(html.slice(loc.startOffset, loc.endOffset));
+  }
+  return { html: cortar(html, cortes), removidos, foraDoLugar };
+}
+
+// ───────────── T17m: o cartão da obra que só tem capítulo em OUTRO idioma (só no Astro) ─────────────
+//
+// Pedido do autor (22/10, "por agora sim"): em Histórias (e na home), a obra que não tem nada no idioma da página mas tem no outro (hoje
+// Ossos do Ofício em português, só na prévia) ganha o botão de verdade, que leva ao outro idioma com `hreflang` (src/lib/obras.ts →
+// cartaoDaObra). O build.py mostra o "Em breve" apagado. Exceção de UMA forma exata, no HTML do ASTRO: o <a class="button" href hreflang>
+// que é filho de um article.work-card, sem target (não é link externo), vira o <span class="button disabled">Em breve</span> do Python
+// (`emBreve` = config.json → ui.<idioma>.soon). Outro <a> (sem hreflang, ou fora do cartão) fica e aparece como diferença.
+// tests/obras-em-outro-idioma.test.ts prova a regra (inclusive casos negativos).
+
+export interface CartaoEmOutroIdiomaComoNoPython {
+  html: string;
+  /** Quantos botões voltaram a ser o "Em breve". */
+  trocados: number;
+}
+/** O HTML do Astro com cada botão "no outro idioma" dos cartões de obra escrito como o "Em breve" do Python. */
+export function cartaoEmOutroIdiomaComoNoPython(html: string, emBreve: string): CartaoEmOutroIdiomaComoNoPython {
+  const cortes: { de: number; ate: number; texto: string }[] = [];
+  const escapar = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  for (const a of varrer(arvoreComPosicoes(html) as unknown as No, (e) => e.tagName === "a" && attr(e, "hreflang") !== undefined)) {
+    const pai = a.parentNode as Elemento | null;
+    const noLugar = !!pai && pai.tagName === "article" && attr(pai, "class") === "work-card" && attr(a, "class") === "button" && attr(a, "target") === undefined && attr(a, "href") !== undefined;
+    const loc = a.sourceCodeLocation;
+    if (!noLugar || !loc) continue;
+    cortes.push({ de: loc.startOffset, ate: loc.endOffset, texto: `<span class="button disabled">${escapar(emBreve)}</span>` });
+  }
+  return { html: cortar(html, cortes), trocados: cortes.length };
+}
+
+// ───────────── T17n: "Feed de Notícias" → "Blog" (só no Astro) ─────────────
+//
+// Pedido do autor (27/10): a seção de notícias passa a se chamar "Blog" e as notícias, "posts" — só no que o visitante lê (src/lib/textosDoBlog.ts,
+// por cima do config.json → ui, que é do autor e continua com os textos antigos, os que o build.py usa). Exceção de NOVE formas exatas, no HTML
+// do ASTRO, cada uma trocando SÓ o texto novo pelo do config.json (o resto da tag tem de ser exatamente o de sempre):
+//   titulo     <title>Blog | …            og:title   <meta property="og:title" content="Blog | …
+//   menu       <a href="/xx/news/"[ aria-current="page"][ data-astro-cid-…]>Blog</a>
+//   h1         <div class="wrap block news-wrap"><h1>Blog</h1>
+//   busca      <input type="search" class="news-search" placeholder="Buscar no blog…" aria-label="Buscar no blog…"
+//   nenhum     <p class="news-none" hidden>Nenhum post encontrado.</p>
+//   paginacao  <nav class="pagination" aria-label="Blog"
+//   todos      <a class="mid" href="/xx/news/">Todos os posts</a>          (o botão do meio no fim de cada post)
+//   etiqueta   <span class="tag">Post do blog</span><time>                  (o cartão de "Últimas atualizações" da home)
+// Os textos vêm de quem chama (`astro` = TEXTOS_DO_BLOG[lang], `python` = config.json → ui[lang]), para este arquivo não ler o config.json.
+// O mesmo texto em outro lugar (no texto de um post, numa etiqueta do autor, num <h1> que não é o da lista) fica e aparece como diferença.
+// tests/blog.test.ts prova a regra (inclusive casos negativos).
+
+export type FormaDoBlog = "titulo" | "og:title" | "menu" | "h1" | "busca" | "nenhum" | "paginacao" | "todos" | "etiqueta";
+export interface TextosDoBlogNaParidade {
+  news: string;
+  tag_news: string;
+  all_news: string;
+  news_search_ph: string;
+  news_none: string;
+}
+export interface BlogComoNoPython {
+  html: string;
+  /** Quantas trocas de cada forma. */
+  trocas: Record<FormaDoBlog, number>;
+}
+const escaparComoOAstro = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+const comoRegExp = (t: string) => escaparComoOAstro(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** O HTML do Astro com os textos do blog (T17n) escritos como os do config.json (os do Python), só nas nove formas exatas. */
+export function blogComoNoPython(html: string, astro: TextosDoBlogNaParidade, python: TextosDoBlogNaParidade): BlogComoNoPython {
+  const a = (k: keyof TextosDoBlogNaParidade) => comoRegExp(astro[k]);
+  const p = (k: keyof TextosDoBlogNaParidade) => escaparComoOAstro(python[k]);
+  // cada forma: a expressão (os grupos são o que fica em volta do texto) e o que entra no lugar, montado com os grupos
+  const formas: [FormaDoBlog, RegExp, (g: string[]) => string][] = [
+    ["titulo", new RegExp(`(<title>)${a("news")}( \\| )`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["og:title", new RegExp(`(<meta property="og:title" content=")${a("news")}( \\| )`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["menu", new RegExp(`(<a href="/(?:en|pt)/news/"(?: aria-current="page")?(?: data-astro-cid-[a-z0-9]+)?>)${a("news")}(</a>)`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["h1", new RegExp(`(<div class="wrap block news-wrap"><h1>)${a("news")}(</h1>)`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["busca", new RegExp(`(<input type="search" class="news-search" placeholder=")${a("news_search_ph")}(" aria-label=")${a("news_search_ph")}(")`, "g"), (g) => `${g[1]}${p("news_search_ph")}${g[2]}${p("news_search_ph")}${g[3]}`],
+    ["nenhum", new RegExp(`(<p class="news-none" hidden>)${a("news_none")}(</p>)`, "g"), (g) => `${g[1]}${p("news_none")}${g[2]}`],
+    ["paginacao", new RegExp(`(<nav class="pagination" aria-label=")${a("news")}(")`, "g"), (g) => `${g[1]}${p("news")}${g[2]}`],
+    ["todos", new RegExp(`(<a class="mid" href="/(?:en|pt)/news/">)${a("all_news")}(</a>)`, "g"), (g) => `${g[1]}${p("all_news")}${g[2]}`],
+    ["etiqueta", new RegExp(`(<span class="tag">)${a("tag_news")}(</span><time>)`, "g"), (g) => `${g[1]}${p("tag_news")}${g[2]}`],
+  ];
+  const trocas = Object.fromEntries(formas.map(([f]) => [f, 0])) as Record<FormaDoBlog, number>;
+  let saida = html;
+  for (const [forma, re, montar] of formas) {
+    saida = saida.replace(re, (...m: unknown[]) => {
+      trocas[forma] += 1;
+      return montar(m.slice(0, 4).map((x) => (typeof x === "string" ? x : "")));
+    });
+  }
+  return { html: saida, trocas };
+}
+
+// ───────────── 28/10: o cabeçalho dos capítulos (só no Astro) ─────────────
+//
+// Pedidos do autor de 28/10, só no Astro (o build.py está congelado): (1) "retire as datas de debaixo dos nomes dos capítulos";
+// (2) a linha fina (hr.thin) em todas as páginas de história, "realmente logo abaixo da logo" (antes do título); (3) "Turn Close Captions
+// on!" sob o título, no lugar da data, só em inglês (Luz & Sangue e O Pêndulo; `chapter_note` no work.json). O Python desenha: logo,
+// título, data e, SÓ no texto, a linha depois do título; vídeo e quadrinho sem linha. Duas exceções, cada uma de formas exatas:
+//   - cabecalhoDoCapituloComoNoPython() (no HTML do ASTRO), em três passos:
+//       a. sai o <hr class="thin"> que vem logo depois da logo (<img class="title-image" …>, ou o </a> em volta dela);
+//       b. sai o <p class="chapter-note">…</p> que vem logo depois do </h1>;
+//       c. no TEXTO (o </h1> seguido de div.prose.story ou div.jogo), a linha volta para depois do título, onde o Python a desenha; e sai a linha
+//          que vem logo depois do </h1> no vídeo (div.player-row, div.video-wrapper) e no quadrinho (nav.pager, div.comic, div.folheador)
+//          — a de capítulo SEM logo, que o Astro desenha depois do título.
+//     Tem de rodar ANTES de semJanelaDoJogo() (que procura a janela logo depois da linha, como no Python).
+//   - semDataDoCapitulo() (no HTML do PYTHON): sai o <p class="chapter-date"><time datetime="…">…</time></p> que vem logo depois do </h1>.
+// tests/cabecalho.test.ts prova as duas (inclusive casos negativos).
+
+export interface CabecalhoDoCapituloComoNoPython {
+  html: string;
+  /** Quantos avisos (`chapter-note`) saíram. */
+  avisos: number;
+  /** Quantas linhas saíram de logo abaixo da logo. */
+  linhas: number;
+  /** Quantas linhas voltaram para depois do título no texto (onde o Python as desenha). */
+  devolvidas: number;
+  /** Quantas linhas de vídeo/quadrinho sem logo saíram (depois do título). */
+  semLogo: number;
+}
+// (o alt da logo pode ter ">" sem escape, como "Setas -> B": os atributos são lidos entre aspas; o título é o <h1> do capítulo, nunca o
+// <h1> de uma página avulsa — "Sobre" tem um <h1 class="sr-only"> seguido de div.prose —; o texto do capítulo é div.prose.story)
+const RE_LINHA_DEPOIS_DA_LOGO = /(<img class="title-image"(?:\s+[\w:-]+(?:="[^"]*")?)*\s*\/?>(?:<\/a>)?)<hr class="thin">/g;
+const RE_AVISO_DO_CAPITULO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)<p class="chapter-note">[^<]*<\/p>/g;
+const RE_TEXTO_DEPOIS_DO_TITULO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)(?=<div class="prose story|<div class="jogo")/g;
+const RE_LINHA_DO_CABECALHO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)<hr class="thin">(?=<div class="player-row">|<div class="video-wrapper">|<nav class="pager"|<div class="comic">|<div class="folheador")/g;
+/** O HTML do Astro com o cabeçalho do capítulo como o Python o desenha (sem aviso, linha só no texto, depois do título). */
+export function cabecalhoDoCapituloComoNoPython(html: string): CabecalhoDoCapituloComoNoPython {
+  let avisos = 0;
+  let linhas = 0;
+  let devolvidas = 0;
+  let semLogo = 0;
+  const a = html.replace(RE_LINHA_DEPOIS_DA_LOGO, (_m, logo: string) => (linhas++, logo));
+  const b = a.replace(RE_AVISO_DO_CAPITULO, (_m, h1: string) => (avisos++, h1));
+  const c = b.replace(RE_TEXTO_DEPOIS_DO_TITULO, (_m, h1: string) => (devolvidas++, `${h1}<hr class="thin">`));
+  const d = c.replace(RE_LINHA_DO_CABECALHO, (_m, h1: string) => (semLogo++, h1));
+  return { html: d, avisos, linhas, devolvidas, semLogo };
+}
+
+export interface SemDataDoCapitulo {
+  html: string;
+  /** Quantas datas saíram. */
+  tiradas: number;
+}
+const RE_DATA_DO_CAPITULO = /(<h1 class="(?:chapter-title|sr-only)">(?:(?!<\/h1>)[\s\S])*<\/h1>)<p class="chapter-date"><time datetime="[^"]*">[^<]*<\/time><\/p>/g;
+/** O HTML do Python sem a data sob o título do capítulo (o Astro não a desenha desde 28/10). */
+export function semDataDoCapitulo(html: string): SemDataDoCapitulo {
+  let tiradas = 0;
+  return { html: html.replace(RE_DATA_DO_CAPITULO, (_m, h1: string) => (tiradas++, h1)), tiradas };
+}

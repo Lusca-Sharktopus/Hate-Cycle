@@ -1,0 +1,38 @@
+{
+  "kind": "prose",
+  "universe": true,
+  "oneshot": true,
+  "title": {
+    "en": "Firestriker",
+    "pt": "Pederneira"
+  },
+  "blurb": {
+    "en": "Olivia Purinna is absolutely certain that dragons exist, and she’s determined to prove it no matter how disastrous her journey may be!",
+    "pt": "Olivia Purinna tem absoluta certeza de que dragões existem, e ela vai provar isso não importa o quão desastrosa a jornada dela seja!"
+  },
+  "cover": {
+    "en": "covers/EN/Cover Firestriker.png",
+    "pt": "covers/PT/Capa Pederneira.png"
+  },
+  "logo": {
+    "en": "logos/EN/Firestriker 2.png",
+    "pt": "logos/PT/Pederneira - Black.png"
+  },
+  "divider": "other images/Firestriker Scene Divider.png",
+  "order": {
+    "release": 2,
+    "chrono": 6
+  },
+  "reading_font": "times",
+  "order_art": {
+    "escala": 1.1,
+    "bleed": true,
+    "size": [2002, 2023],
+    "layers": [
+      { "image": "ordem/Thymorr Site Cronologia.png", "x": 62.18, "y": 44.52, "width": 61.66, "opacity": 0, "hover": { "x": 69.18, "opacity": 1 } },
+      { "image": "ordem/Harry Site Cronologia.png", "x": 32.19, "y": 70.19, "width": 50.3, "hover": { "x": 27.3, "y": 71.56, "width": 53.85, "rotate": -5.54 } },
+      { "image": "ordem/Olivia Site Cronologia.png", "x": 55.09, "y": 65.42, "width": 46.25, "hover": { "x": 55.48, "y": 63.54, "width": 48.9 } }
+    ]
+  },
+  "media": "short-story"
+}

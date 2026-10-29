@@ -1,0 +1,91 @@
+---
+// O LEITOR PÁGINA A PÁGINA dos quadrinhos (T17d, só no Astro): no lugar do <div class="comic"> do leitor de quadrinhos, o mesmo
+// <div class="comic"> (as mesmas <img>, na mesma ordem, como o build.py desenha) dentro de um "palco" com uma seta de cada lado, e
+// embaixo a fileira de runas (uma por página; a da página atual brilha). Só desenha: tudo vem decidido em `folheador`
+// (src/lib/folheador.ts), no estado da PÁGINA 1. O <script> (src/scripts/folheador/) mostra uma página por vez e segue o `#pN` do endereço.
+//
+// Sem JavaScript: as páginas aparecem uma embaixo da outra e as setas e runas somem (o <noscript>), como no leitor de quadrinhos de hoje.
+// Antes de o script rodar, só a 1ª página aparece (para a tela não pular de 8 páginas para 1).
+// Para comparar com o Python, tests/ajudantes/html.ts → folheadorComoNoPython() troca este bloco inteiro pelo <div class="comic"> de dentro.
+//
+// ⚠ Escrito "colado" de propósito (o HTML sai como está escrito): espaço entre elementos apareceria na tela e no teste.
+import type { Folheador } from "../lib/folheador";
+import { assetUrl } from "../lib/assets";
+import Seta from "./Seta.astro";
+
+interface Props {
+  folheador: Folheador;
+  /** As páginas do capítulo (as mesmas do leitor de quadrinhos). */
+  paginas: { arquivo: string; alt: string }[];
+}
+
+const { folheador: f, paginas } = Astro.props;
+const setas = [
+  { direcao: "prev" as const, seta: f.anterior },
+  { direcao: "next" as const, seta: f.proxima },
+];
+const [anterior, proxima] = setas.map(({ direcao, seta }) => ({
+  class: `side-btn ${direcao} fl-seta${seta.inicial ? "" : " ghost"}`,
+  href: seta.inicial?.href,
+  title: seta.inicial?.rotulo,
+  "aria-label": seta.inicial?.rotulo,
+  "aria-hidden": seta.inicial ? undefined : ("true" as const),
+  "data-rotulo-pagina": seta.rotuloDaPagina,
+  "data-capitulo": seta.capitulo?.href,
+  "data-rotulo-capitulo": seta.capitulo?.rotulo,
+  direcao,
+}));
+---
+
+<div class="folheador" data-folheador data-total={f.total}><div class="fl-palco">{anterior && <a class={anterior.class} href={anterior.href} title={anterior.title} aria-label={anterior["aria-label"]} aria-hidden={anterior["aria-hidden"]} data-rotulo-pagina={anterior["data-rotulo-pagina"]} data-capitulo={anterior["data-capitulo"]} data-rotulo-capitulo={anterior["data-rotulo-capitulo"]}><Seta direcao="prev" /></a>}<div class="comic">{paginas.map((p) => <img src={assetUrl(p.arquivo)} alt={p.alt} loading="lazy" />)}</div>{proxima && <a class={proxima.class} href={proxima.href} title={proxima.title} aria-label={proxima["aria-label"]} aria-hidden={proxima["aria-hidden"]} data-rotulo-pagina={proxima["data-rotulo-pagina"]} data-capitulo={proxima["data-capitulo"]} data-rotulo-capitulo={proxima["data-rotulo-capitulo"]}><Seta direcao="next" /></a>}</div><nav class={f.total > 10 ? "fl-runas muitas" : "fl-runas"} aria-label={f.rotuloDasRunas}>{f.runas.map((r) => <a class="fl-runa" href={r.href} title={r.rotulo} aria-label={r.rotulo} aria-current={r.numero === 1 ? "page" : undefined}><span aria-hidden="true">{r.runa}</span></a>)}</nav><p class="sr-only" data-fl-status aria-live="polite"></p><noscript><style is:inline>.folheador .comic>img{display:block!important}.folheador .fl-seta,.folheador .fl-runas{display:none!important}</style></noscript></div>
+
+<script>
+  import "../scripts/folheador/index";
+</script>
+
+<style is:global>
+  @layer site {
+    /* O leitor página a página (T17d). O palco: a página no meio, uma seta de cada lado (os mesmos botões redondos do vídeo de Luz & Sangue,
+       .side-btn em Leitor.astro); a página ocupa a largura da folha; a altura máxima é a da janela MAIS 20rem (escolha do autor de 28/10; era "menos 5rem", a página inteira
+       na tela), sem nunca crescer além do arquivo. */
+    .folheador { margin: 1rem 0; }
+    .fl-palco { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+    .fl-palco .comic { margin: 0; min-width: 0; flex: 0 1 auto; }
+    .folheador .comic > img { width: auto; height: auto; max-width: 100%; max-height: calc(100svh + 20rem); }
+    .folheador .comic > img[hidden] { display: none; }
+    .folheador:not([data-ligado]) .comic > img ~ img { display: none; }
+    .fl-seta { flex: none; }
+
+    /* As runas d'A Força: as mesmas fontes do fundo de runas (src/styles/fontes-das-runas.css, servidas pelo próprio site). A da página atual
+       brilha (ciano, com o mesmo brilho das runas do fundo); as outras ficam apagadas e acendem com o mouse ou o foco. */
+    /* numa linha só (até 10 runas): no celular cada uma encolhe até 1,9rem (30 px; 8 cabem a 320 px); com mais de 10, quebram em linhas */
+    .fl-runas { display: flex; justify-content: center; flex-wrap: nowrap; gap: .3rem .15rem; margin: 1.2rem auto .2rem; }
+    .fl-runas.muitas { flex-wrap: wrap; }
+    .fl-runa {
+      flex: 0 1 2.75rem; min-width: 1.9rem; height: 2.75rem; display: grid; place-items: center; border-radius: 50%; text-decoration: none;
+      font-family: "Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans KR","Noto Sans JP",sans-serif;
+      font-size: clamp(1.15rem, 4.4vw, 1.6rem); line-height: 1; font-style: normal; color: var(--mint); opacity: .42;
+      transition: opacity .25s, color .25s, text-shadow .25s, transform .25s;
+    }
+    .fl-runa:hover, .fl-runa:focus-visible { opacity: .85; }
+    .fl-runa:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .fl-runa[aria-current="page"] { opacity: 1; color: var(--cyan); text-shadow: 0 0 .3em currentColor, 0 0 .8em currentColor; transform: scale(1.15); }
+    /* (T17l) a caixa do leitor página a página agora é a folha de PAPEL (Leitor.astro): no papel claro, o menta apagado e o ciano quase
+       somem. As apagadas viram o verde dos títulos (ainda apagadas) e a da página atual, o petróleo (--teal) com o MESMO brilho ciano em
+       volta: continua sendo a que brilha, e legível. */
+    .reader-box:has(> .folheador) .fl-runa { color: var(--green); opacity: .45; }
+    .reader-box:has(> .folheador) .fl-runa:hover, .reader-box:has(> .folheador) .fl-runa:focus-visible { opacity: .9; }
+    .reader-box:has(> .folheador) .fl-runa[aria-current="page"] { opacity: 1; color: var(--teal); text-shadow: 0 0 .25em var(--cyan), 0 0 .7em var(--cyan); }
+
+    @media (max-width: 700px) {
+      /* no celular, como o vídeo: a página na largura toda e as setas embaixo, uma em cada canto */
+      .fl-palco { display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "v v" "p n"; gap: .8rem; }
+      .fl-palco .comic { grid-area: v; justify-self: center; }
+      .fl-seta.prev { grid-area: p; }
+      .fl-seta.next { grid-area: n; justify-self: end; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fl-runa { transition: none; }
+    }
+  }
+</style>

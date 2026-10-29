@@ -1,0 +1,36 @@
+---
+// A carta que vira (Ossos do Ofício): o bloco 4 do static/site.js. O texto do autor traz o HTML da carta
+// (<div class="flip-card">…); este componente só traz o comportamento: clicar (ou Enter/Espaço, pelo teclado) vira a
+// carta, e clicar de novo desvira. O Leitor só põe este componente na página quando o texto tem uma carta
+// (src/lib/leitura.ts → temCartaQueVira), então as outras páginas não levam JavaScript nenhum por causa dela.
+//
+// (28/10) A fonte da carta (Pristina, placeholder do autor; o texto da carta é texto de verdade, ver src/styles/prosa.css → .carta-texto).
+// Ela é registrada por um <script type="module"> embutido AQUI (FontFace), só nas páginas que têm a carta (o acabamento do <main>,
+// src/lib/pagina.ts, leva os scripts de componente para o fim da página, como os outros): a fonte é da Monotype/ITC (vem com o Office) e a licença
+// do Office não cobre publicá-la num site, então ela não deve ir para páginas que não precisam dela. Enquanto Ossos do Ofício for
+// rascunho, ela só existe na prévia. ANTES DE PUBLICAR OSSOS: licença para web ou outra fonte (pendência no docs/BACKLOG.md).
+// A fonte entra EMBUTIDA no HTML (data: URI, ~60 KB) e não como arquivo: um `import …?url` faria o Vite publicar o arquivo em /_astro/
+// em TODO build, até no site publicado, onde nenhuma página tem a carta (conferido em 28/10).
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+const pristina = readFileSync(join(process.cwd(), "src/assets/fontes/carta/pristina.woff2")).toString("base64");
+const fonteDaCarta = `try{const f=new FontFace("Pristina","url(data:font/woff2;base64,${pristina}) format(\\"woff2\\")",{display:"swap"});document.fonts.add(f);f.load().catch(()=>{})}catch(e){}`;
+---
+
+<script type="module" is:inline set:html={fonteDaCarta}></script>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".flip-card").forEach((carta) => {
+    carta.setAttribute("tabindex", "0");
+    carta.setAttribute("role", "button");
+    carta.setAttribute("aria-pressed", "false");
+    const virar = () => carta.setAttribute("aria-pressed", String(carta.classList.toggle("flipped")));
+    carta.addEventListener("click", virar);
+    carta.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        virar();
+      }
+    });
+  });
+</script>

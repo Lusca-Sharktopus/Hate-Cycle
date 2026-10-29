@@ -1,0 +1,67 @@
+---
+// O cartão de uma obra (a capa, o título, o resumo e o botão): o card_work() do build.py.
+// O componente só DESENHA: tudo que ele mostra já vem decidido em `cartao` (src/lib/obras.ts → cartaoDaObra).
+import { assetUrl } from "../lib/assets";
+import type { CartaoDaObra } from "../lib/obras";
+
+interface Props {
+  cartao: CartaoDaObra;
+}
+
+const { cartao: c } = Astro.props;
+const { botao } = c;
+
+// Os atributos data-* são a "ficha" do cartão para o seletor de Histórias (o <script> de SeletorDeHistorias.astro os lê).
+// Ordem como no build.py: título, depois chrono, depois release (só os que a obra declara), depois a mídia.
+const chrono = c.ordem.chrono === undefined ? undefined : String(c.ordem.chrono);
+const release = c.ordem.release === undefined ? undefined : String(c.ordem.release);
+---
+
+{/* Atenção às quebras de linha: o HTML sai exatamente como está escrito aqui (compressHTML: false), por isso o cartão fica numa linha só. */}
+<article class="work-card" data-title={c.titulo} data-chrono={chrono} data-release={release} data-media={c.midia}>{c.imagem ? <img src={assetUrl(c.imagem)} alt={c.titulo} loading="lazy" /> : <div class="nocover"></div>}<h3>{c.titulo}</h3><p>{c.resumo}</p>{botao.tipo === "link" ? <a class="button" href={botao.href} hreflang={botao.idioma ?? undefined} target={botao.externo ? "_blank" : undefined} rel={botao.externo ? "noopener noreferrer" : undefined}>{botao.rotulo}</a> : <span class="button disabled">{botao.rotulo}</span>}{c.previa && <a class="preview-link" href={c.previa.href}>👁 {c.previa.rotulo}</a>}</article>
+
+<script>
+  // Imagem que não carrega: a capa vira um bloco liso (o bloco 5 do static/site.js).
+  // Se a imagem já falhou antes deste script rodar, troca na hora; senão, fica de olho no erro.
+  document.querySelectorAll<HTMLImageElement>(".work-card > img").forEach((img) => {
+    const trocar = () => {
+      const bloco = document.createElement("div");
+      bloco.className = "nocover";
+      bloco.setAttribute("role", "img");
+      bloco.setAttribute("aria-label", img.alt || "");
+      img.replaceWith(bloco);
+    };
+    if (img.complete && img.naturalWidth === 0) trocar();
+    else img.addEventListener("error", trocar);
+  });
+</script>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seções "cards de histórias", "seletor de ordem" e "Histórias: grade"), mesmos valores e mesma ordem.
+       `is:global`: sem a marca de escopo do Astro (data-astro-cid), para o HTML sair idêntico ao do site atual. */
+    .works { --fl: 0px; --fr: 0px; display: flex; gap: 1.4rem; margin-top: 1rem; padding: .4rem .4rem 1.3rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: .4rem;
+      scrollbar-width: thin; scrollbar-color: var(--green) transparent;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+              mask-image: linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%); }
+    .work-card { flex: 0 0 clamp(210px, 25%, 310px); scroll-snap-align: start; display: flex; flex-direction: column; align-items: flex-start; background: linear-gradient(to bottom, #e7fcf3, #e4e4e4); padding: 15px; border-radius: var(--radius); font-size: .88rem; box-shadow: 0 4px 12px #0000001f; }
+    .work-card img, .work-card .nocover { width: 100%; border-radius: 8px; background: #cfdcd6; aspect-ratio: 2/3; object-fit: cover; }
+    .work-card h3 { margin: .8rem 0 .3rem; }
+    .work-card p { margin: 0 0 auto; padding-bottom: .4rem; }
+    .work-card[hidden] { display: none; }
+    .works { hyphens: manual; }
+    .preview-link { margin-top: .6rem; font-size: .78rem; }
+    .work-card .nocover { min-height: 0; aspect-ratio: 2/3; display: grid; place-items: center; }
+    /* grade da página Histórias: 4 por linha; a 5ª começa a linha de baixo */
+    .works.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.4rem; overflow: visible; scroll-snap-type: none; padding: .4rem 0 1rem;
+      -webkit-mask-image: none; mask-image: none; }
+    .works.grid .work-card { flex: none; width: auto; min-width: 0; }
+    @media (max-width: 900px) { .works.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 440px) { .works.grid { grid-template-columns: minmax(0, 1fr); } }
+    .work-card .button { white-space: nowrap; padding-left: .9rem; padding-right: .9rem; max-width: 100%; }
+    /* as seções que reúnem cartões (Histórias e Outras histórias) */
+    .stories-block { clear: none; }
+    .page-project .stories-block h2 { clear: none; }
+    .page-project .stories-block { margin-top: 1.4rem; }
+  }
+</style>

@@ -1,0 +1,17 @@
+---
+// A seção "Outras histórias" (obras com `universe: false`): o atalho {{other-stories}} (SHORT["other-stories"] do build.py).
+// Sem nenhuma obra assim (o caso de hoje), não desenha nada — e o atalho vira texto vazio, como no build.py.
+import type { Lang } from "../lib/config";
+import { t } from "../lib/config";
+import type { CartaoDaObra } from "../lib/obras";
+import WorkCard from "./WorkCard.astro";
+
+interface Props {
+  lang: Lang;
+  cartoes: CartaoDaObra[];
+}
+
+const { lang, cartoes } = Astro.props;
+---
+
+{cartoes.length > 0 && <section class="stories-block"><h2>{t(lang, "other_stories")}</h2><p class="sub">{t(lang, "other_stories_sub")}</p><div class="works grid">{cartoes.map((c) => <WorkCard cartao={c} />)}</div></section>}

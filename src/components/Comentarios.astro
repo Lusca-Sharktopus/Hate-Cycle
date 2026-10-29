@@ -1,0 +1,85 @@
+---
+// A seção de comentários (comments() do build.py). Dois casos:
+//   - "aviso" (prévia sem chaves): <section class="hc-comments"><p class="c-note">…</p></section>, sem JavaScript;
+//   - "caixa": a CaixaDeComentarios — a <section class="hc-comments" data-page="…">, o <script> com window.HC e o script
+//     empacotado dos comentários (T15). Ficar num componente separado é o que garante que SÓ as páginas com a caixa de
+//     verdade recebem o JavaScript (e o @supabase/supabase-js): o Astro só põe na página o <script> de um componente
+//     que foi desenhado nela.
+// Só desenha: o que entra vem de src/lib/comentarios.ts (o ÚNICO arquivo que lê as chaves do config.json).
+//
+// O data-page é o ID da conversa: works/<obra>/<capítulo> (ou news/<slug>), IGUAL nos dois idiomas. Mudar esse ID faz as
+// conversas "sumirem" (invariante 2 do CLAUDE.md); o teste tests/paginas.test.ts compara a lista inteira com a baseline.
+import type { SecaoDeComentarios } from "../lib/comentarios";
+import CaixaDeComentarios from "./CaixaDeComentarios.astro";
+
+interface Props {
+  secao: SecaoDeComentarios;
+}
+
+const { secao: s } = Astro.props;
+---
+
+{s.tipo === "aviso" ? <section class="hc-comments"><p class="c-note">{s.texto}</p></section> : <CaixaDeComentarios idDaPagina={s.idDaPagina} titulo={s.titulo} configuracao={s.configuracao} />}
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css: seção "comentários" e seção "comentários: barra compacta + pop-up de login",
+       mesmos valores e mesma ordem. O script dos comentários (src/scripts/comentarios/caixa.ts) monta o resto da caixa
+       (formulários, lista, janela de login) com estas classes. */
+    .hc-comments { margin-top: 1rem; }
+    .hc-comments h2 { font-size: 1.8rem; margin-top: .2em; }
+    .c-note { font-size: .85rem; color: var(--muted); }
+    .c-box { background: #ffffff90; border: 1px solid #0002; border-radius: var(--radius); padding: 1rem; margin: 0 0 1.2rem; }
+    .c-box form { display: grid; gap: .6rem; max-width: 420px; }
+    .c-box input, .c-box textarea { font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; width: 100%; }
+    .c-box textarea { min-height: 5.5rem; resize: vertical; max-width: none; }
+    .c-form-wide { max-width: none !important; }
+    .c-tabs { display: flex; gap: .5rem; margin-bottom: .8rem; }
+    .c-tabs button, .c-link { font: 600 .9rem var(--font-text); background: none; border: 0; color: var(--teal); cursor: pointer; text-decoration: underline; padding: 0; }
+    .c-tabs button { padding: .3rem .9rem; border: 2px solid var(--green); border-radius: 99px; text-decoration: none; color: var(--green); }
+    .c-tabs button[aria-pressed="true"] { background: var(--green); color: #fff; }
+    .c-msg { font-size: .9rem; margin: .5rem 0 0; padding: .5rem .8rem; border-radius: 8px; background: #fff3cd; color: #6b4e00; }
+    .c-msg.ok { background: #d9f7ec; color: #0d4a39; }
+    .c-who { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; justify-content: space-between; margin-bottom: .7rem; font-size: .92rem; }
+    .c-item { padding: .8rem 0; border-bottom: 1px solid #0002; }
+    .c-item .c-head { font-size: .88rem; color: var(--muted); }
+    .c-item .c-head strong { color: var(--green); font-size: 1rem; margin-right: .5rem; }
+    .c-item .c-head .c-badge { background: var(--night); color: #fff; font-size: .7rem; padding: .05rem .5rem; border-radius: 99px; margin-right: .5rem; }
+    .c-body { white-space: pre-wrap; overflow-wrap: anywhere; margin: .3rem 0; }
+    .c-actions { display: flex; gap: 1rem; }
+    .c-replies { margin: .4rem 0 0 1.2rem; padding-left: 1rem; border-left: 3px solid var(--mint); }
+    .c-replies .c-item:last-child { border-bottom: 0; }
+    .c-reply-form { margin: .5rem 0; display: grid; gap: .5rem; }
+    .c-row { display: flex; gap: .6rem; align-items: center; }
+
+    .c-bar { display: flex; gap: .6rem; align-items: flex-end; margin: .4rem 0 1rem; }
+    .c-bar textarea { flex: 1; font: inherit; padding: .6rem .8rem; border: 2px solid #0003; border-radius: .5rem; background: #fff; resize: none; min-height: 2.8rem; max-height: 220px; overflow-y: auto; }
+    /* B23 (T15), a ÚNICA diferença de propósito em relação ao static/style.css: no celular o texto de exemplo
+       ("Escreva um comentário…") quebra em duas linhas e a barra, de uma linha só, cortava a segunda ao meio.
+       Com field-sizing: content a barra vazia já nasce com a altura do texto de exemplo (no computador, uma linha, como
+       antes); depois o script dos comentários continua mandando na altura enquanto se digita (até 220 px).
+       Navegador que ainda não conhece field-sizing ignora a linha e fica como no site atual. */
+    .c-bar textarea { field-sizing: content; }
+    .c-bar .button { white-space: nowrap; }
+    .c-who { margin: 0 0 .5rem; }
+    .c-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; background: rgba(0, 0, 0, .65); overflow-y: auto; }
+    .c-modal-open { overflow: hidden; }
+    .c-dialog { position: relative; width: min(420px, 100%); background: #fff; color: #1a1a1a; border-radius: 14px; padding: 1.6rem 1.4rem 1.3rem; box-shadow: 0 20px 60px #000a; }
+    .c-dialog h3 { margin: 0 1.5rem .9rem 0; font-size: 1.15rem; }
+    .c-dialog form { display: grid; gap: .6rem; }
+    .c-dialog input { font: inherit; padding: .55rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; width: 100%; box-sizing: border-box; }
+    .c-x { position: absolute; top: .4rem; right: .6rem; background: none; border: 0; font-size: 1.8rem; line-height: 1; cursor: pointer; color: #555; }
+    .c-x:hover { color: #000; background: none; }
+    .c-google { display: flex; align-items: center; justify-content: center; gap: .6rem; width: 100%; padding: .6rem; font: 600 1rem var(--font-text); background: #fff; color: #333; border: 2px solid #0003; border-radius: .4rem; cursor: pointer; }
+    .c-google:hover { background: #f4f4f4; color: #333; }
+    .c-g { font-weight: 800; color: #4285f4; font-size: 1.15rem; }
+    .c-or { display: flex; align-items: center; gap: .7rem; margin: .8rem 0; font-size: .85rem; color: #777; }
+    .c-or::before, .c-or::after { content: ""; flex: 1; border-top: 1px solid #0003; }
+    .c-dialog .c-tabs { margin-bottom: .7rem; }
+    .hc-comments > h2 + .c-app { margin-top: .4rem; }
+    .c-edited { font-size: .78rem; color: #aaa; margin-right: .5rem; font-weight: 400; }
+    .c-edit-form textarea { width: 100%; min-height: 4rem; font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; box-sizing: border-box; }
+    .c-reply-form textarea { width: 100%; font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; box-sizing: border-box; min-height: 3.5rem; }
+    .hc-comments [hidden], .c-who[hidden] { display: none !important; }
+  }
+</style>

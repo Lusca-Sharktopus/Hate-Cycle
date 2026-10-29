@@ -1,0 +1,57 @@
+---
+// O card de um emissário (foto ou inicial, nome, papel, texto opcional e ícones das redes): o card_emissary() do build.py.
+// Só DESENHA: tudo já vem decidido em `cartao` (src/lib/emissarios.ts → cartaoDoEmissario). O texto (HTML do autor)
+// entra marcado por textoDoAutor() (src/lib/pagina.ts), desde a revisão da T12.
+import { assetUrl } from "../lib/assets";
+import type { CartaoDoEmissario } from "../lib/emissarios";
+import { textoDoAutor } from "../lib/pagina";
+import { ICONES_DAS_REDES } from "./icones-das-redes";
+
+interface Props {
+  cartao: CartaoDoEmissario;
+}
+
+const { cartao: c } = Astro.props;
+---
+
+{/* O HTML sai exatamente como está escrito (compressHTML: false): o card fica numa linha só. */}
+<article class="emi-card"><div class="emi-photo">{c.imagem ? <img src={assetUrl(c.imagem)} alt={c.titulo} loading="lazy" /> : <div class="emi-ph" aria-hidden="true">{c.inicial}</div>}</div><h3>{c.titulo}</h3><p class="emi-role">{c.papel}</p>{c.texto && <div class="emi-text" set:html={textoDoAutor(c.texto)} />}{c.redes.length > 0 && <div class="emi-links">{c.redes.map((r) => <a href={r.url} target="_blank" rel="noopener" aria-label={r.rotulo} title={r.rotulo} set:html={ICONES_DAS_REDES[r.chave]} />)}</div>}</article>
+
+<script>
+  // Foto que não carrega: o card mostra a inicial do nome no lugar (o bloco 5 do static/site.js).
+  document.querySelectorAll<HTMLImageElement>(".emi-photo img").forEach((img) => {
+    const trocar = () => {
+      const bloco = document.createElement("div");
+      bloco.className = "emi-ph";
+      bloco.setAttribute("aria-hidden", "true");
+      bloco.textContent = (img.alt || "?").charAt(0).toUpperCase();
+      img.replaceWith(bloco);
+    };
+    if (img.complete && img.naturalWidth === 0) trocar();
+    else img.addEventListener("error", trocar);
+  });
+</script>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "Outros Emissários"), mesmos valores e mesma ordem. */
+    .emi-grid { hyphens: manual; }
+    .emissaries { clear: both; }
+    .emi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .emi-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: .8rem .8rem 1rem;
+      background: linear-gradient(to bottom, var(--night), #1c1329); color: #e9e4f2; border-radius: 18px; border-bottom: 4px solid var(--mint); box-shadow: 0 6px 16px #0003; }
+    .emi-photo { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: #3a2b52; }
+    .emi-photo img, .emi-ph { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .emi-ph { display: grid; place-items: center; font: 600 3rem var(--font-head); color: var(--mint); }
+    .emi-card h3 { color: #fff; font-size: 1.15rem; margin: .7rem 0 .1rem; text-shadow: none; }
+    .emi-role { margin: 0 0 .4rem; color: var(--mint); font-size: .78rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+    .emi-text { font-size: .8rem; line-height: 1.45; color: #cfc8dc; }
+    .emi-text p { margin: 0 0 .4em; }
+    .emi-links { display: flex; gap: .55rem; justify-content: center; margin-top: auto; padding-top: .7rem; }
+    .emi-links a { color: var(--mint); display: inline-flex; }
+    .emi-links a:hover { color: var(--cyan); filter: drop-shadow(0 0 5px var(--cyan)); }
+    .emi-links svg { width: 22px; height: 22px; }
+    @media (max-width: 1000px) { .emi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .emi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  }
+</style>

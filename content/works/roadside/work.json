@@ -1,0 +1,38 @@
+{
+  "draft": true,
+  "kind": "comic",
+  "universe": true,
+  "oneshot": false,
+  "page_runes": ["ᚣ", "弓", "♐︎", "ᚸ", "エ", "ꑭ", "⼒", "Ⱝ"],
+  "title": {
+    "en": "Roadside",
+    "pt": "Beira de Estrada"
+  },
+  "blurb": {
+    "en": "After strange appearances in front of his house, a weird little girl shows up in Cézar's restaurant, carrying powers that will change his life forever.",
+    "pt": "Após estranhas aparições na frente da sua casa, uma estranha garotinha aparece no restaurante de Cézar, carregando poderes que mudarão sua vida para sempre."
+  },
+  "order": {
+    "release": 4,
+    "chrono": 7
+  },
+  "order_art": {
+    "escala": 1.3,
+    "bleed": true,
+    "size": [1950, 2143],
+    "layers": [
+      { "image": "ordem/Jean Site Cronologia.png", "x": 64.62, "y": 67.99, "width": 28.23, "hover": { "x": 68.2, "y": 65.06, "width": 32, "rotate": 4.05 } },
+      { "image": "ordem/Cezar e Iris Site Cronologia.png", "x": 40.47, "y": 70.87, "width": 36.17, "hover": { "x": 36.89, "y": 68.22, "width": 41, "rotate": -5.69 } },
+      { "image": "ordem/Iris Olhos Site Cronologia.png", "x": 40.47, "y": 70.87, "width": 36.17, "opacity": 0, "hover": { "x": 36.89, "y": 68.22, "width": 41, "rotate": -5.69, "opacity": 1 } }
+    ]
+  },
+  "cover": {
+    "en": "covers/PT/Capa Beira de Estrada.png",
+    "pt": "covers/PT/Capa Beira de Estrada.png"
+  },
+  "logo": {
+    "en": "logos/EN/Roadside 4.png",
+    "pt": "logos/PT/Beira de Estrada 4.png"
+  },
+  "media": "webcomic"
+}

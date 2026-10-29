@@ -1,0 +1,34 @@
+{
+  "draft": true,
+  "universe": true,
+  "oneshot": true,
+  "title": {
+    "en": "Cat-Crow-Thing",
+    "pt": "Cat-Crow-Thing"
+  },
+  "blurb": {
+    "en": "Shizuku has been tormented by nightmares and turns to the best psionic she knows for help. Fly through this runner/shooter, dodging obstacles, shooting enemies and piecing together the clues to uncover the cause of this cat-crow-thing’s bad dreams.",
+    "pt": "Shizuku tem sido atormentada por pesadelos e pede ajuda ao melhor psiônico que ela conhece. Voe por este runner/shooter, desviando de obstáculos, atirando em inimigos e juntando as peças para descobrir a causa dos sonhos ruins dessa coisa-gato-corvo."
+  },
+  "cover": {
+    "en": "covers/PT/Capa Cat-Crow-Thing.png",
+    "pt": "covers/PT/Capa Cat-Crow-Thing.png"
+  },
+  "logo": {
+    "en": "logos/PT/Cat-Crow-Thing 2.png",
+    "pt": "logos/PT/Cat-Crow-Thing 2.png"
+  },
+  "cta": {
+    "en": "Play here",
+    "pt": "Jogue aqui"
+  },
+  "order": {
+    "release": 7,
+    "chrono": 12
+  },
+  "game": {
+    "demo": "",
+    "steam": ""
+  },
+  "media": "videogame"
+}
