@@ -677,26 +677,26 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
     expect(ped.chrono.next).toEqual({ href: "/pt/works/roadside/", texto: "Ler Beira de Estrada", externo: false });
     expect(ped.release.next?.texto).toBe("Assistir Luz & Sangue");
     // Beira de Estrada (quadrinho: "estou lendo"), nos capítulos e na página da obra: cronológica Pederneira ← → (O Pêndulo e Cat-Crow-Thing,
-    // sem arte, pulados) ninguém; lançamento (4, desde a T17o: o autor vai lançar a Beira antes de Ossos): Luz & Sangue (3) ← → Ossos do
-    // Ofício (5; desde a T17n tem capítulo em português, e é para ele que leva)
+    // sem arte, pulados) ninguém; lançamento (5, desde 30/10 — T17x: Ossos do Ofício volta a ser a 4ª, no lugar da Beira): Ossos do Ofício (4;
+    // desde a T17n tem capítulo em português, e é para ele que leva) ← → ninguém
     for (const url of ["/pt/works/roadside/01/", "/pt/works/roadside/02/", "/pt/works/roadside/"]) {
       const bloco = blocoDe(dir, url);
       expect(bloco, url).toContain("estou lendo em ordem");
       const l = lados(bloco);
       expect(l.chrono.prev, url).toEqual({ href: "/pt/works/firestriker/01/", texto: "Ler Pederneira", externo: false });
       expect(l.chrono.next, url).toBeNull();
-      expect(l.release.prev, url).toEqual({ href: "/pt/works/light-and-blood/", texto: "Assistir Luz & Sangue", externo: false });
-      expect(l.release.next, url).toEqual({ href: "/pt/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
-      expect(bloco, url).toContain('<a class="so-side next" href="/pt/works/all-in-a-nights-work/01/">');
+      expect(l.release.prev, url).toEqual({ href: "/pt/works/all-in-a-nights-work/01/", texto: "Ler Ossos do Ofício", externo: false });
+      expect(l.release.next, url).toBeNull();
+      expect(bloco, url).toContain('<a class="so-side prev" href="/pt/works/all-in-a-nights-work/01/">');
       expect(bloco, url).not.toContain("hreflang");
     }
-    expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.next).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
+    expect(lados(blocoDe(dir, "/en/works/roadside/01/")).release.prev).toEqual({ href: "/en/works/all-in-a-nights-work/01/", texto: "Read All in a Night&#39;s Work", externo: false });
     expect(blocoDe(dir, "/en/works/roadside/01/")).not.toContain("hreflang");
-    // T17o: lançamento na prévia = Alô? 1 · Pederneira 2 · Luz & Sangue 3 · Beira de Estrada 4 · Ossos do Ofício 5 (O Pêndulo 6 e Cat-Crow-Thing 7, sem arte, pulados)
-    expect(lados(blocoDe(dir, "/pt/works/light-and-blood/01/")).release.next?.href).toBe("/pt/works/roadside/");
+    // T17x: lançamento na prévia = Alô? 1 · Pederneira 2 · Luz & Sangue 3 · Ossos do Ofício 4 · Beira de Estrada 5 (O Pêndulo 6 e Cat-Crow-Thing 7, sem arte, pulados)
+    expect(lados(blocoDe(dir, "/pt/works/light-and-blood/01/")).release.next?.href).toBe("/pt/works/all-in-a-nights-work/01/");
     const ossosNoLancamento = lados(blocoDe(dir, "/pt/works/all-in-a-nights-work/01/")).release;
-    expect(ossosNoLancamento.prev?.href).toBe("/pt/works/roadside/");
-    expect(ossosNoLancamento.next).toBeNull();
+    expect(ossosNoLancamento.prev?.href).toBe("/pt/works/light-and-blood/");
+    expect(ossosNoLancamento.next?.href).toBe("/pt/works/roadside/");
     // O Pêndulo (vídeo: "estou assistindo") e Cat-Crow-Thing (jogo: "estou jogando") ainda TÊM o bloco; antes deles, a Beira de Estrada na
     // cronológica e (T17o) Ossos do Ofício no lançamento
     const pen = blocoDe(dir, "/pt/works/the-pendulum/01/");
@@ -706,7 +706,7 @@ describe("T17c/T17l: o bloco de ordem no fim de TODO capítulo e de toda página
       expect(cct).toContain(lang === "pt" ? "estou jogando em ordem" : "I’m playing in");
       for (const bloco of [cct, blocoDe(dir, `/${lang}/works/the-pendulum/01/`)]) {
         for (const o of ["chrono", "release"] as const) {
-          expect(lados(bloco)[o].prev?.href).toBe(o === "chrono" ? `/${lang}/works/roadside/` : `/${lang}/works/all-in-a-nights-work/01/`);
+          expect(lados(bloco)[o].prev?.href).toBe(`/${lang}/works/roadside/`);   // T17x: a Beira é a última também no lançamento
           expect(lados(bloco)[o].next).toBeNull();
         }
       }

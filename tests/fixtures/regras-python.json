@@ -18113,8 +18113,8 @@
       "hdvr",
       "firestriker",
       "light-and-blood",
-      "roadside",
       "all-in-a-nights-work",
+      "roadside",
       "the-pendulum",
       "cat-crow-thing"
      ],
@@ -18124,7 +18124,7 @@
       "firestriker",
       "cat-crow-thing",
       "the-pendulum",
-      "all-in-a-nights-work"
+      "roadside"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -18141,7 +18141,7 @@
        "previa": null,
        "ordem": {
         "chrono": "4",
-        "release": "5"
+        "release": "4"
        },
        "midia": "short-story"
       },
@@ -18231,7 +18231,7 @@
        "previa": null,
        "ordem": {
         "chrono": "7",
-        "release": "4"
+        "release": "5"
        },
        "midia": "webcomic"
       },
@@ -19296,8 +19296,8 @@
       "hdvr",
       "firestriker",
       "light-and-blood",
-      "roadside",
       "all-in-a-nights-work",
+      "roadside",
       "the-pendulum",
       "cat-crow-thing"
      ],
@@ -19307,7 +19307,7 @@
       "firestriker",
       "cat-crow-thing",
       "the-pendulum",
-      "all-in-a-nights-work"
+      "roadside"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -19324,7 +19324,7 @@
        "previa": null,
        "ordem": {
         "chrono": "4",
-        "release": "5"
+        "release": "4"
        },
        "midia": "short-story"
       },
@@ -19414,7 +19414,7 @@
        "previa": null,
        "ordem": {
         "chrono": "7",
-        "release": "4"
+        "release": "5"
        },
        "midia": "webcomic"
       },

@@ -470,14 +470,14 @@ describe("T17l: quem não tem arte para a caixa é pulado; obra só com capítul
   test("conteúdo de verdade (prévia): Ossos do Ofício nas páginas em português leva ao capítulo em PORTUGUÊS (T17n; até a T17m, ao inglês)", () => {
     const r = ler(Object.fromEntries(realContent()), true);
     const pt = r.dados.pt;
-    // Luz & Sangue: na cronológica Ossos do Ofício (4) vem antes; no lançamento (T17o: Beira de Estrada 4, Ossos 5), vem depois da Beira de Estrada
+    // Luz & Sangue: na cronológica Ossos do Ofício (4) vem antes; no lançamento (T17x, 30/10: Ossos 4, Beira de Estrada 5), Ossos vem logo depois dela
     const obra = pt.obras.find((o) => o.data._origem.slug === "light-and-blood")!;
     const beira = pt.obras.find((o) => o.data._origem.slug === "roadside")!;
     const outros = (o: (typeof pt.obras)[number]) => [{ lang: "en" as const, capitulos: r.dados.en.capitulosDe(r.dados.en.obras.find((x) => x.data._origem.slug === o.data._origem.slug)!) }];
-    expect(blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros).listas.release.proximo?.slug).toBe("roadside");
+    expect(blocoDaOrdem(obra, "pt", pt.universo, pt.capitulosDe, true, outros).listas.release.proximo?.slug).toBe("all-in-a-nights-work");
     // com ou sem a informação dos outros idiomas, o mesmo destino: o capítulo em português, sem hreflang (a regra do "outro idioma" não vale mais para Ossos)
     for (const [b, c] of [obra, beira].flatMap((o) => [blocoDaOrdem(o, "pt", pt.universo, pt.capitulosDe, true, outros), blocoDaOrdem(o, "pt", pt.universo, pt.capitulosDe, true)].map((x) => [x, o] as const))) {
-      for (const ossos of c === obra ? [b.listas.chrono.anterior] : [b.listas.release.proximo]) {
+      for (const ossos of c === obra ? [b.listas.chrono.anterior] : [b.listas.release.anterior]) {
         expect(ossos?.slug).toBe("all-in-a-nights-work");
         expect(ossos?.rotulo).toBe("Ler Ossos do Ofício");
         expect(ossos?.destino).toEqual({ tipo: "link", href: "/pt/works/all-in-a-nights-work/01/", externo: false, idioma: null });
