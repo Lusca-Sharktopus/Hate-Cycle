@@ -1,237 +1,294 @@
+/* Hᴀᴛᴇ Cʏᴄʟᴇ — estilos do site no ar.
+   O visual (fundo degradê, cabeçalho, folha de papel, rodapé, runas) é o do site novo; as seções abaixo foram copiadas dele. */
 :root {
-  --cor-primaria: #1abc9c;
+  --green: #135c48;      /* verde escuro: títulos, botões */
+  --mint: #2ee0b0;       /* verde-menta */
+  --teal: #25737a;       /* azul-petróleo */
+  --cyan: #00e9fd;       /* ciano: brilhos e hover */
+  --night: #271b39;      /* roxo-noite: texto, hero, leitor de HQ */
+  --top: #28c49a;        /* topo do degradê (medido na sua página no Photoshop) */
+  --sheet: #ececec;
+  --muted: #5b5468;
+  --paper: url("Backgrounds/paper-texture.avif");
+  --radius: 14px;
+  --sheet-radius: clamp(22px, 4vw, 44px);
+  --font-text: "Lexend", system-ui, sans-serif;
+  --font-head: "Oswald", "Arial Narrow", sans-serif;
 }
 
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 body {
-  font-family: 'Lexend', serif;
-  background-image: url("Backgrounds/background-new-texture-paper-shape-high-quality-have-copy-space-text_440279-941.avif");
-  background-color: #dadada;
-  color: #333;
-  border-radius: 10px;
+  margin: 0; min-height: 100vh; font-family: var(--font-text); line-height: 1.6; color: #14101c;
+  background: linear-gradient(to bottom, var(--top) 0, var(--green) 420px, var(--teal) 100%) no-repeat, var(--teal);
+}
+img { max-width: 100%; height: auto; }
+a { color: var(--teal); }
+a:hover { color: var(--green); }
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 4px; }
+.skip { position: absolute; left: -999px; top: 0; background: #fff; padding: .5rem 1rem; z-index: 20; }
+.skip:focus { left: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* B22 (T17k): palavra mais larga que a tela (ex.: "importantes/interessantes" num título de notícia, no celular) quebra em vez de empurrar a página para o lado */
+h1, h2, h3, .chapter-title { font-family: var(--font-head); font-weight: 600; line-height: 1.1; color: var(--green); margin: 0 0 .5em; text-shadow: 0 3px 4px #0000002e; overflow-wrap: break-word; }
+h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); }
+h2 { font-size: clamp(2rem, 5vw, 3.4rem); margin-top: 1.1em; }
+h3 { font-size: 1.3rem; text-shadow: none; }
+.block > h2:first-child, .sheet > .block:first-child h2:first-child { margin-top: 0; }
+
+/* ── cabeçalho (sobre o degradê) ── */
+.site-header {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem;
+  max-width: 1240px; margin: 0 auto; padding: clamp(1rem, 3vw, 2.2rem) clamp(1rem, 4vw, 2.5rem) clamp(1.2rem, 3vw, 2rem);
+}
+:root { --logo-w: clamp(130px, 17vw, 230px); }   /* tamanho da logo do cabeçalho; em custom.css: :root { --logo-w: 160px; } */
+.brand img { display: block; width: var(--logo-w); height: auto; }
+.main-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem clamp(.9rem, 2vw, 1.6rem); margin-left: auto; padding-bottom: .4rem; }
+.main-nav > a, .dd > summary {
+  color: #fff; text-decoration: none; font-weight: 700; font-size: clamp(1rem, 1.7vw, 1.3rem); cursor: pointer; list-style: none;
+  padding: .2rem 0; border-bottom: 2px solid transparent; text-shadow: 0 2px 4px #0003;
+}
+.main-nav a:hover, .dd > summary:hover { color: #fff; text-shadow: 0 0 16px var(--cyan), 0 0 4px var(--cyan); transition: text-shadow .3s; }
+.main-nav > a[aria-current], .dd[data-current] > summary { border-bottom-color: #fff; }
+.dd { position: relative; }
+.dd > summary::-webkit-details-marker { display: none; }
+.dd > summary::after { content: " ▾"; font-size: .8em; }
+.dd[open] > summary::after { content: " ▴"; }
+.dd-menu { position: absolute; right: 0; top: calc(100% + .5rem); min-width: 10rem; z-index: 10; display: flex; flex-direction: column;
+  background: var(--night); border-radius: 12px; padding: .4rem; box-shadow: 0 10px 28px #0006; }
+/* se o menu aberto sairia da tela pela direita, o site.js põe .dd-flip e ele abre alinhado à direita do botão (B32, T17k) */
+.dd.dd-flip .dd-menu { left: auto; right: 0; }
+.dd-menu a { color: #e9fff8; text-decoration: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 500; }
+.dd-menu a:hover, .dd-menu a[aria-current] { background: #ffffff1c; color: #fff; }
+
+/* ── a "folha" de papel que contém cada página ── */
+.sheet {
+  max-width: 1200px; margin: 0 auto; padding: clamp(1.4rem, 5vw, 3.6rem) clamp(1.2rem, 5vw, 3.6rem);
+  background: var(--paper), var(--sheet); background-color: var(--sheet); border-radius: var(--sheet-radius);
+  box-shadow: 0 12px 34px #00000040; width: calc(100% - 2rem);
+}
+.wrap { margin: 0 auto; }
+.narrow { max-width: 760px; }
+.block { padding-top: 1rem; padding-bottom: 1.6rem; }
+.sub { color: var(--muted); margin-top: -.2em; }
+time { color: var(--muted); font-size: .85rem; }
+
+/* ── botões ── */
+.button {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: .4rem 1.3rem; margin-top: 12px;
+  background: var(--green); color: #f1f1f1; border: 2px solid var(--green); border-radius: .3rem; font: 700 .93rem var(--font-text);
+  text-decoration: none; cursor: pointer; transition: background-color .3s, transform .2s, box-shadow .3s;
+}
+.hero-actions .button { margin-top: 0; }
+.button:hover { background: #f3f3f3; color: #0e0e0e; box-shadow: 0 0 12px var(--cyan); transform: scale(1.03); }
+.button:active { transform: scale(.97); }
+.button.ghost { background: transparent; color: var(--green); }
+.hero .button { background: var(--mint); border-color: var(--mint); color: var(--night); }
+.hero .button.ghost { background: transparent; color: #eafff8; border-color: #eafff8; }
+.hero .button:hover { background: #fff; color: var(--night); }
+.button.ghost:hover { background: #f3f3f3; color: #0e0e0e; }
+.button.disabled { background: #bdb8c6; border-color: #bdb8c6; color: #4a4356; cursor: default; box-shadow: none; transform: none; }
+
+/* ── cards de histórias ── */
+.works { --fl: 0px; --fr: 0px; display: flex; gap: 1.4rem; margin-top: 1rem; padding: .4rem .4rem 1.3rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: .4rem;
+  scrollbar-width: thin; scrollbar-color: var(--green) transparent;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%); }
+.rail > .works { scrollbar-width: none; -ms-overflow-style: none; }   /* com as setas ativas, esconde a barra */
+.rail > .works::-webkit-scrollbar { display: none; }
+.rail { position: relative; }
+.rail-btn { position: absolute; top: 34%; z-index: 2; width: 58px; height: 58px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer;
+  background: var(--green); color: #eafff8; box-shadow: 0 4px 14px #0004; transition: transform .2s, box-shadow .3s; }
+.rail-btn:hover { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
+.rail-btn svg { width: 30px; height: 30px; }
+.rail-next { right: .6rem; } .rail-prev { left: .6rem; }
+.work-card { flex: 0 0 clamp(210px, 25%, 310px); scroll-snap-align: start; display: flex; flex-direction: column; align-items: flex-start; background: linear-gradient(to bottom, #e7fcf3, #e4e4e4); padding: 15px; border-radius: var(--radius); font-size: .88rem; box-shadow: 0 4px 12px #0000001f; }
+.work-card img, .work-card .nocover { width: 100%; border-radius: 8px; background: #cfdcd6; aspect-ratio: 2/3; object-fit: cover; }
+.work-card h3 { margin: .8rem 0 .3rem; }
+.work-card p { margin: 0 0 auto; padding-bottom: .4rem; }
+
+/* ── obra ── */
+.work-head { display: grid; grid-template-columns: minmax(150px, 240px) 1fr; gap: 2rem; align-items: start; }
+.work-head .cover { border-radius: var(--radius); box-shadow: 0 6px 18px #0003; width: 100%; }
+.chapter-list { list-style: none; padding: 0; margin: 0; }
+.chapter-list a { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; padding: .8rem 1rem; text-decoration: none; color: inherit; border-bottom: 1px solid #0000001a; }
+.chapter-list a:hover { background: #ffffffa0; }
+.chapter-list .n { font-family: var(--font-head); color: var(--teal); font-size: 1.4rem; }
+.chapter-list .t { font-weight: 500; }
+
+
+/* ── texto corrido ── */
+.prose { max-width: 70ch; hyphens: auto; -webkit-hyphens: auto; }
+.wide .prose { max-width: none; }
+.prose::after { content: ""; display: block; clear: both; }
+.prose figure { margin: 1.5rem 0; }
+.prose figure img { border-radius: var(--radius); max-width: min(100%, 26rem); }
+.prose blockquote { margin: 1.2rem 0; padding-left: 1rem; border-left: 4px solid var(--mint); color: var(--muted); }
+.lead { margin: 1rem 0 1.5rem; } .lead img { border-radius: var(--radius); }
+.draft-banner { background: #fff3cd; color: #6b4e00; padding: .5rem 1rem; border-radius: 8px; font-size: .9rem; }
+
+/* página "Sobre": personagens e fotos flutuando com o texto contornando o desenho */
+.page-about h2, .page-project h2 { clear: both; }
+/* página "Sobre" (T17l, pedido do autor de 22/10): o título que vem logo depois do texto ("Sobre o autor", depois do fim de "Sobre o projeto") fica à mesma distância do texto que "Outros Emissários" (só a margem do parágrafo, 1rem) */
+.page-about .prose > p + h2 { margin-top: 0; }
+/* página "Apoio": o texto e as imagens ocupam a coluna inteira (o .prose de 70ch ficava encostado à esquerda e o conteúdo parecia descentralizado) */
+.page-support .prose { max-width: none; }
+/* página "Apoio" (T17l, pedido do autor de 22/10, "print 2.png"): o banner do canal do YouTube sobe até o cabo do tridente "invadir" um pouco a faixa do texto de cima (8,5% da largura da coluna = ~65 px a 760 px); o texto fica POR CIMA (z-index), para continuar legível e clicável */
+.page-support .prose > p { position: relative; z-index: 1; }
+.page-support .yt-banner { margin-top: -8.5%; }
+.apollo-gif, .anfibio-gif, .autor-foto { height: auto; shape-margin: 1rem; }
+.apollo-gif { float: left; width: clamp(85px, 16%, 200px); margin: 0 1.2rem .5rem 0; shape-outside: url("other images/Apollo Site.gif"); }
+.anfibio-gif { float: right; width: clamp(85px, 17%, 215px); margin: 0 0 .5rem 1.2rem; shape-outside: url("other images/Anfíbio Site.gif"); }
+.autor-foto { float: left; width: clamp(200px, 48%, 560px); margin: 0 1.4rem .5rem 0; shape-outside: url("other images/1000172301.png"); }
+
+/* ── leitor (capítulos) ── */
+.reader-box { max-width: 1000px; width: calc(100% - 2rem); margin: 0 auto 1.5rem; padding: clamp(1.4rem, 5vw, 3.5rem); border-radius: var(--sheet-radius); box-shadow: 0 12px 34px #00000040; }
+.reader-box.paper { background: var(--paper), var(--sheet); background-color: var(--sheet); }
+.reader-box.slim { padding-top: .8rem; padding-bottom: .8rem; }
+.title-image { display: block; margin: 0 auto 1.5rem; height: 100px; width: auto; }
+.chapter-title { text-align: center; font-size: clamp(1.25rem, 2.6vw, 1.6rem); margin-bottom: 1rem; }
+hr.thin { width: 80%; border: 0; border-top: 1px solid #0003; margin: 0 auto 2rem; }
+.reader .prose { max-width: none; }
+.story { font-size: 1.04rem; line-height: 1.9; color: #0e0e0e; }
+.story p { margin: 0 0 1.15em; text-align: justify; }
+.scene-divider { display: block; width: 100%; margin: 2rem 0; border: 0; }
+hr.scene-divider { border-top: 1px solid #0004; width: 40%; margin: 2rem auto; }
+.story figure img { display: block; margin: 1.5rem auto; }
+
+.reader-comic .reader-box:first-of-type { background: var(--night); color: #dff6ee; padding: 1.5rem clamp(.5rem, 3vw, 2rem); }
+.reader-comic .title-image { height: 70px; }
+.reader-comic .chapter-title { color: #fff; }
+.comic { display: flex; flex-direction: column; align-items: center; margin: 1rem 0; }
+.comic img { display: block; width: 100%; max-width: 860px; }
+.author-note { margin: 1.5rem auto 0; padding: 1rem 1.2rem; background: #ffffff12; border-radius: 10px; }
+
+.pager { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin: 1.5rem 0; font-size: .95rem; }
+.pager a { text-decoration: none; font-weight: 600; }
+.pager .pg { display: flex; align-items: center; gap: .8rem; max-width: 42%; color: inherit; }
+.pager .pg-txt { display: flex; flex-direction: column; }
+.pager .next .pg-txt { text-align: right; }
+.pager small { font-weight: 400; font-size: .8rem; opacity: .75; }
+.pg-btn { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--green); color: #eafff8; box-shadow: 0 4px 14px #0004; transition: transform .2s, box-shadow .3s; }
+.pg-btn svg { width: 28px; height: 28px; }
+.pager .pg:hover .pg-btn { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
+.pager .mid { flex-direction: row; padding: .35rem .9rem; border: 1px solid currentColor; border-radius: 99px; color: var(--teal); }
+/* pedido do autor (16/10/2026): o botão do meio nunca é espremido pelos títulos das laterais (que o build.py já corta em 40 caracteres) */
+.pager .mid { flex: none; white-space: nowrap; }
+.reader-comic .pager .mid, .reader-comic .pager .pg { color: var(--mint); }
+/* B36 (T17k): em tela estreita a barra não cabia numa linha ("Todos os capítulos" + "Próximo", em português, passam da tela a 320 px e a página ganhava
+   rolagem lateral). Até 389 px (e, quando há os DOIS vizinhos, até 560 px) o botão do meio vai inteiro para a primeira linha e os vizinhos descem para a
+   de baixo, como as notícias já faziam até 560 px. De 390 px para cima, com um vizinho só, nada mudou. */
+@media (max-width: 389px) {
+  .pager { flex-wrap: wrap; justify-content: center; }
+  .pager .pg { max-width: 100%; }
+  .pager .mid { order: -1; width: 100%; text-align: center; }
+  .pager > span:empty { display: none; }
+}
+@media (max-width: 560px) {
+  .pager:has(> .prev):has(> .next) { flex-wrap: wrap; justify-content: center; }
+  .pager:has(> .prev):has(> .next) .pg { max-width: 100%; }
+  .pager:has(> .prev):has(> .next) .mid { order: -1; width: 100%; text-align: center; }
 }
 
-h2 {
-  font-family: 'Oswald', sans-serif;
-  font-size: 40px;
-  background-image: url("Backgrounds/background-new-texture-paper-shape-high-quality-have-copy-space-text_440279-941.avif");
-  background-color: #dadada;
-  color: #135c48;
-  border-radius: 5px;
-}
+.video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
+.video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-header {
-  background-image: linear-gradient(to top, var(--cor-primaria) 0%, #14866f 100%);
-  color: #fcfbfb;
-  padding: 20px;
-  text-align: center;
-}
+/* cartinha que vira (Ossos do Ofício) */
+/* T17k: 300 × 450 px, mas nunca mais larga que a coluna (a 320 px a carta passava da tela): max-width + proporção 2:3 no lugar da altura fixa */
+.flip-card { width: 300px; max-width: 100%; aspect-ratio: 2 / 3; perspective: 1000px; margin: 1.5rem auto; }
+.flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform .8s; transform-style: preserve-3d; }
+.flip-card { cursor: pointer; }
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 4px 12px #0000005e; }
+.flip-card-back { transform: rotateY(180deg); }
+.flip-card img { width: 100%; height: 100%; }
 
-nav a {
-  margin: 0 10px;
-  color: #ecf0f1;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav a:hover {
-  color: #ffffff;
-  text-shadow: 0px 0px 15px #28ffc9;
-  transition: all 0.3s ease;
-}
-
-.galeria {
-  display: flex;
-  overflow-x: auto;
-  gap: 20px;
-  padding-bottom: 10px;
-  scroll-snap-type: x mandatory;
-}
-
-.historia {
-  flex: 0 0 230px;
-  background-image: linear-gradient(to bottom, #e7fcf3 0%, #e4e4e4 100%);
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  scroll-snap-align: start;
-  font-size: small;
-}
-
-.historia img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-footer {
-  text-align: center;
-  margin-top: 40px;
-  padding: 20px;
-  background-color: #09493c;
-  color: #cfe7ff;
-}
-
-.autor-foto {
-  float: left;
-  width: 500px;
-  height: auto;
-  margin: 0 20px 10px 20px;
-  shape-margin: 2rem;
-  shape-outside: url(other\ images/1000172301.png);
-}
-
-.apollo-gif {
-  float: left;
-  width: 16%;
-  height: auto;
-  margin: 0 10px 0 20px;
-  shape-margin: 2rem;
-  shape-outside: url(other\ images/Apollo\ Site.gif);
-}
-
-.anfibio-gif {
-  float: right;
-  width: 18%;
-  height: auto;
-  margin: 0 10px 0 10px;
-  shape-margin: 2rem;
-  shape-outside: url(other\ images/Anfíbio\ Site.gif);
-}
-
-.sobre {
-  display: left;
-  align-items: left;
-  gap: 10px;
-  background-color: #09493c;
-  flex-wrap: wrap;
-  margin-right: 15px;
-  padding-right: 15px;
-}
+/* ── rodapé (sobre o degradê) ── */
+.site-footer { text-align: center; margin-top: 2.2rem; padding: 1rem 1rem 2rem; color: #fff; font-size: 1.05rem; font-weight: 500; }
+.site-footer a { color: #fff; }
+.social { display: flex; justify-content: center; gap: .9rem; margin-bottom: .8rem; }
+.social img { width: 34px; height: 34px; object-fit: contain; }
+.site-footer p { margin: .25rem 0; }
 
 @media (max-width: 700px) {
-  .autor-foto {
-    width: 80%;
-  }
-
-  .sobre-autor {
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .apollo-gif {
-    float: left;
-    width: 25%;
-    height: auto;
-    margin: 0 10px 5px 0;
-  }
-
-  .anfibio-gif {
-    float: right;
-    width: 25%;
-    height: auto;
-    margin: 0 5px 10px 0;
-  }
+  .work-head, .char-page { grid-template-columns: 1fr; }
+  .work-head .cover, .portrait { max-width: 260px; }
+  .chapter-list a { grid-template-columns: 2rem 1fr; }
+  .chapter-list time { display: none; }
+  .story p { text-align: left; }
+  .site-header { align-items: flex-start; }
+  .main-nav { margin-left: 0; }
+  .dd-menu { right: auto; left: 0; }
+  .autor-foto { width: 100%; float: none; margin: 0 0 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
 }
 
-.slideshow-container {
-  width: 100%;
-  max-width: 1000px;
-  margin: auto;
-  position: relative;
-  border: none;
-  border-radius: 12px;
+/* ── seletor de ordem das histórias ── */
+.hc { font-variant: small-caps; letter-spacing: .02em; }
+/* ── Luz & Sangue: botões de episódio ao lado do vídeo ── */
+.player-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; grid-template-areas: "p v n"; gap: 1rem; align-items: center; }
+.player-row .video-wrapper { grid-area: v; }
+.side-btn { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--green); color: #eafff8; box-shadow: 0 4px 14px #0004; transition: transform .2s, box-shadow .3s; }
+.side-btn svg { width: 28px; height: 28px; }
+a.side-btn:hover { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); color: #fff; }
+.side-btn.prev { grid-area: p; } .side-btn.next { grid-area: n; }
+.side-btn.ghost { visibility: hidden; }
+@media (max-width: 700px) {
+  .player-row { grid-template-columns: 1fr 1fr; grid-template-areas: "v v" "p n"; }
+  .side-btn.next { justify-self: end; }
 }
 
-.video {
-  width: 830px;
-  height: 466, 88px;
-  border: none;
-  border-radius: 12px;
+/* ── Ossos do Ofício: Giuseppe com o texto contornando o desenho; Times New Roman ── */
+.jusep { float: left; width: 15rem; max-width: 40%; height: auto; margin: 0 1rem .5rem 0; shape-margin: 1rem; shape-outside: url("other images/Giuseppe.png"); }
+.story.font-times { font-family: "Times New Roman", Times, serif; font-size: 1.08rem; line-height: 1.7; }
+.story.font-times p { margin: 0; }          /* sem espaço entre parágrafos (Ossos do Ofício e Pederneira) */
+.reader-comic .title-image { filter: invert(1); }   /* logo preta continua legível no fundo escuro das HQs */
+
+.chapter-date { text-align: center; margin: -.6rem 0 1rem; }
+
+/* ── Impressão rúnica no fundo (cada página tem a sua; ver rune_imprint no build.py) ── */
+.runes { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.runes i {
+  position: absolute; left: var(--lx); top: var(--ly); font-style: normal; line-height: 1; color: var(--cyan); opacity: var(--lo, .1);
+  font-family: "Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans KR","Noto Sans JP",sans-serif;
+  font-size: calc(var(--s, 5) * 1vmin + 14px); transform: translate(-50%, -50%) rotate(var(--r, 0deg));
+  text-shadow: 0 0 .35em currentColor; animation: rune-glow var(--d, 12s) ease-in-out infinite alternate;
+}
+@keyframes rune-glow { from { opacity: var(--lo, .1); } to { opacity: var(--hi, .4); } }
+@media (max-aspect-ratio: 1/1) { .runes i { left: var(--px); top: var(--py); } }
+@media (prefers-reduced-motion: reduce) { .runes i { animation: none; opacity: calc((var(--lo, .1) + var(--hi, .4)) / 2); } }
+.site-header, main, .site-footer { position: relative; z-index: 1; }
+.site-header { z-index: 5; }
+
+
+/* ── ajustes do site no ar ── */
+.skip { z-index: 20; }
+/* o texto do autor nas páginas de leitura (Pederneira, Ossos do Ofício): Times New Roman, sem espaço entre os parágrafos */
+.reader-box .prose { max-width: none; }
+.story.font-times { font-family: "Times New Roman", Times, serif; font-size: 1.08rem; line-height: 1.7; }
+.story.font-times p { margin: 0; }
+.story .scene-divider { margin: 2rem 0; }
+.voltar { display: block; text-align: center; margin-top: 2rem; font-weight: 700; text-decoration: none; }
+.voltar:hover { text-decoration: underline; }
+/* título (logo) das páginas de capítulo: mesma altura em todas; no celular desce até a mais larga caber */
+.title-image { height: min(100px, (min(1000px, 100vw - 2rem) - 2 * clamp(1.4rem, 5vw, 3.5rem)) / 3.75); object-fit: contain; }
+.chapter-note { text-align: center; margin: -.6rem 0 1rem; }
+.chapter-list time { white-space: nowrap; }
+.reader-box .back-link { margin-top: 1rem; }
+/* ordem: o cartão "em breve" não tem botão de verdade */
+.work-card .button.disabled { margin-top: 12px; }
+/* Sobre o projeto / Sobre o autor: o título fica entre as imagens que o texto contorna */
+.sobre-sec h2 { margin: 0 0 .4em; }
+.sobre-sec .prose p { margin: 0 0 1em; }
+.contact-links { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .8rem; }
+.contact-links img { width: 40px; height: 40px; object-fit: contain; }
+@media (max-width: 700px) {
+  .site-header { align-items: flex-start; }
 }
 
-.video-wrapper {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%;
-  /* 16:9 */
-  height: 0;
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 12px;
-}
-
-.mesa {
-  color: #ffffff;
-  font-size: 20px;
-  padding: 5px;
-  text-align: center;
-  border: none;
-  border-radius: 12px;
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 10.62375rem;
-  height: 2.4375rem;
-  margin-top: 12px;
-
-  background-color: #09493c;
-  color: #eeeeee;
-
-  border-radius: 0.2rem;
-  font-size: 0.9375rem;
-  font-weight: bold;
-  text-decoration: none;
-
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.button:hover {
-  background-color: #ebebeb;
-  box-shadow: 0 0 10px #50ffbcaf;
-  color: #0e0e0e;
-  transform: scale(1.03);
-}
-
-.button:active {
-  transform: scale(0.97);
-}
-
-.title-image {
-  display: block;
-  margin: 0 auto 30px;
-  width: auto;
-  height: 100px;
-}
-
-.comment-container {
-  max-width: 1000px;
-  margin: auto;
-  background-image: url("Backgrounds/background-new-texture-paper-shape-high-quality-have-copy-space-text_440279-941.avif");
-  padding: 60px;
-  padding-top: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
-  border-radius: 10px;
-}
-/* Espaço menor entre os títulos de "Sobre" e o texto seguinte */
-#sobre h2 { margin-bottom: 4px; }
-#sobre > p, #sobre .sobre-autor > p:first-child { margin-top: 6px; }
-
-/* Margem lateral maior entre o conteúdo e as bordas da tela */
-main { padding-left: clamp(16px, 2vw, 150px); padding-right: clamp(16px, 2vw, 150px); }
-
-/* Com a margem lateral maior, as quebras de linha manuais do "Sobre o autor" deixavam linhas picotadas */
-.sobre-autor p:first-child br { display: none; }
+.work-card { flex: 0 0 clamp(210px, calc((100% - 4.2rem) / 4), 310px); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
+.hero-actions .button { margin-top: 0; }
