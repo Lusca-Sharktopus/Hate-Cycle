@@ -292,3 +292,6 @@ a.side-btn:hover { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); col
 .work-card { flex: 0 0 clamp(210px, calc((100% - 4.2rem) / 4), 310px); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
 .hero-actions .button { margin-top: 0; }
+
+/* o texto dos botões dos cartões cabe numa linha só (ex.: "Assista no YouTube" no celular) */
+.work-card .button { white-space: nowrap; padding-left: .9rem; padding-right: .9rem; }
