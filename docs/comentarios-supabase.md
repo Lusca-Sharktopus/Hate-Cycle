@@ -124,7 +124,7 @@ Com o CLI: `supabase db push` (depois de marcar a inicial como aplicada, passo 4
 
 ### Migração de 03/11/2026: marca-páginas
 
-Arquivo: `supabase/migrations/20261103020000_marca_paginas.sql`. **Ainda não rodada no seu projeto.** Rode depois da de cima (ela usa a tabela de perfis).
+Arquivo: `supabase/migrations/20261103020000_marca_paginas.sql`. **Já rodada no seu projeto (03/11/2026, versão com os ajustes da revisão).** Num projeto novo, rode depois da de cima (ela usa a tabela de perfis).
 
 O que muda para quem visita: quem tem conta passa a ter o marca-página guardado na conta (vale em qualquer aparelho). Sem conta, o marca-página continua funcionando, guardado só no navegador. Enquanto a migração não for rodada, nada quebra: sem conta, o marca-página funciona normalmente no navegador; com conta, o marcador anda na página, mas não fica guardado (com conta o site nunca grava no navegador, para não deixar a posição de uma pessoa num computador compartilhado).
 
