@@ -3,7 +3,7 @@ title: Privacy Policy
 summary: What data the Hᴀᴛᴇ Cʏᴄʟᴇ website keeps, why, and how to ask for it to be deleted.
 ---
 
-*Last updated: November 2, 2026.*
+*Last updated: November 3, 2026.*
 
 Hᴀᴛᴇ Cʏᴄʟᴇ is the personal website of Lusca Sharktopus (Lucas Pereira da Silva). This page explains, in plain words, what data the website keeps, why, and how you can ask to see it or delete it. Questions and requests: [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com).
 
@@ -42,7 +42,7 @@ The website is hosted by **GitHub Pages**, which may log technical access data (
 
 ## Your rights
 
-Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. To delete your account, write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, comments and bookmarks are deleted too.
+Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. You can change your name or delete your account yourself at any time: while signed in, click your name above the comment box. You can also write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, bookmarks and comments are deleted too (the text of a comment other people replied to is replaced with “[comment deleted]”, so the conversation still makes sense).
 
 ## Changes to this policy
 

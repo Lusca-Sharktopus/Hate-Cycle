@@ -242,9 +242,9 @@ def casos(q, paralelo=None) -> int:
     caso("visitante lê comentários e nomes", "select count(*) from public.comments; select count(*) from public.profiles;", papel="anon")
     caso("funções internas não podem ser chamadas pelo site", "select public.soft_delete_comment()", papel="authenticated", sub=B, erro="permission denied")
     caso("as funções têm search_path fixo", "select 1",
-         depois="select count(*) from pg_proc where proname in ('check_new_comment','check_edit_comment','soft_delete_comment','cleanup_deleted_parent','before_delete_profile','handle_new_user') "
+         depois="select count(*) from pg_proc where proname in ('check_new_comment','check_edit_comment','soft_delete_comment','cleanup_deleted_parent','before_delete_profile','handle_new_user','check_bookmark','change_my_name','delete_my_account') "
                 "and proconfig is not null and 'search_path=\"\"' = any(proconfig)",
-         espera="6")
+         espera="9")
 
     # 9) marca-páginas (migração 20261103020000)
     mp = lambda pag, par, fr="0.5", extra="": f"insert into public.bookmarks (page_id, paragrafo, fracao{', user_id' if extra else ''}) values ('{pag}', {par}, {fr}{', ' + extra if extra else ''})"
@@ -295,6 +295,43 @@ def casos(q, paralelo=None) -> int:
         q(f"delete from public.bookmarks where user_id = '{C}'")
     q(f"set local role authenticated; set local request.jwt.claim.sub = '{C}'; " + mp("works/firestriker/01", 3) + ";")
     caso("marca-página: some junto com a conta", f"delete from auth.users where id = '{C}'", depois="select count(*) from public.bookmarks", espera="0")
+
+    # 10) a janela da conta (migração 20261103040000): trocar o próprio nome, apagar a própria conta
+    caso("conta: trocar o próprio nome (limpa espaços)", "select public.change_my_name('  Bia   Nova  ')", papel="authenticated", sub=B,
+         depois=f"select display_name from public.profiles where id = '{B}'", espera="Bia Nova")
+    caso("conta: nome com 1 caractere é recusado", "select public.change_my_name(' x ')", papel="authenticated", sub=B, erro="name length")
+    caso("conta: nome com mais de 30 é recusado", "select public.change_my_name(repeat('a', 31))", papel="authenticated", sub=B, erro="name length")
+    caso("conta: nome com caractere de controle é recusado", "select public.change_my_name('Bia' || chr(7) || 'x')", papel="authenticated", sub=B, erro="invalid name")
+    caso("conta: visitante sem conta não troca nome", "select public.change_my_name('Fulano')", papel="anon", erro="permission denied")
+    caso("conta: ninguém troca o nome direto na tabela (nem vira admin)", "update public.profiles set display_name = 'Hacker', is_admin = true", papel="authenticated", sub=B,
+         erro="permission denied")
+    caso("conta: trocar o nome não mexe no de outra pessoa", "select public.change_my_name('Outra')", papel="authenticated", sub=B,
+         depois=f"select display_name from public.profiles where id = '{A}'", espera="Admin")
+    E = "00000000-0000-0000-0000-00000000000e"
+    q(f"insert into auth.users (id, email, raw_user_meta_data) values ('{E}', 'e@x', '{{\"display_name\":\"Eva\"}}')")
+    pagina_e = "works/firestriker/01"
+    # Eva: um comentário com resposta da Bia, um sem resposta e uma resposta dela a um comentário da Bia; um marca-página
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " + ins("da Eva com resposta", pagina_e))
+    envelhecer()
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{B}'; " +
+      ins("resposta da Bia", pagina_e, f"(select id from public.comments where body = 'da Eva com resposta')"))
+    envelhecer()
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " + ins("da Eva sem resposta", pagina_e))
+    envelhecer()
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{B}'; " + ins("raiz da Bia", pagina_e))
+    envelhecer()
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " +
+      ins("resposta da Eva", pagina_e, f"(select id from public.comments where body = 'raiz da Bia')"))
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " + mp("works/firestriker/01", 5))
+    caso("conta: visitante sem conta não apaga conta nenhuma", "select public.delete_my_account()", papel="anon", erro="permission denied",
+         depois="select count(*) from auth.users", espera="3")
+    caso("conta: apagar a própria conta leva o usuário, o perfil e os marca-páginas", "select public.delete_my_account()", papel="authenticated", sub=E,
+         depois=f"select (select count(*) from auth.users where id = '{E}') || '|' || (select count(*) from public.profiles where id = '{E}') || '|' || "
+                f"(select count(*) from public.bookmarks where user_id = '{E}') || '|' || (select count(*) from auth.users)",
+         espera="0|0|0|2")
+    caso("conta: comentários da conta apagada (com resposta vira [apagado]; o resto some; os da Bia ficam)", "select 1",
+         depois=f"select string_agg(case when deleted_at is null then body else '[apagado]' end, ',' order by id) from public.comments where page_id = '{pagina_e}'",
+         espera="[apagado],resposta da Bia,raiz da Bia")
 
     falhas = [n for ok, n in resultados if not ok]
     print(f"\n{len(resultados) - len(falhas)}/{len(resultados)} casos certos" + (f"; FALHARAM: {falhas}" if falhas else ""))

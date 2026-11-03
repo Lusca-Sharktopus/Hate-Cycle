@@ -83,5 +83,22 @@ const { secao: s } = Astro.props;
     .c-edit-form textarea { width: 100%; min-height: 4rem; font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; box-sizing: border-box; }
     .c-reply-form textarea { width: 100%; font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; box-sizing: border-box; min-height: 3.5rem; }
     .hc-comments [hidden], .c-who[hidden] { display: none !important; }
+
+    /* a janela da conta (03/11, só no site novo; src/scripts/comentarios/conta.ts): o nome em "Conectado como" é o botão que a abre */
+    .c-who .c-me {
+      font: inherit; font-weight: 700; padding: 0; border: 0; background: none; color: var(--green); cursor: pointer;
+      text-decoration: underline dotted; text-underline-offset: .2em;
+    }
+    .c-who .c-me:hover, .c-who .c-me:focus-visible { color: var(--teal); text-decoration-style: solid; }
+    .c-conta .c-conta-email { margin: -.4rem 0 1rem; font-size: .88rem; color: #555; overflow-wrap: anywhere; }
+    .c-conta .c-conta-nome label { font-weight: 600; font-size: .92rem; }
+    .c-conta .c-conta-nome .button { justify-self: start; }
+    .c-conta .c-msg[hidden] { display: none; }
+    .c-conta .c-conta-perigo { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid #0002; }
+    .c-conta .c-conta-apagar { color: #a4262c; }
+    .c-conta .c-conta-aviso { margin: 0 0 .8rem; font-size: .9rem; line-height: 1.45; }
+    .c-conta .c-conta-confirmar { background: #a4262c; border-color: #a4262c; color: #fff; }
+    .c-conta .c-conta-confirmar:hover { background: #7f1d22; border-color: #7f1d22; }
+    .c-conta .c-row { flex-wrap: wrap; gap: .6rem 1rem; }
   }
 </style>

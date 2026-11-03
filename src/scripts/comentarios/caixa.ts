@@ -20,7 +20,9 @@
 //   - responder (181–197) e editar (218–239: Esc cancela, texto igual não envia, cursor no fim);
 //   - mensagens de erro e de aviso (22–28, 59–60, 142–143);
 //   - sessão: entra/sai sem recarregar a página (277–296).
+// Só aqui (03/11/2026, sem par no comments.js): o nome em "Conectado como <nome>" é um botão que abre a janela da conta (./conta.ts).
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { abrirJanelaDaConta, textosDaConta } from "./conta";
 import { el } from "./dom";
 import {
   COLUNAS,
@@ -123,7 +125,34 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     const linha = linhaDeQuem as HTMLDivElement;
     linha.textContent = "";
     if (quem) {
-      linha.appendChild(el("span", { texto: `${t("c_hello")} ${nomeDeQuemEntrou(quem, perfil)}` }));
+      // o nome abre a janela da conta (./conta.ts); o resto da linha é o mesmo do comments.js
+      const eu = quem;
+      const nome = nomeDeQuemEntrou(eu, perfil);
+      linha.appendChild(
+        el("span", { texto: `${t("c_hello")} ` }, [
+          el("button", {
+            attrs: { type: "button", class: "c-me", title: textosDaConta(cfg.lang).abrir, "aria-haspopup": "dialog" },
+            texto: nome,
+            ao: {
+              click: () => {
+                abrirJanelaDaConta({
+                  sb,
+                  lang: cfg.lang,
+                  nome: (perfil && perfil.display_name) || "",
+                  email: eu.email,
+                  aoMudarNome: () => void atualizar(),
+                  aoApagar: (texto) => {
+                    quem = null;
+                    perfil = null;
+                    aviso = texto;
+                    void atualizar();
+                  },
+                });
+              },
+            },
+          }),
+        ]),
+      );
       linha.appendChild(
         el("button", {
           attrs: { type: "button", class: "c-link" },

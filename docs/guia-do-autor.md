@@ -395,6 +395,16 @@ Cada capítulo e cada notícia tem comentários; a conversa é a mesma nos dois 
 No site novo (Astro) a caixa funciona igual; por dentro, ela usa um script próprio com o supabase-js numa versão fixa, e o banco passou a ter migrações versionadas em `supabase/migrations/` (como usar daqui para frente: `docs/comentarios-supabase.md`, seções 5 e 6). Você não precisa fazer nada no Supabase por causa disso.
 Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da notícia (nas três versões de notícia: comum, com fundo e colagem). Nos botões de anterior/próximo do fim da notícia, o título da notícia vizinha é cortado em 40 caracteres com "…" (o título inteiro aparece ao passar o mouse); isso é automático, não muda o título da notícia.
 
+### A janela da conta (só no site novo, desde 03/11)
+
+- Quem está com a conta aberta vê "Conectado como **seu nome**" acima da caixa de comentários. Clicar no nome abre uma janela (o resto da página escurece; fecha no ×, com Esc ou clicando fora) com:
+  - **o nome que aparece nos comentários**, para trocar (de 2 a 30 caracteres; espaços a mais são tirados). O nome novo aparece também nos comentários antigos;
+  - **a conta** (o e-mail, só para a pessoa saber em qual conta está);
+  - **Apagar conta**, que pede uma segunda confirmação explicando o que some (a conta, o nome, os marca-páginas e os comentários; os que têm respostas de outras pessoas ficam como "[comentário apagado]"). Não dá para desfazer.
+- Para funcionar, o banco precisa da migração `20261103040000_conta.sql` (`docs/comentarios-supabase.md`, seção 5).
+- Os textos da janela moram em `src/scripts/comentarios/conta.ts` (`TEXTOS_DA_CONTA`, em português e inglês); a aparência, no fim de `src/components/Comentarios.astro`.
+- A Política de Privacidade já explica esse caminho (seção "Seus direitos").
+
 ### Marca-página (só no site novo, desde 03/11)
 
 - Em todo capítulo de **texto** (não nos quadrinhos nem nos vídeos), a margem à direita do texto é a "faixa" do marca-página. Um clique nela leva o marcador (a aba verde com a logo) para aquela altura; dá para arrastar o marcador para cima e para baixo; com o teclado, Tab até o marcador e as setas andam de parágrafo em parágrafo. Antes do primeiro uso, o marcador fica apagadinho no topo do texto.

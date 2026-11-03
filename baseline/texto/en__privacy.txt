@@ -1,7 +1,7 @@
 URL: /en/privacy/
 
 Privacy Policy
-Last updated: November 2, 2026.
+Last updated: November 3, 2026.
 Hate Cycle is the personal website of Lusca Sharktopus (Lucas Pereira da Silva). This page explains, in plain words, what data the website keeps, why, and how you can ask to see it or delete it. Questions and requests: lucas.blito@gmail.com.
 Reading requires nothing
 You can read, watch and browse the whole website without an account. The website has no ads, uses no analytics tools (such as Google Analytics) and does not sell or share data with anyone.
@@ -24,6 +24,6 @@ Content from other platforms
 Some pages show content from other platforms: YouTube videos and posts from Twitter, Reddit and Instagram. When that content loads, those platforms may use their own cookies and receive data such as your IP address, under their own privacy policies. The same applies to Google, Discord and Twitter when you use one of them to sign in.
 The website is hosted by GitHub Pages, which may log technical access data (such as your IP address) to keep the service running and secure.
 Your rights
-Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. To delete your account, write to lucas.blito@gmail.com from the account’s email address. When an account is deleted, its name, comments and bookmarks are deleted too.
+Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. You can change your name or delete your account yourself at any time: while signed in, click your name above the comment box. You can also write to lucas.blito@gmail.com from the account’s email address. When an account is deleted, its name, bookmarks and comments are deleted too (the text of a comment other people replied to is replaced with “[comment deleted]”, so the conversation still makes sense).
 Changes to this policy
 If this policy changes, the new version will be published on this page, with the update date at the top.

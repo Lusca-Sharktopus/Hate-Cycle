@@ -40,6 +40,11 @@ const LINHAS: Linha[] = [
 ];
 
 /** Um cliente do Supabase de mentira: só o que a caixa usa, respondendo do jeito do supabase-js ({ data, error }). */
+/** As funções do banco chamadas pela janela da conta (rpc), na ordem; e as respostas que o teste quer. */
+const RPCS: { nome: string; args: unknown }[] = [];
+let RESPOSTA_DO_RPC: { data: unknown; error: { message: string } | null } = { data: null, error: null };
+const SAIDAS: unknown[] = [];
+
 function clienteFalso(sessao: { user: { id: string; email: string } } | null, linhas: readonly Linha[] = LINHAS): SupabaseClient {
   const consulta = (tabela: string) => {
     let unico = false;
@@ -67,9 +72,13 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
       return { data: { subscription: { unsubscribe() {} } } };
     },
     getSession: () => Promise.resolve({ data: { session: sessao }, error: null }),
-    signOut: () => Promise.resolve({ error: null }),
+    signOut: (o?: unknown) => (SAIDAS.push(o ?? null), Promise.resolve({ error: null })),
   };
-  return { from: consulta, auth } as unknown as SupabaseClient;
+  const rpc = (nome: string, args?: unknown) => {
+    RPCS.push({ nome, args: args ?? null });
+    return Promise.resolve(RESPOSTA_DO_RPC);
+  };
+  return { from: consulta, auth, rpc } as unknown as SupabaseClient;
 }
 
 const CFG_BRUTA = { url: "https://supabase-falso.test", key: "__CHAVE_FALSA__", lang: "pt", ui: { c_reply: "Responder", c_edit: "Editar", c_delete: "Apagar", c_write: "Escreva", c_hello: "Conectado como" } };
@@ -96,7 +105,7 @@ async function esperar(): Promise<void> {
 }
 
 /** As únicas tags que a caixa cria (mais as da própria <section>). */
-const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "input"]);
+const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "input", "label"]);
 function conferirSoElementosDoCodigo(): void {
   const tags = [...document.body.querySelectorAll("*")].map((e) => e.tagName.toLowerCase());
   expect(tags.filter((t) => !TAGS_DA_CAIXA.has(t)), "elementos que o código não cria (vieram de texto do visitante)").toEqual([]);
@@ -113,6 +122,9 @@ function conferirTextoLiteral(): void {
 }
 
 afterEach(() => {
+  RPCS.length = 0;
+  SAIDAS.length = 0;
+  RESPOSTA_DO_RPC = { data: null, error: null };
   document.body.replaceChildren();
   delete (globalThis as { __xss?: unknown }).__xss;
 });
@@ -144,7 +156,11 @@ describe("a caixa de comentários num DOM simulado, com HTML no comentário, na 
     await esperar();
     const quem = document.querySelector(".c-who span");
     expect(quem?.textContent).toBe(`Conectado como ${NOME_ATAQUE}`);
-    expect([...(quem?.childNodes ?? [])].map((n) => n.nodeType)).toEqual([3]);
+    // 03/11: o nome é um <button class="c-me"> (abre a janela da conta) com o nome só como texto
+    expect([...(quem?.childNodes ?? [])].map((n) => n.nodeType)).toEqual([3, 1]);
+    const botaoDoNome = quem?.querySelector("button.c-me");
+    expect(botaoDoNome?.textContent).toBe(NOME_ATAQUE);
+    expect([...(botaoDoNome?.childNodes ?? [])].map((n) => n.nodeType)).toEqual([3]);
     conferirTextoLiteral();
     // abre o formulário de resposta no comentário do ataque e o de edição no próprio
     const botao = (texto: string) => [...document.querySelectorAll<HTMLButtonElement>(".c-actions button")].find((b) => b.textContent === texto);
@@ -181,5 +197,85 @@ describe("comentário apagado que tem respostas", () => {
     expect(resposta?.querySelector(".c-body")?.textContent).toBe(CORPO_ATAQUE);
     expect([...(resposta?.querySelectorAll(".c-actions button") ?? [])].map((b) => b.textContent)).toEqual(["Editar", "Apagar"]);
     conferirSoElementosDoCodigo();
+  });
+});
+
+describe("a janela da conta (03/11): abre pelo nome, troca o nome, apaga a conta", () => {
+  const EU = { user: { id: "u-eu", email: "<b>eu</b>@exemplo.test" } };
+  async function abrir(): Promise<HTMLElement> {
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso(EU));
+    await esperar();
+    const nome = document.querySelector<HTMLButtonElement>(".c-who button.c-me");
+    nome?.focus(); // num navegador, o clique dá o foco ao botão
+    nome?.click();
+    await esperar();
+    const j = document.querySelector<HTMLElement>(".c-modal.c-conta");
+    expect(j, "a janela abriu").not.toBeNull();
+    return j as HTMLElement;
+  }
+
+  test("clicar no próprio nome abre a janela: escurece (trava a página), nome e e-mail só como texto, foco no campo", async () => {
+    const j = await abrir();
+    expect(j.getAttribute("role")).toBe("dialog");
+    expect(j.getAttribute("aria-modal")).toBe("true");
+    expect(document.documentElement.classList.contains("c-modal-open")).toBe(true);
+    const campo = j.querySelector<HTMLInputElement>("input[name=display_name]");
+    expect(campo?.value).toBe(NOME_ATAQUE);
+    expect(document.activeElement).toBe(campo);
+    expect(j.querySelector(".c-conta-email strong")?.textContent).toBe("<b>eu</b>@exemplo.test");
+    conferirSoElementosDoCodigo();
+  });
+
+  test("Esc fecha, devolve o foco ao nome e destrava a página", async () => {
+    const j = await abrir();
+    j.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(document.querySelector(".c-modal.c-conta")).toBeNull();
+    expect(document.documentElement.classList.contains("c-modal-open")).toBe(false);
+    expect(document.activeElement?.classList.contains("c-me")).toBe(true);
+  });
+
+  test("salvar o nome: confere antes (2 a 30), manda o nome limpo ao banco e mostra o aviso", async () => {
+    const j = await abrir();
+    const campo = j.querySelector<HTMLInputElement>("input[name=display_name]") as HTMLInputElement;
+    const form = j.querySelector<HTMLFormElement>("form.c-conta-nome") as HTMLFormElement;
+    campo.value = " x ";
+    form.dispatchEvent(new Event("submit", { cancelable: true }));
+    await esperar();
+    expect(RPCS).toEqual([]);
+    expect(j.querySelector(".c-msg")?.textContent).toBe("O nome precisa ter de 2 a 30 caracteres.");
+    RESPOSTA_DO_RPC = { data: "Novo Nome", error: null };
+    campo.value = "  Novo    Nome ";
+    form.dispatchEvent(new Event("submit", { cancelable: true }));
+    await esperar();
+    expect(RPCS).toEqual([{ nome: "change_my_name", args: { novo: "Novo Nome" } }]);
+    expect(j.querySelector(".c-msg.ok")?.textContent).toBe("Nome salvo.");
+    expect(campo.value).toBe("Novo Nome");
+  });
+
+  test("erro do banco no nome vira mensagem da janela", async () => {
+    const j = await abrir();
+    RESPOSTA_DO_RPC = { data: null, error: { message: "name length" } };
+    (j.querySelector("input[name=display_name]") as HTMLInputElement).value = "Válido";
+    j.querySelector<HTMLFormElement>("form.c-conta-nome")?.dispatchEvent(new Event("submit", { cancelable: true }));
+    await esperar();
+    expect(j.querySelector(".c-msg")?.textContent).toBe("O nome precisa ter de 2 a 30 caracteres.");
+  });
+
+  test("apagar a conta pede uma segunda confirmação; Cancelar não apaga; confirmar chama delete_my_account, sai e avisa", async () => {
+    const j = await abrir();
+    j.querySelector<HTMLButtonElement>(".c-conta-apagar")?.click();
+    expect(j.querySelector(".c-conta-aviso")?.textContent).toContain("Não dá para desfazer");
+    expect(RPCS).toEqual([]);
+    [...j.querySelectorAll<HTMLButtonElement>(".c-conta-perigo button")].find((b) => b.textContent === "Cancelar")?.click();
+    expect(j.querySelector(".c-conta-aviso")).toBeNull();
+    j.querySelector<HTMLButtonElement>(".c-conta-apagar")?.click();
+    j.querySelector<HTMLButtonElement>(".c-conta-confirmar")?.click();
+    await esperar();
+    expect(RPCS).toEqual([{ nome: "delete_my_account", args: null }]);
+    expect(SAIDAS).toEqual([{ scope: "local" }]);
+    expect(document.querySelector(".c-modal.c-conta")).toBeNull();
+    expect(document.querySelector(".c-who")?.hasAttribute("hidden")).toBe(true);
+    expect(document.querySelector(".hc-comments .c-msg.ok")?.textContent).toBe("Sua conta foi apagada.");
   });
 });

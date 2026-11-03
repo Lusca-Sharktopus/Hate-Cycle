@@ -234,17 +234,17 @@ describe("segurança: o código que vai para o navegador", () => {
       .split("\n")
       .filter((l) => !/^\s*\/\//.test(l)) // comentários podem citar as palavras proibidas
       .join("\n");
-  test("os quatro arquivos existem", () => {
-    expect(arquivos.sort()).toEqual(["caixa.ts", "dom.ts", "index.ts", "regras.ts"]);
+  test("os cinco arquivos existem (conta.ts = a janela da conta, 03/11)", () => {
+    expect(arquivos.sort()).toEqual(["caixa.ts", "conta.ts", "dom.ts", "index.ts", "regras.ts"]);
   });
-  test.each(["caixa.ts", "dom.ts", "index.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
+  test.each(["caixa.ts", "conta.ts", "dom.ts", "index.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
     // (srcdoc não entra aqui: ele aparece de propósito na lista ATRIBUTOS_RECUSADOS de dom.ts, e a trava é testada acima)
     expect(codigo(a)).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
   });
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
       const imports = [...codigo(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa)|\.\.\/supabase\/cliente|@supabase\/supabase-js)$/);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta)|\.\.\/supabase\/cliente|@supabase\/supabase-js)$/);
     }
   });
   test("regras.ts e dom.ts não importam nada; caixa.ts só usa o TIPO do supabase-js; só index.ts carrega o pacote", () => {

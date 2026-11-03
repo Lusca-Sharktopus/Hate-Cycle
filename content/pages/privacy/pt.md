@@ -3,7 +3,7 @@ title: Política de Privacidade
 summary: Que dados o site Hᴀᴛᴇ Cʏᴄʟᴇ guarda, para quê e como pedir para apagá-los.
 ---
 
-*Última atualização: 2 de novembro de 2026.*
+*Última atualização: 3 de novembro de 2026.*
 
 Hᴀᴛᴇ Cʏᴄʟᴇ é um site pessoal de Lusca Sharktopus (Lucas Pereira da Silva). Esta página explica, em linguagem simples, quais dados o site guarda, para quê e como você pode pedir para vê-los ou apagá-los. Dúvidas e pedidos: [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com).
 
@@ -42,7 +42,7 @@ O site é hospedado pelo **GitHub Pages**, que pode registrar dados técnicos de
 
 ## Seus direitos
 
-Pela Lei Geral de Proteção de Dados (LGPD), você pode pedir, a qualquer momento, para ver os dados que o site tem sobre você, corrigi-los ou apagá-los. Para apagar a sua conta, escreva para [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) a partir do e-mail da conta. Ao apagar a conta, apagamos também o seu nome, os seus comentários e os seus marca-páginas.
+Pela Lei Geral de Proteção de Dados (LGPD), você pode pedir, a qualquer momento, para ver os dados que o site tem sobre você, corrigi-los ou apagá-los. Você mesmo pode trocar o seu nome ou apagar a sua conta a qualquer momento: com a conta aberta, clique no seu nome, acima da caixa de comentários. Também pode escrever para [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) a partir do e-mail da conta. Ao apagar a conta, apagamos também o seu nome, os seus marca-páginas e os seus comentários (o texto de um comentário que recebeu respostas de outras pessoas é trocado por “[comentário apagado]”, para a conversa continuar fazendo sentido).
 
 ## Mudanças nesta política
 

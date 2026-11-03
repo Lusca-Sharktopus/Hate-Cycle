@@ -87,11 +87,15 @@ RETRATO = """() => {
     if (!n) return null;
     if (n.nodeType === 3) return n.data;
     if (n.nodeType !== 1) return null;
+    // 03/11 (só no Astro): o nome em "Conectado como <nome>" é um <button class="c-me"> que abre a janela da conta; aqui ele volta a
+    // ser só o texto do nome, como no comments.js (a janela tem o próprio teste: tests/comentarios-dom.test.ts)
+    if (n.classList.contains('c-me')) return n.textContent;
     const a = {}; for (const x of Array.from(n.attributes).sort((p, q) => p.name < q.name ? -1 : 1)) a[x.name] = x.value;
     const o = { t: n.tagName.toLowerCase(), a };
     if (n.hidden) o.hidden = true;
     if (n.tagName === 'TEXTAREA' || n.tagName === 'INPUT') o.v = n.value;
-    o.c = Array.from(n.childNodes).map(ser).filter((x) => x !== null && x !== '');
+    o.c = Array.from(n.childNodes).map(ser).filter((x) => x !== null && x !== '')
+      .reduce((acc, x) => (typeof x === 'string' && typeof acc[acc.length - 1] === 'string' ? (acc[acc.length - 1] += x, acc) : (acc.push(x), acc)), []);
     return o;
   };
   const j = document.querySelectorAll('.c-modal');
@@ -280,6 +284,27 @@ class SupabaseFalso:
                 if alvo and conta and (alvo["user_id"] == quem or conta["admin"]):
                     self.linhas = [l for l in self.linhas if l["id"] != alvo_id and l["parent_id"] != alvo_id]
                 return 204, None
+        # a janela da conta (03/11, só no Astro; migração 20261103040000): trocar o próprio nome, apagar a própria conta
+        if caminho == "/rest/v1/rpc/change_my_name" and req.method == "POST":
+            conta = self.conta_por_id(self.quem_pede(req) or "")
+            if not conta:
+                return 401, {"code": "42501", "message": "permission denied for function change_my_name"}
+            n = re.sub(r"\s+", " ", str((corpo or {}).get("novo", "")).strip())
+            if not 2 <= len(n) <= 30:
+                return 400, {"code": "P0001", "message": "name length"}
+            conta["nome"] = n
+            return 200, n
+        if caminho == "/rest/v1/rpc/delete_my_account" and req.method == "POST":
+            uid = self.quem_pede(req)
+            email = next((e for e, c in self.contas.items() if c["id"] == uid), None)
+            if not email:
+                return 401, {"code": "42501", "message": "permission denied for function delete_my_account"}
+            del self.contas[email]
+            self.linhas = [l for l in self.linhas if l["user_id"] != uid or any(r["parent_id"] == l["id"] and r["user_id"] != uid for r in self.linhas)]
+            for l in self.linhas:
+                if l["user_id"] == uid:
+                    l["user_id"], l["body"], l["deleted_at"] = None, "[apagado]", self.agora()
+            return 204, None
         # marca-página (03/11, só no Astro): quem entrou lê o marca-página do capítulo; aqui ninguém tem nenhum
         if caminho == "/rest/v1/bookmarks" and req.method == "GET":
             return 200, []
