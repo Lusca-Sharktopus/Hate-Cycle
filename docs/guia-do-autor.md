@@ -343,20 +343,10 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 
 ## 10. Notícias
 
-### O nome da seção: "Blog" (desde 27/10, seu pedido; só no site novo)
+### "Notícias" e o Blog (desde 03/11)
 
-No site novo a seção de notícias se chama **Blog**, e as notícias, **posts**. Mudou só o que o visitante lê; os endereços (`/pt/news/…`, `/en/news/…`), as pastas em `content/news/`, os comentários de cada post e o jeito de escrever **não mudaram**. Você continua criando um post do mesmo jeito (`python build.py new news nome-do-post`, pasta em `content/news/`).
-
-| Onde aparece | Português (antes → agora) | Inglês (antes → agora) |
-|---|---|---|
-| Menu, aba do navegador e título da lista | Notícias → **Blog** | News Feed → **Blog** |
-| Caixa de busca da lista | Buscar notícias… → **Buscar no blog…** | Search news… → **Search the blog…** |
-| Busca sem resultado | Nenhuma notícia encontrada. → **Nenhum post encontrado.** | No news found. → **No posts found.** |
-| Botão do meio no fim de cada post | Todas as notícias → **Todos os posts** | All news → **All posts** |
-| Etiqueta do cartão em "Últimas atualizações" (home) | Notícia → **Post do blog** | News → **Blog post** |
-
-- **Onde ficam esses textos:** em `src/lib/textosDoBlog.ts` (uma linha por texto, nas duas línguas), e **não** no `config.json`: o `config.json` é seu e eu não o edito. Ele continua com os textos antigos (`news`, `tag_news`, `all_news`, `news_search_ph`, `news_none` em `ui`), que o site antigo (Python) ainda usa até a virada. No site novo, o `textosDoBlog.ts` passa por cima deles: **mudar essas cinco chaves no `config.json` não muda o site novo**. Para trocar um texto, mude a linha no `textosDoBlog.ts` (ou me peça).
-- O RSS não mudou (o nome do feed é o nome do site, e o "Feed RSS" do rodapé não fala em notícias).
+- De 27/10 a 03/11 a seção de notícias se chamou "Blog" no site novo. **Desde 03/11 (seu pedido) ela voltou a ser "Notícias" / "News Feed"**, com os textos do `config.json → ui` (`news`, `tag_news`, `all_news`, `news_search_ph`, `news_none`), nos dois sites. Os endereços, as pastas e os comentários nunca mudaram.
+- O **Blog** vai ser uma seção separada, para posts sobre personagens, o universo e coisas variadas: no menu entre Notícias e Apoio (Histórias · Sobre · Notícias · Blog · Apoio), começando **vazio** (nenhum post atual muda de lugar), com os posts nas "Últimas atualizações" da página inicial e no feed RSS. O visual da lista vai ser diferente do de Notícias: aguardando o seu modelo. Os comentários dos posts do blog vão usar o ID `blog/<pasta>`, que o banco já aceita (migração de 03/11).
 
 ### Escrever e publicar
 

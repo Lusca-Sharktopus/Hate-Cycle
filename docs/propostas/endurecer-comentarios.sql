@@ -1,3 +1,5 @@
+-- ⚠ SUBSTITUÍDA (03/11/2026) pela migração supabase/migrations/20261103000000_endurecer_comentarios.sql (esta proposta + "[comentário apagado]").
+--   Fica aqui só como histórico; não rode este arquivo.
 -- docs/propostas/: SQL proposto, NUNCA aplicado automaticamente (fica fora de supabase/migrations/ de propósito).
 -- Origem: revisão independente de segurança da T15 (16/10/2026), testada num Postgres local com imitação do Supabase.
 -- Para usar: o autor decide (B25); a proposta vira supabase/migrations/<data>_endurecer_comentarios.sql e passa por nova revisão.

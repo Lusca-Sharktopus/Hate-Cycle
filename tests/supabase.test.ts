@@ -60,3 +60,48 @@ describe("supabase/migrations/", () => {
     expect(readdirSync(join(RAIZ, "supabase")).filter((a) => a !== ".temp" && a !== ".branches")).toEqual(["migrations"]);
   });
 });
+
+// Migração de 03/11/2026 (B25): o banco só aceita comentários em page_id no formato dos IDs de página do site. Uma pasta nova em content/
+// com letra maiúscula, acento, "_" ou capítulo com 1 ou 4 dígitos teria TODOS os comentários daquela página recusados, sem aviso no build:
+// este teste avisa antes. (Achado 3 da revisão de segurança de 03/11.)
+describe("page_id dos comentários × a regra do banco", () => {
+  const sql = readFileSync(join(PASTA, "20261103000000_endurecer_comentarios.sql"), "utf8");
+  const m = /add constraint comments_page_id_formato\s+check \(page_id ~ '([^']+)'\);/.exec(sql);
+  test("a regra está na migração", () => expect(m, "constraint comments_page_id_formato").not.toBeNull());
+  const regra = new RegExp(m?.[1] ?? "$^");
+  const pastas = (dir: string) => readdirSync(join(RAIZ, dir), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
+
+  test("todo capítulo de content/works/ e todo post de content/news/ (e content/blog/, quando existir) cabe na regra", () => {
+    const ids: string[] = [];
+    for (const obra of pastas("content/works")) for (const cap of pastas(`content/works/${obra}`)) ids.push(`works/${obra}/${cap}`);
+    for (const secao of ["news", "blog"]) {
+      try {
+        for (const post of pastas(`content/${secao}`)) ids.push(`${secao}/${post}`);
+      } catch {
+        /* seção ainda não existe */
+      }
+    }
+    expect(ids.length).toBeGreaterThan(50);
+    expect(ids.filter((id) => !regra.test(id)), "IDs que o banco recusaria").toEqual([]);
+  });
+
+  test("os IDs da baseline (os do site de hoje) cabem na regra", () => {
+    const base = JSON.parse(readFileSync(join(RAIZ, "baseline", "comentarios.json"), "utf8")) as unknown;
+    const ids = new Set<string>();
+    const andar = (x: unknown): void => {
+      if (typeof x === "string") {
+        if (/^(works|news|blog)\//.test(x)) ids.add(x);
+      } else if (Array.isArray(x)) x.forEach(andar);
+      else if (x && typeof x === "object") for (const [k, v] of Object.entries(x)) (andar(k), andar(v));
+    };
+    andar(base);
+    expect(ids.size).toBeGreaterThan(50);
+    expect([...ids].filter((id) => !regra.test(id))).toEqual([]);
+  });
+
+  test("a regra recusa o que deve", () => {
+    for (const ruim of ["works/Firestriker/01", "works/firestriker/1", "works/firestriker/0001", "news/orcs", "news/2023-08-18-Orcs", "lixo/2023-08-18-x", "works/obra_x/01", "works/ação/01"])
+      expect(regra.test(ruim), ruim).toBe(false);
+    for (const bom of ["works/firestriker/01", "works/all-in-a-nights-work/001", "news/2023-08-18-orcs", "blog/2026-11-03-primeiro-post"]) expect(regra.test(bom), bom).toBe(true);
+  });
+});

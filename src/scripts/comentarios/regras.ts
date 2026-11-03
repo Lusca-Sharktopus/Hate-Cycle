@@ -31,6 +31,7 @@ export const PADROES_DA_CAIXA: TextosDaCaixa = {
   c_edit: "Edit",
   c_save: "Save",
   c_edited: "edited",
+  c_deleted: "[comment deleted]",
 };
 
 /** T2 = Object.assign({padrões}, T): os textos do window.HC.ui por cima dos padrões. Valor que não é texto vira texto (como o DOM faria). */
@@ -81,6 +82,8 @@ export function enderecoDeVolta(href: string): string {
 /** As colunas pedidas ao banco. Sem edited_at = projeto que ainda não rodou o bloco 5 do SQL (a caixa segue sem "(editado)"). */
 export const COLUNAS = "id, body, created_at, user_id, parent_id, profiles(display_name, is_admin)";
 export const COLUNAS_COM_EDICAO = COLUNAS.replace("created_at,", "created_at, edited_at,");
+/** Com deleted_at (migração 20261103000000, "[comentário apagado]"). Sem a coluna, recua para COLUNAS_COM_EDICAO e depois COLUNAS. */
+export const COLUNAS_COMPLETAS = COLUNAS_COM_EDICAO.replace("parent_id,", "parent_id, deleted_at,");
 
 /** Uma linha de public.comments como o select acima a devolve (o perfil vem embutido). */
 export interface Comentario {
@@ -88,7 +91,9 @@ export interface Comentario {
   body: string;
   created_at: string;
   edited_at?: string | null;
-  user_id: string;
+  /** Apagado tendo respostas: o banco guarda "[apagado]" no texto e tira o dono; a caixa mostra c_deleted e as respostas. */
+  deleted_at?: string | null;
+  user_id: string | null;
   parent_id: number | string | null;
   profiles: { display_name?: string | null; is_admin?: boolean | null } | null;
 }
@@ -107,6 +112,16 @@ export interface Perfil {
 /** O nome da linha "Conectado como …": o do perfil; sem perfil, o e-mail da própria pessoa (só ela vê). */
 export function nomeDeQuemEntrou(quem: QuemEntrou, perfil: Perfil | null): string {
   return (perfil && perfil.display_name) || quem.email || "";
+}
+
+/** A coluna pedida não existe no banco (erro 42703 do Postgres, que o PostgREST repassa): só nesse caso a caixa recua para menos colunas. */
+export function faltaColuna(erro: { code?: string | null; message?: string | null } | null | undefined): boolean {
+  return Boolean(erro) && (erro?.code === "42703" || /column .* does not exist/i.test(erro?.message ?? ""));
+}
+
+/** Comentário apagado que ficou por causa das respostas. */
+export function comentarioApagado(c: Comentario): boolean {
+  return Boolean(c.deleted_at);
 }
 
 /** O nome que aparece em cada comentário ("?" se o perfil não veio). */

@@ -577,8 +577,8 @@ def embed_html(spec):
     return f'<div class="embed-alt"><div class="embed-panels">{panels}</div><div class="embed-switch">{btns}</div></div>'
 
 COMMENT_UI_DEFAULTS = {
-    "en": {"c_google": "Continue with Google", "c_or": "or", "c_close": "Close", "c_login_title": "Log in to comment", "c_edit": "Edit", "c_save": "Save", "c_edited": "edited"},
-    "pt": {"c_google": "Continuar com o Google", "c_or": "ou", "c_close": "Fechar", "c_login_title": "Entre para comentar", "c_edit": "Editar", "c_save": "Salvar", "c_edited": "editado"},
+    "en": {"c_google": "Continue with Google", "c_or": "or", "c_close": "Close", "c_login_title": "Log in to comment", "c_edit": "Edit", "c_save": "Save", "c_edited": "edited", "c_deleted": "[comment deleted]"},
+    "pt": {"c_google": "Continuar com o Google", "c_or": "ou", "c_close": "Fechar", "c_login_title": "Entre para comentar", "c_edit": "Editar", "c_save": "Salvar", "c_edited": "editado", "c_deleted": "[comentário apagado]"},
 }
 
 

@@ -31,10 +31,9 @@ import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
-import { t, tDoConfig, type Lang } from "../src/lib/config";
-import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog";
+import { t } from "../src/lib/config";
 import { pyStrip } from "../src/lib/frontmatter";
-import { rodapeComoNoPython, blogComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -163,10 +162,6 @@ function pythonComoNoAstro(html: string): string {
   // 28/10: o Astro não desenha mais a data sob o título do capítulo (tests/ajudantes/html.ts → semDataDoCapitulo)
   return semDataDoCapitulo(soQuatroHistoriasNaHome(html).html).html;
 }
-/** Os textos do blog como estão no config.json (os que o build.py mostra). */
-function textosDoBlogNoConfig(lang: Lang) {
-  return Object.fromEntries(CHAVES_DO_BLOG.map((k) => [k, tDoConfig(lang, k)])) as Record<(typeof CHAVES_DO_BLOG)[number], string>;
-}
 /** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j); o leitor página a página
  *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
 function astroComoNoPython(html: string): string {
@@ -178,9 +173,7 @@ function astroComoNoPython(html: string): string {
   if (f.recusados !== 0 || j.foraDoLugar !== 0) throw new Error(`T17d: leitor página a página ou janela do jogo com forma inesperada (${f.recusados} leitor(es), ${j.foraDoLugar} janela(s))`);
   // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá (no Python, "Em breve"; tests/obras-em-outro-idioma.test.ts)
   const lang = /<html lang="pt/.test(j.html) ? "pt" : "en";
-  // T17n: "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts); o Python usa os textos do config.json (tests/blog.test.ts)
-  const b = blogComoNoPython(j.html, TEXTOS_DO_BLOG[lang], textosDoBlogNoConfig(lang));
-  const c = cartaoEmOutroIdiomaComoNoPython(b.html, t(lang, "soon"));
+  const c = cartaoEmOutroIdiomaComoNoPython(j.html, t(lang, "soon"));
   return resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html;
 }
 

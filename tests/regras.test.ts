@@ -27,8 +27,7 @@ import { assetUrl } from "../src/lib/assets";
 import { ATUALIZACOES_NA_HOME, itensDoRss, rotuloDaAtualizacao, type Atualizacao } from "../src/lib/atualizacoes";
 import { paginaDaObra, paginasDosCapitulos } from "../src/lib/capitulos";
 import { cortarTitulo, LIMITE_DO_TITULO_NO_PAGER } from "../src/lib/titulos";
-import { langs, tDoConfig, tr, type Lang, type Translatable } from "../src/lib/config";
-import { TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog";
+import { langs, tr, type Lang, type Translatable } from "../src/lib/config";
 import { dataParaRss, datasProximas, formatarData } from "../src/lib/datas";
 import { inicialDoEmissario, mostraTexto, REDES, redesDoEmissario } from "../src/lib/emissarios";
 import { agruparUniverso, obrasEmQueAparece, relacionados } from "../src/lib/extras";
@@ -385,14 +384,12 @@ for (const j of conjuntos) {
         const esperado = c.lista.slice(0, ATUALIZACOES_NA_HOME).map((a) => ({
           url: a.url,
           imagem: a.imagem ? assetUrl(a.imagem) : null,
-          // T17n: o selo da notícia é "Post do blog"/"Blog post" no Astro (src/lib/textosDoBlog.ts); o Python mostra o do config.json
-          rotulo: a.tipo === "tag_news" ? tDoConfig(lang, "tag_news") : rotuloDaAtualizacao(lang, a.tipo),
+          rotulo: rotuloDaAtualizacao(lang, a.tipo),
           data: formatarData(lang, a.data),
           titulo: a.titulo,
           texto: a.texto,
         }));
         igual("atualizacoes() — cartões da home (selo e data)", esperado, py.home_cartoes);
-        expect(rotuloDaAtualizacao(lang, "tag_news")).toBe(TEXTOS_DO_BLOG[lang].tag_news);
         igual(
           "chamadaSobre() — chamada Sobre da home",
           c.sobre,

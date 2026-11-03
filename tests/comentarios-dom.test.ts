@@ -24,8 +24,9 @@ interface Linha {
   body: string;
   created_at: string;
   edited_at: string | null;
-  user_id: string;
+  user_id: string | null;
   parent_id: number | null;
+  deleted_at?: string | null;
 }
 const PERFIS: Record<string, { display_name: string; is_admin: boolean }> = {
   "u-ataque": { display_name: NOME_ATAQUE, is_admin: false },
@@ -39,7 +40,7 @@ const LINHAS: Linha[] = [
 ];
 
 /** Um cliente do Supabase de mentira: só o que a caixa usa, respondendo do jeito do supabase-js ({ data, error }). */
-function clienteFalso(sessao: { user: { id: string; email: string } } | null): SupabaseClient {
+function clienteFalso(sessao: { user: { id: string; email: string } } | null, linhas: readonly Linha[] = LINHAS): SupabaseClient {
   const consulta = (tabela: string) => {
     let unico = false;
     const filtros: Record<string, unknown> = {};
@@ -53,7 +54,7 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null): S
       delete: () => b,
       then: (ok: (r: { data: unknown; error: null }) => unknown, falha?: (e: unknown) => unknown) => {
         let data: unknown = null;
-        if (tabela === "comments") data = LINHAS.map((l) => ({ ...l, profiles: PERFIS[l.user_id] ?? null }));
+        if (tabela === "comments") data = linhas.map((l) => ({ ...l, profiles: (l.user_id && PERFIS[l.user_id]) || null }));
         if (tabela === "profiles" && unico) data = PERFIS[String(filtros["id"])] ?? null;
         return Promise.resolve({ data, error: null }).then(ok, falha);
       },
@@ -71,7 +72,8 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null): S
   return { from: consulta, auth } as unknown as SupabaseClient;
 }
 
-const CFG = lerConfiguracao({ url: "https://supabase-falso.test", key: "__CHAVE_FALSA__", lang: "pt", ui: { c_reply: "Responder", c_edit: "Editar", c_delete: "Apagar", c_write: "Escreva", c_hello: "Conectado como" } }) as ConfiguracaoDosComentarios;
+const CFG_BRUTA = { url: "https://supabase-falso.test", key: "__CHAVE_FALSA__", lang: "pt", ui: { c_reply: "Responder", c_edit: "Editar", c_delete: "Apagar", c_write: "Escreva", c_hello: "Conectado como" } };
+const CFG = lerConfiguracao(CFG_BRUTA) as ConfiguracaoDosComentarios;
 
 /** A <section> como a página Astro a traz (montada com DOM, não com HTML). */
 function montarPagina(): HTMLElement {
@@ -152,6 +154,32 @@ describe("a caixa de comentários num DOM simulado, com HTML no comentário, na 
     expect(document.querySelectorAll(".c-reply-form:not(.c-edit-form)")).toHaveLength(1);
     const edicao = document.querySelector<HTMLTextAreaElement>(".c-edit-form textarea");
     expect(edicao?.value, "o texto a editar é o do banco, literal").toBe(MEU_ATAQUE);
+    conferirSoElementosDoCodigo();
+  });
+});
+
+// Migração de 03/11/2026 (opção b do autor): comentário apagado que tem respostas fica como "[comentário apagado]", sem nome e sem
+// botões; as respostas continuam com nome, texto e botões. O banco guarda "[apagado]" no texto: a caixa nunca o mostra.
+describe("comentário apagado que tem respostas", () => {
+  const APAGADO: Linha[] = [
+    { id: 10, body: "[apagado]", created_at: "2026-10-01T12:00:00+00:00", edited_at: null, user_id: null, parent_id: null, deleted_at: "2026-10-05T10:00:00+00:00" },
+    { id: 11, body: CORPO_ATAQUE, created_at: "2026-10-01T13:00:00+00:00", edited_at: null, user_id: "u-eu", parent_id: 10, deleted_at: null },
+  ];
+  test("mostra c_deleted, a data e a resposta; nenhum botão no apagado", async () => {
+    const raiz = montarPagina();
+    const cfg = lerConfiguracao({ ...CFG_BRUTA, ui: { ...CFG_BRUTA.ui, c_deleted: "[comentário apagado]" } }) as ConfiguracaoDosComentarios;
+    iniciarComentarios(raiz, cfg, clienteFalso({ user: { id: "u-eu", email: "eu@exemplo.test" } }, APAGADO));
+    await esperar();
+    const [apagado, resposta] = [...document.querySelectorAll<HTMLElement>(".c-item")];
+    expect(apagado?.querySelector(":scope > .c-body")?.textContent).toBe("[comentário apagado]");
+    expect(apagado?.querySelector(":scope > .c-body")?.classList.contains("c-deleted")).toBe(true);
+    expect(apagado?.querySelector(":scope > .c-head strong")).toBeNull();
+    expect(apagado?.querySelector(":scope > .c-head time")?.textContent).not.toBe("");
+    expect(apagado?.querySelector(":scope > .c-actions")).toBeNull();
+    expect(document.body.textContent).not.toContain("[apagado]");
+    expect(resposta?.closest(".c-replies")).not.toBeNull();
+    expect(resposta?.querySelector(".c-body")?.textContent).toBe(CORPO_ATAQUE);
+    expect([...(resposta?.querySelectorAll(".c-actions button") ?? [])].map((b) => b.textContent)).toEqual(["Editar", "Apagar"]);
     conferirSoElementosDoCodigo();
   });
 });

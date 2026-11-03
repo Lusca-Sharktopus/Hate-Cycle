@@ -42,7 +42,7 @@
 
   /* ── barra de comentário (fixa) + janela de login (pop-up) ── */
   var bar = null, whoLine = null, barTa = null, modal = null, lastFocus = null;
-  var T2 = Object.assign({ c_google: 'Continue with Google', c_or: 'or', c_close: 'Close', c_login_title: 'Log in to comment', c_edit: 'Edit', c_save: 'Save', c_edited: 'edited' }, T);
+  var T2 = Object.assign({ c_google: 'Continue with Google', c_or: 'or', c_close: 'Close', c_login_title: 'Log in to comment', c_edit: 'Edit', c_save: 'Save', c_edited: 'edited', c_deleted: '[comment deleted]' }, T);
 
   function renderAuth() {
     if (!bar) buildBar();
@@ -201,7 +201,11 @@
     listBox.textContent = T.c_loading;
     var cols = 'id, body, created_at, user_id, parent_id, profiles(display_name, is_admin)';
     function q(c) { return sb.from('comments').select(c).eq('page_id', page).order('created_at', { ascending: true }); }
-    q(cols.replace('created_at,', 'created_at, edited_at,')).then(function (r) {
+    var comEdicao = cols.replace('created_at,', 'created_at, edited_at,');
+    q(comEdicao.replace('parent_id,', 'parent_id, deleted_at,')).then(function (r) {
+      if (r.error && (r.error.code === '42703' || /column .* does not exist/i.test(r.error.message || ''))) return q(comEdicao);   // coluna deleted_at ainda não existe (migração de 03/11 não rodada)
+      return r;
+    }).then(function (r) {
       if (r.error) return q(cols);   // coluna edited_at ainda não existe: segue sem ela
       return r;
     }).then(function (r) {
@@ -239,8 +243,20 @@
   }
 
   function item(c, replies, top) {
-    var author = c.profiles || {};
     var d = new Date(c.created_at);
+    if (c.deleted_at) {   // apagado tendo respostas: só a data, "[comentário apagado]" e as respostas; nenhum botão
+      var gone = el('div', { class: 'c-item' }, [
+        el('div', { class: 'c-head' }, [el('time', { datetime: c.created_at, text: isNaN(d) ? '' : d.toLocaleString(cfg.lang, { dateStyle: 'medium', timeStyle: 'short' }) })]),
+        el('div', { class: 'c-body c-deleted', text: T2.c_deleted })
+      ]);
+      if (replies.length) {
+        var box0 = el('div', { class: 'c-replies' });
+        replies.forEach(function (x) { box0.appendChild(item(x, [], false)); });
+        gone.appendChild(box0);
+      }
+      return gone;
+    }
+    var author = c.profiles || {};
     var head = el('div', { class: 'c-head' }, [
       author.is_admin ? el('span', { class: 'c-badge', text: '✦' }) : null,
       el('strong', { text: author.display_name || '?' }),

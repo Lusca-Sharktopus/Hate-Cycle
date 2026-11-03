@@ -25,6 +25,9 @@ import { el } from "./dom";
 import {
   COLUNAS,
   COLUNAS_COM_EDICAO,
+  COLUNAS_COMPLETAS,
+  comentarioApagado,
+  faltaColuna,
   alturaDoCampo,
   dataDaEdicao,
   dataDoComentario,
@@ -386,7 +389,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   function carregarComentarios(): Promise<void> {
     lista.textContent = t("c_loading");
     const consulta = (colunas: string) => sb.from("comments").select(colunas).eq("page_id", pagina as string).order("created_at", { ascending: true });
-    return Promise.resolve(consulta(COLUNAS_COM_EDICAO))
+    return Promise.resolve(consulta(COLUNAS_COMPLETAS))
+      .then((r) => (faltaColuna(r.error) ? consulta(COLUNAS_COM_EDICAO) : r)) // coluna deleted_at ainda não existe (migração de 03/11 não rodada)
       .then((r) => (r.error ? consulta(COLUNAS) : r)) // coluna edited_at ainda não existe: segue sem ela
       .then((r) => {
         lista.textContent = "";
@@ -447,6 +451,19 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   }
 
   function item(c: Comentario, respostas: readonly Comentario[], raizDaConversa: boolean): HTMLDivElement {
+    if (comentarioApagado(c)) {
+      // apagado tendo respostas: só a data, "[comentário apagado]" e as respostas; nenhum botão
+      const apagado = el("div", { attrs: { class: "c-item" } }, [
+        el("div", { attrs: { class: "c-head" } }, [el("time", { attrs: { datetime: String(c.created_at) }, texto: dataDoComentario(c.created_at, cfg.lang) })]),
+        el("div", { attrs: { class: "c-body c-deleted" }, texto: t("c_deleted") }),
+      ]);
+      if (respostas.length) {
+        const caixaDeRespostas = el("div", { attrs: { class: "c-replies" } });
+        for (const r of respostas) caixaDeRespostas.appendChild(item(r, [], false));
+        apagado.appendChild(caixaDeRespostas);
+      }
+      return apagado;
+    }
     const autor = c.profiles ?? {};
     const cabeca = el("div", { attrs: { class: "c-head" } }, [
       autor.is_admin ? el("span", { attrs: { class: "c-badge" }, texto: "✦" }) : null,

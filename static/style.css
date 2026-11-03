@@ -543,6 +543,7 @@ html.intro-out .intro-screen { opacity: 0; pointer-events: none; }
 .c-dialog .c-tabs { margin-bottom: .7rem; }
 .hc-comments > h2 + .c-app { margin-top: .4rem; }
 .c-edited { font-size: .78rem; color: #aaa; margin-right: .5rem; font-weight: 400; }
+.c-body.c-deleted { font-style: italic; color: var(--muted); }   /* comentário apagado que tem respostas (03/11) */
 .c-edit-form textarea { width: 100%; min-height: 4rem; font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; box-sizing: border-box; }
 .c-reply-form textarea { width: 100%; font: inherit; padding: .5rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; box-sizing: border-box; min-height: 3.5rem; }
 .hc-comments [hidden], .c-who[hidden] { display: none !important; }

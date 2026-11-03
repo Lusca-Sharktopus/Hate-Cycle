@@ -27,9 +27,6 @@
 //         (tests/ajudantes/html.ts → homeComoNoPython, soQuatroHistoriasNaHome, resumoCortadoComoNoPython);
 //   T17m  o cartão da obra que só tem capítulo no OUTRO idioma (Ossos do Ofício em português, na prévia) leva até lá no Astro; o
 //         <a class="button" hreflang> desse cartão volta ao "Em breve" do Python (tests/ajudantes/html.ts → cartaoEmOutroIdiomaComoNoPython);
-//   T17n  "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts, só no Astro): nove lugares exatos (título e og:title da lista,
-//         link do menu, <h1>, busca, "nenhum resultado", rótulo da paginação, botão do meio de cada post, etiqueta dos cartões da home)
-//         voltam ao texto do config.json (tests/ajudantes/html.ts → blogComoNoPython);
 //   T17h  o ícone do YouTube do rodapé leva ao canal do idioma no Astro (@HateCycleEn / @HateCycleBR; o Python tem @HateCycle): troca só o
 //         href dessa <a> (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython), exigindo 1 por página e o canal do idioma da URL;
 //   T17   <link> de fontes (Google no Python; preload no Astro) saem; os ícones (1 no Python, 32+192 px no Astro) viram um só;
@@ -52,9 +49,7 @@ import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
 // só os textos da interface (ui) do config.json do autor: o "Em breve" de cada idioma (T17m)
 const UI = JSON.parse(readFileSync(new URL("../config.json", import.meta.url), "utf8")).ui;
-import { rodapeComoNoPython, blogComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
-// T17n: os textos do blog ("Blog" no lugar de "Notícias"/"News Feed"), que só o Astro usa (o config.json continua com os antigos)
-import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog.ts";
+import { rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
 
 // ───────────── argumentos ─────────────
 const args = process.argv.slice(2);
@@ -208,14 +203,6 @@ function normalizar(html, lado, url, existe) {
     const ca = cartaoEmOutroIdiomaComoNoPython(html, UI[langDoCartao].soon);
     if (ca.trocados) conta("T17m: cartão de obra que leva ao outro idioma (Astro)", url);
     html = ca.html;
-    // T17n: "Blog" no lugar de "Notícias"/"News Feed" (src/lib/textosDoBlog.ts); no Python, os textos do config.json (tests/ajudantes/html.ts → blogComoNoPython)
-    const bl = blogComoNoPython(html, TEXTOS_DO_BLOG[langDoCartao], Object.fromEntries(CHAVES_DO_BLOG.map((k) => [k, UI[langDoCartao][k]])));
-    if (Object.values(bl.trocas).some((n) => n > 0)) conta("T17n: textos do blog (\"Blog\" no lugar de \"Notícias\"/\"News Feed\") (Astro)", url);
-    const daLista = ["titulo", "og:title", "h1", "busca", "nenhum", "paginacao"].filter((f) => bl.trocas[f] > 0);
-    if (daLista.length && !/^\/(en|pt)\/news\/$/.test(url)) falha(url, `texto do blog da lista fora da lista (${daLista.join(", ")})`);
-    if (bl.trocas.todos && !/^\/(en|pt)\/news\/[^/]+\/$/.test(url)) falha(url, "\"Todos os posts\" fora de um post");
-    if (bl.trocas.etiqueta && !/^\/(en|pt)\/$/.test(url)) falha(url, "etiqueta \"Post do blog\" fora da home");
-    html = bl.html;
     // 28/10: o aviso sob o título (`chapter_note`) e a linha fina logo abaixo da logo só existem no Astro; no Python a linha vem depois do
     // título e só no texto (tests/ajudantes/html.ts). Antes da janela do jogo, que o Python desenha logo depois dessa linha.
     const cab = cabecalhoDoCapituloComoNoPython(html);

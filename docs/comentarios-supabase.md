@@ -105,6 +105,23 @@ Nunca rode `supabase db reset --linked` (apaga o banco do projeto ligado) nem `s
 
 O `supabase-setup.sql` fica congelado como está (é o que este guia manda colar num projeto novo, e o site Python ainda é a referência até a virada, T20). Mudanças novas vão em migrações, não nele.
 
+### Migração de 03/11/2026: reforço do banco (B25) e "[comentário apagado]"
+
+Arquivo: `supabase/migrations/20261103000000_endurecer_comentarios.sql`. **Precisa ser rodada no seu projeto antes do lançamento do site novo.**
+
+O que muda para quem visita: quase nada na tela. Comentário apagado que tem respostas passa a aparecer como **"[comentário apagado]"** (sem nome, sem botões), e as respostas das outras pessoas ficam; sem respostas, ele some como antes. Quando a última resposta de um comentário apagado some, ele some junto. O resto fecha brechas de quem mexe no banco direto, sem passar pelo site: data inventada, limite de 10 s burlado, comentário em página que não existe, comentário só de espaços, edições sem limite, permissões que o site nunca usou. Conta apagada: as respostas e os comentários sem resposta dela somem; os que têm respostas de outras pessoas viram "[comentário apagado]".
+
+**Como aplicar (sem o CLI, ~2 minutos):**
+
+1. Supabase → seu projeto → **SQL Editor** → **New query**.
+2. Abra o arquivo `supabase/migrations/20261103000000_endurecer_comentarios.sql`, copie **tudo** e cole.
+3. **Run**. Deve aparecer "Success. No rows returned". Se der erro, não tente de novo: me mande um print.
+4. Pode rodar de novo sem estragar nada (ex.: se não tiver certeza de que rodou).
+
+Com o CLI: `supabase db push` (depois de marcar a inicial como aplicada, passo 4 da seção anterior).
+
+**Como foi provado:** `python3 tools/banco_local.py` sobe um Postgres local com uma imitação do Supabase, aplica todas as migrações (a última duas vezes) e roda 35 casos (cada brecha fechada e tudo o que o site faz continuando a funcionar). A caixa de comentários dos dois sites mostra "[comentário apagado]" (`c_deleted`, texto padrão no `build.py`/`src/lib/comentarios.ts`; dá para trocar pelo `config.json → ui`).
+
 ## 6. O que mudou no site novo (Astro, T15)
 
 Para quem visita, **nada**: mesma caixa, mesmos botões e textos, mesmas conversas (os IDs `works/<obra>/<capítulo>` e `news/<pasta>` não mudaram), e quem já estava conectado continua conectado (a sessão fica guardada no navegador com o mesmo nome).
