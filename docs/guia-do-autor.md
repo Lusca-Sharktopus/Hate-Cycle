@@ -125,6 +125,16 @@ Em `work.json`, `"reading_font": "times"` (usado em *Ossos do Ofício*: Times Ne
 
 Na cena 1 de *Ossos do Ofício*, o texto em Times New Roman muda para **PT Serif na cor #111012** quando Giuseppe adormece ("He closes his eyes"): tudo até "Giuseppe opened his eyes" é um sonho, numa fonte *quase* igual e numa cor *quase* certa. A cena também usa a fonte **Road Rage** e o GIF "NO… …I CAN’T…" (na versão em português, desde 27/10, o seu GIF "NÃO… …EU NÃO POSSO…"). Para transpor uma cena de um PDF com essa fidelidade, mande o PDF e peça "atualize a cena de acordo com o arquivo".
 
+### Recuo no começo de um parágrafo
+
+Para o "espacinho" no começo da primeira linha (como em Ossos do Ofício e, desde 03/11, no começo de Pederneira), ponha `<span class="recuo"></span>` logo antes do texto do parágrafo:
+
+```markdown
+<span class="recuo"></span>“Estamos perdidos!”, exclamou Harry, meu jovem assistente.
+```
+
+O recuo tem 3,5rem, o mesmo de Ossos. Só aparece onde você colocar.
+
 ### Texto em volta de uma imagem
 
 A imagem com `class="jusep"` (Giuseppe) flutua à esquerda e o texto acompanha o contorno do desenho (precisa ser PNG com fundo transparente).

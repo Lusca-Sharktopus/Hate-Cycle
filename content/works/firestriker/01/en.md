@@ -4,7 +4,7 @@ title: Firestriker
 summary: "We're lost!", shouted Harry, my young assistant.
 ---
 
-“We’re lost!”, shouted Harry, my young assistant. Tiredness, frustration and what I can only interpret as a moan caused by muscular pain were all audible in his voice.
+<span class="recuo"></span>“We’re lost!”, shouted Harry, my young assistant. Tiredness, frustration and what I can only interpret as a moan caused by muscular pain were all audible in his voice.
 
 I ignored him and continued trying to navigate through the swampy terrain. Mud only a few centimeters from reaching our knees and the terrible cold of that season did not facilitate our journey, but I was prepared for this.
 
