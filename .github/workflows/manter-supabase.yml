@@ -1,0 +1,45 @@
+# Mantém o banco do Supabase acordado (pedido do autor de 02/11/2026: plano gratuito, sem pagar o plano pro).
+#
+# O plano gratuito do Supabase PAUSA o projeto depois de alguns dias sem nenhum acesso; pausado, o login e os comentários do site param
+# até alguém reativar no painel. Esta tarefa faz uma leitura minúscula (1 comentário, só o número dele) a cada 3 dias, como um
+# visitante qualquer, e isso conta como uso. Não grava nada e não mexe em nada.
+#
+# Precisa de dois "secrets" do repositório (GitHub → Settings → Secrets and variables → Actions → New repository secret):
+#   SUPABASE_URL       = o endereço do projeto (o mesmo de config.json → comments.supabase_url)
+#   SUPABASE_ANON_KEY  = a chave pública (anon) do projeto (a mesma de config.json → comments.supabase_anon_key)
+# Os valores NUNCA vão escritos aqui nem em outro arquivo do repositório.
+#
+# Atenção: o GitHub desliga tarefas agendadas de repositório público depois de 60 dias sem nenhum commit; se isso acontecer, ele avisa por
+# e-mail e basta reativar em Actions → "Manter o banco acordado" → Enable workflow. Para rodar na hora: Actions → esta tarefa → Run workflow.
+name: Manter o banco acordado
+
+on:
+  schedule:
+    - cron: "17 9 */3 * *" # a cada 3 dias, às 09:17 UTC (06:17 em Brasília)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visitar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ler um comentário (só para contar como uso)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Faltam os secrets SUPABASE_URL e/ou SUPABASE_ANON_KEY (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          codigo=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 60 \
+            "${SUPABASE_URL%/}/rest/v1/comments?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          echo "Resposta do Supabase: HTTP $codigo"
+          if [ "$codigo" != "200" ]; then
+            echo "::error::O Supabase respondeu $codigo (o projeto pode já estar pausado: reative no painel do Supabase)."
+            exit 1
+          fi
