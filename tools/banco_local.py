@@ -25,8 +25,9 @@ MIGRACOES = sorted(glob.glob(os.path.join(RAIZ, "supabase", "migrations", "*.sql
 BIN = next((p for p in sorted(glob.glob("/usr/lib/postgresql/*/bin"), reverse=True)), "")
 COMO_POSTGRES = ["runuser", "-u", "postgres", "--"] if os.geteuid() == 0 else []
 
+# papéis (valem para o servidor inteiro; criados uma vez) e o resto da imitação (por banco)
+PAPEIS = "create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;"
 IMITACAO = r"""
-create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;
 create extension if not exists pgcrypto;
 create schema auth;
 create table auth.users (id uuid primary key default gen_random_uuid(), email text, raw_user_meta_data jsonb not null default '{}');
@@ -63,22 +64,47 @@ def main() -> int:
         print(r.stderr, open(os.path.join(pasta, "log")).read())
         return 2
     try:
-        return casos(lambda sql, papel=None, sub=None: psql(run, sock, sql, papel, sub))
+        ok, _, err = psql(run, sock, PAPEIS, None, None)
+        if not ok:
+            print("✗ papéis do Supabase:", err)
+            return 1
+        antigo = banco_antigo(lambda sql, papel=None, sub=None, db="antigo": psql(run, sock, sql, papel, sub, db))
+        return casos(lambda sql, papel=None, sub=None: psql(run, sock, sql, papel, sub)) or antigo
     finally:
         run(f"{BIN}/pg_ctl", "-D", dados, "-m", "immediate", "stop")
         shutil.rmtree(pasta, ignore_errors=True)
 
 
-def psql(run, sock, sql: str, papel: str | None, sub: str | None):
+def psql(run, sock, sql: str, papel: str | None, sub: str | None, db: str = "postgres"):
     """Roda `sql` (como o papel e o usuário do site, se dados) numa transação; devolve (ok, saída, erro)."""
     pre = ""
     if papel:
         pre = f"set local role {papel};\n"
         if sub:
             pre += f"set local request.jwt.claim.sub = '{sub}';\n"
-    r = run(f"{BIN}/psql", "-h", sock, "-p", "55432", "-U", "postgres", "-d", "postgres", "-X", "-q", "-At", "-v", "ON_ERROR_STOP=1",
-            "-c", "begin;\n" + pre + sql.rstrip().rstrip(";") + ";\ncommit;")
+    r = run(f"{BIN}/psql", "-h", sock, "-p", "55432", "-U", "postgres", "-d", db, "-X", "-q", "-At", "-v", "ON_ERROR_STOP=1",
+            "-c", sql if sql.lower().startswith("create database") else "begin;\n" + pre + sql.rstrip().rstrip(";") + ";\ncommit;")
     return r.returncode == 0, r.stdout.strip(), r.stderr.strip()
+
+
+def banco_antigo(q) -> int:
+    """Projeto criado com um setup ANTIGO, sem o bloco 5 (editar comentários) — como o do autor (03/11/2026: "trigger comments_edit_check
+    does not exist"). A migração nova tem de rodar nele e deixar tudo como num projeto completo."""
+    q("create database antigo", db="postgres")
+    inicial = open(MIGRACOES[0], encoding="utf8").read()
+    sem_bloco5 = inicial[: inicial.index("-- 5) EDITAR COMENTÁRIOS")]
+    passos = [("imitação do Supabase", IMITACAO), ("setup antigo (sem o bloco 5)", sem_bloco5)] + [(os.path.basename(m), open(m, encoding="utf8").read()) for m in MIGRACOES[1:]]
+    for nome, sql in passos:
+        ok, _, err = q(sql)
+        if not ok:
+            print(f"✗ banco antigo: {nome} ({err})")
+            return 1
+    ok, saida, err = q("select (select count(*) from pg_trigger where tgname in ('comments_check','comments_edit_check','comments_soft_delete','comments_cleanup') and not tgisinternal)"
+                       " || '|' || (select count(*) from pg_policies where policyname = 'editar o proprio comentario')"
+                       " || '|' || (select count(*) from information_schema.columns where table_name = 'comments' and column_name in ('edited_at','deleted_at'))")
+    certo = ok and saida == "4|1|2"
+    print(("✔ " if certo else "✗ ") + "banco antigo (sem o bloco 5): a migração roda e cria gatilhos, policy de edição e colunas" + ("" if certo else f" (veio {saida or err!r})"))
+    return 0 if certo else 1
 
 
 def casos(q) -> int:

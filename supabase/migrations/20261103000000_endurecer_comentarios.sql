@@ -54,6 +54,11 @@ begin
   return new;
 end $$;
 
+-- o gatilho de criação (bloco 3 do setup), recriado para valer em qualquer projeto
+drop trigger if exists comments_check on public.comments;
+create trigger comments_check before insert on public.comments
+  for each row execute function public.check_new_comment();
+
 -- ───── 3) edição: só o texto muda; uma edição a cada 10 s; marcar como apagado; conta apagada ─────
 create or replace function public.check_edit_comment() returns trigger
 language plpgsql set search_path = '' as $$
@@ -85,6 +90,15 @@ begin
   end if;
   return new;
 end $$;
+
+-- o bloco 5 do setup (editar comentários): policy de update do próprio e gatilho de edição. Projetos criados com um setup antigo
+-- (como o do autor, conferido em 03/11/2026: "trigger comments_edit_check does not exist") não o têm; aqui ele passa a existir sempre.
+drop policy if exists "editar o proprio comentario" on public.comments;
+create policy "editar o proprio comentario" on public.comments for update to authenticated
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop trigger if exists comments_edit_check on public.comments;
+create trigger comments_edit_check before update on public.comments
+  for each row execute function public.check_edit_comment();
 
 -- ───── 4) apagar: com respostas, vira "[comentário apagado]"; sem, some de vez ─────
 -- Roda com os privilégios do dono das tabelas (security definer) só para fazer a troca; QUEM pode apagar continua sendo decidido
@@ -134,8 +148,34 @@ create trigger profiles_before_delete before delete on public.profiles
   for each row execute function public.before_delete_profile();
 
 -- ───── 5) perfil novo: search_path vazio (recomendação do Supabase para security definer) ─────
--- (a função já escreve em public.profiles com o esquema por extenso, e trim/coalesce/left/substr moram no pg_catalog, sempre visível)
-alter function public.handle_new_user() set search_path = '';
+-- recriada inteira (igual à do setup, só com search_path vazio), com o gatilho, para valer também em projeto criado com setup antigo
+create or replace function public.handle_new_user() returns trigger
+language plpgsql security definer set search_path = '' as $$
+declare n text;
+begin
+  n := trim(coalesce(new.raw_user_meta_data->>'display_name', new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', ''));
+  if char_length(n) > 30 then n := left(n, 30); end if;
+  if char_length(n) < 2 then n := 'user-' || substr(new.id::text, 1, 6); end if;
+  insert into public.profiles (id, display_name) values (new.id, n);
+  return new;
+end $$;
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- as regras de acesso (blocos 1 e 2 do setup), recriadas iguais, pelo mesmo motivo
+alter table public.profiles enable row level security;
+alter table public.comments enable row level security;
+drop policy if exists "perfis sao publicos" on public.profiles;
+create policy "perfis sao publicos" on public.profiles for select using (true);
+drop policy if exists "comentarios sao publicos" on public.comments;
+create policy "comentarios sao publicos" on public.comments for select using (true);
+drop policy if exists "quem tem conta pode comentar" on public.comments;
+create policy "quem tem conta pode comentar" on public.comments for insert to authenticated
+  with check (auth.uid() = user_id);
+drop policy if exists "apagar o proprio ou ser admin" on public.comments;
+create policy "apagar o proprio ou ser admin" on public.comments for delete to authenticated
+  using (auth.uid() = user_id or exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin));
 
 -- ───── 6) corpo e page_id ─────
 -- page_id: os IDs de página do site — works/<obra>/<NN>, news/<pasta> e (desde 03/11, seção nova) blog/<pasta>. tests/supabase.test.ts confere
