@@ -1,0 +1,49 @@
+---
+title: Privacy Policy
+summary: What data the Hᴀᴛᴇ Cʏᴄʟᴇ website keeps, why, and how to ask for it to be deleted.
+---
+
+*Last updated: November 2, 2026.*
+
+Hᴀᴛᴇ Cʏᴄʟᴇ is the personal website of Lusca Sharktopus (Lucas Pereira da Silva). This page explains, in plain words, what data the website keeps, why, and how you can ask to see it or delete it. Questions and requests: [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com).
+
+## Reading requires nothing
+
+You can read, watch and browse the whole website without an account. The website has no ads, uses no analytics tools (such as Google Analytics) and does not sell or share data with anyone.
+
+## If you create an account
+
+An account lets you comment and, once the feature is available, keep your bookmarks. With it, the website keeps:
+
+- **your email address**, so you can sign in and recover your password. It never appears on the website;
+- **the name you choose** to show on your comments;
+- **if you sign in with Google, Discord or Twitter:** your account identifier on that platform and the public information it shares (name and picture). Your password for those platforms never reaches the website;
+- **your comments**, which are public, with your name, on the page where you wrote them;
+- **your bookmarks:** where you stopped in each chapter.
+
+This data is stored on **Supabase**, the service that hosts the website’s accounts and database.
+
+## What is kept in your browser
+
+The website sets no cookies of its own. It keeps only these in your browser:
+
+- your session, so you stay signed in;
+- your preferences: language, reading order and the sorting of the Stories page;
+- bookmarks, if you use them without signing in (once you sign in, your account takes priority);
+- a mark so the opening animation plays only once per visit.
+
+None of this is sent outside the website. You can delete it at any time by clearing this website’s data in your browser.
+
+## Content from other platforms
+
+Some pages show content from other platforms: **YouTube** videos and posts from **Twitter**, **Reddit** and **Instagram**. When that content loads, those platforms may use their own cookies and receive data such as your IP address, under their own privacy policies. The same applies to **Google**, **Discord** and **Twitter** when you use one of them to sign in.
+
+The website is hosted by **GitHub Pages**, which may log technical access data (such as your IP address) to keep the service running and secure.
+
+## Your rights
+
+Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. To delete your account, write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, comments and bookmarks are deleted too.
+
+## Changes to this policy
+
+If this policy changes, the new version will be published on this page, with the update date at the top.

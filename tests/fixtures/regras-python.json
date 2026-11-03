@@ -6547,6 +6547,8 @@
     "news/2026-12-25-feliz-natal-di-vario/pt.md": "Arte Oficial: Os di Vario desejam um…",
     "pages/about/en.md": "About the author",
     "pages/about/pt.md": "Sobre o autor",
+    "pages/privacy/en.md": "Privacy Policy",
+    "pages/privacy/pt.md": "Política de Privacidade",
     "pages/project/en.md": "About the project",
     "pages/project/pt.md": "Sobre o projeto",
     "pages/support/en.md": "Support",
@@ -6750,6 +6752,8 @@
    "news/2026-12-25-feliz-natal-di-vario/pt.md": "E é no clima natalino que eu venho trazer essa pequena ilustração da família di Vario, com direito a speedpaint e tudo! espero…",
    "pages/about/en.md": "About the author Affur Akmosh! I'm Lusca Sharktopus, author of the stories you’ll read, watch, listen to and play on this…",
    "pages/about/pt.md": "Sobre o autor Affur Akmosh! Eu sou Lusca Sharktopus, autor das histórias que você vai ler, assistir, ouvir e jogar nesse site!…",
+   "pages/privacy/en.md": "Last updated: November 2, 2026. Hᴀᴛᴇ Cʏᴄʟᴇ is the personal website of Lusca Sharktopus (Lucas Pereira da Silva). This page…",
+   "pages/privacy/pt.md": "Última atualização: 2 de novembro de 2026. Hᴀᴛᴇ Cʏᴄʟᴇ é um site pessoal de Lusca Sharktopus (Lucas Pereira da Silva). Esta página…",
    "pages/project/en.md": "About the project The world of Hᴀᴛᴇ Cʏᴄʟᴇ is one of inherent magic and wonder, even if hidden underneath many layers of fear…",
    "pages/project/pt.md": "Sobre o projeto O mundo de Hᴀᴛᴇ Cʏᴄʟᴇ é um de magia e maravilhas inerentes, ainda que escondidas sob muitas camadas de medo…",
    "pages/support/en.md": "You can help this universe grow by supporting us monthly on Patreon!! With only five dollars a month you help the world of Hᴀᴛᴇ…",
@@ -7501,6 +7505,14 @@
    "pages/about/pt.md": {
     "sha1": "effb923796d6b4639fe138c9bb84070d0a5cd75f",
     "tamanho": 1056
+   },
+   "pages/privacy/en.md": {
+    "sha1": "1a860e5275aaafe59e26a7a6c0d132fada458cf6",
+    "tamanho": 2680
+   },
+   "pages/privacy/pt.md": {
+    "sha1": "edd22eaca59df8d1b041e56a4727d839df7dae3f",
+    "tamanho": 2803
    },
    "pages/project/en.md": {
     "sha1": "7b01b74bdba3f49b92a4e8ec7f1cab56c3c0e765",
@@ -13746,6 +13758,18 @@
       "pt": "/pt/about/"
      }
     },
+    "/en/privacy/": {
+     "lang": "en",
+     "titulo": "Privacy Policy",
+     "cls": "",
+     "desc": "What data the Hᴀᴛᴇ Cʏᴄʟᴇ website keeps, why, and how to ask for it to be deleted.",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/privacy/",
+      "pt": "/pt/privacy/"
+     }
+    },
     "/en/support/": {
      "lang": "en",
      "titulo": "Support",
@@ -17709,6 +17733,18 @@
      "alt": {
       "en": "/en/about/",
       "pt": "/pt/about/"
+     }
+    },
+    "/pt/privacy/": {
+     "lang": "pt",
+     "titulo": "Política de Privacidade",
+     "cls": "",
+     "desc": "Que dados o site Hᴀᴛᴇ Cʏᴄʟᴇ guarda, para quê e como pedir para apagá-los.",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/privacy/",
+      "pt": "/pt/privacy/"
      }
     },
     "/pt/support/": {
@@ -24625,6 +24661,18 @@
       "pt": "/pt/about/"
      }
     },
+    "/en/privacy/": {
+     "lang": "en",
+     "titulo": "Privacy Policy",
+     "cls": "",
+     "desc": "What data the Hᴀᴛᴇ Cʏᴄʟᴇ website keeps, why, and how to ask for it to be deleted.",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/privacy/",
+      "pt": "/pt/privacy/"
+     }
+    },
     "/en/support/": {
      "lang": "en",
      "titulo": "Support",
@@ -28793,6 +28841,18 @@
      "alt": {
       "en": "/en/about/",
       "pt": "/pt/about/"
+     }
+    },
+    "/pt/privacy/": {
+     "lang": "pt",
+     "titulo": "Política de Privacidade",
+     "cls": "",
+     "desc": "Que dados o site Hᴀᴛᴇ Cʏᴄʟᴇ guarda, para quê e como pedir para apagá-los.",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/privacy/",
+      "pt": "/pt/privacy/"
      }
     },
     "/pt/support/": {

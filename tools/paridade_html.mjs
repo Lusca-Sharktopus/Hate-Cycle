@@ -52,7 +52,7 @@ import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
 // só os textos da interface (ui) do config.json do autor: o "Em breve" de cada idioma (T17m)
 const UI = JSON.parse(readFileSync(new URL("../config.json", import.meta.url), "utf8")).ui;
-import { blogComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
+import { rodapeComoNoPython, blogComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
 // T17n: os textos do blog ("Blog" no lugar de "Notícias"/"News Feed"), que só o Astro usa (o config.json continua com os antigos)
 import { CHAVES_DO_BLOG, TEXTOS_DO_BLOG } from "../src/lib/textosDoBlog.ts";
 
@@ -245,6 +245,13 @@ function normalizar(html, lado, url, existe) {
     if (y.errados) falha(url, "o ícone do YouTube do rodapé leva ao canal do OUTRO idioma");
     if (lang && y.trocados !== 1) falha(url, `o rodapé devia ter 1 ícone do YouTube com o canal do idioma (tem ${y.trocados})`);
     html = y.html;
+    // 02/11: a linha nova do rodapé e a janela da Política de Privacidade (tests/ajudantes/html.ts → rodapeComoNoPython); o script da
+    // janela (só no Astro, sem par no Python) sai junto
+    const lr = lang ?? (/<html lang="pt/.test(html) ? "pt" : "en");
+    const ro = rodapeComoNoPython(html, lr, UI[lr].rss);
+    if (ro.linhas) conta("02/11: linha nova do rodapé + janela da Política de Privacidade (Astro)", url);
+    if (ro.linhas !== 1 || ro.janelas !== 1) falha(url, `o rodapé devia ter 1 linha nova e 1 janela da política (linhas ${ro.linhas}, janelas ${ro.janelas})`);
+    html = ro.html.replace(/<script type="module">(?:(?!<\/script>)[\s\S])*?dialog\.politica[\s\S]*?<\/script>/g, "");
   }
   html = comMarcadores(html);
   const doc = parse(html);

@@ -89,6 +89,7 @@
     "/en/news/2026-07-14-ruach-hakodesh/",
     "/en/news/2026-08-18-novo-episodio-luz-e-sangue/",
     "/en/news/2026-08-19-more-amphibious-doodles/",
+    "/en/privacy/",
     "/en/support/",
     "/en/works/",
     "/en/works/firestriker/01/",
@@ -186,6 +187,7 @@
     "/pt/news/2026-07-14-ruach-hakodesh/",
     "/pt/news/2026-08-18-novo-episodio-luz-e-sangue/",
     "/pt/news/2026-08-19-more-amphibious-doodles/",
+    "/pt/privacy/",
     "/pt/support/",
     "/pt/works/",
     "/pt/works/firestriker/01/",
@@ -213,5 +215,5 @@
     "/ossos.html": "/pt/",
     "/pederneira.html": "/pt/works/firestriker/01/"
   },
-  "total_html": 191
+  "total_html": 193
 }

@@ -1822,6 +1822,27 @@
     },
     "title": "Official Artwork: More Amphibious Doodles | Hᴀᴛᴇ Cʏᴄʟᴇ"
   },
+  "/en/privacy/": {
+    "alternates": [
+      {
+        "href": "/en/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "What data the Hᴀᴛᴇ Cʏᴄʟᴇ website keeps, why, and how to ask for it to be deleted.",
+    "hreflang": {
+      "en": "/en/privacy/",
+      "pt": "/pt/privacy/"
+    },
+    "lang": "en",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "What data the Hᴀᴛᴇ Cʏᴄʟᴇ website keeps, why, and how to ask for it to be deleted.",
+      "og:title": "Privacy Policy | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Privacy Policy | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
   "/en/support/": {
     "alternates": [
       {
@@ -3796,6 +3817,27 @@
       "og:title": "Arte Oficial: Mais Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
     },
     "title": "Arte Oficial: Mais Rabiscos do Anfíbio | Hᴀᴛᴇ Cʏᴄʟᴇ"
+  },
+  "/pt/privacy/": {
+    "alternates": [
+      {
+        "href": "/pt/feed.xml",
+        "type": "application/rss+xml"
+      }
+    ],
+    "canonical": "",
+    "description": "Que dados o site Hᴀᴛᴇ Cʏᴄʟᴇ guarda, para quê e como pedir para apagá-los.",
+    "hreflang": {
+      "en": "/en/privacy/",
+      "pt": "/pt/privacy/"
+    },
+    "lang": "pt-BR",
+    "meta_refresh": "",
+    "og": {
+      "og:description": "Que dados o site Hᴀᴛᴇ Cʏᴄʟᴇ guarda, para quê e como pedir para apagá-los.",
+      "og:title": "Política de Privacidade | Hᴀᴛᴇ Cʏᴄʟᴇ"
+    },
+    "title": "Política de Privacidade | Hᴀᴛᴇ Cʏᴄʟᴇ"
   },
   "/pt/support/": {
     "alternates": [

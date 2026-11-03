@@ -413,10 +413,18 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 
 ### Redes sociais do rodapé e os canais do YouTube (desde 21/10)
 
-- O rodapé de todas as páginas mostra o ícone de cada rede (Instagram, YouTube, TikTok, X). Os endereços vêm do `config.json → socials`.
+- O rodapé de todas as páginas mostra o ícone de cada rede (Instagram, YouTube, TikTok, Twitter). Os endereços vêm do `config.json → socials`.
 - **O ícone do YouTube leva ao canal do idioma da página** (só no site novo, Astro): páginas em inglês → `https://www.youtube.com/@HateCycleEn`; páginas em português → `https://www.youtube.com/@HateCycleBR`. Esses dois endereços moram em **um lugar só**: `src/lib/canais.ts` (`CANAIS_DO_YOUTUBE`, uma linha por idioma). Para trocar um canal, troque a linha do idioma ali (ou me peça); o `config.json` não precisa mudar, e o endereço antigo dele (`@HateCycle`) deixa de aparecer no site novo.
 - Outro lugar do site que precise levar ao canal do Hᴀᴛᴇ Cʏᴄʟᴇ deve usar o mesmo mapa (`canalDoYoutube(lang)`), para as duas línguas ficarem sempre certas.
 - **Página Apoio (português):** o link "Inscreva-se no canal no YouTube" leva ao **seu canal pessoal**, `https://www.youtube.com/@LuscaSharktopus` (escrito direto em `content/pages/support/pt.md`; vale nos dois geradores). A página Apoio em inglês não tem link de YouTube.
+
+### A linha do rodapé e a Política de Privacidade (desde 02/11)
+
+- Abaixo dos ícones, a linha é: **"© 2023 - 2026 por Lusca Sharktopus • Política de Privacidade • Email de contato: lucas.blito@gmail.com"** (em inglês: "by", "Privacy Policy", "Contact email"). Os dois links são sublinhados. O ano final é o do dia em que o site é gerado. Os textos moram em `src/lib/textosDoRodape.ts` (inclusive o e-mail); para trocar, mude ali ou me peça.
+- **Política de Privacidade** é uma página como Sobre e Apoio: `content/pages/privacy/pt.md` e `en.md`. Para mudar o texto, edite esses arquivos (e a data de "Última atualização" no topo). O endereço é `hatecycle.com/pt/privacy/` (e `/en/privacy/`), o link que vai no campo da Política de Privacidade do Google.
+- No rodapé, clicar em "Política de Privacidade" abre o mesmo texto numa janela, com o resto da tela escurecido (fecha no ×, com Esc ou clicando fora). Quem abre o endereço direto vê a página normal.
+- O link do feed RSS saiu da linha do rodapé (pedido seu); leitores de RSS continuam achando o feed sozinhos, pelo endereço `/pt/feed.xml` e `/en/feed.xml`.
+- No site que está no ar hoje (o HTML da `main`), a linha e a política foram colocadas à mão em cada página, com uma frase a mais sobre o Disqus (que só existe lá).
 
 ## 14. Aparência: cores, fontes e seus ajustes
 

@@ -632,3 +632,47 @@ export function semDataDoCapitulo(html: string): SemDataDoCapitulo {
   let tiradas = 0;
   return { html: html.replace(RE_DATA_DO_CAPITULO, (_m, h1: string) => (tiradas++, h1)), tiradas };
 }
+
+// ───────────── 02/11: a linha nova do rodapé e a janela da Política de Privacidade (só no Astro) ─────────────
+//
+// Pedido do autor (02/11/2026): o rodapé passa a ser "© 2023 - ano por Lusca Sharktopus • Política de Privacidade • Email de contato:
+// lucas.blito@gmail.com", com a política abrindo numa janela (<dialog class="politica">) — src/components/Footer.astro e
+// src/lib/textosDoRodape.ts. O build.py, congelado, continua com "© 2023 - ano by Lusca Sharktopus <a href="/<lang>/feed.xml">…</a>".
+// Para comparar o resto do rodapé, troca-se no HTML do ASTRO, e só nele:
+//   - o <p class="rodape-linha"> inteiro pela linha do Python (com o rótulo do feed `rotuloDoFeed`, o de config.json → ui.rss);
+//   - a <dialog class="politica"> (que fica dentro do <footer>) sai.
+// Só vale se a linha tiver exatamente a forma esperada (o mesmo ano antes e depois, o e-mail de contato e, se houver janela, o link
+// /<lang>/privacy/); senão nada é trocado e a comparação falha. Quem chama confere que saiu exatamente 1 linha por página.
+
+export interface RodapeComoNoPython {
+  html: string;
+  /** Quantas linhas novas foram trocadas (esperado: 1 por página). */
+  linhas: number;
+  /** Quantas janelas da política saíram (0 ou 1). */
+  janelas: number;
+}
+
+const CID = '(?: data-astro-cid-[a-z0-9]+)?';
+export function rodapeComoNoPython(html: string, lang: "en" | "pt", rotuloDoFeed: string, autor = "Lusca Sharktopus"): RodapeComoNoPython {
+  let linhas = 0;
+  let janelas = 0;
+  const por = lang === "pt" ? "por" : "by";
+  const politica = lang === "pt" ? "Política de Privacidade" : "Privacy Policy";
+  const email = lang === "pt" ? "Email de contato" : "Contact email";
+  const sep = `<span class="sep" aria-hidden="true"${CID}>•</span>`;
+  const linha = new RegExp(
+    `<p class="rodape-linha"${CID}>&copy; 2023 - (\\d{4}) ${por} ${autor}` +
+      `(?: ${sep} <a href="/${lang}/privacy/" data-politica${CID}>${politica}</a>)? ${sep} ` +
+      `<span class="contato"${CID}>${email}: <a href="mailto:lucas\\.blito@gmail\\.com"${CID}>lucas\\.blito@gmail\\.com</a></span></p>`,
+    "g",
+  );
+  let saida = html.replace(linha, (_todo, ano: string) => {
+    linhas += 1;
+    return `<p>&copy; 2023 - ${ano} by ${autor} <a href="/${lang}/feed.xml">${rotuloDoFeed}</a></p>`;
+  });
+  saida = saida.replace(new RegExp(`\\s*<dialog class="politica" aria-labelledby="politica-titulo"${CID}>[\\s\\S]*?</dialog>`, "g"), () => {
+    janelas += 1;
+    return "";
+  });
+  return { html: saida, linhas, janelas };
+}
