@@ -26,8 +26,44 @@
   <div class="social">
     <a href="https://www.instagram.com/hate.cycle/" target="_blank" rel="noopener" title="Instagram"><img src="social/instagram.png" alt="Instagram"></a><a href="https://www.youtube.com/@HateCycleBR" target="_blank" rel="noopener" title="YouTube"><img src="social/youtube.png" alt="YouTube"></a><a href="https://www.tiktok.com/@hate.cycle" target="_blank" rel="noopener" title="TikTok"><img src="social/tiktok.png" alt="TikTok"></a><a href="https://x.com/hate_cycle" target="_blank" rel="noopener" title="X (Twitter)"><img src="social/twitter.png" alt="X (Twitter)"></a>
   </div>
-  <p>&copy; 2023 - 2026 by Lusca Sharktopus</p>
+  <p class="rodape-linha">&copy; 2023 - 2026 por Lusca Sharktopus <span class="sep" aria-hidden="true">•</span> <a href="pt/privacy/" data-politica>Política de Privacidade</a> <span class="sep" aria-hidden="true">•</span> <span class="contato">Email de contato: <a href="mailto:lucas.blito@gmail.com">lucas.blito@gmail.com</a></span></p>
+  <dialog class="politica" aria-labelledby="politica-titulo"><div class="politica-topo"><h2 id="politica-titulo">Política de Privacidade</h2><button type="button" class="politica-fechar" aria-label="Fechar" title="Fechar">×</button></div><div class="politica-texto prose"><p><em>Última atualização: 2 de novembro de 2026.</em></p>
+<p><span class="hc">Hate Cycle</span> é um site pessoal de Lusca Sharktopus (Lucas Pereira da Silva). Esta página explica, em linguagem simples, quais dados o site guarda, para quê e como você pode pedir para vê-los ou apagá-los. Dúvidas e pedidos: <a href="mailto:lucas.blito@gmail.com">lucas.blito@gmail.com</a>.</p>
+<h2>Para ler, nada é pedido</h2>
+<p>Você pode ler, assistir e navegar por todo o site sem criar conta. O site não tem anúncios, não usa ferramentas de estatística (como o Google Analytics) e não vende nem repassa dados a ninguém.</p>
+<h2>Se você criar uma conta</h2>
+<p>A conta serve para comentar e, quando o recurso estiver disponível, para guardar seus marca-páginas. Com ela, o site guarda:</p>
+<ul><li><strong>seu e-mail</strong>, para você entrar e recuperar a senha. Ele nunca aparece no site;</li><li><strong>o nome que você escolher</strong> para aparecer nos comentários;</li><li><strong>se você entrar pelo Google, Discord ou X:</strong> o identificador da sua conta nessa plataforma e as informações públicas que ela compartilha (nome e foto). A sua senha dessas plataformas nunca chega ao site;</li><li><strong>seus comentários</strong>, que ficam públicos, com o seu nome, na página em que foram escritos;</li><li><strong>seus marca-páginas:</strong> em que parte de cada capítulo você parou.</li></ul>
+<p>Esses dados ficam no <strong>Supabase</strong>, o serviço que hospeda as contas e o banco de dados do site.</p>
+<h2>O que fica guardado no seu navegador</h2>
+<p>O site não cria cookies próprios. Ele guarda no seu navegador apenas:</p>
+<ul><li>a sua sessão, para você continuar logado;</li><li>as suas preferências: idioma, ordem de leitura e ordenação da página Histórias;</li><li>marca-páginas, se você usá-los sem estar logado (quando você entra na conta, a conta tem prioridade);</li><li>uma marca para a animação de abertura aparecer só uma vez por visita.</li></ul>
+<p>Nada disso é enviado para fora do site. Você pode apagar esses dados a qualquer momento limpando os dados do site no seu navegador.</p>
+<h2>Conteúdo de outras plataformas</h2>
+<p>Algumas páginas mostram conteúdo de outras plataformas: vídeos do <strong>YouTube</strong> e posts do <strong>X</strong>, <strong>Reddit</strong> e <strong>Instagram</strong>. Ao carregar esse conteúdo, essas plataformas podem usar os próprios cookies e receber dados como o seu endereço IP, de acordo com as políticas de privacidade delas. O mesmo vale para o <strong>Google</strong>, o <strong>Discord</strong> e o <strong>X</strong> quando você usa um deles para entrar.</p>
+<p>Os comentários de algumas histórias usam o <strong>Disqus</strong>, que tem contas e regras de privacidade próprias.</p>
+<p>O site é hospedado pelo <strong>GitHub Pages</strong>, que pode registrar dados técnicos de acesso (como o endereço IP) para manter o serviço funcionando e seguro.</p>
+<h2>Seus direitos</h2>
+<p>Pela Lei Geral de Proteção de Dados (LGPD), você pode pedir, a qualquer momento, para ver os dados que o site tem sobre você, corrigi-los ou apagá-los. Para apagar a sua conta, escreva para <a href="mailto:lucas.blito@gmail.com">lucas.blito@gmail.com</a> a partir do e-mail da conta. Ao apagar a conta, apagamos também o seu nome, os seus comentários e os seus marca-páginas.</p>
+<h2>Mudanças nesta política</h2>
+<p>Se esta política mudar, a nova versão será publicada nesta página, com a data de atualização no topo.</p></div></dialog>
 </footer>
+  <script>
+    (function () {
+      var janela = document.querySelector("dialog.politica"), link = document.querySelector("a[data-politica]");
+      if (!janela || !link || typeof janela.showModal !== "function") return;
+      link.addEventListener("click", function (e) {
+        if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+        e.preventDefault(); janela.showModal(); janela.scrollTop = 0;
+      });
+      janela.querySelector(".politica-fechar").addEventListener("click", function () { janela.close(); });
+      janela.addEventListener("click", function (e) {
+        if (e.target !== janela) return;
+        var r = janela.getBoundingClientRect();
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) janela.close();
+      });
+    })();
+  </script>
 </body>
 
 </html>

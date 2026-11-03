@@ -295,3 +295,36 @@ a.side-btn:hover { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); col
 
 /* o texto dos botões dos cartões cabe numa linha só (ex.: "Assista no YouTube" no celular) */
 .work-card .button { white-space: nowrap; padding-left: .9rem; padding-right: .9rem; }
+
+/* ── rodapé (02/11): "© 2023 - 2026 por Lusca Sharktopus • Política de Privacidade • Email de contato: …" e a janela da política ── */
+.rodape-linha a { text-decoration: underline; text-underline-offset: .15em; }
+.rodape-linha a:hover { text-shadow: 0 0 12px var(--cyan); }
+.rodape-linha .sep { margin: 0 .2em; }
+.rodape-linha .contato { white-space: nowrap; }
+.politica {
+  width: min(760px, calc(100% - 2rem)); max-height: min(85vh, 85dvh); padding: 0; border: 0; border-radius: var(--sheet-radius);
+  background: var(--paper), var(--sheet); background-color: var(--sheet); color: #14101c; box-shadow: 0 12px 34px #00000059;
+  text-align: left; font-size: 1rem; font-weight: 400; overflow: auto; overscroll-behavior: contain;
+}
+.politica::backdrop { background: #0b0812b3; }
+.politica-topo {
+  position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1.2rem clamp(1.2rem, 4vw, 2.4rem) .6rem; background: var(--paper), var(--sheet); background-color: var(--sheet);
+}
+.politica-topo h2 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.2rem); }
+.politica-fechar {
+  flex: none; width: 2.6rem; height: 2.6rem; border: 0; border-radius: 50%; background: var(--green); color: #eafff8;
+  font: 700 1.6rem/1 var(--font-text); cursor: pointer; transition: transform .2s, box-shadow .3s;
+}
+.politica-fechar:hover, .politica-fechar:focus-visible { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
+.politica-texto { max-width: none; padding: 0 clamp(1.2rem, 4vw, 2.4rem) 1.6rem; }
+.politica-texto h2 { font-size: 1.35rem; margin: 1.4rem 0 .4rem; text-shadow: none; }
+.politica-texto p, .politica-texto li { line-height: 1.6; }
+html:has(dialog.politica[open]) { overflow: hidden; }
+/* a página da política (pt/privacy/, en/privacy/) */
+.narrow-page { max-width: 760px; margin: 0 auto; }
+.narrow-page .prose h2 { font-size: 1.6rem; }
+/* a janela fica dentro do <footer>: desfaz o que o rodapé faz com links e parágrafos */
+.site-footer .politica a { color: var(--teal); }
+.site-footer .politica a:hover { color: var(--green); }
+.site-footer .politica p { margin: 0 0 1em; }
