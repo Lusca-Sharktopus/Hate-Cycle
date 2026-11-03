@@ -398,7 +398,7 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 ### A janela da conta (só no site novo, desde 03/11)
 
 - Quem está com a conta aberta vê "Conectado como **seu nome**" acima da caixa de comentários. Clicar no nome abre uma janela (o resto da página escurece; fecha no ×, com Esc ou clicando fora) com:
-  - **o nome que aparece nos comentários**, para trocar (de 2 a 30 caracteres; espaços a mais são tirados). O nome novo aparece também nos comentários antigos;
+  - **o nome que aparece nos comentários**, para trocar (de 2 a 30 caracteres; espaços a mais são tirados; sem caracteres invisíveis; uma troca por hora; "Lusca" e "Sharktopus" só para a conta de admin, a sua). O nome novo aparece também nos comentários antigos;
   - **a conta** (o e-mail, só para a pessoa saber em qual conta está);
   - **Apagar conta**, que pede uma segunda confirmação explicando o que some (a conta, o nome, os marca-páginas e os comentários; os que têm respostas de outras pessoas ficam como "[comentário apagado]"). Não dá para desfazer.
 - Para funcionar, o banco precisa da migração `20261103040000_conta.sql` (`docs/comentarios-supabase.md`, seção 5).

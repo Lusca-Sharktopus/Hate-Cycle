@@ -42,7 +42,7 @@ O site é hospedado pelo **GitHub Pages**, que pode registrar dados técnicos de
 
 ## Seus direitos
 
-Pela Lei Geral de Proteção de Dados (LGPD), você pode pedir, a qualquer momento, para ver os dados que o site tem sobre você, corrigi-los ou apagá-los. Você mesmo pode trocar o seu nome ou apagar a sua conta a qualquer momento: com a conta aberta, clique no seu nome, acima da caixa de comentários. Também pode escrever para [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) a partir do e-mail da conta. Ao apagar a conta, apagamos também o seu nome, os seus marca-páginas e os seus comentários (o texto de um comentário que recebeu respostas de outras pessoas é trocado por “[comentário apagado]”, para a conversa continuar fazendo sentido).
+Pela Lei Geral de Proteção de Dados (LGPD), você pode pedir, a qualquer momento, para ver os dados que o site tem sobre você, corrigi-los ou apagá-los. Você mesmo pode trocar o seu nome ou apagar a sua conta a qualquer momento: com a conta aberta, clique no seu nome, acima da caixa de comentários. Também pode escrever para [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) a partir do e-mail da conta. Ao apagar a conta, apagamos também o seu nome, os seus marca-páginas e os seus comentários (o texto de um comentário que recebeu respostas de outras pessoas é trocado por “[comentário apagado]”, para a conversa continuar fazendo sentido). O Supabase pode guardar por um tempo registros técnicos de acesso das contas (como a data de uma entrada), por segurança.
 
 ## Mudanças nesta política
 

@@ -13,6 +13,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { afterEach, describe, expect, test } from "vitest";
 import { iniciarComentarios, lerConfiguracao, type ConfiguracaoDosComentarios } from "../src/scripts/comentarios/caixa";
+import { mensagemDaConta, nomeLimpo, problemaNoNome, TEXTOS_DA_CONTA } from "../src/scripts/comentarios/conta";
 
 const NOME_ATAQUE = '<img src=x onerror="globalThis.__xss=1"><b>nome</b>';
 const CORPO_ATAQUE = '<img src=x onerror="globalThis.__xss=2"><script>globalThis.__xss=3</script><b>negrito?</b>';
@@ -277,5 +278,35 @@ describe("a janela da conta (03/11): abre pelo nome, troca o nome, apaga a conta
     expect(document.querySelector(".c-modal.c-conta")).toBeNull();
     expect(document.querySelector(".c-who")?.hasAttribute("hidden")).toBe(true);
     expect(document.querySelector(".hc-comments .c-msg.ok")?.textContent).toBe("Sua conta foi apagada.");
+  });
+});
+
+describe("a regra do nome no navegador (a mesma de public.limpar_nome; o banco confere de novo)", () => {
+  const T = TEXTOS_DA_CONTA.pt;
+  test.each([
+    ["  Bia   Nova ", "Bia Nova"],
+    ["\u00A0Bia\u00A0\u00A0Nova\u3000", "Bia Nova"],
+  ])("nomeLimpo(%j) = %j", (bruto, limpo) => expect(nomeLimpo(bruto)).toBe(limpo));
+  test.each([
+    ["Bi\u200Ba", T.invalido],
+    ["\u202Eaib", T.invalido],
+    ["B\uFEFFia", T.invalido],
+    ["\u3164\u3164", T.invalido],
+    ["\u00A0\u00A0", T.tamanho],
+    ["x", T.tamanho],
+    ["a".repeat(31), T.tamanho],
+    ["Lúsca Sharktopus", T.reservado],
+    ["LUSCA_fan", T.reservado],
+    ["shark-topus", T.reservado],
+  ])("%j é recusado", (nome, msg) => expect(problemaNoNome(nome, T)).toBe(msg));
+  test.each(["José 山田", "👨‍👩‍👧 ❤️", "Eu Mesma", "Lucas"])("%j vale", (nome) => expect(problemaNoNome(nome, T)).toBeNull());
+  test("o admin pode usar o nome do autor", () => expect(problemaNoNome("Lusca Sharktopus", T, true)).toBeNull());
+  test("mensagens do banco viram textos da janela", () => {
+    expect(mensagemDaConta({ message: "name taken" }, T)).toBe(T.reservado);
+    expect(mensagemDaConta({ message: "rate limit: wait before renaming" }, T)).toBe(T.espera);
+    expect(mensagemDaConta({ message: "name length" }, T)).toBe(T.tamanho);
+    expect(mensagemDaConta({ message: "invalid name" }, T)).toBe(T.invalido);
+    expect(mensagemDaConta({ message: "qualquer outra" }, T)).toBe(T.erro);
+    expect(Object.keys(TEXTOS_DA_CONTA.en).sort()).toEqual(Object.keys(TEXTOS_DA_CONTA.pt).sort());
   });
 });

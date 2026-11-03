@@ -42,7 +42,7 @@ The website is hosted by **GitHub Pages**, which may log technical access data (
 
 ## Your rights
 
-Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. You can change your name or delete your account yourself at any time: while signed in, click your name above the comment box. You can also write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, bookmarks and comments are deleted too (the text of a comment other people replied to is replaced with “[comment deleted]”, so the conversation still makes sense).
+Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. You can change your name or delete your account yourself at any time: while signed in, click your name above the comment box. You can also write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, bookmarks and comments are deleted too (the text of a comment other people replied to is replaced with “[comment deleted]”, so the conversation still makes sense). Supabase may keep technical access records for accounts (such as the time of a sign-in) for a while, for security.
 
 ## Changes to this policy
 

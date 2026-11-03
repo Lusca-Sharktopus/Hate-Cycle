@@ -139,6 +139,7 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
                   sb,
                   lang: cfg.lang,
                   nome: (perfil && perfil.display_name) || "",
+                  admin: Boolean(perfil && perfil.is_admin),
                   email: eu.email,
                   aoMudarNome: () => void atualizar(),
                   aoApagar: (texto) => {

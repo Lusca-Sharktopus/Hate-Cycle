@@ -305,8 +305,29 @@ def casos(q, paralelo=None) -> int:
     caso("conta: visitante sem conta não troca nome", "select public.change_my_name('Fulano')", papel="anon", erro="permission denied")
     caso("conta: ninguém troca o nome direto na tabela (nem vira admin)", "update public.profiles set display_name = 'Hacker', is_admin = true", papel="authenticated", sub=B,
          erro="permission denied")
-    caso("conta: trocar o nome não mexe no de outra pessoa", "select public.change_my_name('Outra')", papel="authenticated", sub=B,
+    caso("conta: trocar o nome não mexe no de outra pessoa", "select 1",
          depois=f"select display_name from public.profiles where id = '{A}'", espera="Admin")
+    # revisão de 03/11: uma troca por hora; invisíveis e direção do texto; nome do autor reservado; mesma regra no cadastro
+    caso("conta: segunda troca na mesma hora é recusada", "select public.change_my_name('Outra')", papel="authenticated", sub=B, erro="rate limit",
+         depois=f"select display_name from public.profiles where id = '{B}'", espera="Bia Nova")
+    caso("conta: salvar o mesmo nome de novo não gasta a troca", "select public.change_my_name(' Bia  Nova ')", papel="authenticated", sub=B,
+         depois=f"select display_name from public.profiles where id = '{B}'", espera="Bia Nova")
+    libera = lambda uid: q(f"update public.profiles set name_changed_at = now() - interval '2 hours' where id = '{uid}'")
+    for nome_, ataque in (("espaço de largura zero", "E'Bi\\u200Ba'"), ("RLO (inverte a data)", "E'\\u202Eaib'"), ("dois espaços sem quebra", "E'\\u00A0\\u00A0'"),
+                          ("preenchimento Hangul", "E'\\u3164\\u3164'"), ("BOM", "E'B\\uFEFFia'")):
+        libera(B)
+        caso(f"conta: nome com {nome_} é recusado", f"select public.change_my_name({ataque})", papel="authenticated", sub=B, erro="name")
+    libera(B)
+    caso("conta: nome do autor é reservado (Lúsca, LUSCA_sharktopus…)", "select public.change_my_name('L\u00FAsca Sharktopus')", papel="authenticated", sub=B, erro="name taken")
+    caso("conta: emoji e outros alfabetos valem", "select public.change_my_name('Jos\u00E9 \u5C71\u7530 \U0001F468\u200D\U0001F469\u200D\U0001F467')", papel="authenticated", sub=B,
+         depois=f"select display_name like 'José 山田 %' from public.profiles where id = '{B}'", espera="t")
+    caso("conta: o admin pode usar o nome do autor", "select public.change_my_name('Lusca Sharktopus')", papel="authenticated", sub=A,
+         depois=f"select display_name from public.profiles where id = '{A}'", espera="Lusca Sharktopus")
+    F = "00000000-0000-0000-0000-00000000000f"
+    caso("conta: cadastro com nome que não passa (RLO, ou o do autor) vira user-xxxxxx",
+         f"insert into auth.users (id, email, raw_user_meta_data) values ('{F}', 'f@x', jsonb_build_object('full_name', 'Lusca Sharktopus'))",
+         depois=f"select display_name from public.profiles where id = '{F}'", espera="user-000000")
+    q(f"delete from auth.users where id = '{F}'")
     E = "00000000-0000-0000-0000-00000000000e"
     q(f"insert into auth.users (id, email, raw_user_meta_data) values ('{E}', 'e@x', '{{\"display_name\":\"Eva\"}}')")
     pagina_e = "works/firestriker/01"

@@ -140,7 +140,11 @@ Arquivo: `supabase/migrations/20261103040000_conta.sql`. **Ainda não rodada no 
 
 O que muda para quem visita (só no site novo): em "Conectado como **Fulano**", o nome vira um botão. O clique abre uma janela, com o resto da página escurecido, onde a pessoa troca o nome que aparece nos comentários (2 a 30 caracteres) e pode apagar a conta. Apagar pede uma segunda confirmação que explica o que some; a conta, o nome e os marca-páginas vão embora; os comentários somem, e os que têm respostas de outras pessoas ficam como "[comentário apagado]" (as mesmas regras da migração do reforço).
 
+**Regras do nome** (revisão independente de 03/11, valem também para o nome de quem cria conta, inclusive pelo Google): de 2 a 30 caracteres; espaços a mais saem; nada de caracteres invisíveis ou que invertem a direção do texto (eles embaralhavam a data ao lado do nome); **"Lusca" e "Sharktopus" ficam reservados para a conta de admin** (a sua: depois de virar admin, você pode se chamar assim pela janela; quem tenta criar conta com esse nome fica com `user-xxxxxx`); e **uma troca de nome por hora** (o nome novo aparece em todos os comentários antigos, então sem limite dava para "assinar" com outro nome depois).
+
 São duas funções do banco, `change_my_name` e `delete_my_account`, que só agem sobre quem as chama; visitante sem conta não pode usar nenhuma. Ninguém ganha permissão de mexer na tabela de perfis diretamente (o "admin" continua intocável). Enquanto a migração não for rodada, a janela abre, mas salvar o nome ou apagar a conta mostra "Algo deu errado".
+
+**Depois de aplicar, vale um teste com uma conta descartável** (crie uma com outro e-mail, troque o nome, apague a conta e confira em Authentication → Users que ela sumiu).
 
 **Como aplicar (~2 minutos):** SQL Editor → New query → cole **tudo** de `supabase/migrations/20261103040000_conta.sql` → **Run** → "Success. No rows returned". Pode rodar de novo sem estragar nada.
 
