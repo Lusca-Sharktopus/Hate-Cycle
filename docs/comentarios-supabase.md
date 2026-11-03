@@ -107,7 +107,7 @@ O `supabase-setup.sql` fica congelado como está (é o que este guia manda colar
 
 ### Migração de 03/11/2026: reforço do banco (B25) e "[comentário apagado]"
 
-Arquivo: `supabase/migrations/20261103000000_endurecer_comentarios.sql`. **Precisa ser rodada no seu projeto antes do lançamento do site novo.**
+Arquivo: `supabase/migrations/20261103000000_endurecer_comentarios.sql`. **Já rodada no seu projeto (03/11/2026).** Num projeto novo, rode-a depois do `supabase-setup.sql`.
 
 O que muda para quem visita: quase nada na tela. Comentário apagado que tem respostas passa a aparecer como **"[comentário apagado]"** (sem nome, sem botões), e as respostas das outras pessoas ficam; sem respostas, ele some como antes. Quando a última resposta de um comentário apagado some, ele some junto. O resto fecha brechas de quem mexe no banco direto, sem passar pelo site: data inventada, limite de 10 s burlado, comentário em página que não existe, comentário só de espaços, edições sem limite, permissões que o site nunca usou. Conta apagada: as respostas e os comentários sem resposta dela somem; os que têm respostas de outras pessoas viram "[comentário apagado]".
 
