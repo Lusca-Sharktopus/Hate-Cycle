@@ -152,7 +152,7 @@ São duas funções do banco, `change_my_name` e `delete_my_account`, que só ag
 
 ### Migração de 03/11/2026: histórias favoritas
 
-Arquivo: `supabase/migrations/20261103060000_favoritos.sql`. **Ainda não rodada no seu projeto.** Rode depois das de cima.
+Arquivo: `supabase/migrations/20261103060000_favoritos.sql`. **Já rodada no seu projeto (03/11/2026).** Num projeto novo, rode depois das de cima.
 
 O que muda para quem visita (só no site novo, página Histórias): uma estrela no canto de cima de cada capa (aparece com o mouse em cima da capa) e um botão de estrela no começo da linha de busca, que mostra só as favoritas. Sem conta, os dois abrem uma janela avisando que o recurso exige login. Com conta, os favoritos ficam na tabela `favorites`: cada pessoa só vê e mexe nos próprios, visitante sem conta não toca nela, no máximo 300 por pessoa, e a conta apagada leva os favoritos junto. Enquanto a migração não for rodada, quem tem conta vê a estrela, mas favoritar mostra "Não deu para salvar o favorito".
 
