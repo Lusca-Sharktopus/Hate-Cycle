@@ -144,7 +144,7 @@ Os testes continuam existindo e são rodados à mão (`pnpm test`) por quem mexe
 
 ## 6. Como voltar atrás
 
-O site antigo está guardado inteiro na branch **`site-antigo`** (a `main` de antes da virada, commit `31904c2`). Voltar é trocar *de onde o Pages publica*:
+O site antigo está guardado inteiro na branch **`site-antigo`** (a `main` de antes da virada, commit `970bbcc`; atualizada em 03/11/2026 para o site no ar com o rodapé novo e a Política de Privacidade). Voltar é trocar *de onde o Pages publica*:
 
 Settings → Pages → **Source = Deploy from a branch** → Branch **`site-antigo`** / **/ (root)** → Save.
 
