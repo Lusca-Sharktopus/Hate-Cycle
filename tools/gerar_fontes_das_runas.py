@@ -13,7 +13,8 @@ Como rodar (precisa de `pip install fonttools brotli` e dos pacotes @fontsource 
   mkdir /tmp/noto && cd /tmp/noto
   for p in noto-sans noto-sans-symbols noto-sans-symbols-2 noto-sans-math noto-sans-runic noto-sans-cherokee noto-sans-kr noto-sans-jp \\
            noto-sans-yi noto-sans-phoenician noto-sans-glagolitic noto-sans-tifinagh noto-sans-balinese noto-sans-canadian-aboriginal \\
-           noto-sans-old-turkic noto-sans-old-italic noto-sans-lycian noto-sans-linear-a noto-sans-old-south-arabian noto-sans-warang-citi noto-sans-brahmi noto-music; do
+           noto-sans-old-turkic noto-sans-old-italic noto-sans-lycian noto-sans-linear-a noto-sans-old-south-arabian noto-sans-warang-citi noto-sans-brahmi noto-music \\
+           noto-sans-bamum noto-sans-elbasan; do
     npm pack @fontsource/$p@5.3.0 --silent; done          # (noto-sans-kr e -jp: @5.3.1)
   for f in *.tgz; do mkdir -p x/${f%.tgz}; tar xzf $f -C x/${f%.tgz} --strip-components=1; done
   python3 tools/gerar_fontes_das_runas.py --pacotes /tmp/noto/x
@@ -27,9 +28,14 @@ from fontTools import subset
 from fontTools.ttLib import TTFont
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROPRIA = "hate-cycle-runas"   # a fonte nossa: não vem de pacote @fontsource, vem do projeto
+FONTE_PROPRIA = os.path.join(RAIZ, "src", "assets", "fontes", "runas-proprias", "hate-cycle-runas.ttf")
 
 # A ordem do `font-family` de `.runes i` (Runas.astro): a primeira família que tem o glifo o desenha.
 FAMILIAS = [
+    # 03/11/2026: as runas PRÓPRIAS (a = sangue, b = Os Amantes), desenhadas por tools/gerar_fonte_das_runas_proprias.py. Primeira da
+    # lista: só ela tem "a" e "b" (unicode-range U+61-62), então nenhuma outra letra muda.
+    ("Hate Cycle Runas", PROPRIA),
     ("Noto Sans", "noto-sans"), ("Noto Sans Runic", "noto-sans-runic"), ("Noto Sans Symbols", "noto-sans-symbols"),
     ("Noto Sans Symbols 2", "noto-sans-symbols-2"), ("Noto Sans Math", "noto-sans-math"), ("Noto Sans Cherokee", "noto-sans-cherokee"),
     ("Noto Sans Yi", "noto-sans-yi"), ("Noto Sans Phoenician", "noto-sans-phoenician"), ("Noto Sans Glagolitic", "noto-sans-glagolitic"),
@@ -38,21 +44,36 @@ FAMILIAS = [
     ("Noto Sans Old Italic", "noto-sans-old-italic"), ("Noto Sans Lycian", "noto-sans-lycian"), ("Noto Sans Linear A", "noto-sans-linear-a"),
     ("Noto Sans Old South Arabian", "noto-sans-old-south-arabian"), ("Noto Sans Warang Citi", "noto-sans-warang-citi"),
     ("Noto Sans Brahmi", "noto-sans-brahmi"), ("Noto Music", "noto-music"),
+    ("Noto Sans Bamum", "noto-sans-bamum"), ("Noto Sans Elbasan", "noto-sans-elbasan"),  # 03/11: 𖦐 e 𐔙
     ("Noto Sans KR", "noto-sans-kr"), ("Noto Sans JP", "noto-sans-jp"),
 ]
 
 
+def glifos_das_estrelas() -> list[str]:
+    """(03/11) As runas das estrelas dos favoritos (`star_runes` de content/works/*/work.json): algumas não estão no fundo do site (⛧),
+    mas também precisam de fonte. O seletor de texto U+FE0E não é glifo e fica de fora."""
+    saida = []
+    for arq in sorted(glob.glob(os.path.join(RAIZ, "content", "works", "*", "work.json"))):
+        sr = json.load(open(arq, encoding="utf8")).get("star_runes") or {}
+        finais = sr.get("final", [])
+        for runa in list(sr.get("list", [])) + ([finais] if isinstance(finais, str) else list(finais)):
+            saida += [c for c in runa if c != "\ufe0e"]
+    return saida
+
+
 def glifos_do_site() -> list[str]:
-    """Os símbolos sem repetição, na ordem da 1ª aparição (RUNES de src/lib/runas.ts)."""
+    """Os símbolos sem repetição, na ordem da 1ª aparição (RUNES de src/lib/runas.ts), e depois os das estrelas que faltarem."""
     ts = open(os.path.join(RAIZ, "src", "lib", "runas.ts"), encoding="utf8").read()
     m = re.search(r'export const RUNES =\s*"([^"]+)"', ts)
     if not m:
         sys.exit("não achei RUNES em src/lib/runas.ts")
-    return list(dict.fromkeys(m.group(1)))
+    return list(dict.fromkeys(list(m.group(1)) + glifos_das_estrelas()))
 
 
 def recortes_da_familia(pacotes: str, slug: str) -> list[tuple[str, str, set[int]]]:
     """Os arquivos .woff de peso 400 de uma família: (id do recorte, caminho, pontos de código que têm glifo)."""
+    if slug == PROPRIA:
+        return [("runas", FONTE_PROPRIA, set(TTFont(FONTE_PROPRIA).getBestCmap()))]
     pasta = glob.glob(os.path.join(pacotes, f"fontsource-{slug}-5.*"))
     if not pasta:
         sys.exit(f"pacote não encontrado: {slug} em {pacotes}")

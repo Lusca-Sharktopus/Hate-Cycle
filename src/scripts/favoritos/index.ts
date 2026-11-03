@@ -12,9 +12,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { clienteDoSupabase } from "../supabase/cliente";
 import {
+  horariosDaSequencia,
+  RUNAS_SORTEADAS,
   sequenciaDeRunas,
-  TEMPO_DA_RUNA_FINAL,
-  TEMPO_DE_CADA_RUNA,
   cartaoFora,
   favoritosDoBanco,
   lerConfiguracaoDosFavoritos,
@@ -62,7 +62,7 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
   const semMovimento = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
   const cartoes = [...grade.querySelectorAll<HTMLElement>(".work-card")].map((el) => {
     const titulo = el.dataset["title"] ?? "";
-    const obra = cfg.obras[titulo];
+    const obra = Object.hasOwn(cfg.obras, titulo) ? cfg.obras[titulo] : undefined;
     el.classList.add("fav-card");
     const janela = document.createElement("span");
     janela.className = "fav-janela";
@@ -111,14 +111,15 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
     parar(c);
     c.el.classList.add("fav-ver");
     // já favorita (a estrela cheia estava à vista), sem movimento, ou obra sem runas: só a estrela
-    const runas = c.obra ? cfg.runas[c.obra] : undefined;
+    const runas = c.obra && Object.hasOwn(cfg.runas, c.obra) ? cfg.runas[c.obra] : undefined;
     if (semMovimento || !runas || c.botao.getAttribute("aria-pressed") === "true") return;
     const seq = sequenciaDeRunas(runas);
+    const { entradas, estrela } = horariosDaSequencia(RUNAS_SORTEADAS, runas.finais.length);
     c.botao.classList.add("fav-girando");
     seq.forEach((r, i) => {
-      c.relogios.push(window.setTimeout(() => (c.runa.textContent = r), i * TEMPO_DE_CADA_RUNA));
+      c.relogios.push(window.setTimeout(() => (c.runa.textContent = r), entradas[i] ?? 0));
     });
-    c.relogios.push(window.setTimeout(() => c.botao.classList.remove("fav-girando"), (seq.length - 1) * TEMPO_DE_CADA_RUNA + TEMPO_DA_RUNA_FINAL));
+    c.relogios.push(window.setTimeout(() => c.botao.classList.remove("fav-girando"), estrela));
   }
   function esconder(c: Cartao): void {
     parar(c);
@@ -164,8 +165,22 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
     } else aviso.hidden = true;
   }
 
+  // um pedido por obra de cada vez: clique enquanto o anterior não voltou é ignorado (dois cliques rápidos podiam chegar ao banco fora
+  // de ordem e deixar a estrela diferente do que ficou gravado; revisão de 03/11)
+  const pendentes = new Set<string>();
   async function alternar(obra: string): Promise<void> {
+    if (!usuario || pendentes.has(obra)) return;
+    pendentes.add(obra);
+    try {
+      await alternarAgora(obra);
+    } finally {
+      pendentes.delete(obra);
+    }
+  }
+  async function alternarAgora(obra: string): Promise<void> {
     if (!usuario) return;
+    const eu = usuario;
+    const conjunto = favoritos;
     const tinha = favoritos.has(obra);
     if (tinha) favoritos.delete(obra);
     else favoritos.add(obra);
@@ -174,6 +189,8 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
       ? await sb.from("favorites").delete().eq("user_id", usuario).eq("work_id", obra)
       : await sb.from("favorites").upsert({ user_id: usuario, work_id: obra }, { onConflict: "user_id,work_id", ignoreDuplicates: true });
     if (!r.error) return;
+    // a pessoa saiu (ou trocou de conta) enquanto o pedido ia e voltava: não mexe nos favoritos de agora
+    if (eu !== usuario || conjunto !== favoritos) return;
     // não salvou: volta como estava e avisa por alguns segundos
     if (tinha) favoritos.add(obra);
     else favoritos.delete(obra);

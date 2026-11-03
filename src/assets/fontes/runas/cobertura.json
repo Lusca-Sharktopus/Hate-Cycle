@@ -1,5 +1,14 @@
 [
  {
+  "familia": "Hate Cycle Runas",
+  "arquivo": "hate-cycle-runas-runas.woff2",
+  "glifos": [
+   "61",
+   "62"
+  ],
+  "bytes": 364
+ },
+ {
   "familia": "Noto Sans",
   "arquivo": "noto-sans-cyrillic.woff2",
   "glifos": [
@@ -60,10 +69,12 @@
    "16B8",
    "16B9",
    "16BB",
+   "16BE",
    "16C1",
    "16C3",
    "16C4",
    "16C7",
+   "16C8",
    "16CB",
    "16CF",
    "16D2",
@@ -79,7 +90,7 @@
    "16E5",
    "16EE"
   ],
-  "bytes": 1452
+  "bytes": 1480
  },
  {
   "familia": "Noto Sans Symbols",
@@ -91,6 +102,7 @@
    "2650",
    "26B4",
    "26BC",
+   "26E7",
    "26E9",
    "271D",
    "2721",
@@ -104,9 +116,10 @@
    "1F742",
    "1F743",
    "1F758",
-   "1F767"
+   "1F767",
+   "1F76A"
   ],
-  "bytes": 1392
+  "bytes": 1580
  },
  {
   "familia": "Noto Sans Symbols 2",
@@ -234,9 +247,10 @@
   "arquivo": "noto-sans-linear-a-linear-a.woff2",
   "glifos": [
    "10607",
+   "10632",
    "1064E"
   ],
-  "bytes": 748
+  "bytes": 764
  },
  {
   "familia": "Noto Sans Old South Arabian",
@@ -272,6 +286,22 @@
   "bytes": 436
  },
  {
+  "familia": "Noto Sans Bamum",
+  "arquivo": "noto-sans-bamum-bamum.woff2",
+  "glifos": [
+   "16990"
+  ],
+  "bytes": 416
+ },
+ {
+  "familia": "Noto Sans Elbasan",
+  "arquivo": "noto-sans-elbasan-elbasan.woff2",
+  "glifos": [
+   "10519"
+  ],
+  "bytes": 412
+ },
+ {
   "familia": "Noto Sans KR",
   "arquivo": "noto-sans-kr-101.woff2",
   "glifos": [
@@ -291,9 +321,10 @@
   "familia": "Noto Sans KR",
   "arquivo": "noto-sans-kr-105.woff2",
   "glifos": [
-   "5C71"
+   "5C71",
+   "5FC3"
   ],
-  "bytes": 560
+  "bytes": 740
  },
  {
   "familia": "Noto Sans KR",

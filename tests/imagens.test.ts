@@ -399,8 +399,16 @@ describe("runas: os recortes de fonte cobrem todos os glifos do fundo", () => {
   const cobertura: Recorte[] = JSON.parse(readFileSync(join(pasta, "cobertura.json"), "utf8"));
   const cps = (s: string) => Array.from(s).map((c) => c.codePointAt(0) ?? 0);
 
-  test("cada glifo de RUNES tem exatamente um recorte, e nenhum recorte tem glifo que o site não usa", () => {
-    const esperados = GLIFOS.flatMap(cps).sort((a, b) => a - b);
+  // 03/11: também as runas das estrelas dos favoritos (star_runes dos work.json), algumas fora do fundo do site (⛧); o U+FE0E não é glifo
+  const glifosDasEstrelas = readdirSync(join(RAIZ, "content", "works"))
+    .map((o) => join(RAIZ, "content", "works", o, "work.json"))
+    .filter((f) => existsSync(f))
+    .flatMap((f) => {
+      const sr = (JSON.parse(readFileSync(f, "utf8")) as { star_runes?: { list: string[]; final: string | string[] } }).star_runes;
+      return sr ? [...sr.list, ...(typeof sr.final === "string" ? [sr.final] : sr.final)].flatMap((r) => Array.from(r)).filter((c) => c !== "\uFE0E") : [];
+    });
+  test("cada glifo de RUNES (e das estrelas dos favoritos) tem exatamente um recorte, e nenhum recorte tem glifo que o site não usa", () => {
+    const esperados = [...new Set([...GLIFOS, ...glifosDasEstrelas])].flatMap(cps).sort((a, b) => a - b);
     const cobertos = cobertura.flatMap((r) => r.glifos.map((h) => parseInt(h, 16))).sort((a, b) => a - b);
     expect(cobertos).toEqual(esperados);
   });

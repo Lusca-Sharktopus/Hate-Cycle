@@ -34,5 +34,6 @@
       { "image": "ordem/Olivia Site Cronologia.png", "x": 55.09, "y": 65.42, "width": 46.25, "hover": { "x": 55.48, "y": 63.54, "width": 48.9 } }
     ]
   },
-  "media": "short-story"
+  "media": "short-story",
+  "star_runes": {"list": ["🜂", "ᚳ", "ᛠ", "🝃", "F"], "final": "Σ"}
 }

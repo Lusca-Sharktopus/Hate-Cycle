@@ -31,5 +31,6 @@
       { "image": "ordem/Wellersson Site Cronologia.png", "x": 59.56, "y": 75.09, "width": 33.95, "hover": { "x": 62.58, "width": 36.66 } }
     ]
   },
-  "media": "misc"
+  "media": "misc",
+  "star_runes": {"list": ["ᛃ", "𐤉", "心"], "final": "b"}
 }

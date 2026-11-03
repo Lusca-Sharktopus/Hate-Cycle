@@ -14,7 +14,7 @@ const CFG: ConfiguracaoDosFavoritos = {
   key: "__CHAVE_FALSA__",
   lang: "pt",
   obras: { Pederneira: "firestriker", "Luz & Sangue": "light-and-blood", [TITULO_ATAQUE]: "hdvr" },
-  runas: { firestriker: { lista: ["ᚠ", "ᚢ", "ᚦ"], final: "ᛟ" } },
+  runas: { firestriker: { lista: ["ᚠ", "ᚢ", "ᚦ"], finais: ["ᛟ"] } },
 };
 
 const PEDIDOS: { op: string; filtros: Record<string, unknown>; corpo?: unknown }[] = [];

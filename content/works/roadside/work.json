@@ -34,5 +34,6 @@
     "en": "logos/EN/Roadside 4.png",
     "pt": "logos/PT/Beira de Estrada 4.png"
   },
-  "media": "webcomic"
+  "media": "webcomic",
+  "star_runes": {"list": ["ᚣ", "弓", "♐︎", "ᚸ", "エ", "ꑭ", "⼒", "Ⱝ"], "final": "ᚸ"}
 }

@@ -8,6 +8,7 @@ import { criarSchemas } from "../src/lib/schemas";
 import {
   cartaoFora,
   favoritosDoBanco,
+  horariosDaSequencia,
   lerConfiguracaoDosFavoritos,
   obraValida,
   sequenciaDeRunas,
@@ -16,26 +17,26 @@ import {
 } from "../src/scripts/favoritos/regras";
 
 const CHAVES = { supabase_url: " https://falso.supabase.co/rest/v1/ ", supabase_anon_key: "__CHAVE_FALSA__" };
-const RUNAS = { firestriker: { lista: ["ᚠ", "ᚢ"], final: "ᛟ" } };
+const RUNAS = { firestriker: { lista: ["ᚠ", "ᚢ"], finais: ["ᛟ"] }, "light-and-blood": { lista: ["ᚠ"], finais: ["✝︎", "a"] } };
 
 describe("a configuração da página (window.HC_FAV)", () => {
   test("sem as duas chaves, nada (a seção fica sem favoritos)", () => {
     expect(configuracaoDosFavoritos("pt", [["Pederneira", "firestriker"]], RUNAS, undefined)).toBeNull();
     expect(configuracaoDosFavoritos("pt", [["Pederneira", "firestriker"]], RUNAS, { supabase_url: "x" })).toBeNull();
   });
-  test("com as chaves: URL limpa como a dos comentários, idioma, mapa título → obra e as runas; '</' escapado", () => {
-    const s = configuracaoDosFavoritos("pt", [["Pederneira", "firestriker"], ["A</script>B", "hdvr"]], RUNAS, CHAVES) ?? "";
+  test("com as chaves: URL limpa como a dos comentários, idioma, mapa título → obra e as runas; < > & escapados (nada mexe no <script>)", () => {
+    const s = configuracaoDosFavoritos("pt", [["Pederneira", "firestriker"], ["A</script>B", "hdvr"], ["<!--<script>", "x-y"]], RUNAS, CHAVES) ?? "";
     expect(s.startsWith("window.HC_FAV=")).toBe(true);
-    expect(s).not.toContain("</script>");
-    const cfg = JSON.parse(s.slice("window.HC_FAV=".length, -1).replaceAll("<\\/", "</")) as Record<string, unknown>;
+    expect(s).not.toMatch(/[<>&]/);
+    const cfg = JSON.parse(s.slice("window.HC_FAV=".length, -1)) as Record<string, unknown>;
     expect(cfg).toEqual({
       url: "https://falso.supabase.co",
       key: "__CHAVE_FALSA__",
       lang: "pt",
-      obras: { Pederneira: "firestriker", "A</script>B": "hdvr" },
-      runas: { firestriker: { lista: ["ᚠ", "ᚢ"], final: "ᛟ" } },
+      obras: { Pederneira: "firestriker", "A</script>B": "hdvr", "<!--<script>": "x-y" },
+      runas: { firestriker: { lista: ["ᚠ", "ᚢ"], finais: ["ᛟ"] }, "light-and-blood": { lista: ["ᚠ"], finais: ["✝︎", "a"] } },
     });
-    expect(lerConfiguracaoDosFavoritos(cfg)?.obras).toEqual(cfg["obras"]);
+    expect({ ...lerConfiguracaoDosFavoritos(cfg)?.obras }).toEqual(cfg["obras"]);
   });
   test("lerConfiguracaoDosFavoritos(): descarta obra com identificador fora do formato e runas inválidas", () => {
     const cfg = lerConfiguracaoDosFavoritos({
@@ -43,10 +44,15 @@ describe("a configuração da página (window.HC_FAV)", () => {
       key: "k",
       lang: "en",
       obras: { A: "firestriker", B: "../x", C: 3 },
-      runas: { firestriker: { lista: ["ᚠ", "<b>", "  ", "ᚢ"], final: "ᛟ" }, hdvr: { lista: [], final: "ᛟ" }, "../x": { lista: ["ᚠ"], final: "ᛟ" } },
+      runas: {
+        firestriker: { lista: ["ᚠ", "<b>", "  ", "ᚢ"], finais: ["ᛟ"] },
+        hdvr: { lista: [], finais: ["ᛟ"] },
+        "../x": { lista: ["ᚠ"], finais: ["ᛟ"] },
+        roadside: { lista: ["ᚠ"], finais: ["<b>"] },
+      },
     });
-    expect(cfg?.obras).toEqual({ A: "firestriker" });
-    expect(cfg?.runas).toEqual({ firestriker: { lista: ["ᚠ", "ᚢ"], final: "ᛟ" } });
+    expect({ ...cfg?.obras }).toEqual({ A: "firestriker" });
+    expect({ ...cfg?.runas }).toEqual({ firestriker: { lista: ["ᚠ", "ᚢ"], finais: ["ᛟ"] } });
     expect(lerConfiguracaoDosFavoritos({ url: "", key: "k", obras: {} })).toBeNull();
     expect(lerConfiguracaoDosFavoritos(null)).toBeNull();
   });
@@ -70,11 +76,15 @@ describe("as regras", () => {
     expect(cartaoFora(undefined, true, favs)).toBe(true);
     expect(cartaoFora("hdvr", false, favs)).toBe(false);
   });
+  test("horariosDaSequencia(): as sorteadas a cada 55 ms, as finais a cada 150 ms, depois a estrela", () => {
+    expect(horariosDaSequencia(5, 1)).toEqual({ entradas: [0, 55, 110, 165, 220, 275], estrela: 425 });
+    expect(horariosDaSequencia(5, 2)).toEqual({ entradas: [0, 55, 110, 165, 220, 275, 425], estrela: 575 });
+  });
   test("sequenciaDeRunas(): 5 sorteadas da lista (nunca a mesma duas vezes seguidas) e, por último, a final", () => {
     const sempreZero = () => 0;
-    expect(sequenciaDeRunas({ lista: ["ᚠ", "ᚢ", "ᚦ"], final: "ᛟ" }, 5, sempreZero)).toEqual(["ᚠ", "ᚢ", "ᚠ", "ᚢ", "ᚠ", "ᛟ"]);
-    expect(sequenciaDeRunas({ lista: ["ᚠ"], final: "ᛟ" }, 3, sempreZero)).toEqual(["ᚠ", "ᚠ", "ᚠ", "ᛟ"]);
-    const seq = sequenciaDeRunas({ lista: ["ᚠ", "ᚢ", "ᚦ", "ᚨ"], final: "ᛟ" });
+    expect(sequenciaDeRunas({ lista: ["ᚠ", "ᚢ", "ᚦ"], finais: ["ᛟ"] }, 5, sempreZero)).toEqual(["ᚠ", "ᚢ", "ᚠ", "ᚢ", "ᚠ", "ᛟ"]);
+    expect(sequenciaDeRunas({ lista: ["ᚠ"], finais: ["✝︎", "a"] }, 3, sempreZero)).toEqual(["ᚠ", "ᚠ", "ᚠ", "✝︎", "a"]);
+    const seq = sequenciaDeRunas({ lista: ["ᚠ", "ᚢ", "ᚦ", "ᚨ"], finais: ["ᛟ"] });
     expect(seq).toHaveLength(6);
     expect(seq.at(-1)).toBe("ᛟ");
     for (let i = 1; i < 5; i++) expect(seq[i]).not.toBe(seq[i - 1]);
@@ -90,15 +100,17 @@ describe("as regras", () => {
 describe("star_runes no work.json", () => {
   const works = criarSchemas({ existe: () => true }).works;
   const ler = (star_runes: unknown) => works.safeParse({ star_runes, _origem: { slug: "x" } });
-  test("aceita {list, final}", () => {
-    const r = ler({ list: ["ᚠ", "ᚢ", "🜂"], final: "ᛟ" });
-    expect(r.success).toBe(true);
+  test("aceita {list, final} com a final como um símbolo ou uma lista de até 3", () => {
+    expect(ler({ list: ["ᚠ", "ᚢ", "🜂"], final: "ᛟ" }).success).toBe(true);
+    expect(ler({ list: ["✡︎", "ᚳ"], final: ["✝︎", "a"] }).success).toBe(true);
   });
   test.each([
     [{ list: [], final: "ᛟ" }, "pelo menos uma"],
     [{ list: ["ᚠ ᚢ"], final: "ᛟ" }, "UM símbolo"],
     [{ list: ["<b>"], final: "ᛟ" }, "UM símbolo"],
     [{ list: ["ᚠ"], final: "" }, "runa final"],
+    [{ list: ["ᚠ"], final: [] }, "runa final"],
+    [{ list: ["ᚠ"], final: ["a", "b", "c", "d"] }, "runa final"],
     [{ list: ["ᚠ"] }, "runa final"],
     [{ list: ["ᚠ"], final: "ᛟ", outra: 1 }, "só aceita"],
     [["ᚠ"], "tem de ser"],
@@ -111,7 +123,8 @@ describe("star_runes no work.json", () => {
     expect(runasDaEstrela(undefined)).toBe(RUNAS_PROVISORIAS);
     expect(RUNAS_PROVISORIAS.lista.length).toBeGreaterThan(5);
     for (const r of RUNAS_PROVISORIAS.lista) expect(r).toMatch(/^[ᚠ-᛿]$/u);
-    expect(runasDaEstrela({ list: ["ᚠ"], final: "ᚱ" })).toEqual({ lista: ["ᚠ"], final: "ᚱ" });
+    expect(runasDaEstrela({ list: ["ᚠ"], final: "ᚱ" })).toEqual({ lista: ["ᚠ"], finais: ["ᚱ"] });
+    expect(runasDaEstrela({ list: ["ᚠ"], final: ["✝︎", "a"] })).toEqual({ lista: ["ᚠ"], finais: ["✝︎", "a"] });
   });
 });
 

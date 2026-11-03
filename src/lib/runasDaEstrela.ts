@@ -6,16 +6,18 @@ import { GLIFOS } from "./runas";
 
 export interface RunasDaEstrela {
   lista: readonly string[];
-  final: string;
+  /** a(s) runa(s) final(is), mostradas em ordem logo antes da estrela (Luz & Sangue tem duas: ✝ e o sangue). */
+  finais: readonly string[];
 }
 
 /** Provisória: as runas do bloco Rúnico (U+16A0–U+16FF) que o fundo do site já desenha; a final é ᛟ (Othala). */
 export const RUNAS_PROVISORIAS: RunasDaEstrela = {
   lista: GLIFOS.filter((g) => /^[ᚠ-᛿]$/u.test(g)),
-  final: "ᛟ",
+  finais: ["ᛟ"],
 };
 
 /** As runas de uma obra: as do work.json (`star_runes`) ou as provisórias. */
-export function runasDaEstrela(starRunes: { list: readonly string[]; final: string } | undefined): RunasDaEstrela {
-  return starRunes ? { lista: [...starRunes.list], final: starRunes.final } : RUNAS_PROVISORIAS;
+export function runasDaEstrela(starRunes: { list: readonly string[]; final: string | readonly string[] } | undefined): RunasDaEstrela {
+  if (!starRunes) return RUNAS_PROVISORIAS;
+  return { lista: [...starRunes.list], finais: typeof starRunes.final === "string" ? [starRunes.final] : [...starRunes.final] };
 }

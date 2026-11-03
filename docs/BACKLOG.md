@@ -221,7 +221,7 @@ CLAUDE.md, `.claude/rules` e todas as skills refletindo os comandos e a estrutur
 ## Favoritos: decisões (03/11/2026)
 
 - Pedido do autor (zip "for claude", 03/11): estrela no topo da capa ao passar o mouse (como GIFs favoritados no Discord, prints `gif discord 1/2.png`), botão no topo da página Histórias para filtrar só as favoritas (`fav.png`), e janela que escurece a tela dizendo que o recurso exige login, para quem está sem conta.
-- Segundo pedido (03/11): a caixinha desliza para baixo saindo de trás da borda em volta da capa; antes de virar estrela, passa rápido por runas sorteadas da lista de cada história e para numa runa final predefinida. **Pendente: o autor manda as listas de runas** (`star_runes` no `work.json`; hoje todas usam a lista provisória).
+- Segundo pedido (03/11): a caixinha desliza para baixo saindo de trás da borda em volta da capa; antes de virar estrela, passa rápido por runas sorteadas da lista de cada história e para numa runa final predefinida. **Listas recebidas e aplicadas (03/11, segundo zip):** `star_runes` nas 7 obras; Luz & Sangue com duas finais (✝ e o sangue); runas próprias a (sangue) e b (Os Amantes corrigida) na fonte "Hate Cycle Runas"; as runas novas também no fundo, menos 𐤚 e ⛧. Leitura de quem fez: Cat-Crow-Thing = as de Ossos com ⛧ no lugar do 🝪 (que virou a final).
 - Escolhas de quem fez (o autor pode mudar): estrela de favorita fica sempre à vista (cheia, sem runas); sem mouse, estrelas sempre à vista; sem animação com "reduzir movimento"; filtro não é lembrado entre visitas; só na página Histórias (e onde houver `{{stories}}`), não no carrossel da home.
 - A janela "exige login" ganha o botão de entrar quando a caixa de login nova (do autor) virar um componente de todas as páginas.
 

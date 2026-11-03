@@ -129,6 +129,8 @@ O navegador escolhe, para cada símbolo, a **primeira** família da lista `font-
 3. Rode `python3 tools/gerar_fontes_das_runas.py --pacotes <pasta>`; confira o `cobertura.json`.
 4. Refaça as referências: `python3 tools/runas_ref.py` e `python3 tools/paginas_ref.py`; depois `pnpm test` (se o número de `<link>` de fonte mudou, `tests/runas.test.ts` pede o número novo). Gere o site e olhe uma página com todas as runas (nenhuma pode ser quadradinho).
 
+**Runas próprias e runas das estrelas (03/11/2026).** Dois acréscimos ao gerador: (1) a família **"Hate Cycle Runas"** (a primeira da lista) vem de uma fonte nossa, `src/assets/fontes/runas-proprias/hate-cycle-runas.ttf`, desenhada por `tools/gerar_fonte_das_runas_proprias.py` a partir dos PNGs do autor (polígonos medidos; `skia-pathops` junta as formas que se cruzam): `a` = sangue, `b` = Os Amantes; ela só tem essas duas letras, então nenhum outro texto muda. (2) As runas dos `star_runes` (estrelas dos favoritos) também ganham recorte, mesmo as que não estão no fundo (⛧). Entraram as famílias Noto Sans Bamum (𖦐) e Noto Sans Elbasan (𐔙), nos quatro lugares de sempre. Hoje: 120 runas no fundo, 34 recortes, 20,7 KB.
+
 ## 8. Silhuetas: o texto que contorna o desenho
 
 Quando o texto contorna o Giuseppe (e a foto do autor, e os dois GIFs da página Sobre), o CSS diz `shape-outside: url("…/Giuseppe.png")`: "contorne o desenho deste arquivo". O navegador baixa esse arquivo **inteiro** (1,6 MB o Giuseppe) só para ler a transparência, e, como o pedido do contorno é de outro tipo que o da `<img>`, ele baixa **de novo** o que a imagem já tinha (os dois GIFs apareciam duas vezes na rede; desde a T17e a `<img>` baixa o WebP animado deles e o contorno, só a silhueta).

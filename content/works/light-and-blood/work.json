@@ -35,5 +35,6 @@
       { "image": "ordem/Ellie Site Cronologia.png", "x": 44.74, "y": 67.42, "width": 37.95, "hover": { "x": 44.54, "y": 63.05, "width": 43.39 } }
     ]
   },
-  "media": "live-ttrpg"
+  "media": "live-ttrpg",
+  "star_runes": {"list": ["✡︎", "⧮", "🝃", "🝘", "ᛈ", "ᚳ"], "final": ["✝︎", "a"]}
 }

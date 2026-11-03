@@ -2482,7 +2482,19 @@
      }
     ]
    },
-   "media": "short-story"
+   "media": "short-story",
+   "star_runes": {
+    "list": [
+     "🜍",
+     "🝪",
+     "𐘲",
+     "ᚾ",
+     "Ł",
+     "ᔨ",
+     "⊥"
+    ],
+    "final": "⛧"
+   }
   },
   "cat-crow-thing": {
    "draft": true,
@@ -2516,7 +2528,19 @@
     "demo": "",
     "steam": ""
    },
-   "media": "videogame"
+   "media": "videogame",
+   "star_runes": {
+    "list": [
+     "🜍",
+     "⛧",
+     "𐘲",
+     "ᚾ",
+     "Ł",
+     "ᔨ",
+     "⊥"
+    ],
+    "final": "🝪"
+   }
   },
   "firestriker": {
    "kind": "prose",
@@ -2588,7 +2612,17 @@
      }
     ]
    },
-   "media": "short-story"
+   "media": "short-story",
+   "star_runes": {
+    "list": [
+     "🜂",
+     "ᚳ",
+     "ᛠ",
+     "🝃",
+     "F"
+    ],
+    "final": "Σ"
+   }
   },
   "hdvr": {
    "kind": "video",
@@ -2644,7 +2678,15 @@
      }
     ]
    },
-   "media": "misc"
+   "media": "misc",
+   "star_runes": {
+    "list": [
+     "ᛃ",
+     "𐤉",
+     "心"
+    ],
+    "final": "b"
+   }
   },
   "light-and-blood": {
    "kind": "video",
@@ -2718,7 +2760,21 @@
      }
     ]
    },
-   "media": "live-ttrpg"
+   "media": "live-ttrpg",
+   "star_runes": {
+    "list": [
+     "✡︎",
+     "⧮",
+     "🝃",
+     "🝘",
+     "ᛈ",
+     "ᚳ"
+    ],
+    "final": [
+     "✝︎",
+     "a"
+    ]
+   }
   },
   "roadside": {
    "draft": true,
@@ -2803,7 +2859,20 @@
     "en": "logos/EN/Roadside 4.png",
     "pt": "logos/PT/Beira de Estrada 4.png"
    },
-   "media": "webcomic"
+   "media": "webcomic",
+   "star_runes": {
+    "list": [
+     "ᚣ",
+     "弓",
+     "♐︎",
+     "ᚸ",
+     "エ",
+     "ꑭ",
+     "⼒",
+     "Ⱝ"
+    ],
+    "final": "ᚸ"
+   }
   },
   "the-pendulum": {
    "kind": "video",
@@ -2833,7 +2902,18 @@
     "chrono": 11
    },
    "draft": true,
-   "media": "short-film"
+   "media": "short-film",
+   "star_runes": {
+    "list": [
+     "𖦐",
+     "𐔙",
+     "𑀒",
+     "🜲",
+     "ᛥ",
+     "⧖"
+    ],
+    "final": "◇︎"
+   }
   }
  },
  "sinteticos": [

@@ -100,8 +100,11 @@ const listaDeTextos = () =>
 const UMA_RUNA = /^[^\s<>&"']{1,4}$/u;
 /**
  * star_runes do work.json (03/11/2026, só no Astro): as runas que a estrela dos favoritos sorteia ao aparecer na capa, e a runa final
- * logo antes da estrela. Ex.: {"list": ["ᚠ", "ᚢ", "ᚦ"], "final": "ᛟ"}. Ver src/scripts/favoritos/.
+ * logo antes da estrela. Ex.: {"list": ["ᚠ", "ᚢ", "ᚦ"], "final": "ᛟ"}. A final pode ser uma lista (até 3, mostradas em ordem), como em
+ * Luz & Sangue: {"final": ["✝︎", "a"]}. "a" e "b" são as runas próprias (fonte "Hate Cycle Runas"). Ver src/scripts/favoritos/.
  */
+const FINAL_ERRADA = (v: unknown) =>
+  `a runa final tem de ser UM símbolo (ex.: "ᛟ") ou uma lista de até 3 (ex.: ["✝︎", "a"]), sem espaços, mas veio ${descrever(v)}.`;
 const runasDaEstrela = () =>
   z.strictObject(
     {
@@ -114,9 +117,16 @@ const runasDaEstrela = () =>
             if (!UMA_RUNA.test(r)) ctx.addIssue({ code: "custom", path: [n], input: r, message: `a runa ${n + 1} (${JSON.stringify(r)}) tem de ser UM símbolo, sem espaços.` });
           });
         }),
-      final: z
-        .string({ error: (i) => `a runa final tem de ser UM símbolo (ex.: "ᛟ"), mas veio ${descrever(i.input)}.` })
-        .regex(UMA_RUNA, { error: (i) => `a runa final tem de ser UM símbolo, sem espaços, mas veio ${descrever(i.input)}.` }),
+      final: z.union(
+        [
+          z.string().regex(UMA_RUNA, { error: (i) => FINAL_ERRADA(i.input) }),
+          z
+            .array(z.string().regex(UMA_RUNA, { error: (i) => FINAL_ERRADA(i.input) }))
+            .min(1, { error: (i) => FINAL_ERRADA(i.input) })
+            .max(3, { error: (i) => FINAL_ERRADA(i.input) }),
+        ],
+        { error: (i) => FINAL_ERRADA(i.input) },
+      ),
     },
     { error: (i) => (i.code === "unrecognized_keys" ? `só aceita "list" e "final".` : `tem de ser {"list": ["ᚠ", "ᚢ"], "final": "ᛟ"}, mas veio ${descrever(i.input)}.`) },
   );

@@ -36,5 +36,6 @@
       { "image": "ordem/Giuseppe Olhos Site Cronologia.png", "x": 41.95, "y": 85.97, "width": 22.66, "opacity": 0, "hover": { "x": 41.86, "y": 85.37, "width": 24.08, "opacity": 1 } }
     ]
   },
-  "media": "short-story"
+  "media": "short-story",
+  "star_runes": {"list": ["🜍", "🝪", "𐘲", "ᚾ", "Ł", "ᔨ", "⊥"], "final": "⛧"}
 }

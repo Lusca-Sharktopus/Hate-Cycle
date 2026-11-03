@@ -23,27 +23,29 @@ export interface ConfiguracaoDosFavoritos {
 
 export interface RunasDaObra {
   lista: readonly string[];
-  final: string;
+  /** a(s) runa(s) final(is), em ordem, logo antes da estrela (Luz & Sangue: ✝ e o sangue). */
+  finais: readonly string[];
 }
 
 /** Uma runa: um símbolo curto, sem espaços nem caracteres de HTML (a mesma regra do schema do work.json). */
 const UMA_RUNA = /^[^\s<>&"']{1,4}$/u;
 function runasValidas(x: unknown): RunasDaObra | null {
   if (!x || typeof x !== "object") return null;
-  const { lista, final } = x as Record<string, unknown>;
-  if (!Array.isArray(lista) || typeof final !== "string" || !UMA_RUNA.test(final)) return null;
+  const { lista, finais } = x as Record<string, unknown>;
+  if (!Array.isArray(lista) || !Array.isArray(finais)) return null;
   const boas = lista.filter((r): r is string => typeof r === "string" && UMA_RUNA.test(r)).slice(0, 60);
-  return boas.length ? { lista: boas, final } : null;
+  const fins = finais.filter((r): r is string => typeof r === "string" && UMA_RUNA.test(r)).slice(0, 3);
+  return boas.length && fins.length === finais.length && fins.length ? { lista: boas, finais: fins } : null;
 }
 
-/** Quantas runas sorteadas passam antes da final, e quanto tempo cada uma fica (ms). */
+/** Quantas runas sorteadas passam antes da(s) final(is), e quanto tempo cada uma fica (ms). */
 export const RUNAS_SORTEADAS = 5;
 export const TEMPO_DE_CADA_RUNA = 55;
 export const TEMPO_DA_RUNA_FINAL = 150;
 
 /**
  * A seqüência da animação: `quantas` runas sorteadas da lista (nunca a mesma duas vezes seguidas, quando a lista tem mais de uma) e,
- * por último, a runa final. `sorteio` devolve um número em [0, 1) (Math.random no navegador; fixo no teste).
+ * por último, a(s) runa(s) final(is). `sorteio` devolve um número em [0, 1) (Math.random no navegador; fixo no teste).
  */
 export function sequenciaDeRunas(r: RunasDaObra, quantas = RUNAS_SORTEADAS, sorteio: () => number = Math.random): string[] {
   const saida: string[] = [];
@@ -52,8 +54,18 @@ export function sequenciaDeRunas(r: RunasDaObra, quantas = RUNAS_SORTEADAS, sort
     if (r.lista.length > 1 && runa === saida[saida.length - 1]) runa = r.lista[(r.lista.indexOf(runa) + 1) % r.lista.length] as string;
     saida.push(runa);
   }
-  saida.push(r.final);
+  saida.push(...r.finais);
   return saida;
+}
+
+/** Quando cada runa da seqüência entra (ms desde o começo) e quando a estrela volta: as sorteadas a cada TEMPO_DE_CADA_RUNA, as finais a
+ *  cada TEMPO_DA_RUNA_FINAL. */
+export function horariosDaSequencia(sorteadas: number, finais: number): { entradas: number[]; estrela: number } {
+  const entradas: number[] = [];
+  let t = 0;
+  for (let i = 0; i < sorteadas; i++) (entradas.push(t), (t += TEMPO_DE_CADA_RUNA));
+  for (let i = 0; i < finais; i++) (entradas.push(t), (t += TEMPO_DA_RUNA_FINAL));
+  return { entradas, estrela: t };
 }
 
 /** O identificador de uma obra como o banco aceita (check de public.favorites). */
@@ -68,9 +80,10 @@ export function lerConfiguracaoDosFavoritos(x: unknown): ConfiguracaoDosFavorito
   const { url, key, lang, obras, runas } = x as Record<string, unknown>;
   if (typeof url !== "string" || !url || typeof key !== "string" || !key) return null;
   if (!obras || typeof obras !== "object" || Array.isArray(obras)) return null;
-  const limpas: Record<string, string> = {};
+  // sem protótipo: um título ou pasta chamado "constructor" não cai em propriedade herdada (revisão de 03/11)
+  const limpas: Record<string, string> = Object.create(null) as Record<string, string>;
   for (const [titulo, id] of Object.entries(obras as Record<string, unknown>)) if (obraValida(id)) limpas[titulo] = id;
-  const runasLimpas: Record<string, RunasDaObra> = {};
+  const runasLimpas: Record<string, RunasDaObra> = Object.create(null) as Record<string, RunasDaObra>;
   if (runas && typeof runas === "object" && !Array.isArray(runas)) {
     for (const [obra, rr] of Object.entries(runas as Record<string, unknown>)) {
       const boa = runasValidas(rr);

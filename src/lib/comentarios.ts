@@ -134,7 +134,7 @@ export function comentariosDaPagina(lang: Lang, idDaPagina: string | null, comRa
 export function configuracaoDosFavoritos(
   lang: Lang,
   obras: readonly (readonly [string, string])[],
-  runas: Readonly<Record<string, { lista: readonly string[]; final: string }>>,
+  runas: Readonly<Record<string, { lista: readonly string[]; finais: readonly string[] }>>,
   chaves: ChavesDoSupabase | undefined,
 ): string | null {
   const url = chaves?.supabase_url;
@@ -145,16 +145,17 @@ export function configuracaoDosFavoritos(
     ["key", pyStrip(chave)],
     ["lang", lang],
     ["obras", new Map(obras.map(([titulo, obra]) => [titulo, obra]))],
-    ["runas", new Map(Object.entries(runas).map(([obra, r]) => [obra, new Map<string, unknown>([["lista", [...r.lista]], ["final", r.final]])]))],
+    ["runas", new Map(Object.entries(runas).map(([obra, r]) => [obra, new Map<string, unknown>([["lista", [...r.lista]], ["finais", [...r.finais]]])]))],
   ]);
-  return `window.HC_FAV=${jsonComoPython(fav).replaceAll("</", "<\\/")};`;
+  // revisão de 03/11: além de "</", também "<!--" (e < > & e as quebras de linha do Unicode) viram \uXXXX: nada no texto mexe no <script>
+  return `window.HC_FAV=${jsonComoPython(fav).replace(/[<>&\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"))};`;
 }
 
 /** A configuração dos favoritos com o config.json do autor. */
 export function favoritosDaPagina(
   lang: Lang,
   obras: readonly (readonly [string, string])[],
-  runas: Readonly<Record<string, { lista: readonly string[]; final: string }>>,
+  runas: Readonly<Record<string, { lista: readonly string[]; finais: readonly string[] }>>,
 ): string | null {
   return configuracaoDosFavoritos(lang, obras, runas, doAutor.comments);
 }

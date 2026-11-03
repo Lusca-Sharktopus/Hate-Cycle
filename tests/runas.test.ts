@@ -46,9 +46,9 @@ describe(`runas iguais às do Python ${ref.python} (${ref.casos.length} sementes
     expect(diferentes, `sementes com runas diferentes do Python`).toEqual([]);
   });
 
-  test("os 22 <link> de fontes das runas são os mesmos do rune_fonts_links()", () => {
+  test("os 24 <link> de fontes das runas são os mesmos do rune_fonts_links() (22 + Bamum e Elbasan, 03/11)", () => {
     expect(runasFontesHtml()).toBe(ref.fontes);
-    expect(runasFontesHtml().match(/<link /g)).toHaveLength(22);
+    expect(runasFontesHtml().match(/<link /g)).toHaveLength(24);
   });
 });
 

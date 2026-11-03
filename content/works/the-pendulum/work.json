@@ -26,5 +26,6 @@
     "chrono": 11
   },
   "draft": true,
-  "media": "short-film"
+  "media": "short-film",
+  "star_runes": {"list": ["𖦐", "𐔙", "𑀒", "🜲", "ᛥ", "⧖"], "final": "◇︎"}
 }

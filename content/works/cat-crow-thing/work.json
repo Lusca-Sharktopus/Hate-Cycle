@@ -30,5 +30,6 @@
     "demo": "",
     "steam": ""
   },
-  "media": "videogame"
+  "media": "videogame",
+  "star_runes": {"list": ["🜍", "⛧", "𐘲", "ᚾ", "Ł", "ᔨ", "⊥"], "final": "🝪"}
 }
