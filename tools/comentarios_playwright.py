@@ -695,7 +695,7 @@ def main():
                     do_marca = [x for x in pa if x["caminho"] == "/rest/v1/bookmarks"]
                     pa = [x for x in pa if x["caminho"] != "/rest/v1/bookmarks"]
                     for x in do_marca:
-                        if x["metodo"] != "GET" or x["q"] != {"page_id": [f"eq.{pid_as}"], "select": ["paragrafo,fracao"]}:
+                        if x["metodo"] != "GET" or x["q"] not in ({"page_id": [f"eq.{pid_as}"], "select": ["paragrafo,fracao"], "user_id": [f"eq.{x['q'].get('user_id', [''])[0].removeprefix('eq.')}"]},) or x["q"]["user_id"] == ["eq."]:
                             problemas.append(f"{nome} [{passo}] pedido inesperado do marca-página: {json.dumps(x, ensure_ascii=False)}")
                 if isinstance(pp, list) and any(x["caminho"] == "/rest/v1/bookmarks" for x in pp):
                     problemas.append(f"{nome} [{passo}] o Python pediu o marca-página (não tem)")

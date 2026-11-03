@@ -129,11 +129,12 @@ function iniciar(texto: HTMLElement, caixa: HTMLElement, id: string): void {
   }
   async function enviar(a: Ancora): Promise<void> {
     if (sb && usuario) {
-      const { error } = await sb
+      await sb
         .from("bookmarks")
         .upsert({ user_id: usuario, page_id: id, paragrafo: a.paragrafo, fracao: a.fracao }, { onConflict: "user_id,page_id" });
-      if (!error) return;
-      // sem rede ou tabela ainda não criada: guarda no navegador, para não perder (sobe na próxima entrada)
+      // com conta, nunca cai no navegador (revisão de 03/11): num computador compartilhado, a posição de uma pessoa ficaria para a
+      // próxima e subiria para a conta dela; sem rede, o marcador fica onde está nesta página e a próxima gravação tenta de novo
+      return;
     }
     const marcas = lerMarcas(guardado(CHAVE_DAS_MARCAS));
     marcas[id] = { p: a.paragrafo, f: a.fracao, t: Date.now() };
@@ -146,8 +147,9 @@ function iniciar(texto: HTMLElement, caixa: HTMLElement, id: string): void {
     return m ? { paragrafo: m.p, fracao: m.f } : null;
   }
   async function daConta(): Promise<Ancora | null> {
-    if (!sb) return null;
-    const { data, error } = await sb.from("bookmarks").select("paragrafo, fracao").eq("page_id", id).maybeSingle();
+    if (!sb || !usuario) return null;
+    // .eq("user_id") além do RLS (revisão de 03/11): se um dia uma policy deixar alguém ler mais (um admin), aqui continua só o próprio
+    const { data, error } = await sb.from("bookmarks").select("paragrafo, fracao").eq("user_id", usuario).eq("page_id", id).maybeSingle();
     if (error) return doNavegador();
     return ancoraValida(data);
   }
@@ -155,7 +157,7 @@ function iniciar(texto: HTMLElement, caixa: HTMLElement, id: string): void {
     if (!sb || !usuario) return;
     const marcas = lerMarcas(guardado(CHAVE_DAS_MARCAS));
     if (!Object.keys(marcas).length) return;
-    const { data, error } = await sb.from("bookmarks").select("page_id");
+    const { data, error } = await sb.from("bookmarks").select("page_id").eq("user_id", usuario);
     if (error) return;
     const jaTem = new Set(((data ?? []) as { page_id: string }[]).map((l) => l.page_id));
     const sobem = marcasQueSobem(marcas, jaTem).map((m) => ({ ...m, user_id: usuario }));

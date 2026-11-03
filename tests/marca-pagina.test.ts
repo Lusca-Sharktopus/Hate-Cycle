@@ -71,7 +71,7 @@ describe("ID do capítulo = ID dos comentários (iguais nos dois idiomas)", () =
   });
   test("o formato é o mesmo que o banco aceita (check da tabela bookmarks)", () => {
     const sql = readFileSync("supabase/migrations/20261103020000_marca_paginas.sql", "utf8");
-    expect(sql).toContain("check (page_id ~ '^works/[a-z0-9-]+/[0-9]{2,3}$')");
+    expect(sql).toContain("check (page_id ~ '^works/[a-z0-9-]+/[0-9]{2,3}$' and char_length(page_id) <= 120)");
     for (const pasta of readdirSync("content/works", { withFileTypes: true }).filter((d) => d.isDirectory())) {
       for (const cap of readdirSync(join("content/works", pasta.name), { withFileTypes: true }).filter((d) => d.isDirectory())) {
         expect(idDoCapitulo(`/pt/works/${pasta.name}/${cap.name}/`), `${pasta.name}/${cap.name}`).toBe(`works/${pasta.name}/${cap.name}`);

@@ -69,7 +69,7 @@ def main() -> int:
             print("✗ papéis do Supabase:", err)
             return 1
         antigo = banco_antigo(lambda sql, papel=None, sub=None, db="antigo": psql(run, sock, sql, papel, sub, db))
-        return casos(lambda sql, papel=None, sub=None: psql(run, sock, sql, papel, sub)) or antigo
+        return casos(lambda sql, papel=None, sub=None: psql(run, sock, sql, papel, sub), lambda pedidos: juntos(sock, pedidos)) or antigo
     finally:
         run(f"{BIN}/pg_ctl", "-D", dados, "-m", "immediate", "stop")
         shutil.rmtree(pasta, ignore_errors=True)
@@ -85,6 +85,16 @@ def psql(run, sock, sql: str, papel: str | None, sub: str | None, db: str = "pos
     r = run(f"{BIN}/psql", "-h", sock, "-p", "55432", "-U", "postgres", "-d", db, "-X", "-q", "-At", "-v", "ON_ERROR_STOP=1",
             "-c", sql if sql.lower().startswith("create database") else "begin;\n" + pre + sql.rstrip().rstrip(";") + ";\ncommit;")
     return r.returncode == 0, r.stdout.strip(), r.stderr.strip()
+
+
+def juntos(sock, pedidos):
+    """Roda vários (sql, papel, sub) AO MESMO TEMPO, cada um na sua conexão e transação; devolve [(ok, erro)]."""
+    procs = []
+    for sql, papel, sub in pedidos:
+        pre = f"set local role {papel};\nset local request.jwt.claim.sub = '{sub}';\n"
+        procs.append(subprocess.Popen(COMO_POSTGRES + [f"{BIN}/psql", "-h", sock, "-p", "55432", "-U", "postgres", "-X", "-q", "-At", "-v", "ON_ERROR_STOP=1",
+                                                       "-c", "begin;\n" + pre + sql + ";\nselect pg_sleep(0.5);\ncommit;"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
+    return [(p.wait() == 0, p.stderr.read().strip()) for p in procs]
 
 
 def banco_antigo(q) -> int:
@@ -107,7 +117,7 @@ def banco_antigo(q) -> int:
     return 0 if certo else 1
 
 
-def casos(q) -> int:
+def casos(q, paralelo=None) -> int:
     resultados: list[tuple[bool, str]] = []
 
     def caso(nome: str, sql: str, *, papel=None, sub=None, erro: str | None = None, depois: str | None = None, espera: str | None = None):
@@ -250,7 +260,11 @@ def casos(q) -> int:
     ok_, saida_, _ = q("select count(*) from public.bookmarks", "anon")
     resultados.append((not ok_, "marca-página: visitante sem conta não lê a tabela"))
     print(("✔ " if not ok_ else "✗ ") + "marca-página: visitante sem conta não lê a tabela")
-    caso("marca-página: ninguém grava em nome de outra pessoa", mp("works/firestriker/01", 1, extra=f"'{B}'"), papel="authenticated", sub=C, erro="row-level security")
+    # o gatilho recusa antes do RLS ("not allowed"; revisão de 03/11), também quando a linha da outra pessoa já existe (upsert)
+    caso("marca-página: ninguém grava em nome de outra pessoa", mp("works/firestriker/01", 1, extra=f"'{B}'"), papel="authenticated", sub=C, erro="not allowed")
+    caso("marca-página: nem por upsert sobre o da outra pessoa",
+         mp("works/firestriker/01", 1, extra=f"'{B}'") + " on conflict (user_id, page_id) do update set paragrafo = excluded.paragrafo",
+         papel="authenticated", sub=C, erro="not allowed")
     caso("marca-página: ninguém muda o de outra pessoa", "update public.bookmarks set paragrafo = 0", papel="authenticated", sub=C,
          depois=f"select paragrafo from public.bookmarks where user_id = '{B}'", espera="30")
     caso("marca-página: ninguém apaga o de outra pessoa", "delete from public.bookmarks", papel="authenticated", sub=C,
@@ -261,6 +275,24 @@ def casos(q) -> int:
          depois=f"select page_id || '|' || (user_id = '{B}') from public.bookmarks", espera="works/firestriker/01|true")
     caso("marca-página: apagar o próprio", "delete from public.bookmarks where page_id = 'works/firestriker/01'", papel="authenticated", sub=B,
          depois="select count(*) from public.bookmarks", espera="0")
+    # revisão de 03/11: capítulo com nome gigante; limite de 1000 (com 1000, mover um que já existe pelo upsert do site continua valendo);
+    # pedidos simultâneos não passam do limite
+    caso("marca-página: capítulo com mais de 120 caracteres é recusado", mp("works/" + "a" * 200 + "/01", 1), papel="authenticated", sub=B, erro="check")
+    q(f"insert into public.bookmarks (user_id, page_id, paragrafo) select '{B}', 'works/o' || g || '/01', 1 from generate_series(1, 1000) g")
+    caso("marca-página: com 1000, o upsert de um capítulo que já tem continua valendo",
+         "insert into public.bookmarks (page_id, paragrafo, fracao) values ('works/o5/01', 7, 0.1) "
+         "on conflict (user_id, page_id) do update set paragrafo = excluded.paragrafo, fracao = excluded.fracao", papel="authenticated", sub=B,
+         depois=f"select paragrafo from public.bookmarks where user_id = '{B}' and page_id = 'works/o5/01'", espera="7")
+    caso("marca-página: com 1000, um capítulo novo é recusado", mp("works/novo/01", 1), papel="authenticated", sub=B, erro="too many bookmarks")
+    q(f"delete from public.bookmarks where user_id = '{B}'")
+    if paralelo:
+        lotes = [(f"insert into public.bookmarks (page_id, paragrafo) select 'works/l{k}-' || g || '/01', 1 from generate_series(1, 1000) g", "authenticated", C) for k in range(3)]
+        res = paralelo(lotes)
+        ok_, saida_, _ = q(f"select count(*) from public.bookmarks where user_id = '{C}'")
+        certo = ok_ and saida_ == "1000" and sum(1 for o, _ in res if o) == 1 and all("too many bookmarks" in e for o, e in res if not o)
+        resultados.append((certo, "marca-página: 3 lotes de 1000 ao mesmo tempo param em 1000"))
+        print(("✔ " if certo else "✗ ") + f"marca-página: 3 lotes de 1000 ao mesmo tempo param em 1000 (ficaram {saida_})")
+        q(f"delete from public.bookmarks where user_id = '{C}'")
     q(f"set local role authenticated; set local request.jwt.claim.sub = '{C}'; " + mp("works/firestriker/01", 3) + ";")
     caso("marca-página: some junto com a conta", f"delete from auth.users where id = '{C}'", depois="select count(*) from public.bookmarks", espera="0")
 
