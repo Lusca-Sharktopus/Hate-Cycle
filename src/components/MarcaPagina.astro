@@ -1,0 +1,41 @@
+---
+// O marca-página (03/11/2026): só nos capítulos de TEXTO (Leitor.astro). Não desenha nada no HTML: o script (src/scripts/marcaPagina/)
+// monta a faixa da margem e o marcador ao lado do texto quando a página abre. Sem JavaScript, o capítulo fica como sempre.
+// O site Python não tem o marca-página: a paridade tira só este script (tools/paridade_html.mjs).
+---
+
+<script>
+  import "../scripts/marcaPagina/index";
+</script>
+
+<style is:global>
+  @layer site {
+    /* a caixa do capítulo vira a referência das posições (a faixa e o marcador ficam na margem direita dela) */
+    .reader-box.mp-caixa { position: relative; }
+
+    /* a faixa: toda a margem à direita do texto (dentro da folha e fora dela, até a borda da tela). Clique = marcador ali. */
+    .mp-faixa { position: absolute; z-index: 2; cursor: pointer; touch-action: pan-y; }
+    .mp-faixa:hover { background: linear-gradient(to right, #00e9fd00, #00e9fd14 40%, #00e9fd00); }
+
+    /* o marcador: a ponta (losango menta, que aponta para o texto) e a aba com a logo (degradê verde → ciano, como no modelo do autor) */
+    .mp-marcador {
+      position: absolute; z-index: 3; width: var(--mp-s, 64px); height: calc(var(--mp-s, 64px) * 1.15); padding: 0; border: 0; background: none;
+      transform: translateY(-50%); cursor: grab; touch-action: none; transition: top .25s ease, opacity .2s;
+    }
+    .mp-marcador.mp-arrastando { cursor: grabbing; transition: none; }
+    .mp-marcador.mp-vazio { opacity: .4; }
+    .mp-marcador.mp-vazio:hover, .mp-marcador.mp-vazio:focus-visible { opacity: .85; }
+    .mp-ponta {
+      position: absolute; left: 0; top: 50%; width: calc(var(--mp-s, 64px) * .5); aspect-ratio: 1; background: #1fe0b0; border-radius: 4px;
+      transform: translate(-45%, -50%) rotate(45deg); box-shadow: 0 2px 8px #0003;
+    }
+    .mp-aba {
+      position: absolute; inset: 0; display: grid; place-items: center; border-radius: 0 6px 6px 0;
+      background: linear-gradient(135deg, #19e38a, #0be6f0); box-shadow: 0 4px 14px #0004;
+    }
+    .mp-aba img { width: 72%; height: auto; pointer-events: none; filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 7px #00e9fd); }
+    .mp-marcador:hover .mp-aba, .mp-marcador:focus-visible .mp-aba { box-shadow: 0 0 16px var(--cyan); }
+
+    @media (prefers-reduced-motion: reduce) { .mp-marcador { transition: none; } }
+  }
+</style>

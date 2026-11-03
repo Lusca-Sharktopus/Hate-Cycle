@@ -6,7 +6,7 @@ Hate Cycle is the personal website of Lusca Sharktopus (Lucas Pereira da Silva).
 Reading requires nothing
 You can read, watch and browse the whole website without an account. The website has no ads, uses no analytics tools (such as Google Analytics) and does not sell or share data with anyone.
 If you create an account
-An account lets you comment and, once the feature is available, keep your bookmarks. With it, the website keeps:
+An account lets you comment and keep your bookmarks. With it, the website keeps:
 your email address, so you can sign in and recover your password. It never appears on the website;
 the name you choose to show on your comments;
 if you sign in with Google, Discord or Twitter: your account identifier on that platform and the public information it shares (name and picture). Your password for those platforms never reaches the website;

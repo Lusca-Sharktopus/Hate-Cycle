@@ -19,6 +19,7 @@ import CartaQueVira from "./CartaQueVira.astro";
 import Comentarios from "./Comentarios.astro";
 import Folheador from "./Folheador.astro";
 import JanelaDoJogo from "./JanelaDoJogo.astro";
+import MarcaPagina from "./MarcaPagina.astro";
 import Pager from "./Pager.astro";
 import PostsAlternados from "./PostsAlternados.astro";
 import ProximaHistoria from "./ProximaHistoria.astro";
@@ -41,6 +42,7 @@ const c = l.conteudo;
 <div class="reader-box paper slim">{l.comentarios && <Comentarios secao={l.comentarios} />}</div>
 {l.temCartaQueVira && <CartaQueVira />}
 {l.temPostsAlternados && <PostsAlternados />}
+{c.formato === "prose" && <MarcaPagina />}
 
 <style is:global>
   @layer site {

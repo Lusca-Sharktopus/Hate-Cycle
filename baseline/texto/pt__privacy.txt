@@ -6,7 +6,7 @@ Hate Cycle é um site pessoal de Lusca Sharktopus (Lucas Pereira da Silva). Esta
 Para ler, nada é pedido
 Você pode ler, assistir e navegar por todo o site sem criar conta. O site não tem anúncios, não usa ferramentas de estatística (como o Google Analytics) e não vende nem repassa dados a ninguém.
 Se você criar uma conta
-A conta serve para comentar e, quando o recurso estiver disponível, para guardar seus marca-páginas. Com ela, o site guarda:
+A conta serve para comentar e para guardar seus marca-páginas. Com ela, o site guarda:
 seu e-mail, para você entrar e recuperar a senha. Ele nunca aparece no site;
 o nome que você escolher para aparecer nos comentários;
 se você entrar pelo Google, Discord ou Twitter: o identificador da sua conta nessa plataforma e as informações públicas que ela compartilha (nome e foto). A sua senha dessas plataformas nunca chega ao site;

@@ -122,6 +122,18 @@ Com o CLI: `supabase db push` (depois de marcar a inicial como aplicada, passo 4
 
 **Como foi provado:** `python3 tools/banco_local.py` sobe um Postgres local com uma imitação do Supabase, aplica todas as migrações (a última duas vezes) e roda 35 casos (cada brecha fechada e tudo o que o site faz continuando a funcionar). A caixa de comentários dos dois sites mostra "[comentário apagado]" (`c_deleted`, texto padrão no `build.py`/`src/lib/comentarios.ts`; dá para trocar pelo `config.json → ui`).
 
+### Migração de 03/11/2026: marca-páginas
+
+Arquivo: `supabase/migrations/20261103020000_marca_paginas.sql`. **Ainda não rodada no seu projeto.** Rode depois da de cima (ela usa a tabela de perfis).
+
+O que muda para quem visita: quem tem conta passa a ter o marca-página guardado na conta (vale em qualquer aparelho). Sem conta, o marca-página continua funcionando, guardado só no navegador. Enquanto a migração não for rodada, o site novo guarda tudo no navegador, mesmo de quem entrou (nada quebra; quando a tabela existir, o que estava no navegador sobe para a conta na próxima vez que a pessoa entrar).
+
+A tabela `bookmarks` guarda, por pessoa e por capítulo, o parágrafo e a fração dentro dele. Cada pessoa só vê e mexe nos próprios (RLS); visitante sem conta não toca na tabela; no máximo 1000 por pessoa; a conta apagada leva os marca-páginas junto.
+
+**Como aplicar (~2 minutos):** igual à de cima: SQL Editor → New query → cole **tudo** de `supabase/migrations/20261103020000_marca_paginas.sql` → **Run** → "Success. No rows returned". Pode rodar de novo sem estragar nada. Se der erro, me mande um print.
+
+**Como foi provado:** `python3 tools/banco_local.py` (os casos do marca-página: ler e gravar o próprio, não ver nem mexer no de outra pessoa, visitante sem conta barrado, dono e capítulo que não mudam, formato do capítulo, limite, conta apagada).
+
 ## 6. O que mudou no site novo (Astro, T15)
 
 Para quem visita, **nada**: mesma caixa, mesmos botões e textos, mesmas conversas (os IDs `works/<obra>/<capítulo>` e `news/<pasta>` não mudaram), e quem já estava conectado continua conectado (a sessão fica guardada no navegador com o mesmo nome).

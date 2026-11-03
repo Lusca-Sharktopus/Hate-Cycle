@@ -395,9 +395,17 @@ Cada capítulo e cada notícia tem comentários; a conversa é a mesma nos dois 
 No site novo (Astro) a caixa funciona igual; por dentro, ela usa um script próprio com o supabase-js numa versão fixa, e o banco passou a ter migrações versionadas em `supabase/migrations/` (como usar daqui para frente: `docs/comentarios-supabase.md`, seções 5 e 6). Você não precisa fazer nada no Supabase por causa disso.
 Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da notícia (nas três versões de notícia: comum, com fundo e colagem). Nos botões de anterior/próximo do fim da notícia, o título da notícia vizinha é cortado em 40 caracteres com "…" (o título inteiro aparece ao passar o mouse); isso é automático, não muda o título da notícia.
 
+### Marca-página (só no site novo, desde 03/11)
+
+- Em todo capítulo de **texto** (não nos quadrinhos nem nos vídeos), a margem à direita do texto é a "faixa" do marca-página. Um clique nela leva o marcador (a aba verde com a logo) para aquela altura; dá para arrastar o marcador para cima e para baixo; com o teclado, Tab até o marcador e as setas andam de parágrafo em parágrafo. Antes do primeiro uso, o marcador fica apagadinho no topo do texto.
+- O lugar é guardado como "parágrafo + quanto dele já foi lido", não em pixels: noutro aparelho (ou com a janela de outro tamanho) o marcador volta ao mesmo parágrafo, podendo cair um pouco acima ou abaixo.
+- **Sem conta:** fica guardado só naquele navegador, **sem aviso nenhum** (seu pedido de 03/11). **Com conta:** fica na conta e aparece em qualquer aparelho. Ao entrar, o que estava no navegador sobe para a conta só nos capítulos em que a conta ainda não tinha marca-página (a conta tem prioridade, sua decisão de 02/11).
+- Para funcionar com conta, o banco precisa da migração `20261103020000_marca_paginas.sql` (`docs/comentarios-supabase.md`, seção 5). Sem ela, tudo fica no navegador.
+- Onde mexer: a aparência em `src/components/MarcaPagina.astro`; o ícone em `src/assets/marca-pagina/hc-branco.png`; os textos para leitores de tela em `src/scripts/marcaPagina/regras.ts`.
+
 ## 13. Menu e Extras
 
-- *Stories* e *About* sempre aparecem; *Blog* (no site antigo, *News Feed* / *Notícias*; ver [Notícias](#10-notícias)) aparece quando há notícias publicadas; *Support* aparece quando existir a página `content/pages/support/` sem `draft: true`.
+- *Stories* e *About* sempre aparecem; *News Feed* / *Notícias* (ver [Notícias](#10-notícias)) aparece quando há notícias publicadas; *Support* aparece quando existir a página `content/pages/support/` sem `draft: true`.
 - *Extras* agrupa Universo, Personagens e qualquer página com `menu: extras` no topo.
 - **Extras retirado por enquanto:** `config.json → "show_extras": false` (menu, páginas de Universo/Personagens e o botão da home). Para voltar, troque para `true`.
 

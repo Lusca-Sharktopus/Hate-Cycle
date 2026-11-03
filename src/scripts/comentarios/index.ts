@@ -7,7 +7,7 @@
 // A configuração vem do window.HC que a própria página traz, ANTES deste script (um <script> comum no HTML, montado por
 // src/lib/comentarios.ts, o único arquivo que lê config.json → comments). A chave é a "anon": pública por desenho; quem
 // protege os dados é o RLS do banco (supabase/migrations/).
-import { createClient } from "@supabase/supabase-js";
+import { clienteDoSupabase } from "../supabase/cliente";
 import { iniciarComentarios, lerConfiguracao } from "./caixa";
 
 declare global {
@@ -18,4 +18,4 @@ declare global {
 
 const cfg = lerConfiguracao(window.HC);
 const raiz = document.querySelector<HTMLElement>(".hc-comments[data-page]");
-if (cfg && raiz) iniciarComentarios(raiz, cfg, createClient(cfg.url, cfg.key));
+if (cfg && raiz) iniciarComentarios(raiz, cfg, clienteDoSupabase(cfg.url, cfg.key));

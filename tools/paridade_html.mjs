@@ -108,6 +108,8 @@ const SCRIPTS_DO_ASTRO = [
   ["6 notícias: busca e páginas (.news-list)", (s) => s.modulo && /news-list|news-item/.test(s.texto)],
   ["7 posts alternados (.embed-alt)", (s) => s.modulo && /\.embed-alt/.test(s.texto)],
   ["T15 comentários (script empacotado)", (s) => s.modulo && /CaixaDeComentarios\.astro/.test(s.src)],
+  // 03/11: o marca-página (só no Astro, todo capítulo de texto; MarcaPagina.astro). O Python não tem.
+  ["marca-página (script empacotado)", (s) => s.modulo && /MarcaPagina\.astro/.test(s.src)],
   ["T17c bloco de ordem", (s) => s.modulo && /hc-ordem-de-leitura/.test(s.texto)],
   // T17d (só no Astro, só na prévia): o script do leitor página a página vem EMBUTIDO na página (não tem src); o que o reconhece é o que ele
   // procura (`[data-folheador]`) e os `.fl-runa` que ele marca (src/scripts/folheador/). O Python não tem o leitor (desenha as páginas empilhadas).
@@ -380,13 +382,15 @@ for (const url of [...pp.keys()].filter((u) => pa.has(u)).sort()) {
   // comportamentos
   const cp = [...p.comportamentos].filter((c) => !c.startsWith("3 ")), ca = [...a.comportamentos];
   if (p.comportamentos.has("3 GIFs de .page-project (nunca age: T14)")) falha(url, "o bloco 3 do site.js (GIFs de .page-project) agiria aqui, e o Astro não o tem (T14 diz que nunca age)");
-  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17d leitor página a página (script)"]);
+  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17d leitor página a página (script)", "marca-página (script empacotado)"]);
   const faltam = cp.filter((c) => !a.comportamentos.has(c));
   const sobram = ca.filter((c) => !p.comportamentos.has(c) && !extrasDecididos.has(c));
   if (faltam.length) falha(url, `comportamento do Python sem script no Astro: ${faltam.join("; ")}`);
   if (sobram.length) falha(url, `script do Astro sem o elemento que o usa no Python: ${sobram.join("; ")}`);
   if (a.comportamentos.has("T15 comentários (script empacotado)") !== /class="hc-comments"/.test(ha)) falha(url, "script dos comentários × caixa de comentários");
   if (a.comportamentos.has("T17c bloco de ordem") !== (CONTAGEM['T17c: bloco "estou lendo em ordem" (Astro)']?.has(url) === true)) falha(url, "script do bloco de ordem × bloco de ordem");
+  // marca-página (03/11): só em capítulo de TEXTO (a área .prose.story do leitor)
+  if (a.comportamentos.has("marca-página (script empacotado)") !== /class="prose story[ "]/.test(ha)) falha(url, "script do marca-página × capítulo de texto");
   // T17d: o script do leitor página a página só vai nas páginas que têm o leitor (o que a regra folheadorComoNoPython acabou de trocar)
   if (a.comportamentos.has("T17d leitor página a página (script)") !== (CONTAGEM["T17d: leitor página a página dos quadrinhos (Astro)"]?.has(url) === true)) falha(url, "script do leitor página a página × leitor página a página");
   const chave = `Python: ${[...p.comportamentos].sort().join(" | ")}\nAstro:  ${ca.sort().join(" | ")}`;

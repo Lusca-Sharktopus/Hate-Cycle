@@ -236,6 +236,34 @@ def casos(q) -> int:
                 "and proconfig is not null and 'search_path=\"\"' = any(proconfig)",
          espera="6")
 
+    # 9) marca-páginas (migração 20261103020000)
+    mp = lambda pag, par, fr="0.5", extra="": f"insert into public.bookmarks (page_id, paragrafo, fracao{', user_id' if extra else ''}) values ('{pag}', {par}, {fr}{', ' + extra if extra else ''})"
+    caso("marca-página: quem tem conta guarda o seu", mp("works/firestriker/01", 12), papel="authenticated", sub=B,
+         depois=f"select paragrafo || ':' || fracao from public.bookmarks where user_id = '{B}'", espera="12:0.5")
+    caso("marca-página: guardar de novo no mesmo capítulo atualiza (upsert)",
+         "insert into public.bookmarks (page_id, paragrafo, fracao) values ('works/firestriker/01', 30, 0.25) "
+         "on conflict (user_id, page_id) do update set paragrafo = excluded.paragrafo, fracao = excluded.fracao", papel="authenticated", sub=B,
+         depois=f"select paragrafo || ':' || fracao from public.bookmarks where user_id = '{B}'", espera="30:0.25")
+    ok_, saida_, _ = q("select count(*) from public.bookmarks", "authenticated", C)
+    resultados.append((ok_ and saida_ == "0", "marca-página: a Caio não vê o da Bia"))
+    print(("✔ " if ok_ and saida_ == "0" else "✗ ") + "marca-página: a Caio não vê o da Bia")
+    ok_, saida_, _ = q("select count(*) from public.bookmarks", "anon")
+    resultados.append((not ok_, "marca-página: visitante sem conta não lê a tabela"))
+    print(("✔ " if not ok_ else "✗ ") + "marca-página: visitante sem conta não lê a tabela")
+    caso("marca-página: ninguém grava em nome de outra pessoa", mp("works/firestriker/01", 1, extra=f"'{B}'"), papel="authenticated", sub=C, erro="row-level security")
+    caso("marca-página: ninguém muda o de outra pessoa", "update public.bookmarks set paragrafo = 0", papel="authenticated", sub=C,
+         depois=f"select paragrafo from public.bookmarks where user_id = '{B}'", espera="30")
+    caso("marca-página: ninguém apaga o de outra pessoa", "delete from public.bookmarks", papel="authenticated", sub=C,
+         depois="select count(*) from public.bookmarks", espera="1")
+    caso("marca-página: só em capítulo (page_id de capítulo)", mp("news/2023-08-18-orcs", 1), papel="authenticated", sub=C, erro="check")
+    caso("marca-página: fração fora de 0–1 é recusada", mp("works/firestriker/01", 1, "1.5"), papel="authenticated", sub=C, erro="check")
+    caso("marca-página: trocar de capítulo ou de dono não pega", f"update public.bookmarks set page_id = 'works/light-and-blood/01', user_id = '{C}'", papel="authenticated", sub=B,
+         depois=f"select page_id || '|' || (user_id = '{B}') from public.bookmarks", espera="works/firestriker/01|true")
+    caso("marca-página: apagar o próprio", "delete from public.bookmarks where page_id = 'works/firestriker/01'", papel="authenticated", sub=B,
+         depois="select count(*) from public.bookmarks", espera="0")
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{C}'; " + mp("works/firestriker/01", 3) + ";")
+    caso("marca-página: some junto com a conta", f"delete from auth.users where id = '{C}'", depois="select count(*) from public.bookmarks", espera="0")
+
     falhas = [n for ok, n in resultados if not ok]
     print(f"\n{len(resultados) - len(falhas)}/{len(resultados)} casos certos" + (f"; FALHARAM: {falhas}" if falhas else ""))
     return 1 if falhas else 0

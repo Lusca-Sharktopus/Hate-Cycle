@@ -26,7 +26,7 @@ import { versaleteEntreTags } from "../src/lib/markdown";
 import { compararNatural } from "../src/lib/ordem";
 import { finalizarMain, protegerAtributos, separarScripts, textoDoAutor, versaleteNoMain } from "../src/lib/pagina";
 import { arquivosDoGlob, globNaPasta } from "../src/lib/quadrinhos";
-import { cabecalhoDoCapituloComoNoPython, canonicoDoMiolo, folheadorComoNoPython, RE_SCRIPT_DOS_COMENTARIOS, semDataDoCapitulo, semJanelaDoJogo, semScriptsAntigosDosComentarios } from "./ajudantes/html";
+import { cabecalhoDoCapituloComoNoPython, canonicoDoMiolo, folheadorComoNoPython, RE_SCRIPT_DO_MARCA_PAGINA, RE_SCRIPT_DOS_COMENTARIOS, semDataDoCapitulo, semJanelaDoJogo, semScriptsAntigosDosComentarios } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -149,7 +149,10 @@ for (const amb of ref.ambientes) {
       // JavaScript só onde precisa: o dos comentários (só com a caixa de verdade) e a carta que vira / os posts alternados
       const doComentario = pronto.scripts.match(RE_SCRIPT_DOS_COMENTARIOS) ?? [];
       expect(doComentario.length, `${url}: script dos comentários`).toBe(temCaixa ? 1 : 0);
-      expect(pronto.scripts.replace(RE_SCRIPT_DOS_COMENTARIOS, "") !== "", `${url}: scripts de componente`).toBe(leitura.temCartaQueVira || leitura.temPostsAlternados || (leitura.conteudo.formato === "comic" && leitura.conteudo.folheador !== null));
+      // o marca-página (03/11): uma vez em todo capítulo de texto, nunca no quadrinho nem no vídeo
+      const doMarcaPagina = pronto.scripts.match(RE_SCRIPT_DO_MARCA_PAGINA) ?? [];
+      expect(doMarcaPagina.length, `${url}: script do marca-página`).toBe(leitura.conteudo.formato === "prose" ? 1 : 0);
+      expect(pronto.scripts.replace(RE_SCRIPT_DOS_COMENTARIOS, "").replace(RE_SCRIPT_DO_MARCA_PAGINA, "").trim() !== "", `${url}: scripts de componente`).toBe(leitura.temCartaQueVira || leitura.temPostsAlternados || (leitura.conteudo.formato === "comic" && leitura.conteudo.folheador !== null));
       comparados++;
     });
   });

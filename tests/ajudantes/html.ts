@@ -219,6 +219,8 @@ export function semScriptsAntigosDosComentarios(htmlDoPython: string): { html: s
 
 /** O <script type="module"> do script empacotado dos comentários (o nome do arquivo leva o nome do componente). */
 export const RE_SCRIPT_DOS_COMENTARIOS = /<script type="module" src="[^"]*CaixaDeComentarios\.astro[^"]*"><\/script>/g;
+/** O script do marca-página (03/11/2026, só no Astro, em todo capítulo de texto; MarcaPagina.astro). */
+export const RE_SCRIPT_DO_MARCA_PAGINA = /<script type="module" src="[^"]*MarcaPagina\.astro[^"]*"><\/script>/g;
 
 /** Os IDs das conversas de comentários de uma página: todo atributo data-page, na ordem (o mesmo critério de tools/baseline.py). */
 export function idsDeComentarios(html: string): string[] {

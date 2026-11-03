@@ -13,7 +13,7 @@ Você pode ler, assistir e navegar por todo o site sem criar conta. O site não 
 
 ## Se você criar uma conta
 
-A conta serve para comentar e, quando o recurso estiver disponível, para guardar seus marca-páginas. Com ela, o site guarda:
+A conta serve para comentar e para guardar seus marca-páginas. Com ela, o site guarda:
 
 - **seu e-mail**, para você entrar e recuperar a senha. Ele nunca aparece no site;
 - **o nome que você escolher** para aparecer nos comentários;

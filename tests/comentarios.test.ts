@@ -244,7 +244,7 @@ describe("segurança: o código que vai para o navegador", () => {
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
       const imports = [...codigo(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa)|@supabase\/supabase-js)$/);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa)|\.\.\/supabase\/cliente|@supabase\/supabase-js)$/);
     }
   });
   test("regras.ts e dom.ts não importam nada; caixa.ts só usa o TIPO do supabase-js; só index.ts carrega o pacote", () => {
@@ -252,7 +252,11 @@ describe("segurança: o código que vai para o navegador", () => {
     expect(codigo("dom.ts")).not.toMatch(/\bimport\b/);
     expect(codigo("caixa.ts")).toMatch(/import type \{ SupabaseClient \} from "@supabase\/supabase-js"/);
     expect(codigo("caixa.ts")).not.toMatch(/import \{[^}]*\} from "@supabase/);
-    expect(codigo("index.ts")).toMatch(/import \{ createClient \} from "@supabase\/supabase-js"/);
+    // 03/11: a conexão é uma só para a página toda (comentários e marca-página), em src/scripts/supabase/cliente.ts
+    expect(codigo("index.ts")).toMatch(/import \{ clienteDoSupabase \} from "\.\.\/supabase\/cliente"/);
+    const cliente = readFileSync(join(PASTA, "..", "supabase", "cliente.ts"), "utf8");
+    expect(cliente).toMatch(/import \{ createClient[^}]*\} from "@supabase\/supabase-js"/);
+    expect([...cliente.matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1])).toEqual(["@supabase/supabase-js"]);
   });
   test("todo texto que vem do banco passa por el(..., { texto }) — nenhum textContent/appendChild com dado cru fora do el()", () => {
     // as únicas atribuições de textContent fora de dom.ts são para LIMPAR ("") ou o texto de "Carregando…" da interface

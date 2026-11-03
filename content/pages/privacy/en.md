@@ -13,7 +13,7 @@ You can read, watch and browse the whole website without an account. The website
 
 ## If you create an account
 
-An account lets you comment and, once the feature is available, keep your bookmarks. With it, the website keeps:
+An account lets you comment and keep your bookmarks. With it, the website keeps:
 
 - **your email address**, so you can sign in and recover your password. It never appears on the website;
 - **the name you choose** to show on your comments;

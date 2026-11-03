@@ -280,6 +280,9 @@ class SupabaseFalso:
                 if alvo and conta and (alvo["user_id"] == quem or conta["admin"]):
                     self.linhas = [l for l in self.linhas if l["id"] != alvo_id and l["parent_id"] != alvo_id]
                 return 204, None
+        # marca-página (03/11, só no Astro): quem entrou lê o marca-página do capítulo; aqui ninguém tem nenhum
+        if caminho == "/rest/v1/bookmarks" and req.method == "GET":
+            return 200, []
         return 404, {"message": f"rota desconhecida no Supabase falso: {req.method} {caminho}"}
 
 
@@ -686,6 +689,16 @@ def main():
                 continue
             for (passo, rp, pp), (_, ra, pa) in zip(exec_py.passos, exec_as.passos):
                 total_passos += 1
+                # marca-página (03/11, só no Astro): ao entrar, o script dele lê o marca-página do capítulo; tira esse pedido (e só
+                # esse) antes de comparar, e confere que é exatamente a leitura esperada
+                if isinstance(pa, list):
+                    do_marca = [x for x in pa if x["caminho"] == "/rest/v1/bookmarks"]
+                    pa = [x for x in pa if x["caminho"] != "/rest/v1/bookmarks"]
+                    for x in do_marca:
+                        if x["metodo"] != "GET" or x["q"] != {"page_id": [f"eq.{pid_as}"], "select": ["paragrafo,fracao"]}:
+                            problemas.append(f"{nome} [{passo}] pedido inesperado do marca-página: {json.dumps(x, ensure_ascii=False)}")
+                if isinstance(pp, list) and any(x["caminho"] == "/rest/v1/bookmarks" for x in pp):
+                    problemas.append(f"{nome} [{passo}] o Python pediu o marca-página (não tem)")
                 if a.detalhes:
                     print(f"{nome} [{passo}] pedidos: {nomes_de_pedidos(pp) if isinstance(pp, list) else pp}")
                 if rp != ra:

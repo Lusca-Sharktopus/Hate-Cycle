@@ -222,7 +222,7 @@ CLAUDE.md, `.claude/rules` e todas as skills refletindo os comandos e a estrutur
 
 Primeiro recurso do sistema de contas (documento "Hᴀᴛᴇ Cʏᴄʟᴇ — contas e login", Claude Docs). Respostas do autor:
 
-- **Sem login, o marca-página funciona** e fica guardado no navegador (`localStorage`), só naquele aparelho. No lugar do aviso "é preciso estar logado", um **convite discreto**, uma vez: "Seu marca-página está salvo neste navegador. Entre na sua conta para levá-lo a outros aparelhos."
+- **Sem login, o marca-página funciona** e fica guardado no navegador (`localStorage`), só naquele aparelho. **Sem aviso nenhum** (03/11: o convite discreto que estava combinado saiu, pedido do autor, "acho melhor não ter nada"); quem quiser levar para outro aparelho entra na conta pela caixa de comentários.
 - **Ao entrar na conta, os dados da conta têm prioridade** sobre os do navegador (não vale o mais recente): capítulo marcado na conta fica como está; o que só existe no navegador sobe para a conta.
 - **Posição = âncora no texto** (parágrafo + fração dentro dele), não pixel: noutro aparelho o marcador pode cair no começo do parágrafo onde a pessoa parou.
 - Comportamento já pedido antes: clique na faixa à direita do texto leva o marcador à altura do clique; arrastar para cima e para baixo; ícone `guardados/marca-pagina/` (`Favicon Marca Página.png`).
