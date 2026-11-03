@@ -156,28 +156,6 @@
    },
    "body": "\nUm grande amigo meu. Saf foi mestre de uma mesa de RPG onde eu converti Giuseppe em um Personagem de Jogador e o interpretei por meses. Durante este processo, Saf se tornou a segunda pessoa no mundo a melhor compreender o personagem. Convidá-lo para co-autorar [[works/all-in-a-nights-work|Ossos do Ofício]] foi um passo natural a partir daí.\n"
   },
-  "emissaries/tutti/en.md": {
-   "fm": {
-    "draft": true,
-    "title": "Tutti",
-    "role": "Marketing & Social Media",
-    "image": "emissaries/Tutti.jpg",
-    "order": "5",
-    "instagram": "https://www.instagram.com/tuttioni/"
-   },
-   "body": ""
-  },
-  "emissaries/tutti/pt.md": {
-   "fm": {
-    "draft": true,
-    "title": "Tutti",
-    "role": "Marketing e Social Media",
-    "image": "emissaries/Tutti.jpg",
-    "order": "5",
-    "instagram": "https://www.instagram.com/tuttioni/"
-   },
-   "body": ""
-  },
   "news/2023-08-18-orcs/en.md": {
    "fm": {
     "title": "Official Artwork: Orcs",
@@ -4157,15 +4135,13 @@
       "adolas-podcast",
       "joao-revan",
       "kaisui",
-      "saf",
-      "tutti"
+      "saf"
      ],
      "pt": [
       "adolas-podcast",
       "joao-revan",
       "kaisui",
-      "saf",
-      "tutti"
+      "saf"
      ]
     }
    },
@@ -4174,15 +4150,13 @@
      "adolas-podcast",
      "joao-revan",
      "kaisui",
-     "saf",
-     "tutti"
+     "saf"
     ],
     "pt": [
      "adolas-podcast",
      "joao-revan",
      "kaisui",
-     "saf",
-     "tutti"
+     "saf"
     ]
    },
    "obras": [
@@ -4496,7 +4470,6 @@
     "en:emissaries/joao-revan",
     "en:emissaries/kaisui",
     "en:emissaries/saf",
-    "en:emissaries/tutti",
     "en:news/2023-08-18-orcs",
     "en:news/2023-08-19-conheca-os-talassimbiontes",
     "en:news/2023-08-20-kartekta",
@@ -4595,7 +4568,6 @@
     "pt:emissaries/joao-revan",
     "pt:emissaries/kaisui",
     "pt:emissaries/saf",
-    "pt:emissaries/tutti",
     "pt:news/2023-08-18-orcs",
     "pt:news/2023-08-19-conheca-os-talassimbiontes",
     "pt:news/2023-08-20-kartekta",

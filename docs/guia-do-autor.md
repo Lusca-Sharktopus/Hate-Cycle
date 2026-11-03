@@ -338,8 +338,8 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 - Cinco por linha; o sexto desce para a linha de baixo (em telas menores, 3 ou 2 por linha).
 - **Textos dos Emissários** (ocultos por enquanto): em `config.json`, `"emissaries": { "show_texts": false, ... }` → mude para `true` para mostrá-los de novo.
 - **Esconder um emissário:** em `config.json`, `"emissaries": { "hide": ["saf"] }`; deixe a lista vazia (`[]`) para todos aparecerem (hoje está vazia: a Saf aparece). Outra forma: `draft: true` nos dois `.md` dele.
-- **Tutti** está fora dos Emissários desde 22/10/2026 (pedido seu): `draft: true` em `content/emissaries/tutti/en.md` e `pt.md` (o `config.json` não mudou). Para recolocá-lo, apague essa linha nos dois arquivos.
-- **Adolas Podcast:** desde 28/10 (seu "Deve aparecer") está **de volta** aos Emissários, na página Sobre (a linha `draft: true` saiu do `content/emissaries/adolas-podcast/pt.md` e do `en.md`). Para esconder um emissário, ponha `draft: true` no front matter dos dois arquivos; para tirar outro emissário, é a mesma coisa que o Tutti.
+- **Tutti** saiu dos Emissários de vez em 03/11/2026 (pedido seu; desde 22/10 ele só aparecia na prévia com rascunhos). Os arquivos dele (os dois textos e a foto `Tutti.jpg`) estão guardados em `guardados/emissarios/tutti/`. Para recolocá-lo, devolva a pasta para `content/emissaries/tutti/` (tirando a linha `draft: true` dos dois `.md`) e a foto para `static/emissaries/Tutti.jpg`.
+- **Adolas Podcast:** desde 28/10 (seu "Deve aparecer") está **de volta** aos Emissários, na página Sobre (a linha `draft: true` saiu do `content/emissaries/adolas-podcast/pt.md` e do `en.md`). Para esconder um emissário, ponha `draft: true` no front matter dos dois arquivos; para tirar um emissário de vez, mova a pasta dele para `guardados/`, como o Tutti.
 
 ## 10. Notícias
 

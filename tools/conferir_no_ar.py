@@ -82,7 +82,7 @@ def obras_em_rascunho() -> list[str]:
 
 
 def emissarios_em_rascunho() -> list[str]:
-    """Os NOMES (title) dos emissários com `draft: true` (hoje: Tutti, T17l)."""
+    """Os NOMES (title) dos emissários com `draft: true` (hoje nenhum; o Tutti saiu de vez em 03/11 e foi para guardados/emissarios/)."""
     nomes = []
     for md in sorted((CONTEUDO / "emissaries").glob("*/pt.md")):
         fm = _front_matter(md)

@@ -6907,10 +6907,6 @@
      "Saf",
      "/en/emissaries/saf/"
     ],
-    "emissaries/tutti": [
-     "Tutti",
-     "/en/emissaries/tutti/"
-    ],
     "news/2023-08-18-orcs": [
      "Official Artwork: Orcs",
      "/en/news/2023-08-18-orcs/"
@@ -7304,10 +7300,6 @@
     "emissaries/saf": [
      "Saf",
      "/pt/emissaries/saf/"
-    ],
-    "emissaries/tutti": [
-     "Tutti",
-     "/pt/emissaries/tutti/"
     ],
     "news/2023-08-18-orcs": [
      "Arte Oficial: Orcs",
@@ -7870,26 +7862,6 @@
     "html": "<p>Um grande amigo meu. Saf foi mestre de uma mesa de RPG onde eu converti Giuseppe em um Personagem de Jogador e o interpretei por meses. Durante este processo, Saf se tornou a segunda pessoa no mundo a melhor compreender o personagem. Convidá-lo para co-autorar <a href=\"/pt/works/all-in-a-nights-work/01/\">Ossos do Ofício</a> foi um passo natural a partir daí.</p>",
     "versalete": "<p>Um grande amigo meu. Saf foi mestre de uma mesa de RPG onde eu converti Giuseppe em um Personagem de Jogador e o interpretei por meses. Durante este processo, Saf se tornou a segunda pessoa no mundo a melhor compreender o personagem. Convidá-lo para co-autorar <a href=\"/pt/works/all-in-a-nights-work/01/\">Ossos do Ofício</a> foi um passo natural a partir daí.</p>"
    }
-  },
-  "emissaries/tutti/en.md": {
-   "lang": "en",
-   "divisor": null,
-   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-   "build": {
-    "html": "",
-    "versalete": ""
-   },
-   "previa": null
-  },
-  "emissaries/tutti/pt.md": {
-   "lang": "pt",
-   "divisor": null,
-   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-   "build": {
-    "html": "",
-    "versalete": ""
-   },
-   "previa": null
   },
   "news/2023-08-18-orcs/en.md": {
    "lang": "en",

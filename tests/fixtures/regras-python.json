@@ -6377,8 +6377,6 @@
     "emissaries/kaisui/pt.md": "Kai’sui",
     "emissaries/saf/en.md": "Saf",
     "emissaries/saf/pt.md": "Saf",
-    "emissaries/tutti/en.md": "Tutti",
-    "emissaries/tutti/pt.md": "Tutti",
     "news/2023-08-18-orcs/en.md": "Official Artwork: Orcs",
     "news/2023-08-18-orcs/pt.md": "Arte Oficial: Orcs",
     "news/2023-08-19-conheca-os-talassimbiontes/en.md": "Meet the Thalassymbiotes",
@@ -6582,8 +6580,6 @@
    "emissaries/kaisui/pt.md": "Um amigo meu de longa data que conheci nas aulas de piano. Esteve comigo em outros projetos como a Safe Haven e a Corte do…",
    "emissaries/saf/en.md": "A great friend of mine. Saf was the game master of an RPG table where I converted Giuseppe into a Player Character and played him…",
    "emissaries/saf/pt.md": "Um grande amigo meu. Saf foi mestre de uma mesa de RPG onde eu converti Giuseppe em um Personagem de Jogador e o interpretei por…",
-   "emissaries/tutti/en.md": "",
-   "emissaries/tutti/pt.md": "",
    "news/2023-08-18-orcs/en.md": "Orcs are goblinoid primates of the family Cercopithecidae that live in the Great Cave System, and appear to be close relatives of…",
    "news/2023-08-18-orcs/pt.md": "Orcs são primatas Goblinoides, da família Cercopithecidae que vivem no Grande Sistema de Grutas, e parecem ser parentes próximos…",
    "news/2023-08-19-conheca-os-talassimbiontes/en.md": "Dolphins and octopuses are both extremely intelligent animals, capable of logical reasoning comparable to that of primates…",
@@ -6825,14 +6821,6 @@
    "emissaries/saf/pt.md": {
     "sha1": "1ad5108722b4d1ce890c9ab9c1ab9960c3ee4618",
     "tamanho": 311
-   },
-   "emissaries/tutti/en.md": {
-    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-    "tamanho": 0
-   },
-   "emissaries/tutti/pt.md": {
-    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-    "tamanho": 0
    },
    "news/2023-08-18-orcs/en.md": {
     "sha1": "b1528f6621c3630ef7dbd6ef631d683879a47cf5",
@@ -19231,8 +19219,7 @@
       "saf",
       "kaisui",
       "joao-revan",
-      "adolas-podcast",
-      "tutti"
+      "adolas-podcast"
      ],
      "emissarios_cartoes": {
       "saf": {
@@ -19297,20 +19284,6 @@
          "chave": "youtube",
          "rotulo": "YouTube",
          "url": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl"
-        }
-       ],
-       "mostra_texto": false
-      },
-      "tutti": {
-       "titulo": "Tutti",
-       "papel": "Marketing & Social Media",
-       "foto": "/emissaries/Tutti.jpg",
-       "inicial": null,
-       "redes": [
-        {
-         "chave": "instagram",
-         "rotulo": "Instagram",
-         "url": "https://www.instagram.com/tuttioni/"
         }
        ],
        "mostra_texto": false
@@ -20414,8 +20387,7 @@
       "saf",
       "kaisui",
       "joao-revan",
-      "adolas-podcast",
-      "tutti"
+      "adolas-podcast"
      ],
      "emissarios_cartoes": {
       "saf": {
@@ -20480,20 +20452,6 @@
          "chave": "youtube",
          "rotulo": "YouTube",
          "url": "https://youtube.com/playlist?list=PLIRpnU-OV9ymv4Il-_CLvp3bkgRqtccBl"
-        }
-       ],
-       "mostra_texto": false
-      },
-      "tutti": {
-       "titulo": "Tutti",
-       "papel": "Marketing e Social Media",
-       "foto": "/emissaries/Tutti.jpg",
-       "inicial": null,
-       "redes": [
-        {
-         "chave": "instagram",
-         "rotulo": "Instagram",
-         "url": "https://www.instagram.com/tuttioni/"
         }
        ],
        "mostra_texto": false
