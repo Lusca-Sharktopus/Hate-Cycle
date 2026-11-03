@@ -136,7 +136,7 @@ A tabela `bookmarks` guarda, por pessoa e por capítulo, o parágrafo e a fraç�
 
 ### Migração de 03/11/2026: a janela da conta
 
-Arquivo: `supabase/migrations/20261103040000_conta.sql`. **Ainda não rodada no seu projeto.** Rode depois das duas de cima.
+Arquivo: `supabase/migrations/20261103040000_conta.sql`. **Já rodada no seu projeto (03/11/2026, versão com os ajustes da revisão).** Num projeto novo, rode depois das duas de cima.
 
 O que muda para quem visita (só no site novo): em "Conectado como **Fulano**", o nome vira um botão. O clique abre uma janela, com o resto da página escurecido, onde a pessoa troca o nome que aparece nos comentários (2 a 30 caracteres) e pode apagar a conta. Apagar pede uma segunda confirmação que explica o que some; a conta, o nome e os marca-páginas vão embora; os comentários somem, e os que têm respostas de outras pessoas ficam como "[comentário apagado]" (as mesmas regras da migração do reforço).
 
