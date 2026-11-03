@@ -33,7 +33,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { t } from "../src/lib/config";
 import { pyStrip } from "../src/lib/frontmatter";
-import { rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -210,6 +210,8 @@ for (const ref of refs) {
         // T17h: o ícone do YouTube do rodapé leva ao canal do idioma (tests/ajudantes/html.ts → canalDoYoutubeComoNoPython; tests/canais.test.ts)
         // T17j: o trilho e o link "Ver todas as histórias" da home e o degradê do resumo cortado das Notícias (tests/home.test.ts, tests/noticias.test.ts)
         let html = astroComoNoPython(semBlocoDeOrdem(trocarCanalDoYoutube(url, readFileSync(arquivo, "utf8"))).html);
+        // 03/11: o <script> com window.HC_FAV (favoritos, só no Astro) sai ANTES de qualquer comparação (tem as chaves: nunca vai para uma mensagem)
+        html = semFavoritos(html).html;
         if (ref.marcadores) {
           const r = comMarcadores(html, ref.marcadores);
           // sem expect(valor) aqui de propósito: em caso de erro, o vitest imprimiria a chave
@@ -443,7 +445,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
       if (!py) continue;
       const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
       if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
-      if (canonicoDoMiolo(miolo(html)) !== canonicoDoMiolo(pythonComoNoAstro(semScriptsAntigosDosComentarios(py.main).html))) diferentes.push(`${url} (<main>)`);
+      if (canonicoDoMiolo(semFavoritos(miolo(html)).html) !== canonicoDoMiolo(pythonComoNoAstro(semScriptsAntigosDosComentarios(py.main).html))) diferentes.push(`${url} (<main>)`);
     }
     expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);
   }, 240_000);
@@ -504,8 +506,31 @@ describe("T15: o script dos comentários só nas páginas com comentários, sem 
     for (const [url, arquivo] of paginasDoDist(dist)) {
       const html = readFileSync(arquivo, "utf8");
       if (RE_CAIXA.test(html)) continue;
+      // 03/11: as páginas com a seção de Histórias carregam os favoritos (que falam com o banco, pela mesma conexão dos comentários)
+      if (/<script>window\.HC_FAV=/.test(html)) continue;
       expect([...jsCarregados(html)].filter(ehSupabase), url).toEqual([]);
     }
+  });
+
+  test("favoritos (03/11): o window.HC_FAV e o script empacotado só nas páginas com a seção de Histórias, um de cada; sem as chaves no .js", () => {
+    let comFavoritos = 0;
+    for (const [url, arquivo] of paginasDoDist(dist)) {
+      const html = readFileSync(arquivo, "utf8");
+      const secoes = (html.match(/<section class="stories-block">/g) ?? []).length;
+      const configs = semFavoritos(html).quantos;
+      const scripts = (html.match(RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO) ?? []).length;
+      // sem expect(html): em caso de erro, o vitest imprimiria a chave
+      expect({ url, configs, scripts }).toEqual({ url, configs: temChaves ? secoes : 0, scripts: temChaves && secoes ? 1 : 0 });
+      if (scripts) {
+        comFavoritos++;
+        for (const js of jsCarregados(html)) {
+          const texto = readFileSync(join(dist, js.slice(1)), "utf8");
+          const temChave = temChaves && texto.includes(pyStrip(String(chavesDoAutor.supabase_anon_key)));
+          expect({ js, temChave }).toEqual({ js, temChave: false });
+        }
+      }
+    }
+    if (temChaves) expect(comFavoritos).toBeGreaterThan(0);
   });
 
   test("versão fixa: o package.json pede uma versão exata do @supabase/supabase-js, e é ela que está instalada", () => {

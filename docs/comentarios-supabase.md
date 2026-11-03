@@ -150,6 +150,16 @@ São duas funções do banco, `change_my_name` e `delete_my_account`, que só ag
 
 **Como foi provado:** `python3 tools/banco_local.py` (casos "conta:": trocar o próprio nome, nomes recusados, visitante barrado, ninguém mexe no perfil direto, apagar a conta levando perfil, marca-páginas e comentários pelas regras certas); no site, `tests/comentarios-dom.test.ts` (a janela num DOM simulado) e o Supabase falso de `tools/comentarios_playwright.py`.
 
+### Migração de 03/11/2026: histórias favoritas
+
+Arquivo: `supabase/migrations/20261103060000_favoritos.sql`. **Ainda não rodada no seu projeto.** Rode depois das de cima.
+
+O que muda para quem visita (só no site novo, página Histórias): uma estrela no canto de cima de cada capa (aparece com o mouse em cima da capa) e um botão de estrela no começo da linha de busca, que mostra só as favoritas. Sem conta, os dois abrem uma janela avisando que o recurso exige login. Com conta, os favoritos ficam na tabela `favorites`: cada pessoa só vê e mexe nos próprios, visitante sem conta não toca nela, no máximo 300 por pessoa, e a conta apagada leva os favoritos junto. Enquanto a migração não for rodada, quem tem conta vê a estrela, mas favoritar mostra "Não deu para salvar o favorito".
+
+**Como aplicar (~2 minutos):** SQL Editor → New query → cole **tudo** de `supabase/migrations/20261103060000_favoritos.sql` → **Run** → "Success. No rows returned". Pode rodar de novo sem estragar nada.
+
+**Como foi provado:** `python3 tools/banco_local.py` (casos "favoritos:"); no site, `tests/favoritos.test.ts` e `tests/favoritos-dom.test.ts`.
+
 ## 6. O que mudou no site novo (Astro, T15)
 
 Para quem visita, **nada**: mesma caixa, mesmos botões e textos, mesmas conversas (os IDs `works/<obra>/<capítulo>` e `news/<pasta>` não mudaram), e quem já estava conectado continua conectado (a sessão fica guardada no navegador com o mesmo nome).

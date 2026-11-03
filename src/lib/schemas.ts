@@ -96,6 +96,31 @@ const listaDeTextos = () =>
     })
     .transform((v): string[] => (v === "" ? [] : v));
 
+/** Um símbolo só (uma runa): de 1 a 4 unidades de texto, sem espaços nem os caracteres de HTML < > & " '. */
+const UMA_RUNA = /^[^\s<>&"']{1,4}$/u;
+/**
+ * star_runes do work.json (03/11/2026, só no Astro): as runas que a estrela dos favoritos sorteia ao aparecer na capa, e a runa final
+ * logo antes da estrela. Ex.: {"list": ["ᚠ", "ᚢ", "ᚦ"], "final": "ᛟ"}. Ver src/scripts/favoritos/.
+ */
+const runasDaEstrela = () =>
+  z.strictObject(
+    {
+      list: z
+        .array(z.string(), { error: (i) => `tem de ser uma lista de runas, ex.: ["ᚠ", "ᚢ"], mas veio ${descrever(i.input)}.` })
+        .min(1, { error: "precisa de pelo menos uma runa." })
+        .max(60, { error: "aceita no máximo 60 runas." })
+        .superRefine((lista, ctx) => {
+          lista.forEach((r, n) => {
+            if (!UMA_RUNA.test(r)) ctx.addIssue({ code: "custom", path: [n], input: r, message: `a runa ${n + 1} (${JSON.stringify(r)}) tem de ser UM símbolo, sem espaços.` });
+          });
+        }),
+      final: z
+        .string({ error: (i) => `a runa final tem de ser UM símbolo (ex.: "ᛟ"), mas veio ${descrever(i.input)}.` })
+        .regex(UMA_RUNA, { error: (i) => `a runa final tem de ser UM símbolo, sem espaços, mas veio ${descrever(i.input)}.` }),
+    },
+    { error: (i) => (i.code === "unrecognized_keys" ? `só aceita "list" e "final".` : `tem de ser {"list": ["ᚠ", "ᚢ"], "final": "ᛟ"}, mas veio ${descrever(i.input)}.`) },
+  );
+
 /** order_images do work.json: a imagem normal e, se houver, a do mouse por cima (no máximo duas). */
 const listaOrdemDeImagens = () =>
   listaDeTextos().superRefine((lista, ctx) => {
@@ -418,6 +443,8 @@ export function criarSchemas(indice: Indice) {
       page_runes: runasDasPaginas().optional(),
       /** Página de jogo (T17d, só no Astro): janela da demo e botão da Steam. Ver src/lib/jogo.ts. */
       game: paginaDeJogo().optional(),
+      /** Favoritos (03/11, só no Astro): as runas que a estrela da capa sorteia antes de virar estrela. Ver src/scripts/favoritos/. */
+      star_runes: runasDaEstrela().optional(),
       langs: z.array(idioma, { error: (i) => `tem de ser uma lista de idiomas (${langs.join(", ")}), mas veio ${descrever(i.input)}.` }).optional(),
       title: traduzivel().optional(),
       /** (28/10, só no Astro) um aviso curto sob o título de TODO capítulo da obra, no idioma que tiver (ex.: {"en": "Turn Close Captions on!"}).

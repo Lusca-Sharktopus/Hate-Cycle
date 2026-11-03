@@ -13,13 +13,14 @@ You can read, watch and browse the whole website without an account. The website
 
 ## If you create an account
 
-An account lets you comment and keep your bookmarks. With it, the website keeps:
+An account lets you comment, keep your bookmarks and mark your favorite stories. With it, the website keeps:
 
 - **your email address**, so you can sign in and recover your password. It never appears on the website;
 - **the name you choose** to show on your comments;
 - **if you sign in with Google, Discord or Twitter:** your account identifier on that platform and the public information it shares (name and picture). Your password for those platforms never reaches the website;
 - **your comments**, which are public, with your name, on the page where you wrote them;
-- **your bookmarks:** where you stopped in each chapter.
+- **your bookmarks:** where you stopped in each chapter;
+- **your favorite stories:** which stories you marked with the star.
 
 This data is stored on **Supabase**, the service that hosts the website’s accounts and database.
 
@@ -42,7 +43,7 @@ The website is hosted by **GitHub Pages**, which may log technical access data (
 
 ## Your rights
 
-Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. You can change your name or delete your account yourself at any time: while signed in, click your name above the comment box. You can also write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, bookmarks and comments are deleted too (the text of a comment other people replied to is replaced with “[comment deleted]”, so the conversation still makes sense). Supabase may keep technical access records for accounts (such as the time of a sign-in) for a while, for security.
+Under Brazil’s General Data Protection Law (LGPD), you may ask at any time to see the data the website has about you, to correct it or to delete it. You can change your name or delete your account yourself at any time: while signed in, click your name above the comment box. You can also write to [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com) from the account’s email address. When an account is deleted, its name, bookmarks, favorites and comments are deleted too (the text of a comment other people replied to is replaced with “[comment deleted]”, so the conversation still makes sense). Supabase may keep technical access records for accounts (such as the time of a sign-in) for a while, for security.
 
 ## Changes to this policy
 

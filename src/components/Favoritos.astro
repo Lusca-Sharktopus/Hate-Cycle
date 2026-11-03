@@ -1,0 +1,74 @@
+---
+// Histórias favoritas (03/11/2026, só no site novo; pedido do autor com os prints "gif discord 1/2.png" e "fav.png").
+// Desenhado pela SecaoHistorias só quando o site tem login (as chaves do Supabase). Não acrescenta nada visível ao HTML: o
+// <script> com window.HC_FAV (a conexão, o idioma e o mapa título → obra, de src/lib/comentarios.ts, o único que lê as chaves) e o
+// script empacotado (src/scripts/favoritos/), que monta as estrelas das capas e o botão do filtro quando a página abre.
+// O site Python não tem os favoritos: a paridade tira só estes dois scripts (tools/paridade_html.mjs, tests/ajudantes/html.ts).
+interface Props {
+  /** O texto do <script> que cria window.HC_FAV (src/lib/comentarios.ts → favoritosDaPagina). */
+  configuracao: string;
+}
+const { configuracao } = Astro.props;
+---
+
+<script is:inline set:html={configuracao}></script>
+
+<script>
+  import "../scripts/favoritos/index";
+</script>
+
+<style is:global>
+  @layer site {
+    /* a estrela da capa (03/11, pedidos do autor): um quadradinho escuro no canto de cima da capa, como no Discord. Ele mora numa
+       "janelinha" recortada no topo da capa (.fav-janela, overflow: hidden): escondido acima dela, DESLIZA para baixo quando o mouse
+       entra na capa (classe fav-ver, posta pelo script), como se saísse de trás da borda clara em volta da capa; enquanto desce, passa
+       pelas runas da obra (.fav-girando mostra a .fav-runa no lugar da estrela) e para na estrela. A de uma história favorita fica sempre
+       à vista, cheia. Sem mouse (tela de toque), sempre à vista. */
+    .work-card.fav-card { position: relative; }
+    .fav-janela {
+      position: absolute; top: 15px; right: 15px; z-index: 2; width: calc(2.2rem + 1rem); height: calc(2.2rem + 1rem);
+      overflow: hidden; border-top-right-radius: 8px; pointer-events: none;
+    }
+    .fav-estrela {
+      position: absolute; top: .5rem; right: .5rem; display: grid; place-items: center; width: 2.2rem; height: 2.2rem; padding: 0;
+      border: 0; border-radius: .45rem; cursor: pointer; pointer-events: auto; background: #1c1a24e0; color: #fff;
+      transform: translateY(calc(-100% - .6rem)); transition: transform .18s cubic-bezier(.2, .8, .3, 1.15), box-shadow .15s;
+    }
+    .fav-card.fav-ver .fav-estrela, .fav-estrela:focus-visible, .fav-estrela[aria-pressed="true"] { transform: none; }
+    .fav-estrela > * { grid-area: 1 / 1; }
+    .fav-estrela svg { width: 1.35rem; height: 1.35rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; }
+    .fav-runa {
+      display: none; font-size: 1.3rem; line-height: 1; color: var(--mint); text-shadow: 0 0 6px var(--cyan);
+      font-family: "Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans KR","Noto Sans JP",sans-serif;
+    }
+    .fav-estrela.fav-girando svg { visibility: hidden; }
+    .fav-estrela.fav-girando .fav-runa { display: block; }
+    .fav-estrela:hover, .fav-estrela:focus-visible { box-shadow: 0 0 10px var(--cyan); }
+    .fav-estrela[aria-pressed="true"] svg { fill: var(--mint); stroke: var(--mint); }
+    @media (hover: none) { .fav-estrela { transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .fav-estrela { transition: none; } }
+
+    /* o filtro: um botão quadrado verde, igual ao de inverter a ordem, com a estrela; ligado = estrela cheia */
+    .fav-filtro {
+      display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; padding: 0; border: 0; border-radius: .35rem;
+      background: var(--green); color: #fff; cursor: pointer;
+    }
+    .fav-filtro svg { width: 1.9rem; height: 1.9rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
+    .fav-filtro:hover, .fav-filtro:focus-visible { box-shadow: 0 0 10px var(--cyan); }
+    .fav-filtro[aria-pressed="true"] svg { fill: var(--mint); stroke: var(--mint); }
+    .stories-head .sorter .fav-filtro { order: -1; }
+
+    .work-card.fav-fora { display: none !important; }
+    .fav-aviso { text-align: center; color: var(--muted); padding: 1.5rem 0; }
+
+    /* a janela "este recurso exige login": a página escurece atrás (como a janela de login dos comentários) */
+    .fav-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; background: rgba(0, 0, 0, .65); overflow-y: auto; }
+    .fav-modal-aberta { overflow: hidden; }
+    .fav-dialogo { position: relative; width: min(420px, 100%); background: #fff; color: #1a1a1a; border-radius: 14px; padding: 1.6rem 1.4rem 1.3rem; box-shadow: 0 20px 60px #000a; }
+    .fav-dialogo h3 { display: flex; align-items: center; gap: .5rem; margin: 0 1.5rem .7rem 0; font-size: 1.15rem; color: var(--green); }
+    .fav-dialogo h3 svg { width: 1.4rem; height: 1.4rem; fill: var(--mint); stroke: var(--green); stroke-width: 1.4; stroke-linejoin: round; }
+    .fav-dialogo p { margin: 0 0 1rem; line-height: 1.5; }
+    .fav-x { position: absolute; top: .4rem; right: .6rem; background: none; border: 0; font-size: 1.8rem; line-height: 1; cursor: pointer; color: #555; }
+    .fav-x:hover { color: #000; background: none; }
+  }
+</style>

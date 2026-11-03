@@ -49,7 +49,7 @@ import { join, relative, sep } from "node:path";
 import { parse } from "parse5";
 // só os textos da interface (ui) do config.json do autor: o "Em breve" de cada idioma (T17m)
 const UI = JSON.parse(readFileSync(new URL("../config.json", import.meta.url), "utf8")).ui;
-import { rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
+import { semFavoritos, rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonico, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, homeComoNoPython, semJanelaDoJogo, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome } from "../tests/ajudantes/html.ts";
 
 // ───────────── argumentos ─────────────
 const args = process.argv.slice(2);
@@ -110,6 +110,8 @@ const SCRIPTS_DO_ASTRO = [
   ["T15 comentários (script empacotado)", (s) => s.modulo && /CaixaDeComentarios\.astro/.test(s.src)],
   // 03/11: o marca-página (só no Astro, todo capítulo de texto; MarcaPagina.astro). O Python não tem.
   ["marca-página (script empacotado)", (s) => s.modulo && /MarcaPagina\.astro/.test(s.src)],
+  // 03/11: os favoritos (só no Astro, páginas com a seção de Histórias): a configuração inline (window.HC_FAV) e o script empacotado
+  ["favoritos (script empacotado)", (s) => s.modulo && /Favoritos\.astro/.test(s.src)],
   ["T17c bloco de ordem", (s) => s.modulo && /hc-ordem-de-leitura/.test(s.texto)],
   // T17d (só no Astro, só na prévia): o script do leitor página a página vem EMBUTIDO na página (não tem src); o que o reconhece é o que ele
   // procura (`[data-folheador]`) e os `.fl-runa` que ele marca (src/scripts/folheador/). O Python não tem o leitor (desenha as páginas empilhadas).
@@ -173,6 +175,7 @@ const comMarcadores = (html) =>
 
 function normalizar(html, lado, url, existe) {
   const r = { comportamentos: new Set(), customCss: [] };
+  const comportamentosAntes = r.comportamentos;
   if (lado === "python") {
     const s = semScriptsAntigosDosComentarios(html);
     if (s.sobrou) falha(url, "o Python tem supabase-js/comments.js fora do par de sempre");
@@ -241,6 +244,10 @@ function normalizar(html, lado, url, existe) {
     if (ro.linhas) conta("02/11: linha nova do rodapé + janela da Política de Privacidade (Astro)", url);
     if (ro.linhas !== 1 || ro.janelas !== 1) falha(url, `o rodapé devia ter 1 linha nova e 1 janela da política (linhas ${ro.linhas}, janelas ${ro.janelas})`);
     html = ro.html.replace(/<script type="module">(?:(?!<\/script>)[\s\S])*?dialog\.politica[\s\S]*?<\/script>/g, "");
+    // 03/11: o <script> com window.HC_FAV dos favoritos (só no Astro), colado no fim da seção de Histórias (tests/ajudantes/html.ts → semFavoritos)
+    const fv = semFavoritos(html);
+    if (fv.quantos) (conta("03/11: configuração dos favoritos (window.HC_FAV, Astro)", url), comportamentosAntes.add("favoritos (configuração)"));
+    html = fv.html;
   }
   html = comMarcadores(html);
   const doc = parse(html);
@@ -382,13 +389,16 @@ for (const url of [...pp.keys()].filter((u) => pa.has(u)).sort()) {
   // comportamentos
   const cp = [...p.comportamentos].filter((c) => !c.startsWith("3 ")), ca = [...a.comportamentos];
   if (p.comportamentos.has("3 GIFs de .page-project (nunca age: T14)")) falha(url, "o bloco 3 do site.js (GIFs de .page-project) agiria aqui, e o Astro não o tem (T14 diz que nunca age)");
-  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17d leitor página a página (script)", "marca-página (script empacotado)"]);
+  const extrasDecididos = new Set(["T17c bloco de ordem", "T15 comentários (script empacotado)", "T17d leitor página a página (script)", "marca-página (script empacotado)", "favoritos (configuração)", "favoritos (script empacotado)"]);
   const faltam = cp.filter((c) => !a.comportamentos.has(c));
   const sobram = ca.filter((c) => !p.comportamentos.has(c) && !extrasDecididos.has(c));
   if (faltam.length) falha(url, `comportamento do Python sem script no Astro: ${faltam.join("; ")}`);
   if (sobram.length) falha(url, `script do Astro sem o elemento que o usa no Python: ${sobram.join("; ")}`);
   if (a.comportamentos.has("T15 comentários (script empacotado)") !== /class="hc-comments"/.test(ha)) falha(url, "script dos comentários × caixa de comentários");
   if (a.comportamentos.has("T17c bloco de ordem") !== (CONTAGEM['T17c: bloco "estou lendo em ordem" (Astro)']?.has(url) === true)) falha(url, "script do bloco de ordem × bloco de ordem");
+  // favoritos (03/11): a configuração e o script, juntos, só onde há a seção de Histórias
+  const temSecaoDeHistorias = /<section class="stories-block">/.test(ha);
+  if (a.comportamentos.has("favoritos (configuração)") !== temSecaoDeHistorias || a.comportamentos.has("favoritos (script empacotado)") !== temSecaoDeHistorias) falha(url, "favoritos × seção de Histórias");
   // marca-página (03/11): só em capítulo de TEXTO (a área .prose.story do leitor)
   if (a.comportamentos.has("marca-página (script empacotado)") !== /class="prose story[ "]/.test(ha)) falha(url, "script do marca-página × capítulo de texto");
   // T17d: o script do leitor página a página só vai nas páginas que têm o leitor (o que a regra folheadorComoNoPython acabou de trocar)

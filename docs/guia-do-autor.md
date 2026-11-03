@@ -395,6 +395,20 @@ Cada capítulo e cada notícia tem comentários; a conversa é a mesma nos dois 
 No site novo (Astro) a caixa funciona igual; por dentro, ela usa um script próprio com o supabase-js numa versão fixa, e o banco passou a ter migrações versionadas em `supabase/migrations/` (como usar daqui para frente: `docs/comentarios-supabase.md`, seções 5 e 6). Você não precisa fazer nada no Supabase por causa disso.
 Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da notícia (nas três versões de notícia: comum, com fundo e colagem). Nos botões de anterior/próximo do fim da notícia, o título da notícia vizinha é cortado em 40 caracteres com "…" (o título inteiro aparece ao passar o mouse); isso é automático, não muda o título da notícia.
 
+### Histórias favoritas (só no site novo, desde 03/11)
+
+- Na página Histórias, ao passar o mouse sobre a capa de uma história, uma caixinha escura **desliza para baixo**, saindo de trás da borda clara em cima da capa (como os GIFs favoritados do Discord). Enquanto desce, ela passa rápido por algumas **runas sorteadas** da história, para numa **runa final** e então vira a **estrela**. Clicar na estrela favorita (estrela cheia, que fica sempre à vista) ou tira dos favoritos.
+- No começo da linha de busca, o **botão de estrela** mostra só as histórias favoritas (clique de novo para ver todas).
+- **Sem conta**, a estrela e o botão abrem uma janela (a página escurece atrás) dizendo que o recurso exige login. Hoje a janela manda entrar pela caixa de comentários de qualquer capítulo; quando a caixa de login nova chegar, a janela ganha o botão de entrar.
+- Em celular (sem mouse) as estrelas ficam sempre à vista, e com "reduzir movimento" ligado no sistema nada desliza nem gira.
+- **As runas de cada história** vão no `work.json` da obra, no campo `star_runes`:
+  ```json
+  "star_runes": { "list": ["ᚠ", "ᚢ", "ᚦ", "ᚨ"], "final": "ᛟ" }
+  ```
+  `list` são as runas sorteadas (de 1 a 60; cada uma é UM símbolo) e `final` é a runa que aparece logo antes da estrela. Sem o campo, a história usa uma lista provisória (as runas do bloco rúnico que o fundo do site já usa, final ᛟ). **Runa que ainda não aparece no fundo do site precisa de fonte:** me mande as listas e eu gero as fontes (o site serve só os símbolos que usa).
+- Para funcionar com conta, o banco precisa da migração `20261103060000_favoritos.sql` (`docs/comentarios-supabase.md`, seção 5).
+- Onde mexer: a aparência em `src/components/Favoritos.astro`; os textos em `src/scripts/favoritos/regras.ts` (`TEXTOS_DOS_FAVORITOS`); a velocidade das runas também ali (`RUNAS_SORTEADAS` = 5, `TEMPO_DE_CADA_RUNA` = 55 ms, `TEMPO_DA_RUNA_FINAL` = 150 ms).
+
 ### A janela da conta (só no site novo, desde 03/11)
 
 - Quem está com a conta aberta vê "Conectado como **seu nome**" acima da caixa de comentários. Clicar no nome abre uma janela (o resto da página escurece; fecha no ×, com Esc ou clicando fora) com:

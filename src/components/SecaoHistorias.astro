@@ -5,6 +5,10 @@ import type { Lang } from "../lib/config";
 import { t } from "../lib/config";
 import type { CartaoDaObra, DadosDoSeletor } from "../lib/obras";
 import SeletorDeHistorias from "./SeletorDeHistorias.astro";
+import Favoritos from "./Favoritos.astro";
+import { favoritosDaPagina } from "../lib/comentarios";
+import { obras } from "../lib/conteudo";
+import { runasDaEstrela } from "../lib/runasDaEstrela";
 import WorkCard from "./WorkCard.astro";
 
 interface Props {
@@ -16,6 +20,13 @@ interface Props {
 
 const { lang, cartoes, seletor } = Astro.props;
 const ID_DA_GRADE = "hate-grid";
+// histórias favoritas (03/11, só no site novo): só com login no site (as chaves do Supabase); o mapa título do cartão → obra
+const todasAsObras = new Map((await obras()).map((o) => [o.data._origem.slug, o.data]));
+const configuracaoDosFavoritos = favoritosDaPagina(
+  lang,
+  cartoes.map((c) => [c.titulo, c.slug] as const),
+  Object.fromEntries(cartoes.map((c) => [c.slug, runasDaEstrela(todasAsObras.get(c.slug)?.star_runes)])),
+);
 ---
 
-<section class="stories-block"><h2>{t(lang, "hate_stories")}</h2><div class="stories-head"><p class="sub">{t(lang, "hate_stories_sub")}</p><SeletorDeHistorias lang={lang} dados={seletor} idDaGrade={ID_DA_GRADE} /></div><div class="works grid" id={ID_DA_GRADE}>{cartoes.map((c) => <WorkCard cartao={c} />)}</div><p class="no-results" hidden>{t(lang, "search_none")}</p></section>
+<section class="stories-block"><h2>{t(lang, "hate_stories")}</h2><div class="stories-head"><p class="sub">{t(lang, "hate_stories_sub")}</p><SeletorDeHistorias lang={lang} dados={seletor} idDaGrade={ID_DA_GRADE} /></div><div class="works grid" id={ID_DA_GRADE}>{cartoes.map((c) => <WorkCard cartao={c} />)}</div><p class="no-results" hidden>{t(lang, "search_none")}</p></section>{configuracaoDosFavoritos && <Favoritos configuracao={configuracaoDosFavoritos} />}

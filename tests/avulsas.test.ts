@@ -37,7 +37,7 @@ import { paginasAvulsas } from "../src/lib/paginasAvulsas";
 import { fichasDePersonagens, listaDePersonagens, listaDoUniverso, verbetesDoUniverso } from "../src/lib/paginasDeExtras";
 import { paginaDaRaiz, paginaDeRedirecionamento, redirecionamentosQueViramPagina } from "../src/lib/raiz";
 import { feedRss } from "../src/lib/rss";
-import { canonicoDoMiolo } from "./ajudantes/html";
+import { canonicoDoMiolo, semFavoritos } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Shell {
@@ -188,7 +188,7 @@ for (const amb of ref.ambientes) {
         const py = amb.paginas[p.url];
         if (!py) throw new Error(`o Python não gerou ${p.url}`);
         expect(p.shell, p.url).toEqual(py.shell);
-        expect(canonicoDoMiolo(p.main), p.url).toBe(canonicoDoMiolo(py.main));
+        expect(canonicoDoMiolo(semFavoritos(p.main).html), p.url).toBe(canonicoDoMiolo(py.main));
         // JavaScript só onde precisa: a carta que vira e os posts alternados (obrigatórios quando o texto os usa); os cartões dos atalhos
         // ({{stories}}, {{emissaries}}…) também trazem o seu (imagem ausente, seletor); sem nada disso, a página não leva script de componente
         if (p.atalhos) {

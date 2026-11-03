@@ -24,7 +24,7 @@ export const TEXTOS_DA_CONTA = {
     espera: "Você já trocou de nome há pouco. Dá para trocar de novo daqui a uma hora.",
     apagar: "Apagar conta",
     aviso:
-      "Isso apaga a sua conta, o seu nome e os seus marca-páginas. Os seus comentários somem; os que têm respostas de outras pessoas ficam como “[comentário apagado]”. Não dá para desfazer.",
+      "Isso apaga a sua conta, o seu nome, os seus marca-páginas e os seus favoritos. Os seus comentários somem; os que têm respostas de outras pessoas ficam como “[comentário apagado]”. Não dá para desfazer.",
     confirmar: "Apagar minha conta de vez",
     cancelar: "Cancelar",
     apagada: "Sua conta foi apagada.",
@@ -44,7 +44,7 @@ export const TEXTOS_DA_CONTA = {
     espera: "You changed your name recently. You can change it again in an hour.",
     apagar: "Delete account",
     aviso:
-      "This deletes your account, your name and your bookmarks. Your comments disappear; the ones other people replied to stay as “[comment deleted]”. This can't be undone.",
+      "This deletes your account, your name, your bookmarks and your favorites. Your comments disappear; the ones other people replied to stay as “[comment deleted]”. This can't be undone.",
     confirmar: "Delete my account for good",
     cancelar: "Cancel",
     apagada: "Your account was deleted.",

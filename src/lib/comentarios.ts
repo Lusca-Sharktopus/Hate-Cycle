@@ -123,3 +123,38 @@ const doAutor = configDoSite as { comments?: ChavesDoSupabase; ui: TextosDaInter
 export function comentariosDaPagina(lang: Lang, idDaPagina: string | null, comRascunhos: boolean): SecaoDeComentarios | null {
   return secaoDeComentarios(lang, idDaPagina, { chaves: doAutor.comments, ui: doAutor.ui, comRascunhos });
 }
+
+// ───────────── as histórias favoritas (03/11/2026, só no site novo) ─────────────
+
+/**
+ * O <script> que cria window.HC_FAV nas páginas com a seção de Histórias (src/components/Favoritos.astro): a mesma conexão dos
+ * comentários (URL limpa e chave anon), o idioma e o mapa título do cartão → obra. Sem as duas chaves, null (nada de favoritos).
+ * Função pura (o teste usa chaves de mentira); o site chama `favoritosDaPagina()`.
+ */
+export function configuracaoDosFavoritos(
+  lang: Lang,
+  obras: readonly (readonly [string, string])[],
+  runas: Readonly<Record<string, { lista: readonly string[]; final: string }>>,
+  chaves: ChavesDoSupabase | undefined,
+): string | null {
+  const url = chaves?.supabase_url;
+  const chave = chaves?.supabase_anon_key;
+  if (!(typeof url === "string" && url !== "" && typeof chave === "string" && chave !== "")) return null;
+  const fav = new Map<string, unknown>([
+    ["url", limparUrlDoSupabase(url)],
+    ["key", pyStrip(chave)],
+    ["lang", lang],
+    ["obras", new Map(obras.map(([titulo, obra]) => [titulo, obra]))],
+    ["runas", new Map(Object.entries(runas).map(([obra, r]) => [obra, new Map<string, unknown>([["lista", [...r.lista]], ["final", r.final]])]))],
+  ]);
+  return `window.HC_FAV=${jsonComoPython(fav).replaceAll("</", "<\\/")};`;
+}
+
+/** A configuração dos favoritos com o config.json do autor. */
+export function favoritosDaPagina(
+  lang: Lang,
+  obras: readonly (readonly [string, string])[],
+  runas: Readonly<Record<string, { lista: readonly string[]; final: string }>>,
+): string | null {
+  return configuracaoDosFavoritos(lang, obras, runas, doAutor.comments);
+}

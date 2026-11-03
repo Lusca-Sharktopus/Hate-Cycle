@@ -186,6 +186,22 @@ export function lerPagina(html: string): PaginaLida {
   };
 }
 
+// ───────────── 03/11: as histórias favoritas (só no Astro) ─────────────
+// Depois da seção de Histórias (SecaoHistorias), o Astro desenha o <script> com window.HC_FAV (Favoritos.astro: a conexão, o idioma e
+// o mapa título → obra); o script empacotado vai para o fim da página. O Python não tem os favoritos: antes de comparar, sai SÓ esse
+// <script> inline, colado no </section> da seção. Devolve quantos saíram (o teste confere que é um por seção de Histórias).
+const RE_SCRIPT_DOS_FAVORITOS = /(<\/section>)<script>window\.HC_FAV=\{[^<]*\};<\/script>/g;
+export function semFavoritos(html: string): { html: string; quantos: number } {
+  let quantos = 0;
+  const limpo = html.replace(RE_SCRIPT_DOS_FAVORITOS, (_t, fim: string) => {
+    quantos++;
+    return fim;
+  });
+  return { html: limpo, quantos };
+}
+/** O script empacotado dos favoritos (fim da página). */
+export const RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO = /<script type="module" src="[^"]*Favoritos\.astro[^"]*"><\/script>/g;
+
 /** Só o miolo (<main>) de um HTML que pode ser um pedaço (o resultado de um componente, sem <html>). */
 export function canonicoDoMiolo(htmlDoMiolo: string): string {
   const doc = parse(`<!doctype html><html><head></head><body><main id="main">${htmlDoMiolo}</main></body></html>`);

@@ -26,7 +26,7 @@ import { langs, t, type Lang } from "../src/lib/config";
 import { dadosDoIdioma } from "../src/lib/idioma";
 import { finalizarMain, separarScripts } from "../src/lib/pagina";
 import { dadosDaHome, dadosDosAtalhos } from "../src/lib/paginas";
-import { canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, homeComoNoPython, soQuatroHistoriasNaHome } from "./ajudantes/html";
+import { canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, homeComoNoPython, semFavoritos, soQuatroHistoriasNaHome } from "./ajudantes/html";
 import { carregarConteudo } from "./ajudantes/conteudo";
 
 interface Ambiente {
@@ -90,7 +90,8 @@ for (const amb of ref.ambientes) {
 
       // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá; no Python, "Em breve" (tests/obras-em-outro-idioma.test.ts)
       const igual = (atual: string, esperado: string, quem: string) => {
-        expect(canonicoDoMiolo(cartaoEmOutroIdiomaComoNoPython(atual, t(lang, "soon")).html), quem).toBe(canonicoDoMiolo(esperado));
+        // 03/11: o <script> com window.HC_FAV (favoritos, só no Astro) sai antes de comparar
+        expect(canonicoDoMiolo(cartaoEmOutroIdiomaComoNoPython(semFavoritos(atual).html, t(lang, "soon")).html), quem).toBe(canonicoDoMiolo(esperado));
         comparados++;
       };
 

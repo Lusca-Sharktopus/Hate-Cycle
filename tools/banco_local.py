@@ -242,9 +242,9 @@ def casos(q, paralelo=None) -> int:
     caso("visitante lê comentários e nomes", "select count(*) from public.comments; select count(*) from public.profiles;", papel="anon")
     caso("funções internas não podem ser chamadas pelo site", "select public.soft_delete_comment()", papel="authenticated", sub=B, erro="permission denied")
     caso("as funções têm search_path fixo", "select 1",
-         depois="select count(*) from pg_proc where proname in ('check_new_comment','check_edit_comment','soft_delete_comment','cleanup_deleted_parent','before_delete_profile','handle_new_user','check_bookmark','change_my_name','delete_my_account') "
+         depois="select count(*) from pg_proc where proname in ('check_new_comment','check_edit_comment','soft_delete_comment','cleanup_deleted_parent','before_delete_profile','handle_new_user','check_bookmark','change_my_name','delete_my_account','check_favorite','limpar_nome') "
                 "and proconfig is not null and 'search_path=\"\"' = any(proconfig)",
-         espera="9")
+         espera="11")
 
     # 9) marca-páginas (migração 20261103020000)
     mp = lambda pag, par, fr="0.5", extra="": f"insert into public.bookmarks (page_id, paragrafo, fracao{', user_id' if extra else ''}) values ('{pag}', {par}, {fr}{', ' + extra if extra else ''})"
@@ -296,6 +296,41 @@ def casos(q, paralelo=None) -> int:
     q(f"set local role authenticated; set local request.jwt.claim.sub = '{C}'; " + mp("works/firestriker/01", 3) + ";")
     caso("marca-página: some junto com a conta", f"delete from auth.users where id = '{C}'", depois="select count(*) from public.bookmarks", espera="0")
 
+    # 9b) histórias favoritas (migração 20261103060000)
+    fav = lambda obra, extra="": f"insert into public.favorites (work_id{', user_id' if extra else ''}) values ('{obra}'{', ' + extra if extra else ''})"
+    caso("favoritos: quem tem conta favorita uma obra", fav("firestriker"), papel="authenticated", sub=B,
+         depois=f"select string_agg(work_id, ',') from public.favorites where user_id = '{B}'", espera="firestriker")
+    caso("favoritos: favoritar de novo a mesma obra não duplica (on conflict do nothing)", fav("firestriker") + " on conflict do nothing", papel="authenticated", sub=B,
+         depois=f"select count(*) from public.favorites where user_id = '{B}'", espera="1")
+    ok_, saida_, _ = q("select count(*) from public.favorites", "authenticated", A)
+    resultados.append((ok_ and saida_ == "0", "favoritos: o Admin não vê os da Bia"))
+    print(("✔ " if ok_ and saida_ == "0" else "✗ ") + "favoritos: o Admin não vê os da Bia")
+    ok_, saida_, _ = q("select count(*) from public.favorites", "anon")
+    resultados.append((not ok_, "favoritos: visitante sem conta não lê a tabela"))
+    print(("✔ " if not ok_ else "✗ ") + "favoritos: visitante sem conta não lê a tabela")
+    caso("favoritos: visitante sem conta não favorita", fav("hdvr"), papel="anon", erro="permission denied")
+    caso("favoritos: ninguém favorita em nome de outra pessoa", fav("hdvr", f"'{B}'"), papel="authenticated", sub=A, erro="not allowed")
+    caso("favoritos: ninguém apaga o de outra pessoa", "delete from public.favorites", papel="authenticated", sub=A,
+         depois=f"select count(*) from public.favorites where user_id = '{B}'", espera="1")
+    caso("favoritos: ninguém muda um favorito (só entra ou sai)", "update public.favorites set work_id = 'hdvr'", papel="authenticated", sub=B, erro="permission denied")
+    caso("favoritos: obra com nome fora do formato é recusada", fav("../x"), papel="authenticated", sub=B, erro="check")
+    caso("favoritos: obra com nome gigante é recusada", fav("a" * 81), papel="authenticated", sub=B, erro="check")
+    caso("favoritos: tirar o próprio favorito", "delete from public.favorites where work_id = 'firestriker'", papel="authenticated", sub=B,
+         depois=f"select count(*) from public.favorites where user_id = '{B}'", espera="0")
+    q(f"insert into public.favorites (user_id, work_id) select '{B}', 'obra-' || g from generate_series(1, 300) g")
+    caso("favoritos: com 300, uma obra nova é recusada", fav("mais-uma"), papel="authenticated", sub=B, erro="too many favorites")
+    caso("favoritos: com 300, favoritar de novo uma que já tem não quebra", fav("obra-5") + " on conflict do nothing", papel="authenticated", sub=B,
+         depois=f"select count(*) from public.favorites where user_id = '{B}'", espera="300")
+    q(f"delete from public.favorites where user_id = '{B}'")
+    if paralelo:
+        lotes = [(f"insert into public.favorites (work_id) select 'l{k}-' || g from generate_series(1, 300) g", "authenticated", B) for k in range(3)]
+        res = paralelo(lotes)
+        ok_, saida_, _ = q(f"select count(*) from public.favorites where user_id = '{B}'")
+        certo = ok_ and saida_ == "300" and sum(1 for o, _ in res if o) == 1
+        resultados.append((certo, "favoritos: 3 lotes de 300 ao mesmo tempo param em 300"))
+        print(("✔ " if certo else "✗ ") + f"favoritos: 3 lotes de 300 ao mesmo tempo param em 300 (ficaram {saida_})")
+        q(f"delete from public.favorites where user_id = '{B}'")
+
     # 10) a janela da conta (migração 20261103040000): trocar o próprio nome, apagar a própria conta
     caso("conta: trocar o próprio nome (limpa espaços)", "select public.change_my_name('  Bia   Nova  ')", papel="authenticated", sub=B,
          depois=f"select display_name from public.profiles where id = '{B}'", espera="Bia Nova")
@@ -344,12 +379,13 @@ def casos(q, paralelo=None) -> int:
     q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " +
       ins("resposta da Eva", pagina_e, f"(select id from public.comments where body = 'raiz da Bia')"))
     q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " + mp("works/firestriker/01", 5))
+    q(f"set local role authenticated; set local request.jwt.claim.sub = '{E}'; " + fav("firestriker"))
     caso("conta: visitante sem conta não apaga conta nenhuma", "select public.delete_my_account()", papel="anon", erro="permission denied",
          depois="select count(*) from auth.users", espera="3")
     caso("conta: apagar a própria conta leva o usuário, o perfil e os marca-páginas", "select public.delete_my_account()", papel="authenticated", sub=E,
          depois=f"select (select count(*) from auth.users where id = '{E}') || '|' || (select count(*) from public.profiles where id = '{E}') || '|' || "
-                f"(select count(*) from public.bookmarks where user_id = '{E}') || '|' || (select count(*) from auth.users)",
-         espera="0|0|0|2")
+                f"(select count(*) from public.bookmarks where user_id = '{E}') || '|' || (select count(*) from public.favorites where user_id = '{E}') || '|' || (select count(*) from auth.users)",
+         espera="0|0|0|0|2")
     caso("conta: comentários da conta apagada (com resposta vira [apagado]; o resto some; os da Bia ficam)", "select 1",
          depois=f"select string_agg(case when deleted_at is null then body else '[apagado]' end, ',' order by id) from public.comments where page_id = '{pagina_e}'",
          espera="[apagado],resposta da Bia,raiz da Bia")
