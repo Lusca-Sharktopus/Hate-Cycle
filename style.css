@@ -328,6 +328,3 @@ html:has(dialog.politica[open]) { overflow: hidden; }
 .site-footer .politica a { color: var(--teal); }
 .site-footer .politica a:hover { color: var(--green); }
 .site-footer .politica p { margin: 0 0 1em; }
-
-/* 03/11/2026: o recuo da primeira linha do começo de Pederneira, igual ao de Ossos do Ofício (3,5rem). Pedido do autor. */
-.story .recuo { display: inline-block; width: 3.5rem; }
