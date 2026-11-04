@@ -110,8 +110,6 @@
   .story .s1 { margin: 0; text-align: justify; color: #000; line-height: 1.7; hyphens: none; }
   .story .s1.ps, .story .s1 .ps { font-family: "PT Serif", Georgia, serif; font-size: .909em; color: #111012; }
   .story .s1.indent { text-indent: 3.5rem; }
-  /* 03/11: o mesmo recuo no começo de Pederneira, marcado no texto com <span class="recuo"></span> (pedido do autor) */
-  .story .recuo { display: inline-block; width: 3.5rem; }
   .story .s1.rr { font-family: "Road Rage", "Times New Roman", serif; font-size: 1.727em; line-height: 1.25; text-align: center; margin: .6rem 0 .5rem; color: #000; }
   .story .s1.mid { text-align: center; padding: 0 .6rem; }
   .story .s1.gap { margin-bottom: 1.2rem; }

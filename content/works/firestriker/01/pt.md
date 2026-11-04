@@ -4,7 +4,7 @@ title: Pederneira
 summary: “Estamos perdidos!”, exclamou Harry, meu jovem assistente.
 ---
 
-<span class="recuo"></span>“Estamos perdidos!”, exclamou Harry, meu jovem assistente. Cansaço, frustração e o que eu só posso interpretar como um gemido causado por dor muscular eram todos audíveis em sua voz.
+“Estamos perdidos!”, exclamou Harry, meu jovem assistente. Cansaço, frustração e o que eu só posso interpretar como um gemido causado por dor muscular eram todos audíveis em sua voz.
 
 Eu o ignorei e continuei tentando navegar pelo terreno pantanoso, lama a poucos centímetros de alcançar nossos joelhos e o terrível frio daquela época do ano não facilitaram nossa jornada, mas eu estava preparada para isso.
 
