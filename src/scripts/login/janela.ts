@@ -37,7 +37,15 @@ export function erroDoRetornoDoLogin(hash: string, search: string, lang: string)
       continue;
     }
     if (!p.has("error") && !p.has("error_description")) continue;
-    const bruto = p.get("error_description") || p.get("error_code") || p.get("error") || "";
+    let bruto = p.get("error_description") || p.get("error_code") || p.get("error") || "";
+    // o Supabase às vezes codifica a descrição duas vezes ("code%3A+4%2F0A…"): desfaz a segunda
+    if (/%[0-9A-Fa-f]{2}/.test(bruto)) {
+      try {
+        bruto = decodeURIComponent(bruto.replace(/\+/g, " "));
+      } catch {
+        /* fica como veio */
+      }
+    }
     const limpo = bruto.replace(/[^A-Za-z0-9À-ÿ .,:;()'_-]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
     return `${textosDoLogin(lang).falhou} ${limpo || "?"}`;
   }

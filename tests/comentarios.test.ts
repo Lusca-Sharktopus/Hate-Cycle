@@ -302,6 +302,10 @@ describe("erroDoRetornoDoLogin (o erro do login no endereço)", () => {
     );
     expect(erroDoRetornoDoLogin("", "?error=access_denied&error_description=Email+link+is+invalid", "en")).toBe("The login didn't work. The server said: Email link is invalid");
     expect(erroDoRetornoDoLogin("#error=invalid_request", "", "pt")).toBe("O login não deu certo. O servidor respondeu: invalid_request");
+    // codificada duas vezes (o que o Supabase mandou ao autor em 05/11)
+    expect(erroDoRetornoDoLogin("#error=server_error&error_description=Unable+to+exchange+external+code%253A+4%252F0A", "", "pt")).toBe(
+      "O login não deu certo. O servidor respondeu: Unable to exchange external code: 40A",
+    );
   });
   test("texto do endereço montado por outra pessoa: sem caracteres de HTML nem de endereço, até 160", () => {
     const r = erroDoRetornoDoLogin("#error=x&error_description=" + encodeURIComponent('<img src=x onerror="alert(1)"> visite http://golpe.test ' + "a".repeat(300)), "", "pt") ?? "";
