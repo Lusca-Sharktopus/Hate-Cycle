@@ -113,7 +113,7 @@ Em *Ossos do Ofício* (`content/works/all-in-a-nights-work/01/en.md`) o texto em
 
 ### Regras práticas
 
-- **Entregas (skill `hc-entrega`):** todo trabalho é commit + `git push origin migracao-astro`; o pull request #1 (rascunho, `migracao-astro` → `main`) se atualiza sozinho. **Não fazer merge nem push na `main` até a T20**: a `main` é o site antigo no ar em hatecycle.com (também guardado na **branch** `site-antigo` do GitHub, commit `970bbcc`, atualizada em 03/11/2026 para o site no ar com o rodapé novo e a Política de Privacidade; a tag `site-antigo` só existe na cópia local, nunca foi enviada — B15). Enquanto o autor não usar `git pull`, o zip só com os arquivos alterados continua sendo enviado a ele também.
+- **Entregas (skill `hc-entrega`) — DESDE A VIRADA (05/11/2026, merge `e34db8e` do PR #1):** o site novo está no ar; todo trabalho é commit + `git push origin main`, e o GitHub Actions constrói e publica sozinho (2 a 5 min; confira a bolinha em Actions). A branch `migracao-astro` ficou só como histórico. Cópia de segurança do site antigo: **branch** `site-antigo` (commit `970bbcc`, igual ao que estava no ar até a virada); voltar atrás = `docs/virada.md`, seção 3. Enquanto o autor não usar `git pull`, o zip só com os arquivos alterados continua sendo enviado a ele também.
 - **Nunca use `pkill`.** Servidores de teste sempre sob `timeout` (ex.: `timeout 300 python3 -m http.server 8790 -d public`); porta ocupada → use outra.
 - No sandbox, comandos pnpm/npm precisam passar pelo proxy: remova `registry.npmjs.org` do `NO_PROXY` (ver `docs/aprendendo-astro/01-anatomia.md`, seção "Rede do sandbox").
 - O Astro 7 percebe que está sendo rodado por um agente e põe `astro dev`/`astro preview` em segundo plano, escapando do `timeout`. Use `--ignore-lock` para ficar em primeiro plano (ex.: `timeout 120 pnpm preview --port 4329 --ignore-lock`); se escapou, `pnpm astro preview stop` (ou `dev stop`).
@@ -127,7 +127,8 @@ Em *Ossos do Ofício* (`content/works/all-in-a-nights-work/01/en.md`) o texto em
 
 ## Estado da migração (Astro)
 
-- O site vai migrar para **Astro** (decisão aprovada pelo autor em 14/10/2026; **Astro 7** desde a T05, 15/10/2026). Decisões e motivos: `docs/ARQUITETURA.md`. Tarefas, ordem, status e pendências do autor: `docs/BACKLOG.md`. Lições para o autor aprender Astro com o próprio site: `docs/aprendendo-astro/00-mapa.md`.
+- **Virada feita em 05/11/2026:** o site Astro está no ar em hatecycle.com (T20). Pendentes do autor para depois: design da janela da conta e o visual da lista do Blog. O que segue abaixo descreve a migração.
+- O site migrou para **Astro** (decisão aprovada pelo autor em 14/10/2026; **Astro 7** desde a T05, 15/10/2026). Decisões e motivos: `docs/ARQUITETURA.md`. Tarefas, ordem, status e pendências do autor: `docs/BACKLOG.md`. Lições para o autor aprender Astro com o próprio site: `docs/aprendendo-astro/00-mapa.md`.
 - **Durante a migração os dois geradores convivem**: o Astro lê `content/`, `static/` e `config.json` no lugar onde estão — nada é duplicado. Conteúdo novo continua sendo escrito normalmente em `content/`.
 - O `build.py` e o CSS ficam **congelados para mudanças estruturais** até a virada (T20): só correções de bug e conteúdo.
 - Invariantes da migração: URLs idênticas, IDs de comentários idênticos, mesmo jeito de escrever, visual das páginas-chave conferido por screenshot contra a baseline (T03).
