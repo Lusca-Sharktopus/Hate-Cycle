@@ -1,6 +1,6 @@
 {
  "_leia": "Gerado por tools/regras_ref.py a partir do build.py (build() de verdade, com o estado copiado de dentro dele). Não edite à mão: rode `python3 tools/regras_ref.py` de novo. Usado por tests/regras.test.ts.",
- "python": "3.13.16",
+ "python": "3.13.18",
  "langs": [
   "en",
   "pt"
@@ -7677,8 +7677,8 @@
      "outras": [],
      "destaques": [
       "light-and-blood",
-      "firestriker",
-      "hdvr"
+      "hdvr",
+      "firestriker"
      ],
      "cartoes": {
       "firestriker": {
@@ -8741,8 +8741,8 @@
      "outras": [],
      "destaques": [
       "light-and-blood",
-      "firestriker",
-      "hdvr"
+      "hdvr",
+      "firestriker"
      ],
      "cartoes": {
       "firestriker": {
@@ -18145,10 +18145,10 @@
      "outras": [],
      "destaques": [
       "light-and-blood",
+      "hdvr",
       "firestriker",
       "cat-crow-thing",
-      "the-pendulum",
-      "roadside"
+      "the-pendulum"
      ],
      "cartoes": {
       "all-in-a-nights-work": {
@@ -19313,10 +19313,10 @@
      "outras": [],
      "destaques": [
       "light-and-blood",
+      "hdvr",
       "firestriker",
       "cat-crow-thing",
-      "the-pendulum",
-      "roadside"
+      "the-pendulum"
      ],
      "cartoes": {
       "all-in-a-nights-work": {

@@ -93,9 +93,19 @@ const { cartoes, maisUrl, maisRotulo } = Astro.props;
     /* T17j: a home com 4 histórias e a seta que é o link "Ver todas as histórias" (o .is-link de antes, agora no mouse e no foco). */
     .rail-home > .works { padding-right: 84px; }   /* a faixa da seta: 58 px + as margens; nenhum cartão fica embaixo dela */
     .rail-home .work-card { flex: 0 0 calc((100% - 3 * 1.4rem) / 4); min-width: 0; }   /* espaço para 4, mesmo quando há menos */
-    .rail-more { color: #eafff8; text-decoration: none; }
-    .rail-more:hover, .rail-more:focus-visible { width: auto; border-radius: 40px; padding: 0 1.1rem 0 1.3rem; gap: .6rem; grid-auto-flow: column; color: #eafff8; }
-    .rail-more:hover .rail-label, .rail-more:focus-visible .rail-label { display: inline; }
+    /* 05/11 (pedido do autor): a seta vira "Ver todas as histórias" DESLIZANDO, não de uma vez. A largura "auto" não anima; quem anima é o
+       rótulo (largura máxima de 0 até caber, e a opacidade), e o botão cresce junto, para a esquerda (ele está preso na direita). */
+    .rail-more {
+      color: #eafff8; text-decoration: none; width: auto; min-width: 58px; border-radius: 40px; padding: 0; gap: 0; grid-auto-flow: column;
+      justify-content: center; transition: transform .2s, box-shadow .3s, padding .38s cubic-bezier(.3, .7, .2, 1), gap .38s cubic-bezier(.3, .7, .2, 1);
+    }
+    .rail-more .rail-label {
+      display: inline-block; max-width: 0; opacity: 0; overflow: hidden;
+      transition: max-width .38s cubic-bezier(.3, .7, .2, 1), opacity .22s ease;
+    }
+    .rail-more:hover, .rail-more:focus-visible { padding: 0 1.1rem 0 1.3rem; gap: .6rem; color: #eafff8; }
+    .rail-more:hover .rail-label, .rail-more:focus-visible .rail-label { max-width: 16rem; opacity: 1; transition: max-width .38s cubic-bezier(.3, .7, .2, 1), opacity .3s ease .08s; }
+    @media (prefers-reduced-motion: reduce) { .rail-more, .rail-more .rail-label, .rail-more:hover .rail-label { transition: none; } }
     .rail-more:focus-visible { outline: 3px solid var(--night); outline-offset: 3px; box-shadow: 0 0 14px var(--cyan); }
     .rail-home .rail-rolar.rail-next { display: none; }   /* na tela larga não há o que rolar: a seta da direita é só o link */
     @media (max-width: 1000px) {
@@ -104,7 +114,7 @@ const { cartoes, maisUrl, maisRotulo } = Astro.props;
       .rail-home .rail-rolar.rail-next { display: grid; }
       .rail-more { position: static; width: fit-content; height: 48px; margin: .1rem 0 0 auto; border-radius: 40px; padding: 0 1rem 0 1.2rem; gap: .5rem; grid-auto-flow: column; transform: none; }
       .rail-more:hover { transform: none; }
-      .rail-more .rail-label { display: inline; }
+      .rail-more .rail-label { display: inline; max-width: none; opacity: 1; }
       .rail-more svg { width: 24px; height: 24px; }
     }
   }

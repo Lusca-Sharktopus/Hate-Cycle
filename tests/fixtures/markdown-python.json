@@ -1,6 +1,6 @@
 {
  "_leia": "Gerado por tools/markdown_ref.py a partir do build.py (make_md, smallcaps, url_embed, embed_html, build). Não edite à mão: rode `python3 tools/markdown_ref.py` de novo. Usado por tests/markdown.test.ts. Em cada caso, 'previa' é null quando dá igual ao 'build'. Em 'chamadas', 'partes' são os arquivos cujo corpo foi o texto da chamada (o HTML é o de 'corpos'); nas composições (página Sobre), o HTML vem junto.",
- "python": "3.13.16",
+ "python": "3.13.18",
  "classes": {
   "unicode": "15.1.0",
   "w": [
