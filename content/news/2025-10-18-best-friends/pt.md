@@ -1,6 +1,6 @@
 ---
 title: Melhores amigos em todos os universos
-date: 2025-10-18
+date: 2025-11-05
 thumb: news/best-friends.png
 tags:
   - Vídeo Novo
