@@ -1,0 +1,47 @@
+---
+// O miolo da home (/pt/, /en/): o <main> da home do build.py. Só desenha: o que aparece e em que ordem já vem decidido
+// em `dados` (src/lib/paginas.ts → dadosDaHome, que usa as regras de atualizacoes.ts e obras.ts).
+import { assetUrl } from "../lib/assets";
+import { t, type Lang } from "../lib/config";
+import type { DadosDaHome } from "../lib/paginas";
+import Carrossel from "./Carrossel.astro";
+
+interface Props {
+  lang: Lang;
+  dados: DadosDaHome;
+}
+
+const { lang, dados } = Astro.props;
+---
+
+{/* A quebra de linha entre os dois botões do hero é a do build.py (um espaço entre dois elementos de linha): fica igual. */}
+<section class="hero"><div class="wrap"><h1>{t(lang, "tagline")}</h1><p>{t(lang, "hero_sub")}</p><div class="hero-actions"><a class="button" href={`/${lang}/works/`}>{t(lang, "start")}</a>
+{dados.temUniverso && <a class="button ghost" href={`/${lang}/universe/`}>{t(lang, "explore")}</a>}</div></div><div class="crack" aria-hidden="true"></div></section>
+{dados.atualizacoes.length > 0 && <section class="wrap block"><h2>{t(lang, "latest")}</h2><div class="updates">{dados.atualizacoes.map((a) => <a class="update" href={a.url}>{a.imagem && <img src={assetUrl(a.imagem)} alt="" loading="lazy" />}<span class="tag">{a.selo}</span><time>{a.data}</time><h3>{a.titulo}</h3><p>{a.texto}</p></a>)}</div></section>}
+<section class="wrap block"><h2>{t(lang, "hate_stories")}</h2><p class="sub">{t(lang, "hate_stories_sub")}</p><Carrossel cartoes={dados.destaques} maisUrl={`/${lang}/works/`} maisRotulo={t(lang, "all_stories")} /></section>
+{dados.sobre && <section class="wrap block about-teaser"><h2>{dados.sobre.titulo}</h2><p>{dados.sobre.resumo}</p><a class="button ghost" href={dados.sobre.url}>{t(lang, "read_more")}</a></section>}
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seções "hero", "últimas atualizações"), mesmos valores e mesma ordem. */
+    .hero {
+      position: relative; color: #fff; border-radius: calc(var(--sheet-radius) * .6); overflow: hidden;
+      padding: clamp(2.2rem, 6vw, 4.5rem) clamp(1.4rem, 5vw, 3.5rem) clamp(3rem, 6vw, 4.5rem);
+      background: linear-gradient(135deg, var(--night) 0%, var(--night) 50%, var(--green) 135%);
+    }
+    .hero h1 { color: #fff; max-width: 19ch; font-size: clamp(2.4rem, 6.5vw, 4.4rem); text-shadow: 0 0 30px #00e9fd55; }
+    .hero p { max-width: 46ch; color: #d8f6ee; font-size: 1.08rem; }
+    .crack {
+      position: absolute; left: 0; right: 0; bottom: 8px; height: 24px; pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='24' viewBox='0 0 600 24'%3E%3Cpath d='M0 12 L40 12 L52 5 L64 15 L80 9 L118 12 L134 19 L150 11 L210 12 L224 4 L238 14 L252 12 L330 12 L346 20 L362 9 L376 13 L440 12 L456 6 L470 16 L486 11 L600 12' fill='none' stroke='%2300e9fd' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center;
+      filter: drop-shadow(0 0 6px var(--cyan));
+    }
+    .updates { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+    .update { display: block; color: inherit; text-decoration: none; background: #f6f9f8; border-left: 5px solid var(--mint); padding: 1rem 1.1rem; border-radius: 0 var(--radius) var(--radius) 0; }
+    .update:hover { background: #fff; box-shadow: 0 0 14px #00e9fd66; color: inherit; }
+    .update img { width: 100%; max-height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: .6rem; }
+    .update h3 { margin: .3rem 0; }
+    .update p { margin: 0; font-size: .9rem; color: var(--muted); }
+    .about-teaser { max-width: 760px; }
+  }
+</style>

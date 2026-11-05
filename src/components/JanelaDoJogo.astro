@@ -1,0 +1,48 @@
+---
+// A PÁGINA DE UM JOGO (T17d, só no Astro; hoje Cat-Crow-Thing): logo abaixo do título, a janela da demo (proporção de tela de jogo,
+// 16:9) e, embaixo dela, o botão com a logo da Steam à esquerda e "Wishlist on Steam" / "Adicione à Wishlist".
+// Só desenha: tudo vem decidido em `jogo` (src/lib/jogo.ts, a partir do work.json → game).
+//   - sem demo: a janela fica escura e vazia, com "Demo em breve" (nenhum <iframe>, nada de terceiros);
+//   - sem link da Steam: o botão aparece apagado, sem ser link (aria-disabled), com "Link em breve" ao lado.
+// Para comparar com o Python (que desenha a página como um capítulo de texto), tests/ajudantes/html.ts → semJanelaDoJogo() tira só este bloco.
+//
+// ⚠ Escrito "colado" de propósito (o HTML sai como está escrito).
+import type { JanelaDoJogo } from "../lib/jogo";
+import { SANDBOX_DA_DEMO } from "../lib/jogo";
+import { assetUrl } from "../lib/assets";
+
+interface Props {
+  jogo: JanelaDoJogo;
+}
+
+const { jogo: j } = Astro.props;
+const logo = assetUrl(j.steam.logo);
+---
+
+<div class="jogo" data-jogo>{j.demo ? <div class="jogo-tela"><iframe src={j.demo} title={j.nome} sandbox={SANDBOX_DA_DEMO} allow="fullscreen; gamepad; autoplay" allowfullscreen loading="lazy"></iframe></div> : <div class="jogo-tela vazia" role="img" aria-label={`${j.nome}: ${j.emBreve}`}><span class="jogo-aviso" aria-hidden="true">{j.emBreve}</span></div>}<p class="jogo-steam">{j.steam.href ? <a class="steam-btn" href={j.steam.href} target="_blank" rel="noopener"><img class="steam-logo" src={logo} alt="" /><span>{j.steam.texto}</span></a> : <><span class="steam-btn sem-link" role="link" aria-disabled="true" aria-describedby="jogo-link-em-breve"><img class="steam-logo" src={logo} alt="" /><span>{j.steam.texto}</span></span><span class="steam-breve" id="jogo-link-em-breve">{j.steam.linkEmBreve}</span></>}</p></div>
+
+<style is:global>
+  @layer site {
+    /* A janela da demo: a tela de um jogo (16:9), escura, com a borda arredondada das folhas do site. */
+    .jogo { margin: 0 auto 2rem; max-width: 860px; }
+    .jogo-tela { position: relative; aspect-ratio: 16 / 9; background: #0b0812; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 28px #0006, inset 0 0 0 1px #ffffff14; }
+    .jogo-tela.vazia { display: grid; place-items: center; background: radial-gradient(ellipse at center, #1d1430 0%, #0b0812 70%); }
+    .jogo-tela iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .jogo-aviso { font-family: var(--font-head); font-size: clamp(.95rem, 2.4vw, 1.3rem); letter-spacing: .08em; text-transform: uppercase; color: #dff6ee; opacity: .45; }
+
+    /* O botão da Steam: as cores da loja (azul-escuro), a logo à esquerda. Sem link: apagado, sem mãozinha, e "Link em breve" ao lado. */
+    .jogo-steam { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .5rem 1rem; margin: 1.2rem 0 0; }
+    .steam-btn {
+      display: inline-flex; align-items: center; gap: .7rem; padding: .55rem 1.3rem .55rem .6rem; border-radius: 999px;
+      background: linear-gradient(180deg, #2a475e, #171a21); color: #fff; font-family: var(--font-head); font-size: 1.05rem; font-weight: 500;
+      text-decoration: none; box-shadow: 0 4px 14px #0004; transition: transform .2s, box-shadow .3s;
+    }
+    .steam-logo { width: 2rem; height: 2rem; flex: none; }
+    a.steam-btn:hover, a.steam-btn:focus-visible { transform: scale(1.04); box-shadow: 0 0 14px #66c0f4; color: #fff; }
+    .steam-btn.sem-link { opacity: .6; cursor: default; filter: saturate(.7); }
+    .steam-breve { font-size: .9rem; color: #0e0e0e; opacity: .7; }
+    @media (prefers-reduced-motion: reduce) {
+      .steam-btn { transition: none; }
+    }
+  }
+</style>

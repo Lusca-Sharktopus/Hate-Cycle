@@ -1,0 +1,126 @@
+---
+// Rodapé: redes sociais e a linha "© 2023 - ano por autor • Política de Privacidade • Email de contato: …" (pedido do autor de 02/11/2026;
+// textos em src/lib/textosDoRodape.ts). Até 02/11 era o <footer> do shell() do build.py ("© 2023 - ano by autor" + link do feed RSS); o
+// build.py, congelado, continua assim (exceção de paridade estreita rodapeComoNoPython() em tests/ajudantes/html.ts).
+// A barra lateral (SIDEBAR_ON do build.py) está desligada, então as redes ficam aqui.
+// O ícone do YouTube leva ao canal do idioma da página (inglês: @HateCycleEn; português: @HateCycleBR), definido em src/lib/canais.ts (T17h).
+//
+// "Política de Privacidade" é um link de verdade para /<idioma>/privacy/ (a página avulsa content/pages/privacy/, que funciona sozinha e é o
+// endereço que vai para o Google); com JavaScript, o clique abre a mesma política numa janela (<dialog>) que escurece o resto da tela.
+// O texto da janela é o da página (rendered.html do Markdown), com o mesmo versalete do <main> (Hᴀᴛᴇ Cʏᴄʟᴇ → <span class="hc">).
+import { assetUrl } from "../lib/assets";
+import { redesDoRodape } from "../lib/canais";
+import { authorName, type Lang } from "../lib/config";
+import { dadosDoIdioma } from "../lib/conteudo";
+import { versaleteEntreTags } from "../lib/markdown";
+import { EMAIL_DE_CONTATO, PASTA_DA_POLITICA, TEXTOS_DO_RODAPE } from "../lib/textosDoRodape";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const ano = new Date().getFullYear(); // ano do build, como datetime.date.today().year
+const txt = TEXTOS_DO_RODAPE[lang];
+// A política publicada neste idioma (rascunho só existe na prévia); sem ela, o rodapé fica sem o link e sem a janela.
+const politica = (await dadosDoIdioma(lang)).paginas.find((p) => p.data._origem.slug === PASTA_DA_POLITICA);
+const htmlDaPolitica = politica ? versaleteEntreTags(politica.rendered?.html ?? "") : "";
+---
+
+<footer class="site-footer">
+  <div class="social">
+    {
+      redesDoRodape(lang).map((s) => (
+        <a href={s.url} target="_blank" rel="noopener" title={s.name}><img src={assetUrl(s.icon)} alt={s.name} /></a>
+      ))
+    }
+  </div>
+  <p class="rodape-linha">&copy; 2023 - {ano} {txt.por} {authorName}{politica && <> <span class="sep" aria-hidden="true">•</span> <a href={`/${lang}/${PASTA_DA_POLITICA}/`} data-politica>{txt.politica}</a></>} <span class="sep" aria-hidden="true">•</span> <span class="contato">{txt.email}: <a href={`mailto:${EMAIL_DE_CONTATO}`}>{EMAIL_DE_CONTATO}</a></span></p>
+  {
+    politica && (
+      <dialog class="politica" aria-labelledby="politica-titulo">
+        <div class="politica-topo">
+          <h2 id="politica-titulo">{politica.data.title}</h2>
+          <button type="button" class="politica-fechar" aria-label={txt.fechar} title={txt.fechar}>×</button>
+        </div>
+        <div class="politica-texto prose"><Fragment set:html={htmlDaPolitica} /></div>
+      </dialog>
+    )
+  }
+</footer>
+
+<script>
+  // A janela da política: o link continua indo para /<idioma>/privacy/ sem JavaScript (ou com o botão do meio / Ctrl+clique, nova aba).
+  const janela = document.querySelector<HTMLDialogElement>("dialog.politica");
+  const link = document.querySelector<HTMLAnchorElement>("a[data-politica]");
+  if (janela && link && typeof janela.showModal === "function") {
+    link.addEventListener("click", (e) => {
+      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      janela.showModal();
+      janela.scrollTop = 0;
+    });
+    janela.querySelector(".politica-fechar")?.addEventListener("click", () => janela.close());
+    // clique no escuro em volta (fora da caixa) fecha; Esc fecha sozinho (é do próprio <dialog>)
+    janela.addEventListener("click", (e) => {
+      if (e.target !== janela) return;
+      const r = janela.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) janela.close();
+    });
+  }
+</script>
+
+<style>
+  @layer site {
+    /* Copiado de static/style.css (seção "rodapé"), mesmos valores. */
+    .site-footer {
+      text-align: center; margin-top: 2.2rem; padding: 1rem 1rem 2rem; color: var(--on-brand); font-size: 1.05rem; font-weight: 500;
+      position: relative; z-index: 1;
+    }
+    .site-footer a { color: var(--on-brand); }
+    .social { display: flex; justify-content: center; gap: .9rem; margin-bottom: .8rem; }
+    .social img { width: 34px; height: 34px; object-fit: contain; }
+    .site-footer p { margin: .25rem 0; }
+    /* Pedido do autor (21/10): os ícones crescem um pouco ao passar o mouse (e ao chegar pelo teclado). Só no Astro. */
+    .social a { display: inline-block; transition: transform .18s ease; }
+    .social a:hover, .social a:focus-visible { transform: scale(1.15); }
+    @media (prefers-reduced-motion: reduce) { .social a { transition: none; } }
+
+    /* 02/11: a linha do rodapé. "Política de Privacidade" e o e-mail sublinhados (são links); no celular, o e-mail não se parte no meio. */
+    .rodape-linha a { text-decoration: underline; text-underline-offset: .15em; }
+    .rodape-linha a:hover { text-shadow: 0 0 12px var(--cyan); }
+    .rodape-linha .sep { margin: 0 .2em; }
+    .rodape-linha .contato { white-space: nowrap; }
+
+    /* A janela da política: a folha de papel do site por cima de um véu escuro; rola por dentro quando a política é maior que a tela. */
+    .politica {
+      width: min(760px, calc(100% - 2rem)); max-height: min(85vh, 85dvh); padding: 0; border: 0; border-radius: var(--sheet-radius);
+      background: var(--paper), var(--sheet); background-color: var(--sheet); color: var(--ink); box-shadow: 0 12px 34px #00000059;
+      text-align: left; font-size: 1rem; font-weight: 400; overflow: auto; overscroll-behavior: contain;
+    }
+    .politica::backdrop { background: #0b0812b3; }
+    /* 05/11 (pedido do autor, vale para toda janela que escurece a tela): a caixa sobe um pouco enquanto aparece; o fundo, fade rápido */
+    .politica[open] { animation: politica-sobe .24s cubic-bezier(.2, .8, .3, 1); }
+    .politica[open]::backdrop { animation: politica-fundo .18s ease-out; }
+    @keyframes politica-sobe { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
+    @keyframes politica-fundo { from { opacity: 0; } to { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      @keyframes politica-sobe { from { opacity: 0; } to { opacity: 1; } }
+    }
+    .politica-topo {
+      position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 1.2rem clamp(1.2rem, 4vw, 2.4rem) .6rem; background: var(--paper), var(--sheet); background-color: var(--sheet);
+    }
+    .politica-topo h2 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.2rem); }
+    .politica-fechar {
+      flex: none; width: 2.6rem; height: 2.6rem; border: 0; border-radius: 50%; background: var(--green); color: #eafff8;
+      font: 700 1.6rem/1 var(--font-text); cursor: pointer; transition: transform .2s, box-shadow .3s;
+    }
+    .politica-fechar:hover, .politica-fechar:focus-visible { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
+    .politica-texto { max-width: none; padding: 0 clamp(1.2rem, 4vw, 2.4rem) 1.6rem; }
+    .politica-texto :global(h2) { font-size: 1.35rem; margin: 1.4rem 0 .4rem; text-shadow: none; }
+    .politica-texto :global(p), .politica-texto :global(li) { line-height: 1.6; }
+    :global(html:has(dialog.politica[open])) { overflow: hidden; }
+    @media (prefers-reduced-motion: reduce) { .politica-fechar { transition: none; } }
+  }
+</style>

@@ -1,0 +1,18 @@
+{
+  "origem": "intro/logo.webm",
+  "sha256_do_original": "d26a026aa1368394ad67838b54f9b29d3821d9d214277fde7b6887f07649df0a",
+  "sha256_do_derivado": "63dc652f914ceaf8eb554ebc6647af6fa3db66282be5da5cd5807335d02871ac",
+  "largura": 1280,
+  "altura": 720,
+  "largura_do_original": 1920,
+  "altura_do_original": 1080,
+  "quadros": 151,
+  "fps": "30000/1001",
+  "duracao_s": 5.038,
+  "alfa": true,
+  "codec": "vp9",
+  "crf": 34,
+  "bytes_do_original": 1143599,
+  "bytes_do_derivado": 523552,
+  "gerado_com": "ffmpeg version 6.1.1-3ubuntu5"
+}

@@ -1,0 +1,12 @@
+---
+title: Gnomos do mundo de Hᴀᴛᴇ Cʏᴄʟᴇ
+date: 2024-01-25
+thumb: news/gnomes.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-gnomes}}
+
+Os gnomos nascem de um fenômeno arcano relativamente raro chamado “estelarização”. Apesar de os meios pelos quais esse processo ocorre permanecerem desconhecidos, os seres que dele se originam (chamados de estelares) são facilmente identificáveis. Qualquer ser vivo não senciente, como cogumelos, plantas e corais, é suscetível a esse fenômeno, que altera a morfologia do organismo e lhe concede um nível de consciência quase senciente. Os gnomos são um dos três tipos conhecidos de estelares, resultantes da estelarização de cogumelos. Diferentes espécies de cogumelo parecem ter características únicas atribuídas à sua forma de Gnomo.

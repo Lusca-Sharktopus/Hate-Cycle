@@ -1,0 +1,35 @@
+---
+// As PÁGINAS AVULSAS: /pt/about/ (Sobre), /pt/support/ (Apoio) e qualquer outra pasta de content/pages/ que tenha endereço
+// (src/pages/[lang]/[pagina]/index.astro → dist/pt/about/index.html). `[pagina]` = o nome da pasta.
+// O Astro dá PRIORIDADE às rotas com nome fixo: /pt/works/, /pt/news/, /pt/universe/ e /pt/characters/ continuam sendo delas.
+// getStaticPaths() cria uma página por página publicada de cada idioma (rascunho, como o Apoio de hoje, só na prévia `pnpm dev`);
+// `route: false` (content/pages/project) não ganha página: o texto dela abre a Sobre (feito pelo carregador, src/lib/corpos.ts).
+// É o laço "PÁGINAS AVULSAS" do build() do build.py (~917–922). Lição: docs/aprendendo-astro/09-endpoints.md.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import OutrasHistorias from "../../../components/OutrasHistorias.astro";
+import PaginaAvulsaComp from "../../../components/PaginaAvulsa.astro";
+import SecaoEmissarios from "../../../components/SecaoEmissarios.astro";
+import SecaoHistorias from "../../../components/SecaoHistorias.astro";
+import { emissariosMostramTextos, langs, type Lang } from "../../../lib/config";
+import { COM_RASCUNHOS, dadosDeTodosOsIdiomas, dadosDoIdioma } from "../../../lib/conteudo";
+import { dadosDosAtalhos } from "../../../lib/paginas";
+import { paginasAvulsas, type PaginaAvulsa } from "../../../lib/paginasAvulsas";
+
+export async function getStaticPaths() {
+  const dadosDe = await dadosDeTodosOsIdiomas();
+  const publicadas = Object.fromEntries(langs.map((l) => [l, dadosDe[l].paginas])) as Record<Lang, (typeof dadosDe)[Lang]["paginas"]>;
+  return langs.flatMap((lang) => paginasAvulsas(dadosDe[lang].paginas, lang, publicadas).map((pagina) => ({ params: { lang, pagina: pagina.pasta }, props: { pagina } })));
+}
+
+const lang = Astro.params.lang as Lang;
+const { pagina } = Astro.props as { pagina: PaginaAvulsa };
+// Os atalhos que o texto usa ({{emissaries}} na Sobre; {{stories}} e {{other-stories}} se algum dia o autor os usar numa página)
+const { historias, outras, emissarios } = dadosDosAtalhos(await dadosDoIdioma(lang), COM_RASCUNHOS, emissariosMostramTextos);
+---
+
+<BaseLayout lang={lang} title={pagina.tituloDaPagina} description={pagina.descricao} alternates={pagina.alternativas}>
+  <PaginaAvulsaComp pagina={pagina} />
+  {pagina.atalhos.includes("stories") && <SecaoHistorias slot="atalho-stories" lang={lang} cartoes={historias.cartoes} seletor={historias.seletor} />}
+  {pagina.atalhos.includes("other-stories") && <OutrasHistorias slot="atalho-other-stories" lang={lang} cartoes={outras} />}
+  {pagina.atalhos.includes("emissaries") && <SecaoEmissarios slot="atalho-emissaries" lang={lang} cartoes={emissarios} />}
+</BaseLayout>

@@ -1,0 +1,49 @@
+---
+// A barra "anterior · voltar · próximo" (pager() do build.py): botões redondos com seta, o título do vizinho embaixo do
+// rótulo e, no meio, o botão de voltar (à obra; nas notícias, T13, a "Todas as notícias").
+// Só desenha: tudo vem decidido em `paginador` (src/lib/leitura.ts → paginador()). Lado vazio = <span></span>, para o
+// outro lado não sair do lugar. Título de lateral longo vem CORTADO (src/lib/titulos.ts, 40 caracteres, pedido do autor 16/10/2026) e
+// o inteiro vai no title e no aria-label do link (só quando foi cortado). O rótulo "Chapters" do <nav> é fixo, como no site atual (até nas notícias).
+import type { Paginador } from "../lib/leitura";
+import Seta from "./Seta.astro";
+
+interface Props {
+  paginador: Paginador;
+}
+
+const { paginador: p } = Astro.props;
+---
+
+<nav class="pager" aria-label="Chapters">{p.anterior ? <a class="pg prev" rel="prev" href={p.anterior.url} title={p.anterior.completo?.titulo} aria-label={p.anterior.completo?.rotulo}><span class="pg-btn"><Seta direcao="prev" /></span><span class="pg-txt">{p.rotuloAnterior}<small>{p.anterior.titulo}</small></span></a> : <span></span>}{p.meio && <a class="mid" href={p.meio.url}>{p.meio.rotulo}</a>}{p.proximo ? <a class="pg next" rel="next" href={p.proximo.url} title={p.proximo.completo?.titulo} aria-label={p.proximo.completo?.rotulo}><span class="pg-txt">{p.rotuloProximo}<small>{p.proximo.titulo}</small></span><span class="pg-btn"><Seta direcao="next" /></span></a> : <span></span>}</nav>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "leitor", a parte do .pager), mesmos valores e mesma ordem. */
+    .pager { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin: 1.5rem 0; font-size: .95rem; }
+    .pager a { text-decoration: none; font-weight: 600; }
+    .pager .pg { display: flex; align-items: center; gap: .8rem; max-width: 42%; color: inherit; }
+    .pager .pg-txt { display: flex; flex-direction: column; }
+    .pager .next .pg-txt { text-align: right; }
+    .pager small { font-weight: 400; font-size: .8rem; opacity: .75; }
+    .pg-btn { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--green); color: #eafff8; box-shadow: 0 4px 14px #0004; transition: transform .2s, box-shadow .3s; }
+    .pg-btn svg { width: 28px; height: 28px; }
+    .pager .pg:hover .pg-btn { transform: scale(1.08); box-shadow: 0 0 14px var(--cyan); }
+    .pager .mid { flex-direction: row; padding: .35rem .9rem; border: 1px solid currentColor; border-radius: 99px; color: var(--teal); }
+    /* pedido do autor (16/10/2026): o botão do meio nunca é espremido pelos títulos das laterais */
+    .pager .mid { flex: none; white-space: nowrap; }
+    /* B36 (T17k): em tela estreita a barra não cabia numa linha ("Todos os capítulos" + "Próximo", em português, passam da tela a 320 px e a página ganhava
+       rolagem lateral). Até 389 px (e, quando há os DOIS vizinhos, até 560 px) o botão do meio vai inteiro para a primeira linha e os vizinhos descem para a
+       de baixo, como as notícias já faziam até 560 px. De 390 px para cima, com um vizinho só, nada mudou. */
+    @media (max-width: 389px) {
+      .pager { flex-wrap: wrap; justify-content: center; }
+      .pager .pg { max-width: 100%; }
+      .pager .mid { order: -1; width: 100%; text-align: center; }
+      .pager > span:empty { display: none; }
+    }
+    @media (max-width: 560px) {
+      .pager:has(> .prev):has(> .next) { flex-wrap: wrap; justify-content: center; }
+      .pager:has(> .prev):has(> .next) .pg { max-width: 100%; }
+      .pager:has(> .prev):has(> .next) .mid { order: -1; width: 100%; text-align: center; }
+    }
+  }
+</style>

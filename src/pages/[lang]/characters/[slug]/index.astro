@@ -1,0 +1,30 @@
+---
+// A ficha de um personagem: /pt/characters/harry/. SÓ EXISTE com `show_extras: true` (hoje false). Lição: docs/aprendendo-astro/09-endpoints.md.
+// É o laço "PERSONAGENS" do build() do build.py (~904–911): "Aparece em:" usa TODAS as obras (inclusive as escondidas das listas).
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import FichaDePersonagem from "../../../../components/FichaDePersonagem.astro";
+import { langs, type Lang } from "../../../../lib/config";
+import { dadosDeTodosOsIdiomas } from "../../../../lib/conteudo";
+import { fichasDePersonagens, type FichaDePersonagem as Ficha } from "../../../../lib/paginasDeExtras";
+
+export async function getStaticPaths() {
+  const dadosDe = await dadosDeTodosOsIdiomas();
+  const publicados = Object.fromEntries(langs.map((l) => [l, dadosDe[l].personagens])) as Record<Lang, (typeof dadosDe)[Lang]["personagens"]>;
+  return langs.flatMap((lang) => {
+    const dados = dadosDe[lang];
+    return fichasDePersonagens(dados.personagens, lang, {
+      publicadosPorIdioma: publicados,
+      relacionadosDe: dados.relacionadosDe,
+      obras: dados.obras,
+      capitulosListados: (obra) => dados.capitulosDe(obra).listados,
+    }).map((ficha) => ({ params: { lang, slug: ficha.pasta }, props: { ficha } }));
+  });
+}
+
+const lang = Astro.params.lang as Lang;
+const { ficha } = Astro.props as { ficha: Ficha };
+---
+
+<BaseLayout lang={lang} title={ficha.tituloDaPagina} description={ficha.descricao} image={ficha.imagem} alternates={ficha.alternativas}>
+  <FichaDePersonagem ficha={ficha} />
+</BaseLayout>

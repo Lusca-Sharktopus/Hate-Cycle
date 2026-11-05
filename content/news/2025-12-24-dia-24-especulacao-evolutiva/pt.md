@@ -1,0 +1,16 @@
+---
+title: Dia 24 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele
+date: 2025-12-24
+thumb: news/dia-24-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-24}}
+
+A rena-lunar (Selenorangifer natalinus), chamada nativamente de ttikiwa pelos Avialunari, é uma espécie de macaco-lunar insignolofídeo [[news/2024-02-09-avialuna-pentapods|pentápode]] nativa de Hwaiga, ao norte de Gattewe, próxima dos saltadores-da-estepe (Insignolophus chortinos). As asas das renas-lunares são bem grandes comparadas às de outros insignolofídeos, apesar de não terem o mesmo nível de ornamentação. Também são a maior espécie de insignolofídeo e, por extensão, de macaco-lunar. Seus chifres queratinosos são usados em combate pelos machos durante a época de acasalamento, de forma semelhante aos cervídeos da Terra.
+
+As lendas dos povos Tene'awi falam de uma divindade chamada Santa Kallawa, cujo trenó é puxado por ttikiwas mágicas voadoras. A semelhança com o Papai Noel da Terra é impressionante e intrigou especialistas de inúmeras áreas, da mitologia comparada à prosopologia. Todas as evidências apontam para uma coincidência, mas muitos acham isso difícil de aceitar.
+
+O nome ttikiwa /ᵏǃi.ˈki.ɰa/ vem da língua avialunari e se origina do proto-avialunari *ttiki wikiwa, que significa “asa grande”, em referência ao tamanho das asas em comparação com outros macacos-lunares cursoriais semelhantes. O nome Selenorangifer vem da raiz grega Σελήνη, a deusa da Lua, comumente usada em nomes científicos de espécies de Avialuna, e rangifer, o gênero das renas da Terra.

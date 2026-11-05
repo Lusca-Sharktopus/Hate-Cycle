@@ -1,0 +1,38 @@
+---
+// Posts incorporados com botões para alternar ({{embed:link A | link B}}): o último bloco do static/site.js.
+// O HTML (.embed-alt, painéis e botões) vem do texto do autor (src/lib/markdown.ts → embedHtml); este componente só traz
+// o clique. O Leitor só o põe na página quando o texto tem esse bloco (src/lib/leitura.ts → temPostsAlternados).
+// Hoje nenhum capítulo usa; as notícias (T13) reaproveitam este componente.
+---
+
+<script>
+  type Janela = Window & {
+    twttr?: { widgets?: { load(el?: Element): void } };
+    instgrm?: { Embeds?: { process(): void } };
+    tiktokEmbedLoad?: () => void;
+  };
+  const janela = window as Janela;
+  document.querySelectorAll(".embed-alt").forEach((caixa) => {
+    const botoes = caixa.querySelectorAll(".embed-btn");
+    const paineis = caixa.querySelectorAll(".embed-panel");
+    botoes.forEach((botao, i) => {
+      botao.addEventListener("click", () => {
+        botoes.forEach((b, j) => {
+          b.classList.toggle("is-on", i === j);
+          b.setAttribute("aria-pressed", i === j ? "true" : "false");
+        });
+        paineis.forEach((p, j) => p.classList.toggle("is-on", i === j));
+        // os posts de redes sociais só se desenham quando aparecem: pede ao script de cada rede para desenhar de novo
+        try {
+          if (janela.twttr && janela.twttr.widgets) janela.twttr.widgets.load(paineis[i]);
+        } catch {}
+        try {
+          if (janela.instgrm && janela.instgrm.Embeds) janela.instgrm.Embeds.process();
+        } catch {}
+        try {
+          if (janela.tiktokEmbedLoad) janela.tiktokEmbedLoad();
+        } catch {}
+      });
+    });
+  });
+</script>

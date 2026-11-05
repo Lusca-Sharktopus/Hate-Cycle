@@ -1,0 +1,22 @@
+{
+  "kind": "video",
+  "universe": false,
+  "langs": [
+    "pt"
+  ],
+  "title": {
+    "pt": "A Trilha do Caçador"
+  },
+  "blurb": {
+    "pt": "Após relatos perturbadores envolvendo o sobrenatural, Klaus e Kane, membros da enigmática Trilha do Caçador, são enviados à isolada cidade de Mar'gem, no condado de Nova Carolina"
+  },
+  "cover": {
+    "pt": "covers/PT/Capa Trilha.png"
+  },
+  "external": {
+    "pt": "https://youtube.com/playlist?list=PLxDFuZd3xgjRLX8rd_NwIlDaEP1a8aOxN&si=cmC2BThmBMCWGeZt"
+  },
+  "cta": {
+    "pt": "Assista no YouTube"
+  }
+}

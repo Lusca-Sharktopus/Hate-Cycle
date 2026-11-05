@@ -1,0 +1,22 @@
+---
+title: Day 8 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it
+date: 2025-12-08
+thumb: news/dia-8-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-8}}
+
+The îandapĩ, yandapi or south american tree dolphin (Scandelphinus iandapi) is a species of arboreal remingtonocetid //btw, thanks CM Kosemen for letting me use the idea// native to the mangroves in south america.
+
+Despite their name, tree dolphins are not true dolphins. In fact, the genus Scandelphinus is quite unique among cetaceans, being cladistically isolated from the rest of cetacea (at least when only accounting extant taxa). They're the only cetaceans to, among other traits, still have four limbs and to not display hyperphalangy. Other species of the genus can be found in South and Southeast Asia and the East Coast of Africa.
+
+Yandapis are great climbers, having not only an opposing pinky finger, but claws at the tip of their digits that help them attach to the wood of mangrove trees.
+
+As other species of the genus, S. iandapi engages in fascinating mating rituals through complex vocalizations. Some species of the genus can almost only be differentiated by their mating songs. The yandapi uses the lowest frequencies of all tree dolphins in their mating songs, which can go down to 1.5kHz.
+
+The highest frequency in tree dolphin mating song belongs to the madagascar tree dolphin (Scandelphinus madagascarensis), which can go all the way up to 90kHz.
+
+The name îandapĩ, pronounced /ja.ⁿda.'pĩ/, is the name for the animal in Classical Tupi, but any further etymology is unknown. The genus name can be divided into the latin ꜱᴄᴀɴᴅᴇʀᴇ, meaning "to climb" and greek δελφίς, meaning dolphin

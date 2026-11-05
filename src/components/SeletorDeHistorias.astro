@@ -1,0 +1,141 @@
+---
+// O seletor da página Histórias: busca por título, filtro de mídia, ordem (lançamento / cronológica / alfabética)
+// e o botão de inverter. É o sorter_html() do build.py (o HTML) + o bloco 1 do static/site.js (o comportamento).
+// O HTML só DESENHA `dados` (src/lib/obras.ts → dadosDoSeletor); a ordem e o filtro de verdade são de src/lib/seletor.ts.
+import { direcoesComoJson, type DadosDoSeletor } from "../lib/obras";
+import type { Lang } from "../lib/config";
+
+interface Props {
+  lang: Lang;
+  dados: DadosDoSeletor;
+  /** O `id` da grade de cartões que este seletor ordena (a grade precisa ter este id). */
+  idDaGrade: string;
+}
+
+const { lang, dados, idDaGrade } = Astro.props;
+const filtro = dados.filtroDeMidia;
+---
+
+<div class="sorter" data-grid={idDaGrade} data-lang={lang} data-labels={direcoesComoJson(dados.direcoes)}><input type="search" class="story-search" placeholder={dados.placeholderDaBusca} aria-label={dados.placeholderDaBusca} autocomplete="off" />{dados.midias.length > 0 && <label class="media-filter"><span class="sr-only">{filtro.rotulo}</span><select class="media-select" aria-label={filtro.rotulo}><option value="">{filtro.todos}</option>{dados.midias.map((m) => <option value={m.valor}>{m.rotulo}</option>)}</select></label>}<label><span class="sr-only">{dados.rotuloDaOrdem}</span><select>{dados.ordens.map((o) => <option value={o.valor}>{o.rotulo}</option>)}</select></label><button type="button" class="sort-dir" data-dir="asc"><span class="up">↑</span><span class="down">↓</span></button></div>
+
+<script>
+  // Comportamento do seletor (o bloco 1 do static/site.js, agora em TypeScript).
+  // A decisão "quais cartões aparecem e em que ordem" é de organizarCartoes() (src/lib/seletor.ts), a mesma função que o
+  // tests/regras.test.ts compara com o site.js; aqui só se LÊ a ficha dos cartões, se chama a função e se ARRUMA a tela.
+  import { MODOS_DE_ORDEM, organizarCartoes, type CartaoParaOrdenar, type ModoDeOrdem, type ValorDeOrdem } from "../lib/seletor";
+  import type { Lang } from "../lib/config";
+
+  interface Cartao extends CartaoParaOrdenar {
+    el: HTMLElement;
+  }
+
+  /** data-release / data-chrono → número, "hide" (esconde nessa ordem) ou undefined (sem número: vai para o fim). */
+  function lerOrdem(bruto: string | undefined): ValorDeOrdem | undefined {
+    if (bruto === undefined) return undefined;
+    if (bruto === "hide") return "hide";
+    const n = Number.parseFloat(bruto);
+    return Number.isNaN(n) ? undefined : n;
+  }
+
+  /** O modo de ordem que a pessoa escolheu da última vez (guardado no navegador dela). */
+  function modoSalvo(rotulos: Record<string, readonly string[]>): { modo: ModoDeOrdem; decrescente: boolean } {
+    try {
+      const [modo, dir] = (localStorage.getItem("hc-sort") ?? "").split(":");
+      const valido = MODOS_DE_ORDEM.find((m) => m === modo);
+      if (valido && rotulos[valido]) return { modo: valido, decrescente: dir === "desc" };
+    } catch {
+      /* sem localStorage (janela privada…): segue com o padrão */
+    }
+    return { modo: "release", decrescente: false };
+  }
+
+  document.querySelectorAll<HTMLElement>(".sorter").forEach((caixa) => {
+    const grade = document.getElementById(caixa.dataset["grid"] ?? "");
+    if (!grade) return;
+    const lang = (caixa.dataset["lang"] ?? "en") as Lang;
+    const rotulos = JSON.parse(caixa.dataset["labels"] ?? "{}") as Record<string, readonly string[]>;
+    const seletor = caixa.querySelector<HTMLSelectElement>("label:not(.media-filter) select");
+    const midia = caixa.querySelector<HTMLSelectElement>(".media-select");
+    const botao = caixa.querySelector<HTMLButtonElement>(".sort-dir");
+    const busca = caixa.querySelector<HTMLInputElement>(".story-search");
+    const nenhum = grade.closest(".stories-block")?.querySelector<HTMLElement>(".no-results") ?? null;
+    if (!seletor || !botao) return;
+
+    // a ficha de cada cartão, lida uma vez, na ordem em que o HTML veio (a de lançamento): é ela que desempata
+    const cartoes: Cartao[] = Array.from(grade.children, (filho) => {
+      const el = filho as HTMLElement;
+      const ordem: CartaoParaOrdenar["ordem"] = {};
+      const release = lerOrdem(el.dataset["release"]);
+      const chrono = lerOrdem(el.dataset["chrono"]);
+      if (release !== undefined) ordem.release = release;
+      if (chrono !== undefined) ordem.chrono = chrono;
+      return { el, titulo: el.dataset["title"] ?? "", ordem, midia: el.dataset["media"] };
+    });
+
+    let { modo, decrescente } = modoSalvo(rotulos);
+    seletor.value = modo;
+
+    function aplicar() {
+      const { visiveis, ocultos } = organizarCartoes(cartoes, { modo, decrescente, midia: midia?.value ?? "", busca: busca?.value ?? "", lang });
+      for (const c of visiveis) {
+        c.el.hidden = false;
+        c.el.style.display = "";
+        grade!.appendChild(c.el);
+      }
+      for (const c of ocultos) {
+        c.el.hidden = true;
+        c.el.style.display = "none";
+        grade!.appendChild(c.el);
+      }
+      grade!.scrollLeft = 0;
+      if (nenhum) nenhum.hidden = visiveis.length > 0;
+      const texto = rotulos[modo]?.[decrescente ? 1 : 0] ?? "";
+      botao!.dataset["dir"] = decrescente ? "desc" : "asc";
+      botao!.title = texto;
+      botao!.setAttribute("aria-label", texto);
+      try {
+        localStorage.setItem("hc-sort", `${modo}:${decrescente ? "desc" : "asc"}`);
+      } catch {
+        /* sem localStorage: tudo bem */
+      }
+    }
+
+    seletor.addEventListener("change", () => {
+      modo = seletor.value as ModoDeOrdem;
+      aplicar();
+    });
+    botao.addEventListener("click", () => {
+      decrescente = !decrescente;
+      aplicar();
+    });
+    busca?.addEventListener("input", aplicar);
+    midia?.addEventListener("change", aplicar);
+    aplicar();
+  });
+</script>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seções "seletor de ordem", "busca de histórias" e "Histórias: busca/ordem na mesma linha"),
+       mesmos valores e mesma ordem. `is:global`: sem marca de escopo, para o HTML sair idêntico ao do site atual. */
+    .sorter { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+    .sorter { justify-content: flex-end; clear: both; margin: .2rem 0 .4rem; }
+    .sorter select { appearance: none; -webkit-appearance: none; font: 500 1.1rem var(--font-text); color: #fff; padding: .7rem 2.6rem .7rem 1.1rem; border: 0; border-radius: .35rem; cursor: pointer;
+      background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 1rem center; }
+    .sorter select:hover { box-shadow: 0 0 10px var(--cyan); }
+    .sort-dir { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; padding: 0; border: 0; border-radius: .35rem; background: var(--green); font-size: 1.35rem; font-weight: 700; cursor: pointer; }
+    .sort-dir:hover { background: var(--green); color: inherit; box-shadow: 0 0 10px var(--cyan); }
+    .sort-dir span { opacity: .45; color: var(--mint); }
+    .sort-dir[data-dir="asc"] .up, .sort-dir[data-dir="desc"] .down { opacity: 1; color: #fff; }
+    .story-search { font: 500 1rem var(--font-text); height: 3rem; width: min(100%, 17rem); padding: 0 1rem; border: 2px solid var(--green); border-radius: .35rem; background: #fff; color: var(--night); }
+    .story-search::placeholder { color: #6d6878; }
+    .story-search:focus { outline: 3px solid var(--cyan); outline-offset: 2px; }
+    .no-results { text-align: center; color: var(--muted); padding: 1.5rem 0; }
+    .stories-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .6rem 1rem; margin: 0 0 .6rem; }
+    .stories-head .sub { margin: 0; }
+    .stories-head .sorter { clear: none; margin: 0; }
+    .stories-head .sorter { margin-left: auto; gap: .5rem; }
+    .stories-head .sorter select { font-size: 1rem; padding: .65rem 2.2rem .65rem .9rem; background-position: right .8rem center; }
+    .stories-head .story-search { width: 12.5rem; min-width: 0; }
+  }
+</style>

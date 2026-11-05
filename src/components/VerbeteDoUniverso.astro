@@ -1,0 +1,31 @@
+---
+// Um verbete do Universo: /<idioma>/universe/<pasta>/ (só existe com `show_extras: true`). O <main> do build() (linhas ~894–897):
+//   <article class="wrap narrow block"> [rascunho] <p class="crumb"><a>Universo</a></p> <h1> [figura] <div class="prose">texto</div> [Veja também] </article>
+// Só desenha: tudo vem decidido em `verbete` (src/lib/paginasDeExtras.ts). Escrito "colado" de propósito: não quebre as linhas do HTML.
+import "../styles/prosa.css";
+import { assetUrl } from "../lib/assets";
+import { textoDoAutor } from "../lib/pagina";
+import type { VerbeteDoUniverso } from "../lib/paginasDeExtras";
+import CartaQueVira from "./CartaQueVira.astro";
+import PostsAlternados from "./PostsAlternados.astro";
+import Relacionados from "./Relacionados.astro";
+
+interface Props {
+  verbete: VerbeteDoUniverso;
+}
+
+const { verbete: v } = Astro.props;
+---
+
+<article class="wrap narrow block">{v.avisoDeRascunho && <p class="draft-banner">{v.avisoDeRascunho}</p>}<p class="crumb"><a href={v.migalha.url}>{v.migalha.rotulo}</a></p><h1>{v.titulo}</h1>{v.imagem && <figure class="lead"><img src={assetUrl(v.imagem)} alt="" /></figure>}
+<div class="prose"><Fragment set:html={textoDoAutor(v.html)} /></div>{v.relacionados && <Relacionados rotulo={v.relacionados.rotulo} links={v.relacionados.links} />}</article>
+{v.temCartaQueVira && <CartaQueVira />}
+{v.temPostsAlternados && <PostsAlternados />}
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css: o .crumb (seção "universo / personagens") e a figura grande .lead (seção "texto corrido"). */
+    .crumb { font-size: .85rem; margin: 0 0 .5rem; }
+    .lead { margin: 1rem 0 1.5rem; } .lead img { border-radius: var(--radius); }
+  }
+</style>

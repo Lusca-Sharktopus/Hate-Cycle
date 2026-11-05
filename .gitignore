@@ -1,0 +1,23 @@
+# saída do gerador e caches
+public/
+__pycache__/
+*.pyc
+# entregas empacotadas
+*-atualizacao.zip
+# ajustes pessoais do autor (não versionar daqui)
+static/custom.css
+# Astro (T05): pacotes instalados, site gerado, cache/tipos gerados, segredos locais
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+# registros de erro do pnpm/npm e lixo do macOS
+pnpm-debug.log*
+npm-debug.log*
+.DS_Store
+# baseline (T03): screenshots são regerados por tools/baseline.py
+baseline/screens/
+# Supabase CLI (T15): o "supabase link" guarda aqui o ID do projeto ligado e caches locais (não versionar)
+supabase/.temp/
+supabase/.branches/

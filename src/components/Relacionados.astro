@@ -1,0 +1,22 @@
+---
+// "Veja também: …" no fim de uma notícia (related_html() do build.py): os itens de `related:` que existem publicados neste
+// idioma, como etiquetas-link separadas por UM espaço (o " ".join do Python). Só desenha: a lista vem decidida de
+// src/lib/artigos.ts. As páginas de Universo e Personagens (T14) reaproveitam.
+interface Props {
+  rotulo: string;
+  links: { titulo: string; url: string }[];
+}
+
+const { rotulo, links } = Astro.props;
+---
+
+<p class="related"><strong>{rotulo}:</strong> {links.map((l, i) => <Fragment>{i > 0 && " "}<a href={l.url}>{l.titulo}</a></Fragment>)}</p>
+
+<style is:global>
+  @layer site {
+    /* Copiado de static/style.css (seção "universo / personagens", a parte do .related), mesmos valores e mesma ordem. */
+    .related { margin-top: 2rem; }
+    .related a { display: inline-block; margin: 0 .5rem .3rem 0; padding: .1rem .75rem; border: 1px solid var(--teal); border-radius: 99px; text-decoration: none; font-size: .9rem; }
+    .related a:hover { background: var(--teal); color: #fff; }
+  }
+</style>

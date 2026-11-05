@@ -1,0 +1,26 @@
+---
+// A lista do Universo: /en/universe/ e /pt/universe/. SÓ EXISTE com `show_extras: true` no config.json (hoje false): sem verbetes
+// publicados no idioma, getStaticPaths() devolve nada e nenhuma página é gerada — o menu "Extras" também some (src/lib/nav.ts).
+// É o bloco "UNIVERSO" do build() do build.py (~883–888). Lição: docs/aprendendo-astro/09-endpoints.md.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ListaDoUniverso from "../../../components/ListaDoUniverso.astro";
+import { langs, type Lang } from "../../../lib/config";
+import { dadosDeTodosOsIdiomas } from "../../../lib/conteudo";
+import { listaDoUniverso, type ListaDoUniverso as Lista } from "../../../lib/paginasDeExtras";
+
+export async function getStaticPaths() {
+  const dadosDe = await dadosDeTodosOsIdiomas();
+  const quantos = Object.fromEntries(langs.map((l) => [l, dadosDe[l].universoExtra.length])) as Record<Lang, number>;
+  return langs.flatMap((lang) => {
+    const lista = listaDoUniverso(dadosDe[lang].universoExtra, lang, quantos);
+    return lista ? [{ params: { lang }, props: { lista } }] : [];
+  });
+}
+
+const lang = Astro.params.lang as Lang;
+const { lista } = Astro.props as { lista: Lista };
+---
+
+<BaseLayout lang={lang} title={lista.tituloDaPagina} alternates={lista.alternativas}>
+  <ListaDoUniverso lista={lista} />
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+// A lista de notícias: /en/news/ e /pt/news/ (src/pages/[lang]/news/index.astro → dist/<idioma>/news/index.html).
+// Só existe nos idiomas que têm pelo menos uma notícia publicada (rascunho só na prévia), como no build.py (`if news[lang]:`).
+// Tudo o que a página mostra vem decidido de src/lib/artigos.ts; o ListaDeNoticias só desenha (e traz o JavaScript da busca
+// e das páginas). Lição: docs/aprendendo-astro/08-leitor.md (seção "Notícias").
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ListaDeNoticias from "../../../components/ListaDeNoticias.astro";
+import { paginaDaListaDeNoticias } from "../../../lib/artigos";
+import { langs, type Lang } from "../../../lib/config";
+import { dadosDoIdioma } from "../../../lib/conteudo";
+
+export async function getStaticPaths() {
+  const dadosDe = Object.fromEntries(await Promise.all(langs.map(async (lang) => [lang, await dadosDoIdioma(lang)] as const))) as Record<Lang, Awaited<ReturnType<typeof dadosDoIdioma>>>;
+  const quantas = Object.fromEntries(langs.map((l) => [l, dadosDe[l].noticias.length])) as Record<Lang, number>;
+  return langs.flatMap((lang) => {
+    const pagina = paginaDaListaDeNoticias(dadosDe[lang].noticias, lang, quantas);
+    return pagina ? [{ params: { lang }, props: { pagina } }] : [];
+  });
+}
+
+const lang = Astro.params.lang as Lang;
+const { pagina } = Astro.props as { pagina: NonNullable<ReturnType<typeof paginaDaListaDeNoticias>> };
+---
+
+<BaseLayout lang={lang} title={pagina.titulo} alternates={pagina.alternativas}>
+  <ListaDeNoticias pagina={pagina} />
+</BaseLayout>

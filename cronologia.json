@@ -1,0 +1,95 @@
+{
+  "_nota": "Cronologia completa vinda da planilha. Só entram no site as obras que já têm pasta em content/works; as demais ficam aqui para quando forem adicionadas (use a posição como order.chrono e o tipo em media).",
+  "obras": [
+    {
+      "en": "Pαn",
+      "pt": "Pαn",
+      "chrono": 1,
+      "media": "videogame",
+      "no_site": false
+    },
+    {
+      "en": "Thunderwood",
+      "pt": "Thunderwood",
+      "chrono": 2,
+      "media": "live-ttrpg",
+      "no_site": false
+    },
+    {
+      "en": "The Aftermath of Thunderwood",
+      "pt": "Após Thunderwood",
+      "chrono": 3,
+      "media": "webcomic",
+      "no_site": false
+    },
+    {
+      "en": "All in a Night's Work",
+      "pt": "Ossos do Ofício",
+      "chrono": 4,
+      "media": "short-story",
+      "no_site": true,
+      "pasta": "all-in-a-nights-work"
+    },
+    {
+      "en": "Light & Blood",
+      "pt": "Luz & Sangue",
+      "chrono": 5,
+      "media": "live-ttrpg",
+      "no_site": true,
+      "pasta": "light-and-blood"
+    },
+    {
+      "en": "Firestriker",
+      "pt": "Pederneira",
+      "chrono": 6,
+      "media": "short-story",
+      "no_site": true,
+      "pasta": "firestriker"
+    },
+    {
+      "en": "Roadside",
+      "pt": "Beira de Estrada",
+      "chrono": 7,
+      "media": "webcomic",
+      "no_site": true,
+      "pasta": "roadside"
+    },
+    {
+      "en": "The Dolphin That Was Born Without Tentacles",
+      "pt": "O Golfinho que Nasceu sem Tentáculos",
+      "chrono": 8,
+      "media": "webcomic",
+      "no_site": false
+    },
+    {
+      "en": "Under the Clocktower",
+      "pt": "Under the Clocktower",
+      "chrono": 9,
+      "media": "videogame",
+      "no_site": false
+    },
+    {
+      "en": "Hate Cycle",
+      "pt": "Hate Cycle",
+      "chrono": 10,
+      "media": "animated-show",
+      "no_site": false
+    },
+    {
+      "en": "The Pendulum",
+      "pt": "O Pêndulo",
+      "chrono": 11,
+      "media": "short-film",
+      "no_site": true,
+      "pasta": "the-pendulum"
+    },
+    {
+      "en": "Cat-Crow-Thing",
+      "pt": "Cat-Crow-Thing",
+      "chrono": 12,
+      "media": "videogame",
+      "no_site": true,
+      "pasta": "cat-crow-thing"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+---
+// O visual da janela de login (05/11/2026, design do autor "login design.png" e "login design hover.png"; só no site novo).
+// Não desenha nada: só o CSS, para as páginas que podem abrir a janela (a caixa de comentários e o aviso dos favoritos). Quem monta a
+// janela é src/scripts/login/janela.ts; o círculo mágico dos botões, src/scripts/login/circulo.ts.
+//
+// Os números do círculo (o <canvas> por cima de cada botão): a imagem tem 1136 × 279 e a moldura vai de x 33 a 1103 (1070 de largura) e
+// começa em y 75 (MOLDURA, no circulo.ts). Em CSS, porcentagem de margem e de largura é da largura do botão (sem a borda de 1,5 px de
+// cada lado, por isso o "+ 3px"): 33/1070 = 0,030841; 75/1070 = 0,070093; 1136/1070 = 1,061682.
+---
+
+<style is:global>
+  @layer site {
+    /* a base da janela, copiada (mesmos valores) do Comentarios.astro: a página de Histórias, que abre a janela pelo aviso dos favoritos,
+       não tem a caixa de comentários */
+    .c-msg { font-size: .9rem; margin: .5rem 0 0; padding: .5rem .8rem; border-radius: 8px; background: #fff3cd; color: #6b4e00; }
+    .c-msg.ok { background: #d9f7ec; color: #0d4a39; }
+    .c-tabs { display: flex; gap: .5rem; margin-bottom: .8rem; }
+    .c-tabs button, .c-link { font: 600 .9rem var(--font-text); background: none; border: 0; color: var(--teal); cursor: pointer; text-decoration: underline; padding: 0; }
+    .c-tabs button { padding: .3rem .9rem; border: 2px solid var(--green); border-radius: 99px; text-decoration: none; color: var(--green); }
+    .c-tabs button[aria-pressed="true"] { background: var(--green); color: #fff; }
+    .c-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; background: rgba(0, 0, 0, .65); overflow-y: auto; }
+    .c-modal-open { overflow: hidden; }
+    .c-dialog { position: relative; width: min(420px, 100%); background: #fff; color: #1a1a1a; border-radius: 14px; padding: 1.6rem 1.4rem 1.3rem; box-shadow: 0 20px 60px #000a; }
+    .c-dialog h3 { margin: 0 1.5rem .9rem 0; font-size: 1.15rem; }
+    .c-dialog form { display: grid; gap: .6rem; }
+    .c-dialog input { font: inherit; padding: .55rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; width: 100%; box-sizing: border-box; }
+    .c-x { position: absolute; top: .4rem; right: .6rem; background: none; border: 0; font-size: 1.8rem; line-height: 1; cursor: pointer; color: #555; }
+    .c-x:hover { color: #000; background: none; }
+    .c-dialog .c-tabs { margin-bottom: .7rem; }
+    .c-dialog.c-login {
+      width: min(440px, 100%); box-sizing: border-box; padding: 30px 30px 26px; border-radius: 42px; text-align: center;
+      background: #ecebe8 var(--paper) center / cover; color: #1a1a1a;
+    }
+    .c-dialog.c-login h3 { margin: 0 .5rem 18px; font: 400 1.55rem/1.2 var(--font-head); color: var(--green); letter-spacing: -.01em; }
+    .c-dialog.c-login .c-x { top: 10px; right: 20px; }
+    .c-provedores { display: grid; gap: 10px; }
+    .c-prov {
+      position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; height: 46px; padding: 0 12px;
+      box-sizing: border-box; border: 1.5px solid #2a2630; border-radius: 5px; background: transparent; color: #1a1a1a;
+      font: 500 1.16rem var(--font-text); cursor: pointer; transition: background-color .12s, color .12s;
+    }
+    .c-prov > span, .c-prov .c-ic { position: relative; z-index: 2; }
+    .c-prov .c-ic { width: 24px; height: 24px; flex: none; }
+    .c-prov .c-ic-brilho { display: none; }
+    .c-prov:hover, .c-prov:focus-visible { background: #271b39; color: #fff; border-color: transparent; outline: none; }
+    .c-prov:hover .c-ic-normal, .c-prov:focus-visible .c-ic-normal { display: none; }
+    .c-prov:hover .c-ic-brilho, .c-prov:focus-visible .c-ic-brilho { display: block; filter: drop-shadow(0 0 3px #00e9fdcc) drop-shadow(0 0 7px #00e9fd88); }
+    .c-prov .c-circulo {
+      position: absolute; z-index: 1; top: -1.5px; left: calc((100% + 3px) * -0.030841 - 1.5px); margin-top: calc((100% + 3px) * -0.070093);
+      width: calc((100% + 3px) * 1.061682); height: auto; aspect-ratio: 1136 / 279; pointer-events: none;
+      opacity: 0; transition: opacity .15s ease-out;
+    }
+    .c-prov .c-circulo.c-circulo-ver { opacity: 1; transition: none; }
+    /* a divisória do autor ("ou.png"), com um vão no meio para o "ou" */
+    .c-ou { position: relative; margin: 8px -14px 2px; aspect-ratio: 1000 / 57; background: url("../assets/login/ou.png") center / 100% 100% no-repeat; }
+    .c-ou span { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -58%); font: 400 1.05rem var(--font-text); color: var(--green); }
+    .c-dialog.c-login .c-tabs, .c-dialog.c-login form { width: min(342px, 100%); margin-inline: auto; }
+    .c-dialog.c-login .c-tabs { justify-content: flex-start; margin-block: 10px 12px; }
+    .c-dialog.c-login form { gap: 10px; }
+    .c-dialog.c-login input { height: 42px; padding: 0 12px; border: 2px solid #0003; border-radius: 6px; background: #ffffffb0; font: 400 1rem var(--font-text); }
+    .c-dialog.c-login form .button { height: 36px; margin-top: 10px; padding: 0; border-radius: 4px; font-size: .95rem; }
+    .c-dialog.c-login form .c-link { justify-self: center; color: #1f5e5b; font-size: .85rem; }
+    .c-dialog.c-login .c-msg { text-align: left; }
+    @media (max-width: 420px) {
+      .c-dialog.c-login { padding: 26px 18px 22px; border-radius: 30px; }
+      .c-dialog.c-login h3 { font-size: 1.4rem; }
+      .c-prov { font-size: 1rem; }
+      .c-ou { margin-inline: -6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .c-prov, .c-prov .c-circulo { transition: none; }
+    }
+  }
+</style>

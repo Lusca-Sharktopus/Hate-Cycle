@@ -1,0 +1,20 @@
+---
+title: Day 20 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it
+date: 2025-12-20
+thumb: news/dia-20-especulacao-evolutiva.png
+tags:
+  - Post
+  - Worldbuilding
+---
+
+{{embed:reddit-day-20}}
+
+The Kongamato or Qŭittłam (Kongamato kongamato) is a Kongamatid pterosaur found in Central Africa in Earth and in Muʻykä in Alfheim. It's postulated that the Rhamphorhynchid pterosaurs that would become Alfheim’s pterosaurs got to the planet through the same portal in Ireland through which Elves got there, and that K. kongamato firstly evolved in Alfheim and came back to Earth through the same Portal in the Congo basin through which fairies got to the Fey Planet.
+
+Kongamatos are relatively large, with a wingspan of about 5m and weighing up to 250kg; a size comparable to Anhanguera. Size is not their only similarity to the brazilian pterosaur; similar piscivorous diet have led to similar beak structures and dentition on both, though with notable differences; the main one being that Anhanguera’s teeth pointing outwards and Kongamato’s teeth pointing inwards, more like a crocodile’s.
+
+K. kongamato’s most notable features are its bioluminescent cyan spots on wings, beak, belly and tail. Bioluminescence is remarkably common in Alfheim, possibly as a result of fey magic affecting the evolution of organisms. They can control the brightness of their glowing spots by contracting specialized cells that cover the bioluminescent enzymes underneath the pterosaur’s skin. They use this capability for communication and mating rituals, creating phenomenal lightshows in the sky. The spots also help them camouflage during the night, where the shining dots look like stars when seen from underneath. This might even help explain their tails: unlike most pterosaurs that size, Kongamatids and, by extension, K. kongamato, display long tails; this is likely because of how they use their tails to communicate and attract mates.
+
+There are two recognized subspecies of K. kongamato, being the Midgardian Kongamato kongamato kongamato and the Alfheimian Kongamato kongamato quittlam.
+
+The name Kongamato /ko.ᵑɡa.ma.to/ allegedly comes from the Kaonde language and means “boat breaker”, in reference to not so friendly interactions between fishermen and the animal. The name used on the other side of the portal, Qŭittłam /kʷit.t͡ɬam/, comes from the Say̆a language, in which it means “star carrier”.

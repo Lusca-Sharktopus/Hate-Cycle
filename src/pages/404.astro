@@ -1,0 +1,17 @@
+---
+// A página 404 (dist/404.html): o GitHub Pages a mostra para qualquer endereço que não existe. É a página 404 do build() do build.py
+// (linhas ~950–952): em inglês (o primeiro idioma), com o menu SÓ de "Histórias" + idioma (todas as bandeiras do menu falsas),
+// sem endereço "da mesma página" no outro idioma (nenhum hreflang) e uma frase em CADA idioma com o link da home dele.
+// As runas do fundo usam a semente "404" (o build.py usa o título quando a página não passa semente). Lição: docs/aprendendo-astro/09-endpoints.md.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { langs, t } from "../lib/config";
+
+const primeiro = langs[0];
+if (!primeiro) throw new Error("config.json → languages está vazio");
+// "esta página não existe em nenhum idioma": null em todos, para não sair <link hreflang> nem endereço no seletor
+const semIdiomas = Object.fromEntries(langs.map((l) => [l, null]));
+---
+
+<BaseLayout lang={primeiro} title="404" alternates={semIdiomas} seed="404" menuMinimo>
+  <div class="wrap block"><h1>404</h1>{langs.map((l) => <p lang={l}>{t(l, "not_found_sub")} <a href={`/${l}/`}>{t(l, "back_home")}</a></p>)}</div>
+</BaseLayout>
