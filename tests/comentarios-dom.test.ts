@@ -143,6 +143,8 @@ describe("a caixa de comentários num DOM simulado, com HTML no comentário, na 
     await esperar();
     expect(document.querySelectorAll(".c-item")).toHaveLength(3);
     expect(document.querySelectorAll(".c-replies .c-item")).toHaveLength(1);
+    // 05/11 (pedido do autor): o selo da conta de ADM é 🜄, só no comentário do admin
+    expect([...document.querySelectorAll(".c-badge")].map((b) => b.textContent)).toEqual(["🜄"]);
     conferirTextoLiteral();
     conferirSoElementosDoCodigo();
   });

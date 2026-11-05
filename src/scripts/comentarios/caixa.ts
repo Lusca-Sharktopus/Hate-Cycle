@@ -16,7 +16,7 @@
 //   - entrar (147–162), esqueci a senha (151–154), criar conta com nome de usuário (164–179), nova senha (116–127);
 //   - linha "Conectado como <nome>" + Sair (49–55);
 //   - lista: "Carregando…", "Ainda não há comentários", comentários na ordem do banco com as respostas embaixo (200–216);
-//   - cada comentário (241–275): ✦ para admin, nome, "(editado)" com a data no title, data/hora no formato do idioma, texto;
+//   - cada comentário (241–275): selo para admin (🜄 desde 05/11; ✦ no comments.js), nome, "(editado)" com a data no title, data/hora no formato do idioma, texto;
 //     Responder (só em comentário raiz, só conectado), Editar (só o próprio), Apagar (o próprio ou admin, com confirmação);
 //   - responder (181–197) e editar (218–239: Esc cancela, texto igual não envia, cursor no fim);
 //   - mensagens de erro e de aviso (22–28, 59–60, 142–143);
@@ -365,7 +365,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     }
     const autor = c.profiles ?? {};
     const cabeca = el("div", { attrs: { class: "c-head" } }, [
-      autor.is_admin ? el("span", { attrs: { class: "c-badge" }, texto: "✦" }) : null,
+      // 05/11/2026 (pedido do autor): o selo da conta de ADM é 🜄 (no comments.js do site antigo continua ✦)
+      autor.is_admin ? el("span", { attrs: { class: "c-badge" }, texto: "🜄" }) : null,
       el("strong", { texto: nomeDoAutor(c) }),
       c.edited_at ? el("span", { attrs: { class: "c-edited", title: dataDaEdicao(c.edited_at, cfg.lang) }, texto: `(${t("c_edited")})` }) : null,
       el("time", { attrs: { datetime: String(c.created_at) }, texto: dataDoComentario(c.created_at, cfg.lang) }),

@@ -45,6 +45,8 @@ const { secao: s } = Astro.props;
     .c-item .c-head { font-size: .88rem; color: var(--muted); }
     .c-item .c-head strong { color: var(--green); font-size: 1rem; margin-right: .5rem; unicode-bidi: isolate; }
     .c-item .c-head .c-badge { background: var(--night); color: #fff; font-size: .7rem; padding: .05rem .5rem; border-radius: 99px; margin-right: .5rem; }
+    /* 05/11 (pedido do autor): o selo de ADM é o 🜄, desenhado pela mesma Noto Sans Symbols das runas do fundo (o glifo já está no recorte) */
+    .c-item .c-head .c-badge { font-family: "Noto Sans Symbols", var(--font-text); font-size: .85rem; line-height: 1; padding: .12rem .45rem; vertical-align: .05em; }
     .c-body { white-space: pre-wrap; overflow-wrap: anywhere; margin: .3rem 0; }
     .c-actions { display: flex; gap: 1rem; }
     .c-replies { margin: .4rem 0 0 1.2rem; padding-left: 1rem; border-left: 3px solid var(--mint); }

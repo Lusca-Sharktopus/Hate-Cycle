@@ -85,7 +85,8 @@ TROCA_O_HC = """(() => {
 RETRATO = """() => {
   const ser = (n) => {
     if (!n) return null;
-    if (n.nodeType === 3) return n.data;
+    // 05/11 (só no Astro, pedido do autor): o selo do admin é 🜄; no comments.js continua ✦ (aqui os dois viram ✦)
+    if (n.nodeType === 3) return n.parentElement && n.parentElement.classList.contains('c-badge') && n.data === '🜄' ? '✦' : n.data;
     if (n.nodeType !== 1) return null;
     // 03/11 (só no Astro): o nome em "Conectado como <nome>" é um <button class="c-me"> que abre a janela da conta; aqui ele volta a
     // ser só o texto do nome, como no comments.js (a janela tem o próprio teste: tests/comentarios-dom.test.ts)
