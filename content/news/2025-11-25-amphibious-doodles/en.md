@@ -1,6 +1,6 @@
 ---
 title: Official Artwork: Amphibious Doodles
-date: 2025-11-25
+date: 2024-10-25
 thumb: news/amphibious-doodles.png
 tags:
   - Post

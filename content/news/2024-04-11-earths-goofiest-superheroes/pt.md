@@ -1,6 +1,6 @@
 ---
 title: Arte Oficial: Os Super-Heróis Mais Bobos da Terra
-date: 2024-04-11
+date: 2024-04-19
 thumb: news/earths-goofiest-superheroes.png
 tags:
   - Post

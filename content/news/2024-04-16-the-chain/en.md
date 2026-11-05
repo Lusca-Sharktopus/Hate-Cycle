@@ -1,11 +1,10 @@
 ---
 title: Official Artwork: The Chain
-date: 2024-04-16
+date: 2024-04-26
 thumb: news/the-chain.png
 tags:
   - Post
   - Official Art
-  - Speedpaint
 ---
 
 {{embed:https://x.com/KingOfAllOceans/status/1783897601940820455}}

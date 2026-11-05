@@ -10094,14 +10094,6 @@
     "lang": "en",
     "divisor": null,
     "partes": [
-     "news/2025-11-25-amphibious-doodles/en.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "en",
-    "divisor": null,
-    "partes": [
      "news/2025-11-25-amphibious-sonic-pose/en.md"
     ],
     "composicao": false
@@ -10222,6 +10214,14 @@
     "lang": "en",
     "divisor": null,
     "partes": [
+     "news/2025-11-25-amphibious-doodles/en.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "en",
+    "divisor": null,
+    "partes": [
      "news/2024-07-25-apollo-no-diffs/en.md"
     ],
     "composicao": false
@@ -10310,7 +10310,23 @@
     "lang": "en",
     "divisor": null,
     "partes": [
+     "news/2024-04-16-the-chain/en.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "en",
+    "divisor": null,
+    "partes": [
      "news/2024-04-25-non-canon-funny-exchange/en.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "en",
+    "divisor": null,
+    "partes": [
+     "news/2024-04-11-earths-goofiest-superheroes/en.md"
     ],
     "composicao": false
    },
@@ -10327,22 +10343,6 @@
     "divisor": null,
     "partes": [
      "news/2024-04-16-friday-thirteenth/en.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "en",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-16-the-chain/en.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "en",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-11-earths-goofiest-superheroes/en.md"
     ],
     "composicao": false
    },
@@ -10785,14 +10785,6 @@
     "lang": "pt",
     "divisor": null,
     "partes": [
-     "news/2025-11-25-amphibious-doodles/pt.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "pt",
-    "divisor": null,
-    "partes": [
      "news/2025-11-25-amphibious-sonic-pose/pt.md"
     ],
     "composicao": false
@@ -10913,6 +10905,14 @@
     "lang": "pt",
     "divisor": null,
     "partes": [
+     "news/2025-11-25-amphibious-doodles/pt.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "pt",
+    "divisor": null,
+    "partes": [
      "news/2024-07-25-apollo-no-diffs/pt.md"
     ],
     "composicao": false
@@ -11001,7 +11001,23 @@
     "lang": "pt",
     "divisor": null,
     "partes": [
+     "news/2024-04-16-the-chain/pt.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "pt",
+    "divisor": null,
+    "partes": [
      "news/2024-04-25-non-canon-funny-exchange/pt.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "pt",
+    "divisor": null,
+    "partes": [
+     "news/2024-04-11-earths-goofiest-superheroes/pt.md"
     ],
     "composicao": false
    },
@@ -11018,22 +11034,6 @@
     "divisor": null,
     "partes": [
      "news/2024-04-16-friday-thirteenth/pt.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "pt",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-16-the-chain/pt.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "pt",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-11-earths-goofiest-superheroes/pt.md"
     ],
     "composicao": false
    },
@@ -11494,14 +11494,6 @@
     "lang": "en",
     "divisor": null,
     "partes": [
-     "news/2025-11-25-amphibious-doodles/en.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "en",
-    "divisor": null,
-    "partes": [
      "news/2025-11-25-amphibious-sonic-pose/en.md"
     ],
     "composicao": false
@@ -11622,6 +11614,14 @@
     "lang": "en",
     "divisor": null,
     "partes": [
+     "news/2025-11-25-amphibious-doodles/en.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "en",
+    "divisor": null,
+    "partes": [
      "news/2024-07-25-apollo-no-diffs/en.md"
     ],
     "composicao": false
@@ -11710,7 +11710,23 @@
     "lang": "en",
     "divisor": null,
     "partes": [
+     "news/2024-04-16-the-chain/en.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "en",
+    "divisor": null,
+    "partes": [
      "news/2024-04-25-non-canon-funny-exchange/en.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "en",
+    "divisor": null,
+    "partes": [
+     "news/2024-04-11-earths-goofiest-superheroes/en.md"
     ],
     "composicao": false
    },
@@ -11727,22 +11743,6 @@
     "divisor": null,
     "partes": [
      "news/2024-04-16-friday-thirteenth/en.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "en",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-16-the-chain/en.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "en",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-11-earths-goofiest-superheroes/en.md"
     ],
     "composicao": false
    },
@@ -12201,14 +12201,6 @@
     "lang": "pt",
     "divisor": null,
     "partes": [
-     "news/2025-11-25-amphibious-doodles/pt.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "pt",
-    "divisor": null,
-    "partes": [
      "news/2025-11-25-amphibious-sonic-pose/pt.md"
     ],
     "composicao": false
@@ -12329,6 +12321,14 @@
     "lang": "pt",
     "divisor": null,
     "partes": [
+     "news/2025-11-25-amphibious-doodles/pt.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "pt",
+    "divisor": null,
+    "partes": [
      "news/2024-07-25-apollo-no-diffs/pt.md"
     ],
     "composicao": false
@@ -12417,7 +12417,23 @@
     "lang": "pt",
     "divisor": null,
     "partes": [
+     "news/2024-04-16-the-chain/pt.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "pt",
+    "divisor": null,
+    "partes": [
      "news/2024-04-25-non-canon-funny-exchange/pt.md"
+    ],
+    "composicao": false
+   },
+   {
+    "lang": "pt",
+    "divisor": null,
+    "partes": [
+     "news/2024-04-11-earths-goofiest-superheroes/pt.md"
     ],
     "composicao": false
    },
@@ -12434,22 +12450,6 @@
     "divisor": null,
     "partes": [
      "news/2024-04-16-friday-thirteenth/pt.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "pt",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-16-the-chain/pt.md"
-    ],
-    "composicao": false
-   },
-   {
-    "lang": "pt",
-    "divisor": null,
-    "partes": [
-     "news/2024-04-11-earths-goofiest-superheroes/pt.md"
     ],
     "composicao": false
    },

@@ -1,6 +1,6 @@
 ---
 title: Official Artwork: Earth’s Goofiest Superheroes
-date: 2024-04-11
+date: 2024-04-19
 thumb: news/earths-goofiest-superheroes.png
 tags:
   - Post

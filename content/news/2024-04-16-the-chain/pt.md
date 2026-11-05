@@ -1,11 +1,10 @@
 ---
 title: Arte Oficial: A Corrente
-date: 2024-04-16
+date: 2024-04-26
 thumb: news/the-chain.png
 tags:
   - Post
   - Arte Oficial
-  - Speedpaint
 ---
 
 {{embed:https://x.com/KingOfAllOceans/status/1783897601940820455}}

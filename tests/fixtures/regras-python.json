@@ -8122,15 +8122,6 @@
       },
       {
        "date": "2025-11-25",
-       "url": "/en/news/2025-11-25-amphibious-doodles/",
-       "title": "Official Artwork: Amphibious Doodles",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/amphibious-doodles.png",
-       "work": null
-      },
-      {
-       "date": "2025-11-25",
        "url": "/en/news/2025-11-25-amphibious-sonic-pose/",
        "title": "Official Artwork: Amphibious Doing the Sonic Pose",
        "kind": "tag_news",
@@ -8265,6 +8256,15 @@
        "work": null
       },
       {
+       "date": "2024-10-25",
+       "url": "/en/news/2025-11-25-amphibious-doodles/",
+       "title": "Official Artwork: Amphibious Doodles",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/amphibious-doodles.png",
+       "work": null
+      },
+      {
        "date": "2024-07-25",
        "url": "/en/news/2024-07-25-apollo-no-diffs/",
        "title": "Official Artwork: Apollo No Diffs",
@@ -8364,12 +8364,30 @@
        "work": null
       },
       {
+       "date": "2024-04-26",
+       "url": "/en/news/2024-04-16-the-chain/",
+       "title": "Official Artwork: The Chain",
+       "kind": "tag_news",
+       "text": "“Don't worry, The Chain is here!” (painting by: me)",
+       "image": "news/the-chain.png",
+       "work": null
+      },
+      {
        "date": "2024-04-25",
        "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
        "title": "Non-Canon Funny Exchange on Twitter",
        "kind": "tag_news",
        "text": "POV: I broke into your house in the middle of the night to eat the pudding that was in your fridge, but you were awake, what…",
        "image": "news/non-canon-funny-exchange.png",
+       "work": null
+      },
+      {
+       "date": "2024-04-19",
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+       "title": "Official Artwork: Earth’s Goofiest Superheroes",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -8388,24 +8406,6 @@
        "kind": "tag_news",
        "text": "",
        "image": "news/friday-thirteenth.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-16",
-       "url": "/en/news/2024-04-16-the-chain/",
-       "title": "Official Artwork: The Chain",
-       "kind": "tag_news",
-       "text": "“Don't worry, The Chain is here!” (painting by: me)",
-       "image": "news/the-chain.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-11",
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-       "title": "Official Artwork: Earth’s Goofiest Superheroes",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -8445,7 +8445,7 @@
        "work": null
       },
       {
-       "date": "2024-02-23",
+       "date": "2024-02-28",
        "url": "/en/news/2024-02-23-avialuna-aeternogyrinians/",
        "title": "Avialuna's aeternogyrinians",
        "kind": "tag_news",
@@ -8603,7 +8603,6 @@
       "2025-12-02-dia-2-especulacao-evolutiva",
       "2025-12-01-dia-1-especulacao-evolutiva",
       "2025-11-26-proto-articulado",
-      "2025-11-25-amphibious-doodles",
       "2025-11-25-amphibious-sonic-pose",
       "2025-10-18-best-friends",
       "2025-10-18-nerds-same-wavelength",
@@ -8619,6 +8618,7 @@
       "2025-03-09-was-bored-at-a-restaurant",
       "2024-11-04-he-a-little-guy",
       "2024-10-28-rain",
+      "2025-11-25-amphibious-doodles",
       "2024-07-25-apollo-no-diffs",
       "2024-06-21-genius-genius-dumb",
       "2024-06-14-lucas-viciado-em-cafeina",
@@ -8630,11 +8630,11 @@
       "2024-05-02-fotomorfos-geomorfos",
       "2024-04-30-solonianos-monocarianos",
       "2024-04-29-hygranocianos",
+      "2024-04-16-the-chain",
       "2024-04-25-non-canon-funny-exchange",
+      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-18-trupizianos",
       "2024-04-16-friday-thirteenth",
-      "2024-04-16-the-chain",
-      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-11-is-that-how-she-does",
       "2024-03-06-dragon-rizz",
       "2024-03-05-ceratoctopodidae",
@@ -9186,15 +9186,6 @@
       },
       {
        "date": "2025-11-25",
-       "url": "/pt/news/2025-11-25-amphibious-doodles/",
-       "title": "Arte Oficial: Rabiscos do Anfíbio",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/amphibious-doodles.png",
-       "work": null
-      },
-      {
-       "date": "2025-11-25",
        "url": "/pt/news/2025-11-25-amphibious-sonic-pose/",
        "title": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic",
        "kind": "tag_news",
@@ -9329,6 +9320,15 @@
        "work": null
       },
       {
+       "date": "2024-10-25",
+       "url": "/pt/news/2025-11-25-amphibious-doodles/",
+       "title": "Arte Oficial: Rabiscos do Anfíbio",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/amphibious-doodles.png",
+       "work": null
+      },
+      {
        "date": "2024-07-25",
        "url": "/pt/news/2024-07-25-apollo-no-diffs/",
        "title": "Arte Oficial: Apollo Sola",
@@ -9428,12 +9428,30 @@
        "work": null
       },
       {
+       "date": "2024-04-26",
+       "url": "/pt/news/2024-04-16-the-chain/",
+       "title": "Arte Oficial: A Corrente",
+       "kind": "tag_news",
+       "text": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
+       "image": "news/the-chain.png",
+       "work": null
+      },
+      {
        "date": "2024-04-25",
        "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
        "title": "Troca Engraçada Não Canônica no Twitter",
        "kind": "tag_news",
        "text": "",
        "image": "news/non-canon-funny-exchange.png",
+       "work": null
+      },
+      {
+       "date": "2024-04-19",
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
+       "title": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -9452,24 +9470,6 @@
        "kind": "tag_news",
        "text": "",
        "image": "news/friday-thirteenth.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-16",
-       "url": "/pt/news/2024-04-16-the-chain/",
-       "title": "Arte Oficial: A Corrente",
-       "kind": "tag_news",
-       "text": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
-       "image": "news/the-chain.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-11",
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
-       "title": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -9509,7 +9509,7 @@
        "work": null
       },
       {
-       "date": "2024-02-23",
+       "date": "2024-02-28",
        "url": "/pt/news/2024-02-23-avialuna-aeternogyrinians/",
        "title": "Os Eternogirinos de Avialuna",
        "kind": "tag_news",
@@ -9667,7 +9667,6 @@
       "2025-12-02-dia-2-especulacao-evolutiva",
       "2025-12-01-dia-1-especulacao-evolutiva",
       "2025-11-26-proto-articulado",
-      "2025-11-25-amphibious-doodles",
       "2025-11-25-amphibious-sonic-pose",
       "2025-10-18-best-friends",
       "2025-10-18-nerds-same-wavelength",
@@ -9683,6 +9682,7 @@
       "2025-03-09-was-bored-at-a-restaurant",
       "2024-11-04-he-a-little-guy",
       "2024-10-28-rain",
+      "2025-11-25-amphibious-doodles",
       "2024-07-25-apollo-no-diffs",
       "2024-06-21-genius-genius-dumb",
       "2024-06-14-lucas-viciado-em-cafeina",
@@ -9694,11 +9694,11 @@
       "2024-05-02-fotomorfos-geomorfos",
       "2024-04-30-solonianos-monocarianos",
       "2024-04-29-hygranocianos",
+      "2024-04-16-the-chain",
       "2024-04-25-non-canon-funny-exchange",
+      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-18-trupizianos",
       "2024-04-16-friday-thirteenth",
-      "2024-04-16-the-chain",
-      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-11-is-that-how-she-does",
       "2024-03-06-dragon-rizz",
       "2024-03-05-ceratoctopodidae",
@@ -10434,19 +10434,6 @@
       },
       {
        "escondida": true,
-       "busca": "Official Artwork: Amphibious Doodles Post Official Art Nov 25, 2025 ",
-       "data": "Nov 25, 2025",
-       "titulo": "Official Artwork: Amphibious Doodles",
-       "miniatura": "/news/amphibious-doodles.png",
-       "tags": [
-        "Post",
-        "Official Art"
-       ],
-       "resumo": "",
-       "url": "/en/news/2025-11-25-amphibious-doodles/"
-      },
-      {
-       "escondida": true,
        "busca": "Official Artwork: Amphibious Doing the Sonic Pose Post Official Art Nov 25, 2025 ",
        "data": "Nov 25, 2025",
        "titulo": "Official Artwork: Amphibious Doing the Sonic Pose",
@@ -10644,6 +10631,19 @@
       },
       {
        "escondida": true,
+       "busca": "Official Artwork: Amphibious Doodles Post Official Art Oct 25, 2024 ",
+       "data": "Oct 25, 2024",
+       "titulo": "Official Artwork: Amphibious Doodles",
+       "miniatura": "/news/amphibious-doodles.png",
+       "tags": [
+        "Post",
+        "Official Art"
+       ],
+       "resumo": "",
+       "url": "/en/news/2025-11-25-amphibious-doodles/"
+      },
+      {
+       "escondida": true,
        "busca": "Official Artwork: Apollo No Diffs Post Official Art Jul 25, 2024 ",
        "data": "Jul 25, 2024",
        "titulo": "Official Artwork: Apollo No Diffs",
@@ -10788,6 +10788,19 @@
       },
       {
        "escondida": true,
+       "busca": "Official Artwork: The Chain Post Official Art Apr 26, 2024 “Don't worry, The Chain is here!” (painting by: me)",
+       "data": "Apr 26, 2024",
+       "titulo": "Official Artwork: The Chain",
+       "miniatura": "/news/the-chain.png",
+       "tags": [
+        "Post",
+        "Official Art"
+       ],
+       "resumo": "“Don't worry, The Chain is here!” (painting by: me)",
+       "url": "/en/news/2024-04-16-the-chain/"
+      },
+      {
+       "escondida": true,
        "busca": "Non-Canon Funny Exchange on Twitter Post Official Art Apr 25, 2024 POV: I broke into your house in the middle of the night to eat the pudding that was in your fridge, but you were awake, what would you do? that sounds like a terrible idea Calm down calm down I'll drop the pudding pls don't do anything sorry TwT I just wanted pudding “Was that it?” “That’s all.” “Well, if you don’t want to kill us” “we’ll take you to the kitchen.” “How did you know I wasn’t lying?” “I read minds.” “I see the future.” “Ah…” Hihi thanks for the pudding and sorry for the trouble, you're nice",
        "data": "Apr 25, 2024",
        "titulo": "Non-Canon Funny Exchange on Twitter",
@@ -10798,6 +10811,19 @@
        ],
        "resumo": "POV: I broke into your house in the middle of the night to eat the pudding that was in your fridge, but you were awake, what…",
        "url": "/en/news/2024-04-25-non-canon-funny-exchange/"
+      },
+      {
+       "escondida": true,
+       "busca": "Official Artwork: Earth’s Goofiest Superheroes Post Official Art Apr 19, 2024 ",
+       "data": "Apr 19, 2024",
+       "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
+       "miniatura": "/news/earths-goofiest-superheroes.png",
+       "tags": [
+        "Post",
+        "Official Art"
+       ],
+       "resumo": "",
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -10825,33 +10851,6 @@
        ],
        "resumo": "",
        "url": "/en/news/2024-04-16-friday-thirteenth/"
-      },
-      {
-       "escondida": true,
-       "busca": "Official Artwork: The Chain Post Official Art Speedpaint Apr 16, 2024 “Don't worry, The Chain is here!” (painting by: me)",
-       "data": "Apr 16, 2024",
-       "titulo": "Official Artwork: The Chain",
-       "miniatura": "/news/the-chain.png",
-       "tags": [
-        "Post",
-        "Official Art",
-        "Speedpaint"
-       ],
-       "resumo": "“Don't worry, The Chain is here!” (painting by: me)",
-       "url": "/en/news/2024-04-16-the-chain/"
-      },
-      {
-       "escondida": true,
-       "busca": "Official Artwork: Earth’s Goofiest Superheroes Post Official Art Apr 11, 2024 ",
-       "data": "Apr 11, 2024",
-       "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
-       "miniatura": "/news/earths-goofiest-superheroes.png",
-       "tags": [
-        "Post",
-        "Official Art"
-       ],
-       "resumo": "",
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -10907,8 +10906,8 @@
       },
       {
        "escondida": true,
-       "busca": "Avialuna's aeternogyrinians Post Worldbuilding Feb 23, 2024 ",
-       "data": "Feb 23, 2024",
+       "busca": "Avialuna's aeternogyrinians Post Worldbuilding Feb 28, 2024 ",
+       "data": "Feb 28, 2024",
        "titulo": "Avialuna's aeternogyrinians",
        "miniatura": "/news/avialuna-aeternogyrinians.png",
        "tags": [
@@ -12232,45 +12231,12 @@
       ],
       "comentarios": "news/2025-11-26-proto-articulado",
       "anterior": {
-       "url": "/en/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Official Artwork: Amphibious Doodles"
-      },
-      "proximo": {
-       "url": "/en/news/2025-12-01-dia-1-especulacao-evolutiva/",
-       "titulo": "Day 1 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2025-11-25-amphibious-doodles/": {
-     "lang": "en",
-     "titulo": "Official Artwork: Amphibious Doodles",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-11-25-amphibious-doodles/",
-      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
-     },
-     "noticia": {
-      "data": "Nov 25, 2025",
-      "h1": "Official Artwork: Amphibious Doodles",
-      "tags": [
-       "Post",
-       "Official Art"
-      ],
-      "comentarios": "news/2025-11-25-amphibious-doodles",
-      "anterior": {
        "url": "/en/news/2025-11-25-amphibious-sonic-pose/",
        "titulo": "Official Artwork: Amphibious Doing the Sonic Pose"
       },
       "proximo": {
-       "url": "/en/news/2025-11-26-proto-articulado/",
-       "titulo": "Proto-Articulate, the language of the crabs"
+       "url": "/en/news/2025-12-01-dia-1-especulacao-evolutiva/",
+       "titulo": "Day 1 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "voltar": {
        "url": "/en/news/",
@@ -12302,8 +12268,8 @@
        "titulo": "Best Friends in every universe"
       },
       "proximo": {
-       "url": "/en/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Official Artwork: Amphibious Doodles"
+       "url": "/en/news/2025-11-26-proto-articulado/",
+       "titulo": "Proto-Articulate, the language of the crabs"
       },
       "voltar": {
        "url": "/en/news/",
@@ -12762,12 +12728,45 @@
       ],
       "comentarios": "news/2024-10-28-rain",
       "anterior": {
-       "url": "/en/news/2024-07-25-apollo-no-diffs/",
-       "titulo": "Official Artwork: Apollo No Diffs"
+       "url": "/en/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Official Artwork: Amphibious Doodles"
       },
       "proximo": {
        "url": "/en/news/2024-11-04-he-a-little-guy/",
        "titulo": "Official Artwork: He a little guy"
+      },
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
+    "/en/news/2025-11-25-amphibious-doodles/": {
+     "lang": "en",
+     "titulo": "Official Artwork: Amphibious Doodles",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2025-11-25-amphibious-doodles/",
+      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
+     },
+     "noticia": {
+      "data": "Oct 25, 2024",
+      "h1": "Official Artwork: Amphibious Doodles",
+      "tags": [
+       "Post",
+       "Official Art"
+      ],
+      "comentarios": "news/2025-11-25-amphibious-doodles",
+      "anterior": {
+       "url": "/en/news/2024-07-25-apollo-no-diffs/",
+       "titulo": "Official Artwork: Apollo No Diffs"
+      },
+      "proximo": {
+       "url": "/en/news/2024-10-28-rain/",
+       "titulo": "Official Artwork: Rain"
       },
       "voltar": {
        "url": "/en/news/",
@@ -12799,8 +12798,8 @@
        "titulo": "Official Artwork: Genius + Genius = Dumb²"
       },
       "proximo": {
-       "url": "/en/news/2024-10-28-rain/",
-       "titulo": "Official Artwork: Rain"
+       "url": "/en/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Official Artwork: Amphibious Doodles"
       },
       "voltar": {
        "url": "/en/news/",
@@ -13126,12 +13125,45 @@
       ],
       "comentarios": "news/2024-04-29-hygranocianos",
       "anterior": {
-       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Non-Canon Funny Exchange on Twitter"
+       "url": "/en/news/2024-04-16-the-chain/",
+       "titulo": "Official Artwork: The Chain"
       },
       "proximo": {
        "url": "/en/news/2024-04-30-solonianos-monocarianos/",
        "titulo": "Solonians and Monocarians"
+      },
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
+    "/en/news/2024-04-16-the-chain/": {
+     "lang": "en",
+     "titulo": "Official Artwork: The Chain",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-16-the-chain/",
+      "pt": "/pt/news/2024-04-16-the-chain/"
+     },
+     "noticia": {
+      "data": "Apr 26, 2024",
+      "h1": "Official Artwork: The Chain",
+      "tags": [
+       "Post",
+       "Official Art"
+      ],
+      "comentarios": "news/2024-04-16-the-chain",
+      "anterior": {
+       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Non-Canon Funny Exchange on Twitter"
+      },
+      "proximo": {
+       "url": "/en/news/2024-04-29-hygranocianos/",
+       "titulo": "Hygranocians"
       },
       "voltar": {
        "url": "/en/news/",
@@ -13159,12 +13191,45 @@
       ],
       "comentarios": "news/2024-04-25-non-canon-funny-exchange",
       "anterior": {
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
+      },
+      "proximo": {
+       "url": "/en/news/2024-04-16-the-chain/",
+       "titulo": "Official Artwork: The Chain"
+      },
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
+    "/en/news/2024-04-11-earths-goofiest-superheroes/": {
+     "lang": "en",
+     "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
+     },
+     "noticia": {
+      "data": "Apr 19, 2024",
+      "h1": "Official Artwork: Earth’s Goofiest Superheroes",
+      "tags": [
+       "Post",
+       "Official Art"
+      ],
+      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
+      "anterior": {
        "url": "/en/news/2024-04-18-trupizianos/",
        "titulo": "Trupizians"
       },
       "proximo": {
-       "url": "/en/news/2024-04-29-hygranocianos/",
-       "titulo": "Hygranocians"
+       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Non-Canon Funny Exchange on Twitter"
       },
       "voltar": {
        "url": "/en/news/",
@@ -13196,8 +13261,8 @@
        "titulo": "Official Artwork: Friday Thirteenth"
       },
       "proximo": {
-       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Non-Canon Funny Exchange on Twitter"
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
       },
       "voltar": {
        "url": "/en/news/",
@@ -13226,79 +13291,12 @@
       ],
       "comentarios": "news/2024-04-16-friday-thirteenth",
       "anterior": {
-       "url": "/en/news/2024-04-16-the-chain/",
-       "titulo": "Official Artwork: The Chain"
-      },
-      "proximo": {
-       "url": "/en/news/2024-04-18-trupizianos/",
-       "titulo": "Trupizians"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2024-04-16-the-chain/": {
-     "lang": "en",
-     "titulo": "Official Artwork: The Chain",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-16-the-chain/",
-      "pt": "/pt/news/2024-04-16-the-chain/"
-     },
-     "noticia": {
-      "data": "Apr 16, 2024",
-      "h1": "Official Artwork: The Chain",
-      "tags": [
-       "Post",
-       "Official Art",
-       "Speedpaint"
-      ],
-      "comentarios": "news/2024-04-16-the-chain",
-      "anterior": {
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
-      },
-      "proximo": {
-       "url": "/en/news/2024-04-16-friday-thirteenth/",
-       "titulo": "Official Artwork: Friday Thirteenth"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2024-04-11-earths-goofiest-superheroes/": {
-     "lang": "en",
-     "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
-     },
-     "noticia": {
-      "data": "Apr 11, 2024",
-      "h1": "Official Artwork: Earth’s Goofiest Superheroes",
-      "tags": [
-       "Post",
-       "Official Art"
-      ],
-      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
-      "anterior": {
        "url": "/en/news/2024-04-11-is-that-how-she-does/",
        "titulo": "Official Artwork: Is That How She Does?"
       },
       "proximo": {
-       "url": "/en/news/2024-04-16-the-chain/",
-       "titulo": "Official Artwork: The Chain"
+       "url": "/en/news/2024-04-18-trupizianos/",
+       "titulo": "Trupizians"
       },
       "voltar": {
        "url": "/en/news/",
@@ -13330,8 +13328,8 @@
        "titulo": "Official Artwork: Dragon Rizz"
       },
       "proximo": {
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
+       "url": "/en/news/2024-04-16-friday-thirteenth/",
+       "titulo": "Official Artwork: Friday Thirteenth"
       },
       "voltar": {
        "url": "/en/news/",
@@ -13450,7 +13448,7 @@
       "pt": "/pt/news/2024-02-23-avialuna-aeternogyrinians/"
      },
      "noticia": {
-      "data": "Feb 23, 2024",
+      "data": "Feb 28, 2024",
       "h1": "Avialuna's aeternogyrinians",
       "tags": [
        "Post",
@@ -14411,19 +14409,6 @@
       },
       {
        "escondida": true,
-       "busca": "Arte Oficial: Rabiscos do Anfíbio Post Arte Oficial 25 de nov. de 2025 ",
-       "data": "25 de nov. de 2025",
-       "titulo": "Arte Oficial: Rabiscos do Anfíbio",
-       "miniatura": "/news/amphibious-doodles.png",
-       "tags": [
-        "Post",
-        "Arte Oficial"
-       ],
-       "resumo": "",
-       "url": "/pt/news/2025-11-25-amphibious-doodles/"
-      },
-      {
-       "escondida": true,
        "busca": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic Post Arte Oficial 25 de nov. de 2025 ",
        "data": "25 de nov. de 2025",
        "titulo": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic",
@@ -14621,6 +14606,19 @@
       },
       {
        "escondida": true,
+       "busca": "Arte Oficial: Rabiscos do Anfíbio Post Arte Oficial 25 de out. de 2024 ",
+       "data": "25 de out. de 2024",
+       "titulo": "Arte Oficial: Rabiscos do Anfíbio",
+       "miniatura": "/news/amphibious-doodles.png",
+       "tags": [
+        "Post",
+        "Arte Oficial"
+       ],
+       "resumo": "",
+       "url": "/pt/news/2025-11-25-amphibious-doodles/"
+      },
+      {
+       "escondida": true,
        "busca": "Arte Oficial: Apollo Sola Post Arte Oficial 25 de jul. de 2024 ",
        "data": "25 de jul. de 2024",
        "titulo": "Arte Oficial: Apollo Sola",
@@ -14765,6 +14763,19 @@
       },
       {
        "escondida": true,
+       "busca": "Arte Oficial: A Corrente Post Arte Oficial 26 de abr. de 2024 Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens! Esses são Aeschyllus, Samma, Kolotto'i, Nallewi, Uritei, Sk-26-13b e Kalai. Sintam-se à vontade para fazer qualquer pergunta sobre eles ^^",
+       "data": "26 de abr. de 2024",
+       "titulo": "Arte Oficial: A Corrente",
+       "miniatura": "/news/the-chain.png",
+       "tags": [
+        "Post",
+        "Arte Oficial"
+       ],
+       "resumo": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
+       "url": "/pt/news/2024-04-16-the-chain/"
+      },
+      {
+       "escondida": true,
        "busca": "Troca Engraçada Não Canônica no Twitter Post Arte Oficial 25 de abr. de 2024 ",
        "data": "25 de abr. de 2024",
        "titulo": "Troca Engraçada Não Canônica no Twitter",
@@ -14775,6 +14786,19 @@
        ],
        "resumo": "",
        "url": "/pt/news/2024-04-25-non-canon-funny-exchange/"
+      },
+      {
+       "escondida": true,
+       "busca": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra Post Arte Oficial 19 de abr. de 2024 ",
+       "data": "19 de abr. de 2024",
+       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+       "miniatura": "/news/earths-goofiest-superheroes.png",
+       "tags": [
+        "Post",
+        "Arte Oficial"
+       ],
+       "resumo": "",
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -14802,33 +14826,6 @@
        ],
        "resumo": "",
        "url": "/pt/news/2024-04-16-friday-thirteenth/"
-      },
-      {
-       "escondida": true,
-       "busca": "Arte Oficial: A Corrente Post Arte Oficial Speedpaint 16 de abr. de 2024 Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens! Esses são Aeschyllus, Samma, Kolotto'i, Nallewi, Uritei, Sk-26-13b e Kalai. Sintam-se à vontade para fazer qualquer pergunta sobre eles ^^",
-       "data": "16 de abr. de 2024",
-       "titulo": "Arte Oficial: A Corrente",
-       "miniatura": "/news/the-chain.png",
-       "tags": [
-        "Post",
-        "Arte Oficial",
-        "Speedpaint"
-       ],
-       "resumo": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
-       "url": "/pt/news/2024-04-16-the-chain/"
-      },
-      {
-       "escondida": true,
-       "busca": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra Post Arte Oficial 11 de abr. de 2024 ",
-       "data": "11 de abr. de 2024",
-       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-       "miniatura": "/news/earths-goofiest-superheroes.png",
-       "tags": [
-        "Post",
-        "Arte Oficial"
-       ],
-       "resumo": "",
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -14884,8 +14881,8 @@
       },
       {
        "escondida": true,
-       "busca": "Os Eternogirinos de Avialuna Post Worldbuilding 23 de fev. de 2024 ",
-       "data": "23 de fev. de 2024",
+       "busca": "Os Eternogirinos de Avialuna Post Worldbuilding 28 de fev. de 2024 ",
+       "data": "28 de fev. de 2024",
        "titulo": "Os Eternogirinos de Avialuna",
        "miniatura": "/news/avialuna-aeternogyrinians.png",
        "tags": [
@@ -16209,45 +16206,12 @@
       ],
       "comentarios": "news/2025-11-26-proto-articulado",
       "anterior": {
-       "url": "/pt/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
-      },
-      "proximo": {
-       "url": "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/",
-       "titulo": "Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2025-11-25-amphibious-doodles/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: Rabiscos do Anfíbio",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-11-25-amphibious-doodles/",
-      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
-     },
-     "noticia": {
-      "data": "25 de nov. de 2025",
-      "h1": "Arte Oficial: Rabiscos do Anfíbio",
-      "tags": [
-       "Post",
-       "Arte Oficial"
-      ],
-      "comentarios": "news/2025-11-25-amphibious-doodles",
-      "anterior": {
        "url": "/pt/news/2025-11-25-amphibious-sonic-pose/",
        "titulo": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic"
       },
       "proximo": {
-       "url": "/pt/news/2025-11-26-proto-articulado/",
-       "titulo": "Proto-Articulado, a linguagem dos caranguejos"
+       "url": "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/",
+       "titulo": "Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -16279,8 +16243,8 @@
        "titulo": "Melhores amigos em todos os universos"
       },
       "proximo": {
-       "url": "/pt/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
+       "url": "/pt/news/2025-11-26-proto-articulado/",
+       "titulo": "Proto-Articulado, a linguagem dos caranguejos"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -16739,12 +16703,45 @@
       ],
       "comentarios": "news/2024-10-28-rain",
       "anterior": {
-       "url": "/pt/news/2024-07-25-apollo-no-diffs/",
-       "titulo": "Arte Oficial: Apollo Sola"
+       "url": "/pt/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
       },
       "proximo": {
        "url": "/pt/news/2024-11-04-he-a-little-guy/",
        "titulo": "Arte Oficial: He a little guy"
+      },
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
+    "/pt/news/2025-11-25-amphibious-doodles/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: Rabiscos do Anfíbio",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2025-11-25-amphibious-doodles/",
+      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
+     },
+     "noticia": {
+      "data": "25 de out. de 2024",
+      "h1": "Arte Oficial: Rabiscos do Anfíbio",
+      "tags": [
+       "Post",
+       "Arte Oficial"
+      ],
+      "comentarios": "news/2025-11-25-amphibious-doodles",
+      "anterior": {
+       "url": "/pt/news/2024-07-25-apollo-no-diffs/",
+       "titulo": "Arte Oficial: Apollo Sola"
+      },
+      "proximo": {
+       "url": "/pt/news/2024-10-28-rain/",
+       "titulo": "Arte Oficial: Chuva"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -16776,8 +16773,8 @@
        "titulo": "Arte Oficial: Gênio + Gênio = Burro²"
       },
       "proximo": {
-       "url": "/pt/news/2024-10-28-rain/",
-       "titulo": "Arte Oficial: Chuva"
+       "url": "/pt/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17103,12 +17100,45 @@
       ],
       "comentarios": "news/2024-04-29-hygranocianos",
       "anterior": {
-       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Troca Engraçada Não Canônica no Twitter"
+       "url": "/pt/news/2024-04-16-the-chain/",
+       "titulo": "Arte Oficial: A Corrente"
       },
       "proximo": {
        "url": "/pt/news/2024-04-30-solonianos-monocarianos/",
        "titulo": "Solonianos e Monocarianos"
+      },
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
+    "/pt/news/2024-04-16-the-chain/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: A Corrente",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-16-the-chain/",
+      "pt": "/pt/news/2024-04-16-the-chain/"
+     },
+     "noticia": {
+      "data": "26 de abr. de 2024",
+      "h1": "Arte Oficial: A Corrente",
+      "tags": [
+       "Post",
+       "Arte Oficial"
+      ],
+      "comentarios": "news/2024-04-16-the-chain",
+      "anterior": {
+       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Troca Engraçada Não Canônica no Twitter"
+      },
+      "proximo": {
+       "url": "/pt/news/2024-04-29-hygranocianos/",
+       "titulo": "Hygranocianos"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17136,12 +17166,45 @@
       ],
       "comentarios": "news/2024-04-25-non-canon-funny-exchange",
       "anterior": {
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
+      },
+      "proximo": {
+       "url": "/pt/news/2024-04-16-the-chain/",
+       "titulo": "Arte Oficial: A Corrente"
+      },
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
+    "/pt/news/2024-04-11-earths-goofiest-superheroes/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
+     },
+     "noticia": {
+      "data": "19 de abr. de 2024",
+      "h1": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+      "tags": [
+       "Post",
+       "Arte Oficial"
+      ],
+      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
+      "anterior": {
        "url": "/pt/news/2024-04-18-trupizianos/",
        "titulo": "Trupizianos"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-29-hygranocianos/",
-       "titulo": "Hygranocianos"
+       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Troca Engraçada Não Canônica no Twitter"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17173,8 +17236,8 @@
        "titulo": "Arte Oficial: Sexta-feira 13"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Troca Engraçada Não Canônica no Twitter"
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17203,79 +17266,12 @@
       ],
       "comentarios": "news/2024-04-16-friday-thirteenth",
       "anterior": {
-       "url": "/pt/news/2024-04-16-the-chain/",
-       "titulo": "Arte Oficial: A Corrente"
-      },
-      "proximo": {
-       "url": "/pt/news/2024-04-18-trupizianos/",
-       "titulo": "Trupizianos"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2024-04-16-the-chain/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: A Corrente",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-16-the-chain/",
-      "pt": "/pt/news/2024-04-16-the-chain/"
-     },
-     "noticia": {
-      "data": "16 de abr. de 2024",
-      "h1": "Arte Oficial: A Corrente",
-      "tags": [
-       "Post",
-       "Arte Oficial",
-       "Speedpaint"
-      ],
-      "comentarios": "news/2024-04-16-the-chain",
-      "anterior": {
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
-      },
-      "proximo": {
-       "url": "/pt/news/2024-04-16-friday-thirteenth/",
-       "titulo": "Arte Oficial: Sexta-feira 13"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2024-04-11-earths-goofiest-superheroes/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
-     },
-     "noticia": {
-      "data": "11 de abr. de 2024",
-      "h1": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-      "tags": [
-       "Post",
-       "Arte Oficial"
-      ],
-      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
-      "anterior": {
        "url": "/pt/news/2024-04-11-is-that-how-she-does/",
        "titulo": "Arte Oficial: É Assim Que Ela Faz?"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-16-the-chain/",
-       "titulo": "Arte Oficial: A Corrente"
+       "url": "/pt/news/2024-04-18-trupizianos/",
+       "titulo": "Trupizianos"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17307,8 +17303,8 @@
        "titulo": "Arte Oficial: Dragon Rizz"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
+       "url": "/pt/news/2024-04-16-friday-thirteenth/",
+       "titulo": "Arte Oficial: Sexta-feira 13"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -17427,7 +17423,7 @@
       "pt": "/pt/news/2024-02-23-avialuna-aeternogyrinians/"
      },
      "noticia": {
-      "data": "23 de fev. de 2024",
+      "data": "28 de fev. de 2024",
       "h1": "Os Eternogirinos de Avialuna",
       "tags": [
        "Post",
@@ -18685,15 +18681,6 @@
       },
       {
        "date": "2025-11-25",
-       "url": "/en/news/2025-11-25-amphibious-doodles/",
-       "title": "Official Artwork: Amphibious Doodles",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/amphibious-doodles.png",
-       "work": null
-      },
-      {
-       "date": "2025-11-25",
        "url": "/en/news/2025-11-25-amphibious-sonic-pose/",
        "title": "Official Artwork: Amphibious Doing the Sonic Pose",
        "kind": "tag_news",
@@ -18828,6 +18815,15 @@
        "work": null
       },
       {
+       "date": "2024-10-25",
+       "url": "/en/news/2025-11-25-amphibious-doodles/",
+       "title": "Official Artwork: Amphibious Doodles",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/amphibious-doodles.png",
+       "work": null
+      },
+      {
        "date": "2024-07-25",
        "url": "/en/news/2024-07-25-apollo-no-diffs/",
        "title": "Official Artwork: Apollo No Diffs",
@@ -18927,12 +18923,30 @@
        "work": null
       },
       {
+       "date": "2024-04-26",
+       "url": "/en/news/2024-04-16-the-chain/",
+       "title": "Official Artwork: The Chain",
+       "kind": "tag_news",
+       "text": "“Don't worry, The Chain is here!” (painting by: me)",
+       "image": "news/the-chain.png",
+       "work": null
+      },
+      {
        "date": "2024-04-25",
        "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
        "title": "Non-Canon Funny Exchange on Twitter",
        "kind": "tag_news",
        "text": "POV: I broke into your house in the middle of the night to eat the pudding that was in your fridge, but you were awake, what…",
        "image": "news/non-canon-funny-exchange.png",
+       "work": null
+      },
+      {
+       "date": "2024-04-19",
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+       "title": "Official Artwork: Earth’s Goofiest Superheroes",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -18951,24 +18965,6 @@
        "kind": "tag_news",
        "text": "",
        "image": "news/friday-thirteenth.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-16",
-       "url": "/en/news/2024-04-16-the-chain/",
-       "title": "Official Artwork: The Chain",
-       "kind": "tag_news",
-       "text": "“Don't worry, The Chain is here!” (painting by: me)",
-       "image": "news/the-chain.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-11",
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-       "title": "Official Artwork: Earth’s Goofiest Superheroes",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -19008,7 +19004,7 @@
        "work": null
       },
       {
-       "date": "2024-02-23",
+       "date": "2024-02-28",
        "url": "/en/news/2024-02-23-avialuna-aeternogyrinians/",
        "title": "Avialuna's aeternogyrinians",
        "kind": "tag_news",
@@ -19167,7 +19163,6 @@
       "2025-12-02-dia-2-especulacao-evolutiva",
       "2025-12-01-dia-1-especulacao-evolutiva",
       "2025-11-26-proto-articulado",
-      "2025-11-25-amphibious-doodles",
       "2025-11-25-amphibious-sonic-pose",
       "2025-10-18-best-friends",
       "2025-10-18-nerds-same-wavelength",
@@ -19183,6 +19178,7 @@
       "2025-03-09-was-bored-at-a-restaurant",
       "2024-11-04-he-a-little-guy",
       "2024-10-28-rain",
+      "2025-11-25-amphibious-doodles",
       "2024-07-25-apollo-no-diffs",
       "2024-06-21-genius-genius-dumb",
       "2024-06-14-lucas-viciado-em-cafeina",
@@ -19194,11 +19190,11 @@
       "2024-05-02-fotomorfos-geomorfos",
       "2024-04-30-solonianos-monocarianos",
       "2024-04-29-hygranocianos",
+      "2024-04-16-the-chain",
       "2024-04-25-non-canon-funny-exchange",
+      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-18-trupizianos",
       "2024-04-16-friday-thirteenth",
-      "2024-04-16-the-chain",
-      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-11-is-that-how-she-does",
       "2024-03-06-dragon-rizz",
       "2024-03-05-ceratoctopodidae",
@@ -19853,15 +19849,6 @@
       },
       {
        "date": "2025-11-25",
-       "url": "/pt/news/2025-11-25-amphibious-doodles/",
-       "title": "Arte Oficial: Rabiscos do Anfíbio",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/amphibious-doodles.png",
-       "work": null
-      },
-      {
-       "date": "2025-11-25",
        "url": "/pt/news/2025-11-25-amphibious-sonic-pose/",
        "title": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic",
        "kind": "tag_news",
@@ -19996,6 +19983,15 @@
        "work": null
       },
       {
+       "date": "2024-10-25",
+       "url": "/pt/news/2025-11-25-amphibious-doodles/",
+       "title": "Arte Oficial: Rabiscos do Anfíbio",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/amphibious-doodles.png",
+       "work": null
+      },
+      {
        "date": "2024-07-25",
        "url": "/pt/news/2024-07-25-apollo-no-diffs/",
        "title": "Arte Oficial: Apollo Sola",
@@ -20095,12 +20091,30 @@
        "work": null
       },
       {
+       "date": "2024-04-26",
+       "url": "/pt/news/2024-04-16-the-chain/",
+       "title": "Arte Oficial: A Corrente",
+       "kind": "tag_news",
+       "text": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
+       "image": "news/the-chain.png",
+       "work": null
+      },
+      {
        "date": "2024-04-25",
        "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
        "title": "Troca Engraçada Não Canônica no Twitter",
        "kind": "tag_news",
        "text": "",
        "image": "news/non-canon-funny-exchange.png",
+       "work": null
+      },
+      {
+       "date": "2024-04-19",
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
+       "title": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+       "kind": "tag_news",
+       "text": "",
+       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -20119,24 +20133,6 @@
        "kind": "tag_news",
        "text": "",
        "image": "news/friday-thirteenth.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-16",
-       "url": "/pt/news/2024-04-16-the-chain/",
-       "title": "Arte Oficial: A Corrente",
-       "kind": "tag_news",
-       "text": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
-       "image": "news/the-chain.png",
-       "work": null
-      },
-      {
-       "date": "2024-04-11",
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
-       "title": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-       "kind": "tag_news",
-       "text": "",
-       "image": "news/earths-goofiest-superheroes.png",
        "work": null
       },
       {
@@ -20176,7 +20172,7 @@
        "work": null
       },
       {
-       "date": "2024-02-23",
+       "date": "2024-02-28",
        "url": "/pt/news/2024-02-23-avialuna-aeternogyrinians/",
        "title": "Os Eternogirinos de Avialuna",
        "kind": "tag_news",
@@ -20335,7 +20331,6 @@
       "2025-12-02-dia-2-especulacao-evolutiva",
       "2025-12-01-dia-1-especulacao-evolutiva",
       "2025-11-26-proto-articulado",
-      "2025-11-25-amphibious-doodles",
       "2025-11-25-amphibious-sonic-pose",
       "2025-10-18-best-friends",
       "2025-10-18-nerds-same-wavelength",
@@ -20351,6 +20346,7 @@
       "2025-03-09-was-bored-at-a-restaurant",
       "2024-11-04-he-a-little-guy",
       "2024-10-28-rain",
+      "2025-11-25-amphibious-doodles",
       "2024-07-25-apollo-no-diffs",
       "2024-06-21-genius-genius-dumb",
       "2024-06-14-lucas-viciado-em-cafeina",
@@ -20362,11 +20358,11 @@
       "2024-05-02-fotomorfos-geomorfos",
       "2024-04-30-solonianos-monocarianos",
       "2024-04-29-hygranocianos",
+      "2024-04-16-the-chain",
       "2024-04-25-non-canon-funny-exchange",
+      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-18-trupizianos",
       "2024-04-16-friday-thirteenth",
-      "2024-04-16-the-chain",
-      "2024-04-11-earths-goofiest-superheroes",
       "2024-04-11-is-that-how-she-does",
       "2024-03-06-dragon-rizz",
       "2024-03-05-ceratoctopodidae",
@@ -21273,19 +21269,6 @@
       },
       {
        "escondida": true,
-       "busca": "Official Artwork: Amphibious Doodles Post Official Art Nov 25, 2025 ",
-       "data": "Nov 25, 2025",
-       "titulo": "Official Artwork: Amphibious Doodles",
-       "miniatura": "/news/amphibious-doodles.png",
-       "tags": [
-        "Post",
-        "Official Art"
-       ],
-       "resumo": "",
-       "url": "/en/news/2025-11-25-amphibious-doodles/"
-      },
-      {
-       "escondida": true,
        "busca": "Official Artwork: Amphibious Doing the Sonic Pose Post Official Art Nov 25, 2025 ",
        "data": "Nov 25, 2025",
        "titulo": "Official Artwork: Amphibious Doing the Sonic Pose",
@@ -21483,6 +21466,19 @@
       },
       {
        "escondida": true,
+       "busca": "Official Artwork: Amphibious Doodles Post Official Art Oct 25, 2024 ",
+       "data": "Oct 25, 2024",
+       "titulo": "Official Artwork: Amphibious Doodles",
+       "miniatura": "/news/amphibious-doodles.png",
+       "tags": [
+        "Post",
+        "Official Art"
+       ],
+       "resumo": "",
+       "url": "/en/news/2025-11-25-amphibious-doodles/"
+      },
+      {
+       "escondida": true,
        "busca": "Official Artwork: Apollo No Diffs Post Official Art Jul 25, 2024 ",
        "data": "Jul 25, 2024",
        "titulo": "Official Artwork: Apollo No Diffs",
@@ -21627,6 +21623,19 @@
       },
       {
        "escondida": true,
+       "busca": "Official Artwork: The Chain Post Official Art Apr 26, 2024 “Don't worry, The Chain is here!” (painting by: me)",
+       "data": "Apr 26, 2024",
+       "titulo": "Official Artwork: The Chain",
+       "miniatura": "/news/the-chain.png",
+       "tags": [
+        "Post",
+        "Official Art"
+       ],
+       "resumo": "“Don't worry, The Chain is here!” (painting by: me)",
+       "url": "/en/news/2024-04-16-the-chain/"
+      },
+      {
+       "escondida": true,
        "busca": "Non-Canon Funny Exchange on Twitter Post Official Art Apr 25, 2024 POV: I broke into your house in the middle of the night to eat the pudding that was in your fridge, but you were awake, what would you do? that sounds like a terrible idea Calm down calm down I'll drop the pudding pls don't do anything sorry TwT I just wanted pudding “Was that it?” “That’s all.” “Well, if you don’t want to kill us” “we’ll take you to the kitchen.” “How did you know I wasn’t lying?” “I read minds.” “I see the future.” “Ah…” Hihi thanks for the pudding and sorry for the trouble, you're nice",
        "data": "Apr 25, 2024",
        "titulo": "Non-Canon Funny Exchange on Twitter",
@@ -21637,6 +21646,19 @@
        ],
        "resumo": "POV: I broke into your house in the middle of the night to eat the pudding that was in your fridge, but you were awake, what…",
        "url": "/en/news/2024-04-25-non-canon-funny-exchange/"
+      },
+      {
+       "escondida": true,
+       "busca": "Official Artwork: Earth’s Goofiest Superheroes Post Official Art Apr 19, 2024 ",
+       "data": "Apr 19, 2024",
+       "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
+       "miniatura": "/news/earths-goofiest-superheroes.png",
+       "tags": [
+        "Post",
+        "Official Art"
+       ],
+       "resumo": "",
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -21664,33 +21686,6 @@
        ],
        "resumo": "",
        "url": "/en/news/2024-04-16-friday-thirteenth/"
-      },
-      {
-       "escondida": true,
-       "busca": "Official Artwork: The Chain Post Official Art Speedpaint Apr 16, 2024 “Don't worry, The Chain is here!” (painting by: me)",
-       "data": "Apr 16, 2024",
-       "titulo": "Official Artwork: The Chain",
-       "miniatura": "/news/the-chain.png",
-       "tags": [
-        "Post",
-        "Official Art",
-        "Speedpaint"
-       ],
-       "resumo": "“Don't worry, The Chain is here!” (painting by: me)",
-       "url": "/en/news/2024-04-16-the-chain/"
-      },
-      {
-       "escondida": true,
-       "busca": "Official Artwork: Earth’s Goofiest Superheroes Post Official Art Apr 11, 2024 ",
-       "data": "Apr 11, 2024",
-       "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
-       "miniatura": "/news/earths-goofiest-superheroes.png",
-       "tags": [
-        "Post",
-        "Official Art"
-       ],
-       "resumo": "",
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -21746,8 +21741,8 @@
       },
       {
        "escondida": true,
-       "busca": "Avialuna's aeternogyrinians Post Worldbuilding Feb 23, 2024 ",
-       "data": "Feb 23, 2024",
+       "busca": "Avialuna's aeternogyrinians Post Worldbuilding Feb 28, 2024 ",
+       "data": "Feb 28, 2024",
        "titulo": "Avialuna's aeternogyrinians",
        "miniatura": "/news/avialuna-aeternogyrinians.png",
        "tags": [
@@ -23105,45 +23100,12 @@
       ],
       "comentarios": "news/2025-11-26-proto-articulado",
       "anterior": {
-       "url": "/en/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Official Artwork: Amphibious Doodles"
-      },
-      "proximo": {
-       "url": "/en/news/2025-12-01-dia-1-especulacao-evolutiva/",
-       "titulo": "Day 1 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2025-11-25-amphibious-doodles/": {
-     "lang": "en",
-     "titulo": "Official Artwork: Amphibious Doodles",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-11-25-amphibious-doodles/",
-      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
-     },
-     "noticia": {
-      "data": "Nov 25, 2025",
-      "h1": "Official Artwork: Amphibious Doodles",
-      "tags": [
-       "Post",
-       "Official Art"
-      ],
-      "comentarios": "news/2025-11-25-amphibious-doodles",
-      "anterior": {
        "url": "/en/news/2025-11-25-amphibious-sonic-pose/",
        "titulo": "Official Artwork: Amphibious Doing the Sonic Pose"
       },
       "proximo": {
-       "url": "/en/news/2025-11-26-proto-articulado/",
-       "titulo": "Proto-Articulate, the language of the crabs"
+       "url": "/en/news/2025-12-01-dia-1-especulacao-evolutiva/",
+       "titulo": "Day 1 of Drawing a Spec Evo creature from Hᴀᴛᴇ Cʏᴄʟᴇ every day because i bought a new sketchbook and i don't know what else to do with it"
       },
       "voltar": {
        "url": "/en/news/",
@@ -23175,8 +23137,8 @@
        "titulo": "Best Friends in every universe"
       },
       "proximo": {
-       "url": "/en/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Official Artwork: Amphibious Doodles"
+       "url": "/en/news/2025-11-26-proto-articulado/",
+       "titulo": "Proto-Articulate, the language of the crabs"
       },
       "voltar": {
        "url": "/en/news/",
@@ -23635,12 +23597,45 @@
       ],
       "comentarios": "news/2024-10-28-rain",
       "anterior": {
-       "url": "/en/news/2024-07-25-apollo-no-diffs/",
-       "titulo": "Official Artwork: Apollo No Diffs"
+       "url": "/en/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Official Artwork: Amphibious Doodles"
       },
       "proximo": {
        "url": "/en/news/2024-11-04-he-a-little-guy/",
        "titulo": "Official Artwork: He a little guy"
+      },
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
+    "/en/news/2025-11-25-amphibious-doodles/": {
+     "lang": "en",
+     "titulo": "Official Artwork: Amphibious Doodles",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2025-11-25-amphibious-doodles/",
+      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
+     },
+     "noticia": {
+      "data": "Oct 25, 2024",
+      "h1": "Official Artwork: Amphibious Doodles",
+      "tags": [
+       "Post",
+       "Official Art"
+      ],
+      "comentarios": "news/2025-11-25-amphibious-doodles",
+      "anterior": {
+       "url": "/en/news/2024-07-25-apollo-no-diffs/",
+       "titulo": "Official Artwork: Apollo No Diffs"
+      },
+      "proximo": {
+       "url": "/en/news/2024-10-28-rain/",
+       "titulo": "Official Artwork: Rain"
       },
       "voltar": {
        "url": "/en/news/",
@@ -23672,8 +23667,8 @@
        "titulo": "Official Artwork: Genius + Genius = Dumb²"
       },
       "proximo": {
-       "url": "/en/news/2024-10-28-rain/",
-       "titulo": "Official Artwork: Rain"
+       "url": "/en/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Official Artwork: Amphibious Doodles"
       },
       "voltar": {
        "url": "/en/news/",
@@ -23999,12 +23994,45 @@
       ],
       "comentarios": "news/2024-04-29-hygranocianos",
       "anterior": {
-       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Non-Canon Funny Exchange on Twitter"
+       "url": "/en/news/2024-04-16-the-chain/",
+       "titulo": "Official Artwork: The Chain"
       },
       "proximo": {
        "url": "/en/news/2024-04-30-solonianos-monocarianos/",
        "titulo": "Solonians and Monocarians"
+      },
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
+    "/en/news/2024-04-16-the-chain/": {
+     "lang": "en",
+     "titulo": "Official Artwork: The Chain",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-16-the-chain/",
+      "pt": "/pt/news/2024-04-16-the-chain/"
+     },
+     "noticia": {
+      "data": "Apr 26, 2024",
+      "h1": "Official Artwork: The Chain",
+      "tags": [
+       "Post",
+       "Official Art"
+      ],
+      "comentarios": "news/2024-04-16-the-chain",
+      "anterior": {
+       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Non-Canon Funny Exchange on Twitter"
+      },
+      "proximo": {
+       "url": "/en/news/2024-04-29-hygranocianos/",
+       "titulo": "Hygranocians"
       },
       "voltar": {
        "url": "/en/news/",
@@ -24032,12 +24060,45 @@
       ],
       "comentarios": "news/2024-04-25-non-canon-funny-exchange",
       "anterior": {
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
+      },
+      "proximo": {
+       "url": "/en/news/2024-04-16-the-chain/",
+       "titulo": "Official Artwork: The Chain"
+      },
+      "voltar": {
+       "url": "/en/news/",
+       "rotulo": "All news"
+      }
+     }
+    },
+    "/en/news/2024-04-11-earths-goofiest-superheroes/": {
+     "lang": "en",
+     "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
+     },
+     "noticia": {
+      "data": "Apr 19, 2024",
+      "h1": "Official Artwork: Earth’s Goofiest Superheroes",
+      "tags": [
+       "Post",
+       "Official Art"
+      ],
+      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
+      "anterior": {
        "url": "/en/news/2024-04-18-trupizianos/",
        "titulo": "Trupizians"
       },
       "proximo": {
-       "url": "/en/news/2024-04-29-hygranocianos/",
-       "titulo": "Hygranocians"
+       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Non-Canon Funny Exchange on Twitter"
       },
       "voltar": {
        "url": "/en/news/",
@@ -24069,8 +24130,8 @@
        "titulo": "Official Artwork: Friday Thirteenth"
       },
       "proximo": {
-       "url": "/en/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Non-Canon Funny Exchange on Twitter"
+       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
       },
       "voltar": {
        "url": "/en/news/",
@@ -24099,79 +24160,12 @@
       ],
       "comentarios": "news/2024-04-16-friday-thirteenth",
       "anterior": {
-       "url": "/en/news/2024-04-16-the-chain/",
-       "titulo": "Official Artwork: The Chain"
-      },
-      "proximo": {
-       "url": "/en/news/2024-04-18-trupizianos/",
-       "titulo": "Trupizians"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2024-04-16-the-chain/": {
-     "lang": "en",
-     "titulo": "Official Artwork: The Chain",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-16-the-chain/",
-      "pt": "/pt/news/2024-04-16-the-chain/"
-     },
-     "noticia": {
-      "data": "Apr 16, 2024",
-      "h1": "Official Artwork: The Chain",
-      "tags": [
-       "Post",
-       "Official Art",
-       "Speedpaint"
-      ],
-      "comentarios": "news/2024-04-16-the-chain",
-      "anterior": {
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
-      },
-      "proximo": {
-       "url": "/en/news/2024-04-16-friday-thirteenth/",
-       "titulo": "Official Artwork: Friday Thirteenth"
-      },
-      "voltar": {
-       "url": "/en/news/",
-       "rotulo": "All news"
-      }
-     }
-    },
-    "/en/news/2024-04-11-earths-goofiest-superheroes/": {
-     "lang": "en",
-     "titulo": "Official Artwork: Earth’s Goofiest Superheroes",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
-     },
-     "noticia": {
-      "data": "Apr 11, 2024",
-      "h1": "Official Artwork: Earth’s Goofiest Superheroes",
-      "tags": [
-       "Post",
-       "Official Art"
-      ],
-      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
-      "anterior": {
        "url": "/en/news/2024-04-11-is-that-how-she-does/",
        "titulo": "Official Artwork: Is That How She Does?"
       },
       "proximo": {
-       "url": "/en/news/2024-04-16-the-chain/",
-       "titulo": "Official Artwork: The Chain"
+       "url": "/en/news/2024-04-18-trupizianos/",
+       "titulo": "Trupizians"
       },
       "voltar": {
        "url": "/en/news/",
@@ -24203,8 +24197,8 @@
        "titulo": "Official Artwork: Dragon Rizz"
       },
       "proximo": {
-       "url": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Official Artwork: Earth’s Goofiest Superheroes"
+       "url": "/en/news/2024-04-16-friday-thirteenth/",
+       "titulo": "Official Artwork: Friday Thirteenth"
       },
       "voltar": {
        "url": "/en/news/",
@@ -24323,7 +24317,7 @@
       "pt": "/pt/news/2024-02-23-avialuna-aeternogyrinians/"
      },
      "noticia": {
-      "data": "Feb 23, 2024",
+      "data": "Feb 28, 2024",
       "h1": "Avialuna's aeternogyrinians",
       "tags": [
        "Post",
@@ -25455,19 +25449,6 @@
       },
       {
        "escondida": true,
-       "busca": "Arte Oficial: Rabiscos do Anfíbio Post Arte Oficial 25 de nov. de 2025 ",
-       "data": "25 de nov. de 2025",
-       "titulo": "Arte Oficial: Rabiscos do Anfíbio",
-       "miniatura": "/news/amphibious-doodles.png",
-       "tags": [
-        "Post",
-        "Arte Oficial"
-       ],
-       "resumo": "",
-       "url": "/pt/news/2025-11-25-amphibious-doodles/"
-      },
-      {
-       "escondida": true,
        "busca": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic Post Arte Oficial 25 de nov. de 2025 ",
        "data": "25 de nov. de 2025",
        "titulo": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic",
@@ -25665,6 +25646,19 @@
       },
       {
        "escondida": true,
+       "busca": "Arte Oficial: Rabiscos do Anfíbio Post Arte Oficial 25 de out. de 2024 ",
+       "data": "25 de out. de 2024",
+       "titulo": "Arte Oficial: Rabiscos do Anfíbio",
+       "miniatura": "/news/amphibious-doodles.png",
+       "tags": [
+        "Post",
+        "Arte Oficial"
+       ],
+       "resumo": "",
+       "url": "/pt/news/2025-11-25-amphibious-doodles/"
+      },
+      {
+       "escondida": true,
        "busca": "Arte Oficial: Apollo Sola Post Arte Oficial 25 de jul. de 2024 ",
        "data": "25 de jul. de 2024",
        "titulo": "Arte Oficial: Apollo Sola",
@@ -25809,6 +25803,19 @@
       },
       {
        "escondida": true,
+       "busca": "Arte Oficial: A Corrente Post Arte Oficial 26 de abr. de 2024 Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens! Esses são Aeschyllus, Samma, Kolotto'i, Nallewi, Uritei, Sk-26-13b e Kalai. Sintam-se à vontade para fazer qualquer pergunta sobre eles ^^",
+       "data": "26 de abr. de 2024",
+       "titulo": "Arte Oficial: A Corrente",
+       "miniatura": "/news/the-chain.png",
+       "tags": [
+        "Post",
+        "Arte Oficial"
+       ],
+       "resumo": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
+       "url": "/pt/news/2024-04-16-the-chain/"
+      },
+      {
+       "escondida": true,
        "busca": "Troca Engraçada Não Canônica no Twitter Post Arte Oficial 25 de abr. de 2024 ",
        "data": "25 de abr. de 2024",
        "titulo": "Troca Engraçada Não Canônica no Twitter",
@@ -25819,6 +25826,19 @@
        ],
        "resumo": "",
        "url": "/pt/news/2024-04-25-non-canon-funny-exchange/"
+      },
+      {
+       "escondida": true,
+       "busca": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra Post Arte Oficial 19 de abr. de 2024 ",
+       "data": "19 de abr. de 2024",
+       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+       "miniatura": "/news/earths-goofiest-superheroes.png",
+       "tags": [
+        "Post",
+        "Arte Oficial"
+       ],
+       "resumo": "",
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -25846,33 +25866,6 @@
        ],
        "resumo": "",
        "url": "/pt/news/2024-04-16-friday-thirteenth/"
-      },
-      {
-       "escondida": true,
-       "busca": "Arte Oficial: A Corrente Post Arte Oficial Speedpaint 16 de abr. de 2024 Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens! Esses são Aeschyllus, Samma, Kolotto'i, Nallewi, Uritei, Sk-26-13b e Kalai. Sintam-se à vontade para fazer qualquer pergunta sobre eles ^^",
-       "data": "16 de abr. de 2024",
-       "titulo": "Arte Oficial: A Corrente",
-       "miniatura": "/news/the-chain.png",
-       "tags": [
-        "Post",
-        "Arte Oficial",
-        "Speedpaint"
-       ],
-       "resumo": "Como hoje é o Dia do Alien, aqui está um desenho INCRÍVEL que eu encomendei de @domadordedinoss dos meus personagens Aliens!…",
-       "url": "/pt/news/2024-04-16-the-chain/"
-      },
-      {
-       "escondida": true,
-       "busca": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra Post Arte Oficial 11 de abr. de 2024 ",
-       "data": "11 de abr. de 2024",
-       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-       "miniatura": "/news/earths-goofiest-superheroes.png",
-       "tags": [
-        "Post",
-        "Arte Oficial"
-       ],
-       "resumo": "",
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
       },
       {
        "escondida": true,
@@ -25928,8 +25921,8 @@
       },
       {
        "escondida": true,
-       "busca": "Os Eternogirinos de Avialuna Post Worldbuilding 23 de fev. de 2024 ",
-       "data": "23 de fev. de 2024",
+       "busca": "Os Eternogirinos de Avialuna Post Worldbuilding 28 de fev. de 2024 ",
+       "data": "28 de fev. de 2024",
        "titulo": "Os Eternogirinos de Avialuna",
        "miniatura": "/news/avialuna-aeternogyrinians.png",
        "tags": [
@@ -27287,45 +27280,12 @@
       ],
       "comentarios": "news/2025-11-26-proto-articulado",
       "anterior": {
-       "url": "/pt/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
-      },
-      "proximo": {
-       "url": "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/",
-       "titulo": "Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2025-11-25-amphibious-doodles/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: Rabiscos do Anfíbio",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2025-11-25-amphibious-doodles/",
-      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
-     },
-     "noticia": {
-      "data": "25 de nov. de 2025",
-      "h1": "Arte Oficial: Rabiscos do Anfíbio",
-      "tags": [
-       "Post",
-       "Arte Oficial"
-      ],
-      "comentarios": "news/2025-11-25-amphibious-doodles",
-      "anterior": {
        "url": "/pt/news/2025-11-25-amphibious-sonic-pose/",
        "titulo": "Arte Oficial: Anfíbio Fazendo a Pose do Sonic"
       },
       "proximo": {
-       "url": "/pt/news/2025-11-26-proto-articulado/",
-       "titulo": "Proto-Articulado, a linguagem dos caranguejos"
+       "url": "/pt/news/2025-12-01-dia-1-especulacao-evolutiva/",
+       "titulo": "Dia 1 desenhando uma criatura de Especulação Evolutiva de Hᴀᴛᴇ Cʏᴄʟᴇ todos os dias por que eu comprei um caderno novo e eu não sei o que mais fazer com ele"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -27357,8 +27317,8 @@
        "titulo": "Melhores amigos em todos os universos"
       },
       "proximo": {
-       "url": "/pt/news/2025-11-25-amphibious-doodles/",
-       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
+       "url": "/pt/news/2025-11-26-proto-articulado/",
+       "titulo": "Proto-Articulado, a linguagem dos caranguejos"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -27817,12 +27777,45 @@
       ],
       "comentarios": "news/2024-10-28-rain",
       "anterior": {
-       "url": "/pt/news/2024-07-25-apollo-no-diffs/",
-       "titulo": "Arte Oficial: Apollo Sola"
+       "url": "/pt/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
       },
       "proximo": {
        "url": "/pt/news/2024-11-04-he-a-little-guy/",
        "titulo": "Arte Oficial: He a little guy"
+      },
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
+    "/pt/news/2025-11-25-amphibious-doodles/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: Rabiscos do Anfíbio",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2025-11-25-amphibious-doodles/",
+      "pt": "/pt/news/2025-11-25-amphibious-doodles/"
+     },
+     "noticia": {
+      "data": "25 de out. de 2024",
+      "h1": "Arte Oficial: Rabiscos do Anfíbio",
+      "tags": [
+       "Post",
+       "Arte Oficial"
+      ],
+      "comentarios": "news/2025-11-25-amphibious-doodles",
+      "anterior": {
+       "url": "/pt/news/2024-07-25-apollo-no-diffs/",
+       "titulo": "Arte Oficial: Apollo Sola"
+      },
+      "proximo": {
+       "url": "/pt/news/2024-10-28-rain/",
+       "titulo": "Arte Oficial: Chuva"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -27854,8 +27847,8 @@
        "titulo": "Arte Oficial: Gênio + Gênio = Burro²"
       },
       "proximo": {
-       "url": "/pt/news/2024-10-28-rain/",
-       "titulo": "Arte Oficial: Chuva"
+       "url": "/pt/news/2025-11-25-amphibious-doodles/",
+       "titulo": "Arte Oficial: Rabiscos do Anfíbio"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28181,12 +28174,45 @@
       ],
       "comentarios": "news/2024-04-29-hygranocianos",
       "anterior": {
-       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Troca Engraçada Não Canônica no Twitter"
+       "url": "/pt/news/2024-04-16-the-chain/",
+       "titulo": "Arte Oficial: A Corrente"
       },
       "proximo": {
        "url": "/pt/news/2024-04-30-solonianos-monocarianos/",
        "titulo": "Solonianos e Monocarianos"
+      },
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
+    "/pt/news/2024-04-16-the-chain/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: A Corrente",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-16-the-chain/",
+      "pt": "/pt/news/2024-04-16-the-chain/"
+     },
+     "noticia": {
+      "data": "26 de abr. de 2024",
+      "h1": "Arte Oficial: A Corrente",
+      "tags": [
+       "Post",
+       "Arte Oficial"
+      ],
+      "comentarios": "news/2024-04-16-the-chain",
+      "anterior": {
+       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Troca Engraçada Não Canônica no Twitter"
+      },
+      "proximo": {
+       "url": "/pt/news/2024-04-29-hygranocianos/",
+       "titulo": "Hygranocianos"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28214,12 +28240,45 @@
       ],
       "comentarios": "news/2024-04-25-non-canon-funny-exchange",
       "anterior": {
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
+      },
+      "proximo": {
+       "url": "/pt/news/2024-04-16-the-chain/",
+       "titulo": "Arte Oficial: A Corrente"
+      },
+      "voltar": {
+       "url": "/pt/news/",
+       "rotulo": "Todas as notícias"
+      }
+     }
+    },
+    "/pt/news/2024-04-11-earths-goofiest-superheroes/": {
+     "lang": "pt",
+     "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+     "cls": "news-page",
+     "desc": "",
+     "imagem": "",
+     "noindex": false,
+     "alt": {
+      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
+      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
+     },
+     "noticia": {
+      "data": "19 de abr. de 2024",
+      "h1": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
+      "tags": [
+       "Post",
+       "Arte Oficial"
+      ],
+      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
+      "anterior": {
        "url": "/pt/news/2024-04-18-trupizianos/",
        "titulo": "Trupizianos"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-29-hygranocianos/",
-       "titulo": "Hygranocianos"
+       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
+       "titulo": "Troca Engraçada Não Canônica no Twitter"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28251,8 +28310,8 @@
        "titulo": "Arte Oficial: Sexta-feira 13"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-25-non-canon-funny-exchange/",
-       "titulo": "Troca Engraçada Não Canônica no Twitter"
+       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
+       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28281,79 +28340,12 @@
       ],
       "comentarios": "news/2024-04-16-friday-thirteenth",
       "anterior": {
-       "url": "/pt/news/2024-04-16-the-chain/",
-       "titulo": "Arte Oficial: A Corrente"
-      },
-      "proximo": {
-       "url": "/pt/news/2024-04-18-trupizianos/",
-       "titulo": "Trupizianos"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2024-04-16-the-chain/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: A Corrente",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-16-the-chain/",
-      "pt": "/pt/news/2024-04-16-the-chain/"
-     },
-     "noticia": {
-      "data": "16 de abr. de 2024",
-      "h1": "Arte Oficial: A Corrente",
-      "tags": [
-       "Post",
-       "Arte Oficial",
-       "Speedpaint"
-      ],
-      "comentarios": "news/2024-04-16-the-chain",
-      "anterior": {
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
-      },
-      "proximo": {
-       "url": "/pt/news/2024-04-16-friday-thirteenth/",
-       "titulo": "Arte Oficial: Sexta-feira 13"
-      },
-      "voltar": {
-       "url": "/pt/news/",
-       "rotulo": "Todas as notícias"
-      }
-     }
-    },
-    "/pt/news/2024-04-11-earths-goofiest-superheroes/": {
-     "lang": "pt",
-     "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-     "cls": "news-page",
-     "desc": "",
-     "imagem": "",
-     "noindex": false,
-     "alt": {
-      "en": "/en/news/2024-04-11-earths-goofiest-superheroes/",
-      "pt": "/pt/news/2024-04-11-earths-goofiest-superheroes/"
-     },
-     "noticia": {
-      "data": "11 de abr. de 2024",
-      "h1": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra",
-      "tags": [
-       "Post",
-       "Arte Oficial"
-      ],
-      "comentarios": "news/2024-04-11-earths-goofiest-superheroes",
-      "anterior": {
        "url": "/pt/news/2024-04-11-is-that-how-she-does/",
        "titulo": "Arte Oficial: É Assim Que Ela Faz?"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-16-the-chain/",
-       "titulo": "Arte Oficial: A Corrente"
+       "url": "/pt/news/2024-04-18-trupizianos/",
+       "titulo": "Trupizianos"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28385,8 +28377,8 @@
        "titulo": "Arte Oficial: Dragon Rizz"
       },
       "proximo": {
-       "url": "/pt/news/2024-04-11-earths-goofiest-superheroes/",
-       "titulo": "Arte Oficial: Os Super-Heróis Mais Bobos da Terra"
+       "url": "/pt/news/2024-04-16-friday-thirteenth/",
+       "titulo": "Arte Oficial: Sexta-feira 13"
       },
       "voltar": {
        "url": "/pt/news/",
@@ -28505,7 +28497,7 @@
       "pt": "/pt/news/2024-02-23-avialuna-aeternogyrinians/"
      },
      "noticia": {
-      "data": "23 de fev. de 2024",
+      "data": "28 de fev. de 2024",
       "h1": "Os Eternogirinos de Avialuna",
       "tags": [
        "Post",
