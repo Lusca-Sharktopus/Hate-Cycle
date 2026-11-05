@@ -287,3 +287,25 @@ describe("segurança: o código que vai para o navegador", () => {
     expect(atribuicoes.sort()).toEqual(['""', '""', 't("c_loading")'].sort());
   });
 });
+
+// 05/11/2026 (depois da virada): o erro que o Supabase devolve no endereço quando o login com Google/Twitter/Discord falha
+import { erroDoRetornoDoLogin } from "../src/scripts/login/janela";
+describe("erroDoRetornoDoLogin (o erro do login no endereço)", () => {
+  test("sem erro no endereço: nada", () => {
+    expect(erroDoRetornoDoLogin("", "", "pt")).toBeNull();
+    expect(erroDoRetornoDoLogin("#p3", "?p=2", "pt")).toBeNull();
+    expect(erroDoRetornoDoLogin("#access_token=x&refresh_token=y&token_type=bearer", "", "pt")).toBeNull();
+  });
+  test("erro no hash ou na busca: a frase fixa + a descrição do Supabase", () => {
+    expect(erroDoRetornoDoLogin("#error=server_error&error_code=unexpected_failure&error_description=Database+error+saving+new+user", "", "pt")).toBe(
+      "O login não deu certo. O servidor respondeu: Database error saving new user",
+    );
+    expect(erroDoRetornoDoLogin("", "?error=access_denied&error_description=Email+link+is+invalid", "en")).toBe("The login didn't work. The server said: Email link is invalid");
+    expect(erroDoRetornoDoLogin("#error=invalid_request", "", "pt")).toBe("O login não deu certo. O servidor respondeu: invalid_request");
+  });
+  test("texto do endereço montado por outra pessoa: sem caracteres de HTML nem de endereço, até 160", () => {
+    const r = erroDoRetornoDoLogin("#error=x&error_description=" + encodeURIComponent('<img src=x onerror="alert(1)"> visite http://golpe.test ' + "a".repeat(300)), "", "pt") ?? "";
+    expect(r).not.toMatch(/[<>"/]/);
+    expect(r.length).toBeLessThanOrEqual("O login não deu certo. O servidor respondeu: ".length + 160);
+  });
+});

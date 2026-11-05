@@ -7,6 +7,7 @@
 // A configuração vem do window.HC que a própria página traz, ANTES deste script (um <script> comum no HTML, montado por
 // src/lib/comentarios.ts, o único arquivo que lê config.json → comments). A chave é a "anon": pública por desenho; quem
 // protege os dados é o RLS do banco (supabase/migrations/).
+import { erroDoRetornoDoLogin } from "../login/janela";
 import { clienteDoSupabase } from "../supabase/cliente";
 import { iniciarComentarios, lerConfiguracao } from "./caixa";
 
@@ -18,4 +19,8 @@ declare global {
 
 const cfg = lerConfiguracao(window.HC);
 const raiz = document.querySelector<HTMLElement>(".hc-comments[data-page]");
-if (cfg && raiz) iniciarComentarios(raiz, cfg, clienteDoSupabase(cfg.url, cfg.key));
+if (cfg && raiz) {
+  // 05/11: o erro do login com Google/Twitter/Discord é lido ANTES de criar a conexão (o supabase-js limpa o endereço)
+  const erroDoLogin = erroDoRetornoDoLogin(location.hash, location.search, cfg.lang);
+  iniciarComentarios(raiz, cfg, clienteDoSupabase(cfg.url, cfg.key), erroDoLogin);
+}

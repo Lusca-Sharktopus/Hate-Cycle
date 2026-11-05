@@ -12,7 +12,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { animarEntrada } from "../comentarios/dom";
 import { textosComPadrao } from "../comentarios/regras";
-import { janelaDeLogin, textosDoLogin, type EstadoDoLogin } from "../login/janela";
+import { erroDoRetornoDoLogin, janelaDeLogin, textosDoLogin, type EstadoDoLogin } from "../login/janela";
 import { clienteDoSupabase } from "../supabase/cliente";
 import {
   horariosDaSequencia,
@@ -375,6 +375,15 @@ declare global {
 
 const cfg = typeof window !== "undefined" ? lerConfiguracaoDosFavoritos(window.HC_FAV) : null;
 if (cfg) {
+  // 05/11: o login pode ter começado aqui (aviso dos favoritos → Entrar): se voltou com erro, ele aparece na mensagem da seção
+  const erroDoLogin = erroDoRetornoDoLogin(location.hash, location.search, cfg.lang);
+  if (erroDoLogin) {
+    const aviso = document.createElement("p");
+    aviso.className = "c-msg fav-erro-do-login";
+    aviso.setAttribute("role", "alert");
+    aviso.textContent = erroDoLogin;
+    document.querySelector(".stories-block .stories-head")?.after(aviso);
+  }
   const sb = clienteDoSupabase(cfg.url, cfg.key);
   document.querySelectorAll<HTMLElement>(".stories-block").forEach((secao) => iniciarFavoritos(secao, cfg, sb));
 }

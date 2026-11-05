@@ -71,7 +71,7 @@ export function lerConfiguracao(hc: unknown): ConfiguracaoDosComentarios | null 
 type Erro = { message?: unknown } | null | undefined;
 
 /** Monta a caixa dentro de `raiz` (a <section class="hc-comments" data-page>) e liga tudo ao Supabase. */
-export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComentarios, sb: SupabaseClient): void {
+export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComentarios, sb: SupabaseClient, erroDoLogin: string | null = null): void {
   const app = raiz.querySelector<HTMLElement>(".c-app");
   const pagina = raiz.dataset["page"];
   if (!app || !pagina) return;
@@ -83,7 +83,7 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   let modo: "login" | "signup" = "login";
   let trocandoSenha = false; // "recovery": a pessoa chegou pelo link de nova senha do e-mail
   let aviso: string | null = null; // "notice" (verde)
-  let erro: string | null = null; // "flash" (amarelo)
+  let erro: string | null = erroDoLogin; // "flash" (amarelo); 05/11: começa com o erro do login com Google/Twitter/Discord, se voltou um
 
   const caixaDeLogin = el("div");
   const lista = el("div");

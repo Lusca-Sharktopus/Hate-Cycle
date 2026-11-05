@@ -16,9 +16,33 @@ import { enderecoDeVolta, mensagemDeErro, texto, type TextosDaCaixa } from "../c
 import { ligarCirculo } from "./circulo";
 
 export const TEXTOS_DO_LOGIN = {
-  pt: { google: "continuar com Google", twitter: "continuar com Twitter", discord: "continuar com Discord", titulo: "Entre ou crie uma conta" },
-  en: { google: "continue with Google", twitter: "continue with Twitter", discord: "continue with Discord", titulo: "Log in or create an account" },
+  pt: { google: "continuar com Google", twitter: "continuar com Twitter", discord: "continuar com Discord", titulo: "Entre ou crie uma conta", falhou: "O login não deu certo. O servidor respondeu:" },
+  en: { google: "continue with Google", twitter: "continue with Twitter", discord: "continue with Discord", titulo: "Log in or create an account", falhou: "The login didn't work. The server said:" },
 } as const;
+
+/**
+ * (05/11/2026, depois da virada) Quando o login com Google/Twitter/Discord falha, o Supabase devolve a pessoa à página com o erro no
+ * endereço (#error=…&error_description=… ou ?error=…) e o supabase-js não mostra nada: a pessoa só via a janela de login de novo.
+ * Esta função lê esse erro (antes de o supabase-js limpar o endereço) e devolve a frase para a caixa mostrar. O texto vem do endereço,
+ * que qualquer um pode montar num link: só letras, números e pontuação simples, até 160 caracteres, e sempre depois da frase fixa
+ * `falhou`. Função pura (o teste usa).
+ */
+export function erroDoRetornoDoLogin(hash: string, search: string, lang: string): string | null {
+  for (const parte of [hash.replace(/^#/, ""), search.replace(/^\?/, "")]) {
+    if (!parte) continue;
+    let p: URLSearchParams;
+    try {
+      p = new URLSearchParams(parte);
+    } catch {
+      continue;
+    }
+    if (!p.has("error") && !p.has("error_description")) continue;
+    const bruto = p.get("error_description") || p.get("error_code") || p.get("error") || "";
+    const limpo = bruto.replace(/[^A-Za-z0-9À-ÿ .,:;()'_-]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
+    return `${textosDoLogin(lang).falhou} ${limpo || "?"}`;
+  }
+  return null;
+}
 export type TextosDoLogin = (typeof TEXTOS_DO_LOGIN)["pt"] | (typeof TEXTOS_DO_LOGIN)["en"];
 export function textosDoLogin(lang: string): TextosDoLogin {
   return lang.toLowerCase().startsWith("pt") ? TEXTOS_DO_LOGIN.pt : TEXTOS_DO_LOGIN.en;
