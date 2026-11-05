@@ -328,6 +328,10 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 
 - O texto de cada página fica em `content/pages/project/` (Histórias) e `content/pages/about/` (Sobre). Dentro do texto,
   as linhas `{{stories}}`, `{{emissaries}}` e `{{other-stories}}` marcam onde entram os cards. Mude a ordem mudando as linhas de lugar.
+- **Desde 05/11/2026 a Sobre mora na página inicial:** o texto inteiro ("Sobre o projeto", "Sobre o autor", os Emissários e o Contato)
+  aparece logo abaixo das histórias, na home. Continue editando os mesmos arquivos (`content/pages/project/` e `content/pages/about/`).
+  O item "Sobre" do menu leva até essa parte da home (`/pt/#sobre`, `/en/#about`), e o endereço antigo `hatecycle.com/pt/about/` continua
+  funcionando: ele leva para lá.
 - Página larga como a "Sobre": `layout: wide` no topo do arquivo.
 - Para o texto contornar imagens, use as classes `apollo-gif`, `anfibio-gif` e `autor-foto`.
 

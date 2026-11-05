@@ -12,6 +12,7 @@
 //   * o fundo leve da abertura e o ícone do site.
 // As diferenças aceitas no HTML (os 5 atributos novos da <img>, os <link> de fonte e o ícone) estão em tests/ajudantes/html.ts, e
 // tests/paginas.test.ts prova que, fora isso, cada página continua igual à do site Python.
+import { ehRedirecionamentoDoSobre } from "./ajudantes/html";
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -365,7 +366,9 @@ describe("fontes: servidas pelo próprio site", () => {
     const css = arquivosDe(dist).filter((a) => a.startsWith("_astro/") && a.endsWith(".css")).map((a) => readFileSync(join(dist, a), "utf8")).join("\n");
     for (const arquivo of htmlsDoDist()) {
       if (/^[^/]+\.html$/.test(arquivo) && arquivo !== "404.html" && arquivo !== "index.html") continue; // os redirects do site antigo não têm <head> do site
-      const doc = parse(readFileSync(join(dist, arquivo), "utf8"));
+      const bruto = readFileSync(join(dist, arquivo), "utf8");
+      if (ehRedirecionamentoDoSobre(bruto)) continue; // 05/11: /about/ também só redireciona (a Sobre mora na home)
+      const doc = parse(bruto);
       const pre = varrer(doc, (e) => e.tagName === "link" && attr(e, "rel") === "preload");
       if (arquivo === "index.html") continue; // a raiz é só o redirecionamento por idioma
       expect(pre.map((l) => attr(l, "href")?.replace(/^\/_astro\/([a-z-]+)-latin-wght-normal\..*$/, "$1")).sort(), arquivo).toEqual(["lexend", "oswald"]);

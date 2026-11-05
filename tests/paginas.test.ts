@@ -33,7 +33,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { t } from "../src/lib/config";
 import { pyStrip } from "../src/lib/frontmatter";
-import { rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { ehRedirecionamentoDoSobre, menuDoSobreComoNoPython, semChamadaDoSobre, semSobreNaHome, rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -124,7 +124,10 @@ function trocarCanalDoYoutube(url: string, html: string): string {
   const lr = (lang ?? "en") as "en" | "pt";
   const f = rodapeComoNoPython(r.html, lr, t(lr, "rss"));
   if (f.linhas !== 1 || f.janelas !== 1) throw new Error(`${url}: o rodapé devia ter 1 linha nova e 1 janela da política (linhas ${f.linhas}, janelas ${f.janelas})`);
-  return f.html;
+  // 05/11: o item "Sobre" do menu leva à seção da home (/pt/#sobre; src/lib/sobreNaHome.ts); no Python, a /pt/about/
+  const m = menuDoSobreComoNoPython(f.html);
+  if (/<nav class="main-nav"[^>]*>[\s\S]*?href="\/(en|pt)\/#/.test(m.html)) throw new Error(`${url}: sobrou um link do menu para uma âncora da home com forma inesperada`);
+  return m.html;
 }
 
 /** O ano do rodapé é o do dia do build ("© 2023 - 2026"): troca por um marcador para o teste não quebrar em 1º de janeiro. */
@@ -160,7 +163,8 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
  *  T17m: os scripts oficiais, como no site antigo; a exceção semScriptsDosPosts da T17g saiu.) */
 function pythonComoNoAstro(html: string): string {
   // 28/10: o Astro não desenha mais a data sob o título do capítulo (tests/ajudantes/html.ts → semDataDoCapitulo)
-  return semDataDoCapitulo(soQuatroHistoriasNaHome(html).html).html;
+  // 05/11: a home do Python tem a chamada "Sobre"; a do Astro, a Sobre inteira (conferida à parte, no teste "a Sobre na home")
+  return semChamadaDoSobre(semDataDoCapitulo(soQuatroHistoriasNaHome(html).html).html).html;
 }
 /** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j); o leitor página a página
  *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
@@ -174,7 +178,7 @@ function astroComoNoPython(html: string): string {
   // T17m: o cartão da obra que só tem capítulo no outro idioma leva até lá (no Python, "Em breve"; tests/obras-em-outro-idioma.test.ts)
   const lang = /<html lang="pt/.test(j.html) ? "pt" : "en";
   const c = cartaoEmOutroIdiomaComoNoPython(j.html, t(lang, "soon"));
-  return resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html;
+  return semSobreNaHome(resumoCortadoComoNoPython(homeComoNoPython(c.html).html).html).html;
 }
 
 // ───────────── página a página, grupo a grupo ─────────────
@@ -195,7 +199,8 @@ for (const ref of refs) {
       });
     }
 
-    describe.each(urls)("%s", (url) => {
+    // 05/11: /pt/about/ e /en/about/ só redirecionam (a Sobre mora na home): conferidas no teste "a Sobre na home", lá embaixo
+    describe.each(urls.filter((u) => !/^\/(en|pt)\/about\/$/.test(u)))("%s", (url) => {
       let py: PaginaLida;
       let astro: PaginaLida;
       beforeAll(() => {
@@ -370,6 +375,8 @@ describe("sitemap.xml", () => {
     return arquivosDe(pasta)
       .filter((a) => a.endsWith(".html") && a !== "index.html" && a !== "404.html" && !baseDeRedirects.has(a) && !a.startsWith("dev/"))
       .filter((a) => !RE_NOINDEX.test(readFileSync(join(pasta, a), "utf8")))
+      // 05/11: /pt/about/ e /en/about/ só redirecionam para a Sobre na home: fora do sitemap
+      .filter((a) => !ehRedirecionamentoDoSobre(readFileSync(join(pasta, a), "utf8")))
       .map((a) => "https://hatecycle.com" + enderecoDoHtml(a))
       .sort();
   }
@@ -387,7 +394,7 @@ describe("sitemap.xml", () => {
     const l = listadas(dist);
     for (const fora of ["https://hatecycle.com/", "https://hatecycle.com/404.html", "https://hatecycle.com/PT.html", "https://hatecycle.com/en/works/all-in-a-nights-work/01/"]) expect(l, fora).not.toContain(fora);
     expect(l).toContain("https://hatecycle.com/en/");
-    expect(l).toContain("https://hatecycle.com/pt/about/");
+    expect(l).not.toContain("https://hatecycle.com/pt/about/"); // 05/11: a Sobre mora na home (/about/ só redireciona)
     expect(new Set(l).size, "endereços repetidos").toBe(l.length);
   });
   test("com rascunhos e Extras ligados, o sitemap também acompanha o site (Apoio, Universo, Personagens)", () => {
@@ -416,7 +423,8 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
     expect(doAstro, REFAZER).toEqual([...Object.keys(c.paginas), ...Object.keys(c.partes)].sort());
   }, 240_000);
 
-  test.each(Object.keys(c.paginas))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
+  const SOBRE = /^\/(en|pt)\/about\/$/;
+  test.each(Object.keys(c.paginas).filter((u) => !SOBRE.test(u)))("página do grupo t14 %s: <head>, <main>, runas, cabeçalho e rodapé", (url) => {
     const py = lerPagina(pythonComoNoAstro(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html));
     const astro = lerPagina(trocarCanalDoYoutube(url, lerComMarcadores(join(outra(), url.slice(1), "index.html"))));
     expect(astro.cabeca.titulo).toBe(py.cabeca.titulo);
@@ -427,6 +435,20 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
     expect(astro.cabecalho).toBe(py.cabecalho);
     expect(astro.classeDoCorpo).toBe(py.classeDoCorpo);
     expect(semAno(astro.rodape)).toBe(semAno(py.rodape));
+  }, 240_000);
+
+  // 05/11/2026: a Sobre mora na home (src/lib/sobreNaHome.ts): /about/ só redireciona, e o <article> da home é o <main> da Sobre do Python
+  test.each(Object.keys(c.paginas).filter((u) => SOBRE.test(u)))("a Sobre na home: %s redireciona e o texto inteiro está na home", (url) => {
+    const lang = url.slice(1, 3);
+    expect(ehRedirecionamentoDoSobre(readFileSync(join(outra(), url.slice(1), "index.html"), "utf8"))).toBe(true);
+    const py = pythonComoNoAstro(semScriptsAntigosDosComentarios(c.paginas[url] ?? "").html);
+    const home = comMarcadores(readFileSync(join(outra(), lang, "index.html"), "utf8"), { url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" }).html;
+    const artigo = semSobreNaHome(miolo(home)).artigo;
+    expect(artigo, "a home não tem a Sobre").not.toBe("");
+    // no Python o <article> abre com o <h1> só para leitor de tela; na home, o <article> tem a âncora e não tem <h1> (a home já tem o dela)
+    const h1 = /<h1 class="sr-only">[^<]*<\/h1>/.exec(miolo(c.paginas[url] ?? ""))?.[0] ?? "";
+    const comoNoPython = artigo.replace(/^<article id="(sobre|about)" class="wrap wide block page-about">/, `<article class="wrap wide block page-about">${h1}`);
+    expect(canonicoDoMiolo(comoNoPython)).toBe(canonicoDoMiolo(miolo(py)));
   }, 240_000);
 
   test("sanidade da referência: com Extras ligados o cabeçalho do Python traz Universo, Personagens e Apoio", () => {
@@ -444,7 +466,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
       const py = c.partes[url];
       if (!py) continue;
       const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
-      if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
+      if (canonicoDoMiolo(menuDoSobreComoNoPython(cabecalho(html)).html) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
       if (canonicoDoMiolo(semFavoritos(miolo(html)).html) !== canonicoDoMiolo(pythonComoNoAstro(semScriptsAntigosDosComentarios(py.main).html))) diferentes.push(`${url} (<main>)`);
     }
     expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);
@@ -860,6 +882,7 @@ describe("T17h: o ícone do YouTube do rodapé leva ao canal do idioma em TODAS 
       const html = readFileSync(arquivo, "utf8");
       const lang = /^\/(en|pt)\//.exec(url)?.[1];
       if (!lang) continue; // a raiz (redireciona) e os redirects antigos não têm rodapé
+      if (ehRedirecionamentoDoSobre(html)) continue; // 05/11: /about/ também só redireciona (a Sobre mora na home)
       expect(doYoutube(html), url).toEqual([lang === "en" ? "https://www.youtube.com/@HateCycleEn" : "https://www.youtube.com/@HateCycleBR"]);
       expect(html, `${url}: link antigo do canal`).not.toMatch(/youtube\.com\/@HateCycle(?![A-Za-z])/);
       n += 1;

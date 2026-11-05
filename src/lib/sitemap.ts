@@ -10,6 +10,7 @@
 import type { Lang } from "./config";
 import { esc } from "./markdown";
 import { paginaTemRota } from "./paginasAvulsas";
+import { PASTA_DO_SOBRE } from "./sobreNaHome";
 import { obraTemPagina, type ObraVisivel } from "./visibilidade";
 
 /** O que o sitemap lê de `dadosDoIdioma()` (o resultado completo serve). */
@@ -36,7 +37,8 @@ export function enderecosDoSitemap<O extends ObraVisivel>(dadosDe: readonly Dado
       for (const c of listados) urls.push(`/${l}/works/${slug}/${c.data._origem.capitulo}/`);
     }
     if (dados.noticias.length > 0) urls.push(`/${l}/news/`, ...dados.noticias.map((n) => `/${l}/news/${n.data._origem.slug}/`));
-    urls.push(...dados.paginas.filter(paginaTemRota).map((p) => `/${l}/${p.data._origem.slug}/`));
+    // 05/11/2026: a Sobre mora na home (/about/ só redireciona): sai do sitemap
+    urls.push(...dados.paginas.filter((p) => paginaTemRota(p) && p.data._origem.slug !== PASTA_DO_SOBRE).map((p) => `/${l}/${p.data._origem.slug}/`));
     if (dados.universoExtra.length > 0) urls.push(`/${l}/universe/`, ...dados.universoExtra.map((i) => `/${l}/universe/${i.data._origem.slug}/`));
     if (dados.personagens.length > 0) urls.push(`/${l}/characters/`, ...dados.personagens.map((i) => `/${l}/characters/${i.data._origem.slug}/`));
   }

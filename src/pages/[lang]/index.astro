@@ -4,9 +4,12 @@
 // Lição: docs/aprendendo-astro/07-paginas.md.
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ConteudoDaHome from "../../components/ConteudoDaHome.astro";
-import { langs, siteName, type Lang } from "../../lib/config";
-import { COM_RASCUNHOS, dadosDoIdioma } from "../../lib/conteudo";
-import { dadosDaHome } from "../../lib/paginas";
+import SecaoEmissarios from "../../components/SecaoEmissarios.astro";
+import { emissariosMostramTextos, langs, siteName, type Lang } from "../../lib/config";
+import { COM_RASCUNHOS, dadosDeTodosOsIdiomas, dadosDoIdioma } from "../../lib/conteudo";
+import { dadosDaHome, dadosDosAtalhos } from "../../lib/paginas";
+import { paginasAvulsas } from "../../lib/paginasAvulsas";
+import { PASTA_DO_SOBRE } from "../../lib/sobreNaHome";
 
 export function getStaticPaths() {
   return langs.map((lang) => ({ params: { lang } }));
@@ -16,9 +19,15 @@ const lang = Astro.params.lang as Lang;
 const dados = await dadosDoIdioma(lang);
 const home = dadosDaHome(dados, COM_RASCUNHOS);
 const alternates = Object.fromEntries(langs.map((l) => [l, `/${l}/`]));
+// 05/11/2026: a página Sobre inteira, logo abaixo das histórias (src/lib/sobreNaHome.ts)
+const dadosDe = await dadosDeTodosOsIdiomas();
+const publicadas = Object.fromEntries(langs.map((l) => [l, dadosDe[l].paginas])) as Record<Lang, (typeof dadosDe)[Lang]["paginas"]>;
+const sobre = paginasAvulsas(dados.paginas, lang, publicadas).find((p) => p.pasta === PASTA_DO_SOBRE);
+const { emissarios } = dadosDosAtalhos(dados, COM_RASCUNHOS, emissariosMostramTextos);
 ---
 
 {/* title = o nome do site: a aba da home mostra só "Hᴀᴛᴇ Cʏᴄʟᴇ". bodyClass="home" é o cls="home" do build.py. */}
 <BaseLayout lang={lang} title={siteName} alternates={alternates} bodyClass="home">
-  <ConteudoDaHome lang={lang} dados={home} />
+  <ConteudoDaHome lang={lang} dados={home} sobre={sobre} />
+  {sobre?.atalhos.includes("emissaries") && <SecaoEmissarios slot="atalho-emissaries" lang={lang} cartoes={emissarios} />}
 </BaseLayout>

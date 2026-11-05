@@ -15,12 +15,15 @@ import PostsAlternados from "./PostsAlternados.astro";
 
 interface Props {
   pagina: PaginaAvulsa;
+  /** 05/11/2026: na home (a Sobre, src/lib/sobreNaHome.ts) o <article> ganha a âncora e não tem <h1> (a home já tem o dela; o texto
+   *  da Sobre abre com os próprios títulos "## Sobre o projeto" / "## Sobre o autor"). */
+  ancoraNaHome?: string;
 }
 
-const { pagina: p } = Astro.props;
+const { pagina: p, ancoraNaHome } = Astro.props;
 ---
 
-<article class={`wrap ${p.largura} block ${p.classe}`}>{p.avisoDeRascunho && <p class="draft-banner">{p.avisoDeRascunho}</p>}<h1 class={p.largura === "wide" ? "sr-only" : undefined}>{p.titulo}</h1><div class="prose"><Fragment set:html={textoDoAutor(p.html)} /></div></article>
+<article id={ancoraNaHome} class={`wrap ${p.largura} block ${p.classe}`}>{p.avisoDeRascunho && <p class="draft-banner">{p.avisoDeRascunho}</p>}{!ancoraNaHome && <h1 class={p.largura === "wide" ? "sr-only" : undefined}>{p.titulo}</h1>}<div class="prose"><Fragment set:html={textoDoAutor(p.html)} /></div></article>
 {p.temCartaQueVira && <CartaQueVira />}
 {p.temPostsAlternados && <PostsAlternados />}
 
@@ -35,6 +38,8 @@ const { pagina: p } = Astro.props;
        nenhuma página tem essa classe + gifs juntos hoje (a Sobre é `page-about`; Histórias é `page-project` mas sem gifs):
        no site atual ele não faz nada na Sobre, então não foi portado (ver docs/aprendendo-astro/09-endpoints.md). */
     .page-about h2, .page-project h2 { clear: both; }
+    /* 05/11: a Sobre na home (a âncora do menu "Sobre"): um respiro em cima ao pular para ela */
+    #sobre.page-about, #about.page-about { scroll-margin-top: 1rem; }
     /* Copiado de static/style.css (T17l, pedido do autor de 22/10): na Sobre, o título que vem logo depois do texto ("Sobre o autor") fica
        à mesma distância do texto que "Outros Emissários" (só a margem do parágrafo, 1rem). */
     .page-about .prose > p + h2 { margin-top: 0; }

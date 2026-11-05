@@ -634,3 +634,54 @@ export function rodapeComoNoPython(html: string, lang: "en" | "pt", rotuloDoFeed
   });
   return { html: saida, linhas, janelas };
 }
+
+// ───────────── 05/11/2026: a página Sobre mora na home (src/lib/sobreNaHome.ts; só no Astro) ─────────────
+
+/** A página de redirecionamento de /pt/about/ e /en/about/ (src/pages/[lang]/about/index.html.ts). */
+export const RE_REDIRECIONAMENTO_DO_SOBRE = /^<!DOCTYPE html><meta charset="UTF-8"><link rel="canonical" href="\/(en\/#about|pt\/#sobre)"><meta http-equiv="refresh" content="0; url=\/(en\/#about|pt\/#sobre)"><a href="\/(en\/#about|pt\/#sobre)">\/(en\/#about|pt\/#sobre)<\/a>$/;
+export function ehRedirecionamentoDoSobre(html: string): boolean {
+  return RE_REDIRECIONAMENTO_DO_SOBRE.test(html);
+}
+
+/** O item "Sobre" do menu do Astro (/pt/#sobre) volta a ser o do Python (/pt/about/). Só a forma exata dentro do <nav class="main-nav">. */
+export function menuDoSobreComoNoPython(html: string): { html: string; trocados: number } {
+  let trocados = 0;
+  const saida = html.replace(/(<nav class="main-nav"[^>]*>[\s\S]*?<\/nav>)/, (nav) =>
+    nav.replace(/<a href="\/(en|pt)\/#(about|sobre)"( data-astro-cid-[a-z0-9]+)?>/g, (_t, lang: string, ancora: string, cid: string | undefined) => {
+      if ((lang === "pt" ? "sobre" : "about") !== ancora) return _t;
+      trocados++;
+      return `<a href="/${lang}/about/"${cid ?? ""}>`;
+    }),
+  );
+  return { html: saida, trocados };
+}
+
+/**
+ * A Sobre inteira na home do Astro (<article id="sobre|about" class="wrap wide block page-about">…</article>, com os <article> dos
+ * emissários dentro) sai; `artigo` devolve o que saiu (o teste compara com o <main> da página Sobre do Python).
+ */
+export function semSobreNaHome(html: string): { html: string; quantos: number; artigo: string } {
+  const inicio = html.search(/<article id="(sobre|about)" class="wrap wide block page-about">/);
+  if (inicio < 0) return { html, quantos: 0, artigo: "" };
+  const re = /<article\b|<\/article>/g;
+  re.lastIndex = inicio;
+  let fundo = 0;
+  for (let m = re.exec(html); m; m = re.exec(html)) {
+    fundo += m[0] === "</article>" ? -1 : 1;
+    if (fundo === 0) {
+      const fim = m.index + "</article>".length;
+      return { html: html.slice(0, inicio) + html.slice(fim), quantos: 1, artigo: html.slice(inicio, fim) };
+    }
+  }
+  return { html, quantos: 0, artigo: "" };
+}
+
+/** A chamada "Sobre" da home do Python (<section class="wrap block about-teaser">…</section>), que o Astro trocou pela Sobre inteira. */
+export function semChamadaDoSobre(html: string): { html: string; quantos: number } {
+  let quantos = 0;
+  const saida = html.replace(/<section class="wrap block about-teaser"><h2>(?:(?!<\/?section)[\s\S])*?<\/h2><p>(?:(?!<\/?section)[\s\S])*?<\/p><a class="button ghost" href="\/(en|pt)\/about\/">[^<]*<\/a><\/section>/g, () => {
+    quantos++;
+    return "";
+  });
+  return { html: saida, quantos };
+}

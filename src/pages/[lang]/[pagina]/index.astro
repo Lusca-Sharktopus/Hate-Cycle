@@ -14,11 +14,17 @@ import { emissariosMostramTextos, langs, type Lang } from "../../../lib/config";
 import { COM_RASCUNHOS, dadosDeTodosOsIdiomas, dadosDoIdioma } from "../../../lib/conteudo";
 import { dadosDosAtalhos } from "../../../lib/paginas";
 import { paginasAvulsas, type PaginaAvulsa } from "../../../lib/paginasAvulsas";
+import { PASTA_DO_SOBRE } from "../../../lib/sobreNaHome";
 
 export async function getStaticPaths() {
   const dadosDe = await dadosDeTodosOsIdiomas();
   const publicadas = Object.fromEntries(langs.map((l) => [l, dadosDe[l].paginas])) as Record<Lang, (typeof dadosDe)[Lang]["paginas"]>;
-  return langs.flatMap((lang) => paginasAvulsas(dadosDe[lang].paginas, lang, publicadas).map((pagina) => ({ params: { lang, pagina: pagina.pasta }, props: { pagina } })));
+  // 05/11/2026: a Sobre mora na home (src/lib/sobreNaHome.ts); /<idioma>/about/ é só um redirecionamento (src/pages/[lang]/about/)
+  return langs.flatMap((lang) =>
+    paginasAvulsas(dadosDe[lang].paginas, lang, publicadas)
+      .filter((pagina) => pagina.pasta !== PASTA_DO_SOBRE)
+      .map((pagina) => ({ params: { lang, pagina: pagina.pasta }, props: { pagina } })),
+  );
 }
 
 const lang = Astro.params.lang as Lang;
