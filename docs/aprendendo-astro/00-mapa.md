@@ -1,6 +1,6 @@
 # Aprendendo Astro com o próprio site — mapa
 
-Cada tarefa de migração do `docs/BACKLOG.md` que constrói uma parte do Astro vem com uma lição nesta pasta. A lição é escrita **depois** que o código existe, apontando para os arquivos reais, para você abrir o arquivo e ler junto. Nada aqui é exemplo genérico: é o código do Hᴀᴛᴇ Cʏᴄʟᴇ.
+Cada tarefa de migração do `docs/BACKLOG.md` que constrói uma parte do Astro vem com uma lição nesta pasta. A lição é escrita **depois** que o código existe, apontando para os arquivos reais, para você abrir o arquivo e ler junto. Nada aqui é exemplo genérico: é o código de Hᴀᴛᴇ Cʏᴄʟᴇ.
 
 Como usar cada lição:
 1. Leia a seção "O que você vai entender".

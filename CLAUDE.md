@@ -90,6 +90,7 @@ pnpm test       # testes automáticos (vitest), tudo comparado com o Python: run
 ## Marca e texto (resumo — regra completa em `.claude/rules/conteudo.md`)
 
 - **Hᴀᴛᴇ Cʏᴄʟᴇ** (versalete Unicode) = a **marca** e o **universo compartilhado**. É o padrão para universo, marca, site e projeto.
+- **Sem artigo antes de Hᴀᴛᴇ Cʏᴄʟᴇ** (pedido do autor, 05/11/2026): nunca "o Hᴀᴛᴇ Cʏᴄʟᴇ", "do Hᴀᴛᴇ Cʏᴄʟᴇ", "no Hᴀᴛᴇ Cʏᴄʟᴇ", "ao Hᴀᴛᴇ Cʏᴄʟᴇ", "pelo Hᴀᴛᴇ Cʏᴄʟᴇ": escreva "Hᴀᴛᴇ Cʏᴄʟᴇ", "de Hᴀᴛᴇ Cʏᴄʟᴇ", "em Hᴀᴛᴇ Cʏᴄʟᴇ", "a Hᴀᴛᴇ Cʏᴄʟᴇ", "por Hᴀᴛᴇ Cʏᴄʟᴇ" (o artigo de "o universo Hᴀᴛᴇ Cʏᴄʟᴇ" é do "universo" e pode). Vale para textos do site, mensagens ao autor e documentos.
 - **Hate Cycle** (caixa normal) = **somente** a futura série de animação, a obra original que nasceu como webcomic de Apollo e O Anfíbio. Como a marca Star Wars × os nove filmes. Não são intercambiáveis; na dúvida, pergunte.
 - **Trema** em português quando o "u" é pronunciado após g/q: lingüista, freqüência, conseqüência. Exceção: "equivalente/equivale" sem trema.
 - **Texto final do autor é final.** Não reescreva nem "melhore". Erro aparente (de digitação, de PDF): mantenha e aponte na resposta.

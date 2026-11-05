@@ -198,8 +198,8 @@ describe("peças soltas", () => {
     expect(combinaComBusca(texto, palavrasDaBusca("LUZ falta"))).toBe(false);
     expect(combinaComBusca(texto, palavrasDaBusca(""))).toBe(true);
     // T17k (B22): o versalete Unicode (Hᴀᴛᴇ Cʏᴄʟᴇ) vale como letra comum na busca ("hate", "Hate", "HATE", "cycle"), sem perder o resto
-    const titulo = normalizarBusca("Novidades do Hᴀᴛᴇ Cʏᴄʟᴇ: Ação");
-    expect(titulo).toBe("novidades do hate cycle: acao");
+    const titulo = normalizarBusca("Novidades de Hᴀᴛᴇ Cʏᴄʟᴇ: Ação");
+    expect(titulo).toBe("novidades de hate cycle: acao");
     for (const consulta of ["hate", "Hate", "HATE", "cycle", "CYCLE", "hate cycle", "hᴀᴛᴇ", "acao", "ação"]) expect(combinaComBusca(titulo, palavrasDaBusca(consulta)), consulta).toBe(true);
     expect(combinaComBusca(titulo, palavrasDaBusca("hate zzz"))).toBe(false);
     // o alfabeto todo: cada letra de versalete vira a sua letra comum (o "ǫ" do q não pode virar "o" pela decomposição)

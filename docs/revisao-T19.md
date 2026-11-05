@@ -55,7 +55,7 @@ Nenhum.
 - As histórias fora do universo que o `PT.html` listava saíram do site (Goblin, Trilha do Caçador, Two Ways e os links para o xbato e as playlists). Decisão do B11.
 - *Ossos do Ofício* (`night.html`, `nights.html`, `ossos.html`) volta para a home: a obra está em rascunho. Decisão do B16, do B35 e da T17b.
 - Os comentários do Disqus dão lugar aos comentários próprios (C7).
-- As redes sociais da home antiga eram as **pessoais** do autor: X @KingOfAllOceans, **Bluesky** luscasharktopus, Instagram @lusca_desenhos e o canal pessoal do YouTube. O rodapé novo mostra as **do projeto** (`config.json → socials`: Instagram, YouTube, TikTok e X do Hᴀᴛᴇ Cʏᴄʟᴇ), e o **Bluesky não aparece em lugar nenhum**. O e-mail de contato continua na página Sobre.
+- As redes sociais da home antiga eram as **pessoais** do autor: X @KingOfAllOceans, **Bluesky** luscasharktopus, Instagram @lusca_desenhos e o canal pessoal do YouTube. O rodapé novo mostra as **do projeto** (`config.json → socials`: Instagram, YouTube, TikTok e X de Hᴀᴛᴇ Cʏᴄʟᴇ), e o **Bluesky não aparece em lugar nenhum**. O e-mail de contato continua na página Sobre.
 
 ## 4. O que foi conferido e passou
 
@@ -79,7 +79,7 @@ Nenhum.
 
 ## 5. O site no ar (`origin/main`, 135 arquivos) × o `dist/` novo
 
-**Iguais byte a byte (105):** `CNAME`, `produtos.html` e as 67 imagens de `Produtos/` (B35: "mantida igual"), `logos/favicon.png`, as duas logos do Hᴀᴛᴇ Cʏᴄʟᴇ, as capas de HDVR, Pederneira/Firestriker, Luz & Sangue e O Pêndulo, as logos das obras, `other images/` (GIFs do Apollo e do Anfíbio, ícones, Giuseppe, carta, divisores) e `Backgrounds/paperbg.jpg`.
+**Iguais byte a byte (105):** `CNAME`, `produtos.html` e as 67 imagens de `Produtos/` (B35: "mantida igual"), `logos/favicon.png`, as duas logos de Hᴀᴛᴇ Cʏᴄʟᴇ, as capas de HDVR, Pederneira/Firestriker, Luz & Sangue e O Pêndulo, as logos das obras, `other images/` (GIFs do Apollo e do Anfíbio, ícones, Giuseppe, carta, divisores) e `Backgrounds/paperbg.jpg`.
 
 **Mudam (14):**
 

@@ -166,7 +166,7 @@ def conferencias() -> list[Conferencia]:
         Conferencia("/other images/Anfíbio Site.gif", tipo="image/gif", inicio_bytes=b"GIF8", nome="imagem com acento no nome"),
         Conferencia("/covers/PT/Capa Luz & Sangue.png", tipo="image/png", inicio_bytes=b"\x89PNG", nome="imagem com & no nome"),
         Conferencia("/Produtos/Água.png", tipo="image/png", inicio_bytes=b"\x89PNG", nome="imagem de Produtos (acento)"),
-        # Erro: um endereço que não existe tem de dar 404 (e, no site de verdade, a página 404 do Hᴀᴛᴇ Cʏᴄʟᴇ)
+        # Erro: um endereço que não existe tem de dar 404 (e, no site de verdade, a página 404 de Hᴀᴛᴇ Cʏᴄʟᴇ)
         Conferencia("/pt/esta-pagina-nao-existe/", status=404, textos=["404"], nome="endereço inexistente (404)"),
         Conferencia("/pt/esta-pagina-nao-existe/", status=404, tipo=html_, titulo=f"404 | {MARCA}", so_em_https=True,
                     nome="a 404 é a página do site"),

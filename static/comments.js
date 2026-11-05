@@ -1,4 +1,4 @@
-/* Comentários do Hᴀᴛᴇ Cʏᴄʟᴇ — contas + comentários usando Supabase (ver COMENTARIOS-LEIA-ME.md).
+/* Comentários de Hᴀᴛᴇ Cʏᴄʟᴇ — contas + comentários usando Supabase (ver COMENTARIOS-LEIA-ME.md).
    Todo texto de usuário entra na página com textContent (nunca innerHTML), então não dá para injetar HTML. */
 (function () {
   var cfg = window.HC, root = document.querySelector('.hc-comments[data-page]');

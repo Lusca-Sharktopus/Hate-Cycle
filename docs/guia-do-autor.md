@@ -444,7 +444,7 @@ Os comentários ficam numa caixa própria, separada da caixa do capítulo ou da 
 
 - O rodapé de todas as páginas mostra o ícone de cada rede (Instagram, YouTube, TikTok, Twitter). Os endereços vêm do `config.json → socials`.
 - **O ícone do YouTube leva ao canal do idioma da página** (só no site novo, Astro): páginas em inglês → `https://www.youtube.com/@HateCycleEn`; páginas em português → `https://www.youtube.com/@HateCycleBR`. Esses dois endereços moram em **um lugar só**: `src/lib/canais.ts` (`CANAIS_DO_YOUTUBE`, uma linha por idioma). Para trocar um canal, troque a linha do idioma ali (ou me peça); o `config.json` não precisa mudar, e o endereço antigo dele (`@HateCycle`) deixa de aparecer no site novo.
-- Outro lugar do site que precise levar ao canal do Hᴀᴛᴇ Cʏᴄʟᴇ deve usar o mesmo mapa (`canalDoYoutube(lang)`), para as duas línguas ficarem sempre certas.
+- Outro lugar do site que precise levar ao canal de Hᴀᴛᴇ Cʏᴄʟᴇ deve usar o mesmo mapa (`canalDoYoutube(lang)`), para as duas línguas ficarem sempre certas.
 - **Página Apoio (português):** o link "Inscreva-se no canal no YouTube" leva ao **seu canal pessoal**, `https://www.youtube.com/@LuscaSharktopus` (escrito direto em `content/pages/support/pt.md`; vale nos dois geradores). A página Apoio em inglês não tem link de YouTube.
 
 ### A linha do rodapé e a Política de Privacidade (desde 02/11)

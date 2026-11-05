@@ -1,6 +1,6 @@
-// Os CANAIS DO YOUTUBE por idioma (T17h, pedido do autor de 21/10): o Hᴀᴛᴇ Cʏᴄʟᴇ agora tem um canal em inglês e um em português. As páginas em
+// Os CANAIS DO YOUTUBE por idioma (T17h, pedido do autor de 21/10): Hᴀᴛᴇ Cʏᴄʟᴇ agora tem um canal em inglês e um em português. As páginas em
 // inglês apontam para o canal anglófono; as em português, para o brasileiro. Hoje isso vale para o ícone de YouTube do rodapé (que está em
-// todas as páginas); qualquer lugar novo que precise do canal do Hᴀᴛᴇ Cʏᴄʟᴇ deve usar `canalDoYoutube(lang)`.
+// todas as páginas); qualquer lugar novo que precise do canal de Hᴀᴛᴇ Cʏᴄʟᴇ deve usar `canalDoYoutube(lang)`.
 //
 // Por que aqui e não no config.json: o config.json é do autor e o Claude não o edita; ele continua com o endereço antigo do canal
 // (`https://www.youtube.com/@HateCycle`), que o gerador Python (até a virada) ainda usa. O Astro, na hora de desenhar o rodapé, troca o
@@ -10,13 +10,13 @@
 // (content/pages/support/pt.md), igual nos dois geradores.
 import { socialLinks, type Lang, type Social } from "./config";
 
-/** O canal do Hᴀᴛᴇ Cʏᴄʟᴇ no YouTube de cada idioma. Cada idioma do site tem de ter o seu (o TypeScript avisa). */
+/** O canal de Hᴀᴛᴇ Cʏᴄʟᴇ no YouTube de cada idioma. Cada idioma do site tem de ter o seu (o TypeScript avisa). */
 export const CANAIS_DO_YOUTUBE: Readonly<Record<Lang, string>> = {
   en: "https://www.youtube.com/@HateCycleEn",
   pt: "https://www.youtube.com/@HateCycleBR",
 };
 
-/** O canal do Hᴀᴛᴇ Cʏᴄʟᴇ no YouTube para as páginas de um idioma. */
+/** O canal de Hᴀᴛᴇ Cʏᴄʟᴇ no YouTube para as páginas de um idioma. */
 export function canalDoYoutube(lang: Lang): string {
   return CANAIS_DO_YOUTUBE[lang];
 }

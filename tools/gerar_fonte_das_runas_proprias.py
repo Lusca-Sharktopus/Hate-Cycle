@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A fonte das runas PRÓPRIAS do Hᴀᴛᴇ Cʏᴄʟᴇ (03/11/2026, pedido do autor): símbolos que não existem no Unicode, desenhados numa fonte
+"""A fonte das runas PRÓPRIAS de Hᴀᴛᴇ Cʏᴄʟᴇ (03/11/2026, pedido do autor): símbolos que não existem no Unicode, desenhados numa fonte
 nossa, "Hate Cycle Runas", em que cada um mora no lugar de uma letra:
 
   a = a Quinta Runa d'A Morte: o símbolo alquímico do sangue (triângulo de ponta para baixo, com uma barra e um traço dentro);

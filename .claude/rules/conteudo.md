@@ -13,6 +13,7 @@ Valem para tudo dentro de `content/` e para `cronologia.json`. Procedimento pass
 Duas grafias, dois significados. **Não são intercambiáveis.**
 
 - **Hᴀᴛᴇ Cʏᴄʟᴇ** (versalete Unicode) = a **marca** e o **universo compartilhado** (contos, quadrinhos, jogos, filmes, o sistema de RPG, a Especulação Evolutiva, o merchandise etc.). É o padrão: universo, marca, site, projeto como um todo.
+- **Sem artigo antes de Hᴀᴛᴇ Cʏᴄʟᴇ** (pedido do autor, 05/11/2026): nunca "o Hᴀᴛᴇ Cʏᴄʟᴇ", "do Hᴀᴛᴇ Cʏᴄʟᴇ", "no Hᴀᴛᴇ Cʏᴄʟᴇ", "ao Hᴀᴛᴇ Cʏᴄʟᴇ", "pelo Hᴀᴛᴇ Cʏᴄʟᴇ": escreva "Hᴀᴛᴇ Cʏᴄʟᴇ", "de Hᴀᴛᴇ Cʏᴄʟᴇ", "em Hᴀᴛᴇ Cʏᴄʟᴇ", "a Hᴀᴛᴇ Cʏᴄʟᴇ", "por Hᴀᴛᴇ Cʏᴄʟᴇ" (o artigo de "o universo Hᴀᴛᴇ Cʏᴄʟᴇ" é do "universo" e pode). Vale para textos do site, mensagens ao autor e documentos.
 - **Hate Cycle** (caixa normal) = **somente** a futura **série de animação**, primeiro projeto do universo a ser idealizado (nasceu como webcomic de Apollo e O Anfíbio). É a obra de onde o universo cresceu, como os nove filmes de Star Wars deram origem à marca Star Wars.
 - Usos corretos de caixa normal hoje: `cronologia.json` (linha da série, `"media": "animated-show"`) e o trecho histórico de `content/pages/project/{en,pt}.md` que fala da webcomic original ("…Hate Cycle soon became more than that"). O versalete aparece no `config.json` (nome do site, textos da capa, "Histórias Hᴀᴛᴇ Cʏᴄʟᴇ"), nas páginas Sobre e O Projeto e nas notícias.
 - Na dúvida, pergunte. Não "corrija" o texto do autor sem confirmar. Ao traduzir, aplique a mesma regra nos dois idiomas.

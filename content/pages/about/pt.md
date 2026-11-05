@@ -18,4 +18,4 @@ Além disso, sou estudante de Biologia, designer gráfico, cristão devoto e mú
 
 ## Contato
 
-Quer conversar ou dar um feedback? Me mande um e-mail em [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com). As redes sociais do Hᴀᴛᴇ Cʏᴄʟᴇ estão no rodapé de todas as páginas.
+Quer conversar ou dar um feedback? Me mande um e-mail em [lucas.blito@gmail.com](mailto:lucas.blito@gmail.com). As redes sociais de Hᴀᴛᴇ Cʏᴄʟᴇ estão no rodapé de todas as páginas.
