@@ -58,7 +58,7 @@ begin
 end $$;
 ```
 
-> Situação atual: o login com Google ainda não funciona no site publicado (item B2 de `docs/BACKLOG.md`, aguardando a mensagem de erro / o que acontece ao clicar).
+> **Situação (05/11/2026):** funciona no site novo. O erro que impedia era **"Unable to exchange external code"** (o Supabase não conseguia trocar o código do Google pelo login): resolvido pelo autor colando de novo o **Client ID** e uma **Client Secret** nova do Google em Authentication → Sign In / Providers → Google. Se voltar a acontecer (ou com o Discord/X), é a mesma conferência: a chave secreta e o endereço de retorno (Callback URL) no portal do provedor. Desde 05/11 a caixa de comentários mostra a mensagem que o Supabase devolver ("O login não deu certo. O servidor respondeu: …").
 
 ## 2b. Login com o Discord e com o Twitter (X) — site novo, 05/11/2026
 
