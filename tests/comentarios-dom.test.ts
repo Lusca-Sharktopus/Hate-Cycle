@@ -107,10 +107,16 @@ async function esperar(): Promise<void> {
 
 /** As únicas tags que a caixa cria (mais as da própria <section>). */
 const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "input", "label"]);
+/** 05/11: os botões de login (src/scripts/login/janela.ts) têm ícones em SVG e o <canvas> do círculo, de valores fixos do código. */
+const TAGS_DOS_BOTOES_DE_LOGIN = new Set(["span", "svg", "path", "defs", "lineargradient", "stop", "canvas"]);
 function conferirSoElementosDoCodigo(): void {
-  const tags = [...document.body.querySelectorAll("*")].map((e) => e.tagName.toLowerCase());
+  const todos = [...document.body.querySelectorAll("*")];
+  const nosBotoes = todos.filter((e) => e.closest(".c-modal .c-provedores .c-prov") && !e.classList.contains("c-prov"));
+  const tags = todos.filter((e) => !nosBotoes.includes(e)).map((e) => e.tagName.toLowerCase());
   expect(tags.filter((t) => !TAGS_DA_CAIXA.has(t)), "elementos que o código não cria (vieram de texto do visitante)").toEqual([]);
-  expect(document.body.querySelectorAll("img, script, b, svg, iframe").length).toBe(0);
+  expect(nosBotoes.map((e) => e.tagName.toLowerCase()).filter((t) => !TAGS_DOS_BOTOES_DE_LOGIN.has(t))).toEqual([]);
+  expect(document.body.querySelectorAll("img, script, b, iframe").length).toBe(0);
+  expect(document.body.querySelectorAll("svg").length).toBe(document.querySelectorAll(".c-modal .c-prov > svg").length);
   expect((globalThis as { __xss?: unknown }).__xss).toBeUndefined();
 }
 function conferirTextoLiteral(): void {
@@ -149,6 +155,11 @@ describe("a caixa de comentários num DOM simulado, com HTML no comentário, na 
     await esperar();
     expect(document.querySelectorAll(".c-modal")).toHaveLength(1);
     conferirSoElementosDoCodigo();
+    // 05/11 (design do autor): Google, Twitter e Discord, cada um com o círculo; a divisória "ou"; o título do config.json
+    expect([...document.querySelectorAll(".c-modal .c-prov")].map((b) => b.className)).toEqual(["c-prov c-google", "c-prov c-twitter", "c-prov c-discord"]);
+    expect(document.querySelectorAll(".c-modal .c-prov canvas.c-circulo")).toHaveLength(3);
+    expect(document.querySelectorAll(".c-modal .c-prov svg.c-ic")).toHaveLength(6);
+    expect(document.querySelector(".c-modal .c-ou")?.textContent).toBe("or");
   });
 
   test("conectado (nome com HTML): 'Conectado como …' literal, Responder e Editar abertos, só elementos do código", async () => {

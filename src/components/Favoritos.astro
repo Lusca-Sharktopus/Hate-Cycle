@@ -8,6 +8,8 @@ interface Props {
   /** O texto do <script> que cria window.HC_FAV (src/lib/comentarios.ts → favoritosDaPagina). */
   configuracao: string;
 }
+import EstiloDoLogin from "./EstiloDoLogin.astro";
+
 const { configuracao } = Astro.props;
 ---
 
@@ -16,6 +18,8 @@ const { configuracao } = Astro.props;
 <script>
   import "../scripts/favoritos/index";
 </script>
+
+<EstiloDoLogin />
 
 <style is:global>
   @layer site {
@@ -61,14 +65,77 @@ const { configuracao } = Astro.props;
     .work-card.fav-fora { display: none !important; }
     .fav-aviso { text-align: center; color: var(--muted); padding: 1.5rem 0; }
 
-    /* a janela "este recurso exige login": a página escurece atrás (como a janela de login dos comentários) */
+    /* o "pulo" da estrela ao ser clicada (05/11, GIF do autor): a estrela encolhe, cresce e volta, e um círculo sai dela e desvanece.
+       Enquanto pula, a janelinha da capa deixa o círculo passar da borda (overflow visível). */
+    .fav-estrela::after {
+      content: ""; position: absolute; inset: -.1rem; border-radius: 50%; border: 2px solid var(--mint); box-shadow: 0 0 6px var(--cyan);
+      opacity: 0; pointer-events: none;
+    }
+    .fav-estrela.fav-pulo svg { animation: fav-pulo .45s ease-out; }
+    .fav-estrela.fav-pulo::after { animation: fav-anel .55s ease-out; }
+    .fav-janela:has(.fav-pulo) { overflow: visible; }
+    @keyframes fav-pulo { 0% { transform: scale(1); } 30% { transform: scale(.7); } 65% { transform: scale(1.25); } 100% { transform: scale(1); } }
+    @keyframes fav-anel { 0% { opacity: .9; transform: scale(.45); } 100% { opacity: 0; transform: scale(1.9); } }
+
+    /* a janela "este recurso exige login" (05/11, design do autor "favorito design.png"): papel, a estrela grande com a cena do cursor
+       (6,4 s, repetindo: aparece, clica, a estrela enche e pula, vai embora; volta, clica, a estrela esvazia), título, texto e os botões
+       Criar conta / Entrar (abrem a janela de login, src/scripts/login/janela.ts). A página escurece atrás. */
     .fav-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; background: rgba(0, 0, 0, .65); overflow-y: auto; }
     .fav-modal-aberta { overflow: hidden; }
-    .fav-dialogo { position: relative; width: min(420px, 100%); background: #fff; color: #1a1a1a; border-radius: 14px; padding: 1.6rem 1.4rem 1.3rem; box-shadow: 0 20px 60px #000a; }
-    .fav-dialogo h3 { display: flex; align-items: center; gap: .5rem; margin: 0 1.5rem .7rem 0; font-size: 1.15rem; color: var(--green); }
-    .fav-dialogo h3 svg { width: 1.4rem; height: 1.4rem; fill: var(--mint); stroke: var(--green); stroke-width: 1.4; stroke-linejoin: round; }
-    .fav-dialogo p { margin: 0 0 1rem; line-height: 1.5; }
-    .fav-x { position: absolute; top: .4rem; right: .6rem; background: none; border: 0; font-size: 1.8rem; line-height: 1; cursor: pointer; color: #555; }
+    .fav-dialogo {
+      position: relative; width: min(440px, 100%); box-sizing: border-box; padding: 34px 24px 26px; border-radius: 42px;
+      background: #ecebe8 var(--paper) center / cover; color: #111; box-shadow: 0 20px 60px #000a;
+    }
+    .fav-dialogo h3 { margin: 0 0 12px; font: 400 2.65rem/1.05 var(--font-head); color: var(--green); text-align: center; letter-spacing: -.01em; }
+    .fav-dialogo p { margin: 0 0 18px; font: 400 1.1rem/1.2 var(--font-text); }
+    .fav-botoes { display: flex; flex-wrap: wrap; gap: 12px; }
+    .fav-botoes .button { min-width: 110px; height: 42px; padding: 0 1rem; border-radius: 4px; }
+    .fav-x { position: absolute; top: 14px; right: 24px; background: none; border: 0; font-size: 1.8rem; line-height: 1; cursor: pointer; color: #555; }
     .fav-x:hover { color: #000; background: none; }
+    .fav-cena { position: relative; width: 200px; height: 196px; margin: 0 auto 4px; }
+    .fav-cena-estrela { position: absolute; inset: 0; display: grid; place-items: center; animation: fav-cena-pulo 6.4s infinite; }
+    .fav-grande { width: 190px; height: 190px; overflow: visible; filter: drop-shadow(0 0 5px #00e9fdaa) drop-shadow(0 0 14px #00e9fd66); }
+    .fav-grande path { stroke: url(#fav-degrade); stroke-width: 1.4; stroke-linejoin: round; }
+    .fav-grande-vazia { fill: none; }
+    .fav-grande-cheia { fill: url(#fav-degrade); opacity: 0; animation: fav-cena-cheia 6.4s infinite; }
+    .fav-cena-circulo {
+      position: absolute; left: 50%; top: 52%; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%;
+      border: 3px solid var(--mint); box-shadow: 0 0 10px var(--cyan), inset 0 0 10px var(--cyan); opacity: 0; pointer-events: none;
+      animation: fav-cena-circulo 6.4s infinite;
+    }
+    .fav-cursor {
+      position: absolute; left: 50%; top: 52%; width: 34px; height: 34px; margin: -3px 0 0 -5px; transform-origin: 5px 3px;
+      fill: #fff; stroke: #000; stroke-width: 1.3; stroke-linejoin: round; opacity: 0; animation: fav-cena-cursor 6.4s infinite;
+      filter: drop-shadow(0 2px 2px #0005);
+    }
+    @keyframes fav-cena-cursor {
+      0% { opacity: 0; transform: translate(70px, 78px); }
+      6% { opacity: 1; transform: translate(70px, 78px); }
+      20% { transform: translate(0, 0); }
+      23% { transform: translate(0, 0) scale(.82); }
+      26%, 32% { opacity: 1; transform: translate(0, 0); }
+      42% { opacity: 0; transform: translate(80px, 64px); }
+      50% { opacity: 0; transform: translate(70px, 78px); }
+      56% { opacity: 1; transform: translate(70px, 78px); }
+      70% { transform: translate(0, 0); }
+      73% { transform: translate(0, 0) scale(.82); }
+      76%, 82% { opacity: 1; transform: translate(0, 0); }
+      92%, 100% { opacity: 0; transform: translate(80px, 64px); }
+    }
+    @keyframes fav-cena-cheia { 0%, 22.9% { opacity: 0; } 23%, 72.9% { opacity: 1; } 73%, 100% { opacity: 0; } }
+    @keyframes fav-cena-pulo {
+      0%, 23% { transform: scale(1); } 25.5% { transform: scale(.78); } 28.5% { transform: scale(1.14); } 32%, 73% { transform: scale(1); }
+      75.5% { transform: scale(.86); } 78.5% { transform: scale(1.06); } 82%, 100% { transform: scale(1); }
+    }
+    @keyframes fav-cena-circulo { 0%, 23.5% { opacity: 0; transform: scale(.45); } 24.5% { opacity: .9; transform: scale(.5); } 35%, 100% { opacity: 0; transform: scale(1.55); } }
+    @media (max-width: 420px) {
+      .fav-dialogo { padding: 28px 18px 22px; border-radius: 30px; }
+      .fav-dialogo h3 { font-size: 2.1rem; }
+      .fav-cena { transform: scale(.8); margin-block: -18px -14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fav-cena-estrela, .fav-cena-circulo, .fav-cursor, .fav-estrela.fav-pulo svg, .fav-estrela.fav-pulo::after { animation: none; }
+      .fav-grande-cheia { animation: none; opacity: 1; }
+    }
   }
 </style>

@@ -19,6 +19,8 @@ export interface ConfiguracaoDosFavoritos {
   obras: Readonly<Record<string, string>>;
   /** obra → as runas que a estrela sorteia e a runa final (src/lib/runasDaEstrela.ts). */
   runas: Readonly<Record<string, RunasDaObra>>;
+  /** Os textos c_* da janela de login (config.json → ui), como no window.HC.ui; o script passa por textosComPadrao(). */
+  ui: unknown;
 }
 
 export interface RunasDaObra {
@@ -77,7 +79,7 @@ export function obraValida(id: unknown): id is string {
 /** Lê o window.HC_FAV; faltou algo essencial = null (nada de estrelas na página). */
 export function lerConfiguracaoDosFavoritos(x: unknown): ConfiguracaoDosFavoritos | null {
   if (!x || typeof x !== "object") return null;
-  const { url, key, lang, obras, runas } = x as Record<string, unknown>;
+  const { url, key, lang, obras, runas, ui } = x as Record<string, unknown>;
   if (typeof url !== "string" || !url || typeof key !== "string" || !key) return null;
   if (!obras || typeof obras !== "object" || Array.isArray(obras)) return null;
   // sem protótipo: um título ou pasta chamado "constructor" não cai em propriedade herdada (revisão de 03/11)
@@ -90,7 +92,7 @@ export function lerConfiguracaoDosFavoritos(x: unknown): ConfiguracaoDosFavorito
       if (obraValida(obra) && boa) runasLimpas[obra] = boa;
     }
   }
-  return { url, key, lang: typeof lang === "string" ? lang : "en", obras: limpas, runas: runasLimpas };
+  return { url, key, lang: typeof lang === "string" ? lang : "en", obras: limpas, runas: runasLimpas, ui: ui && typeof ui === "object" ? ui : {} };
 }
 
 /** Os favoritos que vieram do banco: só os identificadores no formato certo. */
@@ -118,10 +120,11 @@ export const TEXTOS_DOS_FAVORITOS = {
     vazio: "Você ainda não tem histórias favoritas. Clique na estrela no canto de uma capa para favoritar.",
     nenhumaAqui: "Nenhuma das suas favoritas aparece com essa busca ou esse tipo.",
     erro: "Não deu para salvar o favorito. Tente de novo.",
-    janelaTitulo: "Favoritos",
-    janelaTexto:
-      "Favoritar histórias exige uma conta. Entre na sua conta pela caixa de comentários, no fim de qualquer capítulo ou notícia, e volte aqui para marcar as suas favoritas.",
-    entendi: "Entendi",
+    // a janela "exige login" (05/11, texto do autor em "favorito design.png")
+    janelaTitulo: "Quer favoritar histórias?",
+    janelaTexto: "O recurso de favoritar histórias exige um Login no site! Entre na sua conta ou, caso não possua uma, crie uma e aproveite!",
+    criarConta: "Criar conta",
+    entrar: "Entrar",
     fechar: "Fechar",
   },
   en: {
@@ -132,10 +135,11 @@ export const TEXTOS_DOS_FAVORITOS = {
     vazio: "You don't have any favorite stories yet. Click the star in the corner of a cover to add one.",
     nenhumaAqui: "None of your favorites match this search or type.",
     erro: "Couldn't save the favorite. Please try again.",
-    janelaTitulo: "Favorites",
-    janelaTexto:
-      "Favoriting stories requires an account. Log in through the comment box at the end of any chapter or news post, then come back here to mark your favorites.",
-    entendi: "Got it",
+    // tradução do texto do autor (05/11), para ele conferir
+    janelaTitulo: "Want to favorite stories?",
+    janelaTexto: "Favoriting stories requires logging in to the site! Log in to your account or, if you don't have one, create one and enjoy!",
+    criarConta: "Create account",
+    entrar: "Log in",
     fechar: "Close",
   },
 } as const;

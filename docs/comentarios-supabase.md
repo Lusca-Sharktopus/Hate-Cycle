@@ -60,6 +60,28 @@ end $$;
 
 > Situação atual: o login com Google ainda não funciona no site publicado (item B2 de `docs/BACKLOG.md`, aguardando a mensagem de erro / o que acontece ao clicar).
 
+## 2b. Login com o Discord e com o Twitter (X) — site novo, 05/11/2026
+
+A janela de login nova (design do autor) tem três botões: Google, Twitter e Discord. Os dois novos só funcionam depois de ativados no
+Supabase; até lá, quem clicar vê a mensagem de erro do Supabase ("provider is not enabled") na própria janela.
+
+**Discord**
+1. Em <https://discord.com/developers/applications> → **New Application** (nome: Hᴀᴛᴇ Cʏᴄʟᴇ) → menu **OAuth2**.
+2. Em **Redirects** → **Add Redirect** → cole `<sua Project URL>/auth/v1/callback` → **Save Changes**.
+3. Copie o **Client ID** e clique em **Reset Secret** para ver o **Client Secret**.
+4. No Supabase: **Authentication → Sign In / Providers → Discord** → ative, cole os dois valores → **Save**.
+
+**Twitter (X)** — o site usa o provedor **"X / Twitter (OAuth 2.0)"** do Supabase (não o "Twitter" antigo, OAuth 1.0a)
+1. Em <https://developer.x.com/en/portal/dashboard> crie um projeto e um app (o plano gratuito basta para login).
+2. No app → **User authentication settings → Set up**: permissões *Read*; tipo **Web App**; **Callback URI** =
+   `<sua Project URL>/auth/v1/callback`; **Website URL** = `https://hatecycle.com`; ligue o pedido de e-mail se aparecer a opção
+   (exige os links da Política de Privacidade e dos Termos: use `https://hatecycle.com/pt/privacy/` para os dois, se não tiver termos).
+3. Em **Keys and tokens → OAuth 2.0 Client ID and Client Secret**, copie os dois.
+4. No Supabase: **Authentication → Sign In / Providers → X / Twitter (OAuth 2.0)** → ative, cole os dois valores → **Save**.
+
+O nome de quem entra pelo Discord ou pelo X vem da própria conta (a mesma regra do Google: 2 a 30 caracteres; se não servir, vira
+`user-xxxxxx` e a pessoa troca na janela da conta).
+
 ## 3. Editar comentários
 
 Quem comentou vê um botão "Editar" nos próprios comentários; depois de editado aparece "(editado)" em cinza ao lado do nome.

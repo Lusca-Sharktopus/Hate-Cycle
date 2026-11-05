@@ -8,7 +8,7 @@
 // Mesmo cuidado da caixa: todo elemento por el() de ./dom.ts (nome e e-mail entram só como texto). Os textos são do site (não do
 // config.json do autor, que o Python também lê): TEXTOS_DA_CONTA, em pt e en.
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { el } from "./dom";
+import { animarEntrada, el } from "./dom";
 
 export const TEXTOS_DA_CONTA = {
   pt: {
@@ -257,6 +257,7 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
   });
   document.body.appendChild(janela);
   document.documentElement.classList.add("c-modal-open");
+  animarEntrada(janela, caixa);
   campoDoNome.focus();
   return fechar;
 }

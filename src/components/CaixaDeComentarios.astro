@@ -19,6 +19,8 @@ interface Props {
   configuracao: string;
 }
 
+import EstiloDoLogin from "./EstiloDoLogin.astro";
+
 const { idDaPagina, titulo, configuracao } = Astro.props;
 ---
 
@@ -27,3 +29,5 @@ const { idDaPagina, titulo, configuracao } = Astro.props;
 <script>
   import "../scripts/comentarios/index";
 </script>
+
+<EstiloDoLogin />

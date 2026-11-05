@@ -58,6 +58,7 @@ SO_NO_ASTRO = [
     ("T17: fundo da abertura em JPEG (intro/fundo_<hash>.jpeg)", re.compile(r"^intro/fundo_[A-Za-z0-9-]+\.jpeg$")),
     ("T17: silhuetas para o shape-outside (silhuetas/*.png)", re.compile(r"^silhuetas/[^/]+\.png$")),
     ("03/11: ícone do marca-página (src/assets/marca-pagina/hc-branco.png → /_astro/hc-branco.<hash>.png; só no Astro)", re.compile(r"^_astro/hc-branco\.[A-Za-z0-9_-]+\.png$")),
+    ("05/11: a janela de login nova (src/assets/login/: círculo mágico, mapa de tempo e divisória \"ou\" → /_astro/<nome>.<hash>.png; só no Astro)", re.compile(r"^_astro/(circulo|tempo|ou)\.[A-Za-z0-9_-]+\.png$")),
     ("T17e: vídeo da abertura em 720p (/_astro/logo-720p.<hash>.webm; o original continua em intro/logo.webm)", re.compile(r"^_astro/logo-720p\.[A-Za-z0-9_-]+\.webm$")),
     ("T17e: GIFs animados em WebP animado sem perda (animadas/<nome>-<carimbo>.webp; o GIF continua publicado)", re.compile(r"^animadas/[a-z0-9-]+-[0-9a-f]{8}\.webp$")),
     ("T14: sitemap.xml", re.compile(r"^sitemap\.xml$")),

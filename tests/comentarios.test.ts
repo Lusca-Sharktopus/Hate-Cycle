@@ -244,8 +244,29 @@ describe("segurança: o código que vai para o navegador", () => {
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
       const imports = [...codigo(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta)|\.\.\/supabase\/cliente|@supabase\/supabase-js)$/);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta)|\.\.\/supabase\/cliente|\.\.\/login\/janela|@supabase\/supabase-js)$/);
     }
+  });
+  // 05/11: a janela de login saiu da caixa para src/scripts/login/ (a mesma janela abre pelos favoritos): as mesmas travas valem lá
+  const LOGIN = join(PASTA, "..", "login");
+  const codigoDoLogin = (a: string) =>
+    readFileSync(join(LOGIN, a), "utf8")
+      .split("\n")
+      .filter((l) => !/^\s*\/\//.test(l))
+      .join("\n");
+  test("login/: só janela.ts e circulo.ts; sem innerHTML & cia.; imports só do código dos comentários, do círculo, dos dois PNG e do TIPO do supabase-js", () => {
+    expect(readdirSync(LOGIN).sort()).toEqual(["circulo.ts", "janela.ts"]);
+    for (const a of ["circulo.ts", "janela.ts"]) {
+      expect(codigoDoLogin(a)).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
+      const imports = [...codigoDoLogin(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\.\/comentarios\/(dom|regras)|\.\/circulo|\.\.\/\.\.\/assets\/login\/(circulo|tempo)\.png\?url|@supabase\/supabase-js)$/);
+    }
+    expect(codigoDoLogin("janela.ts")).toMatch(/import type \{ Provider, SupabaseClient \} from "@supabase\/supabase-js"/);
+    expect(codigoDoLogin("janela.ts")).not.toMatch(/import \{[^}]*\} from "@supabase/);
+    // a janela só escreve textContent para LIMPAR; texto entra por el(…, { texto })
+    expect([...codigoDoLogin("janela.ts").matchAll(/\.textContent\s*=\s*([^;]+);/g)].map((m) => m[1]?.trim())).toEqual(['""']);
+    // os atributos dos ícones (setAttribute fora do el()) só recebem valores fixos do próprio arquivo
+    expect(codigoDoLogin("janela.ts")).toMatch(/function no<K extends keyof SVGElementTagNameMap>/);
   });
   test("regras.ts e dom.ts não importam nada; caixa.ts só usa o TIPO do supabase-js; só index.ts carrega o pacote", () => {
     expect(codigo("regras.ts")).not.toMatch(/\bimport\b/);
@@ -262,6 +283,7 @@ describe("segurança: o código que vai para o navegador", () => {
     // as únicas atribuições de textContent fora de dom.ts são para LIMPAR ("") ou o texto de "Carregando…" da interface
     const caixa = codigo("caixa.ts");
     const atribuicoes = [...caixa.matchAll(/\.textContent\s*=\s*([^;]+);/g)].map((m) => m[1]?.trim());
-    expect(atribuicoes.sort()).toEqual(['""', '""', '""', 't("c_loading")'].sort());
+    // (05/11: o "" da janela de login foi junto com ela para src/scripts/login/janela.ts, conferido acima)
+    expect(atribuicoes.sort()).toEqual(['""', '""', 't("c_loading")'].sort());
   });
 });

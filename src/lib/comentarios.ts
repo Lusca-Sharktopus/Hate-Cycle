@@ -128,7 +128,7 @@ export function comentariosDaPagina(lang: Lang, idDaPagina: string | null, comRa
 
 /**
  * O <script> que cria window.HC_FAV nas páginas com a seção de Histórias (src/components/Favoritos.astro): a mesma conexão dos
- * comentários (URL limpa e chave anon), o idioma e o mapa título do cartão → obra. Sem as duas chaves, null (nada de favoritos).
+ * comentários (URL limpa e chave anon), o idioma, o mapa título do cartão → obra, as runas e (com `ui`) os textos c_* da janela de login. Sem as duas chaves, null (nada de favoritos).
  * Função pura (o teste usa chaves de mentira); o site chama `favoritosDaPagina()`.
  */
 export function configuracaoDosFavoritos(
@@ -136,6 +136,7 @@ export function configuracaoDosFavoritos(
   obras: readonly (readonly [string, string])[],
   runas: Readonly<Record<string, { lista: readonly string[]; finais: readonly string[] }>>,
   chaves: ChavesDoSupabase | undefined,
+  ui?: TextosDaInterface,
 ): string | null {
   const url = chaves?.supabase_url;
   const chave = chaves?.supabase_anon_key;
@@ -147,6 +148,8 @@ export function configuracaoDosFavoritos(
     ["obras", new Map(obras.map(([titulo, obra]) => [titulo, obra]))],
     ["runas", new Map(Object.entries(runas).map(([obra, r]) => [obra, new Map<string, unknown>([["lista", [...r.lista]], ["finais", [...r.finais]]])]))],
   ]);
+  // 05/11: os textos c_* da janela de login (a mesma da caixa de comentários), que o aviso dos favoritos agora abre
+  if (ui) fav.set("ui", textosDosComentarios(ui, lang));
   // revisão de 03/11: além de "</", também "<!--" (e < > & e as quebras de linha do Unicode) viram \uXXXX: nada no texto mexe no <script>
   return `window.HC_FAV=${jsonComoPython(fav).replace(/[<>&\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"))};`;
 }
@@ -157,5 +160,5 @@ export function favoritosDaPagina(
   obras: readonly (readonly [string, string])[],
   runas: Readonly<Record<string, { lista: readonly string[]; finais: readonly string[] }>>,
 ): string | null {
-  return configuracaoDosFavoritos(lang, obras, runas, doAutor.comments);
+  return configuracaoDosFavoritos(lang, obras, runas, doAutor.comments, doAutor.ui);
 }

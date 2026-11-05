@@ -11,7 +11,8 @@
 //   - barra fixa "Escreva um comentário…" + botão Publicar; Enter envia, Shift+Enter quebra linha; cresce até 220 px (64–82);
 //   - deslogado: focar a barra ou clicar Publicar abre a janela de login (71, 75);
 //   - janela de login (84–145): Google, "ou", abas Entrar/Criar conta, X para fechar, Esc e clique fora fecham, Tab fica
-//     preso dentro dela, o foco volta para onde estava; na troca de senha (link do e-mail) ela não fecha;
+//     preso dentro dela, o foco volta para onde estava; na troca de senha (link do e-mail) ela não fecha. Desde 05/11/2026 ela mora em
+//     ../login/janela.ts (design novo do autor: Google, Twitter e Discord com o círculo mágico; a mesma janela abre pelos favoritos);
 //   - entrar (147–162), esqueci a senha (151–154), criar conta com nome de usuário (164–179), nova senha (116–127);
 //   - linha "Conectado como <nome>" + Sair (49–55);
 //   - lista: "Carregando…", "Ainda não há comentários", comentários na ordem do banco com as respostas embaixo (200–216);
@@ -23,6 +24,7 @@
 // Só aqui (03/11/2026, sem par no comments.js): o nome em "Conectado como <nome>" é um botão que abre a janela da conta (./conta.ts).
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { abrirJanelaDaConta, textosDaConta } from "./conta";
+import { janelaDeLogin } from "../login/janela";
 import { el } from "./dom";
 import {
   COLUNAS,
@@ -33,7 +35,6 @@ import {
   alturaDoCampo,
   dataDaEdicao,
   dataDoComentario,
-  enderecoDeVolta,
   enterEnvia,
   mensagemDeErro,
   montarArvore,
@@ -92,9 +93,6 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   function mensagem(textoDaMensagem: string | null, ok = false): HTMLParagraphElement | null {
     return textoDaMensagem ? el("p", { attrs: { class: "c-msg" + (ok ? " ok" : ""), role: "status" }, texto: textoDaMensagem }) : null;
   }
-  function campo(type: string, name: string, ph: string, extra: Record<string, string> = {}): HTMLInputElement {
-    return el("input", { attrs: { type, name, placeholder: ph, "aria-label": ph, required: "required", ...extra } });
-  }
   function botaoDeEnviar(rotulo: string): HTMLButtonElement {
     return el("button", { attrs: { type: "submit", class: "button" }, texto: rotulo });
   }
@@ -116,8 +114,41 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
 
   let barra: HTMLFormElement | null = null;
   let linhaDeQuem: HTMLDivElement | null = null;
-  let janela: HTMLDivElement | null = null;
-  let focoAntes: Element | null = null;
+  // a janela de login mora em ../login/janela.ts (05/11/2026, design novo do autor) e lê e escreve as variáveis daqui
+  const login = janelaDeLogin({
+    sb,
+    T,
+    lang: cfg.lang,
+    titulo: t("c_login_to"),
+    estado: {
+      get modo() {
+        return modo;
+      },
+      set modo(v) {
+        modo = v;
+      },
+      get trocandoSenha() {
+        return trocandoSenha;
+      },
+      set trocandoSenha(v) {
+        trocandoSenha = v;
+      },
+      get erro() {
+        return erro;
+      },
+      set erro(v) {
+        erro = v;
+      },
+      get aviso() {
+        return aviso;
+      },
+      set aviso(v) {
+        aviso = v;
+      },
+    },
+    depoisDaSenhaNova: () => void atualizar(),
+  });
+  const abrirJanela = login.abrir;
 
   /** renderAuth(): a linha "Conectado como…", a janela de login e as mensagens. */
   function desenharLogin(): void {
@@ -171,12 +202,12 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
       );
     }
     linha.hidden = !quem;
-    if (quem && janela) fecharJanela();
+    if (quem && login.aberta()) login.fechar();
     if (trocandoSenha) abrirJanela();
-    else if (janela) preencherJanela();
+    else if (login.aberta()) login.redesenhar();
     const mensagens = [mensagem(erro), mensagem(aviso, true)].filter((m): m is HTMLParagraphElement => m !== null);
     // como no comments.js: sem janela aberta, a mensagem vai logo acima da barra
-    if (!janela || !janela.isConnected) for (const m of mensagens) linha.parentNode?.insertBefore(m, b);
+    if (!login.aberta()) for (const m of mensagens) linha.parentNode?.insertBefore(m, b);
     if (quem) erro = aviso = null;
   }
 
@@ -220,168 +251,6 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     });
     caixaDeLogin.before(linhaDeQuem, b);
     return b;
-  }
-
-  function abrirJanela(): void {
-    if (janela && janela.isConnected) {
-      preencherJanela();
-      return;
-    }
-    focoAntes = document.activeElement;
-    const j = el("div", { attrs: { class: "c-modal", role: "dialog", "aria-modal": "true", "aria-label": t("c_login_title") } });
-    janela = j;
-    j.addEventListener("mousedown", (e) => {
-      if (e.target === j && !trocandoSenha) fecharJanela();
-    });
-    j.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !trocandoSenha) {
-        fecharJanela();
-        return;
-      }
-      if (e.key !== "Tab") return;
-      const focaveis = j.querySelectorAll<HTMLElement>("button, input, a[href]");
-      const primeiro = focaveis[0];
-      const ultimo = focaveis[focaveis.length - 1];
-      if (!primeiro || !ultimo) return;
-      if (e.shiftKey && document.activeElement === primeiro) {
-        e.preventDefault();
-        ultimo.focus();
-      } else if (!e.shiftKey && document.activeElement === ultimo) {
-        e.preventDefault();
-        primeiro.focus();
-      }
-    });
-    document.body.appendChild(j);
-    document.documentElement.classList.add("c-modal-open");
-    preencherJanela();
-    j.querySelector("input")?.focus();
-  }
-
-  function fecharJanela(): void {
-    janela?.remove();
-    janela = null;
-    document.documentElement.classList.remove("c-modal-open");
-    if (focoAntes instanceof HTMLElement || focoAntes instanceof SVGElement) {
-      try {
-        focoAntes.focus({ preventScroll: true });
-      } catch {
-        /* o elemento pode ter saído da página */
-      }
-    }
-  }
-
-  function preencherJanela(): void {
-    const j = janela;
-    if (!j) return;
-    j.textContent = "";
-    const caixa = el("div", { attrs: { class: "c-dialog" } });
-    if (!trocandoSenha) caixa.appendChild(el("button", { attrs: { type: "button", class: "c-x", "aria-label": t("c_close") }, texto: "×", ao: { click: fecharJanela } }));
-    if (trocandoSenha) {
-      const f = el("form");
-      const senha = campo("password", "password", t("c_new_password"), { minlength: "6", autocomplete: "new-password" });
-      f.appendChild(senha);
-      f.appendChild(botaoDeEnviar(t("c_save_password")));
-      f.addEventListener("submit", (e) => {
-        e.preventDefault();
-        void sb.auth.updateUser({ password: senha.value }).then((r) => {
-          if (r.error) erro = mensagemDeErro(r.error, T);
-          else {
-            trocandoSenha = false;
-            aviso = t("c_password_changed");
-          }
-          void atualizar();
-        });
-      });
-      caixa.appendChild(f);
-    } else {
-      caixa.appendChild(el("h3", { texto: t("c_login_to") }));
-      caixa.appendChild(
-        el(
-          "button",
-          {
-            attrs: { type: "button", class: "c-google" },
-            ao: {
-              click: () => {
-                void sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: enderecoDeVolta(location.href) } }).then((r) => {
-                  if (r && r.error) {
-                    erro = mensagemDeErro(r.error, T);
-                    preencherJanela();
-                  }
-                });
-              },
-            },
-          },
-          [el("span", { attrs: { class: "c-g" }, texto: "G" }), el("span", { texto: t("c_google") })],
-        ),
-      );
-      caixa.appendChild(el("div", { attrs: { class: "c-or" }, texto: t("c_or") }));
-      caixa.appendChild(
-        el("div", { attrs: { class: "c-tabs" } }, [
-          el("button", { attrs: { type: "button", "aria-pressed": String(modo === "login") }, texto: t("c_login"), ao: { click: () => ((modo = "login"), preencherJanela()) } }),
-          el("button", { attrs: { type: "button", "aria-pressed": String(modo === "signup") }, texto: t("c_signup"), ao: { click: () => ((modo = "signup"), preencherJanela()) } }),
-        ]),
-      );
-      caixa.appendChild(modo === "login" ? formularioDeEntrar() : formularioDeCadastro());
-    }
-    for (const m of [mensagem(erro), mensagem(aviso, true)]) if (m) caixa.appendChild(m);
-    erro = aviso = null;
-    j.appendChild(caixa);
-  }
-
-  function formularioDeEntrar(): HTMLFormElement {
-    const f = el("form");
-    const email = campo("email", "email", t("c_email"), { autocomplete: "email" });
-    const senha = campo("password", "password", t("c_password"), { autocomplete: "current-password" });
-    const esqueci = el("button", {
-      attrs: { type: "button", class: "c-link" },
-      texto: t("c_forgot"),
-      ao: {
-        click: () => {
-          if (!email.value) {
-            email.focus();
-            return;
-          }
-          // como no comments.js: o aviso aparece mesmo se o Supabase recusar (não diz se o e-mail tem conta)
-          void sb.auth.resetPasswordForEmail(email.value, { redirectTo: enderecoDeVolta(location.href) }).then(() => {
-            aviso = t("c_reset_sent");
-            preencherJanela();
-          });
-        },
-      },
-    });
-    for (const n of [email, senha, botaoDeEnviar(t("c_login")), esqueci]) f.appendChild(n);
-    f.addEventListener("submit", (e) => {
-      e.preventDefault();
-      void sb.auth.signInWithPassword({ email: email.value, password: senha.value }).then((r) => {
-        if (r.error) {
-          erro = mensagemDeErro(r.error, T);
-          preencherJanela();
-        }
-      });
-    });
-    return f;
-  }
-
-  function formularioDeCadastro(): HTMLFormElement {
-    const f = el("form");
-    const nome = campo("text", "username", t("c_username"), { minlength: "2", maxlength: "30", autocomplete: "nickname" });
-    const email = campo("email", "email", t("c_email"), { autocomplete: "email" });
-    const senha = campo("password", "password", `${t("c_password")} (min. 6)`, { minlength: "6", autocomplete: "new-password" });
-    for (const n of [nome, email, senha, botaoDeEnviar(t("c_signup"))]) f.appendChild(n);
-    f.addEventListener("submit", (e) => {
-      e.preventDefault();
-      void sb.auth
-        .signUp({ email: email.value, password: senha.value, options: { data: { display_name: nome.value.trim() }, emailRedirectTo: enderecoDeVolta(location.href) } })
-        .then((r) => {
-          if (r.error) erro = mensagemDeErro(r.error, T);
-          else {
-            aviso = t("c_check_email");
-            modo = "login";
-          }
-          preencherJanela();
-        });
-    });
-    return f;
   }
 
   /** O formulário de resposta (parentId) — o comments.js também o usa para comentário novo, que hoje só a barra faz. */

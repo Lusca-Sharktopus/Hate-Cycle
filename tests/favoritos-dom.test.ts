@@ -15,6 +15,7 @@ const CFG: ConfiguracaoDosFavoritos = {
   lang: "pt",
   obras: { Pederneira: "firestriker", "Luz & Sangue": "light-and-blood", [TITULO_ATAQUE]: "hdvr" },
   runas: { firestriker: { lista: ["ᚠ", "ᚢ", "ᚦ"], finais: ["ᛟ"] } },
+  ui: { c_login: "Entrar", c_signup: "Criar conta", c_or: "ou", c_email: "E-mail", c_password: "Senha", c_close: "Fechar", c_login_title: "Entrar" },
 };
 
 const PEDIDOS: { op: string; filtros: Record<string, unknown>; corpo?: unknown }[] = [];
@@ -43,6 +44,7 @@ function clienteFalso(logado: boolean): SupabaseClient {
   };
   const sessao = logado ? { user: { id: "u-eu" } } : null;
   const auth = {
+    signInWithOAuth: (o: unknown) => (PEDIDOS.push({ op: "oauth", filtros: {}, corpo: o }), Promise.resolve({ error: null })),
     onAuthStateChange: (cb: (e: string, s: typeof sessao) => void) => {
       setTimeout(() => cb("INITIAL_SESSION", sessao), 0);
       return { data: { subscription: { unsubscribe() {} } } };
@@ -131,6 +133,39 @@ describe("favoritos num DOM simulado", () => {
     expect(document.querySelectorAll(".fav-modal")).toHaveLength(1);
     expect(PEDIDOS).toEqual([]);
     expect(visiveis()).toHaveLength(3);
+  });
+
+  test("o aviso (05/11, design do autor): título, texto, a cena da estrela, Criar conta / Entrar abrem a janela de login na aba certa", async () => {
+    iniciarFavoritos(montar(), CFG, clienteFalso(false));
+    await esperar();
+    const estrela = estrelas()[0] as HTMLButtonElement;
+    estrela.focus();
+    estrela.click();
+    expect(estrela.classList.contains("fav-pulo")).toBe(true); // o pulo do clique
+    const aviso = document.querySelector<HTMLElement>(".fav-modal") as HTMLElement;
+    expect(aviso.querySelector("h3")?.textContent).toBe("Quer favoritar histórias?");
+    expect(aviso.querySelector(".fav-cena .fav-grande-cheia")).not.toBeNull();
+    expect(aviso.querySelector(".fav-cena .fav-cursor")).not.toBeNull();
+    const [criar, entrar] = [...aviso.querySelectorAll<HTMLButtonElement>(".fav-botoes button")];
+    expect([criar?.textContent, entrar?.textContent]).toEqual(["Criar conta", "Entrar"]);
+    criar?.click();
+    expect(document.querySelector(".fav-modal")).toBeNull();
+    const login = document.querySelector<HTMLElement>(".c-modal .c-dialog.c-login") as HTMLElement;
+    expect(login.querySelector("h3")?.textContent).toBe("Entre ou crie uma conta");
+    expect(login.querySelector('.c-tabs button[aria-pressed="true"]')?.textContent).toBe("Criar conta");
+    expect([...login.querySelectorAll(".c-prov")].map((b) => b.className)).toEqual(["c-prov c-google", "c-prov c-twitter", "c-prov c-discord"]);
+    expect(login.querySelectorAll(".c-prov canvas.c-circulo")).toHaveLength(3);
+    // Esc fecha a janela de login e o foco volta para a estrela
+    login.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(document.querySelector(".c-modal")).toBeNull();
+    expect(document.activeElement).toBe(estrela);
+    // Entrar abre na aba Entrar; o Twitter entra pelo provedor "x" do Supabase
+    estrela.click();
+    document.querySelectorAll<HTMLButtonElement>(".fav-botoes button")[1]?.click();
+    expect(document.querySelector('.c-modal .c-tabs button[aria-pressed="true"]')?.textContent).toBe("Entrar");
+    document.querySelector<HTMLButtonElement>(".c-modal .c-twitter")?.click();
+    await esperar();
+    expect((PEDIDOS.at(-1)?.corpo as { provider?: string })?.provider).toBe("x");
   });
 
   test("com conta: lê os favoritos da própria conta, marca a estrela; clicar favorita/desfavorita (filtrando pelo próprio user_id)", async () => {

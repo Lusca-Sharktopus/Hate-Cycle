@@ -48,3 +48,22 @@ export function el<K extends keyof HTMLElementTagNameMap>(tag: K, o: OpcoesDoEle
   for (const f of filhos) if (f) n.appendChild(f);
   return n;
 }
+
+/**
+ * A entrada das janelas que escurecem a tela (05/11/2026, pedido do autor): o fundo aparece num fade rápido e a caixa SOBE um pouco
+ * enquanto aparece. Pela Web Animations API, não por classe: o HTML da janela fica igual ao do comments.js (o teste Python × Astro
+ * compara os atributos) e a caixa redesenhada (troca de aba) não anima de novo. Com "reduzir movimento", só o fade, sem subir.
+ * Navegador (ou DOM de teste) sem element.animate: a janela só aparece, como antes.
+ */
+export function animarEntrada(fundo: Element, caixa: Element | null): void {
+  const semMovimento = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try {
+    fundo.animate?.([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: "ease-out" });
+    caixa?.animate?.(
+      semMovimento ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: "translateY(32px)" }, { opacity: 1, transform: "none" }],
+      { duration: 240, easing: "cubic-bezier(.2, .8, .3, 1)" },
+    );
+  } catch {
+    /* sem animação: a janela só aparece */
+  }
+}

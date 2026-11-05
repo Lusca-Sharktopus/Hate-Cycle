@@ -99,6 +99,14 @@ const htmlDaPolitica = politica ? versaleteEntreTags(politica.rendered?.html ?? 
       text-align: left; font-size: 1rem; font-weight: 400; overflow: auto; overscroll-behavior: contain;
     }
     .politica::backdrop { background: #0b0812b3; }
+    /* 05/11 (pedido do autor, vale para toda janela que escurece a tela): a caixa sobe um pouco enquanto aparece; o fundo, fade rápido */
+    .politica[open] { animation: politica-sobe .24s cubic-bezier(.2, .8, .3, 1); }
+    .politica[open]::backdrop { animation: politica-fundo .18s ease-out; }
+    @keyframes politica-sobe { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
+    @keyframes politica-fundo { from { opacity: 0; } to { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      @keyframes politica-sobe { from { opacity: 0; } to { opacity: 1; } }
+    }
     .politica-topo {
       position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
       padding: 1.2rem clamp(1.2rem, 4vw, 2.4rem) .6rem; background: var(--paper), var(--sheet); background-color: var(--sheet);

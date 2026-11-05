@@ -140,7 +140,8 @@ describe("segurança: o código que vai para o navegador", () => {
   test("regras.ts não importa nada; index.ts só as regras, a conexão compartilhada e o TIPO do supabase-js; ninguém lê src/lib nem o config.json", () => {
     const imports = (a: string) => [...ler(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
     expect(imports("src/scripts/favoritos/regras.ts")).toEqual([]);
-    expect(imports("src/scripts/favoritos/index.ts").sort()).toEqual(["../supabase/cliente", "./regras", "@supabase/supabase-js"]);
+    // 05/11: o aviso abre a janela de login (src/scripts/login/janela.ts, com as travas de tests/comentarios.test.ts) com os textos da caixa
+    expect(imports("src/scripts/favoritos/index.ts").sort()).toEqual(["../comentarios/dom", "../comentarios/regras", "../login/janela", "../supabase/cliente", "./regras", "@supabase/supabase-js"]);
     expect(ler("src/scripts/favoritos/index.ts")).toMatch(/import type \{ SupabaseClient \} from "@supabase\/supabase-js"/);
   });
   test("os favoritos só falam com a tabela favorites", () => {

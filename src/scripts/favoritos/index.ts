@@ -10,6 +10,9 @@
 //
 // Segurança: tudo é criado com createElement/textContent/setAttribute (nada de innerHTML); o título do cartão só entra como texto.
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { animarEntrada } from "../comentarios/dom";
+import { textosComPadrao } from "../comentarios/regras";
+import { janelaDeLogin, textosDoLogin, type EstadoDoLogin } from "../login/janela";
 import { clienteDoSupabase } from "../supabase/cliente";
 import {
   horariosDaSequencia,
@@ -35,6 +38,57 @@ function estrela(): SVGSVGElement {
   p.setAttribute("d", PONTAS_DA_ESTRELA);
   s.appendChild(p);
   return s;
+}
+
+/** O "pulo" da estrela ao ser clicada (05/11, GIF do autor): encolhe, cresce e volta, com um círculo que sai dela e desvanece (CSS). */
+function pular(botao: HTMLElement): void {
+  botao.classList.remove("fav-pulo");
+  void botao.offsetWidth; // recomeça a animação se o clique anterior ainda não terminou
+  botao.classList.add("fav-pulo");
+  setTimeout(() => botao.classList.remove("fav-pulo"), 700);
+}
+
+/** A cena da estrela grande do aviso: a estrela (vazia e cheia, uma por cima da outra), o círculo do clique e o cursor. */
+function cenaDaEstrela(): HTMLDivElement {
+  const cena = document.createElement("div");
+  cena.className = "fav-cena";
+  cena.setAttribute("aria-hidden", "true");
+  const s = document.createElementNS(SVG, "svg");
+  s.setAttribute("viewBox", "0 0 24 24");
+  s.setAttribute("class", "fav-grande");
+  s.setAttribute("focusable", "false");
+  const defs = document.createElementNS(SVG, "defs");
+  const g = document.createElementNS(SVG, "linearGradient");
+  g.id = "fav-degrade";
+  for (const [k, v] of [["x1", "0"], ["y1", "0"], ["x2", "0"], ["y2", "1"]] as const) g.setAttribute(k, v);
+  for (const [offset, cor] of [["0", "#2ee0b0"], ["1", "#00e9fd"]] as const) {
+    const st = document.createElementNS(SVG, "stop");
+    st.setAttribute("offset", offset);
+    st.setAttribute("stop-color", cor);
+    g.appendChild(st);
+  }
+  defs.appendChild(g);
+  const vazia = document.createElementNS(SVG, "path");
+  vazia.setAttribute("d", PONTAS_DA_ESTRELA);
+  vazia.setAttribute("class", "fav-grande-vazia");
+  const cheia = document.createElementNS(SVG, "path");
+  cheia.setAttribute("d", PONTAS_DA_ESTRELA);
+  cheia.setAttribute("class", "fav-grande-cheia");
+  s.append(defs, vazia, cheia);
+  const circulo = document.createElement("span");
+  circulo.className = "fav-cena-circulo";
+  const cursor = document.createElementNS(SVG, "svg");
+  cursor.setAttribute("viewBox", "0 0 24 24");
+  cursor.setAttribute("class", "fav-cursor");
+  cursor.setAttribute("focusable", "false");
+  const seta = document.createElementNS(SVG, "path");
+  seta.setAttribute("d", "M4 2.5l14.5 8.7-6.3 1.3 3.6 7.4-2.9 1.4-3.5-7.5L4.6 18.5z");
+  cursor.appendChild(seta);
+  const estrelaQuePula = document.createElement("span");
+  estrelaQuePula.className = "fav-cena-estrela";
+  estrelaQuePula.appendChild(s);
+  cena.append(circulo, estrelaQuePula, cursor);
+  return cena;
 }
 
 /** Liga as estrelas e o filtro numa seção de Histórias. Exportada para o teste (tests/favoritos-dom.test.ts). */
@@ -76,6 +130,7 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
     janela.appendChild(botao);
     botao.addEventListener("click", (e) => {
       e.preventDefault();
+      pular(botao);
       if (!usuario) return abrirAviso(botao);
       if (obra) void alternar(obra);
     });
@@ -215,7 +270,21 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
     desenhar();
   }
 
-  // ── a janela "este recurso exige login" ──
+  // ── a janela de login (a mesma da caixa de comentários, ../login/janela.ts) ──
+  const estadoDoLogin: EstadoDoLogin = { modo: "login", trocandoSenha: false, erro: null, aviso: null };
+  const login = janelaDeLogin({
+    sb,
+    T: textosComPadrao(cfg.ui),
+    lang: cfg.lang,
+    titulo: textosDoLogin(cfg.lang).titulo,
+    estado: estadoDoLogin,
+    depoisDaSenhaNova: () => (usuario ? login.fechar() : login.redesenhar()),
+  });
+
+  // ── a janela "este recurso exige login" (05/11, design do autor "favorito design.png") ──
+  // A estrela grande em cima tem uma cena que se repete (só CSS, Favoritos.astro): o cursor aparece, clica na estrela (ela enche, com o
+  // mesmo "pulo" da estrela das capas), vai embora, volta e clica de novo (ela esvazia). Criar conta / Entrar fecham o aviso e abrem a
+  // janela de login na aba certa.
   function abrirAviso(origem: HTMLElement): void {
     document.querySelector(".fav-modal")?.remove();
     const janela = document.createElement("div");
@@ -232,42 +301,65 @@ export function iniciarFavoritos(secao: HTMLElement, cfg: ConfiguracaoDosFavorit
     x.textContent = "×";
     const titulo = document.createElement("h3");
     titulo.id = "fav-modal-titulo";
-    titulo.appendChild(estrela());
-    titulo.append(T.janelaTitulo);
+    titulo.textContent = T.janelaTitulo;
     const texto = document.createElement("p");
     texto.textContent = T.janelaTexto;
-    const ok = document.createElement("button");
-    ok.type = "button";
-    ok.className = "button";
-    ok.textContent = T.entendi;
-    caixa.append(x, titulo, texto, ok);
+    const botoes = document.createElement("div");
+    botoes.className = "fav-botoes";
+    const criar = document.createElement("button");
+    criar.type = "button";
+    criar.className = "button";
+    criar.textContent = T.criarConta;
+    const entrar = document.createElement("button");
+    entrar.type = "button";
+    entrar.className = "button";
+    entrar.textContent = T.entrar;
+    botoes.append(criar, entrar);
+    caixa.append(x, cenaDaEstrela(), titulo, texto, botoes);
     janela.appendChild(caixa);
-    const fechar = () => {
+    const fechar = (devolverFoco = true) => {
       janela.remove();
       document.documentElement.classList.remove("fav-modal-aberta");
-      if (origem.isConnected) origem.focus({ preventScroll: true });
+      if (devolverFoco && origem.isConnected) origem.focus({ preventScroll: true });
     };
-    x.addEventListener("click", fechar);
-    ok.addEventListener("click", fechar);
+    const irParaOLogin = (modo: EstadoDoLogin["modo"]) => {
+      fechar(false);
+      // ao fechar a janela de login, o foco volta para a estrela (ou o filtro) que abriu o aviso
+      if (origem.isConnected) origem.focus({ preventScroll: true });
+      estadoDoLogin.modo = modo;
+      login.abrir();
+    };
+    x.addEventListener("click", () => fechar());
+    criar.addEventListener("click", () => irParaOLogin("signup"));
+    entrar.addEventListener("click", () => irParaOLogin("login"));
     janela.addEventListener("mousedown", (e) => {
       if (e.target === janela) fechar();
     });
+    const focaveis = [x, criar, entrar];
     janela.addEventListener("keydown", (e) => {
       if (e.key === "Escape") fechar();
       else if (e.key === "Tab") {
-        // só dois botões: o foco fica dentro da janela
+        // o foco fica dentro da janela
         e.preventDefault();
-        (document.activeElement === ok ? x : ok).focus();
+        const i = focaveis.indexOf(document.activeElement as HTMLButtonElement);
+        const proximo = focaveis[(i + (e.shiftKey ? focaveis.length - 1 : 1)) % focaveis.length] ?? criar;
+        proximo.focus();
       }
     });
     document.body.appendChild(janela);
     document.documentElement.classList.add("fav-modal-aberta");
-    ok.focus();
+    animarEntrada(janela, caixa);
+    entrar.focus();
   }
 
   desenhar();
-  sb.auth.onAuthStateChange((_evento, sessao) => {
+  sb.auth.onAuthStateChange((evento, sessao) => {
+    if (evento === "PASSWORD_RECOVERY") {
+      estadoDoLogin.trocandoSenha = true;
+      setTimeout(() => login.abrir(), 0);
+    }
     const novo = sessao?.user?.id ?? null;
+    if (novo && login.aberta() && !estadoDoLogin.trocandoSenha) setTimeout(() => login.fechar(), 0);
     if (novo === usuario) return;
     usuario = novo;
     // fora do callback do supabase-js (ele pede para não esperar outras chamadas aqui dentro)

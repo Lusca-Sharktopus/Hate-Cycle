@@ -90,7 +90,13 @@ RETRATO = """() => {
     // 03/11 (só no Astro): o nome em "Conectado como <nome>" é um <button class="c-me"> que abre a janela da conta; aqui ele volta a
     // ser só o texto do nome, como no comments.js (a janela tem o próprio teste: tests/comentarios-dom.test.ts)
     if (n.classList.contains('c-me')) return n.textContent;
+    // 05/11 (só no Astro, design do autor): a janela de login tem Google, Twitter e Discord (div.c-provedores, com ícones e o círculo
+    // mágico) e a divisória "ou" da arte do autor (div.c-ou); o Python tem o botão do Google e o "ou" de texto. Os dois lados saem do
+    // retrato (os botões novos têm o próprio teste: tests/comentarios-dom.test.ts e tests/favoritos-dom.test.ts); o roteiro do Google
+    // continua clicando em .c-google, que existe nos dois.
+    if (n.closest && n.closest('.c-modal') && (n.matches('.c-google, .c-or, .c-provedores, .c-ou'))) return null;
     const a = {}; for (const x of Array.from(n.attributes).sort((p, q) => p.name < q.name ? -1 : 1)) a[x.name] = x.value;
+    if (a.class === 'c-dialog c-login') a.class = 'c-dialog';
     const o = { t: n.tagName.toLowerCase(), a };
     if (n.hidden) o.hidden = true;
     if (n.tagName === 'TEXTAREA' || n.tagName === 'INPUT') o.v = n.value;
