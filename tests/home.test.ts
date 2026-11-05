@@ -28,8 +28,10 @@ describe("o componente", () => {
   test("o CSS: espaço para 4 na tela larga, rótulo no mouse e no foco, rótulo sempre visível na tela estreita", () => {
     const css = readFileSync(join(RAIZ, "src", "components", "Carrossel.astro"), "utf8");
     expect(css).toContain(".rail-home .work-card { flex: 0 0 calc((100% - 3 * 1.4rem) / 4); min-width: 0; }");
-    expect(css).toContain(".rail-more:hover .rail-label, .rail-more:focus-visible .rail-label { display: inline; }");
-    expect(css).toMatch(/@media \(max-width: 1000px\) \{[\s\S]*\.rail-more \.rail-label \{ display: inline; \}/);
+    // 05/11 (pedido do autor): o rótulo abre deslizando (largura máxima e opacidade animadas), não com display
+    expect(css).toMatch(/\.rail-more \.rail-label \{\s*display: inline-block; max-width: 0; opacity: 0;/);
+    expect(css).toMatch(/\.rail-more:hover \.rail-label, \.rail-more:focus-visible \.rail-label \{ max-width: 16rem; opacity: 1;/);
+    expect(css).toMatch(/@media \(max-width: 1000px\) \{[\s\S]*\.rail-more \.rail-label \{ display: inline; max-width: none; opacity: 1; \}/);
     expect(css).toMatch(/<style is:global>\s*@layer site \{/);
   });
 });
