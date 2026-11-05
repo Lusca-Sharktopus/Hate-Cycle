@@ -16,8 +16,8 @@ import { enderecoDeVolta, mensagemDeErro, texto, type TextosDaCaixa } from "../c
 import { ligarCirculo } from "./circulo";
 
 export const TEXTOS_DO_LOGIN = {
-  pt: { google: "continuar com Google", twitter: "continuar com Twitter", discord: "continuar com Discord", titulo: "Entre ou crie uma conta", falhou: "O login não deu certo. O servidor respondeu:" },
-  en: { google: "continue with Google", twitter: "continue with Twitter", discord: "continue with Discord", titulo: "Log in or create an account", falhou: "The login didn't work. The server said:" },
+  pt: { google: "continuar com Google", twitter: "continuar com Twitter", discord: "continuar com Discord", titulo: "Entre ou crie uma conta", falhou: "O login não deu certo. O servidor respondeu:", deNovo: "Tente entrar de novo." },
+  en: { google: "continue with Google", twitter: "continue with Twitter", discord: "continue with Discord", titulo: "Log in or create an account", falhou: "The login didn't work. The server said:", deNovo: "Please try logging in again." },
 } as const;
 
 /**
@@ -47,7 +47,10 @@ export function erroDoRetornoDoLogin(hash: string, search: string, lang: string)
       }
     }
     const limpo = bruto.replace(/[^A-Za-z0-9À-ÿ .,:;()'_-]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
-    return `${textosDoLogin(lang).falhou} ${limpo || "?"}`;
+    // 05/11: no celular o erro "Unable to exchange external code" pode ser de uma vez só (o link de volta carregado duas vezes, ou o código
+    // vencido): tentar de novo resolve, então a mensagem diz isso
+    const L = textosDoLogin(lang);
+    return `${L.falhou} ${(limpo || "?").replace(/[.\s]+$/, "")}. ${L.deNovo}`;
   }
   return null;
 }
