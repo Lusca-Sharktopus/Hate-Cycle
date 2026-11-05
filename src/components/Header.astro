@@ -4,7 +4,6 @@ import { assetUrl } from "../lib/assets";
 import { otimizar, PERFIS } from "../lib/imagens";
 import { langName, htmlLang, langs, logoFile, siteName, t, type Lang } from "../lib/config";
 import { menuDoIdioma, type Menu, type MenuLink } from "../lib/nav";
-import { enderecoDoSobre } from "../lib/sobreNaHome";
 
 interface Props {
   lang: Lang;
@@ -18,11 +17,10 @@ interface Props {
 
 const { lang, alternates = {}, current = Astro.url.pathname, menuMinimo = false } = Astro.props;
 
-// Itens do menu na mesma ordem do shell(): Histórias sempre; depois Sobre, Notícias, Extras e Apoio se existirem.
+// Itens do menu na mesma ordem do shell(): Histórias sempre; depois Notícias, Extras e Apoio se existirem (o Sobre saiu em 05/11/2026).
 const menu: Menu = menuMinimo ? { about: false, news: false, support: false, extras: [] } : await menuDoIdioma(lang);
 const links: MenuLink[] = [{ href: `/${lang}/works/`, label: t(lang, "works") }];
-// 05/11/2026: a Sobre mora na home; o item leva à seção (/pt/#sobre, src/lib/sobreNaHome.ts)
-if (menu.about) links.push({ href: enderecoDoSobre(lang), label: t(lang, "about") });
+// 05/11/2026 (pedido do autor): sem o item "Sobre": a Sobre mora na home, logo abaixo das histórias (src/lib/sobreNaHome.ts)
 if (menu.news) links.push({ href: `/${lang}/news/`, label: t(lang, "news") });
 const support: MenuLink | undefined = menu.support ? { href: `/${lang}/support/`, label: t(lang, "support") } : undefined;
 

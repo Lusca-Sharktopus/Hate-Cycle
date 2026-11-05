@@ -33,7 +33,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { t } from "../src/lib/config";
 import { pyStrip } from "../src/lib/frontmatter";
-import { ehRedirecionamentoDoSobre, menuDoSobreComoNoPython, semChamadaDoSobre, semSobreNaHome, rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { ehRedirecionamentoDoSobre, semSobreNoMenu, semChamadaDoSobre, semSobreNaHome, rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -124,10 +124,9 @@ function trocarCanalDoYoutube(url: string, html: string): string {
   const lr = (lang ?? "en") as "en" | "pt";
   const f = rodapeComoNoPython(r.html, lr, t(lr, "rss"));
   if (f.linhas !== 1 || f.janelas !== 1) throw new Error(`${url}: o rodapé devia ter 1 linha nova e 1 janela da política (linhas ${f.linhas}, janelas ${f.janelas})`);
-  // 05/11: o item "Sobre" do menu leva à seção da home (/pt/#sobre; src/lib/sobreNaHome.ts); no Python, a /pt/about/
-  const m = menuDoSobreComoNoPython(f.html);
-  if (/<nav class="main-nav"[^>]*>[\s\S]*?href="\/(en|pt)\/#/.test(m.html)) throw new Error(`${url}: sobrou um link do menu para uma âncora da home com forma inesperada`);
-  return m.html;
+  // 05/11: o menu do Astro não tem o item "Sobre" (tests/ajudantes/html.ts → semSobreNoMenu tira o do Python)
+  if (/<nav class="main-nav"[^>]*>(?:(?!<\/nav>)[\s\S])*?(\/about\/|#sobre|#about)/.test(f.html)) throw new Error(`${url}: o menu do Astro ainda leva à Sobre`);
+  return f.html;
 }
 
 /** O ano do rodapé é o do dia do build ("© 2023 - 2026"): troca por um marcador para o teste não quebrar em 1º de janeiro. */
@@ -164,7 +163,7 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
 function pythonComoNoAstro(html: string): string {
   // 28/10: o Astro não desenha mais a data sob o título do capítulo (tests/ajudantes/html.ts → semDataDoCapitulo)
   // 05/11: a home do Python tem a chamada "Sobre"; a do Astro, a Sobre inteira (conferida à parte, no teste "a Sobre na home")
-  return semChamadaDoSobre(semDataDoCapitulo(soQuatroHistoriasNaHome(html).html).html).html;
+  return semSobreNoMenu(semChamadaDoSobre(semDataDoCapitulo(soQuatroHistoriasNaHome(html).html).html).html).html;
 }
 /** O HTML do Astro sem o trilho/link da home e com o resumo cortado das Notícias escrito como no Python (T17j); o leitor página a página
  *  dos quadrinhos vira o <div class="comic"> de dentro e a janela do jogo sai (T17d; tests/folheador.test.ts). Forma inesperada = erro. */
@@ -466,7 +465,7 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
       const py = c.partes[url];
       if (!py) continue;
       const html = lerComMarcadores(join(dir, url.slice(1), "index.html"));
-      if (canonicoDoMiolo(menuDoSobreComoNoPython(cabecalho(html)).html) !== canonicoDoMiolo(py.header)) diferentes.push(`${url} (cabeçalho)`);
+      if (canonicoDoMiolo(cabecalho(html)) !== canonicoDoMiolo(semSobreNoMenu(py.header).html)) diferentes.push(`${url} (cabeçalho)`);
       if (canonicoDoMiolo(semFavoritos(miolo(html)).html) !== canonicoDoMiolo(pythonComoNoAstro(semScriptsAntigosDosComentarios(py.main).html))) diferentes.push(`${url} (<main>)`);
     }
     expect(diferentes, `${outras.length} páginas conferidas`).toEqual([]);

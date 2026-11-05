@@ -643,17 +643,17 @@ export function ehRedirecionamentoDoSobre(html: string): boolean {
   return RE_REDIRECIONAMENTO_DO_SOBRE.test(html);
 }
 
-/** O item "Sobre" do menu do Astro (/pt/#sobre) volta a ser o do Python (/pt/about/). Só a forma exata dentro do <nav class="main-nav">. */
-export function menuDoSobreComoNoPython(html: string): { html: string; trocados: number } {
-  let trocados = 0;
+/** O menu do Python tem o item "Sobre" (/pt/about/); o do Astro não tem desde 05/11 (a Sobre mora na home). Sai só a forma exata, dentro
+ *  do <nav class="main-nav"> (com ou sem aria-current). */
+export function semSobreNoMenu(html: string): { html: string; tirados: number } {
+  let tirados = 0;
   const saida = html.replace(/(<nav class="main-nav"[^>]*>[\s\S]*?<\/nav>)/, (nav) =>
-    nav.replace(/<a href="\/(en|pt)\/#(about|sobre)"( data-astro-cid-[a-z0-9]+)?>/g, (_t, lang: string, ancora: string, cid: string | undefined) => {
-      if ((lang === "pt" ? "sobre" : "about") !== ancora) return _t;
-      trocados++;
-      return `<a href="/${lang}/about/"${cid ?? ""}>`;
+    nav.replace(/<a href="\/(en|pt)\/about\/"( aria-current="page")?>(About|Sobre)<\/a>/g, () => {
+      tirados++;
+      return "";
     }),
   );
-  return { html: saida, trocados };
+  return { html: saida, tirados };
 }
 
 /**

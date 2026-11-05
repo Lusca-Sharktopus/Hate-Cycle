@@ -40,6 +40,8 @@ const { pagina: p, ancoraNaHome } = Astro.props;
     .page-about h2, .page-project h2 { clear: both; }
     /* 05/11: a Sobre na home (a âncora do menu "Sobre"): um respiro em cima ao pular para ela */
     #sobre.page-about, #about.page-about { scroll-margin-top: 1rem; }
+    /* 05/11 (pedido do autor): menos espaço entre as histórias e o "Sobre o projeto" (o título abria com a margem de cima inteira) */
+    :is(#sobre, #about).page-about .prose > h2:first-child { margin-top: .6rem; }
     /* Copiado de static/style.css (T17l, pedido do autor de 22/10): na Sobre, o título que vem logo depois do texto ("Sobre o autor") fica
        à mesma distância do texto que "Outros Emissários" (só a margem do parágrafo, 1rem). */
     .page-about .prose > p + h2 { margin-top: 0; }
