@@ -79,6 +79,8 @@ Supabase; até lá, quem clicar vê a mensagem de erro do Supabase ("provider is
 3. Em **Keys and tokens → OAuth 2.0 Client ID and Client Secret**, copie os dois.
 4. No Supabase: **Authentication → Sign In / Providers → X / Twitter (OAuth 2.0)** → ative, cole os dois valores → **Save**.
 
+> **Situação:** o autor ativou os dois no Supabase em 05/11/2026 (app do Discord e app do X em *Production*).
+
 O nome de quem entra pelo Discord ou pelo X vem da própria conta (a mesma regra do Google: 2 a 30 caracteres; se não servir, vira
 `user-xxxxxx` e a pessoa troca na janela da conta).
 
