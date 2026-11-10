@@ -4,6 +4,9 @@ import { assetUrl } from "../lib/assets";
 import { otimizar, PERFIS } from "../lib/imagens";
 import { langName, htmlLang, langs, logoFile, siteName, t, type Lang } from "../lib/config";
 import { menuDoIdioma, type Menu, type MenuLink } from "../lib/nav";
+import { contaDaPagina } from "../lib/comentarios";
+import EstiloDaConta from "./EstiloDaConta.astro";
+import EstiloDoLogin from "./EstiloDoLogin.astro";
 
 interface Props {
   lang: Lang;
@@ -27,6 +30,12 @@ const support: MenuLink | undefined = menu.support ? { href: `/${lang}/support/`
 // A logo: o `src` continua sendo o arquivo original (logos/Hate Cycle Glow.png, 2,3 MB); as versões leves em WebP vão no `srcset`
 // (T17, src/lib/imagens.ts). Sem `loading="lazy"`: é a primeira coisa da página. width/height = proporção do original (evita pulo).
 const logo = await otimizar(logoFile, PERFIS.logo);
+
+// 10/11/2026 (pedido do autor): o botão da conta, logo depois do seletor de idioma, em toda página (só com as chaves do Supabase no
+// config.json). Começa escondido e com a silhueta; o script (src/scripts/conta/) mostra o botão e, para quem entrou, troca a silhueta
+// pela foto (ou a runa). Sem JavaScript, o botão não aparece. O Python não tem: tests/ajudantes/html.ts → semBotaoDaConta.
+const configuracaoDaConta = contaDaPagina(lang);
+const rotuloDaConta = lang === "pt" ? "Entrar ou criar uma conta" : "Log in or create an account";
 
 // Os outros idiomas para o seletor: link para a mesma página no outro idioma, ou para a home dele.
 const outros = langs
@@ -54,9 +63,25 @@ const outros = langs
           </div>
         </details>
       )
+    }{
+      configuracaoDaConta && (
+        <button type="button" class="hc-conta" hidden aria-label={rotuloDaConta} title={rotuloDaConta}><span class="hc-conta-silhueta"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="4.2" /><path d="M3.8 21.2c.9-4.3 4.2-6.7 8.2-6.7s7.3 2.4 8.2 6.7z" /></svg></span></button>
+      )
     }
   </nav>
-</header>
+</header>{
+  configuracaoDaConta && (
+    <Fragment>
+      <script is:inline set:html={configuracaoDaConta}></script>
+      <EstiloDaConta />
+      <EstiloDoLogin />
+    </Fragment>
+  )
+}
+
+<script>
+  import "../scripts/conta/index";
+</script>
 
 <style>
   @layer site {
@@ -76,6 +101,23 @@ const outros = langs
     .main-nav a:hover, .dd > summary:hover { color: var(--on-brand); text-shadow: 0 0 16px var(--cyan), 0 0 4px var(--cyan); transition: text-shadow .3s; }
     .main-nav > a[aria-current], .dd[data-current] > summary { border-bottom-color: var(--on-brand); }
     .dd { position: relative; }
+    /* o botão da conta (10/11): um círculo do tamanho do texto do menu; com o mouse, o mesmo brilho ciano dos itens */
+    .hc-conta {
+      position: relative; display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; padding: 0; margin-left: .2rem; border: 2px solid var(--on-brand);
+      border-radius: 50%; background: #0000004d; color: var(--on-brand); cursor: pointer; overflow: hidden; transition: box-shadow .3s, transform .2s;
+    }
+    .hc-conta[hidden] { display: none; }
+    .hc-conta:hover, .hc-conta:focus-visible { box-shadow: 0 0 16px var(--cyan), 0 0 4px var(--cyan); outline: none; transform: scale(1.05); }
+    .hc-conta-silhueta { display: grid; place-items: center; width: 100%; height: 100%; }
+    .hc-conta-silhueta[hidden] { display: none; }
+    .hc-conta-silhueta svg { width: 72%; height: 72%; fill: currentColor; translate: 0 6%; }
+    .hc-conta :global(.c-foto) { width: 100%; height: 100%; margin: 0; font-size: 1.3rem; }
+    /* celular: o botão menor e o menu um pouco mais junto, para o botão caber na mesma linha do idioma (até 360 px) */
+    @media (max-width: 440px) {
+      .main-nav:has(.hc-conta) { column-gap: .7rem; }
+      .hc-conta { width: 1.85rem; height: 1.85rem; margin-left: 0; border-width: 1.5px; }
+      .hc-conta :global(.c-foto) { font-size: 1rem; }
+    }
     .dd > summary::-webkit-details-marker { display: none; }
     .dd > summary::after { content: " ▾"; font-size: .8em; }
     .dd[open] > summary::after { content: " ▴"; }

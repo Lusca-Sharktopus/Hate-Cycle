@@ -176,7 +176,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
                   nome: (perfil && perfil.display_name) || "",
                   foto: perfil && perfil.avatar_path,
                   admin: Boolean(perfil && perfil.is_admin),
-                  aoMudar: () => void atualizar(),
+                  // 10/11: o aviso chega à própria caixa (que redesenha, logo abaixo) e ao botão da conta no cabeçalho (src/scripts/conta/)
+                  aoMudar: () => void document.dispatchEvent(new CustomEvent("hc-conta-mudou")),
                   aoApagar: (texto) => {
                     quem = null;
                     perfil = null;
@@ -449,6 +450,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     });
   }
 
+  // 10/11: o nome ou a foto mudaram pela janela aberta no botão do cabeçalho (src/scripts/conta/): redesenha com o perfil novo
+  document.addEventListener("hc-conta-mudou", () => void atualizar());
   sb.auth.onAuthStateChange((evento, sessao) => {
     if (evento === "PASSWORD_RECOVERY") trocandoSenha = true;
     const proximo = sessao?.user ?? null;

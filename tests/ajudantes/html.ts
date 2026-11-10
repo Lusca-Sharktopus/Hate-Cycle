@@ -168,7 +168,9 @@ export interface PaginaLida {
   rodape: string;
 }
 
-export function lerPagina(html: string): PaginaLida {
+export function lerPagina(htmlInteiro: string): PaginaLida {
+  // 10/11/2026: o botão da conta no cabeçalho só existe no Astro (semBotaoDaConta, logo abaixo); no HTML do Python não muda nada
+  const html = semBotaoDaConta(htmlInteiro).html;
   const doc = parse(html);
   const todos = (quando: (e: Elemento) => boolean) => varrer(doc, quando);
   const um = (quando: (e: Elemento) => boolean, nome: string) => {
@@ -216,6 +218,25 @@ export function semFavoritos(html: string): { html: string; quantos: number } {
 }
 /** O script empacotado dos favoritos (fim da página). */
 export const RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO = /<script type="module" src="[^"]*Favoritos\.astro[^"]*"><\/script>/g;
+
+/**
+ * O botão da conta no cabeçalho (10/11/2026, pedido do autor; só no Astro, src/components/Header.astro): o <button class="hc-conta">
+ * logo depois do seletor de idioma (com a silhueta em SVG) e, logo depois do </header>, o <script> com window.HC_CONTA (as chaves:
+ * nunca imprima esse HTML). Forma inesperada (dois botões, botão sem a silhueta) = erro. Devolve o HTML sem os dois e quantos botões havia.
+ */
+const RE_BOTAO_DA_CONTA = /<button type="button" class="hc-conta" hidden aria-label="[^"]*" title="[^"]*"(?: data-astro-cid-[a-z0-9]+)?><span class="hc-conta-silhueta"(?: data-astro-cid-[a-z0-9]+)?><svg [^>]*>(?:<circle [^>]*><\/circle>|<circle [^>]*\/>)(?:<path [^>]*><\/path>|<path [^>]*\/>)<\/svg><\/span><\/button>/g;
+const RE_CONFIGURACAO_DA_CONTA = /<script>window\.HC_CONTA=\{[^<]*\};<\/script>/g;
+export function semBotaoDaConta(html: string): { html: string; botoes: number } {
+  let botoes = 0;
+  const saida = html
+    .replace(RE_BOTAO_DA_CONTA, () => {
+      botoes++;
+      return "";
+    })
+    .replace(RE_CONFIGURACAO_DA_CONTA, "");
+  if (botoes > 1 || /class="hc-conta"/.test(saida)) throw new Error("botão da conta em forma inesperada");
+  return { html: saida, botoes };
+}
 
 /** Só o miolo (<main>) de um HTML que pode ser um pedaço (o resultado de um componente, sem <html>). */
 export function canonicoDoMiolo(htmlDoMiolo: string): string {

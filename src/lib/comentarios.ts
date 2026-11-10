@@ -162,3 +162,26 @@ export function favoritosDaPagina(
 ): string | null {
   return configuracaoDosFavoritos(lang, obras, runas, doAutor.comments, doAutor.ui);
 }
+
+/**
+ * O botão da conta no cabeçalho (10/11/2026, pedido do autor; só no site novo): window.HC_CONTA = { url, key, lang, ui } em TODAS as
+ * páginas, para o script de src/scripts/conta/ mostrar a foto de quem entrou (ou a silhueta) e abrir a janela da conta ou a de login.
+ * Sem as chaves no config.json, null (o cabeçalho fica sem o botão). Mesmo escape dos outros scripts: nada no texto mexe no <script>.
+ */
+export function configuracaoDaConta(lang: Lang, chaves: ChavesDoSupabase | undefined, ui?: TextosDaInterface): string | null {
+  const url = chaves?.supabase_url;
+  const chave = chaves?.supabase_anon_key;
+  if (!(typeof url === "string" && url !== "" && typeof chave === "string" && chave !== "")) return null;
+  const conta = new Map<string, unknown>([
+    ["url", limparUrlDoSupabase(url)],
+    ["key", pyStrip(chave)],
+    ["lang", lang],
+  ]);
+  if (ui) conta.set("ui", textosDosComentarios(ui, lang));
+  return `window.HC_CONTA=${jsonComoPython(conta).replace(/[<>&\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"))};`;
+}
+
+/** A configuração do botão da conta com o config.json do autor. */
+export function contaDaPagina(lang: Lang): string | null {
+  return configuracaoDaConta(lang, doAutor.comments, doAutor.ui);
+}

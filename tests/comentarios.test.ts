@@ -403,3 +403,44 @@ describe("a janela da conta (endereços e favoritos)", () => {
     );
   });
 });
+
+// 10/11/2026: o botão da conta no cabeçalho (src/components/Header.astro + src/scripts/conta/)
+import { configuracaoDaConta } from "../src/lib/comentarios";
+import { semBotaoDaConta } from "./ajudantes/html";
+describe("o botão da conta no cabeçalho (10/11)", () => {
+  const CONTA = join(PASTA, "..", "conta");
+  const codigoDaConta = (a: string) =>
+    readFileSync(join(CONTA, a), "utf8")
+      .split("\n")
+      .filter((l) => !/^\s*\/\//.test(l))
+      .join("\n");
+  test("a configuração: só com as duas chaves; nada no texto fecha o <script>", () => {
+    expect(configuracaoDaConta("pt", undefined)).toBeNull();
+    expect(configuracaoDaConta("pt", { supabase_url: "", supabase_anon_key: "k" })).toBeNull();
+    const js = configuracaoDaConta("pt", { supabase_url: " https://falso.supabase.co/rest/v1/ ", supabase_anon_key: "__CHAVE_FALSA__" }, { pt: { c_hello: "</script><!--" } }) ?? "";
+    expect(js).toMatch(/^window\.HC_CONTA=\{"url": "https:\/\/falso\.supabase\.co", "key": "__CHAVE_FALSA__", "lang": "pt", "ui": \{/);
+    expect(js).not.toMatch(/[<>]/);
+  });
+  test("src/scripts/conta/: index.ts é leve (sem supabase-js, sem a caixa) e só carrega o painel por import(); sem innerHTML & cia.", () => {
+    expect(readdirSync(CONTA).sort()).toEqual(["index.ts", "painel.ts"]);
+    const index = codigoDaConta("index.ts");
+    expect([...index.matchAll(/^import\b[^"']*["']([^"']+)["']/gm)].map((m) => m[1])).toEqual(["../comentarios/regras"]);
+    expect(index).toMatch(/import\("\.\/painel"\)/);
+    for (const a of ["index.ts", "painel.ts"]) {
+      const c = codigoDaConta(a);
+      expect(c, a).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
+      for (const m of c.matchAll(/^import\b[^"']*["']([^"']+)["']/gm))
+        expect(m[1], a).toMatch(/^(\.\.\/comentarios\/(regras|caixa|conta|foto)|\.\.\/login\/janela|\.\.\/supabase\/cliente|@supabase\/supabase-js)$/);
+    }
+    expect(codigoDaConta("painel.ts")).toMatch(/import type \{ SupabaseClient \} from "@supabase\/supabase-js"/);
+  });
+  test("semBotaoDaConta: tira o botão e a configuração; forma inesperada é erro", () => {
+    const botao =
+      '<button type="button" class="hc-conta" hidden aria-label="Entrar" title="Entrar" data-astro-cid-x1><span class="hc-conta-silhueta" data-astro-cid-x1><svg viewBox="0 0 24 24" data-astro-cid-x1><circle cx="12" data-astro-cid-x1></circle><path d="M3" data-astro-cid-x1></path></svg></span></button>';
+    const html = `<header><nav>a${botao}</nav></header><script>window.HC_CONTA={"key": "__CHAVE_FALSA__"};</script><main></main>`;
+    expect(semBotaoDaConta(html)).toEqual({ html: "<header><nav>a</nav></header><main></main>", botoes: 1 });
+    expect(semBotaoDaConta("<header></header>")).toEqual({ html: "<header></header>", botoes: 0 });
+    expect(() => semBotaoDaConta(`${botao}${botao}`)).toThrow();
+    expect(() => semBotaoDaConta('<button type="button" class="hc-conta">x</button>')).toThrow();
+  });
+});

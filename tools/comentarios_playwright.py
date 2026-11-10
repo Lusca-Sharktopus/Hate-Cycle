@@ -79,6 +79,9 @@ TROCA_O_HC = """(() => {
   let hc;
   Object.defineProperty(window, 'HC', { configurable: true, get() { return hc; },
     set(v) { if (v && typeof v === 'object') { v.url = %s; v.key = %s; } hc = v; } });
+  // 10/11 (só no Astro): o botão da conta no cabeçalho (src/scripts/conta/) fica DESLIGADO aqui (o Python não tem; ele pediria o perfil
+  // de novo e mudaria a lista de pedidos). A configuração dele é jogada fora: sem ela o botão nem aparece. Ele tem os próprios testes.
+  Object.defineProperty(window, 'HC_CONTA', { configurable: true, get() { return undefined; }, set(v) {} });
 })();""" % (json.dumps(FALSO), json.dumps(CHAVE_FALSA))
 
 # O retrato da caixa depois de cada passo (roda no navegador).

@@ -33,7 +33,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { limparUrlDoSupabase } from "../src/lib/comentarios";
 import { t } from "../src/lib/config";
 import { pyStrip } from "../src/lib/frontmatter";
-import { ehRedirecionamentoDoSobre, semSobreNoMenu, semChamadaDoSobre, semSobreNaHome, rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
+import { ehRedirecionamentoDoSobre, semBotaoDaConta, semSobreNoMenu, semChamadaDoSobre, semSobreNaHome, rodapeComoNoPython, cabecalhoDoCapituloComoNoPython, semDataDoCapitulo, canalDoYoutubeComoNoPython, canonicoDoMiolo, cartaoEmOutroIdiomaComoNoPython, folheadorComoNoPython, semJanelaDoJogo, idsDeComentarios, lerPagina, RE_SCRIPT_DOS_COMENTARIOS, RE_SCRIPT_DOS_FAVORITOS_EMPACOTADO, semFavoritos, homeComoNoPython, resumoCortadoComoNoPython, semBlocoDeOrdem, semScriptsAntigosDosComentarios, soQuatroHistoriasNaHome, type PaginaLida } from "./ajudantes/html";
 
 interface Referencia {
   python: string;
@@ -414,7 +414,8 @@ describe("o site INTEIRO com rascunhos e Extras ligados (o que o autor verá se 
     return r.html;
   };
   const miolo = (html: string) => /<main\b[^>]*>([\s\S]*)<\/main>/.exec(html)?.[1] ?? "";
-  const cabecalho = (html: string) => /<header class="site-header"[^>]*>[\s\S]*?<\/header>/.exec(html)?.[0] ?? "";
+  // 10/11: sem o botão da conta (só no Astro; tests/ajudantes/html.ts → semBotaoDaConta)
+  const cabecalho = (html: string) => /<header class="site-header"[^>]*>[\s\S]*?<\/header>/.exec(semBotaoDaConta(html).html)?.[0] ?? "";
 
   test("as mesmas páginas (nenhuma a mais, nenhuma a menos; fora o /dev/ da prévia)", () => {
     const dir = outra();
