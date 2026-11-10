@@ -7645,6 +7645,10 @@
     "Bluesky"
    ],
    [
+    "behance",
+    "Behance"
+   ],
+   [
     "website",
     "Website"
    ],
@@ -8698,8 +8702,8 @@
          "url": "https://www.instagram.com/jrevan.aex/"
         },
         {
-         "chave": "website",
-         "rotulo": "Website",
+         "chave": "behance",
+         "rotulo": "Behance",
          "url": "https://www.behance.net/joao_revan"
         }
        ],
@@ -9767,8 +9771,8 @@
          "url": "https://www.instagram.com/jrevan.aex/"
         },
         {
-         "chave": "website",
-         "rotulo": "Website",
+         "chave": "behance",
+         "rotulo": "Behance",
          "url": "https://www.behance.net/joao_revan"
         }
        ],
@@ -19268,8 +19272,8 @@
          "url": "https://www.instagram.com/jrevan.aex/"
         },
         {
-         "chave": "website",
-         "rotulo": "Website",
+         "chave": "behance",
+         "rotulo": "Behance",
          "url": "https://www.behance.net/joao_revan"
         }
        ],
@@ -20441,8 +20445,8 @@
          "url": "https://www.instagram.com/jrevan.aex/"
         },
         {
-         "chave": "website",
-         "rotulo": "Website",
+         "chave": "behance",
+         "rotulo": "Behance",
          "url": "https://www.behance.net/joao_revan"
         }
        ],

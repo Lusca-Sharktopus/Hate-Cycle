@@ -11,7 +11,7 @@
 // Por que happy-dom e não jsdom: 4 dependências diretas contra 20, e a linha 20 não executa o JavaScript da página por
 // padrão. Fica só nos testes (devDependency, versão exata).
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { afterEach, describe, expect, test } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, test } from "vitest";
 import { iniciarComentarios, lerConfiguracao, type ConfiguracaoDosComentarios } from "../src/scripts/comentarios/caixa";
 import { mensagemDaConta, nomeLimpo, problemaNoNome, TEXTOS_DA_CONTA } from "../src/scripts/comentarios/conta";
 
@@ -45,6 +45,10 @@ const LINHAS: Linha[] = [
 const RPCS: { nome: string; args: unknown }[] = [];
 let RESPOSTA_DO_RPC: { data: unknown; error: { message: string } | null } = { data: null, error: null };
 const SAIDAS: unknown[] = [];
+/** 09/11: os favoritos da pessoa (tabela favorites), o que a janela pediu ao balde de fotos e o que já está lá. */
+let FAVORITOS: string[] = [];
+const BALDE: Record<string, unknown>[] = [];
+let ARQUIVOS_NO_BALDE: string[] = [];
 
 function clienteFalso(sessao: { user: { id: string; email: string } } | null, linhas: readonly Linha[] = LINHAS): SupabaseClient {
   const consulta = (tabela: string) => {
@@ -62,6 +66,7 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
         let data: unknown = null;
         if (tabela === "comments") data = linhas.map((l) => ({ ...l, profiles: (l.user_id && PERFIS[l.user_id]) || null }));
         if (tabela === "profiles" && unico) data = PERFIS[String(filtros["id"])] ?? null;
+        if (tabela === "favorites") data = FAVORITOS.map((work_id) => ({ work_id, created_at: "2026-11-01T00:00:00+00:00" }));
         return Promise.resolve({ data, error: null }).then(ok, falha);
       },
     };
@@ -79,7 +84,14 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
     RPCS.push({ nome, args: args ?? null });
     return Promise.resolve(RESPOSTA_DO_RPC);
   };
-  return { from: consulta, auth, rpc } as unknown as SupabaseClient;
+  const storage = {
+    from: (balde: string) => ({
+      upload: (caminho: string, _blob: unknown, opcoes: unknown) => (BALDE.push({ acao: "upload", balde, caminho, opcoes }), Promise.resolve({ data: { path: caminho }, error: null })),
+      remove: (caminhos: string[]) => (BALDE.push({ acao: "remove", balde, caminhos }), Promise.resolve({ data: [], error: null })),
+      list: (pasta: string) => (BALDE.push({ acao: "list", balde, pasta }), Promise.resolve({ data: ARQUIVOS_NO_BALDE.map((name) => ({ name })), error: null })),
+    }),
+  };
+  return { from: consulta, auth, rpc, storage } as unknown as SupabaseClient;
 }
 
 const CFG_BRUTA = { url: "https://supabase-falso.test", key: "__CHAVE_FALSA__", lang: "pt", ui: { c_reply: "Responder", c_edit: "Editar", c_delete: "Apagar", c_write: "Escreva", c_hello: "Conectado como" } };
@@ -106,7 +118,7 @@ async function esperar(): Promise<void> {
 }
 
 /** As únicas tags que a caixa cria (mais as da própria <section>). */
-const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "input", "label"]);
+const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "h4", "input", "label", "a", "img", "canvas"]);
 /** 05/11: os botões de login (src/scripts/login/janela.ts) têm ícones em SVG e o <canvas> do círculo, de valores fixos do código. */
 const TAGS_DOS_BOTOES_DE_LOGIN = new Set(["span", "svg", "path", "defs", "lineargradient", "stop", "canvas"]);
 function conferirSoElementosDoCodigo(): void {
@@ -115,7 +127,17 @@ function conferirSoElementosDoCodigo(): void {
   const tags = todos.filter((e) => !nosBotoes.includes(e)).map((e) => e.tagName.toLowerCase());
   expect(tags.filter((t) => !TAGS_DA_CAIXA.has(t)), "elementos que o código não cria (vieram de texto do visitante)").toEqual([]);
   expect(nosBotoes.map((e) => e.tagName.toLowerCase()).filter((t) => !TAGS_DOS_BOTOES_DE_LOGIN.has(t))).toEqual([]);
-  expect(document.body.querySelectorAll("img, script, b, iframe").length).toBe(0);
+  // 09/11: a única <img> possível é a capa de um favorito na janela da conta (endereço do próprio site, conferido por capaSegura)
+  // e a foto de perfil (endereço montado por enderecoDaFoto: o Supabase do config + o balde avatars + um caminho conferido)
+  for (const img of document.body.querySelectorAll("img")) {
+    if (img.closest(".c-foto")) {
+      expect(img.getAttribute("src") ?? "").toMatch(/^https:\/\/supabase-falso\.test\/storage\/v1\/object\/public\/avatars\/u-[a-z]+\/[a-z0-9]{12,40}\.(webp|jpg)$|^https:\/\/supabase-falso\.test\/storage\/v1\/object\/public\/avatars\/[0-9a-f-]{36}\/[a-z0-9]{12,40}\.(webp|jpg)$/);
+      continue;
+    }
+    expect(img.closest(".c-perfil-fav"), "img fora das capas dos favoritos").not.toBeNull();
+    expect(img.getAttribute("src") ?? "").toMatch(/^\/(?!\/)/);
+  }
+  expect(document.body.querySelectorAll("script, b, iframe").length).toBe(0);
   expect(document.body.querySelectorAll("svg").length).toBe(document.querySelectorAll(".c-modal .c-prov > svg").length);
   expect((globalThis as { __xss?: unknown }).__xss).toBeUndefined();
 }
@@ -132,6 +154,9 @@ afterEach(() => {
   RPCS.length = 0;
   SAIDAS.length = 0;
   RESPOSTA_DO_RPC = { data: null, error: null };
+  FAVORITOS = [];
+  BALDE.length = 0;
+  ARQUIVOS_NO_BALDE = [];
   document.body.replaceChildren();
   delete (globalThis as { __xss?: unknown }).__xss;
 });
@@ -190,6 +215,30 @@ describe("a caixa de comentários num DOM simulado, com HTML no comentário, na 
 
 // Migração de 03/11/2026 (opção b do autor): comentário apagado que tem respostas fica como "[comentário apagado]", sem nome e sem
 // botões; as respostas continuam com nome, texto e botões. O banco guarda "[apagado]" no texto: a caixa nunca o mostra.
+describe("a foto de perfil ao lado do nome (09/11)", () => {
+  const DONO = "0f8fad5b-d9cb-469f-a165-70867728950e";
+  test("com foto válida: <img> do balde; caminho estranho no banco: a runa", async () => {
+    PERFIS[DONO] = { display_name: "Com foto", is_admin: false, avatar_path: `${DONO}/abcdefghijkl0123.webp` } as never;
+    PERFIS["u-mau"] = { display_name: "Mau", is_admin: false, avatar_path: "javascript:alert(1)" } as never;
+    const linhas: Linha[] = [
+      { id: 21, body: "a", created_at: "2026-10-01T12:00:00+00:00", edited_at: null, user_id: DONO, parent_id: null },
+      { id: 22, body: "b", created_at: "2026-10-01T13:00:00+00:00", edited_at: null, user_id: "u-mau", parent_id: null },
+    ];
+    try {
+      iniciarComentarios(montarPagina(), CFG, clienteFalso(null, linhas));
+      await esperar();
+      const [a, b] = [...document.querySelectorAll(".c-item .c-foto")];
+      expect(a?.querySelector("img")?.getAttribute("src")).toBe(`https://supabase-falso.test/storage/v1/object/public/avatars/${DONO}/abcdefghijkl0123.webp`);
+      expect(b?.querySelector("img")).toBeNull();
+      expect(b?.classList.contains("c-foto-runa")).toBe(true);
+      conferirSoElementosDoCodigo();
+    } finally {
+      delete PERFIS[DONO];
+      delete PERFIS["u-mau"];
+    }
+  });
+});
+
 describe("comentário apagado que tem respostas", () => {
   const APAGADO: Linha[] = [
     { id: 10, body: "[apagado]", created_at: "2026-10-01T12:00:00+00:00", edited_at: null, user_id: null, parent_id: null, deleted_at: "2026-10-05T10:00:00+00:00" },
@@ -214,8 +263,27 @@ describe("comentário apagado que tem respostas", () => {
   });
 });
 
-describe("a janela da conta (03/11): abre pelo nome, troca o nome, apaga a conta", () => {
+describe("a janela da conta (03/11; redesenhada em 09/11): foto, nome, favoritos, apagar a conta", () => {
   const EU = { user: { id: "u-eu", email: "<b>eu</b>@exemplo.test" } };
+  const INDICE = {
+    obras: [
+      { id: "ossos", titulo: "<b>Ossos</b>", capa: "/_astro/ossos.webp", link: "/pt/works/all-in-a-nights-work/" },
+      { id: "mau", titulo: "Mau", capa: "javascript:alert(1)//.png", link: "javascript:alert(1)" },
+      { id: "fora", titulo: "Fora", capa: "/_astro/fora.webp", link: "https://www.youtube.com/watch?v=x" },
+    ],
+  };
+  const PEDIDOS: string[] = [];
+  const fetchOriginal = globalThis.fetch;
+  beforeEach(() => {
+    PEDIDOS.length = 0;
+    globalThis.fetch = ((url: string) => {
+      PEDIDOS.push(String(url));
+      return Promise.resolve(new Response(JSON.stringify(INDICE), { headers: { "Content-Type": "application/json" } }));
+    }) as typeof fetch;
+  });
+  afterAll(() => {
+    globalThis.fetch = fetchOriginal;
+  });
   async function abrir(): Promise<HTMLElement> {
     const raiz = montarPagina();
     iniciarComentarios(raiz, CFG, clienteFalso(EU));
@@ -229,15 +297,19 @@ describe("a janela da conta (03/11): abre pelo nome, troca o nome, apaga a conta
     return j as HTMLElement;
   }
 
-  test("clicar no próprio nome abre a janela: escurece (trava a página), nome e e-mail só como texto, foco no campo", async () => {
+  test("clicar no próprio nome abre a janela: escurece (trava a página), nome só como texto, runa no lugar da foto, sem e-mail", async () => {
     const j = await abrir();
     expect(j.getAttribute("role")).toBe("dialog");
     expect(j.getAttribute("aria-modal")).toBe("true");
     expect(document.documentElement.classList.contains("c-modal-open")).toBe(true);
-    const campo = j.querySelector<HTMLInputElement>("input[name=display_name]");
-    expect(campo?.value).toBe(NOME_ATAQUE);
-    expect(document.activeElement).toBe(campo);
-    expect(j.querySelector(".c-conta-email strong")?.textContent).toBe("<b>eu</b>@exemplo.test");
+    const titulo = j.querySelector("#c-conta-titulo");
+    expect(titulo?.textContent).toBe(NOME_ATAQUE);
+    expect([...(titulo?.childNodes ?? [])].map((n) => n.nodeType)).toEqual([3]);
+    expect(document.activeElement?.classList.contains("c-perfil-lapis-nome")).toBe(true);
+    const foto = j.querySelector(".c-perfil-foto .c-foto");
+    expect(foto?.classList.contains("c-foto-runa")).toBe(true);
+    expect(foto?.textContent).toHaveLength([...(foto?.textContent ?? "")].length === 1 ? (foto?.textContent ?? "").length : -1);
+    expect(j.textContent).not.toContain("exemplo.test");
     conferirSoElementosDoCodigo();
   });
 
@@ -249,10 +321,35 @@ describe("a janela da conta (03/11): abre pelo nome, troca o nome, apaga a conta
     expect(document.activeElement?.classList.contains("c-me")).toBe(true);
   });
 
-  test("salvar o nome: confere antes (2 a 30), manda o nome limpo ao banco e mostra o aviso", async () => {
+  test("Meus Favoritos: capas na ordem da lista, link só para o site ou https, título com HTML só como texto", async () => {
+    FAVORITOS = ["fora", "nao-existe", "ossos", "mau"];
     const j = await abrir();
-    const campo = j.querySelector<HTMLInputElement>("input[name=display_name]") as HTMLInputElement;
-    const form = j.querySelector<HTMLFormElement>("form.c-conta-nome") as HTMLFormElement;
+    expect(PEDIDOS).toEqual(["/pt/obras.json"]);
+    const itens = [...j.querySelectorAll<HTMLElement>(".c-perfil-fav")];
+    expect(itens.map((i) => i.querySelector(".c-perfil-fav-nome")?.textContent)).toEqual(["Fora", "<b>Ossos</b>", "Mau"]);
+    expect(itens.map((i) => i.getAttribute("href"))).toEqual(["https://www.youtube.com/watch?v=x", "/pt/works/all-in-a-nights-work/", null]);
+    expect(itens.map((i) => i.querySelector("img")?.getAttribute("src") ?? null)).toEqual(["/_astro/fora.webp", "/_astro/ossos.webp", null]);
+    expect(itens[2]?.tagName).toBe("SPAN");
+    conferirSoElementosDoCodigo();
+  });
+
+  test("sem favoritos: o aviso", async () => {
+    const j = await abrir();
+    expect(j.querySelector(".c-perfil-vazio")?.textContent).toBe(TEXTOS_DA_CONTA.pt.semFavoritos);
+  });
+
+  test("trocar o nome: lápis vira campo; confere antes (2 a 30), manda o nome limpo ao banco e mostra o aviso; Esc desiste", async () => {
+    const j = await abrir();
+    j.querySelector<HTMLButtonElement>(".c-perfil-lapis-nome")?.click();
+    let campo = j.querySelector<HTMLInputElement>("input[name=display_name]") as HTMLInputElement;
+    expect(campo.value).toBe(NOME_ATAQUE);
+    expect(document.activeElement).toBe(campo);
+    campo.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(j.querySelector("input[name=display_name]")).toBeNull();
+    expect(document.querySelector(".c-modal.c-conta"), "Esc no campo não fecha a janela").not.toBeNull();
+    j.querySelector<HTMLButtonElement>(".c-perfil-lapis-nome")?.click();
+    campo = j.querySelector<HTMLInputElement>("input[name=display_name]") as HTMLInputElement;
+    const form = j.querySelector<HTMLFormElement>("form.c-perfil-nome-form") as HTMLFormElement;
     campo.value = " x ";
     form.dispatchEvent(new Event("submit", { cancelable: true }));
     await esperar();
@@ -264,28 +361,50 @@ describe("a janela da conta (03/11): abre pelo nome, troca o nome, apaga a conta
     await esperar();
     expect(RPCS).toEqual([{ nome: "change_my_name", args: { novo: "Novo Nome" } }]);
     expect(j.querySelector(".c-msg.ok")?.textContent).toBe("Nome salvo.");
-    expect(campo.value).toBe("Novo Nome");
+    expect(j.querySelector("#c-conta-titulo")?.textContent).toBe("Novo Nome");
   });
 
   test("erro do banco no nome vira mensagem da janela", async () => {
     const j = await abrir();
     RESPOSTA_DO_RPC = { data: null, error: { message: "name length" } };
+    j.querySelector<HTMLButtonElement>(".c-perfil-lapis-nome")?.click();
     (j.querySelector("input[name=display_name]") as HTMLInputElement).value = "Válido";
-    j.querySelector<HTMLFormElement>("form.c-conta-nome")?.dispatchEvent(new Event("submit", { cancelable: true }));
+    j.querySelector<HTMLFormElement>("form.c-perfil-nome-form")?.dispatchEvent(new Event("submit", { cancelable: true }));
     await esperar();
     expect(j.querySelector(".c-msg")?.textContent).toBe("O nome precisa ter de 2 a 30 caracteres.");
   });
 
-  test("apagar a conta pede uma segunda confirmação; Cancelar não apaga; confirmar chama delete_my_account, sai e avisa", async () => {
+  test("a foto abre a tela de envio (campo de arquivo só de imagem); Esc volta à janela", async () => {
     const j = await abrir();
-    j.querySelector<HTMLButtonElement>(".c-conta-apagar")?.click();
-    expect(j.querySelector(".c-conta-aviso")?.textContent).toContain("Não dá para desfazer");
+    j.querySelector<HTMLButtonElement>(".c-perfil-foto")?.click();
+    expect(j.querySelector(".c-dialog.c-envio")).not.toBeNull();
+    expect(j.querySelector<HTMLInputElement>("input[type=file]")?.getAttribute("accept")).toBe("image/*");
+    conferirSoElementosDoCodigo();
+    j.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(j.querySelector(".c-dialog.c-envio")).toBeNull();
+    expect(j.querySelector(".c-perfil-topo")).not.toBeNull();
+  });
+
+  test("a lixeira abre \"Opa! Calma aí!\"; Sair volta; Deletar Conta apaga as fotos, chama delete_my_account, sai e avisa", async () => {
+    ARQUIVOS_NO_BALDE = ["abcdefghijkl0123.webp"];
+    const j = await abrir();
+    j.querySelector<HTMLButtonElement>(".c-perfil-lixo")?.click();
+    expect(j.querySelector(".c-apagar-titulo")?.textContent).toBe("Opa! Calma aí!");
+    expect(j.querySelector(".c-apagar-texto")?.textContent).toContain("decisão permanente!");
+    expect([...j.querySelectorAll(".c-apagar-texto .c-verde")].map((s) => s.textContent)).toEqual(["lista de favoritos", "marca-páginas", "todos", " os seus comentários"]);
+    expect(j.querySelectorAll(".c-lixeira-runa")).toHaveLength(3);
     expect(RPCS).toEqual([]);
-    [...j.querySelectorAll<HTMLButtonElement>(".c-conta-perigo button")].find((b) => b.textContent === "Cancelar")?.click();
-    expect(j.querySelector(".c-conta-aviso")).toBeNull();
-    j.querySelector<HTMLButtonElement>(".c-conta-apagar")?.click();
-    j.querySelector<HTMLButtonElement>(".c-conta-confirmar")?.click();
+    conferirSoElementosDoCodigo();
+    j.querySelector<HTMLButtonElement>(".c-apagar-sair")?.click();
+    expect(j.querySelector(".c-apagar-titulo")).toBeNull();
+    expect(j.querySelector(".c-perfil-topo")).not.toBeNull();
+    j.querySelector<HTMLButtonElement>(".c-perfil-lixo")?.click();
+    j.querySelector<HTMLButtonElement>(".c-apagar-confirmar")?.click();
     await esperar();
+    expect(BALDE).toEqual([
+      { acao: "list", balde: "avatars", pasta: "u-eu" },
+      { acao: "remove", balde: "avatars", caminhos: ["u-eu/abcdefghijkl0123.webp"] },
+    ]);
     expect(RPCS).toEqual([{ nome: "delete_my_account", args: null }]);
     expect(SAIDAS).toEqual([{ scope: "local" }]);
     expect(document.querySelector(".c-modal.c-conta")).toBeNull();

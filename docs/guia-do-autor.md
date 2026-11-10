@@ -338,7 +338,7 @@ escreva a linha `{{other-stories}}` no lugar desejado de `content/pages/about/pt
 ## 9. Emissários
 
 - Cada pasta em `content/emissaries/` tem `title` (nome), `role` (função), `image` (ex.: `emissaries/saf.png`, quadrada, dentro de `static/`), `order` (posição),
-  o texto breve (embaixo do `---`) e links: `instagram`, `tiktok`, `youtube`, `x`, `bluesky`, `website`, `email`.
+  o texto breve (embaixo do `---`) e links: `instagram`, `tiktok`, `youtube`, `x`, `bluesky`, `behance`, `website`, `email`.
 - Cinco por linha; o sexto desce para a linha de baixo (em telas menores, 3 ou 2 por linha).
 - **Textos dos Emissários** (ocultos por enquanto): em `config.json`, `"emissaries": { "show_texts": false, ... }` → mude para `true` para mostrá-los de novo.
 - **Esconder um emissário:** em `config.json`, `"emissaries": { "hide": ["saf"] }`; deixe a lista vazia (`[]`) para todos aparecerem (hoje está vazia: a Saf aparece). Outra forma: `draft: true` nos dois `.md` dele.

@@ -91,6 +91,8 @@ RETRATO = """() => {
     // 03/11 (só no Astro): o nome em "Conectado como <nome>" é um <button class="c-me"> que abre a janela da conta; aqui ele volta a
     // ser só o texto do nome, como no comments.js (a janela tem o próprio teste: tests/comentarios-dom.test.ts)
     if (n.classList.contains('c-me')) return n.textContent;
+    // 09/11 (só no Astro, pedido do autor): a foto de perfil (ou a runa) antes do nome de cada comentário; o Python não tem
+    if (n.classList.contains('c-foto')) return null;
     // 05/11 (só no Astro, design do autor): a janela de login tem Google, Twitter e Discord (div.c-provedores, com ícones e o círculo
     // mágico) e a divisória "ou" da arte do autor (div.c-ou); o Python tem o botão do Google e o "ou" de texto. Os dois lados saem do
     // retrato (os botões novos têm o próprio teste: tests/comentarios-dom.test.ts e tests/favoritos-dom.test.ts); o roteiro do Google
@@ -209,9 +211,17 @@ class SupabaseFalso:
         if isinstance(corpo, dict):
             corpo = {k: v for k, v in corpo.items() if k != "gotrue_meta_security" and k != "code_challenge" and k != "code_challenge_method"}
         # a porta do servidor local (8791 × 8792) aparece nos endereços de volta: troca por PORTA para comparar os dois sites
-        self.log.append(json.loads(re.sub(r"localhost:\d+", "localhost:PORTA", json.dumps({"metodo": req.method, "caminho": u.path, "q": {k: v for k, v in sorted(q.items())}, "corpo": corpo,
-                                                                                         "unico": "vnd.pgrst.object" in req.headers.get("accept", "")}))))
+        pedido = json.loads(re.sub(r"localhost:\d+", "localhost:PORTA", json.dumps({"metodo": req.method, "caminho": u.path, "q": {k: v for k, v in sorted(q.items())}, "corpo": corpo,
+                                                                                    "unico": "vnd.pgrst.object" in req.headers.get("accept", "")})))
+        # 09/11 (só no Astro): a foto de perfil pede a coluna avatar_path (com recuo quando ela falta). Sem ela, o pedido é o do Python; o
+        # recuo que só tirou a avatar_path vira o mesmo pedido de novo e não conta
+        if "select" in pedido["q"]:
+            pedido["q"]["select"] = [v.replace(",avatar_path", "") for v in pedido["q"]["select"]]
+        repetido = bool(self.log) and self.log[-1] == pedido and getattr(self, "_faltou_coluna", False)
+        if not repetido:
+            self.log.append(pedido)
         status, dados = self.tratar(req, u.path, q, corpo)
+        self._faltou_coluna = "avatar_path" in req.url and isinstance(dados, dict) and dados.get("code") == "42703"
         texto = "" if dados is None else json.dumps(dados)
         return route.fulfill(status=status, headers={**cors, "content-type": "application/json"}, body=texto)
 

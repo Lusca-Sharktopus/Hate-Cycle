@@ -19,6 +19,7 @@ interface Props {
   configuracao: string;
 }
 
+import EstiloDaConta from "./EstiloDaConta.astro";
 import EstiloDoLogin from "./EstiloDoLogin.astro";
 
 const { idDaPagina, titulo, configuracao } = Astro.props;
@@ -31,3 +32,4 @@ const { idDaPagina, titulo, configuracao } = Astro.props;
 </script>
 
 <EstiloDoLogin />
+<EstiloDaConta />

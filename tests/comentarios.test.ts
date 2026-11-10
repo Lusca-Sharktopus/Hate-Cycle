@@ -234,17 +234,17 @@ describe("segurança: o código que vai para o navegador", () => {
       .split("\n")
       .filter((l) => !/^\s*\/\//.test(l)) // comentários podem citar as palavras proibidas
       .join("\n");
-  test("os cinco arquivos existem (conta.ts = a janela da conta, 03/11)", () => {
-    expect(arquivos.sort()).toEqual(["caixa.ts", "conta.ts", "dom.ts", "index.ts", "regras.ts"]);
+  test("os sete arquivos existem (conta.ts = a janela da conta, 03/11; foto.ts e recorte.ts = a foto de perfil, 09/11)", () => {
+    expect(arquivos.sort()).toEqual(["caixa.ts", "conta.ts", "dom.ts", "foto.ts", "index.ts", "recorte.ts", "regras.ts"]);
   });
-  test.each(["caixa.ts", "conta.ts", "dom.ts", "index.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
+  test.each(["caixa.ts", "conta.ts", "dom.ts", "foto.ts", "index.ts", "recorte.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
     // (srcdoc não entra aqui: ele aparece de propósito na lista ATRIBUTOS_RECUSADOS de dom.ts, e a trava é testada acima)
     expect(codigo(a)).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
   });
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
       const imports = [...codigo(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta)|\.\.\/supabase\/cliente|\.\.\/login\/janela|@supabase\/supabase-js)$/);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta|foto|recorte)|\.\.\/supabase\/cliente|\.\.\/login\/janela|@supabase\/supabase-js)$/);
     }
   });
   // 05/11: a janela de login saiu da caixa para src/scripts/login/ (a mesma janela abre pelos favoritos): as mesmas travas valem lá
@@ -311,5 +311,95 @@ describe("erroDoRetornoDoLogin (o erro do login no endereço)", () => {
     const r = erroDoRetornoDoLogin("#error=x&error_description=" + encodeURIComponent('<img src=x onerror="alert(1)"> visite http://golpe.test ' + "a".repeat(300)), "", "pt") ?? "";
     expect(r).not.toMatch(/[<>"/]/);
     expect(r.length).toBeLessThanOrEqual("O login não deu certo. O servidor respondeu: ".length + 160 + ". Tente entrar de novo.".length);
+  });
+});
+
+// 09/11/2026: a foto de perfil e a janela da conta nova (src/scripts/comentarios/{foto,recorte,conta}.ts)
+import { RUNES } from "../src/lib/runas";
+import { CAMINHO_DA_FOTO, enderecoDaFoto, RUNAS_DA_FOTO, runaDaPessoa } from "../src/scripts/comentarios/foto";
+import { barraDaEscala, deslocamentoPreso, escalaDaBarra, escalaMinima, nomeAleatorio, quadradoDoRecorte, ZOOM_MAXIMO } from "../src/scripts/comentarios/recorte";
+import { capaSegura, linkSeguro, obrasFavoritas, TEXTOS_DA_CONTA } from "../src/scripts/comentarios/conta";
+describe("foto de perfil (09/11)", () => {
+  const ID = "0f8fad5b-d9cb-469f-a165-70867728950e";
+  test("as runas da foto são runas do fundo do site, sem repetir", () => {
+    const doFundo = new Set(Array.from(String(RUNES)));
+    for (const r of RUNAS_DA_FOTO) expect(doFundo.has(r), r).toBe(true);
+    expect(new Set(RUNAS_DA_FOTO).size).toBe(RUNAS_DA_FOTO.length);
+    expect(RUNAS_DA_FOTO.length).toBeGreaterThan(40);
+  });
+  test("a runa de uma pessoa é sempre a mesma e muda de pessoa para pessoa", () => {
+    expect(runaDaPessoa(ID)).toBe(runaDaPessoa(ID));
+    const varias = new Set(Array.from({ length: 50 }, (_, i) => runaDaPessoa(`${ID.slice(0, -2)}${String(i).padStart(2, "0")}`)));
+    expect(varias.size).toBeGreaterThan(20);
+  });
+  test("o endereço da foto só sai de caminho válido e de base https (ou localhost)", () => {
+    expect(enderecoDaFoto("https://abc.supabase.co", `${ID}/abcdefghijkl0123.webp`)).toBe(`https://abc.supabase.co/storage/v1/object/public/avatars/${ID}/abcdefghijkl0123.webp`);
+    expect(enderecoDaFoto("https://abc.supabase.co", `${ID}/abcdefghijkl0123.jpg`)).not.toBeNull();
+    for (const ruim of [null, 3, "", `${ID}/../x.webp`, `${ID}/abc.webp`, `${ID}/abcdefghijkl0123.svg`, `javascript:alert(1)`, `x/${ID}/abcdefghijkl0123.webp`, `${ID}/ABCDEFGHIJKL0123.webp`])
+      expect(enderecoDaFoto("https://abc.supabase.co", ruim), String(ruim)).toBeNull();
+    expect(enderecoDaFoto("javascript:alert(1)//", `${ID}/abcdefghijkl0123.webp`)).toBeNull();
+    expect(enderecoDaFoto("http://evil.com", `${ID}/abcdefghijkl0123.webp`)).toBeNull();
+    expect(enderecoDaFoto("http://localhost:54321", `${ID}/abcdefghijkl0123.webp`)).not.toBeNull();
+  });
+  test("o nome aleatório passa na regra do banco", () => {
+    for (let i = 0; i < 20; i++) expect(CAMINHO_DA_FOTO.test(`${ID}/${nomeAleatorio()}.webp`)).toBe(true);
+  });
+  test("a migração usa a mesma regra do caminho", () => {
+    const sql = readFileSync(join(fileURLToPath(new URL("..", import.meta.url)), "supabase/migrations/20261110000000_fotos_de_perfil.sql"), "utf8");
+    expect(sql.match(/\/\[a-z0-9\]\{12,40\}\\\.\(webp\|jpg\)\$/g)?.length).toBe(3);
+    expect(sql).toMatch(/revoke execute on function public\.set_my_avatar\(text\) from public, anon/);
+    expect(sql).toMatch(/security definer set search_path = ''/);
+  });
+});
+describe("o recorte da foto (contas)", () => {
+  test("a menor escala cobre o círculo pelo lado menor", () => {
+    expect(escalaMinima(1000, 500, 300)).toBeCloseTo(0.6);
+  });
+  test("barra ↔ escala vai e volta, de 1× a ZOOM_MAXIMO×", () => {
+    expect(escalaDaBarra(0, 2)).toBe(2);
+    expect(escalaDaBarra(1, 2)).toBeCloseTo(2 * ZOOM_MAXIMO);
+    expect(escalaDaBarra(7, 2)).toBeCloseTo(2 * ZOOM_MAXIMO);
+    expect(barraDaEscala(escalaDaBarra(0.37, 2), 2)).toBeCloseTo(0.37);
+  });
+  test("o círculo nunca sai da imagem", () => {
+    // imagem 1000 × 500 na escala 0,6 = 600 × 300 na tela; círculo de 300: sobra 150 de cada lado na horizontal, 0 na vertical
+    expect(deslocamentoPreso(999, 999, 1000, 500, 0.6, 300)).toEqual([150, 0]);
+    expect(deslocamentoPreso(-20, 0, 1000, 500, 0.6, 300)).toEqual([-20, 0]);
+  });
+  test("o quadrado recortado é o que está dentro do círculo", () => {
+    expect(quadradoDoRecorte(1000, 500, 0.6, 0, 0, 300)).toEqual([250, 0, 500]);
+    // imagem arrastada 150 px para a direita: o círculo mostra a ponta esquerda
+    const [x, y, lado] = quadradoDoRecorte(1000, 500, 0.6, 150, 0, 300);
+    expect(x).toBeCloseTo(0);
+    expect(y).toBeCloseTo(0);
+    expect(lado).toBeCloseTo(500);
+  });
+});
+describe("a janela da conta (endereços e favoritos)", () => {
+  test("capa: só arquivo de imagem do próprio site", () => {
+    expect(capaSegura("/_astro/capa.Ab12.webp")).toBe("/_astro/capa.Ab12.webp");
+    expect(capaSegura("/covers/ossos.png")).toBe("/covers/ossos.png");
+    for (const ruim of ["//evil.com/x.png", "https://evil.com/x.png", "javascript:alert(1)//.png", "/\\evil.com/x.png", "/x.svg", "x.png", null, "/a.png?x"])
+      expect(capaSegura(ruim), String(ruim)).toBeNull();
+  });
+  test("link: página /en/ ou /pt/ do site, ou https", () => {
+    expect(linkSeguro("/pt/works/light-and-blood/")).toBe("/pt/works/light-and-blood/");
+    expect(linkSeguro("https://www.youtube.com/watch?v=abc")).toBe("https://www.youtube.com/watch?v=abc");
+    for (const ruim of ["javascript:alert(1)", "//evil.com", "/pt//evil.com", "/es/x", "/pt/../x", "http://x.com", "data:text/html,x", 5])
+      expect(linkSeguro(ruim), String(ruim)).toBeNull();
+  });
+  test("favoritos: na ordem da lista, sem repetir, só obras que existem no índice", () => {
+    const indice = [
+      { id: "a", titulo: "A", capa: "/a.png", link: "/pt/works/a/" },
+      { id: "b", titulo: "B", capa: "/b.png", link: null },
+    ];
+    expect(obrasFavoritas(["b", "x", "a", "b"], indice).map((o) => o.id)).toEqual(["b", "a"]);
+  });
+  test("os textos existem nos dois idiomas, com as mesmas chaves", () => {
+    expect(Object.keys(TEXTOS_DA_CONTA.en).sort()).toEqual(Object.keys(TEXTOS_DA_CONTA.pt).sort());
+    expect(TEXTOS_DA_CONTA.pt.calma).toBe("Opa! Calma aí!");
+    expect(TEXTOS_DA_CONTA.pt.aviso.map(([t]) => t).join("")).toBe(
+      "Deletar sua conta é uma decisão permanente! Ao fazer isso, você deletará sua lista de favoritos, seus marca-páginas e todos os seus comentários no site. Tem certeza de que quer prosseguir?",
+    );
   });
 });

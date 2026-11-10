@@ -84,6 +84,8 @@ export const COLUNAS = "id, body, created_at, user_id, parent_id, profiles(displ
 export const COLUNAS_COM_EDICAO = COLUNAS.replace("created_at,", "created_at, edited_at,");
 /** Com deleted_at (migração 20261103000000, "[comentário apagado]"). Sem a coluna, recua para COLUNAS_COM_EDICAO e depois COLUNAS. */
 export const COLUNAS_COMPLETAS = COLUNAS_COM_EDICAO.replace("parent_id,", "parent_id, deleted_at,");
+/** Com a foto de perfil de quem comentou (migração 20261110000000, só no site novo). Sem a coluna, recua para COLUNAS_COMPLETAS. */
+export const COLUNAS_COM_FOTO = COLUNAS_COMPLETAS.replace("is_admin)", "is_admin, avatar_path)");
 
 /** Uma linha de public.comments como o select acima a devolve (o perfil vem embutido). */
 export interface Comentario {
@@ -95,7 +97,7 @@ export interface Comentario {
   deleted_at?: string | null;
   user_id: string | null;
   parent_id: number | string | null;
-  profiles: { display_name?: string | null; is_admin?: boolean | null } | null;
+  profiles: { display_name?: string | null; is_admin?: boolean | null; avatar_path?: string | null } | null;
 }
 
 /** Quem está conectado (o que importa dele). */
@@ -107,6 +109,8 @@ export interface QuemEntrou {
 export interface Perfil {
   display_name?: string | null;
   is_admin?: boolean | null;
+  /** 09/11/2026: a foto de perfil (migração 20261110000000_fotos_de_perfil.sql); sem a migração, a coluna não vem. */
+  avatar_path?: string | null;
 }
 
 /** O nome da linha "Conectado como …": o do perfil; sem perfil, o e-mail da própria pessoa (só ela vê). */

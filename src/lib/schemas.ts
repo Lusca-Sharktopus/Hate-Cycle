@@ -403,6 +403,7 @@ export function criarSchemas(indice: Indice) {
       youtube: texto().optional(),
       x: texto().optional(),
       bluesky: texto().optional(),
+      behance: texto().optional(),
       website: texto().optional(),
       email: texto().optional(),
       _origem: origemDoItem,

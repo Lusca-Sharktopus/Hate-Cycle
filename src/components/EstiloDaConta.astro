@@ -1,0 +1,195 @@
+---
+// O visual da janela da conta e das fotos de perfil (09/11/2026, designs do autor "Profile Design*.png", "Upload Profile Pic design.png",
+// "Icon Edit Design.png" e "Delete Account Design.png"; só no site novo). Não desenha nada: só o CSS. Quem monta a janela é
+// src/scripts/comentarios/conta.ts (+ recorte.ts para a foto); o círculo da foto, foto.ts.
+//
+// Os ícones (src/assets/conta/) são máscaras brancas: a cor vem do background (verde, vermelho, o degradê menta → ciano), como no
+// desenho. "circulo-do-recorte.png" = o "Icon Edit Circle 2.png" do autor (562 px; o anel branco tem 517 px, por isso o 562/517).
+---
+
+<style is:global>
+  @layer site {
+    /* ── o círculo da foto (comentários e janela) ── */
+    .c-foto {
+      display: inline-grid; place-items: center; flex: none; width: 1.9rem; height: 1.9rem; border-radius: 50%; overflow: hidden;
+      background: var(--night); color: var(--mint); vertical-align: middle; margin-right: .5rem; box-sizing: border-box;
+    }
+    .c-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-foto-runa {
+      font: 400 1.05rem/1 "Hate Cycle Runas","Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans Bamum","Noto Sans Elbasan","Noto Sans KR","Noto Sans JP",sans-serif;
+      text-shadow: 0 0 6px #00e9fd99;
+    }
+    .c-item .c-head { display: flex; flex-wrap: wrap; align-items: center; row-gap: .2rem; }
+
+    /* ── a janela (papel, cantos bem redondos) ── */
+    .c-dialog.c-perfil {
+      --c-verde: var(--green); --c-vermelho: #c0262d;
+      width: min(890px, 100%); box-sizing: border-box; padding: 34px 30px 30px; border-radius: 52px;
+      background: #ecebe8 var(--paper) center / cover; color: #1a1a1a;
+    }
+    .c-perfil .c-msg[hidden] { display: none; }
+    .c-perfil-acoes { position: absolute; top: 24px; right: 34px; display: flex; gap: 22px; z-index: 2; }
+    .c-perfil-botao {
+      position: relative; width: 70px; height: 70px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+      background: var(--c-verde); transition: background-color .2s, box-shadow .2s, transform .15s;
+    }
+    .c-perfil-botao::before { content: ""; position: absolute; inset: 0; background: #fff; mask: var(--c-icone) center / var(--c-tam, 44%) no-repeat; -webkit-mask: var(--c-icone) center / var(--c-tam, 44%) no-repeat; }
+    .c-perfil-x { --c-icone: url("../assets/conta/fechar.png"); --c-tam: 46%; }
+    .c-perfil-lixo { --c-icone: url("../assets/conta/lixeira.png"); --c-tam: 48%; }
+    .c-perfil-botao:hover, .c-perfil-botao:focus-visible { box-shadow: 0 0 12px var(--cyan); outline: none; transform: scale(1.04); }
+    .c-perfil-lixo:hover, .c-perfil-lixo:focus-visible { background: var(--c-vermelho); box-shadow: 0 0 12px #ff5a5f; }
+
+    .c-perfil-topo { display: flex; align-items: flex-end; gap: 14px; padding-bottom: 2px; border-bottom: 1.5px solid #0004; padding-right: 170px; min-height: 220px; }
+    .c-perfil-foto { position: relative; flex: none; width: 218px; height: 218px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; margin-bottom: 14px; }
+    .c-foto.c-foto-grande { width: 100%; height: 100%; margin: 0; font-size: 6.5rem; }
+    .c-perfil-foto::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #0000; transition: background-color .2s; }
+    .c-perfil-lapis {
+      position: absolute; z-index: 1; left: 50%; top: 50%; width: 46px; height: 46px; translate: -50% -50%; opacity: 0; transition: opacity .2s;
+      background: #e9e9e9; mask: url("../assets/conta/lapis.png") center / contain no-repeat; -webkit-mask: url("../assets/conta/lapis.png") center / contain no-repeat;
+    }
+    .c-perfil-foto:hover::after, .c-perfil-foto:focus-visible::after { background: #0008; }
+    .c-perfil-foto:hover .c-perfil-lapis, .c-perfil-foto:focus-visible .c-perfil-lapis { opacity: 1; }
+    .c-perfil-foto:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+    .c-perfil-nome { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; margin-bottom: 2px; }
+    .c-dialog.c-perfil .c-perfil-nome h3 { margin: 0; font: 400 clamp(2rem, 6vw, 3.6rem)/1.15 var(--font-head); color: var(--c-verde); overflow-wrap: anywhere; unicode-bidi: isolate; }
+    .c-perfil-lapis-nome {
+      flex: none; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 6px; cursor: pointer; background: #6d6d6d;
+      mask: url("../assets/conta/lapis.png") center / 80% no-repeat; -webkit-mask: url("../assets/conta/lapis.png") center / 80% no-repeat; transition: background-color .2s;
+    }
+    .c-perfil-lapis-nome:hover, .c-perfil-lapis-nome:focus-visible { background: var(--c-verde); outline: none; }
+    .c-perfil-lapis-nome.c-salvando { background: var(--c-verde); }
+    .c-perfil-nome-form { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .c-dialog.c-perfil .c-perfil-nome-form input {
+      flex: 1; min-width: 0; width: auto; padding: 0 .3rem; border: 0; border-bottom: 2px solid var(--c-verde); border-radius: 0; background: #ffffff80;
+      font: 400 clamp(2rem, 6vw, 3.6rem)/1.15 var(--font-head); color: var(--c-verde);
+    }
+
+    .c-dialog.c-perfil .c-perfil-favs-titulo { margin: 6px 0 12px; font: 400 2.1rem/1.2 var(--font-head); color: var(--c-verde); }
+    .c-perfil-favs { display: flex; gap: 16px; overflow-x: auto; padding: 4px 4px 10px; margin: 0 -4px; scroll-snap-type: x proximity; min-height: 40px; }
+    .c-perfil-fav { position: relative; flex: none; width: 131px; aspect-ratio: 131 / 184; border-radius: 6px; overflow: hidden; scroll-snap-align: start; background: #0002; transition: transform .2s, box-shadow .2s; }
+    .c-perfil-fav img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-perfil-fav-nome { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    a.c-perfil-fav:hover, a.c-perfil-fav:focus-visible { transform: translateY(-3px) scale(1.03); box-shadow: 0 0 12px var(--cyan); outline: none; }
+    .c-perfil-vazio { margin: 0; font-size: .95rem; color: #444; }
+
+    /* ── enviar uma imagem (moldura de papel, área escura, ícone brilhante) ── */
+    /* a área do meio é um "buraco" na folha: a página escurecida aparece através dela (o papel fica só na moldura) */
+    .c-dialog.c-perfil.c-envio { width: min(680px, 100%); padding: 28px; border-radius: 44px; background: none; box-shadow: none; }
+    .c-dialog.c-perfil.c-envio::before {
+      content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 28px; box-shadow: 0 20px 60px #000a;
+      background: #ecebe8 var(--paper) center / cover;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    }
+    .c-dialog.c-perfil.c-envio { isolation: isolate; }
+    .c-envio .c-perfil-x { position: absolute; top: 10px; right: 12px; width: 40px; height: 40px; z-index: 2; }
+    .c-envio-area {
+      display: grid; place-items: center; aspect-ratio: 624 / 528; border-radius: 22px; cursor: pointer; background: #0006; transition: background-color .2s, box-shadow .2s;
+      box-shadow: 0 0 0 9px #e7e6e2;
+    }
+    .c-envio-area:hover, .c-envio-area:focus-visible, .c-envio-area.c-envio-sobre { background: #0009; outline: none; box-shadow: 0 0 0 9px #e7e6e2, inset 0 0 0 3px var(--cyan); }
+    .c-envio-icone {
+      grid-area: 1 / 1; width: 34%; aspect-ratio: 1; background: linear-gradient(180deg, var(--mint), var(--cyan));
+      mask: url("../assets/conta/enviar.png") center / contain no-repeat; -webkit-mask: url("../assets/conta/enviar.png") center / contain no-repeat;
+      filter: drop-shadow(0 0 6px #00e9fdcc) drop-shadow(0 0 14px #00e9fd88);
+    }
+    .c-envio-texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .c-envio-campo { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    .c-envio-dica { position: absolute; left: 0; right: 0; bottom: 4px; margin: 0; text-align: center; font-size: .82rem; color: #444; }
+
+    /* ── o recorte ── */
+    .c-dialog.c-perfil.c-recorte { width: min(710px, 100%); padding: 48px 32px 26px; border-radius: 44px; }
+    .c-recorte-palco { position: relative; height: min(378px, 56vw); border-radius: 30px; overflow: hidden; background: #262626; cursor: grab; touch-action: none; }
+    .c-recorte-palco.c-arrastando { cursor: grabbing; }
+    .c-recorte-palco:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+    .c-recorte-tela { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .c-recorte-circulo {
+      position: absolute; left: 50%; top: 50%; width: calc(var(--c-d, 300px) * 562 / 517); aspect-ratio: 1; translate: -50% -50%; pointer-events: none;
+      background: url("../assets/conta/circulo-do-recorte.png") center / contain no-repeat;
+    }
+    .c-recorte-zoom { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 46px auto 0; }
+    .c-recorte-menor, .c-recorte-maior {
+      flex: none; padding: 0; border: 0; cursor: pointer; background: #9a9a9a;
+      mask: url("../assets/conta/imagem.png") center / contain no-repeat; -webkit-mask: url("../assets/conta/imagem.png") center / contain no-repeat;
+    }
+    .c-recorte-menor { width: 30px; height: 30px; }
+    .c-recorte-maior { width: 50px; height: 50px; }
+    .c-recorte-menor:hover, .c-recorte-maior:hover, .c-recorte-menor:focus-visible, .c-recorte-maior:focus-visible { background: var(--c-verde); outline: none; }
+    .c-dialog.c-perfil .c-recorte-barra { padding: 0; border: 0; box-sizing: border-box; flex: none; width: min(252px, 50vw); height: 10px; margin: 0; appearance: none; -webkit-appearance: none; background: var(--c-verde); border-radius: 99px; cursor: pointer; }
+    .c-recorte-barra::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 12px; border-radius: 99px; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+    .c-recorte-barra::-moz-range-thumb { width: 20px; height: 12px; border: 0; border-radius: 99px; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+    .c-recorte-barra:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+    .c-recorte-botoes { display: flex; justify-content: flex-end; align-items: center; gap: 1.2rem; margin-top: 18px; }
+    .c-recorte-botoes .button { margin: 0; }
+    .c-recorte[aria-busy="true"] { cursor: progress; }
+
+    /* ── "Opa! Calma aí!" ── */
+    .c-dialog.c-perfil.c-apagar { padding: 18px 40px 40px; text-align: left; }
+    .c-dialog.c-perfil .c-apagar-titulo { margin: 0; text-align: center; font: 400 clamp(2.6rem, 8vw, 4.6rem)/1.2 var(--font-head); color: var(--c-verde); }
+    .c-apagar-texto { max-width: 660px; margin: 6px auto 0; font: 400 clamp(1.05rem, 2.6vw, 1.45rem)/1.3 var(--font-text); color: #111; }
+    .c-apagar-texto strong { font-weight: 700; }
+    .c-apagar-texto .c-verde { color: var(--c-verde); }
+    .c-apagar-texto .c-forte { font-weight: 700; }
+    .c-apagar-botoes { display: flex; justify-content: space-between; gap: 1rem; max-width: 660px; margin: 34px auto 0; }
+    .c-apagar-botoes .button { flex: 0 1 237px; min-width: 0; white-space: nowrap; height: 67px; margin: 0; border-radius: 5px; font: 400 clamp(1.5rem, 4vw, 2.3rem) var(--font-head); }
+    .c-apagar-botoes .c-apagar-confirmar:hover, .c-apagar-botoes .c-apagar-confirmar:focus-visible {
+      background: var(--c-vermelho); border-color: var(--c-vermelho); color: #fff; box-shadow: 0 0 12px #ff5a5f; outline: none;
+    }
+    .c-apagar-botoes .button:disabled { opacity: .6; cursor: progress; }
+
+    /* a lixeira animada: fechada → a tampa abre → três runas caem dentro → a tampa fecha → recomeça */
+    .c-lixeira { position: relative; width: 170px; height: 175px; margin: 6px auto 0; --c-ciclo: 3.6s; }
+    .c-lixeira-tampa, .c-lixeira-corpo { position: absolute; left: 25px; bottom: 0; width: 120px; height: 120px; }
+    .c-lixeira-corpo {
+      background: var(--cyan); mask: url("../assets/conta/lixeira-corpo.png") center / contain no-repeat; -webkit-mask: url("../assets/conta/lixeira-corpo.png") center / contain no-repeat;
+    }
+    .c-lixeira-tampa {
+      background: var(--mint); mask: url("../assets/conta/lixeira-tampa.png") center / contain no-repeat; -webkit-mask: url("../assets/conta/lixeira-tampa.png") center / contain no-repeat;
+      transform-origin: 13% 30%; animation: c-tampa var(--c-ciclo) ease-in-out infinite;
+    }
+    .c-lixeira-runa {
+      position: absolute; left: 50%; top: 0; z-index: 0; translate: -50% 0; opacity: 0; color: var(--cyan); font-size: 2.6rem; line-height: 1;
+      font-family: "Hate Cycle Runas","Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans Bamum","Noto Sans Elbasan","Noto Sans KR","Noto Sans JP",sans-serif;
+      text-shadow: 0 0 6px #00e9fd88; animation: c-runa var(--c-ciclo) ease-in infinite;
+    }
+    .c-lixeira-corpo { z-index: 1; }
+    .c-lixeira-tampa { z-index: 2; }
+    .c-lixeira-runa-1 { --c-x: -18px; --c-giro: -40deg; animation-delay: 0s; }
+    .c-lixeira-runa-2 { --c-x: 14px; --c-giro: 30deg; animation-delay: .25s; color: var(--mint); }
+    .c-lixeira-runa-3 { --c-x: -2px; --c-giro: 70deg; animation-delay: .5s; }
+    @keyframes c-tampa {
+      0%, 12% { transform: none; }
+      24%, 66% { transform: translate(-22px, -24px) rotate(-72deg); }
+      78%, 100% { transform: none; }
+    }
+    @keyframes c-runa {
+      0%, 22% { opacity: 0; transform: translate(var(--c-x), -10px) rotate(0); }
+      30% { opacity: 1; transform: translate(var(--c-x), 6px) rotate(calc(var(--c-giro) / 3)); }
+      52% { opacity: 1; transform: translate(calc(var(--c-x) / 3), 82px) rotate(var(--c-giro)); }
+      58%, 100% { opacity: 0; transform: translate(calc(var(--c-x) / 4), 112px) rotate(var(--c-giro)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .c-lixeira-tampa, .c-lixeira-runa { animation: none; }
+    }
+
+    /* ── celular ── */
+    @media (max-width: 700px) {
+      .c-dialog.c-perfil { padding: 22px 18px 22px; border-radius: 32px; }
+      .c-perfil-acoes { top: 16px; right: 18px; gap: 10px; }
+      .c-perfil-botao { width: 48px; height: 48px; }
+      .c-perfil-topo { flex-direction: column; align-items: flex-start; padding-right: 0; min-height: 0; }
+      .c-perfil-foto { width: 132px; height: 132px; margin-bottom: 4px; }
+      .c-foto.c-foto-grande { font-size: 4rem; }
+      .c-perfil-nome { width: 100%; }
+      .c-perfil-favs-titulo { font-size: 1.7rem; }
+      .c-perfil-fav { width: 100px; }
+      .c-dialog.c-perfil.c-envio { padding: 18px; border-radius: 30px; }
+      .c-dialog.c-perfil.c-recorte { padding: 22px 16px 18px; border-radius: 30px; }
+      .c-recorte-palco { height: 70vw; border-radius: 20px; }
+      .c-recorte-zoom { margin-top: 22px; }
+      .c-dialog.c-perfil.c-apagar { padding: 16px 20px 24px; }
+      .c-apagar-botoes .button { height: 54px; flex: 1 1 0; font-size: 1.45rem; padding: 0 .6rem; }
+    }
+  }
+</style>

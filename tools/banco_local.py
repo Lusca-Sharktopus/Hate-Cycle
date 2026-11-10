@@ -37,6 +37,18 @@ grant execute on function auth.uid() to anon, authenticated;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
 alter default privileges in schema public grant execute on functions to anon, authenticated, service_role;
+-- o Storage (só o que a migração das fotos usa, 09/11/2026): baldes, arquivos (com RLS ligado, como no Supabase) e storage.foldername()
+create schema storage;
+create table storage.buckets (id text primary key, name text not null, public boolean default false, file_size_limit bigint, allowed_mime_types text[]);
+create table storage.objects (id uuid primary key default gen_random_uuid(), bucket_id text references storage.buckets(id), name text, owner uuid default auth.uid(),
+  created_at timestamptz default now(), unique (bucket_id, name));
+alter table storage.objects enable row level security;
+create function storage.foldername(name text) returns text[] language sql immutable as $$
+  select (string_to_array(name, '/'))[1:array_length(string_to_array(name, '/'), 1) - 1] $$;
+grant usage on schema storage to anon, authenticated;
+grant all on storage.objects to anon, authenticated;
+grant select on storage.buckets to anon, authenticated;
+grant execute on function storage.foldername(text) to anon, authenticated;
 """
 
 A, B, C, D = (f"00000000-0000-0000-0000-00000000000{i}" for i in "abcd")
@@ -330,6 +342,46 @@ def casos(q, paralelo=None) -> int:
         resultados.append((certo, "favoritos: 3 lotes de 300 ao mesmo tempo param em 300"))
         print(("✔ " if certo else "✗ ") + f"favoritos: 3 lotes de 300 ao mesmo tempo param em 300 (ficaram {saida_})")
         q(f"delete from public.favorites where user_id = '{B}'")
+
+    # 9c) fotos de perfil (migração 20261110000000, 09/11/2026)
+    arq = lambda nome: f"insert into storage.objects (bucket_id, name) values ('avatars', '{nome}')"
+    caso("foto: o balde existe, público, só WebP/JPEG de até 200 KB", "select 1",
+         depois="select public || '|' || file_size_limit || '|' || array_to_string(allowed_mime_types, ',') from storage.buckets where id = 'avatars'",
+         espera="true|204800|image/webp,image/jpeg")
+    caso("foto: quem tem conta sobe na própria pasta", arq(f"{B}/abcdefghijkl0001.webp"), papel="authenticated", sub=B)
+    caso("foto: subir na pasta de outra pessoa é recusado", arq(f"{A}/abcdefghijkl0002.webp"), papel="authenticated", sub=B, erro="row-level security")
+    caso("foto: nome fora do formato é recusado (svg, sem pasta, pasta dentro de pasta)", arq(f"{B}/abcdefghijkl0003.svg"), papel="authenticated", sub=B, erro="row-level security")
+    caso("foto: arquivo solto, sem pasta, é recusado", arq("abcdefghijkl0004.webp"), papel="authenticated", sub=B, erro="row-level security")
+    caso("foto: subpasta é recusada", arq(f"{B}/x/abcdefghijkl0005.webp"), papel="authenticated", sub=B, erro="row-level security")
+    caso("foto: visitante sem conta não sobe nada", arq(f"{B}/abcdefghijkl0006.webp"), papel="anon", erro="row-level security")
+    caso("foto: JPEG (o Safari) também vale", arq(f"{B}/abcdefghijkl0007.jpg"), papel="authenticated", sub=B)
+    caso("foto: com 3 arquivos na pasta (subiu e não trocou), o quarto é recusado", arq(f"{B}/abcdefghijkl0008.webp") + "; " + arq(f"{B}/abcdefghijkl0009.webp"),
+         papel="authenticated", sub=B, erro="row-level security")
+    caso("foto: pôr no perfil um arquivo que está na pasta", f"select public.set_my_avatar('{B}/abcdefghijkl0001.webp')", papel="authenticated", sub=B,
+         depois=f"select avatar_path from public.profiles where id = '{B}'", espera=f"{B}/abcdefghijkl0001.webp")
+    caso("foto: trocar devolve o caminho antigo (o navegador apaga o velho)", f"select public.set_my_avatar('{B}/abcdefghijkl0007.jpg')", papel="authenticated", sub=B,
+         depois=f"select avatar_path from public.profiles where id = '{B}'", espera=f"{B}/abcdefghijkl0007.jpg")
+    ok_, saida_, _ = q(f"select public.set_my_avatar('{B}/abcdefghijkl0001.webp')", "authenticated", B)
+    certo = ok_ and saida_ == f"{B}/abcdefghijkl0007.jpg"
+    resultados.append((certo, "foto: set_my_avatar devolve o caminho anterior"))
+    print(("✔ " if certo else "✗ ") + "foto: set_my_avatar devolve o caminho anterior" + ("" if certo else f" (veio {saida_!r})"))
+    caso("foto: arquivo que não existe no balde é recusado", f"select public.set_my_avatar('{B}/zzzzzzzzzzzz0000.webp')", papel="authenticated", sub=B, erro="avatar not found")
+    caso("foto: arquivo de outra pessoa é recusado", f"select public.set_my_avatar('{A}/abcdefghijkl0002.webp')", papel="authenticated", sub=B, erro="invalid avatar")
+    caso("foto: caminho estranho é recusado", "select public.set_my_avatar('javascript:alert(1)')", papel="authenticated", sub=B, erro="invalid avatar")
+    caso("foto: visitante sem conta não chama set_my_avatar", "select public.set_my_avatar(null)", papel="anon", erro="permission denied")
+    caso("foto: ninguém escreve o caminho direto na tabela", f"update public.profiles set avatar_path = '{B}/abcdefghijkl0001.webp'", papel="authenticated", sub=B, erro="permission denied")
+    caso("foto: nem o banco aceita, no perfil, caminho de outra pasta", f"update public.profiles set avatar_path = '{A}/abcdefghijkl0002.webp' where id = '{B}'", erro="check")
+    caso("foto: a pessoa não vê a pasta de outra", "select count(*) from storage.objects", papel="authenticated", sub=A, depois="select 1", espera="1")
+    ok_, saida_, _ = q("select count(*) from storage.objects", "authenticated", A)
+    certo = ok_ and saida_ == "0"
+    resultados.append((certo, "foto: listar o balde só mostra a própria pasta"))
+    print(("✔ " if certo else "✗ ") + "foto: listar o balde só mostra a própria pasta" + ("" if certo else f" (veio {saida_!r})"))
+    caso("foto: ninguém apaga o arquivo de outra pessoa", "delete from storage.objects", papel="authenticated", sub=A, depois="select count(*) from storage.objects", espera="2")
+    caso("foto: apagar o próprio arquivo velho", f"delete from storage.objects where name = '{B}/abcdefghijkl0007.jpg'", papel="authenticated", sub=B,
+         depois="select count(*) from storage.objects", espera="1")
+    caso("foto: tirar a foto (null) volta para a runa", "select public.set_my_avatar(null)", papel="authenticated", sub=B,
+         depois=f"select coalesce(avatar_path, 'runa') from public.profiles where id = '{B}'", espera="runa")
+    q("delete from storage.objects")
 
     # 10) a janela da conta (migração 20261103040000): trocar o próprio nome, apagar a própria conta
     caso("conta: trocar o próprio nome (limpa espaços)", "select public.change_my_name('  Bia   Nova  ')", papel="authenticated", sub=B,

@@ -24,12 +24,14 @@
 // Só aqui (03/11/2026, sem par no comments.js): o nome em "Conectado como <nome>" é um botão que abre a janela da conta (./conta.ts).
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { abrirJanelaDaConta, textosDaConta } from "./conta";
+import { circuloDaFoto } from "./foto";
 import { janelaDeLogin } from "../login/janela";
 import { el } from "./dom";
 import {
   COLUNAS,
   COLUNAS_COM_EDICAO,
   COLUNAS_COMPLETAS,
+  COLUNAS_COM_FOTO,
   comentarioApagado,
   faltaColuna,
   alturaDoCampo,
@@ -169,10 +171,12 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
                 abrirJanelaDaConta({
                   sb,
                   lang: cfg.lang,
+                  id: eu.id,
+                  base: cfg.url,
                   nome: (perfil && perfil.display_name) || "",
+                  foto: perfil && perfil.avatar_path,
                   admin: Boolean(perfil && perfil.is_admin),
-                  email: eu.email,
-                  aoMudarNome: () => void atualizar(),
+                  aoMudar: () => void atualizar(),
                   aoApagar: (texto) => {
                     quem = null;
                     perfil = null;
@@ -288,7 +292,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   function carregarComentarios(): Promise<void> {
     lista.textContent = t("c_loading");
     const consulta = (colunas: string) => sb.from("comments").select(colunas).eq("page_id", pagina as string).order("created_at", { ascending: true });
-    return Promise.resolve(consulta(COLUNAS_COMPLETAS))
+    return Promise.resolve(consulta(COLUNAS_COM_FOTO))
+      .then((r) => (faltaColuna(r.error) ? consulta(COLUNAS_COMPLETAS) : r)) // 09/11: coluna avatar_path ainda não existe (migração das fotos)
       .then((r) => (faltaColuna(r.error) ? consulta(COLUNAS_COM_EDICAO) : r)) // coluna deleted_at ainda não existe (migração de 03/11 não rodada)
       .then((r) => (r.error ? consulta(COLUNAS) : r)) // coluna edited_at ainda não existe: segue sem ela
       .then((r) => {
@@ -366,6 +371,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     const autor = c.profiles ?? {};
     const cabeca = el("div", { attrs: { class: "c-head" } }, [
       // 05/11/2026 (pedido do autor): o selo da conta de ADM é 🜄 (no comments.js do site antigo continua ✦)
+      // 09/11/2026 (pedido do autor): a foto de perfil (ou a runa de quem não tem foto), antes do nome (./foto.ts)
+      c.user_id ? circuloDaFoto(cfg.url, c.user_id, autor.avatar_path) : null,
       autor.is_admin ? el("span", { attrs: { class: "c-badge" }, texto: "🜄" }) : null,
       el("strong", { texto: nomeDoAutor(c) }),
       c.edited_at ? el("span", { attrs: { class: "c-edited", title: dataDaEdicao(c.edited_at, cfg.lang) }, texto: `(${t("c_edited")})` }) : null,
@@ -429,9 +436,12 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   /** refresh(): relê o perfil de quem entrou, redesenha a linha de login e recarrega a lista. */
   function atualizar(): Promise<void> {
     const antes = quem
-      ? Promise.resolve(sb.from("profiles").select("display_name, is_admin").eq("id", quem.id).single()).then((r) => {
-          perfil = (r.data as Perfil | null) || null;
-        })
+      ? Promise.resolve(sb.from("profiles").select("display_name, is_admin, avatar_path").eq("id", quem.id).single())
+          // 09/11: sem a migração das fotos, a coluna avatar_path não existe: relê sem ela
+          .then((r) => (faltaColuna(r.error) ? sb.from("profiles").select("display_name, is_admin").eq("id", (quem as QuemEntrou).id).single() : r))
+          .then((r) => {
+            perfil = (r.data as Perfil | null) || null;
+          })
       : Promise.resolve();
     return antes.then(() => {
       desenharLogin();

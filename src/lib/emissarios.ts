@@ -25,6 +25,7 @@ export interface EmissarioComDados {
     youtube?: string | undefined;
     x?: string | undefined;
     bluesky?: string | undefined;
+    behance?: string | undefined;
     website?: string | undefined;
     email?: string | undefined;
     _origem: { slug: string; lang: Lang };
@@ -49,6 +50,7 @@ export const REDES = [
   ["youtube", "YouTube"],
   ["x", "X"],
   ["bluesky", "Bluesky"],
+  ["behance", "Behance"],
   ["website", "Website"],
   ["email", "E-mail"],
 ] as const;

@@ -43,7 +43,7 @@ Comuns: `title`, `date: AAAA-MM-DD`, `summary`, `image`, `tags: [a, b]`, `relate
 - **Notícia:** `thumb: news/nome.png` (miniatura quadrada; imagens em `static/news/`), `tags`, `date` (a ordem é sempre pela data). Design especial: `backdrop_top` / `backdrop_bottom` (imagens sangrando até a borda da folha); colagem: `stickers` (linhas `arquivo | l3 t2 w26 a-4`) + `overlay`.
 - **Página avulsa:** `layout: wide` (página larga, como Sobre), `menu: extras` (entra no menu Extras), `route: false` (não gera página própria).
 - **Personagem:** `role`, `image`, `appears_in: [firestriker]`, `related`, `order`. **Universo:** `category`, `order`.
-- **Emissário:** `title` (nome), `role` (função), `image` (quadrada, ex.: `emissaries/saf.png`), `order`, redes `instagram`, `tiktok`, `youtube`, `x`, `bluesky`, `website`, `email`; o texto breve vai abaixo do `---`.
+- **Emissário:** `title` (nome), `role` (função), `image` (quadrada, ex.: `emissaries/saf.png`), `order`, redes `instagram`, `tiktok`, `youtube`, `x`, `bluesky`, `behance`, `website`, `email`; o texto breve vai abaixo do `---`.
 
 ## `work.json` (uma obra)
 

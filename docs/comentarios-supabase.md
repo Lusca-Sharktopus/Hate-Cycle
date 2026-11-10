@@ -184,6 +184,18 @@ O que muda para quem visita (só no site novo, página Histórias): uma estrela 
 
 **Como foi provado:** `python3 tools/banco_local.py` (casos "favoritos:"); no site, `tests/favoritos.test.ts` e `tests/favoritos-dom.test.ts`.
 
+### Migração de 10/11/2026: fotos de perfil
+
+Arquivo: `supabase/migrations/20261110000000_fotos_de_perfil.sql`. **Ainda não rodada.** Depende da migração da janela da conta (03/11).
+
+O que muda para quem visita (só no site novo): na janela da conta (clique no próprio nome em "Conectado como"), o círculo da foto abre "escolher uma imagem" (clicar ou arrastar o arquivo), depois a tela de recorte (arrastar a imagem, aproximar pela barra) e "Salvar foto". A foto aparece na janela e ao lado do nome em todo comentário. Quem não tem foto ganha uma runa sorteada, sempre a mesma para a mesma conta (isso não usa o banco).
+
+Como fica guardado: o arquivo vai para o **Storage** do Supabase, num "balde" público chamado `avatars` que a própria migração cria, na pasta da pessoa (`<id da conta>/<nome aleatório>.webp`, 256 × 256, poucos KB; o Safari manda `.jpg`). O perfil (`profiles.avatar_path`) aponta para o arquivo. Cada pessoa só põe e tira arquivos da própria pasta, no máximo 3 de cada vez, só WebP/JPEG de até 200 KB; trocar a foto apaga a velha; apagar a conta apaga as fotos antes. Enquanto a migração não for rodada, os comentários continuam funcionando normalmente e todo mundo aparece com a runa; tentar salvar uma foto mostra "As fotos de perfil ainda não estão ligadas no banco do site".
+
+**Como aplicar (~2 minutos):** SQL Editor → New query → cole **tudo** de `supabase/migrations/20261110000000_fotos_de_perfil.sql` → **Run** → "Success. No rows returned". Pode rodar de novo sem estragar nada. Para conferir: menu **Storage** → deve aparecer o balde `avatars` marcado como "Public".
+
+**Como foi provado:** `python3 tools/banco_local.py` (casos "foto:", com uma imitação do Storage); no site, `tests/comentarios.test.ts` (regras da foto, do recorte e dos endereços) e `tests/comentarios-dom.test.ts` (a janela inteira, com HTML no nome e nos títulos).
+
 ## 6. O que mudou no site novo (Astro, T15)
 
 Para quem visita, **nada**: mesma caixa, mesmos botões e textos, mesmas conversas (os IDs `works/<obra>/<capítulo>` e `news/<pasta>` não mudaram), e quem já estava conectado continua conectado (a sessão fica guardada no navegador com o mesmo nome).
