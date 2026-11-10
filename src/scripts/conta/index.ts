@@ -17,11 +17,11 @@ declare global {
 }
 
 /** O window.HC_CONTA lido como o window.HC da caixa (lerConfiguracao de ../comentarios/caixa.ts, sem trazer a caixa inteira). */
-function lerConfiguracao(hc: unknown): { url: string; key: string; lang: string; ui: ReturnType<typeof textosComPadrao> } | null {
+function lerConfiguracao(hc: unknown): { url: string; key: string; lang: string; ui: ReturnType<typeof textosComPadrao>; klipy: null } | null {
   if (hc === null || typeof hc !== "object") return null;
   const { url, key, lang, ui } = hc as Record<string, unknown>;
   if (typeof url !== "string" || url === "" || typeof key !== "string" || key === "") return null;
-  return { url, key, lang: typeof lang === "string" ? lang : "en", ui: textosComPadrao(ui) };
+  return { url, key, lang: typeof lang === "string" ? lang : "en", ui: textosComPadrao(ui), klipy: null }; // a janela da conta não usa o seletor de GIFs
 }
 
 const cfg = lerConfiguracao(window.HC_CONTA);
