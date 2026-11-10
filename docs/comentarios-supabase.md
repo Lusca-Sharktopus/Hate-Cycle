@@ -186,7 +186,7 @@ O que muda para quem visita (só no site novo, página Histórias): uma estrela 
 
 ### Migração de 10/11/2026: fotos de perfil
 
-Arquivo: `supabase/migrations/20261110000000_fotos_de_perfil.sql`. **Ainda não rodada.** Depende da migração da janela da conta (03/11).
+Arquivo: `supabase/migrations/20261110000000_fotos_de_perfil.sql`. **Já rodada no seu projeto (10/11/2026).** Depende da migração da janela da conta (03/11).
 
 O que muda para quem visita (só no site novo): na janela da conta (clique no próprio nome em "Conectado como"), o círculo da foto abre "escolher uma imagem" (clicar ou arrastar o arquivo), depois a tela de recorte (arrastar a imagem, aproximar pela barra) e "Salvar foto". A foto aparece na janela e ao lado do nome em todo comentário. Quem não tem foto ganha uma runa sorteada, sempre a mesma para a mesma conta (isso não usa o banco).
 
