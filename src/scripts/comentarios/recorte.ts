@@ -198,6 +198,12 @@ export function telaDeRecorte(imagem: { width: number; height: number } & Canvas
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingQuality = "high";
     ctx.drawImage(imagem, w / 2 + dx - (iw * escala) / 2, h / 2 + dy - (ih * escala) / 2, iw * escala, ih * escala);
+    // fora do anel, a imagem fica escurecida (design do autor): um véu escuro com um furo redondo do tamanho do círculo
+    ctx.beginPath();
+    ctx.rect(w / 2 + dx - (iw * escala) / 2, h / 2 + dy - (ih * escala) / 2, iw * escala, ih * escala); // só sobre a imagem: as laterais seguem cinza
+    ctx.arc(w / 2, h / 2, d / 2, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+    ctx.fill("evenodd");
   }
   function mover(ndx: number, ndy: number): void {
     [dx, dy] = deslocamentoPreso(ndx, ndy, iw, ih, escala, d);
