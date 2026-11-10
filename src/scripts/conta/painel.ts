@@ -6,6 +6,10 @@
 // outras quando o nome, a foto ou a conta mudam (evento "hc-conta-mudou" no document). O que vem pelo endereço depois de um login
 // (erro do Google, link de nova senha) fica com a caixa de comentários ou com os favoritos quando a página tem um deles; o botão só
 // cuida disso nas páginas que não têm nenhum dos dois.
+//
+// Conta recém-criada (10/11/2026, pedido do autor): no PRIMEIRO login de uma conta (./boasVindas.ts), o perfil abre sozinho, uma vez,
+// para a pessoa escolher o nome e a foto antes de comentar. Vale para os quatro jeitos de criar conta (Google, Twitter, Discord e
+// e-mail) e em qualquer página, porque é este arquivo, o do botão do cabeçalho, que abre.
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ConfiguracaoDosComentarios } from "../comentarios/caixa";
 import { abrirJanelaDaConta, textosDaConta } from "../comentarios/conta";
@@ -13,6 +17,7 @@ import { circuloDaFoto } from "../comentarios/foto";
 import { faltaColuna, type Perfil } from "../comentarios/regras";
 import { erroDoRetornoDoLogin, janelaDeLogin, textosDoLogin, type EstadoDoLogin } from "../login/janela";
 import { clienteDoSupabase } from "../supabase/cliente";
+import { ehContaNova, jaRecebida, marcarRecebida, type DatasDaConta } from "./boasVindas";
 
 export const EVENTO_DA_CONTA = "hc-conta-mudou";
 
@@ -61,6 +66,49 @@ export function ligarPainel(botao: HTMLButtonElement, cfg: ConfiguracaoDosComent
     if (!quem || quem.id !== eu) return; // saiu ou trocou de conta no meio do caminho
     perfil = r.error ? null : (r.data as Perfil);
     desenhar();
+    if (aReceber === eu) receber(eu);
+  }
+
+  // ── a conta recém-criada: o perfil abre sozinho, uma vez ──
+  /** As contas que já tiveram o perfil aberto nesta página (vale quando o navegador não deixa usar o localStorage). */
+  const recebidasAqui = new Set<string>();
+  /** A conta nova que ainda espera o perfil abrir (depois de ler o nome e a foto). */
+  let aReceber: string | null = null;
+  function armazem(): Storage | null {
+    try {
+      return localStorage;
+    } catch {
+      return null;
+    }
+  }
+  function notar(u: DatasDaConta): void {
+    if (recebidasAqui.has(u.id) || !ehContaNova(u, Date.now())) return;
+    const a = armazem();
+    if (a && jaRecebida(u.id, a)) return;
+    aReceber = u.id;
+  }
+  /**
+   * Abre o perfil da conta nova. Se outra janela ainda está na tela (a de login fechando, a de nova senha), espera um pouco: ela
+   * fecha logo depois do login e, se o perfil abrisse antes, perderia o foco e a trava da rolagem. Se não fechar em 3 s, desiste
+   * sem anotar (a próxima página tenta de novo).
+   */
+  function receber(eu: string, tentativas = 30): void {
+    if (aReceber !== eu) return;
+    if (!quem || quem.id !== eu) {
+      aReceber = null;
+      return;
+    }
+    const jaNoPerfil = document.querySelector(".c-modal.c-conta") !== null; // a pessoa foi mais rápida e abriu sozinha
+    if (!jaNoPerfil && document.querySelector(".c-modal, .fav-modal")) {
+      if (tentativas > 0) setTimeout(() => receber(eu, tentativas - 1), 100);
+      else aReceber = null;
+      return;
+    }
+    aReceber = null;
+    recebidasAqui.add(eu);
+    const a = armazem();
+    if (a) marcarRecebida(eu, a);
+    if (!jaNoPerfil) abrirPerfil();
   }
 
   const estado: EstadoDoLogin = { modo: "login", trocandoSenha: false, erro: erroDoLogin, aviso: null };
@@ -81,13 +129,18 @@ export function ligarPainel(botao: HTMLButtonElement, cfg: ConfiguracaoDosComent
     const proximo = sessao?.user ?? null;
     if ((proximo ? proximo.id : null) === (quem ? quem.id : null)) return;
     quem = proximo ? { id: proximo.id, email: proximo.email } : null;
+    if (proximo) notar(proximo);
+    else aReceber = null;
     // entrou pela janela do botão: ela fecha sozinha (menos no meio da troca de senha)
     if (quem && login.aberta() && !estado.trocandoSenha) login.fechar();
     void lerPerfil();
   });
   const pronto = sb.auth.getSession().then((r) => {
     const s = r.data && r.data.session;
-    if (s && !quem) quem = { id: s.user.id, email: s.user.email };
+    if (s && !quem) {
+      quem = { id: s.user.id, email: s.user.email };
+      notar(s.user);
+    }
     return lerPerfil();
   });
   if (erroDoLogin) login.abrir();
@@ -96,33 +149,35 @@ export function ligarPainel(botao: HTMLButtonElement, cfg: ConfiguracaoDosComent
 
   const avisar = () => document.dispatchEvent(new CustomEvent(EVENTO_DA_CONTA));
 
+  function abrirPerfil(): void {
+    if (!quem) return;
+    const eu = quem;
+    abrirJanelaDaConta({
+      sb,
+      lang: cfg.lang,
+      id: eu.id,
+      base: cfg.url,
+      nome: (perfil && perfil.display_name) || "",
+      foto: perfil && perfil.avatar_path,
+      admin: Boolean(perfil && perfil.is_admin),
+      aoMudar: () => {
+        void lerPerfil();
+        avisar();
+      },
+      aoApagar: () => {
+        quem = null;
+        perfil = null;
+        desenhar();
+        avisar();
+      },
+    });
+  }
+
   return {
     clicar(): void {
       void pronto.then(() => {
-        if (!quem) {
-          login.abrir();
-          return;
-        }
-        const eu = quem;
-        abrirJanelaDaConta({
-          sb,
-          lang: cfg.lang,
-          id: eu.id,
-          base: cfg.url,
-          nome: (perfil && perfil.display_name) || "",
-          foto: perfil && perfil.avatar_path,
-          admin: Boolean(perfil && perfil.is_admin),
-          aoMudar: () => {
-            void lerPerfil();
-            avisar();
-          },
-          aoApagar: () => {
-            quem = null;
-            perfil = null;
-            desenhar();
-            avisar();
-          },
-        });
+        if (quem) abrirPerfil();
+        else login.abrir();
       });
     },
   };

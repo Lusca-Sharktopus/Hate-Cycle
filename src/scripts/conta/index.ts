@@ -4,7 +4,7 @@
 //
 // Este arquivo é pequeno de propósito: ele vai para toda página e NÃO traz o supabase-js. O resto (./painel.ts, com a conexão, a
 // janela da conta e a de login) só é baixado quando precisa: a pessoa tem uma sessão guardada neste navegador, está voltando de um
-// login (Google, Twitter, Discord, e-mail) ou clicou no botão.
+// login (Google, Twitter, Discord, e-mail), acabou de entrar por outra parte da página ou clicou no botão.
 //
 // A configuração vem do window.HC_CONTA da página (src/lib/comentarios.ts → configuracaoDaConta, o único que lê as chaves).
 // ⚠ Vai para o navegador: não importa nada de src/lib/.
@@ -48,5 +48,8 @@ if (cfg && botao) {
   let painel: Promise<{ clicar(): void }> | null = null;
   const carregar = () => (painel ??= import("./painel").then((m) => m.ligarPainel(botao, cfg)));
   if (temSessao || voltandoDoLogin) void carregar();
+  // alguém entrou nesta página sem recarregar (login por e-mail e senha na caixa de comentários ou nos favoritos): a conexão avisa
+  // (src/scripts/supabase/cliente.ts → EVENTO_DE_ENTRADA) e o botão ganha a foto; conta recém-criada = o perfil abre (./painel.ts)
+  document.addEventListener("hc-conta-entrou", () => void carregar());
   botao.addEventListener("click", () => void carregar().then((p) => p.clicar()));
 }
