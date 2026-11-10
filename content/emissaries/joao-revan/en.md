@@ -1,9 +1,11 @@
 ---
 title: João Revan
 role: Motion Animator
-image: emissaries/Revan.png
+image: emissaries/Revan-2026.jpg
 order: 3
 instagram: https://www.instagram.com/jrevan.aex/
+youtube: https://www.youtube.com/@jrevan_aex
+x: https://x.com/jrevan_aex
 behance: https://www.behance.net/joao_revan
 ---
 
