@@ -30,6 +30,8 @@ export const TEXTOS_PADRAO_DOS_COMENTARIOS: Readonly<Record<string, Readonly<Rec
 export interface ChavesDoSupabase {
   supabase_url?: unknown;
   supabase_anon_key?: unknown;
+  /** 10/11/2026: a chave do KLIPY para o seletor de GIFs (pública por desenho, como a anon). Sem ela, o botão GIF não aparece. */
+  klipy_api_key?: unknown;
 }
 
 /** config.json → ui (todos os idiomas): daqui saem os textos `c_*` que o comments.js usa. */
@@ -106,6 +108,9 @@ export function secaoDeComentarios(lang: Lang, idDaPagina: string | null, o: Opc
     ["lang", lang],
     ["ui", textosDosComentarios(o.ui, lang)],
   ]);
+  // 10/11/2026 (só no site novo): a chave do KLIPY, só quando o autor a pôs no config.json (sem ela, o window.HC é o mesmo do Python)
+  const klipy = o.chaves?.klipy_api_key;
+  if (typeof klipy === "string" && pyStrip(klipy) !== "") hc.set("klipy", pyStrip(klipy));
   return {
     tipo: "caixa",
     idDaPagina,

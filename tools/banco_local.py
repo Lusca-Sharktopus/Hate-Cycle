@@ -383,6 +383,44 @@ def casos(q, paralelo=None) -> int:
          depois=f"select coalesce(avatar_path, 'runa') from public.profiles where id = '{B}'", espera="runa")
     q("delete from storage.objects")
 
+    # 9d) imagens nos comentários (migração 20261110120000, 10/11/2026); A é o admin, B e C são contas comuns
+    img = lambda nome: f"insert into storage.objects (bucket_id, name) values ('comment-images', '{nome}')"
+    caso("imagem: o balde existe, público, só WebP/JPEG/GIF de até 2 MB", "select 1",
+         depois="select public || '|' || file_size_limit || '|' || array_to_string(allowed_mime_types, ',') from storage.buckets where id = 'comment-images'",
+         espera="true|2097152|image/webp,image/jpeg,image/gif")
+    caso("imagem: quem tem conta sobe na própria pasta (webp, jpg, gif)", img(f"{B}/abcdefghijkl0001.webp") + "; " + img(f"{B}/abcdefghijkl0002.jpg") + "; " + img(f"{B}/abcdefghijkl0003.gif"),
+         papel="authenticated", sub=B)
+    caso("imagem: na pasta de outra pessoa é recusado", img(f"{C}/abcdefghijkl0004.webp"), papel="authenticated", sub=B, erro="row-level security")
+    caso("imagem: svg é recusado", img(f"{B}/abcdefghijkl0005.svg"), papel="authenticated", sub=B, erro="row-level security")
+    caso("imagem: subpasta é recusada", img(f"{B}/x/abcdefghijkl0006.webp"), papel="authenticated", sub=B, erro="row-level security")
+    caso("imagem: visitante sem conta não sobe nada", img(f"{B}/abcdefghijkl0007.webp"), papel="anon", erro="row-level security")
+    caso("imagem: visitante sem conta não conta arquivos", "select public.minhas_imagens()", papel="anon", erro="permission denied")
+    caso("imagem: minhas_imagens só conta a pasta de quem chama", "select 1", depois="select 1", espera="1")
+    ok_, saida_, _ = q("select public.minhas_imagens()", "authenticated", C)
+    certo = ok_ and saida_ == "0"
+    resultados.append((certo, "imagem: minhas_imagens de C (sem arquivos) é 0, mesmo com os de B no balde"))
+    print(("✔ " if certo else "✗ ") + "imagem: minhas_imagens de C é 0" + ("" if certo else f" (veio {saida_!r})"))
+    caso("imagem: 30 por dia; a 31ª é recusada", "; ".join(img(f"{C}/abcdefghij{n:06d}.webp") for n in range(30)), papel="authenticated", sub=C,
+         depois=f"select count(*) from storage.objects where name like '{C}/%'", espera="30")
+    caso("imagem: a 31ª do dia é recusada", img(f"{C}/abcdefghijzzzzzz.webp"), papel="authenticated", sub=C, erro="row-level security")
+    caso("imagem: C não vê a pasta de B", "select 1", depois="select 1", espera="1")
+    ok_, saida_, _ = q(f"select count(*) from storage.objects where bucket_id = 'comment-images' and name like '{B}/%'", "authenticated", C)
+    certo = ok_ and saida_ == "0"
+    resultados.append((certo, "imagem: listar o balde só mostra a própria pasta"))
+    print(("✔ " if certo else "✗ ") + "imagem: listar o balde só mostra a própria pasta" + ("" if certo else f" (veio {saida_!r})"))
+    caso("imagem: C não apaga arquivo de B", f"delete from storage.objects where name like '{B}/%'", papel="authenticated", sub=C,
+         depois=f"select count(*) from storage.objects where name like '{B}/%'", espera="3")
+    caso("imagem: B apaga o próprio", f"delete from storage.objects where name = '{B}/abcdefghijkl0001.webp'", papel="authenticated", sub=B,
+         depois=f"select count(*) from storage.objects where name like '{B}/%'", espera="2")
+    caso("imagem: o admin apaga o de qualquer um (moderação)", f"delete from storage.objects where bucket_id = 'comment-images' and name = '{B}/abcdefghijkl0002.jpg'", papel="authenticated", sub=A,
+         depois=f"select count(*) from storage.objects where name like '{B}/%'", espera="1")
+    caso("imagem: ninguém troca um arquivo (sem update)", f"update storage.objects set name = '{B}/zzzzzzzzzzzz.webp' where bucket_id = 'comment-images'", papel="authenticated", sub=B,
+         depois=f"select count(*) from storage.objects where name = '{B}/zzzzzzzzzzzz.webp'", espera="0")
+    caso("imagem: o admin não sobe na pasta dos outros", img(f"{B}/abcdefghijkl0099.webp"), papel="authenticated", sub=A, erro="row-level security")
+    caso("imagem: as policies das fotos de perfil continuam só para o balde avatars", f"insert into storage.objects (bucket_id, name) values ('avatars', '{B}/abcdefghijkl0010.gif')",
+         papel="authenticated", sub=B, erro="row-level security")
+    q("delete from storage.objects")
+
     # 10) a janela da conta (migração 20261103040000): trocar o próprio nome, apagar a própria conta
     caso("conta: trocar o próprio nome (limpa espaços)", "select public.change_my_name('  Bia   Nova  ')", papel="authenticated", sub=B,
          depois=f"select display_name from public.profiles where id = '{B}'", espera="Bia Nova")

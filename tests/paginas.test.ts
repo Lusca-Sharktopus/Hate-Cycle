@@ -134,7 +134,7 @@ const semAno = (rodape: string) => rodape.replace(/(2023 - )\d{4}/, "$1<ano>");
 
 // ───────────── as chaves do Supabase do autor (lidas aqui só para conferir e esconder; nunca impressas) ─────────────
 
-const chavesDoAutor = (JSON.parse(readFileSync(join(RAIZ, "config.json"), "utf8")) as { comments?: { supabase_url?: unknown; supabase_anon_key?: unknown } }).comments ?? {};
+const chavesDoAutor = (JSON.parse(readFileSync(join(RAIZ, "config.json"), "utf8")) as { comments?: { supabase_url?: unknown; supabase_anon_key?: unknown; klipy_api_key?: unknown } }).comments ?? {};
 const temChaves = typeof chavesDoAutor.supabase_url === "string" && chavesDoAutor.supabase_url !== "" && typeof chavesDoAutor.supabase_anon_key === "string" && chavesDoAutor.supabase_anon_key !== "";
 const RE_HC = /<script>window\.HC=(\{[\s\S]*?\});<\/script>/g;
 
@@ -147,11 +147,17 @@ function comMarcadores(html: string, marcadores: { url: string; key: string }): 
   let conferem = true;
   const saida = html.replace(RE_HC, (script, json: string) => {
     quantos++;
-    const hc = JSON.parse(json.replaceAll("<\\/", "</")) as { url: unknown; key: unknown };
+    const hc = JSON.parse(json.replaceAll("<\\/", "</")) as { url: unknown; key: unknown; klipy?: unknown };
     const urlCerta = temChaves && hc.url === limparUrlDoSupabase(String(chavesDoAutor.supabase_url));
     const chaveCerta = temChaves && hc.key === pyStrip(String(chavesDoAutor.supabase_anon_key));
     if (!urlCerta || !chaveCerta) conferem = false;
-    return script.replace(`"url": ${JSON.stringify(hc.url)}`, `"url": "${marcadores.url}"`).replace(`"key": ${JSON.stringify(hc.key)}`, `"key": "${marcadores.key}"`);
+    // 10/11/2026: a chave do KLIPY (GIFs, só no Astro) sai antes de comparar — o Python não tem, e ela nunca vai para uma mensagem
+    let saida = script;
+    if (hc.klipy !== undefined) {
+      if (typeof chavesDoAutor.klipy_api_key !== "string" || hc.klipy !== pyStrip(chavesDoAutor.klipy_api_key)) conferem = false;
+      saida = saida.replace(`, "klipy": ${JSON.stringify(hc.klipy)}`, "");
+    }
+    return saida.replace(`"url": ${JSON.stringify(hc.url)}`, `"url": "${marcadores.url}"`).replace(`"key": ${JSON.stringify(hc.key)}`, `"key": "${marcadores.key}"`);
   });
   return { html: saida, quantos, conferem };
 }

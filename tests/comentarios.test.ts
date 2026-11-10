@@ -234,17 +234,17 @@ describe("segurança: o código que vai para o navegador", () => {
       .split("\n")
       .filter((l) => !/^\s*\/\//.test(l)) // comentários podem citar as palavras proibidas
       .join("\n");
-  test("os sete arquivos existem (conta.ts = a janela da conta, 03/11; foto.ts e recorte.ts = a foto de perfil, 09/11)", () => {
-    expect(arquivos.sort()).toEqual(["caixa.ts", "conta.ts", "dom.ts", "foto.ts", "index.ts", "recorte.ts", "regras.ts"]);
+  test("os onze arquivos existem (conta.ts = a janela da conta, 03/11; foto.ts e recorte.ts = a foto de perfil, 09/11; editor.ts, emojis.ts, formato.ts e midia.ts = a formatação, os emojis, os GIFs e as imagens, 10/11)", () => {
+    expect(arquivos.sort()).toEqual(["caixa.ts", "conta.ts", "dom.ts", "editor.ts", "emojis.ts", "formato.ts", "foto.ts", "index.ts", "midia.ts", "recorte.ts", "regras.ts"]);
   });
-  test.each(["caixa.ts", "conta.ts", "dom.ts", "foto.ts", "index.ts", "recorte.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
+  test.each(["caixa.ts", "conta.ts", "dom.ts", "editor.ts", "emojis.ts", "formato.ts", "foto.ts", "index.ts", "midia.ts", "recorte.ts", "regras.ts"])("%s não usa innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, createContextualFragment, eval nem new Function (só no texto do código; a prova pelo resultado é tests/comentarios-dom.test.ts)", (a) => {
     // (srcdoc não entra aqui: ele aparece de propósito na lista ATRIBUTOS_RECUSADOS de dom.ts, e a trava é testada acima)
     expect(codigo(a)).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
   });
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
       const imports = [...codigo(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta|foto|recorte)|\.\.\/supabase\/cliente|\.\.\/login\/janela|@supabase\/supabase-js)$/);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta|foto|recorte|editor|emojis|formato|midia)|\.\.\/supabase\/cliente|\.\.\/login\/janela|@supabase\/supabase-js)$/);
     }
   });
   // 05/11: a janela de login saiu da caixa para src/scripts/login/ (a mesma janela abre pelos favoritos): as mesmas travas valem lá
@@ -271,6 +271,10 @@ describe("segurança: o código que vai para o navegador", () => {
   test("regras.ts e dom.ts não importam nada; caixa.ts só usa o TIPO do supabase-js; só index.ts carrega o pacote", () => {
     expect(codigo("regras.ts")).not.toMatch(/\bimport\b/);
     expect(codigo("dom.ts")).not.toMatch(/\bimport\b/);
+    // 10/11: a formatação também é pura (vai para o navegador e para o teste sem nada junto)
+    expect(codigo("formato.ts")).not.toMatch(/\bimport\b/);
+    expect(codigo("editor.ts")).toMatch(/import type \{ SupabaseClient \} from "@supabase\/supabase-js"/);
+    expect(codigo("editor.ts")).not.toMatch(/import \{[^}]*\} from "@supabase/);
     expect(codigo("caixa.ts")).toMatch(/import type \{ SupabaseClient \} from "@supabase\/supabase-js"/);
     expect(codigo("caixa.ts")).not.toMatch(/import \{[^}]*\} from "@supabase/);
     // 03/11: a conexão é uma só para a página toda (comentários e marca-página), em src/scripts/supabase/cliente.ts

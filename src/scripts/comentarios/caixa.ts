@@ -27,6 +27,9 @@ import { abrirJanelaDaConta, textosDaConta } from "./conta";
 import { circuloDaFoto } from "./foto";
 import { janelaDeLogin } from "../login/janela";
 import { el } from "./dom";
+import { montarEditor, textosDaMidia, type Editor } from "./editor";
+import { imagensDoComentario, separarMidias } from "./formato";
+import { corpoDoComentario } from "./midia";
 import {
   COLUNAS,
   COLUNAS_COM_EDICAO,
@@ -46,7 +49,6 @@ import {
   podeEditar,
   podeResponder,
   texto,
-  textoParaEnviar,
   textosComPadrao,
   type Comentario,
   type Perfil,
@@ -60,14 +62,16 @@ export interface ConfiguracaoDosComentarios {
   key: string;
   lang: string;
   ui: TextosDaCaixa;
+  /** 10/11/2026: a chave do KLIPY (config.json → comments.klipy_api_key); null = sem o botão de GIF. */
+  klipy: string | null;
 }
 
 /** Lê o window.HC; se faltar algo essencial, null (a caixa não aparece, como no comments.js). */
 export function lerConfiguracao(hc: unknown): ConfiguracaoDosComentarios | null {
   if (hc === null || typeof hc !== "object") return null;
-  const { url, key, lang, ui } = hc as Record<string, unknown>;
+  const { url, key, lang, ui, klipy } = hc as Record<string, unknown>;
   if (typeof url !== "string" || url === "" || typeof key !== "string" || key === "") return null;
-  return { url, key, lang: typeof lang === "string" ? lang : "en", ui: textosComPadrao(ui) };
+  return { url, key, lang: typeof lang === "string" ? lang : "en", ui: textosComPadrao(ui), klipy: typeof klipy === "string" && /^[A-Za-z0-9_-]{8,200}$/.test(klipy) ? klipy : null };
 }
 
 type Erro = { message?: unknown } | null | undefined;
@@ -110,6 +114,43 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   function falhou(e: Erro): void {
     erro = mensagemDeErro(e, T);
     desenharLogin();
+  }
+  /** 10/11/2026: a barra de ferramentas (estilos, emojis, GIFs, imagens) de um campo de texto (./editor.ts). */
+  const textosDoCorpo = textosDaMidia(cfg.lang);
+  function editorDo(campoDeTexto: HTMLTextAreaElement, midias?: ReturnType<typeof separarMidias>["midias"]): Editor {
+    return montarEditor(campoDeTexto, {
+      sb,
+      base: cfg.url,
+      lang: cfg.lang,
+      klipy: cfg.klipy,
+      quem: () => (quem ? quem.id : null),
+      pedirLogin: () => abrirJanela(),
+      avisar: (textoDoAviso) => {
+        erro = textoDoAviso;
+        desenharLogin();
+      },
+      ...(midias ? { midias } : {}),
+    });
+  }
+  /** Apaga do balde as imagens que saíram de um comentário (apagado, ou tiradas na edição). Falha = o arquivo só fica lá. */
+  function apagarImagens(caminhos: readonly string[]): void {
+    if (caminhos.length) void Promise.resolve(sb.storage.from("comment-images").remove([...caminhos])).catch(() => undefined);
+  }
+  /** Envia um formulário com editor: sobe as imagens, grava, e desfaz o envio das imagens se o banco recusar. */
+  function enviarComEditor(editor: Editor, gravar: (corpo: string) => PromiseLike<{ error: Erro }>, aoGravar: () => void, igual?: (corpo: string) => boolean): void {
+    void editor.preparar().then((pronto) => {
+      if (!pronto) return;
+      if (igual && igual(pronto.corpo)) return; // texto igual: só fecha (quem fecha é o próprio `igual`), sem pedido ao banco
+      void Promise.resolve(gravar(pronto.corpo)).then((r) => {
+        if (r.error) {
+          editor.desfazer(pronto.enviadas);
+          falhou(r.error);
+        } else {
+          apagarImagens(editor.terminar());
+          aoGravar();
+        }
+      });
+    });
   }
 
   // ───────────── barra de comentário (fixa) + janela de login ─────────────
@@ -223,6 +264,8 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     barra = b;
     b.appendChild(campoDeTexto);
     b.appendChild(el("button", { attrs: { type: "submit", class: "button" }, texto: t("c_post") }));
+    const editor = editorDo(campoDeTexto);
+    b.append(editor.barra, editor.bandeja);
     enterEnviaNo(campoDeTexto, b);
     campoDeTexto.addEventListener("focus", () => {
       if (!quem) {
@@ -240,19 +283,15 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
         abrirJanela();
         return;
       }
-      const corpo = textoParaEnviar(campoDeTexto.value);
-      if (corpo === null) return;
-      void sb
-        .from("comments")
-        .insert({ page_id: pagina, body: corpo })
-        .then((r) => {
-          if (r.error) falhou(r.error);
-          else {
-            campoDeTexto.value = "";
-            campoDeTexto.style.height = "";
-            void carregarComentarios();
-          }
-        });
+      enviarComEditor(
+        editor,
+        (corpo) => sb.from("comments").insert({ page_id: pagina, body: corpo }),
+        () => {
+          campoDeTexto.value = "";
+          campoDeTexto.style.height = "";
+          void carregarComentarios();
+        },
+      );
     });
     caixaDeLogin.before(linhaDeQuem, b);
     return b;
@@ -264,26 +303,26 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     const campoDeTexto = el("textarea", { attrs: { name: "body", maxlength: "2000", required: "required", placeholder: t("c_write"), "aria-label": t("c_write") } });
     const linha = el("div", { attrs: { class: "c-row" } }, [botaoDeEnviar(parentId ? t("c_reply") : t("c_post"))]);
     if (parentId) linha.appendChild(el("button", { attrs: { type: "button", class: "c-link" }, texto: t("c_cancel"), ...(aoTerminar ? { ao: { click: aoTerminar } } : {}) }));
+    const editor = editorDo(campoDeTexto);
     f.appendChild(campoDeTexto);
+    f.append(editor.barra, editor.bandeja);
     f.appendChild(linha);
     enterEnviaNo(campoDeTexto, f);
     f.addEventListener("submit", (e) => {
       e.preventDefault();
-      const corpo = textoParaEnviar(campoDeTexto.value);
-      if (corpo === null) return;
-      const nova: { page_id: string; body: string; parent_id?: Comentario["id"] } = { page_id: pagina as string, body: corpo };
-      if (parentId) nova.parent_id = parentId;
-      void sb
-        .from("comments")
-        .insert(nova)
-        .then((r) => {
-          if (r.error) falhou(r.error);
-          else {
-            void carregarComentarios();
-            if (aoTerminar) aoTerminar();
-            else campoDeTexto.value = "";
-          }
-        });
+      enviarComEditor(
+        editor,
+        (corpo) => {
+          const nova: { page_id: string; body: string; parent_id?: Comentario["id"] } = { page_id: pagina as string, body: corpo };
+          if (parentId) nova.parent_id = parentId;
+          return sb.from("comments").insert(nova);
+        },
+        () => {
+          void carregarComentarios();
+          if (aoTerminar) aoTerminar();
+          else campoDeTexto.value = "";
+        },
+      );
     });
     return f;
   }
@@ -319,13 +358,17 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     if (!corpo || !acoes || bloco.querySelector(":scope > .c-edit-form")) return;
     const f = el("form", { attrs: { class: "c-reply-form c-edit-form" } });
     const campoDeTexto = el("textarea", { attrs: { maxlength: "2000", required: "required", "aria-label": t("c_edit") } });
-    campoDeTexto.value = c.body;
+    // 10/11/2026: os GIFs e imagens do comentário vão para a bandeja; o campo fica só com o texto
+    const separado = separarMidias(c.body);
+    campoDeTexto.value = separado.texto;
+    const editor = editorDo(campoDeTexto, separado.midias);
     const fechar = () => {
       f.remove();
       corpo.hidden = false;
       acoes.hidden = false;
     };
     f.appendChild(campoDeTexto);
+    f.append(editor.barra, editor.bandeja);
     f.appendChild(el("div", { attrs: { class: "c-row" } }, [botaoDeEnviar(t("c_save")), el("button", { attrs: { type: "button", class: "c-link" }, texto: t("c_cancel"), ao: { click: fechar } })]));
     enterEnviaNo(campoDeTexto, f);
     campoDeTexto.addEventListener("keydown", (e) => {
@@ -333,20 +376,16 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     });
     f.addEventListener("submit", (e) => {
       e.preventDefault();
-      const novo = textoParaEnviar(campoDeTexto.value);
-      if (novo === null) return;
-      if (novo === c.body) {
-        fechar();
-        return;
-      }
-      void sb
-        .from("comments")
-        .update({ body: novo })
-        .eq("id", c.id)
-        .then((r) => {
-          if (r.error) falhou(r.error);
-          else void carregarComentarios();
-        });
+      enviarComEditor(
+        editor,
+        (novo) => sb.from("comments").update({ body: novo }).eq("id", c.id),
+        () => void carregarComentarios(),
+        (novo) => {
+          if (novo !== c.body) return false;
+          fechar();
+          return true;
+        },
+      );
     });
     corpo.hidden = true;
     acoes.hidden = true;
@@ -380,7 +419,7 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
       el("time", { attrs: { datetime: String(c.created_at) }, texto: dataDoComentario(c.created_at, cfg.lang) }),
     ]);
     const acoes = el("div", { attrs: { class: "c-actions" } });
-    const bloco = el("div", { attrs: { class: "c-item" } }, [cabeca, el("div", { attrs: { class: "c-body" }, texto: c.body }), acoes]);
+    const bloco = el("div", { attrs: { class: "c-item" } }, [cabeca, corpoDoComentario(c.body, cfg.url, textosDoCorpo), acoes]);
     if (podeResponder(quem, raizDaConversa)) {
       acoes.appendChild(
         el("button", {
@@ -417,7 +456,10 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
                 .eq("id", c.id)
                 .then((r) => {
                   if (r.error) falhou(r.error);
-                  else void carregarComentarios();
+                  else {
+                    apagarImagens(imagensDoComentario(c.body)); // 10/11: as imagens enviadas saem do balde junto
+                    void carregarComentarios();
+                  }
                 });
             },
           },

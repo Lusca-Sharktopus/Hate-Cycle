@@ -172,6 +172,7 @@ function hcs(html) {
 const comMarcadores = (html) =>
   html.replace(RE_HC, (_s, json) => {
     const hc = JSON.parse(json.replaceAll("<\\/", "</"));
+    delete hc.klipy; // 10/11: a chave do KLIPY (GIFs) é só do Astro
     return `<script>window.HC=${JSON.stringify({ ...hc, url: "__SUPABASE_URL__", key: "__SUPABASE_ANON_KEY__" })};</script>`;
   });
 

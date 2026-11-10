@@ -1,0 +1,109 @@
+---
+// O visual do EDITOR dos comentários e dos comentários formatados (10/11/2026, pedido do autor; só no site novo). Não desenha nada:
+// só o CSS. Quem monta a barra, os painéis de emoji e GIF e a bandeja é src/scripts/comentarios/editor.ts; quem desenha o comentário
+// formatado (negrito, spoiler, citação, GIFs, imagens) é midia.ts.
+//
+// Os ícones da barra são máscaras SVG desenhadas aqui (a cor vem do background, como os ícones da janela da conta). As runas no texto
+// do comentário usam as fontes das runas do fundo do site (src/styles/fontes-das-runas.css), DEPOIS da fonte do texto: só os
+// caracteres que a Lexend não tem caem nelas ("Hate Cycle Runas", que troca o a e o b, fica de fora).
+---
+
+<style is:global>
+  @layer site {
+    /* ── a barra de ferramentas ── */
+    .c-bar { flex-wrap: wrap; position: relative; }
+    .c-bar > textarea { flex: 1 1 0; min-width: 0; }
+    .c-bar > .c-ferramentas, .c-bar > .c-bandeja, .c-bar > .c-painel { flex-basis: 100%; }
+    .c-reply-form { position: relative; }
+    .c-ferramentas { display: flex; flex-wrap: wrap; align-items: center; gap: .15rem; margin-top: -.25rem; }
+    .c-ferramenta {
+      display: inline-grid; place-items: center; min-width: 2rem; height: 2rem; padding: 0 .35rem; border: 0; border-radius: .35rem;
+      background: transparent; color: var(--muted); font: 700 .95rem/1 var(--font-text); cursor: pointer;
+    }
+    .c-ferramenta:hover, .c-ferramenta:focus-visible, .c-ferramenta[aria-expanded="true"] { background: #0000000f; color: var(--green); }
+    .c-ferramenta:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px; }
+    .c-f-italico { font-style: italic; font-family: Georgia, "PT Serif", serif; }
+    .c-f-sublinhado { text-decoration: underline; text-underline-offset: 2px; }
+    .c-f-riscado { text-decoration: line-through; }
+    .c-f-gif { font-size: .72rem; letter-spacing: .04em; }
+    .c-f-spoiler::before, .c-f-citacao::before, .c-f-emoji::before, .c-f-imagem::before {
+      content: ""; width: 1.15rem; height: 1.15rem; background: currentColor; -webkit-mask: var(--icone) center / contain no-repeat; mask: var(--icone) center / contain no-repeat;
+    }
+    .c-f-spoiler { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M3 3l18 18'/%3E%3C/svg%3E"); }
+    .c-f-citacao { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 18h5l2-5V6H4v7h3zm9 0h5l2-5V6h-7v7h3z'/%3E%3C/svg%3E"); }
+    .c-f-emoji { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M8 14.5s1.5 2 4 2 4-2 4-2'/%3E%3Ccircle cx='9' cy='9.5' r='.6' fill='%23000'/%3E%3Ccircle cx='15' cy='9.5' r='.6' fill='%23000'/%3E%3C/svg%3E"); }
+    .c-f-imagem { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Ccircle cx='8.5' cy='9.5' r='1.5'/%3E%3Cpath d='M21 16l-5-5-9 9'/%3E%3C/svg%3E"); }
+    .c-f-separador { width: 1px; height: 1.2rem; background: #0002; margin: 0 .3rem; }
+    .c-arquivo { display: none; }
+
+    /* ── os painéis (emoji, GIF) ── */
+    .c-painel {
+      box-sizing: border-box; width: min(100%, 24rem); margin: .2rem 0 .4rem; padding: .5rem; border-radius: .6rem;
+      background: #fff; border: 2px solid #0002; box-shadow: 0 10px 30px #14101c33;
+    }
+    .c-abas { display: flex; flex-wrap: wrap; gap: .1rem; border-bottom: 1px solid #0001; padding-bottom: .3rem; margin-bottom: .3rem; }
+    .c-aba { border: 0; background: none; border-radius: .35rem; width: 2rem; height: 2rem; font-size: 1.15rem; line-height: 1; cursor: pointer; filter: grayscale(.8); opacity: .75; }
+    .c-aba:hover, .c-aba[aria-selected="true"] { filter: none; opacity: 1; background: #0000000d; }
+    .c-grade-emojis { display: grid; grid-template-columns: repeat(auto-fill, minmax(2.1rem, 1fr)); max-height: 13rem; overflow-y: auto; overscroll-behavior: contain; }
+    .c-emoji { border: 0; background: none; border-radius: .35rem; height: 2.1rem; font-size: 1.3rem; line-height: 1; cursor: pointer; padding: 0; }
+    .c-emoji:hover, .c-emoji:focus-visible { background: #0000000f; }
+    .c-aba.c-runas, .c-grade-emojis.c-runas .c-emoji {
+      font-family: "Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans Bamum","Noto Sans Elbasan","Noto Sans KR","Noto Sans JP",sans-serif;
+      color: var(--night);
+    }
+    .c-grade-emojis.c-runas .c-emoji { font-size: 1.15rem; }
+    .c-grade-emojis.c-runas .c-emoji:hover { color: var(--teal); text-shadow: 0 0 6px #00e9fd99; }
+
+    .c-busca-gif { box-sizing: border-box; width: 100%; font: inherit; padding: .45rem .7rem; border: 2px solid #0003; border-radius: .4rem; background: #fff; margin-bottom: .4rem; }
+    .c-grade-gifs { columns: 2 7rem; column-gap: .3rem; max-height: 16rem; overflow-y: auto; overscroll-behavior: contain; }
+    .c-gif-opcao { display: block; width: 100%; padding: 0; margin: 0 0 .3rem; border: 0; border-radius: .35rem; overflow: hidden; background: #0000000d; cursor: pointer; break-inside: avoid; }
+    .c-gif-opcao:hover, .c-gif-opcao:focus-visible { outline: 3px solid var(--teal); outline-offset: -3px; }
+    .c-previa-gif { display: block; width: 100%; height: auto; }
+    .c-estado-gif:empty { display: none; }
+    .c-mais-gif { display: block; margin: .3rem auto 0; }
+    .c-klipy { margin: .35rem 0 0; text-align: right; font: 600 .68rem var(--font-text); letter-spacing: .03em; color: var(--muted); text-transform: uppercase; }
+
+    /* ── a bandeja (GIFs e imagens anexados) ── */
+    .c-bandeja { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .c-bandeja[hidden] { display: none !important; }
+    .c-anexo { position: relative; width: 5.5rem; height: 5.5rem; border-radius: .5rem; overflow: hidden; background: #0000000d; border: 2px solid #0002; }
+    .c-anexo-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-anexo-x {
+      position: absolute; top: .2rem; right: .2rem; width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 0; padding: 0;
+      background: #14101ccc; color: #fff; font: 700 1rem/1 var(--font-text); cursor: pointer;
+    }
+    .c-anexo-x:hover, .c-anexo-x:focus-visible { background: #c62828; }
+
+    /* ── o comentário formatado ── */
+    .c-body, .c-bar textarea, .c-reply-form textarea {
+      font-family: var(--font-text),"Noto Sans","Noto Sans Runic","Noto Sans Symbols","Noto Sans Symbols 2","Noto Sans Math","Noto Sans Cherokee","Noto Sans Yi","Noto Sans Phoenician","Noto Sans Glagolitic","Noto Sans Tifinagh","Noto Sans Balinese","Noto Sans Canadian Aboriginal","Noto Sans Old Turkic","Noto Sans Old Italic","Noto Sans Lycian","Noto Sans Linear A","Noto Sans Old South Arabian","Noto Sans Warang Citi","Noto Sans Brahmi","Noto Music","Noto Sans Bamum","Noto Sans Elbasan","Noto Sans KR","Noto Sans JP",sans-serif;
+    }
+    .c-formatado > p { margin: 0; }
+    .c-formatado > * + * { margin-top: .45rem; }
+    .c-citacao { margin: 0; padding: .15rem 0 .15rem .8rem; border-left: 4px solid var(--green); color: #3b3446; background: #00000008; border-radius: 0 .3rem .3rem 0; }
+    .c-spoiler { background: #14101c; color: transparent; border-radius: .25rem; padding: 0 .2rem; cursor: pointer; transition: background .2s, color .2s; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    .c-spoiler * { color: transparent; }
+    .c-spoiler:hover { background: #2a2333; }
+    .c-spoiler:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px; }
+    .c-spoiler.aberto { background: #0000000f; color: inherit; cursor: auto; }
+    .c-spoiler.aberto * { color: inherit; }
+    .c-spoiler img { visibility: hidden; }
+    .c-midias { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .c-midia { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: .5rem; overflow: hidden; line-height: 0; max-width: 100%; }
+    .c-midia[aria-pressed="true"] { cursor: zoom-out; }
+    .c-midia img { display: block; max-width: min(100%, 18rem); max-height: 16rem; width: auto; height: auto; object-fit: contain; background: #0000000d; }
+    .c-midia[aria-pressed="true"] img { max-width: 100%; max-height: 80vh; }
+    .c-midia:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+    @media (max-width: 560px) {
+      .c-painel { width: 100%; }
+      .c-ferramentas { gap: 0; }
+      .c-ferramenta { min-width: 1.85rem; padding: 0 .2rem; }
+      .c-f-separador { margin: 0 .15rem; }
+      .c-midia img { max-width: 100%; max-height: 14rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .c-spoiler { transition: none; }
+    }
+  }
+</style>

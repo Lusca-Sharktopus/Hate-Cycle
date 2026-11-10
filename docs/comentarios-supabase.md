@@ -196,6 +196,31 @@ Como fica guardado: o arquivo vai para o **Storage** do Supabase, num "balde" p�
 
 **Como foi provado:** `python3 tools/banco_local.py` (casos "foto:", com uma imitação do Storage); no site, `tests/comentarios.test.ts` (regras da foto, do recorte e dos endereços) e `tests/comentarios-dom.test.ts` (a janela inteira, com HTML no nome e nos títulos).
 
+### Migração de 10/11/2026: imagens nos comentários
+
+Arquivo: `supabase/migrations/20261110120000_imagens_nos_comentarios.sql`. **Ainda não rodada no seu projeto.** Depende só da migração inicial.
+
+O que muda para quem visita (só no site novo): embaixo de cada campo de comentário há uma barra com **B** (negrito), *I* (itálico), U (sublinhado), S (riscado), o olho cortado (spoiler: o texto fica tapado até a pessoa clicar), as aspas (citação), o rostinho (emojis comuns e uma aba com as runas de Hᴀᴛᴇ Cʏᴄʟᴇ), **GIF** (só depois que você puser a chave do KLIPY, veja abaixo) e a moldura (enviar imagem; também dá para colar ou arrastar a imagem no campo). Até 4 GIFs ou imagens por comentário; eles aparecem embaixo do texto e crescem com um clique. A formatação fica guardada no texto como marcas (`**negrito**`, `||spoiler||`, `> citação`…), então nada muda no banco para ela.
+
+Como as imagens ficam guardadas: o navegador reduz a imagem para no máximo 1600 px e grava em WebP (o Safari grava JPEG; GIF animado vai como está), e ela vai para o **Storage**, num balde público `comment-images` que a migração cria, na pasta da pessoa. Cada pessoa: só WebP/JPEG/GIF de até 2 MB, no máximo 30 imagens por dia e 500 no total; só põe e tira arquivos da própria pasta. Apagar o comentário (ou tirar a imagem ao editar, ou apagar a conta) apaga o arquivo. **Você, como admin, pode apagar a imagem de qualquer pessoa**: é só apagar o comentário pelo site (ou apagar o arquivo no menu Storage → `comment-images`). Enquanto a migração não for rodada, tudo funciona menos o envio de imagens, que mostra "Não deu para enviar a imagem".
+
+**Como aplicar (~2 minutos):** SQL Editor → New query → cole **tudo** de `supabase/migrations/20261110120000_imagens_nos_comentarios.sql` → **Run** → "Success. No rows returned". Pode rodar de novo sem estragar nada. Para conferir: menu **Storage** → deve aparecer o balde `comment-images` marcado como "Public".
+
+**Espaço:** o plano grátis do Supabase tem 1 GB de Storage. Uma imagem reduzida costuma ter de 100 a 400 KB, então cabem alguns milhares. Dá para acompanhar em Settings → Usage.
+
+**Como foi provado:** `python3 tools/banco_local.py` (casos "imagem:"); no site, `tests/formato-dos-comentarios.test.ts` (as marcas, os endereços aceitos, as contas do editor) e `tests/comentarios-dom.test.ts` (a caixa inteira, com HTML e endereços estranhos dentro das marcas).
+
+### GIFs do KLIPY (10/11/2026): a chave
+
+O botão **GIF** só aparece depois que você puser uma chave do KLIPY no `config.json`. (O Tenor, do Google, foi desligado em 30/06/2026.) A chave é pública como a chave anon do Supabase: vai para o navegador de quem abre o seletor, e o KLIPY espera isso.
+
+1. Entre em <https://partner.klipy.com/api-keys>, crie a conta, clique em **Add Platform** e preencha com os dados do site (nome Hᴀᴛᴇ Cʏᴄʟᴇ, endereço `https://hatecycle.com`).
+2. Em **Create API Key**, crie a chave. Ela começa como chave de teste, com limite de pedidos por minuto; quando quiser, nos três pontinhos ao lado da chave, **Request Production** (grátis).
+3. No `config.json`, dentro de `"comments"`, junto das duas chaves do Supabase, acrescente a linha `"klipy_api_key": "<sua chave do KLIPY>"` (lembre da vírgula na linha de cima).
+4. Faça o commit e o push: o botão GIF aparece em todos os campos de comentário.
+
+O que o visitante vê: um painel com os GIFs em destaque, uma busca ("Pesquisar no KLIPY", no idioma da página) e "Powered by KLIPY" embaixo, como o KLIPY pede. O filtro de conteúdo está no nível "medium" (mais ou menos PG). O navegador só fala com o KLIPY quando a pessoa abre o painel; quem lê um comentário com GIF carrega a imagem dos servidores do KLIPY. **Vale acrescentar isso à Política de Privacidade** (como você fez com o Disqus); o texto é seu, eu não mexi.
+
 ## 6. O que mudou no site novo (Astro, T15)
 
 Para quem visita, **nada**: mesma caixa, mesmos botões e textos, mesmas conversas (os IDs `works/<obra>/<capítulo>` e `news/<pasta>` não mudaram), e quem já estava conectado continua conectado (a sessão fica guardada no navegador com o mesmo nome).

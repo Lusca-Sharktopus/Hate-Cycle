@@ -15,10 +15,10 @@ import { afterAll, afterEach, beforeEach, describe, expect, test } from "vitest"
 import { iniciarComentarios, lerConfiguracao, type ConfiguracaoDosComentarios } from "../src/scripts/comentarios/caixa";
 import { mensagemDaConta, nomeLimpo, problemaNoNome, TEXTOS_DA_CONTA } from "../src/scripts/comentarios/conta";
 
-const NOME_ATAQUE = '<img src=x onerror="globalThis.__xss=1"><b>nome</b>';
-const CORPO_ATAQUE = '<img src=x onerror="globalThis.__xss=2"><script>globalThis.__xss=3</script><b>negrito?</b>';
-const RESPOSTA_ATAQUE = '"><img src=y onerror=globalThis.__xss=4><b>resposta</b>';
-const MEU_ATAQUE = "<b>meu</b><script>globalThis.__xss=5</script>";
+const NOME_ATAQUE = '<img src=x onerror="globalThis.hcXss=1"><b>nome</b>';
+const CORPO_ATAQUE = '<img src=x onerror="globalThis.hcXss=2"><script>globalThis.hcXss=3</script><b>negrito?</b>';
+const RESPOSTA_ATAQUE = '"><img src=y onerror=globalThis.hcXss=4><b>resposta</b>';
+const MEU_ATAQUE = "<b>meu</b><script>globalThis.hcXss=5</script>";
 
 interface Linha {
   id: number;
@@ -49,6 +49,8 @@ const SAIDAS: unknown[] = [];
 let FAVORITOS: string[] = [];
 const BALDE: Record<string, unknown>[] = [];
 let ARQUIVOS_NO_BALDE: string[] = [];
+/** 10/11: o que a caixa gravou (insert/update), na ordem. */
+const GRAVACOES: { tabela: string; acao: string; v: unknown }[] = [];
 
 function clienteFalso(sessao: { user: { id: string; email: string } } | null, linhas: readonly Linha[] = LINHAS): SupabaseClient {
   const consulta = (tabela: string) => {
@@ -59,8 +61,8 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
       eq: (k: string, v: unknown) => ((filtros[k] = v), b),
       order: () => b,
       single: () => ((unico = true), b),
-      insert: () => b,
-      update: () => b,
+      insert: (v: unknown) => (GRAVACOES.push({ tabela, acao: "insert", v }), b),
+      update: (v: unknown) => (GRAVACOES.push({ tabela, acao: "update", v }), b),
       delete: () => b,
       then: (ok: (r: { data: unknown; error: null }) => unknown, falha?: (e: unknown) => unknown) => {
         let data: unknown = null;
@@ -118,7 +120,7 @@ async function esperar(): Promise<void> {
 }
 
 /** As únicas tags que a caixa cria (mais as da própria <section>). */
-const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "h4", "input", "label", "a", "img", "canvas"]);
+const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "h4", "input", "label", "a", "img", "canvas", "em", "u", "s", "blockquote"]); // 10/11: em/u/s/blockquote = a formatação dos comentários
 /** 05/11: os botões de login (src/scripts/login/janela.ts) têm ícones em SVG e o <canvas> do círculo, de valores fixos do código. */
 const TAGS_DOS_BOTOES_DE_LOGIN = new Set(["span", "svg", "path", "defs", "lineargradient", "stop", "canvas"]);
 function conferirSoElementosDoCodigo(): void {
@@ -134,12 +136,17 @@ function conferirSoElementosDoCodigo(): void {
       expect(img.getAttribute("src") ?? "").toMatch(/^https:\/\/supabase-falso\.test\/storage\/v1\/object\/public\/avatars\/u-[a-z]+\/[a-z0-9]{12,40}\.(webp|jpg)$|^https:\/\/supabase-falso\.test\/storage\/v1\/object\/public\/avatars\/[0-9a-f-]{36}\/[a-z0-9]{12,40}\.(webp|jpg)$/);
       continue;
     }
+    // 10/11: GIF do KLIPY (https em klipy.com ou subdomínio) e imagem enviada (o balde comment-images do Supabase do config)
+    if (img.closest(".c-midia, .c-anexo, .c-gif-opcao")) {
+      expect(img.getAttribute("src") ?? "").toMatch(/^https:\/\/([a-z0-9-]+\.)*klipy\.com\/[A-Za-z0-9/_.%-]+(\?[A-Za-z0-9=&_.%-]+)?$|^https:\/\/supabase-falso\.test\/storage\/v1\/object\/public\/comment-images\/[0-9a-f-]{36}\/[a-z0-9]{12,40}\.(webp|jpg|gif)$|^blob:/);
+      continue;
+    }
     expect(img.closest(".c-perfil-fav"), "img fora das capas dos favoritos").not.toBeNull();
     expect(img.getAttribute("src") ?? "").toMatch(/^\/(?!\/)/);
   }
   expect(document.body.querySelectorAll("script, b, iframe").length).toBe(0);
   expect(document.body.querySelectorAll("svg").length).toBe(document.querySelectorAll(".c-modal .c-prov > svg").length);
-  expect((globalThis as { __xss?: unknown }).__xss).toBeUndefined();
+  expect((globalThis as { hcXss?: unknown }).hcXss).toBeUndefined();
 }
 function conferirTextoLiteral(): void {
   const corpos = [...document.querySelectorAll(".c-body")];
@@ -157,8 +164,9 @@ afterEach(() => {
   FAVORITOS = [];
   BALDE.length = 0;
   ARQUIVOS_NO_BALDE = [];
+  GRAVACOES.length = 0;
   document.body.replaceChildren();
-  delete (globalThis as { __xss?: unknown }).__xss;
+  delete (globalThis as { hcXss?: unknown }).hcXss;
 });
 
 describe("a caixa de comentários num DOM simulado, com HTML no comentário, na resposta e no nome", () => {
@@ -404,6 +412,9 @@ describe("a janela da conta (03/11; redesenhada em 09/11): foto, nome, favoritos
     expect(BALDE).toEqual([
       { acao: "list", balde: "avatars", pasta: "u-eu" },
       { acao: "remove", balde: "avatars", caminhos: ["u-eu/abcdefghijkl0123.webp"] },
+      // 10/11: as imagens dos comentários da pessoa também saem (o balde falso devolve a mesma lista para os dois)
+      { acao: "list", balde: "comment-images", pasta: "u-eu" },
+      { acao: "remove", balde: "comment-images", caminhos: ["u-eu/abcdefghijkl0123.webp"] },
     ]);
     expect(RPCS).toEqual([{ nome: "delete_my_account", args: null }]);
     expect(SAIDAS).toEqual([{ scope: "local" }]);
@@ -440,5 +451,174 @@ describe("a regra do nome no navegador (a mesma de public.limpar_nome; o banco c
     expect(mensagemDaConta({ message: "invalid name" }, T)).toBe(T.invalido);
     expect(mensagemDaConta({ message: "qualquer outra" }, T)).toBe(T.erro);
     expect(Object.keys(TEXTOS_DA_CONTA.en).sort()).toEqual(Object.keys(TEXTOS_DA_CONTA.pt).sort());
+  });
+});
+
+// ───────────── 10/11/2026: formatação, emojis, GIFs e imagens ─────────────
+
+describe("comentários formatados (10/11): marcas viram elementos do código; HTML e endereços estranhos continuam texto", () => {
+  const EU = "0f0e0d0c-0b0a-4908-8706-050403020100";
+  const OUTRO = "11111111-2222-4333-8444-555555555555";
+  const GIF = "https://static.klipy.com/ii/abc/12/34/xyz.gif";
+  const FORMATADO = [
+    "**negrito <img src=x onerror=globalThis.hcXss=10>** e *itálico* e __sub__ e ~~risco~~ e ||segredo <script>globalThis.hcXss=11</script>||",
+    "> citação com **força**",
+    `{gif:${GIF}}`,
+    `{img:${OUTRO}/abcdefghijkl1234.webp}`,
+    "{gif:javascript:alert(1)}",
+    "{gif:https://klipy.com.evil.test/a.gif}",
+    "{gif:https://evilklipy.com/a.gif}",
+    "{img:../../avatars/x.webp}",
+  ].join("\n");
+  const LINHAS_F: Linha[] = [{ id: 7, body: FORMATADO, created_at: "2026-11-10T12:00:00+00:00", edited_at: null, user_id: OUTRO, parent_id: null }];
+  PERFIS[OUTRO] = { display_name: "Outra pessoa", is_admin: false };
+  PERFIS[EU] = { display_name: "Eu", is_admin: false };
+
+  test("deslogado: strong/em/u/s/spoiler/citação, um GIF do KLIPY, uma imagem do balde; o resto como texto", async () => {
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso(null, LINHAS_F));
+    await esperar();
+    const corpo = document.querySelector(".c-body") as HTMLElement;
+    expect(corpo.classList.contains("c-formatado")).toBe(true);
+    expect(corpo.querySelector("strong")?.textContent).toBe("negrito <img src=x onerror=globalThis.hcXss=10>");
+    expect(corpo.querySelector("em")?.textContent).toBe("itálico");
+    expect(corpo.querySelector("u")?.textContent).toBe("sub");
+    expect(corpo.querySelector("s")?.textContent).toBe("risco");
+    expect(corpo.querySelector(".c-spoiler")?.textContent).toBe("segredo <script>globalThis.hcXss=11</script>");
+    expect(corpo.querySelector("blockquote.c-citacao")?.textContent).toBe("citação com força");
+    const imgs = [...corpo.querySelectorAll("img")].map((i) => i.getAttribute("src"));
+    expect(imgs).toEqual([GIF, `https://supabase-falso.test/storage/v1/object/public/comment-images/${OUTRO}/abcdefghijkl1234.webp`]);
+    expect(corpo.textContent).toContain("{gif:javascript:alert(1)}");
+    expect(corpo.textContent).toContain("{gif:https://klipy.com.evil.test/a.gif}");
+    expect(corpo.textContent).toContain("{img:../../avatars/x.webp}");
+    conferirSoElementosDoCodigo();
+    // o spoiler abre no clique (e no teclado)
+    const sp = corpo.querySelector<HTMLElement>(".c-spoiler") as HTMLElement;
+    expect(sp.getAttribute("aria-expanded")).toBe("false");
+    sp.click();
+    expect(sp.classList.contains("aberto")).toBe(true);
+    // o GIF amplia e reduz
+    const midia = corpo.querySelector<HTMLButtonElement>(".c-midia") as HTMLButtonElement;
+    midia.click();
+    expect(midia.getAttribute("aria-pressed")).toBe("true");
+  });
+
+  test("a barra de ferramentas: deslogado, clicar num botão abre o login; sem chave do KLIPY, sem botão de GIF", async () => {
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso(null, []));
+    await esperar();
+    const botoes = [...document.querySelectorAll(".c-bar .c-ferramentas button")].map((b) => b.className.replace("c-ferramenta ", ""));
+    expect(botoes).toEqual(["c-f-negrito", "c-f-italico", "c-f-sublinhado", "c-f-riscado", "c-f-spoiler", "c-f-citacao", "c-f-emoji", "c-f-imagem"]);
+    document.querySelector<HTMLButtonElement>(".c-f-negrito")?.click();
+    await esperar();
+    expect(document.querySelectorAll(".c-modal")).toHaveLength(1);
+  });
+
+  test("conectado: negrito na seleção, emoji/runa no cursor, e o texto vai assim para o banco", async () => {
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso({ user: { id: EU, email: "eu@exemplo.test" } }, []));
+    await esperar();
+    const campo = document.querySelector<HTMLTextAreaElement>(".c-bar textarea") as HTMLTextAreaElement;
+    campo.value = "olá mundo";
+    campo.setSelectionRange(4, 9);
+    document.querySelector<HTMLButtonElement>(".c-f-negrito")?.click();
+    expect(campo.value).toBe("olá **mundo**");
+    document.querySelector<HTMLButtonElement>(".c-f-negrito")?.click(); // de novo: tira
+    expect(campo.value).toBe("olá mundo");
+    campo.setSelectionRange(9, 9);
+    document.querySelector<HTMLButtonElement>(".c-f-emoji")?.click();
+    expect(document.querySelectorAll(".c-painel-emojis")).toHaveLength(1);
+    document.querySelector<HTMLButtonElement>(".c-painel-emojis .c-emoji")?.click();
+    expect(campo.value).toBe("olá mundo😀");
+    // a aba das runas
+    [...document.querySelectorAll<HTMLButtonElement>(".c-painel-emojis .c-aba")].find((b) => b.dataset["grupo"] === "runas")?.click();
+    expect(document.querySelector(".c-grade-emojis")?.classList.contains("c-runas")).toBe(true);
+    document.querySelector<HTMLButtonElement>(".c-grade-emojis .c-emoji")?.click();
+    expect(campo.value).toBe("olá mundo😀✝");
+    conferirSoElementosDoCodigo();
+    document.querySelector<HTMLFormElement>(".c-bar")?.requestSubmit();
+    await esperar();
+    expect(GRAVACOES).toEqual([{ tabela: "comments", acao: "insert", v: { page_id: "news/teste", body: "olá mundo😀✝" } }]);
+  });
+
+  test("com a chave do KLIPY: botão GIF; a busca só aceita GIFs do KLIPY; o escolhido vai para a bandeja e para o fim do comentário", async () => {
+    const cfg = lerConfiguracao({ ...CFG_BRUTA, klipy: "chave-de-teste-123" }) as ConfiguracaoDosComentarios;
+    expect(cfg.klipy).toBe("chave-de-teste-123");
+    expect((lerConfiguracao({ ...CFG_BRUTA, klipy: "chave com espaço" }) as ConfiguracaoDosComentarios).klipy).toBeNull();
+    const pedidos: string[] = [];
+    const fetchOriginal = globalThis.fetch;
+    globalThis.fetch = ((u: string) => {
+      pedidos.push(String(u));
+      return Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            results: [
+              { content_description: "<b>gato</b>", media_formats: { tinygif: { url: "https://static.klipy.com/t/gato.gif", dims: [100, 80] }, mediumgif: { url: GIF } } },
+              { media_formats: { tinygif: { url: "https://evil.test/x.gif" }, mediumgif: { url: "https://evil.test/x.gif" } } },
+              { media_formats: { tinygif: { url: "javascript:alert(1)" } } },
+            ],
+            next: "abc",
+          }),
+      });
+    }) as unknown as typeof fetch;
+    try {
+      const raiz = montarPagina();
+      iniciarComentarios(raiz, cfg, clienteFalso({ user: { id: EU, email: "eu@exemplo.test" } }, []));
+      await esperar();
+      document.querySelector<HTMLButtonElement>(".c-bar .c-f-gif")?.click();
+      await esperar();
+      expect(pedidos[0]).toMatch(/^https:\/\/api\.klipy\.com\/v2\/featured\?key=chave-de-teste-123&/);
+      const opcoes = [...document.querySelectorAll<HTMLButtonElement>(".c-gif-opcao")];
+      expect(opcoes).toHaveLength(1);
+      expect(opcoes[0]?.getAttribute("title")).toBe("<b>gato</b>");
+      expect(document.querySelector(".c-klipy")?.textContent).toBe("Powered by KLIPY");
+      conferirSoElementosDoCodigo();
+      opcoes[0]?.click();
+      expect(document.querySelectorAll(".c-painel")).toHaveLength(0);
+      expect(document.querySelectorAll(".c-bar .c-bandeja .c-anexo")).toHaveLength(1);
+      const campo = document.querySelector<HTMLTextAreaElement>(".c-bar textarea") as HTMLTextAreaElement;
+      campo.value = "olha isso";
+      document.querySelector<HTMLFormElement>(".c-bar")?.requestSubmit();
+      await esperar();
+      expect(GRAVACOES[0]?.v).toEqual({ page_id: "news/teste", body: `olha isso\n{gif:${GIF}}` });
+      expect(document.querySelectorAll(".c-bar .c-bandeja .c-anexo")).toHaveLength(0);
+    } finally {
+      globalThis.fetch = fetchOriginal;
+    }
+  });
+
+  test("editar: GIFs e imagens vão para a bandeja (o campo só com o texto); tirar a imagem apaga o arquivo depois de salvar", async () => {
+    const corpo = `meu texto\n{gif:${GIF}}\n{img:${EU}/abcdefghijkl1234.webp}`;
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso({ user: { id: EU, email: "eu@exemplo.test" } }, [{ id: 9, body: corpo, created_at: "2026-11-10T12:00:00+00:00", edited_at: null, user_id: EU, parent_id: null }]));
+    await esperar();
+    [...document.querySelectorAll<HTMLButtonElement>(".c-actions button")].find((b) => b.textContent === "Editar")?.click();
+    await esperar();
+    const campo = document.querySelector<HTMLTextAreaElement>(".c-edit-form textarea") as HTMLTextAreaElement;
+    expect(campo.value).toBe("meu texto");
+    const anexos = document.querySelectorAll(".c-edit-form .c-anexo");
+    expect(anexos).toHaveLength(2);
+    anexos[1]?.querySelector<HTMLButtonElement>(".c-anexo-x")?.click();
+    document.querySelector<HTMLFormElement>(".c-edit-form")?.requestSubmit();
+    await esperar();
+    expect(GRAVACOES).toEqual([{ tabela: "comments", acao: "update", v: { body: `meu texto\n{gif:${GIF}}` } }]);
+    expect(BALDE).toEqual([{ acao: "remove", balde: "comment-images", caminhos: [`${EU}/abcdefghijkl1234.webp`] }]);
+  });
+
+  test("apagar um comentário com imagem: o arquivo sai do balde junto", async () => {
+    const corpo = `{img:${EU}/abcdefghijkl1234.webp}`;
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso({ user: { id: EU, email: "eu@exemplo.test" } }, [{ id: 9, body: corpo, created_at: "2026-11-10T12:00:00+00:00", edited_at: null, user_id: EU, parent_id: null }]));
+    await esperar();
+    const confirmar = window.confirm;
+    window.confirm = () => true;
+    try {
+      [...document.querySelectorAll<HTMLButtonElement>(".c-actions button")].find((b) => b.textContent === "Apagar")?.click();
+      await esperar();
+    } finally {
+      window.confirm = confirmar;
+    }
+    expect(BALDE).toEqual([{ acao: "remove", balde: "comment-images", caminhos: [`${EU}/abcdefghijkl1234.webp`] }]);
   });
 });

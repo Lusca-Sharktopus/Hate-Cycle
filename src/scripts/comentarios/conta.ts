@@ -487,6 +487,15 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
     } catch {
       /* sem a migração das fotos: não há o que apagar */
     }
+    // 10/11/2026: as imagens que a pessoa anexou aos comentários também (balde comment-images, migração 20261110120000)
+    try {
+      const balde = o.sb.storage.from("comment-images");
+      const lista = await balde.list(o.id, { limit: 1000 });
+      const nomes = Array.isArray(lista.data) ? lista.data.map((f) => `${o.id}/${f.name}`) : [];
+      for (let i = 0; i < nomes.length; i += 100) await balde.remove(nomes.slice(i, i + 100));
+    } catch {
+      /* sem a migração das imagens: não há o que apagar */
+    }
     const r = await o.sb.rpc("delete_my_account");
     ocupado = false;
     botao.disabled = false;

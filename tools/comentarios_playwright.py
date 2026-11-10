@@ -65,13 +65,13 @@ NOTICIA = "/pt/news/2023-08-18-orcs/"
 CAPITULO = "/pt/works/firestriker/01/"
 NOTICIA_EN = "/en/news/2023-08-18-orcs/"
 
-# Ataques de injeção de HTML: se algum virar HTML, window.__xss deixa de ser null (ou aparece um <img>/<svg>/<script>).
-ATAQUE_COMENTARIO = '<img src=x onerror="window.__xss=1"><script>window.__xss=2</script>'
-ATAQUE_NOME = '<img src=y onerror=window.__xss=3>'
-ATAQUE_BARRA = '<svg onload="window.__xss=5"></svg><b>negrito?</b>'
-ATAQUE_RESPOSTA = '"><img src=z onerror=window.__xss=6>'
-ATAQUE_EDICAO = '<iframe srcdoc="<script>parent.__xss=7</script>"></iframe>'
-ATAQUE_CADASTRO = '<img src=w onerror=__xss=8>'   # cabe nos 30 caracteres do campo de nome
+# Ataques de injeção de HTML: se algum virar HTML, window.hcXss deixa de ser null (ou aparece um <img>/<svg>/<script>).
+ATAQUE_COMENTARIO = '<img src=x onerror="window.hcXss=1"><script>window.hcXss=2</script>'
+ATAQUE_NOME = '<img src=y onerror=window.hcXss=3>'
+ATAQUE_BARRA = '<svg onload="window.hcXss=5"></svg><b>negrito?</b>'
+ATAQUE_RESPOSTA = '"><img src=z onerror=window.hcXss=6>'
+ATAQUE_EDICAO = '<iframe srcdoc="<script>parent.hcXss=7</script>"></iframe>'
+ATAQUE_CADASTRO = '<img src=w onerror=hcXss=8>'   # cabe nos 30 caracteres do campo de nome
 
 # Troca o window.HC da página (URL e chave do config.json) pelos de mentira ANTES de qualquer script da página ler.
 TROCA_O_HC = """(() => {
@@ -96,6 +96,9 @@ RETRATO = """() => {
     if (n.classList.contains('c-me')) return n.textContent;
     // 09/11 (só no Astro, pedido do autor): a foto de perfil (ou a runa) antes do nome de cada comentário; o Python não tem
     if (n.classList.contains('c-foto')) return null;
+    // 10/11 (só no Astro, pedido do autor): a barra de ferramentas (estilos, emojis, GIFs, imagens), a bandeja dos anexos e os painéis;
+    // o Python não tem (o editor tem o próprio teste: tests/comentarios-dom.test.ts e tests/formato-dos-comentarios.test.ts)
+    if (n.matches('.c-ferramentas, .c-bandeja, .c-painel')) return null;
     // 05/11 (só no Astro, design do autor): a janela de login tem Google, Twitter e Discord (div.c-provedores, com ícones e o círculo
     // mágico) e a divisória "ou" da arte do autor (div.c-ou); o Python tem o botão do Google e o "ou" de texto. Os dois lados saem do
     // retrato (os botões novos têm o próprio teste: tests/comentarios-dom.test.ts e tests/favoritos-dom.test.ts); o roteiro do Google
@@ -118,7 +121,7 @@ RETRATO = """() => {
     janelas: j.length,
     travada: document.documentElement.classList.contains('c-modal-open'),
     foco: f && f !== document.body ? `${f.tagName.toLowerCase()}.${f.className}[${f.getAttribute('name') || ''}]${(f.textContent || '').slice(0, 40)}` : null,
-    xss: window.__xss === undefined ? null : window.__xss,
+    xss: window.hcXss === undefined ? null : window.hcXss,
     elementosPerigosos: document.querySelectorAll('.hc-comments img, .hc-comments svg, .hc-comments iframe, .hc-comments b, .hc-comments script, .c-modal img').length,
   };
 }"""
@@ -399,7 +402,7 @@ class Execucao:
             if problema:
                 self.falhas.append(f"[{nome}] {problema}")
         if r["xss"] is not None or r["elementosPerigosos"]:
-            self.falhas.append(f"[{nome}] INJEÇÃO DE HTML: window.__xss={r['xss']}, elementos perigosos={r['elementosPerigosos']}")
+            self.falhas.append(f"[{nome}] INJEÇÃO DE HTML: window.hcXss={r['xss']}, elementos perigosos={r['elementosPerigosos']}")
         return r
 
     def fechar(self):
