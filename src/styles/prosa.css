@@ -79,7 +79,7 @@
   .spellcard .sc-body b.sc-cond-preta { color: #000; }
   .spellcard .sc-body b.sc-cond-fogo { color: #e68520; font-style: normal; }
   /* 09/11 (pedido do autor): os trechos em que o autor "sai do personagem" (//assim//) na cor #271b39 */
-  .prose .fora-do-personagem { color: #271b39; }
+  .prose .fora-do-personagem { color: #4b3c64; } /* //fora do personagem//: o roxo-noite #271b39 do autor, um pouco mais claro (pedido de 10/11) */
   .spellcard .sc-wand { font-family: "Noto Emoji", sans-serif; font-weight: 600; color: #135c48; }
 
   /* ── Posts incorporados centralizados + botão para alternar entre dois (ou mais) posts ──

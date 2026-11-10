@@ -9,16 +9,14 @@ tags:
 
 {{embed:reddit-dia-1}}
 
-The haoʻumbwa (Arctopithecus angolensis) is a cercopithecid primate belonging to the tribe Papioini. It is found mainly in Angola, but also occurs in parts of the Congo, Zambia and the Democratic Republic of the Congo.
+The **haoʻumbwa** (**<em>Arctopithecus angolensis</em>**) is a cercopithecid primate, part of the *Papioini* tribe and is found mainly in Angola, but also in parts of Congo, Zambia and the DRC.
 
-Haoʻumbwas are large primates, reaching 1.4 to 2.8 m in head-and-body length (not counting the tail) and more than 1.5 m in height at the shoulders. These dimensions are roughly equivalent to those of brown bears, although A. angolensis is lighter, reaching a maximum of 110 kg.
+haoʻumbwas are large primates, reaching head-and-body lengths of 1.4 to 2.8m (not counting the tail) and a shoulder height of over 1.5m; those are about the same as brown bears, though A. angolensis weighs less, at a maximum 110kg.  
+Their size is not their only similarity to brown bears, being as ecologically they occupy a very similar niche of highly omnivorous large mammal, eating fish, fruit, insects, grasses, mushrooms, roots, birds, reptiles, small mammals and, eventually, even larger mammals such as the occasional antelope.
 
-Their size is not the only similarity to brown bears: ecologically, they occupy a niche quite similar to that of a large, highly omnivorous mammal. They feed on fish, fruits, insects, grasses, mushrooms, roots, birds, reptiles, small mammals and, occasionally, even larger mammals such as antelopes.
+Males have in their upper gingivae an iridescent green coloration used to attract females. This coloration is not due to green pigments, but rather structural coloring, similarly to their somewhat close cousins mandrills.
 
-Males display an iridescent green colouration on the upper gums, used to attract females. This colouration is not caused by green pigments but by structural colouration, similar to that seen in their relatively close relatives, the mandrills.
+A. angolensis are not only the closest living relative to the extinct *Dinopithecus ingens*, but proposals have been made to reclassify D. ingens as *Arctopithecus ingens*.
 
-Arctopithecus angolensis is not only the closest living relative of the extinct Dinopithecus ingens: changes to the classification of D. ingens have also been proposed, which would be renamed Arctopithecus ingens.
-
-Its name is pronounced /ɦaʊ̯.ˈʔu.ᵐbʷa/. It derives from the Ghnolli language; the part ʻumbwa is also used to designate other related primates, such as the yellow baboons (Papio cynocephalus), which occur in the same region. As for hao, it means “fierce” or “dangerous (to have around)”.
-
-The scientific name, in turn, is composed of “Arctos”, from the Greek άρκτος, meaning “bear”, and “pithecus”, from the Greek πίθηκος, meaning “monkey”.
+Its name is pronounced /ɦaʊ̯.ˈʔu.ᵐbʷa/. It comes from the ghnolli language; the **<em>ʻumbwa</em>** part is also used to refer to other related primates such as the yellow baboons (*Papio cynocephalus*) that occur in the same region, while **<em>hao</em>** means “ferocious” or “dangerous (to be around)”  
+The scientific name, on the other hand, is comprised of “Arctos”, from greek *άρκτος*, meaning bear, and “pithecus” *πίθηκος*, meaning monkey.

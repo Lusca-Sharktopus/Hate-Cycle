@@ -9,10 +9,10 @@ tags:
 
 {{embed:reddit-day-15}}
 
-The spearhead tree (Dorydendron gigantica) is a species of lycophyte tree descendant from the Carboniferous Lepidodendron trees, found in Jotunheim. Giants and [[news/2025-12-03-dia-3-especulacao-evolutiva|Thunderbirds]] often use the scales in spearhead trees’ trunk as spearheads, hence the name.
+The **spearhead tree** (**<em>Dorydendron gigantica</em>**) is a species of lycophyte tree descendant from the Carboniferous *Lepidodendron trees*, found in Jotunheim. Giants and [[news/2025-12-03-dia-3-especulacao-evolutiva|Thunderbirds]] often use the scales in spearhead trees’ trunk as spearheads, hence the name.
 
 D. gigantica are highly adapted to the cold climate of Jotunheim, with needle-like leaves to help retain water and a conic shape that makes them resemble pine trees. They can reach up to 80m thanks to the lower gravity in Jotunheim compared to Earth which, alongside the colder climate of the planet, has led to the evolution of gigantic sauropods specialized in eating from the top of the trees.
 
-In the center of Ishkålü, the city of Frost Giants, lies the largest spearhead tree on the entire planet, which also serves as the Jontunheimic side of North American Earth-Jotunheim portal, through which came the crows that would become the Thunderbirds and through which Bigfeet (Paranthropus megalopoda) came to Earth. This tree is considered sacred by the Giants and Thunderbirds that live in the city, and its wood contains certain magical properties; objects made from this wood can conduct certain magical elements, including Ice and Lightning, much better than wood usually does.
+In the center of *Ishkålü*, the city of Frost Giants, lies the largest spearhead tree on the entire planet, which also serves as the Jotunheimic side of North American Earth-Jotunheim portal, through which came the crows that would become the Thunderbirds and through which Bigfeet *(Paranthropus megalopoda)* came to Earth. This tree is considered sacred by the Giants and Thunderbirds that live in the city, and its wood contains certain magical properties; objects made from this wood can conduct certain magical elements, including Ice and Lightning, much better than wood usually does.
 
-The name Dorydendron comes from the greek roots δόρυ, meaning “spear” and δένδρον, meaning “tree”.
+The name **<em>Dorydendron</em>** comes from the greek roots *δόρυ*, meaning “spear” and *δένδρον*, meaning “tree”.

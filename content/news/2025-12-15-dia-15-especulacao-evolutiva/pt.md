@@ -9,10 +9,10 @@ tags:
 
 {{embed:reddit-day-15}}
 
-A árvore-ponta-de-lança (Dorydendron gigantica) é uma espécie de árvore licófita descendente das árvores Lepidodendron do Carbonífero, encontrada em Jotunheim. Gigantes e [[news/2025-12-03-dia-3-especulacao-evolutiva|Pássaros-Trovão]] costumam usar as escamas do tronco das árvores-ponta-de-lança como pontas de lança, daí o nome.
+A **árvore-ponta-de-lança** (**<em>Dorydendron gigantica</em>**) é uma espécie de árvore licófita descendente das árvores *Lepidodendron* do Carbonífero, encontrada em Jotunheim. Gigantes e [[news/2025-12-03-dia-3-especulacao-evolutiva|Pássaros-Trovão]] costumam usar as escamas do tronco das árvores-ponta-de-lança como pontas de lança, daí o nome.
 
 D. gigantica é altamente adaptada ao clima frio de Jotunheim, com folhas em forma de agulha para ajudar a reter água e um formato cônico que a faz lembrar pinheiros. Elas podem chegar a 80 m graças à gravidade menor de Jotunheim em comparação com a Terra que, junto do clima mais frio do planeta, levou à evolução de saurópodes gigantescos especializados em comer do topo das árvores.
 
-No centro de Ishkålü, a cidade dos Gigantes de Gelo, fica a maior árvore-ponta-de-lança de todo o planeta, que também serve como o lado jotunheimiano do portal Terra-Jotunheim da América do Norte, por onde vieram os corvos que se tornariam os Pássaros-Trovão e por onde os Pés-Grandes (Paranthropus megalopoda) vieram para a Terra. Essa árvore é considerada sagrada pelos Gigantes e Pássaros-Trovão que vivem na cidade, e sua madeira contém certas propriedades mágicas; objetos feitos dessa madeira conseguem conduzir certos elementos mágicos, incluindo Gelo e Raio, muito melhor do que a madeira costuma conduzir.
+No centro de *Ishkålü*, a cidade dos Gigantes de Gelo, fica a maior árvore-ponta-de-lança de todo o planeta, que também serve como o lado jotunheimiano do portal Terra-Jotunheim da América do Norte, por onde vieram os corvos que se tornariam os Pássaros-Trovão e por onde os Pés-Grandes (*Paranthropus megalopoda*) vieram para a Terra. Essa árvore é considerada sagrada pelos Gigantes e Pássaros-Trovão que vivem na cidade, e sua madeira contém certas propriedades mágicas; objetos feitos dessa madeira conseguem conduzir certos elementos mágicos, incluindo Gelo e Raio, muito melhor do que a madeira costuma conduzir.
 
-O nome Dorydendron vem das raízes gregas δόρυ, que significa “lança”, e δένδρον, que significa “árvore”.
+O nome **<em>Dorydendron</em>** vem das raízes gregas *δόρυ*, que significa “lança”, e *δένδρον*, que significa “árvore”.

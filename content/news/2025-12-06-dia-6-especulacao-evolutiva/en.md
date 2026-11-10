@@ -9,11 +9,11 @@ tags:
 
 {{embed:reddit-day-6}}
 
-Kilizixæs or swamp zixæs (Palozixae orientalis) are a species of zixæ native to the few and far between swampy oasis in the eastern hemisphere of the arid planet of Xaetruxia. They are part of the Xaetruxizoa kingdom, which is the xætruxian equivalent to Earth's animmalia, at least ecologically, which means they're not quite animals, but they're still gonna be referred to as such in this text.
+**Kilizixæs** or **swamp zixæs** (**<em>Palozixae orientalis</em>**) are a species of zixæ native to the few and far between swampy oasis in the eastern hemisphere of the arid planet of Xaetruxia. They are part of the *Xaetruxizoa* kingdom, which is the xætruxian equivalent to Earth's animmalia, at least ecologically, which means they're not quite animals, but they're still gonna be referred to as such in this text.
 
-Its name, kilizixæ, is a transliteration of the xætruxian name for the animal: C₁₈H₃₄B₂LiNaP₂S; Xætruxians have a smell based language, and this molecule is the pheromone used to refer to this animal. By using the Telepathic Method, linguist, biologist and superhero Lucas di Vario was able to adapt such name to human speech. //Thanks u/Ok_Refrigerator2644 for the help//
+Its name, *kilizixæ*, is a transliteration of the xætruxian name for the animal: C₁₈H₃₄B₂LiNaP₂S; Xætruxians have a smell based language, and this molecule is the pheromone used to refer to this animal. By using the Telepathic Method, linguist, biologist and superhero Lucas di Vario was able to adapt such name to human speech. <span class="fora-do-personagem">*//Thanks [u/Ok_Refrigerator2644](https://www.reddit.com/user/Ok_Refrigerator2644/) for the help//*</span>
 
-P. orientalis lives mostly in shallow waters, where most of its body remains out of the water, grazing in aquatic vegetation. They use their long sails in mating rituals, thermoregulation and intimidation purposes, using it to seem larger to potential threats.
+P. *orientalis* lives mostly in shallow waters, where most of its body remains out of the water, grazing in aquatic vegetation. They use their long sails in mating rituals, thermoregulation and intimidation purposes, using it to seem larger to potential threats.
 
 Like all the rest of Hexavertebrata, swamp zixæs have one enormous compound eye that covers what could be either considered its chest or its face.
 
@@ -21,4 +21,4 @@ Their audio-olfactory organs, characteristics of all hexavertebrates, are highly
 
 They're highly intelligent and social creatures; more often than not, Xaetruxians, which are also a species of zixæ, have tales about their wisdom and cunning, similarly to how humans tell tales about monkeys, but with other associations (e. g. Monkeys in human stories tend to be tricksters, while kilizixæs are usually mentors or counselors)
 
-The scientific name can be divided into the latin ᴘᴀʟᴜs, meaning "swamp", zixae, and orientalis, in reference to how they're only found in the western hemisphere
+The scientific name can be divided into the latin *ᴘᴀʟᴜs*, meaning "swamp", *zixae*, and *orientalis*, in reference to how they're only found in the western hemisphere

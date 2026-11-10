@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-21}}
 
-The straqrrak (Gigachelys crypticus) is a species of Podocnemidid turtle native to the lakes and river of The Great Grotto System.
+The **straqrrak** (**<em>Gigachelys crypticus</em>**) is a species of Podocnemidid turtle native to the lakes and river of The Great Grotto System.
 
 Straqrraks are quite large turtles, with a carapace over 3m long and weighing over 325kg. They can walk on land albeit very clumsily; they are quite gratuitous in the water though, being able to swim at impressive speeds and make maneuvers similar to the ones of sea turtles.
 
@@ -19,4 +19,4 @@ Their forelimbs are way more specialized for swimming than your average freshwat
 
 Hobgoblins often hunt straqrraks and make a special stew with mushrooms and krifua worms, which is eaten communally, directly on the shell, which is then used as material for shields and pieces of armour.
 
-The name straqrrak comes from grottic štraqrrāk /s̩.tra.ˈq͡χaːk/, which can be divided into two roots: štrak, meaning large or giant and qrrāk, meaning armoured, but is also the name Grottics use for turtles and tortoises. The genus Gigachelys can be divided into the greek roots γίγας, meaning “big” or “large”, and χέλυς, meaning “turtle”. The epithet comes from latin ᴄʀʏᴘᴛᴜꜱ, which is the etymology of “grotto”.
+The name **<em>straqrrak</em>** comes from grottic *štraqrrāk* /s̩.tra.ˈq͡χaːk/, which can be divided into two roots: *štrak*, meaning large or giant and *qrrāk*, meaning armoured, but is also the name Grottics use for turtles and tortoises. The genus Gigachelys can be divided into the greek roots *γίγας*, meaning “big” or “large”, and *χέλυς*, meaning “turtle”. The epithet comes from latin *ᴄʀʏᴘᴛᴜꜱ*, which is the etymology of “grotto”.

@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-16}}
 
-O saltador-de-rio (Potamopedetes avgophorus) é uma espécie de mamífero prototério migratório do planeta Avialuna.
+O **saltador-de-rio** (**<em>Potamopedetes avgophorus</em>**) é uma espécie de mamífero prototério migratório do planeta Avialuna.
 
 Os saltadores-de-rio têm pés longos adaptados tanto para saltar quanto para nadar, com dedos palmados que lembram nadadeiras de mergulho artificiais. Eles vivem perto e dentro de rios efêmeros, o que os levou a desenvolver uma bolsa especial na ponta da cauda onde podem guardar seus ovos para migrar para outros rios próximos que ainda estão na estação chuvosa.
 
@@ -17,4 +17,4 @@ Seus focinhos são longos e altamente móveis, com bigodes sensoriais na ponta. 
 
 Os ninhos de P. avgophorus são muito parecidos com os dos ornitorrincos, com as entradas perto do nível da água; os saltadores-de-rio parecem saber que é hora de migrar para outro rio com base na distância entre o nível da água e a entrada do ninho.
 
-O nome Potamopedetes pode ser dividido nas raízes gregas ποταμός, que significa “rio”, e πηδητές, que significa “saltador”. O epíteto pode ser dividido em αυγό, que significa “ovo”, e φόρος, que significa “portar” ou “carregar”.
+O nome **<em>Potamopedetes</em>** pode ser dividido nas raízes gregas *ποταμός*, que significa “rio”, e *πηδητές*, que significa “saltador”. O epíteto pode ser dividido em *αυγό*, que significa “ovo”, e *φόρος*, que significa “portar” ou “carregar”.

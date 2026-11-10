@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-10}}
 
-O polvo-vampiro (Hemoctopus vampyricus) é uma espécie de polvo ceratoctopodídeo encontrada no oceano Atlântico. Seu gênero é o único da subfamília Hemoctopodinae.
+O **polvo-vampiro** (**<em>Hemoctopus vampyricus</em>**) é uma espécie de [[news/2024-03-05-ceratoctopodidae|polvo ceratoctopodídeo]] encontrada no oceano Atlântico. Seu gênero é o único da subfamília Hemoctopodinae.
 
 Os polvos-vampiro são hematófagos, alimentando-se do sangue de animais maiores. Eles usam as ventosas para se fixar na presa e, com o bico, perfuram o animal, secretando uma enzima especial que anestesia a área. Eles também mudam de cor e de textura para combinar com o animal de que estão se alimentando.
 
@@ -17,4 +17,4 @@ Também são muito pequenos, chegando ao tamanho de um polvo-de-anéis-azuis e s
 
 H. vampyricus foi o primeiro ceratoctopodídeo a se ramificar do restante da família, e acredita-se que o ancestral comum dos Ceratoctopodidae tinha um estilo de vida semelhante, servindo como um estágio intermediário entre o estilo de vida de um polvo comum e a simbiose permanente que os outros membros da família costumam ter.
 
-O nome Hematoctopus pode ser dividido na palavra grega αἷμα, que significa “sangue”, e “octopus”, que significa polvo.
+O nome **Hematoctopus** pode ser dividido na palavra grega *αἷμα*, que significa “sangue”, e “octopus”, que significa polvo.

@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-16}}
 
-The river skipper (Potamopedetes avgophorus) is a species of migratory prototherian mammal from the planet Avialuna.
+The **river skipper** (**<em>Potamopedetes avgophorus</em>**) is a species of migratory prototherian mammal from the planet Avialuna.
 
 River skippers have long feet adapted to both hopping and swimming. with webbed toes that resemble artificial diving fins. They live near and in ephemeral rivers, which drove them to develop a special sac in the tip of their tails where they can store their eggs to migrate to other nearby rivers that are still in the wet season.
 
@@ -17,4 +17,4 @@ Their snouts are long and highly mobile, with sensorial whiskers at the tip. The
 
 P. avgophorus nests are very similar to the ones of platypi, with the entrances near the water level; river skippers seem to know its time to migrate to another river based on the distance between the water level and their nests entrance.
 
-The name Potamopedetes can be divided into the greek roots ποταμός, meaning “river”, and πηδητές, meaning “leaper” or “jumper”. The epithet can be divided into αυγό, meaning “egg” and φόρος, meaning “to bear” or “to carry”.
+The name **<em>Potamopedetes</em>** can be divided into the greek roots *ποταμός*, meaning “river”, and *πηδητές*, meaning “leaper” or “jumper”. The epithet can be divided into *αυγό*, meaning “egg” and *φόρος*, meaning “to bear” or “to carry”.

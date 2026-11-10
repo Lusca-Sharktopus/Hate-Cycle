@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-12}}
 
-O Foderoceratops girassolensis é uma espécie de dinossauro ceratopsídeo fossorial encontrada apenas na ilha de Girassol, no oceano Pacífico. A ilha está isolada do continente há mais de 100 milhões de anos, e acredita-se que fatores arcanos ajudaram a ilha a não ser afetada pelo impacto do K-Pg.
+O **<em>Foderoceratops girassolensis</em>** é uma espécie de dinossauro ceratopsídeo fossorial encontrada apenas na ilha de Girassol, no oceano Pacífico. A ilha está isolada do continente há mais de 100 milhões de anos, e acredita-se que fatores arcanos ajudaram a ilha a não ser afetada pelo impacto do K-Pg.
 
 O Foderoceratops é um ceratopsídeo pequeno, chegando a apenas cerca de 1,5 m de comprimento e 50 kg, resultado de nanismo insular. Apesar disso, seus músculos do ombro e do pescoço são bastante fortes, adaptados a um estilo de vida escavador.
 
@@ -19,4 +19,4 @@ F. girassolensis possui 5 penas modificadas de cada lado do rosto, usadas como �
 
 Sua dieta consiste principalmente de raízes, gramíneas e sementes, com frutas ocasionais ou até pequenos animais, como minhocas e roedores, complementando a alimentação.
 
-O nome Foderoceratops vem do latim ꜰᴏᴅᴇʀᴇ, que significa “escavar”, do grego κέρας, que significa “chifre”, e ὤψ, que significa “cabeça”. O epíteto significa “de Girassol”.
+O nome **<em>Foderoceratops</em>** vem do latim *ꜰᴏᴅᴇʀᴇ*, que significa “escavar”, do grego *κέρας*, que significa “chifre”, e *ὤψ*, que significa “cabeça”. O epíteto significa “de Girassol”.

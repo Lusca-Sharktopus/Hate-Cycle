@@ -9,11 +9,11 @@ tags:
 
 {{embed:reddit-day-4}}
 
-The altamaha-ha (Altamaha ha), often called Altie, is an aquatic species of thalassopterygid dragon native to southern United States, found mainly in the Altamaha river in Georgia. It is the only species within the genus Altamaha
+The **altamaha-ha** (**<em>Altamaha ha</em>**), often called **<em>Altie</em>**, is an aquatic species of thalassopterygid dragon native to southern United States, found mainly in the Altamaha river in Georgia. It is the only species within the genus Altamaha
 
 Altamaha-has can reach up to 4m in length and weigh almost a ton. They lack any hindlimbs and their wings, as is characteristic of the Thalassopterygidae,have completely become flippers; It is the only species in the family to exhibit hyperphalangy.
 
-It is thought to be the first species to branch off from the rest of Thalassopterygidae, which is supported by both genetic and anatomical evidence; the main one is that they're one of the only dragon species to completely lack any horns; the only other hornless dragons are the ones in the Amphipterus and Megalogallus genera.
+It is thought to be the first species to branch off from the rest of Thalassopterygidae, which is supported by both genetic and anatomical evidence; the main one is that they're one of the only dragon species to completely lack any horns; the only other hornless dragons are the ones in the *Amphipterus* and *Megalogallus* genera.
 
 The plates seen on altamaha-ha's back are actually highly modified feathers, like the ones seen on the feet of birds and other dragons. They seem to be more chaotic in the back of their necks, while creating a more consistent pattern once it gets to the animal's back.
 
@@ -21,6 +21,6 @@ Their diet varies greatly, comprised mostly of fish, but also freshwater crustac
 
 Alties also live their whole lives underwater and, like other thalassopterygids, give live birth to their young.
 
-Male A. ha tails exhibit vibrant color patterns that seem to be unique to each individual, such as fingerprints, used to attract mates.
+Male *A. ha* tails exhibit vibrant color patterns that seem to be unique to each individual, such as fingerprints, used to attract mates.
 
 The "Altamaha" part of the name evidently comes from the river, but it's unknown where the "-ha" part comes from; nonetheless, it was already a widespread name when the animal got officially described, so the scientist that named it decided to use it as the species' scientific name.

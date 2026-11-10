@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-12}}
 
-The Foderoceratops girassolensis is a species of fossorial ceratopsian dinosaur only found in the island of Girassol, in the Pacific Ocean. The island has been isolated from the continent for over 100 million years, and it is thought that arcane factors helped the island not being affected by the KPg impact.
+The **<em>Foderoceratops girassolensis</em>** is a species of fossorial ceratopsian dinosaur only found in the island of Girassol, in the Pacific Ocean. The island has been isolated from the continent for over 100 million years, and it is thought that arcane factors helped the island not being affected by the KPg impact.
 
 Foderoceratops is a small ceratopsian, only reaching about 1.5m in length and 50kg, a result of insular nanism. Despite that, its shoulder and neck muscles are quite strong, adapted for a burrowing lifestyle.
 
@@ -19,4 +19,4 @@ F. girassolensis possesses 5 modified feathers on each side of its face, used as
 
 Its diet consists mostly of roots, grasses and seeds, with the occasional fruit or even small animals such as worms and rodents occurring as dietary complements.
 
-The name Foderoceratops comes from the latin ꜰᴏᴅᴇʀᴇ, which means "to burrow", the greek κέρας, which means "horn" and ὤψ, meaning "head". The ephithet means "from Girassol"
+The name **<em>Foderoceratops</em>** comes from the latin *ꜰᴏᴅᴇʀᴇ*, which means "to burrow", the greek *κέρας*, which means "horn" and *ὤψ*, meaning "head". The epithet means "from Girassol"
