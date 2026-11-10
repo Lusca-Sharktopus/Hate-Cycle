@@ -29,6 +29,10 @@
   /* "Hate Cycle" em versalete (H e C grandes): o texto do autor usa as letras Unicode (Hᴀᴛᴇ Cʏᴄʟᴇ) e,
      quando o Markdown virar HTML (T09), elas viram <span class="hc">Hate Cycle</span> */
   .hc { font-variant: small-caps; letter-spacing: .02em; }
+  /* 09/11/2026 (pedido do autor): em "Hate Cycle", as letras pequenas do versalete (maiúsculas encolhidas pelo navegador, mais finas)
+     ficam mais grossas, para igualar o H e o C (src/lib/versaleteSemibold.ts); onde o texto já é seminegrito ou negrito, um passo acima */
+  .hc-semi { font-weight: 600; }
+  :is(h1, h2, h3, h4, .chapter-title, b, strong, .tag, th) .hc-semi { font-weight: 800; }
 
   /* ── peças que várias páginas usam (T11): títulos de bloco, botões, texto corrido ──
      Copiadas de static/style.css, mesmos valores, na mesma ordem. */

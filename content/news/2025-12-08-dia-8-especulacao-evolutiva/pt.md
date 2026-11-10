@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-8}}
 
-O îandapĩ, yandapi ou golfinho-arborícola-sul-americano (Scandelphinus iandapi) é uma espécie arborícola de remingtonocetídeo //aliás, obrigado, CM Kosemen, por me deixar usar a ideia// nativa dos manguezais da América do Sul.
+O îandapĩ, yandapi ou golfinho-arborícola-sul-americano (Scandelphinus iandapi) é uma espécie arborícola de remingtonocetídeo <span class="fora-do-personagem">//aliás, obrigado, CM Kosemen, por me deixar usar a ideia//</span> nativa dos manguezais da América do Sul.
 
 Apesar do nome, os golfinhos-arborícolas não são golfinhos de verdade. Na verdade, o gênero Scandelphinus é bastante único entre os cetáceos, sendo cladisticamente isolado do resto dos cetáceos (pelo menos quando se consideram apenas os táxons vivos). São os únicos cetáceos que, entre outras características, ainda têm quatro membros e não apresentam hiperfalangia. Outras espécies do gênero podem ser encontradas no Sul e Sudeste da Ásia e na costa leste da África.
 

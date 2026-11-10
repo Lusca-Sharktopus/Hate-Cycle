@@ -9,7 +9,7 @@ tags:
 
 {{embed:reddit-day-8}}
 
-The îandapĩ, yandapi or south american tree dolphin (Scandelphinus iandapi) is a species of arboreal remingtonocetid //btw, thanks CM Kosemen for letting me use the idea// native to the mangroves in south america.
+The îandapĩ, yandapi or south american tree dolphin (Scandelphinus iandapi) is a species of arboreal remingtonocetid <span class="fora-do-personagem">//btw, thanks CM Kosemen for letting me use the idea//</span> native to the mangroves in south america.
 
 Despite their name, tree dolphins are not true dolphins. In fact, the genus Scandelphinus is quite unique among cetaceans, being cladistically isolated from the rest of cetacea (at least when only accounting extant taxa). They're the only cetaceans to, among other traits, still have four limbs and to not display hyperphalangy. Other species of the genus can be found in South and Southeast Asia and the East Coast of Africa.
 

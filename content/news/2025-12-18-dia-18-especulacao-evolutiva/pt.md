@@ -15,9 +15,9 @@ A planta compartilha várias semelhanças com a Gloriosa superba, uma parente pr
 
 Seus ovários parecem lembrar cabeças de dragões e suas pétalas, asas de dragão. Não se sabe se isso tem alguma correlação com as propriedades arcanas da planta, se é pura coincidência ou apenas o reconhecimento humano de padrões pregando peças nas mentes de botânicos e arcanólogos.
 
-Existem quatro rituais conhecidos em que as pétalas de Caelluria são usadas: a Maldição de Cytharr, a Bênção de Lwari, a Masmorra de Ramosh e a Lâmina de Vufir. Aqui está a Receita Arcana de um deles:
+Existem quatro rituais conhecidos em que as pétalas de Caelluria são usadas: a Maldição de Cytharr, a Bênção de Lwari, a Masmorra de Ramosh e a Lâmina de Vufir. Aqui estão as Receitas Ritualistas dos 4
 
-{{embed:spell-lwari-pt}}
+{{embed:spells-caelluria-pt}}
 
 
 O nome Caelluria teria sido ouvido por um usuário de Póscognição que estava na excursão em que a planta foi descoberta, depois de tocá-la.

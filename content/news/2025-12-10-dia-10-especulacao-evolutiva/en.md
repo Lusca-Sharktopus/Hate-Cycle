@@ -11,7 +11,7 @@ tags:
 
 The vampyre octopus (Hemoctopus vampyricus) is a species of ceratoctopodid octopus found in the atlantic ocean. Its genus is the only one on the subfamily Hemoctopodinae.
 
-Vampire octopi //i'm not referring to them as octopuses srry// are hematophagous, feeding off of larger animals' blood. They use their suckers to attach themselves to the pray and, with their beak, perfurate the animal, secreting a special enzyme that numbs the area. They will also change colours and texture to match the animal they're feasting on.
+Vampire octopi <span class="fora-do-personagem">//i'm not referring to them as octopuses srry//</span> are hematophagous, feeding off of larger animals' blood. They use their suckers to attach themselves to the pray and, with their beak, perfurate the animal, secreting a special enzyme that numbs the area. They will also change colours and texture to match the animal they're feasting on.
 
 They're also very small, reaching about the size of a blue-ringed-octopus, being one of the smallest octopi in the family.
 

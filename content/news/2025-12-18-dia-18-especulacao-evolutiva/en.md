@@ -17,7 +17,7 @@ Their ovaries seem to resemble the heads of dragons and their petals dragon wing
 
 There are four known rituals in which the Caelluria petals are used as rituals: Cytharr’s Curse, Lwari’s Blessing, Ramosh’s Dungeon and Vufir’s Blade. Here’s the Arcane Recipee for one of them:
 
-{{embed:spell-lwari-en}}
+{{embed:spells-caelluria-en}}
 
 
 The name Caelluria was allegedly heard by a Postcognition user that was on the field trip in which the plant was discovered after he touched it.

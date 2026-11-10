@@ -58,13 +58,28 @@ function atributos(e: Elemento): string {
     .join("");
 }
 
+/**
+ * 09/11/2026 (só no Astro, pedido do autor): em "Hate Cycle", as letras pequenas do versalete vêm num <span class="hc-semi"> (o passo final
+ * de src/middleware.ts → src/lib/versaleteSemibold.ts); o Python não tem. Na forma canônica esse <span> some e o texto dele se junta
+ * aos vizinhos, como se não existisse. Só esse <span>, exatamente com essa classe e sem outros atributos.
+ */
+function filhosSemVersaleteSemibold(pai: No): No[] {
+  return filhosDe(pai).flatMap((f) =>
+    ehElemento(f) && f.tagName === "span" && f.attrs.length === 1 && f.attrs[0]?.name === "class" && f.attrs[0].value === "hc-semi" ? filhosDe(f) : [f],
+  );
+}
+/** O mesmo, para HTML em texto (onde o teste compara strings): devolve o <span class="hc">Hate Cycle</span> do Python. */
+export function semVersaleteSemibold(html: string): string {
+  return html.split('<span class="hc">H<span class="hc-semi">ate</span> C<span class="hc-semi">ycle</span></span>').join('<span class="hc">Hate Cycle</span>');
+}
+
 /** Os nós de um elemento como linhas canônicas, já com os espaços tratados. */
 function linhasDosFilhos(pai: No, recuo: string): string[] {
   const paiEhBloco = !ehElemento(pai) || BLOCOS.has(pai.tagName);
   const cru = ehElemento(pai) && TEXTO_CRU.has(pai.tagName);
   // 1. junta textos vizinhos e joga fora os comentários
   const itens: ({ texto: string } | { el: Elemento })[] = [];
-  for (const f of filhosDe(pai)) {
+  for (const f of filhosSemVersaleteSemibold(pai)) {
     if (ehTexto(f)) {
       const ultimo = itens[itens.length - 1];
       if (ultimo && "texto" in ultimo) ultimo.texto += f.value;

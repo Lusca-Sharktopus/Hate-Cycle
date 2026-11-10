@@ -8,7 +8,7 @@ stickers:
   - news/stickers/mascaras.png | l3 b3 w21 a-5
   - news/stickers/vestido.png | l38 b2 w15 a4
   - news/stickers/baixo.png | r3 b2 w11 a6
-overlay: news/fundo-papel.jpg
+overlay: Backgrounds/paper-texture.avif
 tags:
   - Nova Obra
   - Vídeo Novo
