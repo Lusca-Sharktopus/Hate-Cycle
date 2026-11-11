@@ -69,13 +69,32 @@
   .spellcard .sc-body:last-child { padding-bottom: .8rem; }
   .spellcard .sc-body b { color: #000; }
   .spellcard .sc-body b.sc-cond { color: #3fa76d; font-style: italic; }
-  /* 09/11 (pedido do autor): os quatro rituais do Dia 18 lado a lado (duas colunas; uma no celular) e as cores das Condições como nos
+  /* 09/11 (pedido do autor): os quatro rituais do Dia 18 lado a lado (duas colunas; uma no celular; desde 10/11, os quatro numa linha em tela larga, ver abaixo) e as cores das Condições como nos
      prints do autor (Enraizamento/Deslocamento em preto, Queimadura em laranja) */
   .embed:has(> .spellcards) { max-width: 760px; overflow: visible; display: block; }
   .spellcards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin: 1.4rem 0; align-items: start; width: 100%; }
   .spellcards .spellcard { hyphens: manual; }
   .spellcards .spellcard { max-width: none; margin: 0; }
   @media (max-width: 700px) { .spellcards { grid-template-columns: 1fr; max-width: 360px; margin-inline: auto; } }
+  /* 10/11 (pedido do autor): os quatro rituais numa linha só. A coluna do texto (680 px) não comporta quatro fichas, então a fileira
+     sai dela e ocupa a folha de papel inteira (--sc-w = a largura da folha menos uma margem; a folha tem min(1200px, 100vw - 2rem) e o
+     artigo, de 760 px (.narrow), fica no meio dela, com o texto encostado à esquerda: 380px = meio do artigo = meio da folha). Para as fichas ficarem IGUAIS às de antes, só menores (mesmas quebras de linha dos
+     prints do autor), tudo dentro delas é medido em --u = "um pixel do desenho original" (a ficha de 330 px): a largura de uma ficha
+     dividida por 330 (100cqw = a largura da fileira, que é o contêiner). De 1180 px de janela para cima; abaixo disso as letras
+     ficariam pequenas demais e a fileira volta a ser 2 × 2 (e uma coluna no celular), como antes. Respiro (pedido do autor na mesma
+     noite: fichas menores, com as letras junto, para não ficar claustrofóbico): 2,5rem de cada lado até a borda da folha e 20 px entre
+     as fichas, o que dá fichas de ~265 px (letra de ~11,3 px) na folha cheia. */
+  @media (min-width: 1180px) {
+    .embed:has(> .spellcards) { --sc-w: calc(min(1200px, 100vw - 2rem) - 5rem); max-width: none; width: var(--sc-w); margin-left: calc(380px - var(--sc-w) / 2); margin-right: 0; }
+    .spellcards { --sc-gap: 20px; --u: calc((100cqw - 3 * var(--sc-gap)) / 4 / 330); container-type: inline-size; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sc-gap); }
+    .spellcards .spellcard { font-size: calc(14.08 * var(--u)); }
+    .spellcards .spellcard .sc-head { padding: calc(5.6 * var(--u)) calc(11.2 * var(--u)); font-size: calc(20 * var(--u)); }
+    .spellcards .spellcard .sc-sub { padding: calc(5.6 * var(--u)) calc(11.2 * var(--u)) 0; font-size: calc(16 * var(--u)); }
+    .spellcards .spellcard .sc-grid { gap: calc(9.6 * var(--u)); padding: calc(8 * var(--u)) calc(11.2 * var(--u)) 0; }
+    .spellcards .spellcard .sc-line { margin: calc(8 * var(--u)) calc(11.2 * var(--u)) 0; }
+    .spellcards .spellcard .sc-body { margin: calc(9.6 * var(--u)) calc(11.2 * var(--u)) 0; }
+    .spellcards .spellcard .sc-body:last-child { padding-bottom: calc(12.8 * var(--u)); }
+  }
   .spellcard .sc-body b.sc-cond-preta { color: #000; }
   .spellcard .sc-body b.sc-cond-fogo { color: #e68520; font-style: normal; }
   /* 09/11 (pedido do autor): os trechos em que o autor "sai do personagem" (//assim//) na cor #271b39 */
