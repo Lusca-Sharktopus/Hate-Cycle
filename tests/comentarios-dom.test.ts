@@ -606,6 +606,53 @@ describe("comentários formatados (10/11): marcas viram elementos do código; HT
     expect(BALDE).toEqual([{ acao: "remove", balde: "comment-images", caminhos: [`${EU}/abcdefghijkl1234.webp`] }]);
   });
 
+  test("só GIF/imagem, sem texto (pedido do autor, 10/11): a barra publica, a edição salva, e o comentário aparece sem parágrafo vazio", async () => {
+    const fetchOriginal = globalThis.fetch;
+    globalThis.fetch = (() =>
+      Promise.resolve({ ok: true, json: () => Promise.resolve({ results: [{ media_formats: { tinygif: { url: GIF }, mediumgif: { url: GIF } } }], next: "" }) })) as unknown as typeof fetch;
+    try {
+      const cfg = lerConfiguracao({ ...CFG_BRUTA, klipy: "chave-de-teste-123" }) as ConfiguracaoDosComentarios;
+      const raiz = montarPagina();
+      iniciarComentarios(raiz, cfg, clienteFalso({ user: { id: EU, email: "eu@exemplo.test" } }, []));
+      await esperar();
+      // campo vazio e nada anexado: nada vai para o banco
+      document.querySelector<HTMLFormElement>(".c-bar")?.requestSubmit();
+      await esperar();
+      expect(GRAVACOES).toEqual([]);
+      // só o GIF: vai
+      document.querySelector<HTMLButtonElement>(".c-bar .c-f-gif")?.click();
+      await esperar();
+      document.querySelector<HTMLButtonElement>(".c-gif-opcao")?.click();
+      document.querySelector<HTMLFormElement>(".c-bar")?.requestSubmit();
+      await esperar();
+      expect(GRAVACOES[0]?.v).toEqual({ page_id: "news/teste", body: `{gif:${GIF}}` });
+    } finally {
+      globalThis.fetch = fetchOriginal;
+    }
+  });
+
+  test("só GIF/imagem, sem texto: resposta e edição não exigem texto; editar apagando o texto salva só as mídias", async () => {
+    const corpo = `meu texto\n{gif:${GIF}}`;
+    const raiz = montarPagina();
+    iniciarComentarios(raiz, CFG, clienteFalso({ user: { id: EU, email: "eu@exemplo.test" } }, [{ id: 9, body: `{img:${EU}/abcdefghijkl1234.webp}`, created_at: "2026-11-10T11:00:00+00:00", edited_at: null, user_id: EU, parent_id: null }, { id: 10, body: corpo, created_at: "2026-11-10T12:00:00+00:00", edited_at: null, user_id: EU, parent_id: null }]));
+    await esperar();
+    // o comentário só com imagem: a imagem, sem parágrafo de texto vazio
+    const soImagem = [...document.querySelectorAll(".c-body")].find((b) => b.querySelector("img") && !(b.textContent ?? "").trim());
+    expect(soImagem).toBeTruthy();
+    expect(soImagem?.querySelectorAll("p:empty")).toHaveLength(0);
+    [...document.querySelectorAll<HTMLButtonElement>(".c-actions button")].find((b) => b.textContent === "Responder")?.click();
+    await esperar();
+    expect(document.querySelector(".c-reply-form textarea")?.hasAttribute("required")).toBe(false);
+    [...document.querySelectorAll<HTMLButtonElement>(".c-actions button")].filter((b) => b.textContent === "Editar").at(-1)?.click();
+    await esperar();
+    const campo = document.querySelector<HTMLTextAreaElement>(".c-edit-form textarea") as HTMLTextAreaElement;
+    expect(campo.hasAttribute("required")).toBe(false);
+    campo.value = "";
+    document.querySelector<HTMLFormElement>(".c-edit-form")?.requestSubmit();
+    await esperar();
+    expect(GRAVACOES).toEqual([{ tabela: "comments", acao: "update", v: { body: `{gif:${GIF}}` } }]);
+  });
+
   test("apagar um comentário com imagem: o arquivo sai do balde junto", async () => {
     const corpo = `{img:${EU}/abcdefghijkl1234.webp}`;
     const raiz = montarPagina();

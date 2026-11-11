@@ -300,7 +300,7 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
   /** O formulário de resposta (parentId) — o comments.js também o usa para comentário novo, que hoje só a barra faz. */
   function formularioDeResposta(parentId: Comentario["id"] | null, aoTerminar?: () => void): HTMLFormElement {
     const f = el("form", { attrs: { class: "c-reply-form" } });
-    const campoDeTexto = el("textarea", { attrs: { name: "body", maxlength: "2000", required: "required", placeholder: t("c_write"), "aria-label": t("c_write") } });
+    const campoDeTexto = el("textarea", { attrs: { name: "body", maxlength: "2000", placeholder: t("c_write"), "aria-label": t("c_write") } });
     const linha = el("div", { attrs: { class: "c-row" } }, [botaoDeEnviar(parentId ? t("c_reply") : t("c_post"))]);
     if (parentId) linha.appendChild(el("button", { attrs: { type: "button", class: "c-link" }, texto: t("c_cancel"), ...(aoTerminar ? { ao: { click: aoTerminar } } : {}) }));
     const editor = editorDo(campoDeTexto);
@@ -357,7 +357,7 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
     const acoes = bloco.querySelector<HTMLElement>(":scope > .c-actions");
     if (!corpo || !acoes || bloco.querySelector(":scope > .c-edit-form")) return;
     const f = el("form", { attrs: { class: "c-reply-form c-edit-form" } });
-    const campoDeTexto = el("textarea", { attrs: { maxlength: "2000", required: "required", "aria-label": t("c_edit") } });
+    const campoDeTexto = el("textarea", { attrs: { maxlength: "2000", "aria-label": t("c_edit") } });
     // 10/11/2026: os GIFs e imagens do comentário vão para a bandeja; o campo fica só com o texto
     const separado = separarMidias(c.body);
     campoDeTexto.value = separado.texto;
