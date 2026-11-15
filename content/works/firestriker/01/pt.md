@@ -120,7 +120,7 @@ Eu e Harry imediatamente corremos em direção ao fogo como mariposas voando em 
 
 “Ah sim, igual aquela vez em que você *não* perdeu a nossa bússola, ou a vez que nós *não* nos perdemos com o mapa em suas mãos, ou a vez que…”, Harry parou, percebendo que estava fazendo algo de errado. Eu esperava que ele tivesse percebido que não deveria estar falando comigo daquela forma, mas minhas esperanças foram rapidamente destruídas.
 
-“Oh, céus, onde estão meus modos?”, Harry se virou na direção do homem, agora iluminado pelas chamas; seu cabelo era ruivo, mas não como o de Harry; era mais laranja do que o vermelho vibrante do Quatro Olhos. Seu rosto era longo e sua pele era como o cobre. Olheiras debaixo de seus olhos e uma enorme cicatriz que nascia de sua testa e chegava até a mandíbula, atravessando seu olho esquerdo, aparentemente cego.
+“Oh, céus, onde estão meus modos?”, Harry se virou na direção do homem, agora iluminado pelas chamas; seu cabelo era ruivo, mas não como o de Harry; era mais laranja do que o vermelho vibrante do Quatro Olhos. Seu rosto era longo e sua pele era como o cobre. Olheiras debaixo de seus olhos e uma enorme cicatriz que nascia de sua testa e chegava até a mandíbula, atravessando seu olho direito, aparentemente cego.
 
 “Meu nome é Harry Larsen”, ele estendeu sua mão na direção do homem.
 

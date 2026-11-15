@@ -126,7 +126,7 @@ Me and Harry immediately ran toward the fire like moths flying towards a light s
 
 “Ah, yes, like that time you *didn't* lose our compass, or the time we *didn't* get lost with the map on your hands, or the time that…” Harry stopped, noticing he was doing something wrong. I hoped that he had realised he shouldn't be talking to me like that, but my hopes were quickly crushed.
 
-“Good heavens, where are my manners?”, Harry turned himself towards the man, now illuminated by the flames; his hair was ginger, but not quite like Harry’s; it was more orange than the Four Eyes vibrant red. His face was long and his skin was like copper. Dark circles around his eyes and an enormous scar that started on his forehead and reached his mandible, going through his, apparently blind, left eye.
+“Good heavens, where are my manners?”, Harry turned himself towards the man, now illuminated by the flames; his hair was ginger, but not quite like Harry’s; it was more orange than the Four Eyes vibrant red. His face was long and his skin was like copper. Dark circles around his eyes and an enormous scar that started on his forehead and reached his mandible, going through his, apparently blind, right eye.
 
 “My name is Harry Larsen”, he extended his hand towards the man.
 
