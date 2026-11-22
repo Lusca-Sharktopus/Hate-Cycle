@@ -8,4 +8,4 @@ tags:
   - Speedpaint
 ---
 
-{{embed:https://x.com/KingOfAllOceans/status/1998938602034835880 | https://www.instagram.com/lusca_desenhos/reel/DSZTP4VjhLc/ | https://www.tiktok.com/@hate.cycle/video/7710170383214726406}}
+{{embed:https://x.com/KingOfAllOceans/status/1998938602034835880 | https://www.instagram.com/lusca_desenhos/reel/DSZTP4VjhLc/ | https://www.tiktok.com/@hate.cycle/video/7710170383214726406 | https://www.tiktok.com/@hate.cycle/video/7710170927551614260}}
