@@ -10,4 +10,4 @@ tags:
 
 Com o primeiro conto do universo de Hᴀᴛᴇ Cʏᴄʟᴇ se aproximando, aqui está um pouco do processo de criação desta capa.
 
-{{embed:instagram-speedpaint-pederneira | https://www.tiktok.com/@lusca_sharktopus/video/7493222444245863685 | https://www.youtube.com/watch?v=jKd-CLUk28g}}
+{{embed:instagram-speedpaint-pederneira | https://www.tiktok.com/@hate.cycle/video/7710171063442803974 | https://www.youtube.com/watch?v=jKd-CLUk28g}}
