@@ -1,7 +1,7 @@
 ---
 date: 2025-04-18
 title: Pederneira
-summary: “Estamos perdidos!”, exclamou Harry, meu jovem assistente.
+summary: Olivia Purinna tem absoluta certeza de que dragões existem, e ela vai provar isso não importa o quão desastrosa a jornada dela seja!
 ---
 
 “Estamos perdidos!”, exclamou Harry, meu jovem assistente. Cansaço, frustração e o que eu só posso interpretar como um gemido causado por dor muscular eram todos audíveis em sua voz.

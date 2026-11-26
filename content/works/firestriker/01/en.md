@@ -1,7 +1,7 @@
 ---
 date: 2025-04-18
 title: Firestriker
-summary: "We're lost!", shouted Harry, my young assistant.
+summary: Olivia Purinna is absolutely certain that dragons exist, and she’s determined to prove it no matter how disastrous her journey may be!
 ---
 
 “We’re lost!”, shouted Harry, my young assistant. Tiredness, frustration and what I can only interpret as a moan caused by muscular pain were all audible in his voice.
