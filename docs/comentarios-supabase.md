@@ -223,7 +223,7 @@ O que o visitante vê: um painel com os GIFs em destaque, uma busca ("Pesquisar 
 
 ### Migração de 28/11/2026: novidades e notificações
 
-Arquivo: `supabase/migrations/20261128000000_notificacoes.sql`. **Ainda não rodada no seu projeto.** Depende da migração de reforço (03/11).
+Arquivo: `supabase/migrations/20261128000000_notificacoes.sql`. **Rodada no projeto do ar em 28/11/2026** (pelo SQL Editor, com o autor logado). Depende da migração de reforço (03/11).
 
 O que muda para quem visita (só no site novo, só com conta): na janela da conta, ao lado da lixeira, um **sino**. Ele abre a tela **Novidades**: as notícias mais recentes (e os posts do Blog, quando a seção existir), com a etiqueta **Nova** nas que a pessoa ainda não viu, e o botão **Receber notificações neste aparelho**. Quando há novidade não vista, aparece uma **bolinha vermelha** no sino e no botão da conta do cabeçalho; abrir o sino conta tudo como visto e a bolinha some. Com as notificações ligadas, o navegador avisa cada notícia nova, mesmo com o site fechado (no Android, no computador; no iPhone/iPad só com o site na Tela de Início).
 
@@ -238,6 +238,8 @@ Três tabelas novas: `site_updates` (o que já saiu no site e a hora em que apar
 Quem manda as notificações é uma **Edge Function** do Supabase chamada `avisar-novidades` (o código está em `supabase/functions/avisar-novidades/`). Depois de cada publicação, o GitHub Actions espera o site novo entrar no ar e chama a função (passo **Avisar as novidades** do deploy, `tools/avisar_novidades.mjs`). A função lê as notícias que estão no ar (`/pt/novidades.json` e `/en/novidades.json`), anota as novas e manda uma notificação para cada aparelho ligado, no idioma em que a pessoa ligou (se a notícia só existe no outro idioma, vai a do outro). Só notícias dos últimos 7 dias viram notificação; chamar a função de novo não repete nada. Na **primeira vez** que ela roda, só anota o que já está no site, sem mandar nada.
 
 Ela precisa de uma **chave privada** (o par da chave pública que está no código do site, `src/scripts/conta/regrasDasNovidades.ts`). Essa chave nunca vai para o GitHub: fica só nos segredos do Supabase.
+
+**Estado (28/11/2026):** migração rodada e função `avisar-novidades` publicada pelo editor do painel (um arquivo só: o `regras.ts` colado dentro do `index.ts`, mesma lógica). Falta só o segredo `VAPID_PRIVATE_KEY` (passo 3).
 
 **Como ligar (uma vez, ~5 minutos):**
 1. Rode a migração de 28/11 (acima).
