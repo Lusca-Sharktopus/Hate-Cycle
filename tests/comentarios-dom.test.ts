@@ -49,6 +49,12 @@ const SAIDAS: unknown[] = [];
 let FAVORITOS: string[] = [];
 const BALDE: Record<string, unknown>[] = [];
 let ARQUIVOS_NO_BALDE: string[] = [];
+/** 28/11: o sino. O novidades.json que o fetch devolve, o que a função anotou (site_updates), a última vez que a pessoa abriu o sino e as
+ * funções do sino chamadas (fora de RPCS, para os testes antigos continuarem iguais). */
+let NOVIDADES_JSON: unknown = null;
+let ANOTADAS: { item_id: string; first_seen_at: string }[] = [];
+let VISTO_EM = "2026-11-20T00:00:00+00:00";
+const RPCS_DO_SINO: string[] = [];
 /** 10/11: o que a caixa gravou (insert/update), na ordem. */
 const GRAVACOES: { tabela: string; acao: string; v: unknown }[] = [];
 
@@ -59,6 +65,7 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
     const b = {
       select: () => b,
       eq: (k: string, v: unknown) => ((filtros[k] = v), b),
+      in: (k: string, v: unknown) => ((filtros[k] = v), b),
       order: () => b,
       single: () => ((unico = true), b),
       insert: (v: unknown) => (GRAVACOES.push({ tabela, acao: "insert", v }), b),
@@ -69,6 +76,7 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
         if (tabela === "comments") data = linhas.map((l) => ({ ...l, profiles: (l.user_id && PERFIS[l.user_id]) || null }));
         if (tabela === "profiles" && unico) data = PERFIS[String(filtros["id"])] ?? null;
         if (tabela === "favorites") data = FAVORITOS.map((work_id) => ({ work_id, created_at: "2026-11-01T00:00:00+00:00" }));
+        if (tabela === "site_updates") data = ANOTADAS.filter((a) => (filtros["item_id"] as string[] | undefined)?.includes(a.item_id) ?? true);
         return Promise.resolve({ data, error: null }).then(ok, falha);
       },
     };
@@ -83,6 +91,8 @@ function clienteFalso(sessao: { user: { id: string; email: string } } | null, li
     signOut: (o?: unknown) => (SAIDAS.push(o ?? null), Promise.resolve({ error: null })),
   };
   const rpc = (nome: string, args?: unknown) => {
+    if (nome === "my_notifications_seen") return (RPCS_DO_SINO.push(nome), Promise.resolve({ data: VISTO_EM, error: null }));
+    if (nome === "mark_notifications_seen") return (RPCS_DO_SINO.push(nome), Promise.resolve({ data: "2026-11-28T00:00:00+00:00", error: null }));
     RPCS.push({ nome, args: args ?? null });
     return Promise.resolve(RESPOSTA_DO_RPC);
   };
@@ -120,7 +130,7 @@ async function esperar(): Promise<void> {
 }
 
 /** As únicas tags que a caixa cria (mais as da própria <section>). */
-const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "h4", "input", "label", "a", "img", "canvas", "em", "u", "s", "blockquote"]); // 10/11: em/u/s/blockquote = a formatação dos comentários
+const TAGS_DA_CAIXA = new Set(["section", "h2", "div", "form", "textarea", "button", "p", "span", "strong", "time", "h3", "h4", "input", "label", "a", "img", "canvas", "em", "u", "s", "blockquote", "ul", "li"]); // 10/11: em/u/s/blockquote = a formatação dos comentários; 28/11: ul/li = a lista do sino
 /** 05/11: os botões de login (src/scripts/login/janela.ts) têm ícones em SVG e o <canvas> do círculo, de valores fixos do código. */
 const TAGS_DOS_BOTOES_DE_LOGIN = new Set(["span", "svg", "path", "defs", "lineargradient", "stop", "canvas"]);
 function conferirSoElementosDoCodigo(): void {
@@ -284,9 +294,13 @@ describe("a janela da conta (03/11; redesenhada em 09/11): foto, nome, favoritos
   const fetchOriginal = globalThis.fetch;
   beforeEach(() => {
     PEDIDOS.length = 0;
+    NOVIDADES_JSON = null;
+    ANOTADAS = [];
+    RPCS_DO_SINO.length = 0;
     globalThis.fetch = ((url: string) => {
       PEDIDOS.push(String(url));
-      return Promise.resolve(new Response(JSON.stringify(INDICE), { headers: { "Content-Type": "application/json" } }));
+      const corpo = String(url).includes("novidades.json") ? (NOVIDADES_JSON ?? { versao: "", itens: [] }) : INDICE;
+      return Promise.resolve(new Response(JSON.stringify(corpo), { headers: { "Content-Type": "application/json" } }));
     }) as typeof fetch;
   });
   afterAll(() => {
@@ -332,13 +346,97 @@ describe("a janela da conta (03/11; redesenhada em 09/11): foto, nome, favoritos
   test("Meus Favoritos: capas na ordem da lista, link só para o site ou https, título com HTML só como texto", async () => {
     FAVORITOS = ["fora", "nao-existe", "ossos", "mau"];
     const j = await abrir();
-    expect(PEDIDOS).toEqual(["/pt/obras.json"]);
+    // 28/11: a janela também pede as novidades (a bolinha do sino)
+    expect([...PEDIDOS].sort()).toEqual(["/pt/novidades.json", "/pt/obras.json"]);
     const itens = [...j.querySelectorAll<HTMLElement>(".c-perfil-fav")];
     expect(itens.map((i) => i.querySelector(".c-perfil-fav-nome")?.textContent)).toEqual(["Fora", "<b>Ossos</b>", "Mau"]);
     expect(itens.map((i) => i.getAttribute("href"))).toEqual(["https://www.youtube.com/watch?v=x", "/pt/works/all-in-a-nights-work/", null]);
     expect(itens.map((i) => i.querySelector("img")?.getAttribute("src") ?? null)).toEqual(["/_astro/fora.webp", "/_astro/ossos.webp", null]);
     expect(itens[2]?.tagName).toBe("SPAN");
     conferirSoElementosDoCodigo();
+  });
+
+  // ── o sino (28/11/2026): novidades e notificações ──
+  const NOVIDADES = {
+    versao: "",
+    itens: [
+      { id: "news/2026-11-28-nova", titulo: "Nova <img src=x onerror=hcXss()>", url: "/pt/news/2026-11-28-nova/", data: "2026-11-28", resumo: "O resumo <b>dela</b>" },
+      { id: "news/2026-11-10-velha", titulo: "Velha", url: "/pt/news/2026-11-10-velha/", data: "2026-11-10", resumo: "" },
+      { id: "news/2026-11-27-nao-anotada", titulo: "Ainda não anotada", url: "/pt/news/2026-11-27-nao-anotada/", data: "2026-11-27", resumo: "" },
+      { id: "news/x-mau", titulo: "Link de fora", url: "https://exemplo.com/", data: "2026-11-28", resumo: "" },
+    ],
+  };
+  const ANOTADAS_DO_TESTE = [
+    { item_id: "news/2026-11-28-nova", first_seen_at: "2026-11-28T10:00:00+00:00" },
+    { item_id: "news/2026-11-10-velha", first_seen_at: "2026-11-10T15:00:00+00:00" },
+  ];
+
+  test("o sino fica ao lado da lixeira; sem novidade que a pessoa não viu, sem bolinha", async () => {
+    const j = await abrir();
+    const acoes = [...j.querySelectorAll(".c-perfil-acoes > button")].map((b) => b.className);
+    expect(acoes).toEqual(["c-perfil-botao c-perfil-sino", "c-perfil-botao c-perfil-lixo", "c-perfil-botao c-perfil-x"]);
+    expect(j.querySelector(".c-perfil-sino .c-ponto")).toBeNull();
+    expect(j.querySelector(".c-perfil-sino")?.getAttribute("aria-label")).toBe(TEXTOS_DA_CONTA.pt.sino);
+  });
+
+  test("novidade que a pessoa não viu: bolinha no sino; a tela lista as novidades (texto só como texto, link só do site), marca a nova e conta tudo como visto", async () => {
+    NOVIDADES_JSON = NOVIDADES;
+    ANOTADAS = ANOTADAS_DO_TESTE;
+    const vistas: string[] = [];
+    const ouvir = () => vistas.push("vistas");
+    document.addEventListener("hc-novidades-vistas", ouvir);
+    const j = await abrir();
+    await esperar();
+    const sino = j.querySelector<HTMLButtonElement>(".c-perfil-sino");
+    expect(sino?.querySelector(".c-ponto")).not.toBeNull();
+    expect(sino?.getAttribute("aria-label")).toBe(TEXTOS_DA_CONTA.pt.sinoNovo);
+    sino?.click();
+    await esperar();
+    const itens = [...j.querySelectorAll<HTMLAnchorElement>(".c-novidades-lista a.c-novidade")];
+    // o item com link de fora foi descartado (lerNovidades); a ordem é a do arquivo
+    expect(itens.map((a) => a.querySelector(".c-novidade-titulo")?.textContent)).toEqual(["Nova <img src=x onerror=hcXss()>", "Velha", "Ainda não anotada"]);
+    expect(itens.map((a) => a.getAttribute("href"))).toEqual(["/pt/news/2026-11-28-nova/", "/pt/news/2026-11-10-velha/", "/pt/news/2026-11-27-nao-anotada/"]);
+    // "Nova" só na que a função anotou depois da última visita ao sino (a não anotada ainda não conta)
+    expect(itens.map((a) => Boolean(a.querySelector(".c-novidade-nova")))).toEqual([true, false, false]);
+    expect(itens[0]?.querySelector(".c-novidade-resumo")?.textContent).toBe("O resumo <b>dela</b>");
+    expect(RPCS_DO_SINO).toContain("mark_notifications_seen");
+    expect(vistas).toEqual(["vistas"]);
+    conferirSoElementosDoCodigo();
+    // Esc volta à janela, com o foco no sino
+    j.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await esperar();
+    expect(j.querySelector(".c-perfil-topo")).not.toBeNull();
+    expect(document.activeElement?.classList.contains("c-perfil-sino")).toBe(true);
+    document.removeEventListener("hc-novidades-vistas", ouvir);
+  });
+
+  test("tudo já visto: nada de 'Nova' e o banco não é chamado para marcar de novo", async () => {
+    NOVIDADES_JSON = NOVIDADES;
+    ANOTADAS = ANOTADAS_DO_TESTE;
+    VISTO_EM = "2026-11-28T11:00:00+00:00";
+    try {
+      const j = await abrir();
+      await esperar();
+      expect(j.querySelector(".c-perfil-sino .c-ponto")).toBeNull();
+      j.querySelector<HTMLButtonElement>(".c-perfil-sino")?.click();
+      await esperar();
+      expect(j.querySelectorAll(".c-novidade-nova")).toHaveLength(0);
+      expect(RPCS_DO_SINO).not.toContain("mark_notifications_seen");
+    } finally {
+      VISTO_EM = "2026-11-20T00:00:00+00:00";
+    }
+  });
+
+  test("notificações: navegador sem suporte deixa o botão desligado, com o aviso; sem novidades, o aviso de vazio", async () => {
+    const j = await abrir();
+    j.querySelector<HTMLButtonElement>(".c-perfil-sino")?.click();
+    await esperar();
+    const chave = j.querySelector<HTMLButtonElement>(".c-chave");
+    expect(chave?.getAttribute("role")).toBe("switch");
+    expect(chave?.getAttribute("aria-checked")).toBe("false");
+    expect(chave?.disabled).toBe(true);
+    expect([TEXTOS_DA_CONTA.pt.semSuporte, TEXTOS_DA_CONTA.pt.iphone]).toContain(j.querySelector(".c-chave-estado")?.textContent);
+    expect(j.querySelector(".c-novidades .c-perfil-vazio")?.textContent).toBe(TEXTOS_DA_CONTA.pt.semNovidades);
   });
 
   test("sem favoritos: o aviso", async () => {

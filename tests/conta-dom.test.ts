@@ -87,18 +87,22 @@ describe("a marca do navegador (uma vez por conta)", () => {
 });
 
 // ── o painel inteiro ──
+/** 28/11: o que a função do Supabase anotou (site_updates), para a bolinha do botão. */
+let ANOTADAS: { item_id: string; first_seen_at: string }[] = [];
 type Usuario = DatasDaConta & { email: string };
 type Ouvinte = (evento: string, s: { user: Usuario } | null) => void;
 function clienteFalso(sessao: { user: Usuario } | null): { sb: SupabaseClient; entrar(u: Usuario): void } {
   const ouvintes: Ouvinte[] = [];
   let atual = sessao;
-  const consulta = () => {
+  const consulta = (tabela?: string) => {
     const b = {
       select: () => b,
       eq: () => b,
       order: () => b,
       single: () => b,
-      then: (ok: (r: { data: unknown; error: null }) => unknown) => Promise.resolve({ data: { display_name: "Nome <b>novo</b>", is_admin: false, avatar_path: null }, error: null }).then(ok),
+      in: () => b,
+      then: (ok: (r: { data: unknown; error: null }) => unknown) =>
+        Promise.resolve({ data: tabela === "site_updates" ? ANOTADAS : { display_name: "Nome <b>novo</b>", is_admin: false, avatar_path: null }, error: null }).then(ok),
     };
     return b;
   };
@@ -110,7 +114,8 @@ function clienteFalso(sessao: { user: Usuario } | null): { sb: SupabaseClient; e
     },
     getSession: () => Promise.resolve({ data: { session: atual }, error: null }),
   };
-  const sb = { from: consulta, auth } as unknown as SupabaseClient;
+  const rpc = (nome: string) => Promise.resolve({ data: nome === "my_notifications_seen" ? "2026-11-20T00:00:00+00:00" : null, error: null });
+  const sb = { from: consulta, auth, rpc } as unknown as SupabaseClient;
   return {
     sb,
     entrar(u) {
@@ -217,5 +222,53 @@ describe("conta recém-criada: o perfil abre sozinho, uma vez (10/11)", () => {
     await new Promise((r) => setTimeout(r, 3600));
     expect(perfilAberto()).toBe(0);
     expect(localStorage.getItem(CHAVE_DAS_RECEBIDAS)).toBeNull();
+  });
+});
+
+describe("a bolinha do botão da conta (28/11): há novidade que a pessoa não viu", () => {
+  const fetchOriginal = globalThis.fetch;
+  const NOVIDADES = { versao: "", itens: [{ id: "news/2026-11-28-nova", titulo: "Nova", url: "/pt/news/2026-11-28-nova/", data: "2026-11-28", resumo: "" }] };
+  beforeEach(() => {
+    localStorage.clear();
+    marcarRecebida("u-antiga", localStorage);
+    globalThis.fetch = ((u: string) =>
+      Promise.resolve({ ok: true, json: () => Promise.resolve(String(u).includes("novidades.json") ? NOVIDADES : { obras: [] }) })) as unknown as typeof fetch;
+  });
+  afterEach(() => {
+    globalThis.fetch = fetchOriginal;
+    ANOTADAS = [];
+    document.body.replaceChildren();
+    delete (globalThis as unknown as Record<string, unknown>)["__hcSupabase"];
+  });
+
+  test("anotada depois da última visita ao sino: a bolinha aparece e o rótulo avisa; abrir o sino (o evento) tira", async () => {
+    ANOTADAS = [{ item_id: "news/2026-11-28-nova", first_seen_at: "2026-11-28T10:00:00+00:00" }];
+    montar(clienteFalso({ user: ANTIGA() }).sb);
+    await esperar();
+    const botao = document.querySelector("button.hc-conta") as HTMLButtonElement;
+    expect(botao.querySelector(".hc-conta-ponto")).not.toBeNull();
+    expect(botao.querySelector(".c-foto")).not.toBeNull();
+    expect(botao.getAttribute("aria-label")).toContain("novidades");
+    document.dispatchEvent(new CustomEvent("hc-novidades-vistas"));
+    expect(botao.querySelector(".hc-conta-ponto")).toBeNull();
+    expect(botao.getAttribute("aria-label")).not.toContain("novidades");
+  });
+
+  test("anotada antes da última visita (já vista) ou ainda não anotada: sem bolinha", async () => {
+    ANOTADAS = [{ item_id: "news/2026-11-28-nova", first_seen_at: "2026-11-10T10:00:00+00:00" }];
+    montar(clienteFalso({ user: ANTIGA() }).sb);
+    await esperar();
+    expect(document.querySelector("button.hc-conta .hc-conta-ponto")).toBeNull();
+    ANOTADAS = [];
+    montar(clienteFalso({ user: ANTIGA() }).sb);
+    await esperar();
+    expect(document.querySelector("button.hc-conta .hc-conta-ponto")).toBeNull();
+  });
+
+  test("sem ninguém conectado: nunca há bolinha", async () => {
+    ANOTADAS = [{ item_id: "news/2026-11-28-nova", first_seen_at: "2026-11-28T10:00:00+00:00" }];
+    montar(clienteFalso(null).sb);
+    await esperar();
+    expect(document.querySelector("button.hc-conta .hc-conta-ponto")).toBeNull();
   });
 });

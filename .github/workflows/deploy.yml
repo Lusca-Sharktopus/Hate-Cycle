@@ -124,3 +124,26 @@ jobs:
       - name: Publicar
         id: pages
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  # Depois que o site novo está no ar: avisa a função do Supabase que manda as notificações das novidades (28/11/2026). Sem segredo
+  # nenhum (só a URL e a chave anon PÚBLICAS do config.json); a função lê o site no ar e decide sozinha o que é novo
+  # (supabase/functions/avisar-novidades/). Nunca deixa o deploy vermelho por causa das notificações: o site já foi publicado.
+  avisar:
+    name: Avisar as novidades
+    needs: publicar
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Instalar o Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Avisar a função das notificações
+        run: node tools/avisar_novidades.mjs --versao "$GITHUB_SHA"

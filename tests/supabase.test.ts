@@ -56,8 +56,17 @@ describe("supabase/migrations/", () => {
       const sql = readFileSync(join(PASTA, a), "utf8");
       expect(sql, a).not.toMatch(/eyJ[A-Za-z0-9_-]{10,}|service_role|sb_secret_|sb_publishable_|\.supabase\.co\b/);
     }
+    // 28/11: a função das notificações (supabase/functions/avisar-novidades/) também: nenhuma chave dentro (a privada é segredo do Supabase)
+    const FUNCAO = join(RAIZ, "supabase", "functions", "avisar-novidades");
+    for (const a of readdirSync(FUNCAO)) {
+      const codigo = readFileSync(join(FUNCAO, a), "utf8");
+      expect(codigo, a).not.toMatch(/eyJ[A-Za-z0-9_-]{10,}|service_role|sb_secret_|sb_publishable_|\.supabase\.co\b/);
+      // a única chave que pode aparecer é a PÚBLICA das notificações (87 caracteres); uma privada (43) não pode estar em lugar nenhum
+      expect(codigo, a).not.toMatch(/["'`][A-Za-z0-9_-]{43}["'`]/);
+    }
+    expect(readdirSync(FUNCAO).sort()).toEqual(["index.ts", "regras.ts"]);
     // sem config.toml de propósito (ver docs/comentarios-supabase.md): o CLI não precisa dele para link/repair/push
-    expect(readdirSync(join(RAIZ, "supabase")).filter((a) => a !== ".temp" && a !== ".branches")).toEqual(["migrations"]);
+    expect(readdirSync(join(RAIZ, "supabase")).filter((a) => a !== ".temp" && a !== ".branches").sort()).toEqual(["functions", "migrations"]);
   });
 });
 

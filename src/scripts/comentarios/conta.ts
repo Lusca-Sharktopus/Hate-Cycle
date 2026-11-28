@@ -7,6 +7,9 @@
 //     vai para o balde `avatars` do Supabase e o perfil aponta para ela (set_my_avatar). Sem foto, uma runa sorteada (./foto.ts);
 //   - o nome, grande, com o lápis ao lado: vira campo de texto (Enter salva, Esc desiste) → change_my_name;
 //   - "Meus Favoritos": as capas das obras favoritadas (tabela favorites + /<idioma>/obras.json), cada uma leva à história;
+//   - o sino (28/11/2026), ao lado da lixeira: as novidades do site (notícias; o Blog quando existir), com as que a pessoa ainda não viu
+//     marcadas (bolinha no sino e no botão da conta do cabeçalho), e o botão de receber notificações neste aparelho
+//     (../conta/novidades.ts; abrir a tela conta tudo como visto);
 //   - a lixeira (fica vermelha com o mouse): a tela "Opa! Calma aí!", com a lixeira animada engolindo runas, "Deletar Conta" (vermelho
 //     com o mouse) e "Sair" (volta à janela). Deletar apaga as fotos da pessoa no balde e chama delete_my_account().
 // As funções do banco só agem sobre QUEM CHAMA (migrações 20261103040000_conta.sql e 20261110000000_fotos_de_perfil.sql).
@@ -18,11 +21,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { animarEntrada, el } from "./dom";
 import { circuloDaFoto, RUNAS_DA_FOTO } from "./foto";
 import { nomeAleatorio, telaDeEnvio, type TextosDoRecorte } from "./recorte";
+import { NOVIDADES_NO_SINO } from "../conta/regrasDasNovidades";
+import { carregarNovidades, desligarNotificacoes, estadoDoAparelho, ligarNotificacoes, marcarVistas, type EstadoDoAparelho } from "../conta/novidades";
 
 export const TEXTOS_DA_CONTA = {
   pt: {
     titulo: "Sua conta",
     abrir: "Abrir a janela da sua conta",
+    abrirComNovidades: "Abrir a janela da sua conta (há novidades que você ainda não viu)",
     trocarFoto: "Trocar a foto de perfil",
     trocarNome: "Trocar o nome",
     nome: "Nome que aparece nos comentários",
@@ -35,6 +41,19 @@ export const TEXTOS_DA_CONTA = {
     favoritos: "Meus Favoritos",
     semFavoritos: "Você ainda não favoritou nenhuma história. Clique na estrela de uma capa, na página de Histórias.",
     apagar: "Apagar conta",
+    sino: "Novidades e notificações",
+    sinoNovo: "Novidades e notificações (há novidades que você ainda não viu)",
+    novidades: "Novidades",
+    semNovidades: "Ainda não há novidades por aqui.",
+    nova: "Nova",
+    receber: "Receber notificações neste aparelho",
+    receberDica: "Quando sair uma notícia nova no site, o seu navegador avisa, mesmo com o site fechado.",
+    ligado: "Ligadas neste aparelho.",
+    desligado: "Desligadas neste aparelho.",
+    bloqueado: "As notificações deste site estão bloqueadas no navegador. Para ligar, libere nas configurações do navegador (no cadeado ao lado do endereço) e tente de novo.",
+    semSuporte: "Este navegador não recebe notificações de sites.",
+    iphone: "No iPhone e no iPad, as notificações de sites só funcionam com o site adicionado à Tela de Início.",
+    voltar: "Voltar",
     calma: "Opa! Calma aí!",
     aviso: [
       ["Deletar sua conta é uma decisão ", ""],
@@ -71,6 +90,7 @@ export const TEXTOS_DA_CONTA = {
   en: {
     titulo: "Your account",
     abrir: "Open your account window",
+    abrirComNovidades: "Open your account window (there's news you haven't seen yet)",
     trocarFoto: "Change your profile picture",
     trocarNome: "Change your name",
     nome: "Name shown on your comments",
@@ -83,6 +103,19 @@ export const TEXTOS_DA_CONTA = {
     favoritos: "My Favorites",
     semFavoritos: "You haven't favorited any story yet. Click the star on a cover, on the Stories page.",
     apagar: "Delete account",
+    sino: "News and notifications",
+    sinoNovo: "News and notifications (there's news you haven't seen yet)",
+    novidades: "What's new",
+    semNovidades: "There's no news here yet.",
+    nova: "New",
+    receber: "Get notifications on this device",
+    receberDica: "When a new post comes out on the site, your browser lets you know, even with the site closed.",
+    ligado: "On for this device.",
+    desligado: "Off for this device.",
+    bloqueado: "Notifications from this site are blocked in your browser. To turn them on, allow them in the browser settings (the lock next to the address) and try again.",
+    semSuporte: "This browser doesn't get notifications from websites.",
+    iphone: "On iPhone and iPad, website notifications only work with the site added to the Home Screen.",
+    voltar: "Back",
     calma: "Whoa! Hold on!",
     aviso: [
       ["Deleting your account is a ", ""],
@@ -225,6 +258,8 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
   let ocupado = false;
   /** "perfil" = a janela; as outras telas voltam a ela com Esc. */
   let tela: "perfil" | "outra" = "perfil";
+  /** Com Esc numa tela de dentro, o foco volta ao botão que a abriu. */
+  let focoDaVolta: "foto" | "lixo" | "sino" | undefined;
 
   function fechar(): void {
     janela.remove();
@@ -251,7 +286,7 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
     el("button", { attrs: { type: "button", class: "c-perfil-botao c-perfil-x", "aria-label": T.fechar, title: T.fechar }, ao: { click: fechar } });
 
   // ── a janela ──
-  function desenharPerfil(foco?: "foto" | "nome" | "lixo"): void {
+  function desenharPerfil(foco?: "foto" | "nome" | "lixo" | "sino"): void {
     tela = "perfil";
     caixa.textContent = "";
     caixa.className = "c-dialog c-perfil";
@@ -264,11 +299,16 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
       attrs: { type: "button", class: "c-perfil-botao c-perfil-lixo", "aria-label": T.apagar, title: T.apagar },
       ao: { click: desenharApagar },
     });
+    const sino = el("button", {
+      attrs: { type: "button", class: "c-perfil-botao c-perfil-sino", "aria-label": T.sino, title: T.sino },
+      ao: { click: () => void desenharNovidades() },
+    });
+    void marcarSino(sino);
     const linhaDoNome = el("div", { attrs: { class: "c-perfil-nome" } });
     desenharNome(linhaDoNome);
     const favoritos = el("div", { attrs: { class: "c-perfil-favs", role: "list", "aria-labelledby": "c-perfil-favs-titulo", "aria-busy": "true" } });
     caixa.append(
-      el("div", { attrs: { class: "c-perfil-acoes" } }, [lixo, botaoX()]),
+      el("div", { attrs: { class: "c-perfil-acoes" } }, [sino, lixo, botaoX()]),
       el("div", { attrs: { class: "c-perfil-topo" } }, [botaoDaFoto, linhaDoNome]),
       el("h4", { attrs: { class: "c-perfil-favs-titulo", id: "c-perfil-favs-titulo" }, texto: T.favoritos }),
       favoritos,
@@ -277,6 +317,7 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
     void carregarFavoritos(favoritos);
     if (foco === "foto") botaoDaFoto.focus();
     else if (foco === "lixo") lixo.focus();
+    else if (foco === "sino") sino.focus();
     else if (foco === "nome") linhaDoNome.querySelector<HTMLElement>("button")?.focus();
     else linhaDoNome.querySelector<HTMLElement>("button")?.focus();
   }
@@ -393,6 +434,7 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
   function abrirEnvio(): void {
     calar();
     tela = "outra";
+    focoDaVolta = "foto";
     const voltar = () => desenharPerfil("foto");
     telaDeEnvio({
       T: textosDoRecorte,
@@ -432,10 +474,105 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
     o.aoMudar();
   }
 
+  // ── o sino: novidades e notificações ──
+  async function marcarSino(sino: HTMLElement): Promise<void> {
+    try {
+      const { naoVistas } = await carregarNovidades(o.sb, lang);
+      if (!naoVistas.size || !sino.isConnected) return;
+      sino.appendChild(el("span", { attrs: { class: "c-ponto", "aria-hidden": "true" } }));
+      sino.setAttribute("aria-label", T.sinoNovo);
+      sino.title = T.sinoNovo;
+    } catch {
+      /* sem novidades: o sino fica sem bolinha */
+    }
+  }
+
+  async function desenharNovidades(): Promise<void> {
+    calar();
+    tela = "outra";
+    focoDaVolta = "sino";
+    caixa.textContent = "";
+    caixa.className = "c-dialog c-perfil c-novidades";
+    const lista = el("ul", { attrs: { class: "c-novidades-lista", "aria-busy": "true" } });
+    const botao = el("button", { attrs: { type: "button", class: "c-chave", role: "switch", "aria-checked": "false", "aria-describedby": "c-chave-estado" } }, [
+      el("span", { attrs: { class: "c-chave-trilho", "aria-hidden": "true" } }),
+      el("span", { attrs: { class: "c-chave-rotulo" }, texto: T.receber }),
+    ]);
+    botao.disabled = true;
+    const estado = el("p", { attrs: { class: "c-chave-estado", id: "c-chave-estado", role: "status" } });
+    const voltar = el("button", { attrs: { type: "button", class: "button c-novidades-voltar" }, texto: T.voltar, ao: { click: () => desenharPerfil("sino") } });
+    const fecharAqui = botaoX();
+    caixa.append(
+      el("div", { attrs: { class: "c-perfil-acoes" } }, [fecharAqui]),
+      el("h3", { attrs: { id: "c-conta-titulo", class: "c-novidades-titulo" }, texto: T.novidades }),
+      el("div", { attrs: { class: "c-notificacoes" } }, [botao, el("p", { attrs: { class: "c-chave-dica" }, texto: T.receberDica }), estado]),
+      lista,
+      msg,
+      voltar,
+    );
+    // o botão das notificações nasce desligado (até saber o estado do aparelho): o foco começa no ×, e vai ao botão quando ele liga
+    fecharAqui.focus();
+
+    let atual: EstadoDoAparelho = "desligado";
+    const mostrar = (e: EstadoDoAparelho) => {
+      atual = e;
+      const pode = e === "ligado" || e === "desligado";
+      botao.disabled = !pode;
+      botao.setAttribute("aria-checked", e === "ligado" ? "true" : "false");
+      estado.textContent = { ligado: T.ligado, desligado: T.desligado, bloqueado: T.bloqueado, "sem-suporte": T.semSuporte, iphone: T.iphone }[e];
+      estado.className = "c-chave-estado" + (pode ? "" : " c-chave-aviso");
+    };
+    botao.addEventListener("click", () => {
+      if (ocupado || botao.disabled) return;
+      ocupado = true;
+      botao.disabled = true;
+      const pedido = atual === "ligado" ? desligarNotificacoes(o.sb) : ligarNotificacoes(o.sb, lang);
+      void pedido
+        .then(mostrar, () => {
+          mostrar(atual);
+          avisar(T.erro);
+        })
+        .finally(() => {
+          ocupado = false;
+          if (botao.isConnected && (atual === "ligado" || atual === "desligado")) botao.disabled = false;
+        });
+    });
+    void estadoDoAparelho(o.sb).then((e) => {
+      if (!botao.isConnected) return;
+      mostrar(e);
+      if (!botao.disabled && document.activeElement === fecharAqui) botao.focus();
+    });
+
+    try {
+      const { itens, naoVistas } = await carregarNovidades(o.sb, lang);
+      if (!lista.isConnected) return;
+      lista.removeAttribute("aria-busy");
+      if (!itens.length) {
+        lista.replaceWith(el("p", { attrs: { class: "c-perfil-vazio" }, texto: T.semNovidades }));
+        return;
+      }
+      for (const n of itens.slice(0, NOVIDADES_NO_SINO)) {
+        const link = el("a", { attrs: { class: "c-novidade" } }, [
+          el("span", { attrs: { class: "c-novidade-titulo" }, texto: n.titulo }),
+          ...(naoVistas.has(n.id) ? [el("span", { attrs: { class: "c-novidade-nova" }, texto: T.nova })] : []),
+          ...(n.resumo ? [el("span", { attrs: { class: "c-novidade-resumo" }, texto: n.resumo })] : []),
+        ]);
+        const href = linkSeguro(n.url);
+        if (href && link instanceof HTMLAnchorElement) link.href = href; // só /pt/… ou /en/… (lerNovidades já conferiu; linkSeguro de novo)
+        lista.appendChild(el("li", {}, [link]));
+      }
+      // abriu o sino: tudo conta como visto (a bolinha some aqui e no botão da conta do cabeçalho)
+      if (naoVistas.size) await marcarVistas(o.sb);
+    } catch {
+      if (lista.isConnected) lista.replaceWith(el("p", { attrs: { class: "c-perfil-vazio" }, texto: T.semNovidades }));
+    }
+  }
+
   // ── apagar ──
   function desenharApagar(): void {
     calar();
     tela = "outra";
+    focoDaVolta = "lixo";
     caixa.textContent = "";
     caixa.className = "c-dialog c-perfil c-apagar";
     // três runas diferentes caem na lixeira (sorteadas a cada vez que a tela abre)
@@ -520,7 +657,7 @@ export function abrirJanelaDaConta(o: OpcoesDaConta): () => void {
     if (e.key === "Escape") {
       e.preventDefault();
       if (tela === "perfil") fechar();
-      else desenharPerfil();
+      else desenharPerfil(focoDaVolta);
       return;
     }
     if (e.key !== "Tab") return;

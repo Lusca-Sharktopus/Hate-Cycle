@@ -244,7 +244,7 @@ describe("segurança: o código que vai para o navegador", () => {
   test("ninguém daqui importa src/lib/ nem o config.json (as chaves só chegam pelo window.HC da página)", () => {
     for (const a of arquivos) {
       const imports = [...codigo(a).matchAll(/\bimport\b[^"']*["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta|foto|recorte|editor|emojis|formato|midia)|\.\.\/supabase\/cliente|\.\.\/login\/janela|@supabase\/supabase-js)$/);
+      for (const i of imports) expect(i, a).toMatch(/^(\.\/(dom|regras|caixa|conta|foto|recorte|editor|emojis|formato|midia)|\.\.\/supabase\/cliente|\.\.\/login\/janela|\.\.\/conta\/(novidades|regrasDasNovidades)|@supabase\/supabase-js)$/);
     }
   });
   // 05/11: a janela de login saiu da caixa para src/scripts/login/ (a mesma janela abre pelos favoritos): as mesmas travas valem lá
@@ -426,7 +426,9 @@ describe("o botão da conta no cabeçalho (10/11)", () => {
     expect(js).not.toMatch(/[<>]/);
   });
   test("src/scripts/conta/: index.ts é leve (sem supabase-js, sem a caixa) e só carrega o painel por import(); sem innerHTML & cia.", () => {
-    expect(readdirSync(CONTA).sort()).toEqual(["boasVindas.ts", "index.ts", "painel.ts"]);
+    expect(readdirSync(CONTA).sort()).toEqual(["boasVindas.ts", "index.ts", "novidades.ts", "painel.ts", "regrasDasNovidades.ts"]);
+    // 28/11 (novidades e notificações): as regras são puras, sem imports (o mesmo arquivo vai, copiado, para a função do Supabase)
+    expect(codigoDaConta("regrasDasNovidades.ts")).not.toMatch(/\bimport\b/);
     // 10/11 (conta recém-criada): as regras de "é o primeiro login?" são puras, sem imports; o index ouve o aviso da conexão pelo mesmo nome
     expect(codigoDaConta("boasVindas.ts")).not.toMatch(/\bimport\b/);
     expect(readFileSync(join(CONTA, "..", "supabase", "cliente.ts"), "utf8")).toMatch(/EVENTO_DE_ENTRADA = "hc-conta-entrou"/);
@@ -434,11 +436,11 @@ describe("o botão da conta no cabeçalho (10/11)", () => {
     const index = codigoDaConta("index.ts");
     expect([...index.matchAll(/^import\b[^"']*["']([^"']+)["']/gm)].map((m) => m[1])).toEqual(["../comentarios/regras"]);
     expect(index).toMatch(/import\("\.\/painel"\)/);
-    for (const a of ["boasVindas.ts", "index.ts", "painel.ts"]) {
+    for (const a of ["boasVindas.ts", "index.ts", "novidades.ts", "painel.ts", "regrasDasNovidades.ts"]) {
       const c = codigoDaConta(a);
       expect(c, a).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|DOMParser|createContextualFragment|\beval\s*\(|new\s+Function\b/);
       for (const m of c.matchAll(/^import\b[^"']*["']([^"']+)["']/gm))
-        expect(m[1], a).toMatch(/^(\.\.\/comentarios\/(regras|caixa|conta|foto)|\.\.\/login\/janela|\.\.\/supabase\/cliente|\.\/boasVindas|@supabase\/supabase-js)$/);
+        expect(m[1], a).toMatch(/^(\.\.\/comentarios\/(regras|caixa|conta|foto)|\.\.\/login\/janela|\.\.\/supabase\/cliente|\.\/boasVindas|\.\/(novidades|regrasDasNovidades)|@supabase\/supabase-js)$/);
     }
     expect(codigoDaConta("painel.ts")).toMatch(/import type \{ SupabaseClient \} from "@supabase\/supabase-js"/);
   });

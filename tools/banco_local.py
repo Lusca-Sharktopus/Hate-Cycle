@@ -480,6 +480,61 @@ def casos(q, paralelo=None) -> int:
          depois=f"select string_agg(case when deleted_at is null then body else '[apagado]' end, ',' order by id) from public.comments where page_id = '{pagina_e}'",
          espera="[apagado],resposta da Bia,raiz da Bia")
 
+    # ── novidades e notificações (28/11/2026, migração 20261128000000_notificacoes.sql) ──
+    FCM = "https://fcm.googleapis.com/fcm/send/abcDEF123:APA91b-xyz_0"
+    P256 = "B" + "a" * 86
+    AUTH = "c" * 22
+    salvar = lambda end=FCM, p256=P256, au=AUTH, lang="pt": f"select public.save_push_subscription('{end}', '{p256}', '{au}', '{lang}')"
+    caso("novidades: visitante lê o que já saiu (site_updates)", "select count(*) from public.site_updates", papel="anon")
+    caso("novidades: ninguém do site anota uma novidade", "insert into public.site_updates (item_id) values ('news/falsa')", papel="authenticated", sub=B, erro="permission denied")
+    caso("novidades: a função (service_role) anota", "insert into public.site_updates (item_id, first_seen_at) values ('news/2026-11-28-sino', now())", papel="service_role",
+         depois="select count(*) from public.site_updates", espera="1")
+    caso("novidades: ID fora do formato é recusado (até para a função)", "insert into public.site_updates (item_id) values ('../x')", papel="service_role", erro="check")
+    caso("novidades: a primeira consulta do sino anota agora", "select public.my_notifications_seen() is not null", papel="authenticated", sub=B,
+         depois=f"select count(*) from public.notification_state where user_id = '{B}'", espera="1")
+    q(f"update public.notification_state set seen_at = '2020-01-01' where user_id = '{B}'")
+    caso("novidades: abrir o sino atualiza a hora", "select public.mark_notifications_seen()",
+         papel="authenticated", sub=B, depois=f"select seen_at > now() - interval '1 minute' from public.notification_state where user_id = '{B}'", espera="t")
+    caso("novidades: ninguém lê a hora de outra pessoa direto na tabela", "select * from public.notification_state", papel="authenticated", sub=A, erro="permission denied")
+    caso("novidades: visitante sem conta não chama as funções do sino", "select public.my_notifications_seen()", papel="anon", erro="permission denied")
+    caso("notificações: quem tem conta liga num aparelho", salvar(), papel="authenticated", sub=B,
+         depois=f"select user_id || '|' || lang from public.push_subscriptions", espera=f"{B}|pt")
+    caso("notificações: ligar de novo no mesmo aparelho troca o idioma (sem duplicar)", salvar(lang="en"), papel="authenticated", sub=B,
+         depois="select count(*) || '|' || min(lang) from public.push_subscriptions", espera="1|en")
+    caso("notificações: o aparelho é meu?", f"select public.has_push_subscription('{FCM}')", papel="authenticated", sub=B)
+    q_ok, saida_, _ = q(f"select public.has_push_subscription('{FCM}')", "authenticated", A)
+    certo = q_ok and saida_ == "f"
+    resultados.append((certo, "notificações: o aparelho da Bia não é do admin"))
+    print(("✔ " if certo else "✗ ") + "notificações: o aparelho da Bia não é do admin" + ("" if certo else f" (veio {saida_!r})"))
+    caso("notificações: ninguém lê as inscrições pelo site", "select * from public.push_subscriptions", papel="authenticated", sub=B, erro="permission denied")
+    caso("notificações: nem grava direto na tabela", f"insert into public.push_subscriptions (endpoint, user_id, p256dh, auth, lang) values ('{FCM}x', '{B}', '{P256}', '{AUTH}', 'pt')",
+         papel="authenticated", sub=B, erro="permission denied")
+    caso("notificações: endereço que não é de serviço de notificação é recusado", salvar(end="https://exemplo.com/roubar"), papel="authenticated", sub=B, erro="check")
+    caso("notificações: endereço http é recusado", salvar(end="http://fcm.googleapis.com/fcm/send/x"), papel="authenticated", sub=B, erro="check")
+    caso("notificações: Firefox, Safari e Edge valem", salvar(end="https://updates.push.services.mozilla.com/wpush/v2/gAAA") + "; " +
+         salvar(end="https://web.push.apple.com/QOabc") + "; " + salvar(end="https://wns2-bl2p.notify.windows.com/w/?token=AwYA"), papel="authenticated", sub=B,
+         depois=f"select count(*) from public.push_subscriptions where user_id = '{B}'", espera="4")
+    caso("notificações: chave fora do formato é recusada", salvar(end=FCM + "k", p256="curta"), papel="authenticated", sub=B, erro="check")
+    caso("notificações: idioma fora de pt/en é recusado", salvar(end=FCM + "l", lang="es"), papel="authenticated", sub=B, erro="check")
+    caso("notificações: visitante sem conta não liga", salvar(end=FCM + "m"), papel="anon", erro="permission denied")
+    caso("notificações: com 10 aparelhos, o 11º é recusado", "; ".join(salvar(end=f"{FCM}n{i}") for i in range(6)), papel="authenticated", sub=B,
+         depois=f"select count(*) from public.push_subscriptions where user_id = '{B}'", espera="10")
+    caso("notificações: o 11º aparelho", salvar(end=FCM + "o"), papel="authenticated", sub=B, erro="too many subscriptions")
+    caso("notificações: mas religar um que já existe continua valendo", salvar(), papel="authenticated", sub=B)
+    caso("notificações: o mesmo navegador passa para a conta que ligou agora", salvar(), papel="authenticated", sub=A,
+         depois=f"select user_id from public.push_subscriptions where endpoint = '{FCM}'", espera=A)
+    caso("notificações: desligar o que não é meu não faz nada", f"select public.remove_push_subscription('{FCM}')", papel="authenticated", sub=B,
+         depois=f"select count(*) from public.push_subscriptions where endpoint = '{FCM}'", espera="1")
+    caso("notificações: desligar o meu", f"select public.remove_push_subscription('{FCM}')", papel="authenticated", sub=A,
+         depois=f"select count(*) from public.push_subscriptions where endpoint = '{FCM}'", espera="0")
+    caso("notificações: a função (service_role) lê as inscrições", "select count(*) from public.push_subscriptions", papel="service_role")
+    caso("notificações e sino: somem junto com a conta", f"delete from auth.users where id = '{B}'",
+         depois=f"select (select count(*) from public.push_subscriptions where user_id = '{B}') || '|' || (select count(*) from public.notification_state where user_id = '{B}')",
+         espera="0|0")
+    caso("notificações: as funções têm search_path fixo", "select 1",
+         depois="select count(*) from pg_proc where proname in ('my_notifications_seen','mark_notifications_seen','save_push_subscription','remove_push_subscription','has_push_subscription')"
+                " and (proconfig is null or not ('search_path=\"\"' = any(proconfig)))", espera="0")
+
     falhas = [n for ok, n in resultados if not ok]
     print(f"\n{len(resultados) - len(falhas)}/{len(resultados)} casos certos" + (f"; FALHARAM: {falhas}" if falhas else ""))
     return 1 if falhas else 0

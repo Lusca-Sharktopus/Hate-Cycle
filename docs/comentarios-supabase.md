@@ -221,6 +221,36 @@ O botão **GIF** só aparece depois que você puser uma chave do KLIPY no `confi
 
 O que o visitante vê: um painel com os GIFs em destaque, uma busca ("Pesquisar no KLIPY", no idioma da página) e "Powered by KLIPY" embaixo, como o KLIPY pede. O filtro de conteúdo está no nível "medium" (mais ou menos PG). O navegador só fala com o KLIPY quando a pessoa abre o painel; quem lê um comentário com GIF carrega a imagem dos servidores do KLIPY. **Vale acrescentar isso à Política de Privacidade** (como você fez com o Disqus); o texto é seu, eu não mexi.
 
+### Migração de 28/11/2026: novidades e notificações
+
+Arquivo: `supabase/migrations/20261128000000_notificacoes.sql`. **Ainda não rodada no seu projeto.** Depende da migração de reforço (03/11).
+
+O que muda para quem visita (só no site novo, só com conta): na janela da conta, ao lado da lixeira, um **sino**. Ele abre a tela **Novidades**: as notícias mais recentes (e os posts do Blog, quando a seção existir), com a etiqueta **Nova** nas que a pessoa ainda não viu, e o botão **Receber notificações neste aparelho**. Quando há novidade não vista, aparece uma **bolinha vermelha** no sino e no botão da conta do cabeçalho; abrir o sino conta tudo como visto e a bolinha some. Com as notificações ligadas, o navegador avisa cada notícia nova, mesmo com o site fechado (no Android, no computador; no iPhone/iPad só com o site na Tela de Início).
+
+Três tabelas novas: `site_updates` (o que já saiu no site e a hora em que apareceu; só a função abaixo escreve), `notification_state` (quando cada pessoa abriu o sino pela última vez) e `push_subscriptions` (os aparelhos com notificação ligada). O site nunca lê os aparelhos de ninguém: só a função das notificações lê. Apagar a conta apaga tudo junto.
+
+**Como aplicar (~2 minutos):** SQL Editor → New query → cole **tudo** de `supabase/migrations/20261128000000_notificacoes.sql` → **Run** → "Success. No rows returned". Pode rodar de novo sem estragar nada. Enquanto ela não for rodada, o sino aparece sem nada marcado como novo e o botão de notificações dá erro.
+
+**Como foi provado:** `python3 tools/banco_local.py` (casos "novidades:" e "notificações:"); no site, `tests/novidades.test.ts`, `tests/comentarios-dom.test.ts` (a tela do sino) e `tests/conta-dom.test.ts` (a bolinha); no navegador, `python3 tools/novidades_playwright.py`.
+
+## 7. A função das notificações (28/11/2026)
+
+Quem manda as notificações é uma **Edge Function** do Supabase chamada `avisar-novidades` (o código está em `supabase/functions/avisar-novidades/`). Depois de cada publicação, o GitHub Actions espera o site novo entrar no ar e chama a função (passo **Avisar as novidades** do deploy, `tools/avisar_novidades.mjs`). A função lê as notícias que estão no ar (`/pt/novidades.json` e `/en/novidades.json`), anota as novas e manda uma notificação para cada aparelho ligado, no idioma em que a pessoa ligou (se a notícia só existe no outro idioma, vai a do outro). Só notícias dos últimos 7 dias viram notificação; chamar a função de novo não repete nada. Na **primeira vez** que ela roda, só anota o que já está no site, sem mandar nada.
+
+Ela precisa de uma **chave privada** (o par da chave pública que está no código do site, `src/scripts/conta/regrasDasNovidades.ts`). Essa chave nunca vai para o GitHub: fica só nos segredos do Supabase.
+
+**Como ligar (uma vez, ~5 minutos):**
+1. Rode a migração de 28/11 (acima).
+2. No painel do Supabase: **Edge Functions** → **Deploy a new function** → **Via Editor**. Nome: `avisar-novidades`. Apague o exemplo, cole o conteúdo de `supabase/functions/avisar-novidades/index.ts` e acrescente um segundo arquivo `regras.ts` com o conteúdo de `supabase/functions/avisar-novidades/regras.ts`. **Deploy**. Deixe ligado o "Enforce JWT verification" (o padrão).
+3. **Edge Functions** → **Secrets** → **Add new secret**: nome `VAPID_PRIVATE_KEY`, valor = a chave privada que eu te mandei no arquivo `chave-privada-das-notificacoes.txt`. **Save**. Depois disso pode apagar o arquivo.
+4. Na próxima publicação do site, em GitHub → Actions → a última execução → **Avisar as novidades**, deve aparecer `notificações: {"versao":…,"primeira_vez":…}`. Daí em diante, cada notícia nova vira notificação.
+
+Antes desses passos o site funciona normalmente: o passo "Avisar as novidades" só mostra um aviso amarelo e o deploy continua verde.
+
+**Trocar a chave** (se ela vazar): gere um par novo, troque a pública em `regrasDasNovidades.ts` (e na cópia `supabase/functions/avisar-novidades/regras.ts`) e a privada no segredo. Todo mundo que tinha ligado as notificações precisa ligar de novo.
+
+**Privacidade:** quem liga as notificações recebe os avisos pelo serviço do próprio navegador (Google no Chrome/Edge/Opera, Mozilla no Firefox, Apple no Safari); o site guarda só o endereço que o navegador dá e as duas chaves dele, ligados à conta. **Vale uma linha na Política de Privacidade**; o texto é seu, eu não mexi.
+
 ## 6. O que mudou no site novo (Astro, T15)
 
 Para quem visita, **nada**: mesma caixa, mesmos botões e textos, mesmas conversas (os IDs `works/<obra>/<capítulo>` e `news/<pasta>` não mudaram), e quem já estava conectado continua conectado (a sessão fica guardada no navegador com o mesmo nome).

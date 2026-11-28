@@ -104,7 +104,13 @@ const outros = langs
     /* o botão da conta (10/11): um círculo do tamanho do texto do menu; com o mouse, o mesmo brilho ciano dos itens */
     .hc-conta {
       position: relative; display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; padding: 0; margin-left: .2rem; border: 2px solid var(--on-brand);
-      border-radius: 50%; background: #0000004d; color: var(--on-brand); cursor: pointer; overflow: hidden; transition: box-shadow .3s, transform .2s;
+      border-radius: 50%; background: #0000004d; color: var(--on-brand); cursor: pointer; transition: box-shadow .3s, transform .2s;
+    }
+    /* 28/11: a bolinha de novidade não vista (src/scripts/conta/painel.ts) sai um pouco do círculo, por isso o botão não corta (a foto
+       dentro já é um círculo por conta própria, .c-foto) */
+    .hc-conta :global(.hc-conta-ponto) {
+      position: absolute; top: -3px; right: -3px; width: .78rem; height: .78rem; border-radius: 50%; background: #ff4b55;
+      box-shadow: 0 0 0 2px var(--on-brand), 0 0 8px #ff4b55aa; pointer-events: none;
     }
     .hc-conta[hidden] { display: none; }
     .hc-conta:hover, .hc-conta:focus-visible { box-shadow: 0 0 16px var(--cyan), 0 0 4px var(--cyan); outline: none; transform: scale(1.05); }

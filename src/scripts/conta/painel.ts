@@ -18,6 +18,7 @@ import { faltaColuna, type Perfil } from "../comentarios/regras";
 import { erroDoRetornoDoLogin, janelaDeLogin, textosDoLogin, type EstadoDoLogin } from "../login/janela";
 import { clienteDoSupabase } from "../supabase/cliente";
 import { ehContaNova, jaRecebida, marcarRecebida, type DatasDaConta } from "./boasVindas";
+import { carregarNovidades, EVENTO_VISTAS } from "./novidades";
 
 export const EVENTO_DA_CONTA = "hc-conta-mudou";
 
@@ -42,11 +43,14 @@ export function ligarPainel(botao: HTMLButtonElement, cfg: ConfiguracaoDosComent
     botao.querySelector(".c-foto")?.remove();
     if (quem) {
       if (silhueta instanceof HTMLElement) silhueta.hidden = true;
-      botao.appendChild(circuloDaFoto(cfg.url, quem.id, perfil && perfil.avatar_path, "hc-conta-foto"));
-      botao.setAttribute("aria-label", rotuloDeDentro);
-      botao.title = rotuloDeDentro;
+      botao.insertBefore(circuloDaFoto(cfg.url, quem.id, perfil && perfil.avatar_path, "hc-conta-foto"), botao.querySelector(".hc-conta-ponto"));
+      const rotulo = botao.querySelector(".hc-conta-ponto") ? textosDaConta(cfg.lang).abrirComNovidades : rotuloDeDentro;
+      botao.setAttribute("aria-label", rotulo);
+      botao.title = rotulo;
       botao.classList.add("hc-conta-dentro");
     } else {
+      mostrarPonto(false);
+      contaDaBolinha = null;
       if (silhueta instanceof HTMLElement) silhueta.hidden = false;
       botao.setAttribute("aria-label", rotuloDeFora);
       botao.title = rotuloDeFora;
@@ -67,7 +71,37 @@ export function ligarPainel(botao: HTMLButtonElement, cfg: ConfiguracaoDosComent
     perfil = r.error ? null : (r.data as Perfil);
     desenhar();
     if (aReceber === eu) receber(eu);
+    void conferirNovidades(eu);
   }
+
+  // ── a bolinha (28/11/2026): há novidade no site que a pessoa ainda não viu (o sino da janela da conta, ../conta/novidades.ts) ──
+  /** A conta para a qual a bolinha já foi conferida nesta página (uma consulta por conta, não a cada troca de nome ou foto). */
+  let contaDaBolinha: string | null = null;
+  function mostrarPonto(sim: boolean): void {
+    botao.querySelector(".hc-conta-ponto")?.remove();
+    if (sim) {
+      const ponto = document.createElement("span");
+      ponto.className = "hc-conta-ponto";
+      ponto.setAttribute("aria-hidden", "true");
+      botao.appendChild(ponto);
+    }
+    if (quem) {
+      const rotulo = sim ? textosDaConta(cfg.lang).abrirComNovidades : rotuloDeDentro;
+      botao.setAttribute("aria-label", rotulo);
+      botao.title = rotulo;
+    }
+  }
+  async function conferirNovidades(eu: string): Promise<void> {
+    if (contaDaBolinha === eu) return;
+    contaDaBolinha = eu;
+    try {
+      const { naoVistas } = await carregarNovidades(sb, cfg.lang);
+      if (quem && quem.id === eu) mostrarPonto(naoVistas.size > 0);
+    } catch {
+      /* sem as novidades (ou sem a migração): sem bolinha */
+    }
+  }
+  document.addEventListener(EVENTO_VISTAS, () => mostrarPonto(false));
 
   // ── a conta recém-criada: o perfil abre sozinho, uma vez ──
   /** As contas que já tiveram o perfil aberto nesta página (vale quando o navegador não deixa usar o localStorage). */
