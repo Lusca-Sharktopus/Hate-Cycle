@@ -7,7 +7,8 @@
 //   node tools/avisar_novidades.mjs --versao <commit>
 //
 // --versao: o commit que acabou de ser publicado (GITHUB_SHA). A função responde 409 enquanto o site no ar ainda mostra a versão
-// anterior (o GitHub Pages leva um pouco para trocar); aqui se tenta de novo a cada 20 s, por até 8 minutos.
+// anterior (o GitHub Pages leva um pouco para trocar); aqui se tenta de novo a cada 20 s, por até 8 minutos. Com muita gente para
+// avisar, a função manda uma parte e responde { pendente: true }: aqui ela é chamada de novo até terminar.
 // A função ainda não existe no Supabase (404) ou sem o segredo da chave (500 com essa mensagem) = aviso no log, e o deploy continua verde:
 // o site já está no ar e nada se perde (a função anota tudo na primeira vez que rodar).
 import { readFileSync } from "node:fs";
@@ -45,7 +46,17 @@ for (let tentativa = 1; ; tentativa++) {
   const texto = r ? await r.text() : "";
   if (r && r.ok) {
     console.log(`notificações: ${texto}`);
+    // muita gente para avisar: a função manda uma parte por vez e pede para ser chamada de novo
+    if (/"pendente":true/.test(texto) && Date.now() < limite) {
+      await espera(6000);
+      continue;
+    }
     process.exit(0);
+  }
+  if (r && r.status === 429) {
+    // a função roda no máximo uma vez a cada 5 s
+    await espera(6000);
+    continue;
   }
   if (r && r.status === 404) {
     console.log("::warning::A função avisar-novidades ainda não existe no Supabase: nenhuma notificação enviada (docs/comentarios-supabase.md, seção 7).");

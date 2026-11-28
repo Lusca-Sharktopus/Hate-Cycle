@@ -21,11 +21,28 @@ create table if not exists public.site_updates (
   item_id text primary key check (item_id ~ '^(news|blog)/[a-z0-9]+(-[a-z0-9]+)*$' and char_length(item_id) <= 200),
   first_seen_at timestamptz not null default now()
 );
+-- o andamento do envio de cada novidade (só a função mexe): enviada (sent_at), até onde já foi (o último endereço, na ordem) e quem está
+-- mandando agora (uma "reserva" com prazo: duas chamadas ao mesmo tempo não mandam a mesma notificação duas vezes, e uma chamada que
+-- morreu no meio deixa a próxima continuar de onde parou depois do prazo)
+alter table public.site_updates add column if not exists sent_at timestamptz;
+alter table public.site_updates add column if not exists send_cursor text;
+alter table public.site_updates add column if not exists send_lease timestamptz;
 alter table public.site_updates enable row level security;
 drop policy if exists "novidades: todos leem" on public.site_updates;
 create policy "novidades: todos leem" on public.site_updates for select to anon, authenticated using (true);
 revoke all on public.site_updates from anon, authenticated;
-grant select on public.site_updates to anon, authenticated;
+-- o site só lê o ID e a hora em que apareceu (o andamento do envio é só da função)
+grant select (item_id, first_seen_at) on public.site_updates to anon, authenticated;
+
+-- uma linha só: a última vez que a função rodou (ela recusa rodar de novo em menos de 5 s; quem tem a chave anon, que é pública, não
+-- consegue fazê-la trabalhar sem parar). Ninguém do site lê nem escreve.
+create table if not exists public.notification_runs (
+  id smallint primary key default 1 check (id = 1),
+  last_run timestamptz not null default '2000-01-01'
+);
+insert into public.notification_runs (id) values (1) on conflict (id) do nothing;
+alter table public.notification_runs enable row level security;
+revoke all on public.notification_runs from anon, authenticated;
 
 -- ───── quando a pessoa abriu o sino ─────
 create table if not exists public.notification_state (
@@ -84,7 +101,7 @@ revoke all on public.push_subscriptions from anon, authenticated;
 -- sem policies: o site não lê nem escreve direto; a função do Supabase usa a chave de serviço do próprio Supabase (que passa por cima do RLS)
 
 -- liga as notificações neste aparelho (ou troca o idioma). O mesmo navegador pode ter sido de outra conta antes (a pessoa saiu e entrou
--- com outra): o endereço passa para quem ligou agora. No máximo 10 aparelhos por pessoa.
+-- com outra): o endereço passa para quem ligou agora. No máximo 5 aparelhos por pessoa.
 create or replace function public.save_push_subscription(endereco text, chave_p256dh text, chave_auth text, idioma text) returns void
 language plpgsql security definer set search_path = '' as $$
 declare
@@ -95,7 +112,7 @@ begin
   end if;
   perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('hc-push:' || eu::text, 0));
   if not exists (select 1 from public.push_subscriptions s where s.endpoint = endereco and s.user_id = eu)
-     and (select count(*) from public.push_subscriptions s where s.user_id = eu) >= 10 then
+     and (select count(*) from public.push_subscriptions s where s.user_id = eu) >= 5 then
     raise exception 'too many subscriptions';
   end if;
   insert into public.push_subscriptions (endpoint, user_id, p256dh, auth, lang)

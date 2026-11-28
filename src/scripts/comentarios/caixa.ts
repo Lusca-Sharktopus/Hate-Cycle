@@ -24,6 +24,7 @@
 // Só aqui (03/11/2026, sem par no comments.js): o nome em "Conectado como <nome>" é um botão que abre a janela da conta (./conta.ts).
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { abrirJanelaDaConta, textosDaConta } from "./conta";
+import { desligarNotificacoes } from "../conta/novidades";
 import { circuloDaFoto } from "./foto";
 import { janelaDeLogin } from "../login/janela";
 import { el } from "./dom";
@@ -237,7 +238,11 @@ export function iniciarComentarios(raiz: HTMLElement, cfg: ConfiguracaoDosComent
           texto: t("c_logout"),
           ao: {
             click: () => {
-              void sb.auth.signOut().then(() => {
+              // 28/11: sair desliga as notificações DESTE aparelho (num computador dividido, quem vem depois não recebe as da conta)
+              void desligarNotificacoes(sb)
+                .catch(() => undefined)
+                .then(() => sb.auth.signOut())
+                .then(() => {
                 quem = null;
                 perfil = null;
                 void atualizar();

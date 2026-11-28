@@ -489,6 +489,10 @@ def casos(q, paralelo=None) -> int:
     caso("novidades: ninguém do site anota uma novidade", "insert into public.site_updates (item_id) values ('news/falsa')", papel="authenticated", sub=B, erro="permission denied")
     caso("novidades: a função (service_role) anota", "insert into public.site_updates (item_id, first_seen_at) values ('news/2026-11-28-sino', now())", papel="service_role",
          depois="select count(*) from public.site_updates", espera="1")
+    caso("novidades: o site lê só o ID e a hora (o andamento do envio é da função)", "select sent_at from public.site_updates", papel="anon", erro="permission denied")
+    caso("novidades: ninguém do site mexe na trava de execução da função", "select * from public.notification_runs", papel="authenticated", sub=B, erro="permission denied")
+    caso("novidades: a função reserva, avança e fecha o envio", "update public.site_updates set send_lease = now() + interval '2 minutes', send_cursor = 'x', sent_at = now()",
+         papel="service_role", depois="select count(*) from public.site_updates where sent_at is not null", espera="1")
     caso("novidades: ID fora do formato é recusado (até para a função)", "insert into public.site_updates (item_id) values ('../x')", papel="service_role", erro="check")
     caso("novidades: a primeira consulta do sino anota agora", "select public.my_notifications_seen() is not null", papel="authenticated", sub=B,
          depois=f"select count(*) from public.notification_state where user_id = '{B}'", espera="1")
@@ -517,9 +521,9 @@ def casos(q, paralelo=None) -> int:
     caso("notificações: chave fora do formato é recusada", salvar(end=FCM + "k", p256="curta"), papel="authenticated", sub=B, erro="check")
     caso("notificações: idioma fora de pt/en é recusado", salvar(end=FCM + "l", lang="es"), papel="authenticated", sub=B, erro="check")
     caso("notificações: visitante sem conta não liga", salvar(end=FCM + "m"), papel="anon", erro="permission denied")
-    caso("notificações: com 10 aparelhos, o 11º é recusado", "; ".join(salvar(end=f"{FCM}n{i}") for i in range(6)), papel="authenticated", sub=B,
-         depois=f"select count(*) from public.push_subscriptions where user_id = '{B}'", espera="10")
-    caso("notificações: o 11º aparelho", salvar(end=FCM + "o"), papel="authenticated", sub=B, erro="too many subscriptions")
+    caso("notificações: com 5 aparelhos, o 6º é recusado", "; ".join(salvar(end=f"{FCM}n{i}") for i in range(1)), papel="authenticated", sub=B,
+         depois=f"select count(*) from public.push_subscriptions where user_id = '{B}'", espera="5")
+    caso("notificações: o 6º aparelho", salvar(end=FCM + "o"), papel="authenticated", sub=B, erro="too many subscriptions")
     caso("notificações: mas religar um que já existe continua valendo", salvar(), papel="authenticated", sub=B)
     caso("notificações: o mesmo navegador passa para a conta que ligou agora", salvar(), papel="authenticated", sub=A,
          depois=f"select user_id from public.push_subscriptions where endpoint = '{FCM}'", espera=A)
