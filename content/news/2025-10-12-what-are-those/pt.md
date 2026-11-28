@@ -1,5 +1,5 @@
 ---
-title: O QUE É ISSO??
+title: Novo Vídeo da Residência dos di Vario: O QUE É ISSO??
 date: 2025-10-12
 thumb: news/what-are-those.png
 tags:

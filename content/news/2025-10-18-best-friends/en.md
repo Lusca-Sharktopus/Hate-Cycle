@@ -1,13 +1,11 @@
 ---
-title: Best Friends in every universe
+title: New Video from the Di Vario Residence: Best Friends in every universe
 date: 2025-11-05
 thumb: news/best-friends.png
 tags:
   - New Video
   - Hello? Di Vario Residence
 ---
-
-Best Friends in every universe
 
 <div class="short-embed"><iframe src="https://www.youtube.com/embed/BlUtLDJr3zs" title="Best Friends in every universe" loading="lazy" allowfullscreen></iframe></div>
 

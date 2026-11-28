@@ -1,13 +1,11 @@
 ---
-title: Melhores amigos em todos os universos
+title: Novo Vídeo da Residência dos di Vario: Melhores amigos em todos os universos
 date: 2025-11-05
 thumb: news/best-friends.png
 tags:
   - Vídeo Novo
   - Alô? Residência dos di Vario
 ---
-
-Melhores amigos em todos os universos
 
 <div class="short-embed"><iframe src="https://www.youtube.com/embed/BlUtLDJr3zs" title="Best Friends in every universe" loading="lazy" allowfullscreen></iframe></div>
 

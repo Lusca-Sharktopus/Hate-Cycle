@@ -442,7 +442,9 @@ def crack():
 
 def excerpt(body, n=130):
     """primeiras palavras do texto da notícia, sem HTML/embeds/markdown"""
-    t = re.sub(r"\{\{[^}]*\}\}", " ", body)
+    # pedido do autor (28/11/2026): parágrafo que é só um link ("Assistir no YouTube", "Leia aqui!") não entra no resumo
+    t = re.sub(r"(?m)^[ \t]*(?:(?<!!)\[[^\]\n]*\]\([^)\n]*\)|\[\[[^\]\n]+\]\]|<a[ \t][^>\n]*>[^\n]*?</a>)[ \t]*$", " ", body)
+    t = re.sub(r"\{\{[^}]*\}\}", " ", t)
     t = re.sub(r"<(script|blockquote|iframe|div|figure|style)\b[\s\S]*?</\1>", " ", t)
     t = re.sub(r"<[^>]+>", " ", t)
     t = re.sub(r"\[\[[^\]|]+\|([^\]]+)\]\]", r"\1", t)

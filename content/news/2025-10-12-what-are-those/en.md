@@ -1,5 +1,5 @@
 ---
-title: WHAT ARE THOSE??
+title: New Video from the Di Vario Residence: WHAT ARE THOSE??
 date: 2025-10-12
 thumb: news/what-are-those.png
 tags:

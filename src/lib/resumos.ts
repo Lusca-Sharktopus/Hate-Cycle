@@ -17,6 +17,11 @@ import { CLASSES_DO_PYTHON } from "./markdown";
 const W = CLASSES_DO_PYTHON.w;
 const S = ESPACOS_PY;
 
+/**
+ * Pedido do autor (28/11/2026): parágrafo que é SÓ um link (`[Assistir no YouTube](…)`, `[[works/x|Leia aqui!]]`, `<a href>…</a>`)
+ * não entra no resumo. Imagem sozinha (`![legenda](…)`) continua como antes. Igual ao excerpt() do build.py.
+ */
+const RE_PARAGRAFO_SO_LINK = /^[ \t]*(?:(?<!!)\[[^\]\n]*\]\([^)\n]*\)|\[\[[^\]\n]+\]\]|<a[ \t][^>\n]*>[^\n]*?<\/a>)[ \t]*$/gmu;
 const RE_ATALHO_OU_EMBED = /\{\{[^}]*\}\}/gu;
 /** <script>…</script>, <blockquote>…</blockquote>, <iframe>, <div>, <figure>, <style>: some o bloco inteiro. */
 const RE_BLOCO_DE_HTML = new RegExp(`<(script|blockquote|iframe|div|figure|style)(?![${W}])[\\s\\S]*?</\\1>`, "gu");
@@ -35,7 +40,8 @@ export const TAMANHO_DO_RESUMO = 130;
  * Passou de `limite` caracteres: corta, volta ao último espaço, tira pontuação do fim e acrescenta "…".
  */
 export function resumoAutomatico(corpo: string, limite = TAMANHO_DO_RESUMO): string {
-  let texto = corpo.replace(RE_ATALHO_OU_EMBED, " ");
+  let texto = corpo.replace(RE_PARAGRAFO_SO_LINK, " ");
+  texto = texto.replace(RE_ATALHO_OU_EMBED, " ");
   texto = texto.replace(RE_BLOCO_DE_HTML, " ");
   texto = texto.replace(RE_TAG, " ");
   texto = texto.replace(RE_LINK_COM_ROTULO, "$1");
